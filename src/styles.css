@@ -169,3 +169,48 @@
   background-clip: text;
   color: transparent;
 }
+
+@utility text-gradient-shimmer {
+  background: linear-gradient(
+    100deg,
+    oklch(0.55 0.22 265) 0%,
+    oklch(0.65 0.2 320) 25%,
+    oklch(0.7 0.18 200) 50%,
+    oklch(0.72 0.18 150) 75%,
+    oklch(0.55 0.22 265) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-slide 6s linear infinite;
+}
+
+@utility bg-dot-grid {
+  background-image: radial-gradient(oklch(0.62 0.16 255 / 0.18) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@keyframes shimmer-slide {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-18px) translateX(12px); }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
