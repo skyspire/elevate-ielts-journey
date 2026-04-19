@@ -3,6 +3,7 @@ import { Header } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 import { Stats } from "@/components/site/Stats";
 import { ModuleFeatures } from "@/components/site/ModuleFeatures";
+import { TrustCompare } from "@/components/site/TrustCompare";
 import { LatestQuestions } from "@/components/site/LatestQuestions";
 import { SamplePreview } from "@/components/site/SamplePreview";
 import { CategorySections } from "@/components/site/CategorySections";
@@ -25,6 +26,7 @@ function Index() {
         <Hero />
         <Stats />
         <ModuleFeatures />
+        <TrustCompare />
         <LatestQuestions />
         <SamplePreview />
         <CategorySections />
