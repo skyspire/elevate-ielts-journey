@@ -75,45 +75,97 @@ function getInitials(name: string) {
   return name.split(" ").map((p) => p[0]).slice(0, 2).join("");
 }
 
-function TestimonialCard({ t }: { t: Testimonial }) {
+function renderQuoteWithHighlight(quote: string, highlight: string, color: string) {
+  const idx = quote.toLowerCase().indexOf(highlight.toLowerCase());
+  if (idx === -1) return quote;
+  const before = quote.slice(0, idx);
+  const match = quote.slice(idx, idx + highlight.length);
+  const after = quote.slice(idx + highlight.length);
   return (
-    <div className="group relative flex w-[320px] flex-shrink-0 flex-col rounded-xl border border-foreground/10 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_12px_-4px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_12px_24px_-8px_rgba(15,23,42,0.10)] sm:w-[360px]">
-      <Quote className="h-5 w-5 text-foreground/15" strokeWidth={2} />
-      <p className="mt-3 text-[14.5px] leading-relaxed text-foreground/80">
-        {t.quote}
+    <>
+      {before}
+      <span
+        className="rounded-[2px] px-0.5"
+        style={{
+          background: `linear-gradient(180deg, transparent 55%, ${color} 55%, ${color} 92%, transparent 92%)`,
+        }}
+      >
+        {match}
+      </span>
+      {after}
+    </>
+  );
+}
+
+function TestimonialCard({ t, index }: { t: Testimonial; index: number }) {
+  const palette = paperPalettes[index % paperPalettes.length];
+  const highlight = highlighterColors[index % highlighterColors.length];
+  const rotations = ["-rotate-[0.6deg]", "rotate-[0.4deg]", "-rotate-[0.3deg]", "rotate-[0.7deg]", "rotate-0"];
+  const rotation = rotations[index % rotations.length];
+
+  return (
+    <div
+      className={`group relative flex w-[320px] flex-shrink-0 flex-col overflow-hidden rounded-[10px] border border-foreground/10 p-6 pt-7 shadow-[0_1px_2px_rgba(15,23,42,0.05),0_8px_20px_-8px_rgba(15,23,42,0.10)] transition-all duration-300 hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_2px_4px_rgba(15,23,42,0.06),0_18px_32px_-12px_rgba(15,23,42,0.15)] sm:w-[360px] ${rotation}`}
+      style={{
+        background: palette.paper,
+        backgroundImage: `radial-gradient(circle, oklch(0.45 0.02 250 / 0.18) 1px, transparent 1.2px)`,
+        backgroundSize: "16px 16px",
+        backgroundPosition: "8px 8px",
+      }}
+    >
+      <div
+        className="absolute -top-2 left-1/2 h-5 w-24 -translate-x-1/2 -rotate-2 rounded-[2px] shadow-sm"
+        style={{
+          background: palette.tape,
+          backgroundImage:
+            "repeating-linear-gradient(45deg, rgba(255,255,255,0.18) 0 4px, transparent 4px 8px)",
+        }}
+      />
+      <div
+        className="absolute right-4 top-5 flex h-14 w-14 -rotate-[8deg] items-center justify-center rounded-full border-[2.5px] font-display text-[15px] font-extrabold leading-none"
+        style={{ color: palette.stamp, borderColor: palette.stamp, background: "transparent" }}
+      >
+        <span className="flex flex-col items-center gap-0.5">
+          <span className="text-[8px] font-bold uppercase tracking-widest opacity-80">Band</span>
+          <span>{t.band}</span>
+        </span>
+      </div>
+      <p className="relative z-10 mt-1 max-w-[78%] font-serif text-[15px] leading-[1.65] text-foreground/85">
+        <span className="mr-0.5 font-display text-2xl leading-none text-foreground/30">“</span>
+        {renderQuoteWithHighlight(t.quote, t.highlight, highlight)}
+        <span className="ml-0.5 font-display text-2xl leading-none text-foreground/30">”</span>
       </p>
-      <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-4">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-foreground/[0.04] font-display text-[12px] font-bold tracking-tight text-foreground/70 ring-1 ring-inset ring-foreground/10">
-          {getInitials(t.name)}
-        </div>
-        <div className="min-w-0 flex-1">
+      <div className="relative z-10 mt-5 flex items-end justify-between border-t border-dashed border-foreground/15 pt-3">
+        <div className="min-w-0">
           <div className="truncate font-display text-[14px] font-bold tracking-tight text-foreground">
             {t.name}
           </div>
-          <div className="truncate text-[12px] font-medium text-foreground/50">
+          <div className="truncate text-[12px] font-medium text-foreground/55">
             {t.city}, {t.country}
           </div>
         </div>
-        <div className="flex flex-shrink-0 flex-col items-end gap-0.5">
-          <div className="font-display text-[15px] font-extrabold leading-none tracking-tight text-foreground">
-            {t.band}
-          </div>
-          <div className="text-[11px] font-medium text-foreground/50">
-            {t.type}
-          </div>
+        <div className="flex-shrink-0 text-[11px] font-medium italic text-foreground/55">
+          {t.type}
         </div>
       </div>
+      <div
+        className="pointer-events-none absolute bottom-0 right-0 h-7 w-7"
+        style={{
+          background: `linear-gradient(135deg, transparent 50%, oklch(0.92 0.01 250) 50%, oklch(0.86 0.015 250) 100%)`,
+          boxShadow: "inset 1px 1px 1px rgba(255,255,255,0.6), -1px -1px 2px rgba(15,23,42,0.06)",
+        }}
+      />
     </div>
   );
 }
 
-function MarqueeRow({ items, direction }: { items: Testimonial[]; direction: "left" | "right" }) {
+function MarqueeRow({ items, direction, offset = 0 }: { items: Testimonial[]; direction: "left" | "right"; offset?: number }) {
   const animClass = direction === "left" ? "animate-marquee-left" : "animate-marquee-right";
   return (
-    <div className="overflow-hidden">
-      <div className={`flex w-max gap-5 ${animClass}`}>
+    <div className="overflow-hidden py-3">
+      <div className={`flex w-max gap-6 ${animClass}`}>
         {[...items, ...items].map((t, i) => (
-          <TestimonialCard key={i} t={t} />
+          <TestimonialCard key={i} t={t} index={i + offset} />
         ))}
       </div>
     </div>
