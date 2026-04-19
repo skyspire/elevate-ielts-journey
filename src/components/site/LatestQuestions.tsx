@@ -52,7 +52,7 @@ const speaking = [
 
 export function LatestQuestions() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: "var(--surface)" }}>
+    <section className="bg-paper-dots py-20 sm:py-28">
       <div className="container-page">
         <div className="flex flex-col items-end justify-between gap-6 sm:flex-row">
           <SectionHeader

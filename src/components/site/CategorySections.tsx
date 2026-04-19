@@ -77,7 +77,7 @@ function CategoryCard({ item }: { item: Item }) {
 
 export function CategorySections() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: "var(--surface-blue)" }}>
+    <section className="bg-paper-mint py-20 sm:py-28">
       <div className="container-page space-y-20">
         <div>
           <SectionHeader
