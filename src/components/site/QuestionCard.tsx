@@ -1,4 +1,4 @@
-import { ArrowUpRight, Calendar } from "lucide-react";
+import { ArrowUpRight, Calendar, Lock } from "lucide-react";
 
 type Props = {
   tag: string;
@@ -7,6 +7,7 @@ type Props = {
   title: string;
   date: string;
   band?: string;
+  locked?: boolean;
 };
 
 const toneMap: Record<NonNullable<Props["tagTone"]>, string> = {
@@ -16,9 +17,17 @@ const toneMap: Record<NonNullable<Props["tagTone"]>, string> = {
   lilac: "bg-lilac text-foreground",
 };
 
-export function QuestionCard({ tag, tagTone = "blue", type, title, date, band = "Band 8.5" }: Props) {
+export function QuestionCard({
+  tag,
+  tagTone = "blue",
+  type,
+  title,
+  date,
+  band = "Band 8.5",
+  locked = true,
+}: Props) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
       {/* Tag banner — full-width, prominent */}
       <div className={`flex items-center justify-between px-5 py-3.5 ${toneMap[tagTone]}`}>
         <span className="text-sm font-extrabold uppercase tracking-wide">{tag}</span>
@@ -41,9 +50,15 @@ export function QuestionCard({ tag, tagTone = "blue", type, title, date, band = 
             </span>
           </div>
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
-            <ArrowUpRight className="h-4 w-4" />
+            {locked ? <Lock className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-4 w-4" />}
           </span>
         </div>
+
+        {locked && (
+          <p className="-mb-1 text-[11px] font-semibold text-muted-foreground/80">
+            Sign up to read · free sample
+          </p>
+        )}
       </div>
     </article>
   );
