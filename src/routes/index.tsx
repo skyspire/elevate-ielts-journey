@@ -5,6 +5,7 @@ import { Stats } from "@/components/site/Stats";
 import { ValueStatement } from "@/components/site/ValueStatement";
 import { ModuleFeatures } from "@/components/site/ModuleFeatures";
 import { TrustCompare } from "@/components/site/TrustCompare";
+import { FreeVsPaid } from "@/components/site/FreeVsPaid";
 import { LatestQuestions } from "@/components/site/LatestQuestions";
 import { SamplePreview } from "@/components/site/SamplePreview";
 import { CategorySections } from "@/components/site/CategorySections";
@@ -29,6 +30,7 @@ function Index() {
         <ValueStatement />
         <ModuleFeatures />
         <TrustCompare />
+        <FreeVsPaid />
         <LatestQuestions />
         <SamplePreview />
         <CategorySections />
