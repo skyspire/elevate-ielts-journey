@@ -1,7 +1,8 @@
-import { Check, X, Quote } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 type Testimonial = {
   quote: string;
+  highlight: string;
   name: string;
   city: string;
   country: string;
@@ -18,38 +19,56 @@ const compareRows = [
 ];
 
 const testimonials: Testimonial[] = [
-  { quote: "Jumped from band 6.5 to 8.0 in six weeks. The sample answers changed how I write Task 2.", name: "Aarav Sharma", city: "Mumbai", country: "India", band: "8.0", type: "Academic" },
-  { quote: "Two of my actual Speaking Part 2 cards were word-for-word from the prediction list.", name: "Priya Mehta", city: "Toronto", country: "Canada", band: "7.5", type: "General" },
-  { quote: "Topic-wise practice made prep finally feel structured. No more random questions.", name: "Daniel Kim", city: "Seoul", country: "South Korea", band: "7.5", type: "Academic" },
-  { quote: "The Writing Task 1 templates are gold. Hit band 8 on my first attempt.", name: "Mei Lin", city: "Shanghai", country: "China", band: "8.0", type: "Academic" },
-  { quote: "BigIELTS predictions are scary accurate. Saved me weeks of guesswork.", name: "Carlos Rivera", city: "Mexico City", country: "Mexico", band: "7.0", type: "General" },
-  { quote: "From 6.0 to 7.5 in two months. The model answers are far better than any book.", name: "Fatima Zahra", city: "Casablanca", country: "Morocco", band: "7.5", type: "Academic" },
-  { quote: "Speaking section anxiety gone. I rehearsed real cue cards before the test.", name: "Tomás Becker", city: "Berlin", country: "Germany", band: "7.0", type: "General" },
-  { quote: "Reading practice questions matched the real exam style perfectly.", name: "Ngozi Adeyemi", city: "Lagos", country: "Nigeria", band: "8.5", type: "Academic" },
-  { quote: "Affordable plan, premium quality. Way smarter than buying five books.", name: "Hiroshi Tanaka", city: "Osaka", country: "Japan", band: "7.5", type: "Academic" },
-  { quote: "The band 9 sample answers helped me understand what examiners actually want.", name: "Sara Patel", city: "London", country: "United Kingdom", band: "8.0", type: "Academic" },
-  { quote: "Got my target score for PR. Couldn't have done it without BigIELTS.", name: "Rajiv Nair", city: "Vancouver", country: "Canada", band: "7.0", type: "General" },
-  { quote: "Daily practice on the topic-wise section pushed my Writing from 6.5 to 8.", name: "Elena Kovac", city: "Zagreb", country: "Croatia", band: "8.0", type: "Academic" },
-  { quote: "Listening predictions hit. I felt I'd already heard those audios before.", name: "Yusuf Demir", city: "Istanbul", country: "Turkey", band: "7.5", type: "General" },
-  { quote: "Cleanest IELTS prep platform I've used. No fluff, just what works.", name: "Amelia Walsh", city: "Dublin", country: "Ireland", band: "8.0", type: "Academic" },
-  { quote: "Cracked Speaking band 8 thanks to the part 3 follow-up question bank.", name: "Kofi Mensah", city: "Accra", country: "Ghana", band: "8.0", type: "General" },
-  { quote: "Worth every dollar. Better than my 800 CAD coaching class.", name: "Linh Vu", city: "Hanoi", country: "Vietnam", band: "7.5", type: "Academic" },
-  { quote: "The updated questions every month kept me ahead of the trends.", name: "Diego Fernandez", city: "Buenos Aires", country: "Argentina", band: "7.0", type: "General" },
-  { quote: "Hit 7.5 overall on first try. The structured approach really works.", name: "Anika Joshi", city: "Pune", country: "India", band: "7.5", type: "Academic" },
-  { quote: "Loved how I could drill weak topics instead of random sets.", name: "Marcus Olsen", city: "Oslo", country: "Norway", band: "8.0", type: "Academic" },
-  { quote: "Writing Task 2 ideas section is a lifesaver for non-native thinkers.", name: "Beatriz Silva", city: "Lisbon", country: "Portugal", band: "7.5", type: "Academic" },
-  { quote: "Speaking cue card predictions matched 3 out of 4 in my exam.", name: "Omar Hassan", city: "Cairo", country: "Egypt", band: "7.0", type: "General" },
-  { quote: "Finally a platform that respects my time. Quick, focused, effective.", name: "Wei Zhang", city: "Singapore", country: "Singapore", band: "8.0", type: "Academic" },
-  { quote: "Improved from 5.5 to 7 in Writing. The band descriptors are crystal clear.", name: "Isabela Rocha", city: "São Paulo", country: "Brazil", band: "7.0", type: "General" },
-  { quote: "Got into my dream uni in Toronto. BigIELTS made the difference.", name: "Sanjay Kapoor", city: "Delhi", country: "India", band: "7.5", type: "Academic" },
-  { quote: "I trusted the predictions and they delivered. Band 8 secured.", name: "Chiara Moretti", city: "Milan", country: "Italy", band: "8.0", type: "Academic" },
-  { quote: "Reading speed jumped after two weeks of topic drills here.", name: "Ahmed Bakr", city: "Dubai", country: "UAE", band: "7.5", type: "General" },
-  { quote: "The 1-month plan is the best 12 CAD I've ever spent on prep.", name: "Júlia Costa", city: "Porto", country: "Portugal", band: "7.0", type: "General" },
-  { quote: "Coherent, modern, and actually fun to use. Big upgrade from PDFs.", name: "Noah Green", city: "Sydney", country: "Australia", band: "8.0", type: "Academic" },
-  { quote: "From band 6 to 8 in Listening. The variety of audios is unmatched.", name: "Reem Alami", city: "Amman", country: "Jordan", band: "8.0", type: "Academic" },
-  { quote: "Speaking part 2 became my strongest section. Thank you BigIELTS!", name: "Ethan Park", city: "Auckland", country: "New Zealand", band: "7.5", type: "General" },
-  { quote: "I recommended it to my whole study group. Three of us got 7.5+.", name: "Layla Farouk", city: "Beirut", country: "Lebanon", band: "7.5", type: "Academic" },
-  { quote: "Writing samples taught me cohesion better than any tutor.", name: "Pavel Ivanov", city: "Prague", country: "Czechia", band: "8.0", type: "Academic" },
+  { quote: "Jumped from band 6.5 to 8.0 in six weeks. The sample answers changed how I write Task 2.", highlight: "6.5 to 8.0 in six weeks", name: "Aarav Sharma", city: "Mumbai", country: "India", band: "8.0", type: "Academic" },
+  { quote: "Two of my actual Speaking Part 2 cards were word-for-word from the prediction list.", highlight: "word-for-word from the prediction list", name: "Priya Mehta", city: "Toronto", country: "Canada", band: "7.5", type: "General" },
+  { quote: "Topic-wise practice made prep finally feel structured. No more random questions.", highlight: "finally feel structured", name: "Daniel Kim", city: "Seoul", country: "South Korea", band: "7.5", type: "Academic" },
+  { quote: "The Writing Task 1 templates are gold. Hit band 8 on my first attempt.", highlight: "band 8 on my first attempt", name: "Mei Lin", city: "Shanghai", country: "China", band: "8.0", type: "Academic" },
+  { quote: "BigIELTS predictions are scary accurate. Saved me weeks of guesswork.", highlight: "scary accurate", name: "Carlos Rivera", city: "Mexico City", country: "Mexico", band: "7.0", type: "General" },
+  { quote: "From 6.0 to 7.5 in two months. The model answers are far better than any book.", highlight: "6.0 to 7.5 in two months", name: "Fatima Zahra", city: "Casablanca", country: "Morocco", band: "7.5", type: "Academic" },
+  { quote: "Speaking section anxiety gone. I rehearsed real cue cards before the test.", highlight: "anxiety gone", name: "Tomás Becker", city: "Berlin", country: "Germany", band: "7.0", type: "General" },
+  { quote: "Reading practice questions matched the real exam style perfectly.", highlight: "matched the real exam", name: "Ngozi Adeyemi", city: "Lagos", country: "Nigeria", band: "8.5", type: "Academic" },
+  { quote: "Affordable plan, premium quality. Way smarter than buying five books.", highlight: "smarter than buying five books", name: "Hiroshi Tanaka", city: "Osaka", country: "Japan", band: "7.5", type: "Academic" },
+  { quote: "The band 9 sample answers helped me understand what examiners actually want.", highlight: "what examiners actually want", name: "Sara Patel", city: "London", country: "United Kingdom", band: "8.0", type: "Academic" },
+  { quote: "Got my target score for PR. Couldn't have done it without BigIELTS.", highlight: "target score for PR", name: "Rajiv Nair", city: "Vancouver", country: "Canada", band: "7.0", type: "General" },
+  { quote: "Daily practice on the topic-wise section pushed my Writing from 6.5 to 8.", highlight: "Writing from 6.5 to 8", name: "Elena Kovac", city: "Zagreb", country: "Croatia", band: "8.0", type: "Academic" },
+  { quote: "Listening predictions hit. I felt I'd already heard those audios before.", highlight: "Listening predictions hit", name: "Yusuf Demir", city: "Istanbul", country: "Turkey", band: "7.5", type: "General" },
+  { quote: "Cleanest IELTS prep platform I've used. No fluff, just what works.", highlight: "just what works", name: "Amelia Walsh", city: "Dublin", country: "Ireland", band: "8.0", type: "Academic" },
+  { quote: "Cracked Speaking band 8 thanks to the part 3 follow-up question bank.", highlight: "Cracked Speaking band 8", name: "Kofi Mensah", city: "Accra", country: "Ghana", band: "8.0", type: "General" },
+  { quote: "Worth every dollar. Better than my 800 CAD coaching class.", highlight: "Better than my 800 CAD coaching class", name: "Linh Vu", city: "Hanoi", country: "Vietnam", band: "7.5", type: "Academic" },
+  { quote: "The updated questions every month kept me ahead of the trends.", highlight: "ahead of the trends", name: "Diego Fernandez", city: "Buenos Aires", country: "Argentina", band: "7.0", type: "General" },
+  { quote: "Hit 7.5 overall on first try. The structured approach really works.", highlight: "7.5 overall on first try", name: "Anika Joshi", city: "Pune", country: "India", band: "7.5", type: "Academic" },
+  { quote: "Loved how I could drill weak topics instead of random sets.", highlight: "drill weak topics", name: "Marcus Olsen", city: "Oslo", country: "Norway", band: "8.0", type: "Academic" },
+  { quote: "Writing Task 2 ideas section is a lifesaver for non-native thinkers.", highlight: "lifesaver for non-native thinkers", name: "Beatriz Silva", city: "Lisbon", country: "Portugal", band: "7.5", type: "Academic" },
+  { quote: "Speaking cue card predictions matched 3 out of 4 in my exam.", highlight: "matched 3 out of 4", name: "Omar Hassan", city: "Cairo", country: "Egypt", band: "7.0", type: "General" },
+  { quote: "Finally a platform that respects my time. Quick, focused, effective.", highlight: "Quick, focused, effective", name: "Wei Zhang", city: "Singapore", country: "Singapore", band: "8.0", type: "Academic" },
+  { quote: "Improved from 5.5 to 7 in Writing. The band descriptors are crystal clear.", highlight: "5.5 to 7 in Writing", name: "Isabela Rocha", city: "São Paulo", country: "Brazil", band: "7.0", type: "General" },
+  { quote: "Got into my dream uni in Toronto. BigIELTS made the difference.", highlight: "dream uni in Toronto", name: "Sanjay Kapoor", city: "Delhi", country: "India", band: "7.5", type: "Academic" },
+  { quote: "I trusted the predictions and they delivered. Band 8 secured.", highlight: "Band 8 secured", name: "Chiara Moretti", city: "Milan", country: "Italy", band: "8.0", type: "Academic" },
+  { quote: "Reading speed jumped after two weeks of topic drills here.", highlight: "Reading speed jumped", name: "Ahmed Bakr", city: "Dubai", country: "UAE", band: "7.5", type: "General" },
+  { quote: "The 1-month plan is the best 12 CAD I've ever spent on prep.", highlight: "best 12 CAD I've ever spent", name: "Júlia Costa", city: "Porto", country: "Portugal", band: "7.0", type: "General" },
+  { quote: "Coherent, modern, and actually fun to use. Big upgrade from PDFs.", highlight: "Big upgrade from PDFs", name: "Noah Green", city: "Sydney", country: "Australia", band: "8.0", type: "Academic" },
+  { quote: "From band 6 to 8 in Listening. The variety of audios is unmatched.", highlight: "band 6 to 8 in Listening", name: "Reem Alami", city: "Amman", country: "Jordan", band: "8.0", type: "Academic" },
+  { quote: "Speaking part 2 became my strongest section. Thank you BigIELTS!", highlight: "my strongest section", name: "Ethan Park", city: "Auckland", country: "New Zealand", band: "7.5", type: "General" },
+  { quote: "I recommended it to my whole study group. Three of us got 7.5+.", highlight: "Three of us got 7.5+", name: "Layla Farouk", city: "Beirut", country: "Lebanon", band: "7.5", type: "Academic" },
+  { quote: "Writing samples taught me cohesion better than any tutor.", highlight: "better than any tutor", name: "Pavel Ivanov", city: "Prague", country: "Czechia", band: "8.0", type: "Academic" },
+];
+
+// Paper tints + washi tape colors rotated per card for variety
+const paperPalettes = [
+  { paper: "oklch(0.985 0.006 90)",  tape: "oklch(0.85 0.13 75 / 0.75)",  stamp: "oklch(0.55 0.16 25)"  }, // cream + amber tape, red stamp
+  { paper: "oklch(0.985 0.008 145)", tape: "oklch(0.78 0.13 165 / 0.7)",  stamp: "oklch(0.5 0.15 165)" }, // ivory + mint tape
+  { paper: "oklch(0.98 0.008 60)",   tape: "oklch(0.82 0.14 55 / 0.7)",   stamp: "oklch(0.55 0.16 35)" }, // manila + peach tape
+  { paper: "oklch(0.985 0.006 280)", tape: "oklch(0.78 0.11 295 / 0.7)",  stamp: "oklch(0.45 0.18 285)" }, // paper + lilac tape
+  { paper: "oklch(0.985 0.007 220)", tape: "oklch(0.78 0.12 235 / 0.7)",  stamp: "oklch(0.45 0.18 240)" }, // paper + sky tape
+  { paper: "oklch(0.985 0.008 100)", tape: "oklch(0.85 0.14 95 / 0.75)",  stamp: "oklch(0.5 0.16 50)"  }, // paper + butter tape
+];
+
+// Highlighter colors rotated to feel like a real marker set
+const highlighterColors = [
+  "oklch(0.92 0.16 95 / 0.55)",  // yellow
+  "oklch(0.88 0.16 145 / 0.5)",  // green
+  "oklch(0.88 0.13 60 / 0.55)",  // orange
+  "oklch(0.88 0.12 320 / 0.5)",  // pink
 ];
 
 function getInitials(name: string) {
