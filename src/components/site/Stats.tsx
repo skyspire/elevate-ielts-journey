@@ -14,7 +14,7 @@ export function Stats() {
       <WashiTape position="top-left" color="mint" />
       <WashiTape position="top-right" color="peach" />
       <div className="container-page">
-        <div className="grid grid-cols-2 gap-y-12 gap-x-6 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 md:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="flex flex-col items-center text-center">
               <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft text-brand">
