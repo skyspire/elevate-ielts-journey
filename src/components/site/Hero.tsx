@@ -20,13 +20,11 @@ export function Hero() {
             Updated weekly · Band 8–9 answers
           </span>
           <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            Recent IELTS{" "}
-            <span className="text-gradient-brand">Writing & Speaking</span>
-            <br className="hidden sm:block" /> Questions, Answered.
+            No need to buy{" "}
+            <span className="text-gradient-brand">expensive IELTS books.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg font-medium text-muted-foreground lg:mx-0">
-            Real exam questions from the latest sittings — paired with Band 8–9 sample answers,
-            vocabulary, and structure breakdowns. Built for serious IELTS candidates.
+          <p className="mx-auto mt-6 max-w-xl text-lg font-semibold text-muted-foreground lg:mx-0">
+            Latest questions with Band 8–9 sample answers — updated regularly.
           </p>
           <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:gap-4 lg:items-start lg:justify-start">
             <Button
