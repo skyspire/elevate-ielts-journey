@@ -13,6 +13,14 @@ const tintStyles: Record<Tint, { bg: string; ring: string; avatar: string; avata
 
 type Testimonial = { quote: string; name: string; band: string; type: string; tint: Tint };
 
+const compareRows = [
+  { books: "Outdated content from years ago", platform: "Latest updated questions every month" },
+  { books: "Static, generic sample answers", platform: "Regularly updated Band 8+ model answers" },
+  { books: "Unstructured, random ordering", platform: "Topic-wise organized for focused practice" },
+  { books: "Expensive — 40-60 CAD per book", platform: "Affordable plans starting at 7 CAD" },
+  { books: "No predictions or trend insights", platform: "Hand-picked predictions for upcoming exams" },
+];
+
 const testimonials: Testimonial[] = [
   { quote: "Jumped from band 6.5 to 8.0 in six weeks. The sample answers changed how I write Task 2.", name: "Aarav S.", band: "8.0", type: "Academic", tint: "sky" },
   { quote: "Two of my actual Speaking Part 2 cards were word-for-word from the prediction list.", name: "Priya M.", band: "7.5", type: "General", tint: "peach" },
