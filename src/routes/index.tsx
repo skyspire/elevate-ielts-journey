@@ -26,6 +26,7 @@ function Index() {
         <Hero />
         <Stats />
         <ModuleFeatures />
+        <TrustCompare />
         <LatestQuestions />
         <SamplePreview />
         <CategorySections />
