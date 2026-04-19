@@ -1,65 +1,59 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage from "@/assets/hero-academic.jpg";
 
 export function Hero() {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ background: "var(--gradient-hero)" }}
-    >
+    <section className="relative isolate overflow-hidden bg-background">
+      {/* Dotted grid */}
+      <div aria-hidden className="absolute inset-0 bg-dot-grid opacity-70 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+
+      {/* Colorful glows */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-        style={{ background: "radial-gradient(closest-side, var(--brand-soft), transparent 70%)" }}
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[640px] w-[640px] rounded-full opacity-70 blur-3xl animate-glow-pulse"
+        style={{
+          background:
+            "radial-gradient(closest-side, oklch(0.7 0.2 265 / 0.55), transparent 70%)",
+        }}
       />
-      <div className="container-page relative grid gap-12 py-20 md:py-28 lg:grid-cols-2 lg:items-center">
-        <div className="text-center lg:text-left">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5" />
-            Updated weekly · Band 8–9 answers
-          </span>
-          <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            No need to buy{" "}
-            <span className="text-gradient-brand">expensive IELTS books.</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg font-semibold text-muted-foreground lg:mx-0">
-            Latest questions with Band 8–9 sample answers — updated regularly.
-          </p>
-          <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:gap-4 lg:items-start lg:justify-start">
-            <Button
-              size="lg"
-              className="h-12 rounded-full bg-brand px-7 text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90"
-            >
-              View Recent Questions
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-12 rounded-full border-border bg-background px-7 text-base font-bold hover:bg-secondary"
-            >
-              Unlock Full Access
-            </Button>
-          </div>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-semibold text-muted-foreground lg:justify-start">
-            <span>★★★★★ 4.9 from 2,300+ learners</span>
-            <span className="hidden h-1 w-1 rounded-full bg-border sm:block" />
-            <span>Updated monthly</span>
-          </div>
-        </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-24 -z-0 h-72 w-72 rounded-full bg-[oklch(0.85_0.15_320/0.45)] blur-3xl animate-float-slow"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 top-40 -z-0 h-80 w-80 rounded-full bg-[oklch(0.85_0.14_180/0.4)] blur-3xl animate-float-slow"
+        style={{ animationDelay: "-4s" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-1/3 -z-0 h-72 w-72 rounded-full bg-[oklch(0.88_0.13_70/0.4)] blur-3xl animate-float-slow"
+        style={{ animationDelay: "-2s" }}
+      />
 
-        <div className="relative">
-          <div className="absolute inset-0 -z-10 translate-y-6 scale-95 rounded-[2rem] bg-brand-soft blur-2xl" />
-          <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-card">
-            <img
-              src={heroImage}
-              alt="Floating papers, pencil and an open book on a soft blue gradient"
-              width={1536}
-              height={1152}
-              className="h-full w-full object-cover"
-            />
-          </div>
+      <div className="container-page relative z-10 flex flex-col items-center py-24 text-center md:py-32 lg:py-40">
+        <h1 className="font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+          No need to buy{" "}
+          <span className="text-gradient-shimmer">expensive IELTS books.</span>
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg font-semibold text-muted-foreground sm:text-xl">
+          Latest questions with Band 8–9 sample answers — updated regularly.
+        </p>
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+          <Button
+            size="lg"
+            className="h-12 rounded-full bg-brand px-7 text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90"
+          >
+            View Recent Questions
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-12 rounded-full border-border bg-background/80 px-7 text-base font-bold backdrop-blur hover:bg-secondary"
+          >
+            Unlock Full Access
+          </Button>
         </div>
       </div>
     </section>
