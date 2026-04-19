@@ -102,12 +102,6 @@ const grainSvg = `data:image/svg+xml;utf8,${encodeURIComponent(
   `<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.14  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`
 )}`;
 
-// Torn-edge mask (top + bottom irregular). Applied via CSS mask-image so the card's
-// painted background takes the torn shape. We use a tall SVG with jagged top/bottom paths.
-const tornMask = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 480' preserveAspectRatio='none'><path fill='black' d='M0 8 L12 4 L24 9 L38 3 L52 10 L66 5 L82 11 L96 4 L112 9 L128 3 L144 10 L160 5 L176 11 L192 4 L208 9 L224 3 L240 10 L256 5 L272 11 L288 4 L304 9 L320 3 L336 10 L348 5 L360 9 L360 471 L348 476 L336 470 L320 477 L304 471 L288 476 L272 469 L256 475 L240 470 L224 477 L208 471 L192 476 L176 469 L160 475 L144 470 L128 477 L112 471 L96 476 L82 469 L66 475 L52 470 L38 477 L24 471 L12 476 L0 472 Z'/></svg>`
-)}`;
-
 function TestimonialCard({ t, index }: { t: Testimonial; index: number }) {
   const palette = paperPalettes[index % paperPalettes.length];
   const highlight = highlighterColors[index % highlighterColors.length];
@@ -116,26 +110,20 @@ function TestimonialCard({ t, index }: { t: Testimonial; index: number }) {
 
   return (
     <div className={`relative w-[320px] flex-shrink-0 transition-all duration-300 hover:-translate-y-1 hover:rotate-0 sm:w-[360px] ${rotation}`}>
-      {/* Soft drop shadow layer (separate so it doesn't get clipped by the mask) */}
+      {/* Solid double-line vintage frame card */}
       <div
-        className="pointer-events-none absolute inset-x-2 inset-y-3 -z-10 rounded-md"
-        style={{ boxShadow: "0 2px 4px rgba(15,23,42,0.06), 0 16px 30px -12px rgba(15,23,42,0.18)" }}
-      />
-      {/* Paper card with torn top/bottom edges */}
-      <div
-        className="relative flex flex-col px-6 pb-6 pt-9"
+        className="relative flex flex-col rounded-xl border border-foreground/15 px-6 pb-6 pt-9 shadow-[0_2px_4px_rgba(15,23,42,0.05),0_18px_32px_-14px_rgba(15,23,42,0.18)]"
         style={{
           background: palette.paper,
           backgroundImage: `url("${grainSvg}")`,
           backgroundSize: "180px 180px",
-          WebkitMaskImage: `url("${tornMask}")`,
-          maskImage: `url("${tornMask}")`,
-          WebkitMaskSize: "100% 100%",
-          maskSize: "100% 100%",
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
         }}
       >
+        {/* Inner second line — completes the double-line vintage frame */}
+        <div
+          className="pointer-events-none absolute inset-[5px] rounded-[8px] border border-foreground/12"
+          aria-hidden
+        />
         {/* Washi tape strip */}
         <div
           className="absolute -top-1 left-1/2 z-10 h-5 w-24 -translate-x-1/2 -rotate-2 rounded-[2px] shadow-sm"
