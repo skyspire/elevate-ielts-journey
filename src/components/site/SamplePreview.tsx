@@ -4,7 +4,7 @@ import { SectionHeader } from "./SectionHeader";
 
 export function SamplePreview() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="bg-paper-white py-20 sm:py-28">
       <div className="container-page">
         <SectionHeader
           eyebrow="Sample answer preview"

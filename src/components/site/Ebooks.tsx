@@ -31,7 +31,7 @@ const ebooks = [
 
 export function Ebooks() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="bg-paper-peach py-20 sm:py-28">
       <div className="container-page">
         <div className="flex flex-col items-end justify-between gap-6 sm:flex-row">
           <SectionHeader

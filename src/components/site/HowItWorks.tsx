@@ -20,7 +20,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="bg-paper-ruled py-20 sm:py-28">
       <div className="container-page">
         <SectionHeader eyebrow="How it works" title="Three simple steps to a higher band" />
 

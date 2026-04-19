@@ -191,6 +191,60 @@
   background-size: 22px 22px;
 }
 
+/* Paper & Ink background system */
+@utility bg-paper-cream {
+  background-color: oklch(0.985 0.012 75);
+  background-image:
+    radial-gradient(oklch(0.4 0.05 60 / 0.06) 1px, transparent 1px),
+    radial-gradient(at 20% 10%, oklch(0.97 0.02 80) 0%, transparent 50%),
+    radial-gradient(at 80% 90%, oklch(0.96 0.025 60) 0%, transparent 50%);
+  background-size: 3px 3px, auto, auto;
+}
+
+@utility bg-paper-ruled {
+  background-color: oklch(0.985 0.012 75);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0, transparent 39px, oklch(0.55 0.05 60 / 0.09) 39px, oklch(0.55 0.05 60 / 0.09) 40px),
+    radial-gradient(oklch(0.4 0.05 60 / 0.05) 1px, transparent 1px);
+  background-size: auto, 3px 3px;
+}
+
+@utility bg-paper-dots {
+  background-color: oklch(0.985 0.012 75);
+  background-image:
+    radial-gradient(oklch(0.45 0.05 60 / 0.22) 1.2px, transparent 1.4px),
+    radial-gradient(oklch(0.4 0.05 60 / 0.04) 1px, transparent 1px);
+  background-size: 24px 24px, 3px 3px;
+}
+
+@utility bg-paper-mint {
+  background-color: oklch(0.94 0.04 165);
+  background-image: radial-gradient(oklch(0.4 0.05 165 / 0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@utility bg-paper-peach {
+  background-color: oklch(0.93 0.05 55);
+  background-image: radial-gradient(oklch(0.4 0.06 55 / 0.07) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@utility bg-paper-kraft {
+  background-color: oklch(0.78 0.07 70);
+  background-image: radial-gradient(oklch(0.3 0.05 60 / 0.1) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+@utility bg-paper-white {
+  background-color: oklch(1 0 0);
+  background-image: radial-gradient(oklch(0.55 0.02 250 / 0.04) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+@utility text-ink {
+  color: oklch(0.3 0.04 60);
+}
+
 @keyframes shimmer-slide {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }

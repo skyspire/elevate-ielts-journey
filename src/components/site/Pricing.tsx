@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./SectionHeader";
+import { WashiTape } from "./PaperAccents";
 
 const features = [
   "Full access to question bank",
@@ -32,7 +33,9 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: "var(--surface-blue)" }}>
+    <section className="relative bg-paper-white py-20 sm:py-28">
+      <WashiTape position="top-left" color="peach" />
+      <WashiTape position="top-right" color="mint" />
       <div className="container-page">
         <SectionHeader
           eyebrow="Pricing"
