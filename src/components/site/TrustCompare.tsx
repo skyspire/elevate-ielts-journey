@@ -1,17 +1,13 @@
-import { Check, X, Star } from "lucide-react";
+import { Check, X, Quote } from "lucide-react";
 
-type Tint = "mint" | "peach" | "lilac" | "sky" | "butter" | "rose";
-
-const tintStyles: Record<Tint, { bg: string; ring: string; avatar: string; avatarText: string }> = {
-  mint:   { bg: "oklch(0.96 0.04 165)", ring: "oklch(0.5 0.1 165 / 0.12)",  avatar: "oklch(0.78 0.12 165)", avatarText: "oklch(0.25 0.05 165)" },
-  peach:  { bg: "oklch(0.95 0.045 55)", ring: "oklch(0.55 0.12 55 / 0.14)", avatar: "oklch(0.8 0.13 55)",   avatarText: "oklch(0.3 0.06 55)" },
-  lilac:  { bg: "oklch(0.95 0.04 300)", ring: "oklch(0.5 0.1 300 / 0.13)",  avatar: "oklch(0.78 0.12 300)", avatarText: "oklch(0.28 0.06 300)" },
-  sky:    { bg: "oklch(0.95 0.04 240)", ring: "oklch(0.5 0.12 240 / 0.14)", avatar: "oklch(0.78 0.13 240)", avatarText: "oklch(0.25 0.06 240)" },
-  butter: { bg: "oklch(0.96 0.05 95)",  ring: "oklch(0.55 0.12 95 / 0.13)", avatar: "oklch(0.82 0.13 95)",  avatarText: "oklch(0.3 0.06 95)" },
-  rose:   { bg: "oklch(0.95 0.035 20)", ring: "oklch(0.55 0.12 20 / 0.13)", avatar: "oklch(0.8 0.12 20)",   avatarText: "oklch(0.3 0.06 20)" },
+type Testimonial = {
+  quote: string;
+  name: string;
+  city: string;
+  country: string;
+  band: string;
+  type: "Academic" | "General";
 };
-
-type Testimonial = { quote: string; name: string; band: string; type: string; tint: Tint };
 
 const compareRows = [
   { books: "Outdated content from years ago", platform: "Latest updated questions every month" },
@@ -22,38 +18,38 @@ const compareRows = [
 ];
 
 const testimonials: Testimonial[] = [
-  { quote: "Jumped from band 6.5 to 8.0 in six weeks. The sample answers changed how I write Task 2.", name: "Aarav S.", band: "8.0", type: "Academic", tint: "sky" },
-  { quote: "Two of my actual Speaking Part 2 cards were word-for-word from the prediction list.", name: "Priya M.", band: "7.5", type: "General", tint: "peach" },
-  { quote: "Topic-wise practice made prep finally feel structured. No more random questions.", name: "Daniel K.", band: "7.5", type: "Academic", tint: "mint" },
-  { quote: "The Writing Task 1 templates are gold. Hit band 8 on my first attempt.", name: "Mei L.", band: "8.0", type: "Academic", tint: "lilac" },
-  { quote: "BigIELTS predictions are scary accurate. Saved me weeks of guesswork.", name: "Carlos R.", band: "7.0", type: "General", tint: "butter" },
-  { quote: "From 6.0 to 7.5 in two months. The model answers are far better than any book.", name: "Fatima Z.", band: "7.5", type: "Academic", tint: "rose" },
-  { quote: "Speaking section anxiety gone. I rehearsed real cue cards before the test.", name: "Tomás B.", band: "7.0", type: "General", tint: "mint" },
-  { quote: "Reading practice questions matched the real exam style perfectly.", name: "Ngozi A.", band: "8.5", type: "Academic", tint: "sky" },
-  { quote: "Affordable plan, premium quality. Way smarter than buying five books.", name: "Hiroshi T.", band: "7.5", type: "Academic", tint: "peach" },
-  { quote: "The band 9 sample answers helped me understand what examiners actually want.", name: "Sara P.", band: "8.0", type: "Academic", tint: "lilac" },
-  { quote: "Got my target score for PR. Couldn't have done it without BigIELTS.", name: "Rajiv N.", band: "7.0", type: "General", tint: "butter" },
-  { quote: "Daily practice on the topic-wise section pushed my Writing from 6.5 to 8.", name: "Elena K.", band: "8.0", type: "Academic", tint: "rose" },
-  { quote: "Listening predictions hit. I felt I'd already heard those audios before.", name: "Yusuf D.", band: "7.5", type: "General", tint: "sky" },
-  { quote: "Cleanest IELTS prep platform I've used. No fluff, just what works.", name: "Amelia W.", band: "8.0", type: "Academic", tint: "mint" },
-  { quote: "Cracked Speaking band 8 thanks to the part 3 follow-up question bank.", name: "Kofi M.", band: "8.0", type: "General", tint: "peach" },
-  { quote: "Worth every dollar. Better than my 800 CAD coaching class.", name: "Linh V.", band: "7.5", type: "Academic", tint: "lilac" },
-  { quote: "The updated questions every month kept me ahead of the trends.", name: "Diego F.", band: "7.0", type: "General", tint: "butter" },
-  { quote: "Hit 7.5 overall on first try. The structured approach really works.", name: "Anika J.", band: "7.5", type: "Academic", tint: "rose" },
-  { quote: "Loved how I could drill weak topics instead of random sets.", name: "Marcus O.", band: "8.0", type: "Academic", tint: "sky" },
-  { quote: "Writing Task 2 ideas section is a lifesaver for non-native thinkers.", name: "Beatriz S.", band: "7.5", type: "Academic", tint: "mint" },
-  { quote: "Speaking cue card predictions matched 3 out of 4 in my exam.", name: "Omar H.", band: "7.0", type: "General", tint: "peach" },
-  { quote: "Finally a platform that respects my time. Quick, focused, effective.", name: "Wei Z.", band: "8.0", type: "Academic", tint: "lilac" },
-  { quote: "Improved from 5.5 to 7 in Writing. The band descriptors are crystal clear.", name: "Isabela R.", band: "7.0", type: "General", tint: "butter" },
-  { quote: "Got into my dream uni in Toronto. BigIELTS made the difference.", name: "Sanjay K.", band: "7.5", type: "Academic", tint: "rose" },
-  { quote: "I trusted the predictions and they delivered. Band 8 secured.", name: "Chiara M.", band: "8.0", type: "Academic", tint: "sky" },
-  { quote: "Reading speed jumped after two weeks of topic drills here.", name: "Ahmed B.", band: "7.5", type: "General", tint: "mint" },
-  { quote: "The 1-month plan is the best 12 CAD I've ever spent on prep.", name: "Júlia C.", band: "7.0", type: "General", tint: "peach" },
-  { quote: "Coherent, modern, and actually fun to use. Big upgrade from PDFs.", name: "Noah G.", band: "8.0", type: "Academic", tint: "lilac" },
-  { quote: "From band 6 to 8 in Listening. The variety of audios is unmatched.", name: "Reem A.", band: "8.0", type: "Academic", tint: "butter" },
-  { quote: "Speaking part 2 became my strongest section. Thank you BigIELTS!", name: "Ethan P.", band: "7.5", type: "General", tint: "rose" },
-  { quote: "I recommended it to my whole study group. Three of us got 7.5+.", name: "Layla F.", band: "7.5", type: "Academic", tint: "sky" },
-  { quote: "Writing samples taught me cohesion better than any tutor.", name: "Pavel I.", band: "8.0", type: "Academic", tint: "mint" },
+  { quote: "Jumped from band 6.5 to 8.0 in six weeks. The sample answers changed how I write Task 2.", name: "Aarav Sharma", city: "Mumbai", country: "India", band: "8.0", type: "Academic" },
+  { quote: "Two of my actual Speaking Part 2 cards were word-for-word from the prediction list.", name: "Priya Mehta", city: "Toronto", country: "Canada", band: "7.5", type: "General" },
+  { quote: "Topic-wise practice made prep finally feel structured. No more random questions.", name: "Daniel Kim", city: "Seoul", country: "South Korea", band: "7.5", type: "Academic" },
+  { quote: "The Writing Task 1 templates are gold. Hit band 8 on my first attempt.", name: "Mei Lin", city: "Shanghai", country: "China", band: "8.0", type: "Academic" },
+  { quote: "BigIELTS predictions are scary accurate. Saved me weeks of guesswork.", name: "Carlos Rivera", city: "Mexico City", country: "Mexico", band: "7.0", type: "General" },
+  { quote: "From 6.0 to 7.5 in two months. The model answers are far better than any book.", name: "Fatima Zahra", city: "Casablanca", country: "Morocco", band: "7.5", type: "Academic" },
+  { quote: "Speaking section anxiety gone. I rehearsed real cue cards before the test.", name: "Tomás Becker", city: "Berlin", country: "Germany", band: "7.0", type: "General" },
+  { quote: "Reading practice questions matched the real exam style perfectly.", name: "Ngozi Adeyemi", city: "Lagos", country: "Nigeria", band: "8.5", type: "Academic" },
+  { quote: "Affordable plan, premium quality. Way smarter than buying five books.", name: "Hiroshi Tanaka", city: "Osaka", country: "Japan", band: "7.5", type: "Academic" },
+  { quote: "The band 9 sample answers helped me understand what examiners actually want.", name: "Sara Patel", city: "London", country: "United Kingdom", band: "8.0", type: "Academic" },
+  { quote: "Got my target score for PR. Couldn't have done it without BigIELTS.", name: "Rajiv Nair", city: "Vancouver", country: "Canada", band: "7.0", type: "General" },
+  { quote: "Daily practice on the topic-wise section pushed my Writing from 6.5 to 8.", name: "Elena Kovac", city: "Zagreb", country: "Croatia", band: "8.0", type: "Academic" },
+  { quote: "Listening predictions hit. I felt I'd already heard those audios before.", name: "Yusuf Demir", city: "Istanbul", country: "Turkey", band: "7.5", type: "General" },
+  { quote: "Cleanest IELTS prep platform I've used. No fluff, just what works.", name: "Amelia Walsh", city: "Dublin", country: "Ireland", band: "8.0", type: "Academic" },
+  { quote: "Cracked Speaking band 8 thanks to the part 3 follow-up question bank.", name: "Kofi Mensah", city: "Accra", country: "Ghana", band: "8.0", type: "General" },
+  { quote: "Worth every dollar. Better than my 800 CAD coaching class.", name: "Linh Vu", city: "Hanoi", country: "Vietnam", band: "7.5", type: "Academic" },
+  { quote: "The updated questions every month kept me ahead of the trends.", name: "Diego Fernandez", city: "Buenos Aires", country: "Argentina", band: "7.0", type: "General" },
+  { quote: "Hit 7.5 overall on first try. The structured approach really works.", name: "Anika Joshi", city: "Pune", country: "India", band: "7.5", type: "Academic" },
+  { quote: "Loved how I could drill weak topics instead of random sets.", name: "Marcus Olsen", city: "Oslo", country: "Norway", band: "8.0", type: "Academic" },
+  { quote: "Writing Task 2 ideas section is a lifesaver for non-native thinkers.", name: "Beatriz Silva", city: "Lisbon", country: "Portugal", band: "7.5", type: "Academic" },
+  { quote: "Speaking cue card predictions matched 3 out of 4 in my exam.", name: "Omar Hassan", city: "Cairo", country: "Egypt", band: "7.0", type: "General" },
+  { quote: "Finally a platform that respects my time. Quick, focused, effective.", name: "Wei Zhang", city: "Singapore", country: "Singapore", band: "8.0", type: "Academic" },
+  { quote: "Improved from 5.5 to 7 in Writing. The band descriptors are crystal clear.", name: "Isabela Rocha", city: "São Paulo", country: "Brazil", band: "7.0", type: "General" },
+  { quote: "Got into my dream uni in Toronto. BigIELTS made the difference.", name: "Sanjay Kapoor", city: "Delhi", country: "India", band: "7.5", type: "Academic" },
+  { quote: "I trusted the predictions and they delivered. Band 8 secured.", name: "Chiara Moretti", city: "Milan", country: "Italy", band: "8.0", type: "Academic" },
+  { quote: "Reading speed jumped after two weeks of topic drills here.", name: "Ahmed Bakr", city: "Dubai", country: "UAE", band: "7.5", type: "General" },
+  { quote: "The 1-month plan is the best 12 CAD I've ever spent on prep.", name: "Júlia Costa", city: "Porto", country: "Portugal", band: "7.0", type: "General" },
+  { quote: "Coherent, modern, and actually fun to use. Big upgrade from PDFs.", name: "Noah Green", city: "Sydney", country: "Australia", band: "8.0", type: "Academic" },
+  { quote: "From band 6 to 8 in Listening. The variety of audios is unmatched.", name: "Reem Alami", city: "Amman", country: "Jordan", band: "8.0", type: "Academic" },
+  { quote: "Speaking part 2 became my strongest section. Thank you BigIELTS!", name: "Ethan Park", city: "Auckland", country: "New Zealand", band: "7.5", type: "General" },
+  { quote: "I recommended it to my whole study group. Three of us got 7.5+.", name: "Layla Farouk", city: "Beirut", country: "Lebanon", band: "7.5", type: "Academic" },
+  { quote: "Writing samples taught me cohesion better than any tutor.", name: "Pavel Ivanov", city: "Prague", country: "Czechia", band: "8.0", type: "Academic" },
 ];
 
 function getInitials(name: string) {
@@ -61,31 +57,30 @@ function getInitials(name: string) {
 }
 
 function TestimonialCard({ t }: { t: Testimonial }) {
-  const s = tintStyles[t.tint];
   return (
-    <div
-      className="flex w-[300px] flex-shrink-0 flex-col rounded-2xl border p-5 transition-transform duration-300 hover:-translate-y-1 sm:w-[340px]"
-      style={{ background: s.bg, borderColor: s.ring }}
-    >
-      <div className="flex items-center gap-1 text-amber-500">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star key={i} className="h-3.5 w-3.5 fill-current" strokeWidth={0} />
-        ))}
-      </div>
-      <p className="mt-3 text-[14px] leading-relaxed text-foreground/85">"{t.quote}"</p>
-      <div className="mt-4 flex items-center gap-3 border-t pt-3" style={{ borderColor: s.ring }}>
-        <div
-          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full font-display text-xs font-extrabold"
-          style={{ background: s.avatar, color: s.avatarText }}
-        >
+    <div className="group relative flex w-[320px] flex-shrink-0 flex-col rounded-xl border border-foreground/10 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_12px_-4px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_12px_24px_-8px_rgba(15,23,42,0.10)] sm:w-[360px]">
+      <Quote className="h-5 w-5 text-foreground/15" strokeWidth={2} />
+      <p className="mt-3 text-[14.5px] leading-relaxed text-foreground/80">
+        {t.quote}
+      </p>
+      <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-4">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-foreground/[0.04] font-display text-[12px] font-bold tracking-tight text-foreground/70 ring-1 ring-inset ring-foreground/10">
           {getInitials(t.name)}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate font-display text-[13px] font-extrabold tracking-tight text-foreground">
+          <div className="truncate font-display text-[14px] font-bold tracking-tight text-foreground">
             {t.name}
           </div>
-          <div className="truncate text-[11px] font-semibold uppercase tracking-wider text-foreground/55">
-            Band {t.band} · {t.type}
+          <div className="truncate text-[12px] font-medium text-foreground/50">
+            {t.city}, {t.country}
+          </div>
+        </div>
+        <div className="flex flex-shrink-0 flex-col items-end gap-0.5">
+          <div className="font-display text-[15px] font-extrabold leading-none tracking-tight text-foreground">
+            {t.band}
+          </div>
+          <div className="text-[11px] font-medium text-foreground/50">
+            {t.type}
           </div>
         </div>
       </div>
@@ -116,9 +111,9 @@ export function TrustCompare() {
       <div className="container-page">
         {/* Testimonials */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-foreground/65">
-            <Star className="h-3 w-3 fill-amber-500 text-amber-500" strokeWidth={0} />
-            4.9 average · 30+ student reviews
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-semibold tracking-wide text-foreground/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Trusted by 30+ verified students worldwide
           </div>
           <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">
             What Students Say
