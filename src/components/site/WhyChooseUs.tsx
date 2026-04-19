@@ -1,5 +1,6 @@
 import { CalendarCheck, Award, BookMarked, Sparkles } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
+import { DoodleAccents } from "./PaperAccents";
 
 const items = [
   {
@@ -26,8 +27,9 @@ const items = [
 
 export function WhyChooseUs() {
   return (
-    <section className="py-20 sm:py-28" style={{ background: "var(--surface)" }}>
-      <div className="container-page">
+    <section className="relative overflow-hidden bg-paper-cream py-20 sm:py-28">
+      <DoodleAccents density="sparse" />
+      <div className="container-page relative">
         <SectionHeader
           eyebrow="Why choose BandPath"
           title="Everything you need to reach Band 8+"

@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "./SectionHeader";
+import { WashiTape } from "./PaperAccents";
 
 const features = [
   "Full access to question bank",

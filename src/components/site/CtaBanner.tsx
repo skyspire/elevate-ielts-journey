@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function CtaBanner() {
   return (
-    <section className="py-20 sm:py-28">
+    <section className="bg-paper-kraft py-20 sm:py-28">
       <div className="container-page">
         <div
           className="relative overflow-hidden rounded-[2rem] px-8 py-16 text-center sm:px-16 sm:py-20"
