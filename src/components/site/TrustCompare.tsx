@@ -199,8 +199,8 @@ export function TrustCompare() {
       <div className="marquee-pause relative mt-12 space-y-5 sm:mt-16">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[oklch(1_0_0)] to-transparent sm:w-32" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[oklch(1_0_0)] to-transparent sm:w-32" />
-        <MarqueeRow items={rowA} direction="left" />
-        <MarqueeRow items={rowB} direction="right" />
+        <MarqueeRow items={rowA} direction="left" offset={0} />
+        <MarqueeRow items={rowB} direction="right" offset={3} />
       </div>
 
       <div className="container-page">
