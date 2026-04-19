@@ -63,17 +63,25 @@ export function SamplePreview() {
 
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background" />
 
-                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
                   <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand text-brand-foreground shadow-glow">
                     <Lock className="h-5 w-5" />
                   </span>
                   <p className="font-display text-lg font-extrabold">
                     Unlock the full Band 9.0 answer
                   </p>
-                  <Button className="rounded-full bg-brand font-bold text-brand-foreground hover:bg-brand/90">
-                    <Sparkles className="mr-1 h-4 w-4" />
-                    Subscribe to read
-                  </Button>
+                  <p className="-mt-1 max-w-sm text-xs font-semibold text-muted-foreground">
+                    Sign up free to read 3 Writing + 3 Speaking samples. Subscribe for the full library.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Button variant="outline" className="rounded-full font-bold">
+                      Sign up free
+                    </Button>
+                    <Button className="rounded-full bg-brand font-bold text-brand-foreground hover:bg-brand/90">
+                      <Sparkles className="mr-1 h-4 w-4" />
+                      Subscribe
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import { SectionHeader } from "./SectionHeader";
 import { QuestionCard } from "./QuestionCard";
+import { AccessNote } from "./AccessNote";
 import { Button } from "@/components/ui/button";
 
 const writing = [
@@ -66,7 +67,11 @@ export function LatestQuestions() {
           </Button>
         </div>
 
-        <div className="mt-12 space-y-12">
+        <div className="mt-10">
+          <AccessNote />
+        </div>
+
+        <div className="mt-6 space-y-12">
           <div>
             <h3 className="mb-5 font-display text-sm font-extrabold uppercase tracking-widest text-muted-foreground">
               ✍️ Writing

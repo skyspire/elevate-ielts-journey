@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FreeQuotaBadge } from "./FreeQuotaBadge";
 
 const navItems = [
   { label: "Home", to: "/" },
@@ -38,6 +39,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <FreeQuotaBadge used={0} total={3} />
           <Button variant="ghost" className="font-semibold">
             Sign In
           </Button>
