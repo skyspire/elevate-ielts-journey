@@ -222,7 +222,14 @@ function WritingSamplesPage() {
           <StepLabel index={3} label={`${activeCategory.label} Questions`} />
           <div className="grid gap-3 sm:grid-cols-2">
             {questions.map((q) => (
-              <QuestionRowCard key={q.id} q={q} accentText={accentText} />
+              <QuestionRowCard
+                key={q.id}
+                q={q}
+                accentText={accentText}
+                module={module}
+                task={task}
+                category={activeCategory.label}
+              />
             ))}
           </div>
 
@@ -299,7 +306,19 @@ function TaskCard({
   );
 }
 
-function QuestionRowCard({ q, accentText }: { q: Question; accentText: string }) {
+function QuestionRowCard({
+  q,
+  accentText,
+  module,
+  task,
+  category,
+}: {
+  q: Question;
+  accentText: string;
+  module: Module;
+  task: Task;
+  category: string;
+}) {
   const diffTone =
     q.difficulty === "Easy"
       ? "bg-[oklch(0.94_0.05_160)] text-[oklch(0.38_0.10_160)]"
@@ -308,9 +327,14 @@ function QuestionRowCard({ q, accentText }: { q: Question; accentText: string })
       : "bg-[oklch(0.94_0.05_30)] text-[oklch(0.42_0.13_40)]";
 
   return (
-    <div className="group relative flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-white p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card">
+    <Link
+      to="/dashboard/writing-samples/$questionId"
+      params={{ questionId: q.id }}
+      search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
+      className="group relative flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-white p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
+    >
       <div className="flex items-start justify-between gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-foreground/60">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-foreground/60 transition-colors group-hover:bg-foreground/10">
           <BookOpen className="h-4 w-4" strokeWidth={2.4} />
         </span>
         <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.16em] ${diffTone}`}>
@@ -325,9 +349,9 @@ function QuestionRowCard({ q, accentText }: { q: Question; accentText: string })
           {q.topic}
         </span>
         <span className={`text-[11px] font-extrabold uppercase tracking-[0.2em] ${accentText}`}>
-          Sample
+          Open →
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
