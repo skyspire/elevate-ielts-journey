@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Footer } from "@/components/site/Footer";
 import bg1 from "@/assets/bg-option-1-paper.jpg";
 import bg2 from "@/assets/bg-option-2-tinted.jpg";
 import bg3 from "@/assets/bg-option-3-doodles.jpg";
@@ -47,6 +48,7 @@ function BgOptions() {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

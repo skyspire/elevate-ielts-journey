@@ -13,6 +13,7 @@ import {
   CalendarDays,
   type LucideProps,
 } from "lucide-react";
+import { Footer } from "@/components/site/Footer";
 
 type Module = "academic" | "general";
 
@@ -381,6 +382,7 @@ function DashboardPage() {
           </p>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
