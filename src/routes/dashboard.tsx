@@ -47,6 +47,8 @@ type Feature = {
   };
   // tone for the card tint (independent of module accent)
   tone: "blue" | "sage" | "lilac" | "peach" | "mint" | "kraft" | "rose";
+  // Lucide icon used for the glossy 3D mark in the corner
+  icon: ComponentType<LucideProps>;
 };
 
 const features: Feature[] = [
@@ -62,9 +64,7 @@ const features: Feature[] = [
       general: { value: "180+", label: "model letters & essays" },
     },
     tone: "blue",
-  },
-  {
-    key: "speaking",
+    icon: PenLine,
     title: "Speaking Samples",
     description: {
       academic: "Part 1, 2 & 3 model answers with examiner-style follow-ups.",
