@@ -561,14 +561,18 @@ function TaskEnvelopeScroll({
   onTaskChange,
   isAcademic,
 }: {
-  task: Task;
+  task: Task | null;
   onTaskChange: (t: Task) => void;
   isAcademic: boolean;
 }) {
   const isT1 = task === "task1";
+  const isT2 = task === "task2";
+  const noSelection = task === null;
   const highlightBg = isAcademic
     ? "bg-[oklch(0.92_0.13_85)]"
     : "bg-[oklch(0.90_0.14_150)]";
+  const accentBorder = isAcademic ? "border-brand" : "border-[oklch(0.55_0.10_160)]";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
 
   const renderCard = (
     active: boolean,
@@ -626,9 +630,42 @@ function TaskEnvelopeScroll({
   );
 
   return (
-    <div className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:gap-5">
-      {renderCard(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters")}
-      {renderCard(!isT1, () => onTaskChange("task2"), "Task 2", "Essay")}
+    <div className="relative mx-auto max-w-3xl">
+      <style>{`
+        @keyframes select-disc-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 var(--ring-color, oklch(0.58 0.17 255 / 0.35)), 0 8px 24px oklch(0.20 0.05 250 / 0.10); }
+          50%      { box-shadow: 0 0 0 10px transparent, 0 8px 24px oklch(0.20 0.05 250 / 0.10); }
+        }
+      `}</style>
+
+      <div className="grid grid-cols-2 gap-3 sm:gap-5">
+        {renderCard(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters")}
+        {renderCard(isT2, () => onTaskChange("task2"), "Task 2", "Essay")}
+      </div>
+
+      {/* Center disc — only shown until user picks a task */}
+      {noSelection && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
+        >
+          <div
+            className={`flex h-24 w-24 items-center justify-center rounded-full border-4 bg-white text-center sm:h-28 sm:w-28 ${accentBorder}`}
+            style={{
+              ["--ring-color" as never]: isAcademic
+                ? "oklch(0.58 0.17 255 / 0.35)"
+                : "oklch(0.55 0.10 160 / 0.35)",
+              animation: "select-disc-pulse 2.2s ease-out infinite",
+            }}
+          >
+            <span
+              className={`px-2 font-display text-[10px] font-black uppercase leading-[1.15] tracking-[0.14em] sm:text-[11px] ${accentText}`}
+            >
+              Select<br />Your<br />Task
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
