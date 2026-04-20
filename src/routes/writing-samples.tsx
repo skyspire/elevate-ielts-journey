@@ -166,10 +166,67 @@ function WritingSamplesPage() {
           {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
           <div className="mt-8 text-center">
             <h2
-              className={`font-display font-black uppercase leading-[0.95] tracking-[-0.02em] ${accentText}`}
+              className={`relative inline-block font-display font-black uppercase leading-[0.95] tracking-[-0.02em] ${accentText}`}
               style={{ fontSize: "clamp(2.25rem, 8vw, 5rem)" }}
             >
-              IELTS {isAcademic ? "Academic" : "General Training"}
+              {/* Sparkle doodle (top-left) */}
+              <svg
+                aria-hidden
+                viewBox="0 0 24 24"
+                className={`absolute -left-5 -top-2 h-5 w-5 sm:-left-10 sm:-top-4 sm:h-7 sm:w-7 ${accentText} opacity-70`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.5 5.5l3 3M15.5 15.5l3 3M5.5 18.5l3-3M15.5 8.5l3-3" />
+              </svg>
+
+              {/* Curved arrow doodle (top-right) */}
+              <svg
+                aria-hidden
+                viewBox="0 0 60 40"
+                className={`absolute -right-6 -top-5 h-7 w-10 sm:-right-14 sm:-top-8 sm:h-12 sm:w-16 ${accentText} opacity-60`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 30 C 15 5, 40 5, 55 22" />
+                <path d="M48 14 L 55 22 L 46 25" />
+              </svg>
+
+              IELTS{" "}
+              <span className="relative inline-block">
+                {/* Highlighter swipe behind the word */}
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-[-6px] bottom-[6%] -z-10 h-[58%] -rotate-1 ${
+                    isAcademic ? "bg-[oklch(0.92_0.13_85)]" : "bg-[oklch(0.90_0.14_150)]"
+                  } opacity-70`}
+                  style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
+                />
+                <span className="relative">
+                  {isAcademic ? "Academic" : "General Training"}
+                </span>
+
+                {/* Pencil underline swoosh */}
+                <svg
+                  aria-hidden
+                  viewBox="0 0 300 22"
+                  preserveAspectRatio="none"
+                  className={`absolute -bottom-3 left-0 h-3 w-full ${accentText}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
+                </svg>
+              </span>
             </h2>
 
             {/* Module switcher */}
