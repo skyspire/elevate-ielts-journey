@@ -184,98 +184,75 @@ function WritingSamplesPage() {
                 </span>
               </button>
 
-              {/* The Dial — School / paper vibe, no heavy shadow */}
+              {/* The Dial — Combination lock */}
               <div className="relative shrink-0">
+                {/* Outer knurled ring */}
                 <div
-                  className="relative flex h-32 w-32 items-center justify-center rounded-full border-[3px] border-dashed border-foreground/25 bg-paper-cream sm:h-40 sm:w-40"
+                  className={`relative flex h-36 w-36 items-center justify-center rounded-full bg-gradient-to-br from-foreground/[0.22] via-foreground/[0.10] to-foreground/[0.20] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-44 sm:w-44 ${
+                    isAcademic ? "-rotate-[40deg]" : "rotate-[40deg]"
+                  }`}
                   style={{
                     backgroundImage:
-                      "radial-gradient(circle at 30% 25%, rgba(255,255,255,0.7), transparent 60%)",
+                      "repeating-conic-gradient(from 0deg, oklch(0.30 0.02 250 / 0.55) 0deg 4deg, transparent 4deg 8deg)",
                   }}
                 >
-                  {/* Tick marks + active arc */}
+                  {/* BigIELTS engraved on the ring (curved text via SVG) */}
                   <svg
-                    viewBox="0 0 100 100"
+                    viewBox="0 0 200 200"
                     className="absolute inset-0 h-full w-full"
-                    fill="none"
                   >
-                    {Array.from({ length: 24 }).map((_, i) => {
-                      const angle = ((i * 15 - 90) * Math.PI) / 180;
-                      const isMajor = i % 6 === 0;
-                      const inner = isMajor ? 36 : 39;
-                      const x1 = 50 + Math.cos(angle) * inner;
-                      const y1 = 50 + Math.sin(angle) * inner;
-                      const x2 = 50 + Math.cos(angle) * 43;
-                      const y2 = 50 + Math.sin(angle) * 43;
-                      return (
-                        <line
-                          key={i}
-                          x1={x1}
-                          y1={y1}
-                          x2={x2}
-                          y2={y2}
-                          stroke="currentColor"
-                          strokeWidth={isMajor ? 2 : 1}
-                          strokeLinecap="round"
-                          className={isMajor ? "text-foreground/55" : "text-foreground/25"}
-                        />
-                      );
-                    })}
-
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="42"
-                      stroke={isAcademic ? "oklch(0.55 0.16 265)" : "oklch(0.55 0.10 160)"}
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeDasharray="30 235"
-                      strokeDashoffset={isAcademic ? "60" : "183"}
-                      className="transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-                      fill="none"
-                    />
+                    <defs>
+                      <path
+                        id="brandArc"
+                        d="M 30,100 A 70,70 0 0,1 170,100"
+                      />
+                    </defs>
+                    <text
+                      fill="currentColor"
+                      className="fill-foreground/55 font-display text-[14px] font-black tracking-[0.18em]"
+                      style={{ letterSpacing: "0.18em" }}
+                    >
+                      <textPath href="#brandArc" startOffset="50%" textAnchor="middle">
+                        BIGIELTS · COM
+                      </textPath>
+                    </text>
                   </svg>
+                </div>
 
-                  {/* Inner knob — rotates, plain paper look */}
+                {/* Fixed pointer notch at top (does NOT rotate) */}
+                <div className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1">
                   <div
-                    className={`relative flex h-[74%] w-[74%] items-center justify-center rounded-full border-2 bg-white transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                      isAcademic
-                        ? "-rotate-[60deg] border-brand/40"
-                        : "rotate-[60deg] border-[oklch(0.55_0.10_160)]/40"
+                    className={`h-0 w-0 border-l-[8px] border-r-[8px] border-t-[14px] border-l-transparent border-r-transparent ${
+                      isAcademic ? "border-t-brand" : "border-t-[oklch(0.55_0.10_160)]"
+                    } drop-shadow-sm`}
+                  />
+                </div>
+
+                {/* Center display window — fixed, does NOT rotate */}
+                <div
+                  className={`pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-[3px] bg-paper-cream transition-colors duration-500 ${
+                    isAcademic ? "border-brand/60" : "border-[oklch(0.55_0.10_160)]/60"
+                  }`}
+                  style={{
+                    boxShadow:
+                      "inset 0 4px 10px rgba(0,0,0,0.12), inset 0 -2px 4px rgba(255,255,255,0.6)",
+                  }}
+                >
+                  <span className="text-[8px] font-extrabold uppercase tracking-[0.22em] text-foreground/50">
+                    Module
+                  </span>
+                  <span
+                    className={`font-display text-2xl font-black leading-none tracking-tight transition-colors duration-500 sm:text-3xl ${
+                      isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]"
                     }`}
                   >
-                    {/* Pointer arrow */}
-                    <div className="absolute top-1 flex flex-col items-center">
-                      <div
-                        className={`h-0 w-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent ${
-                          isAcademic ? "border-b-brand" : "border-b-[oklch(0.55_0.10_160)]"
-                        }`}
-                      />
-                      <div
-                        className={`h-4 w-1.5 rounded-b-full ${
-                          isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-                        }`}
-                      />
-                    </div>
-
-                    {/* BigIELTS.com branding — counter-rotates to stay upright */}
-                    <div
-                      className={`flex flex-col items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                        isAcademic ? "rotate-[60deg]" : "-rotate-[60deg]"
-                      }`}
-                    >
-                      <span
-                        className={`font-display text-base font-black leading-none tracking-tight sm:text-xl ${
-                          isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]"
-                        }`}
-                      >
-                        BigIELTS
-                      </span>
-                      <span className="mt-0.5 text-[8px] font-extrabold uppercase tracking-[0.18em] text-foreground/55 sm:text-[9px]">
-                        .com
-                      </span>
-                    </div>
-                  </div>
+                    {isAcademic ? "ACAD" : "GEN"}
+                  </span>
+                  <span
+                    className={`mt-1 h-0.5 w-6 rounded-full transition-colors duration-500 ${
+                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+                    }`}
+                  />
                 </div>
               </div>
 
