@@ -118,9 +118,10 @@ function WritingSamplesPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const module: Module = search.module ?? "general";
-  const [task, setTask] = useState<Task>("task1");
-  const categories = categoriesByModuleTask[module][task];
-  const [categoryId, setCategoryId] = useState<string>(categories[0].id);
+  const [task, setTask] = useState<Task | null>(null);
+  const fallbackCategories = categoriesByModuleTask[module]["task1"];
+  const categories = task ? categoriesByModuleTask[module][task] : fallbackCategories;
+  const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
 
   // Reset category when task changes
   const onTaskChange = (next: Task) => {
