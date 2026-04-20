@@ -9,17 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WritingSamplesRouteImport } from './routes/writing-samples'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 
-const WritingSamplesRoute = WritingSamplesRouteImport.update({
-  id: '/writing-samples',
-  path: '/writing-samples',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -35,34 +30,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WritingSamplesIndexRoute = WritingSamplesIndexRouteImport.update({
+  id: '/writing-samples/',
+  path: '/writing-samples/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WritingSamplesQuestionIdRoute =
   WritingSamplesQuestionIdRouteImport.update({
-    id: '/$questionId',
-    path: '/$questionId',
-    getParentRoute: () => WritingSamplesRoute,
+    id: '/writing-samples/$questionId',
+    path: '/writing-samples/$questionId',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/writing-samples': typeof WritingSamplesRouteWithChildren
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/writing-samples/': typeof WritingSamplesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/writing-samples': typeof WritingSamplesRouteWithChildren
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/writing-samples': typeof WritingSamplesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/writing-samples': typeof WritingSamplesRouteWithChildren
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/writing-samples/': typeof WritingSamplesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -70,40 +70,34 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
-    | '/writing-samples'
     | '/writing-samples/$questionId'
+    | '/writing-samples/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/bg-options'
     | '/dashboard'
-    | '/writing-samples'
     | '/writing-samples/$questionId'
+    | '/writing-samples'
   id:
     | '__root__'
     | '/'
     | '/bg-options'
     | '/dashboard'
-    | '/writing-samples'
     | '/writing-samples/$questionId'
+    | '/writing-samples/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
-  WritingSamplesRoute: typeof WritingSamplesRouteWithChildren
+  WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
+  WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/writing-samples': {
-      id: '/writing-samples'
-      path: '/writing-samples'
-      fullPath: '/writing-samples'
-      preLoaderRoute: typeof WritingSamplesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -125,33 +119,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/writing-samples/': {
+      id: '/writing-samples/'
+      path: '/writing-samples'
+      fullPath: '/writing-samples/'
+      preLoaderRoute: typeof WritingSamplesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/writing-samples/$questionId': {
       id: '/writing-samples/$questionId'
-      path: '/$questionId'
+      path: '/writing-samples/$questionId'
       fullPath: '/writing-samples/$questionId'
       preLoaderRoute: typeof WritingSamplesQuestionIdRouteImport
-      parentRoute: typeof WritingSamplesRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface WritingSamplesRouteChildren {
-  WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
-}
-
-const WritingSamplesRouteChildren: WritingSamplesRouteChildren = {
-  WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
-}
-
-const WritingSamplesRouteWithChildren = WritingSamplesRoute._addFileChildren(
-  WritingSamplesRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
-  WritingSamplesRoute: WritingSamplesRouteWithChildren,
+  WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
+  WritingSamplesIndexRoute: WritingSamplesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
