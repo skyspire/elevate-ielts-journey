@@ -163,30 +163,100 @@ function WritingSamplesPage() {
             <span className={accentText}>Writing Samples</span>
           </div>
 
-          {/* Module switcher — placed above so it never crowds the title doodles */}
-          <div className="mt-6 flex justify-center">
-            <div className="inline-flex items-center rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
+          {/* Module switcher — Notebook tabs */}
+          <div className="mt-6 flex justify-center px-2">
+            <div
+              role="tablist"
+              aria-label="IELTS module"
+              className="relative flex w-full max-w-md items-end gap-2 border-b-2 border-foreground/15"
+            >
+              {/* Academic tab */}
               <button
                 type="button"
+                role="tab"
+                aria-selected={isAcademic}
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
-                aria-pressed={isAcademic}
-                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
-                  isAcademic ? "bg-brand text-brand-foreground shadow-soft" : "text-foreground/55 hover:text-foreground"
+                className={`group relative flex-1 rounded-t-2xl border-2 border-b-0 px-3 pt-3 pb-3.5 text-center transition-all ${
+                  isAcademic
+                    ? "-mb-[2px] border-brand/40 bg-white shadow-[0_-6px_18px_-8px_oklch(0.55_0.16_265/0.35)] translate-y-0"
+                    : "border-foreground/10 bg-foreground/[0.04] translate-y-1.5 hover:translate-y-0.5 hover:bg-foreground/[0.06]"
                 }`}
               >
-                Academic
+                {/* Paper clip doodle on active */}
+                {isAcademic && (
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 24 24"
+                    className="absolute -top-2.5 left-3 h-5 w-5 -rotate-12 text-brand drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10.5l-9.2 9.2a5 5 0 0 1-7.07-7.07l9.2-9.2a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.2a2 2 0 0 1-2.83-2.83l8.49-8.49" />
+                  </svg>
+                )}
+                <span
+                  className={`block text-[10px] font-extrabold uppercase tracking-[0.18em] ${
+                    isAcademic ? "text-brand" : "text-foreground/40"
+                  }`}
+                >
+                  Module
+                </span>
+                <span
+                  className={`mt-0.5 block font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                    isAcademic ? "text-foreground" : "text-foreground/55"
+                  }`}
+                >
+                  Academic
+                </span>
               </button>
+
+              {/* General tab */}
               <button
                 type="button"
+                role="tab"
+                aria-selected={!isAcademic}
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
-                aria-pressed={!isAcademic}
-                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
+                className={`group relative flex-1 rounded-t-2xl border-2 border-b-0 px-3 pt-3 pb-3.5 text-center transition-all ${
                   !isAcademic
-                    ? "bg-[oklch(0.55_0.10_160)] text-white shadow-soft"
-                    : "text-foreground/55 hover:text-foreground"
+                    ? "-mb-[2px] border-[oklch(0.62_0.10_160)]/40 bg-white shadow-[0_-6px_18px_-8px_oklch(0.55_0.10_160/0.35)] translate-y-0"
+                    : "border-foreground/10 bg-foreground/[0.04] translate-y-1.5 hover:translate-y-0.5 hover:bg-foreground/[0.06]"
                 }`}
               >
-                General Training
+                {/* Pencil doodle on active */}
+                {!isAcademic && (
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 24 24"
+                    className="absolute -top-2.5 right-3 h-5 w-5 rotate-12 text-[oklch(0.45_0.10_160)] drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                    <path d="M2 2l7.586 7.586" />
+                    <circle cx="11" cy="11" r="2" />
+                  </svg>
+                )}
+                <span
+                  className={`block text-[10px] font-extrabold uppercase tracking-[0.18em] ${
+                    !isAcademic ? "text-[oklch(0.42_0.10_160)]" : "text-foreground/40"
+                  }`}
+                >
+                  Module
+                </span>
+                <span
+                  className={`mt-0.5 block font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                    !isAcademic ? "text-foreground" : "text-foreground/55"
+                  }`}
+                >
+                  General Training
+                </span>
               </button>
             </div>
           </div>
