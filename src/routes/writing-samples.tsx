@@ -473,8 +473,11 @@ function WritingSamplesPage() {
           <StepLabel index={3} label={`${activeCategory.label} Questions`} />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {questions.map((q) => (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {questions.map((q, i) => (
               <QuestionRowCard
                 key={q.id}
+                index={i + 1}
                 q={q}
                 module={module}
                 task={task}
