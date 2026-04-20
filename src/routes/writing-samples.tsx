@@ -566,58 +566,38 @@ const toneMap: Record<Tone, string> = {
 
 function QuestionRowCard({
   q,
+  index,
   module,
   task,
   category,
 }: {
   q: Question;
+  index: number;
   module: Module;
   task: Task;
   category: string;
 }) {
-  const typeLabel = task === "task1" ? "Writing Task 1" : "Writing Task 2";
-  const locked = true;
-  const band = "Band 8.5";
-  const date = "April 2026";
+  const idx = String(index).padStart(2, "0");
 
   return (
     <Link
       to="/writing-samples/$questionId"
       params={{ questionId: q.id }}
       search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
+      className="group relative flex h-full overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
     >
-      {/* Tag banner — full-width, prominent */}
-      <div className={`flex items-center justify-between px-5 py-3.5 ${toneMap[q.tone]}`}>
-        <span className="text-sm font-extrabold uppercase tracking-wide">{q.topic}</span>
-        <span className="rounded-full bg-background/60 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
-          {typeLabel}
+      {/* Left column — index */}
+      <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20">
+        <span className="font-display text-2xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-3xl">
+          {idx}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-6">
-        <h3 className="font-display text-xl font-extrabold leading-snug tracking-tight text-foreground">
+      {/* Right column — question statement */}
+      <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
+        <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-base">
           {q.title}
-        </h3>
-
-        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
-            <Calendar className="h-3.5 w-3.5" />
-            {date}
-            <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-secondary-foreground">
-              {band}
-            </span>
-          </div>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
-            {locked ? <Lock className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-4 w-4" />}
-          </span>
-        </div>
-
-        {locked && (
-          <p className="-mb-1 text-[11px] font-semibold text-muted-foreground/80">
-            Sign up to read · free sample
-          </p>
-        )}
+        </p>
       </div>
     </Link>
   );
