@@ -67,6 +67,7 @@ const features: Feature[] = [
     },
     tone: "navy",
     icon: PenLine,
+    to: "/dashboard/writing-samples",
   },
   {
     key: "speaking",
