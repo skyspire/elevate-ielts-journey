@@ -6,13 +6,15 @@ import {
   PenLine,
   FileText,
   Mail,
-  BookOpen,
   BarChart3,
   MessageSquare,
   Lightbulb,
   Scale,
   HelpCircle,
   CheckCircle2,
+  Calendar,
+  Lock,
+  ArrowUpRight,
 } from "lucide-react";
 import { z } from "zod";
 
@@ -78,7 +80,16 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
 };
 
 // ───────── Placeholder questions ─────────
-type Question = { id: string; title: string; topic: string; difficulty: "Easy" | "Medium" | "Hard" };
+type Tone = "blue" | "mint" | "peach" | "lilac";
+type Question = {
+  id: string;
+  title: string;
+  topic: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  tone: Tone;
+};
+
+const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
 
 const makeQuestions = (label: string): Question[] =>
   Array.from({ length: 8 }).map((_, i) => ({
@@ -86,6 +97,7 @@ const makeQuestions = (label: string): Question[] =>
     title: `${label} — Sample Question ${i + 1}`,
     topic: ["Work", "Education", "Society", "Environment", "Technology", "Health", "Travel", "Lifestyle"][i],
     difficulty: (["Easy", "Medium", "Hard"] as const)[i % 3],
+    tone: TONES[i % TONES.length],
   }));
 
 function WritingSamplesPage() {
@@ -220,12 +232,11 @@ function WritingSamplesPage() {
 
           {/* Step 3 — Questions list */}
           <StepLabel index={3} label={`${activeCategory.label} Questions`} />
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {questions.map((q) => (
               <QuestionRowCard
                 key={q.id}
                 q={q}
-                accentText={accentText}
                 module={module}
                 task={task}
                 category={activeCategory.label}
@@ -306,51 +317,67 @@ function TaskCard({
   );
 }
 
+const toneMap: Record<Tone, string> = {
+  blue: "bg-brand-soft text-brand",
+  mint: "bg-mint text-foreground",
+  peach: "bg-peach text-foreground",
+  lilac: "bg-lilac text-foreground",
+};
+
 function QuestionRowCard({
   q,
-  accentText,
   module,
   task,
   category,
 }: {
   q: Question;
-  accentText: string;
   module: Module;
   task: Task;
   category: string;
 }) {
-  const diffTone =
-    q.difficulty === "Easy"
-      ? "bg-[oklch(0.94_0.05_160)] text-[oklch(0.38_0.10_160)]"
-      : q.difficulty === "Medium"
-      ? "bg-[oklch(0.95_0.05_85)] text-[oklch(0.42_0.11_75)]"
-      : "bg-[oklch(0.94_0.05_30)] text-[oklch(0.42_0.13_40)]";
+  const typeLabel = task === "task1" ? "Writing Task 1" : "Writing Task 2";
+  const locked = true;
+  const band = "Band 8.5";
+  const date = "April 2026";
 
   return (
     <Link
       to="/writing-samples/$questionId"
       params={{ questionId: q.id }}
       search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
-      className="group relative flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-white p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
+      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
     >
-      <div className="flex items-start justify-between gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-foreground/60 transition-colors group-hover:bg-foreground/10">
-          <BookOpen className="h-4 w-4" strokeWidth={2.4} />
-        </span>
-        <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.16em] ${diffTone}`}>
-          {q.difficulty}
+      {/* Tag banner — full-width, prominent */}
+      <div className={`flex items-center justify-between px-5 py-3.5 ${toneMap[q.tone]}`}>
+        <span className="text-sm font-extrabold uppercase tracking-wide">{q.topic}</span>
+        <span className="rounded-full bg-background/60 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+          {typeLabel}
         </span>
       </div>
-      <h4 className="font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground">
-        {q.title}
-      </h4>
-      <div className="mt-auto flex items-center justify-between border-t border-foreground/10 pt-3">
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-          {q.topic}
-        </span>
-        <span className={`text-[11px] font-extrabold uppercase tracking-[0.2em] ${accentText}`}>
-          Open →
-        </span>
+
+      <div className="flex flex-1 flex-col gap-4 p-6">
+        <h3 className="font-display text-xl font-extrabold leading-snug tracking-tight text-foreground">
+          {q.title}
+        </h3>
+
+        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <Calendar className="h-3.5 w-3.5" />
+            {date}
+            <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-secondary-foreground">
+              {band}
+            </span>
+          </div>
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
+            {locked ? <Lock className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-4 w-4" />}
+          </span>
+        </div>
+
+        {locked && (
+          <p className="-mb-1 text-[11px] font-semibold text-muted-foreground/80">
+            Sign up to read · free sample
+          </p>
+        )}
       </div>
     </Link>
   );
