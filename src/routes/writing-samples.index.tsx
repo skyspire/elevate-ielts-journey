@@ -561,619 +561,194 @@ function TaskEnvelopeScroll({
   isAcademic: boolean;
 }) {
   const isT1 = task === "task1";
-  const isT2 = task === "task2";
 
-  // Module-aware envelope hues (kraft + accent tinted)
-  const envBase = isAcademic ? "oklch(0.88 0.05 255)" : "oklch(0.89 0.06 155)";
-  const envBaseDark = isAcademic ? "oklch(0.74 0.08 260)" : "oklch(0.70 0.08 158)";
-  const envFlapTop = isAcademic ? "oklch(0.82 0.07 258)" : "oklch(0.78 0.08 156)";
-  const envFlapBot = isAcademic ? "oklch(0.68 0.10 262)" : "oklch(0.62 0.10 158)";
   const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
+  const highlightBg = isAcademic
+    ? "bg-[oklch(0.92_0.13_85)]"
+    : "bg-[oklch(0.90_0.14_150)]";
+
+  // Re-mount parrot on toggle so the keyframe animation re-plays each time
+  const animKey = `parrot-${task}-${isAcademic ? "a" : "g"}`;
 
   return (
     <div className="relative">
-      {/* Wooden desk with rich grain + vignette */}
-      <div
-        className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 overflow-hidden rounded-3xl border border-[oklch(0.55_0.08_55)]/30 p-4 shadow-card sm:gap-6 sm:p-8"
-        style={{
-          background:
-            "radial-gradient(ellipse at 30% 0%, oklch(0.78 0.06 60) 0%, oklch(0.62 0.08 50) 60%, oklch(0.48 0.07 45) 100%)",
-        }}
-      >
-        {/* Wood grain — long planks */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-50 mix-blend-multiply"
-          style={{
-            backgroundImage: `
-              repeating-linear-gradient(90deg, transparent 0 92px, oklch(0.35 0.06 40 / 0.55) 92px 93px, transparent 93px 95px),
-              repeating-linear-gradient(90deg, transparent 0 7px, oklch(0.40 0.05 45 / 0.18) 7px 8px),
-              repeating-linear-gradient(90deg, transparent 0 41px, oklch(0.30 0.05 40 / 0.22) 41px 42px)
-            `,
-          }}
-        />
-        {/* Knot detail */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute h-10 w-10 rounded-full opacity-40 mix-blend-multiply"
-          style={{
-            top: "18%",
-            left: "12%",
-            background:
-              "radial-gradient(circle, oklch(0.30 0.07 35) 0%, oklch(0.45 0.07 40 / 0.6) 40%, transparent 70%)",
-          }}
-        />
-        {/* Vignette */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-3xl"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 40%, oklch(0.25 0.04 40 / 0.35) 100%)",
-          }}
-        />
+      <style>{`
+        @keyframes parrot-fly-to-right {
+          0%   { left: 25%; top: 50%; transform: translate(-50%, -50%) rotate(-8deg) scaleX(1); }
+          50%  { left: 50%; top: 8%;  transform: translate(-50%, -50%) rotate(6deg)  scaleX(1); }
+          100% { left: 75%; top: 50%; transform: translate(-50%, -50%) rotate(-4deg) scaleX(1); }
+        }
+        @keyframes parrot-fly-to-left {
+          0%   { left: 75%; top: 50%; transform: translate(-50%, -50%) rotate(8deg)  scaleX(-1); }
+          50%  { left: 50%; top: 8%;  transform: translate(-50%, -50%) rotate(-6deg) scaleX(-1); }
+          100% { left: 25%; top: 50%; transform: translate(-50%, -50%) rotate(4deg)  scaleX(-1); }
+        }
+        @keyframes parrot-hover {
+          0%, 100% { translate: 0 0; }
+          50%      { translate: 0 -4px; }
+        }
+      `}</style>
 
-        {/* TASK 1 — Envelope (tilted -4°) */}
+      <div className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:gap-5">
+        {/* TASK 1 */}
         <button
           type="button"
           onClick={() => onTaskChange("task1")}
           aria-pressed={isT1}
-          className={`group relative z-10 flex flex-col items-center gap-3 rounded-2xl p-3 text-center transition-all duration-300 sm:p-5 ${
-            isT1 ? "-translate-y-1 scale-[1.04]" : "opacity-70 hover:opacity-95"
+          className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
+            isT1
+              ? "border-foreground/15 shadow-card -translate-y-0.5"
+              : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
           }`}
         >
-          <svg
-            viewBox="0 0 220 180"
-            className="h-32 w-full max-w-[200px] drop-shadow-[0_8px_16px_oklch(0.20_0.05_40_/_0.35)] sm:h-40"
-            aria-label="Wax-sealed envelope"
-            style={{
-              transform: `rotate(${isT1 ? -3 : -5}deg)`,
-              transition: "transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            <defs>
-              <linearGradient id="envBody" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor={envBase} />
-                <stop offset="100%" stopColor={envBaseDark} />
-              </linearGradient>
-              <linearGradient id="envFlap" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor={envFlapTop} />
-                <stop offset="100%" stopColor={envFlapBot} />
-              </linearGradient>
-              <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="oklch(0.99 0.01 80)" />
-                <stop offset="100%" stopColor="oklch(0.93 0.02 80)" />
-              </linearGradient>
-              <radialGradient id="wax" cx="35%" cy="30%" r="70%">
-                <stop offset="0%" stopColor="oklch(0.72 0.18 30)" />
-                <stop offset="55%" stopColor="oklch(0.50 0.18 28)" />
-                <stop offset="100%" stopColor="oklch(0.32 0.14 25)" />
-              </radialGradient>
-              <linearGradient id="stamp" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="oklch(0.85 0.12 80)" />
-                <stop offset="100%" stopColor="oklch(0.65 0.14 50)" />
-              </linearGradient>
-              <pattern id="grainEnv" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
-                <rect width="3" height="3" fill="transparent" />
-                <circle cx="0.5" cy="0.5" r="0.3" fill="oklch(0.30 0.04 50 / 0.18)" />
-                <circle cx="2" cy="1.8" r="0.25" fill="oklch(0.95 0.02 80 / 0.25)" />
-              </pattern>
-              <filter id="shadowSoft" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
-                <feOffset dx="0" dy="1" result="off" />
-                <feComponentTransfer>
-                  <feFuncA type="linear" slope="0.4" />
-                </feComponentTransfer>
-                <feMerge>
-                  <feMergeNode />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
+          {/* Active accent bar */}
+          <span
+            aria-hidden
+            className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
+              isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+            } ${isT1 ? "opacity-100" : "opacity-0"}`}
+          />
 
-            {/* Ground shadow */}
-            <ellipse
-              cx="110"
-              cy="166"
-              rx={isT1 ? 78 : 62}
-              ry="5"
-              fill="oklch(0.20 0.04 40)"
-              opacity={isT1 ? 0.32 : 0.18}
-              style={{ transition: "all 400ms ease" }}
-            />
-
-            {/* Letter peeking out */}
-            <g
-              style={{
-                transform: isT1 ? "translateY(-22px)" : "translateY(0)",
-                opacity: isT1 ? 1 : 0,
-                transition: "all 550ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
+                isT1
+                  ? isAcademic
+                    ? "bg-brand text-brand-foreground"
+                    : "bg-[oklch(0.55_0.10_160)] text-white"
+                  : "bg-foreground/8 text-foreground/55"
+              }`}
             >
-              <rect
-                x="48"
-                y="46"
-                width="124"
-                height="68"
-                rx="2"
-                fill="url(#letter)"
-                stroke="oklch(0.40 0.04 60)"
-                strokeWidth="0.8"
-                filter="url(#shadowSoft)"
-              />
-              {/* Hand-written address lines */}
-              <line x1="58" y1="58" x2="120" y2="58" stroke="oklch(0.30 0.06 250)" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="58" y1="68" x2="142" y2="68" stroke="oklch(0.40 0.04 60)" strokeWidth="0.9" />
-              <line x1="58" y1="76" x2="155" y2="76" stroke="oklch(0.40 0.04 60)" strokeWidth="0.9" />
-              <line x1="58" y1="84" x2="138" y2="84" stroke="oklch(0.40 0.04 60)" strokeWidth="0.9" />
-              <line x1="58" y1="92" x2="148" y2="92" stroke="oklch(0.40 0.04 60)" strokeWidth="0.9" />
-              <line x1="58" y1="100" x2="118" y2="100" stroke="oklch(0.40 0.04 60)" strokeWidth="0.9" />
-            </g>
-
-            {/* Envelope back/body */}
-            <path
-              d="M 30 78 L 30 152 Q 30 158 36 158 L 184 158 Q 190 158 190 152 L 190 78 Z"
-              fill="url(#envBody)"
-              stroke="oklch(0.30 0.06 50)"
-              strokeWidth="1.2"
-            />
-            {/* Paper grain overlay */}
-            <path
-              d="M 30 78 L 30 152 Q 30 158 36 158 L 184 158 Q 190 158 190 152 L 190 78 Z"
-              fill="url(#grainEnv)"
-              opacity="0.6"
-            />
-            {/* Inner highlight stripe */}
-            <path
-              d="M 30 78 L 190 78 L 190 84 L 30 84 Z"
-              fill="oklch(1 0 0)"
-              opacity="0.2"
-            />
-            {/* Side fold lines */}
-            <path d="M 30 78 L 110 128 L 190 78" fill="none" stroke="oklch(0.30 0.06 50)" strokeWidth="1" opacity="0.55" />
-            <path d="M 30 158 L 82 118 M 190 158 L 138 118" stroke="oklch(0.30 0.06 50)" strokeWidth="0.9" opacity="0.4" fill="none" />
-
-            {/* Postage stamp (top-right corner) */}
-            <g transform="translate(150 88)">
-              <rect
-                x="0"
-                y="0"
-                width="26"
-                height="30"
-                fill="url(#stamp)"
-                stroke="oklch(0.40 0.08 50)"
-                strokeWidth="0.6"
-                strokeDasharray="1.5 1"
-              />
-              <circle cx="13" cy="11" r="5" fill="none" stroke="oklch(0.30 0.10 30)" strokeWidth="1" />
-              <text x="13" y="14" textAnchor="middle" fontSize="6" fontWeight="900" fill="oklch(0.30 0.10 30)" fontFamily="serif">
-                B
-              </text>
-              <text x="13" y="24" textAnchor="middle" fontSize="4" fontWeight="700" fill="oklch(0.30 0.08 40)" fontFamily="serif">
-                IELTS
-              </text>
-              {/* Cancellation marks */}
-              <path d="M -2 4 q 8 -2 16 0 M -2 28 q 10 -1 18 -3" stroke="oklch(0.20 0.05 30 / 0.5)" strokeWidth="0.6" fill="none" />
-            </g>
-
-            {/* Top flap — opens when active */}
-            <g
-              style={{
-                transformOrigin: "110px 78px",
-                transform: isT1 ? "rotateX(168deg)" : "rotateX(0deg)",
-                transition: "transform 650ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
-            >
-              <path
-                d="M 30 78 L 110 128 L 190 78 Z"
-                fill="url(#envFlap)"
-                stroke="oklch(0.30 0.06 50)"
-                strokeWidth="1.2"
-              />
-              {/* Flap inner shadow */}
-              <path
-                d="M 30 78 L 110 128 L 190 78"
-                fill="none"
-                stroke="oklch(0.20 0.05 50)"
-                strokeWidth="1.5"
-                opacity="0.3"
-              />
-            </g>
-
-            {/* Wax seal — embossed monogram */}
-            <g
-              style={{
-                transform: isT1 ? "translateY(-50px)" : "translateY(0)",
-                transition: "transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
-            >
-              <circle cx="110" cy="128" r="13" fill="url(#wax)" />
-              {/* Drip */}
-              <path
-                d="M 102 138 q -2 4 0 7 q 2 -3 2 -6 Z M 118 138 q 2 5 1 8 q -3 -3 -3 -6 Z"
-                fill="oklch(0.42 0.16 28)"
-                opacity="0.85"
-              />
-              {/* Embossed B */}
-              <text
-                x="110"
-                y="133"
-                textAnchor="middle"
-                fontSize="13"
-                fontWeight="900"
-                fill="oklch(0.30 0.12 25)"
-                fontFamily="Georgia, serif"
-                opacity="0.85"
-              >
-                B
-              </text>
-              <text
-                x="110"
-                y="132.5"
-                textAnchor="middle"
-                fontSize="13"
-                fontWeight="900"
-                fill="oklch(0.92 0.10 35)"
-                fontFamily="Georgia, serif"
-                opacity="0.5"
-              >
-                B
-              </text>
-              {/* Highlight */}
-              <ellipse cx="105" cy="123" rx="4" ry="2.5" fill="oklch(1 0 0)" opacity="0.35" />
-            </g>
-          </svg>
-
-          <div>
-            <div className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
               Task 1
-            </div>
-            <div className={`mt-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.2em] ${isT1 ? accentText : "text-foreground/45"}`}>
-              {isAcademic ? "Charts & Graphs" : "Letters"}
-            </div>
-            <div className="mt-1.5 text-[11px] font-medium text-foreground/65 sm:text-xs">
-              150 words · 20 min
-            </div>
+            </span>
+            {isT1 && (
+              <CheckCircle2 className={`h-4 w-4 ${accentText}`} strokeWidth={2.5} />
+            )}
+          </div>
+
+          <h3
+            className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
+              isT1 ? "text-foreground" : "text-foreground/70"
+            }`}
+            style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
+          >
+            <span className="relative inline-block">
+              {isT1 && (
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
+                  style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
+                />
+              )}
+              <span className="relative">{isAcademic ? "Charts" : "Letters"}</span>
+            </span>
+          </h3>
+
+          <p className="mt-3 text-[13px] font-medium leading-relaxed text-foreground/65 sm:text-sm">
+            {isAcademic
+              ? "Describe graphs, tables, processes & maps."
+              : "Write formal & informal letters."}
+          </p>
+
+          <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55">
+            <span>150 words</span>
+            <span className="h-1 w-1 rounded-full bg-foreground/25" />
+            <span>20 min</span>
           </div>
         </button>
 
-        {/* TASK 2 — Scroll (tilted +3°) */}
+        {/* TASK 2 */}
         <button
           type="button"
           onClick={() => onTaskChange("task2")}
-          aria-pressed={isT2}
-          className={`group relative z-10 flex flex-col items-center gap-3 rounded-2xl p-3 text-center transition-all duration-300 sm:p-5 ${
-            isT2 ? "-translate-y-1 scale-[1.04]" : "opacity-70 hover:opacity-95"
+          aria-pressed={!isT1}
+          className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
+            !isT1
+              ? "border-foreground/15 shadow-card -translate-y-0.5"
+              : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
           }`}
         >
-          <svg
-            viewBox="0 0 220 180"
-            className="h-32 w-full max-w-[200px] drop-shadow-[0_8px_16px_oklch(0.20_0.05_40_/_0.35)] sm:h-40"
-            aria-label="Parchment scroll"
-            style={{
-              transform: `rotate(${isT2 ? 2 : 4}deg)`,
-              transition: "transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            <defs>
-              <linearGradient id="parchment" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="oklch(0.96 0.04 85)" />
-                <stop offset="50%" stopColor="oklch(0.92 0.05 80)" />
-                <stop offset="100%" stopColor="oklch(0.86 0.06 75)" />
-              </linearGradient>
-              <linearGradient id="rod" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="oklch(0.38 0.08 45)" />
-                <stop offset="40%" stopColor="oklch(0.62 0.11 55)" />
-                <stop offset="60%" stopColor="oklch(0.62 0.11 55)" />
-                <stop offset="100%" stopColor="oklch(0.32 0.07 40)" />
-              </linearGradient>
-              <linearGradient id="brass" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="oklch(0.85 0.13 90)" />
-                <stop offset="50%" stopColor="oklch(0.70 0.15 80)" />
-                <stop offset="100%" stopColor="oklch(0.45 0.10 65)" />
-              </linearGradient>
-              <linearGradient id="ribbon" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="oklch(0.62 0.18 28)" />
-                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
-              </linearGradient>
-              <pattern id="grainParch" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-                <rect width="4" height="4" fill="transparent" />
-                <circle cx="0.8" cy="0.8" r="0.35" fill="oklch(0.55 0.08 55 / 0.18)" />
-                <circle cx="2.5" cy="3" r="0.3" fill="oklch(0.40 0.06 50 / 0.15)" />
-              </pattern>
-            </defs>
+          <span
+            aria-hidden
+            className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
+              isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+            } ${!isT1 ? "opacity-100" : "opacity-0"}`}
+          />
 
-            {/* Ground shadow */}
-            <ellipse
-              cx="110"
-              cy="168"
-              rx={isT2 ? 80 : 64}
-              ry="5"
-              fill="oklch(0.20 0.04 40)"
-              opacity={isT2 ? 0.32 : 0.18}
-              style={{ transition: "all 400ms ease" }}
-            />
-
-            {/* Parchment middle — torn aged edges */}
-            <path
-              d={
-                isT2
-                  ? "M 50 36 q 5 -3 12 0 q 8 3 14 -1 q 8 -3 16 1 q 6 2 12 -1 q 8 -3 16 1 q 6 2 14 -1 q 8 -3 16 1 q 6 3 14 -1 v 96 q -6 3 -14 0 q -8 -3 -16 1 q -8 3 -14 -1 q -8 -3 -16 1 q -6 2 -12 -1 q -8 -3 -16 1 q -8 3 -14 -1 q -6 -2 -12 1 z"
-                  : "M 84 30 q 4 -2 10 0 q 6 2 12 -1 q 6 2 10 -1 v 110 q -4 2 -10 0 q -6 -2 -12 1 q -6 -2 -10 1 z"
-              }
-              fill="url(#parchment)"
-              stroke="oklch(0.50 0.08 55)"
-              strokeWidth="1"
-              style={{ transition: "all 550ms cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            />
-            {/* Parchment grain */}
-            <rect
-              x={isT2 ? 50 : 84}
-              y="32"
-              width={isT2 ? 130 : 32}
-              height="104"
-              fill="url(#grainParch)"
-              opacity="0.7"
-              style={{ transition: "all 550ms cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            />
-            {/* Burnt edge tint */}
-            <rect
-              x={isT2 ? 50 : 84}
-              y="32"
-              width={isT2 ? 130 : 32}
-              height="104"
-              fill="none"
-              stroke="oklch(0.45 0.10 50)"
-              strokeWidth="2"
-              opacity="0.25"
-              style={{ transition: "all 550ms cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            />
-
-            {/* Calligraphy lines */}
-            <g
-              style={{
-                opacity: isT2 ? 1 : 0,
-                transition: "opacity 400ms ease 200ms",
-              }}
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
+                !isT1
+                  ? isAcademic
+                    ? "bg-brand text-brand-foreground"
+                    : "bg-[oklch(0.55_0.10_160)] text-white"
+                  : "bg-foreground/8 text-foreground/55"
+              }`}
             >
-              <text x="110" y="56" textAnchor="middle" fontSize="11" fontWeight="700" fill="oklch(0.30 0.08 30)" fontFamily="Georgia, serif" fontStyle="italic">
-                Essay
-              </text>
-              <line x1="64" y1="68" x2="156" y2="68" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-              <line x1="64" y1="78" x2="148" y2="78" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-              <line x1="64" y1="88" x2="156" y2="88" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-              <line x1="64" y1="98" x2="142" y2="98" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-              <line x1="64" y1="108" x2="156" y2="108" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-              <line x1="64" y1="118" x2="128" y2="118" stroke="oklch(0.40 0.06 55)" strokeWidth="0.9" />
-            </g>
-
-            {/* Left rolled rod with brass rings */}
-            <g
-              style={{
-                transform: isT2 ? "translateX(-12px)" : "translateX(32px)",
-                transition: "transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
-            >
-              <rect x="34" y="26" width="22" height="118" rx="11" fill="url(#rod)" stroke="oklch(0.25 0.06 40)" strokeWidth="1" />
-              {/* Wood grain stripes */}
-              <line x1="38" y1="30" x2="38" y2="140" stroke="oklch(0.30 0.06 40)" strokeWidth="0.5" opacity="0.5" />
-              <line x1="46" y1="28" x2="46" y2="142" stroke="oklch(0.30 0.06 40)" strokeWidth="0.4" opacity="0.4" />
-              <line x1="52" y1="30" x2="52" y2="140" stroke="oklch(0.30 0.06 40)" strokeWidth="0.5" opacity="0.5" />
-              {/* Brass rings */}
-              <ellipse cx="45" cy="30" rx="11" ry="3.5" fill="url(#brass)" stroke="oklch(0.35 0.08 60)" strokeWidth="0.8" />
-              <ellipse cx="45" cy="140" rx="11" ry="3.5" fill="url(#brass)" stroke="oklch(0.35 0.08 60)" strokeWidth="0.8" />
-              {/* End-cap nub */}
-              <ellipse cx="45" cy="30" rx="4" ry="1.5" fill="oklch(0.95 0.08 90)" opacity="0.7" />
-            </g>
-
-            {/* Right rolled rod with brass rings */}
-            <g
-              style={{
-                transform: isT2 ? "translateX(12px)" : "translateX(-32px)",
-                transition: "transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}
-            >
-              <rect x="164" y="26" width="22" height="118" rx="11" fill="url(#rod)" stroke="oklch(0.25 0.06 40)" strokeWidth="1" />
-              <line x1="168" y1="30" x2="168" y2="140" stroke="oklch(0.30 0.06 40)" strokeWidth="0.5" opacity="0.5" />
-              <line x1="176" y1="28" x2="176" y2="142" stroke="oklch(0.30 0.06 40)" strokeWidth="0.4" opacity="0.4" />
-              <line x1="182" y1="30" x2="182" y2="140" stroke="oklch(0.30 0.06 40)" strokeWidth="0.5" opacity="0.5" />
-              <ellipse cx="175" cy="30" rx="11" ry="3.5" fill="url(#brass)" stroke="oklch(0.35 0.08 60)" strokeWidth="0.8" />
-              <ellipse cx="175" cy="140" rx="11" ry="3.5" fill="url(#brass)" stroke="oklch(0.35 0.08 60)" strokeWidth="0.8" />
-              <ellipse cx="175" cy="30" rx="4" ry="1.5" fill="oklch(0.95 0.08 90)" opacity="0.7" />
-            </g>
-
-            {/* Ribbon when closed */}
-            <g
-              opacity={isT2 ? 0 : 1}
-              style={{ transition: "opacity 300ms ease" }}
-            >
-              <rect x="84" y="22" width="32" height="124" fill="url(#ribbon)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.6" />
-              {/* Ribbon highlight */}
-              <rect x="86" y="22" width="4" height="124" fill="oklch(1 0 0)" opacity="0.18" />
-              {/* Knot */}
-              <ellipse cx="100" cy="84" rx="14" ry="9" fill="url(#ribbon)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.8" />
-              <ellipse cx="100" cy="82" rx="6" ry="3" fill="oklch(1 0 0)" opacity="0.15" />
-              {/* Tail */}
-              <path d="M 92 92 q -8 8 -4 18 q 6 -4 8 -10 z" fill="url(#ribbon)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.6" />
-              <path d="M 108 92 q 8 8 4 18 q -6 -4 -8 -10 z" fill="url(#ribbon)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.6" />
-            </g>
-          </svg>
-
-          <div>
-            <div className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
               Task 2
-            </div>
-            <div className={`mt-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.2em] ${isT2 ? accentText : "text-foreground/45"}`}>
-              Essay
-            </div>
-            <div className="mt-1.5 text-[11px] font-medium text-foreground/65 sm:text-xs">
-              250 words · 40 min
-            </div>
+            </span>
+            {!isT1 && (
+              <CheckCircle2 className={`h-4 w-4 ${accentText}`} strokeWidth={2.5} />
+            )}
+          </div>
+
+          <h3
+            className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
+              !isT1 ? "text-foreground" : "text-foreground/70"
+            }`}
+            style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
+          >
+            <span className="relative inline-block">
+              {!isT1 && (
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
+                  style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
+                />
+              )}
+              <span className="relative">Essay</span>
+            </span>
+          </h3>
+
+          <p className="mt-3 text-[13px] font-medium leading-relaxed text-foreground/65 sm:text-sm">
+            Argue a position, weigh views, propose solutions.
+          </p>
+
+          <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55">
+            <span>250 words</span>
+            <span className="h-1 w-1 rounded-full bg-foreground/25" />
+            <span>40 min</span>
           </div>
         </button>
 
-        {/* Flying parrot — arcs between Task 1 and Task 2 */}
-        <FlyingParrot task={task} isAcademic={isAcademic} />
-
-        {/* Quill pen lying across the desk between them (decorative) */}
-        <svg
+        {/* Realistic parrot mascot — flies between cards on toggle */}
+        <div
+          key={animKey}
           aria-hidden
-          viewBox="0 0 200 40"
-          className="pointer-events-none absolute bottom-3 left-1/2 z-0 hidden h-8 w-40 -translate-x-1/2 opacity-70 sm:block"
+          className="pointer-events-none absolute z-20"
+          style={{
+            width: "92px",
+            height: "92px",
+            left: isT1 ? "25%" : "75%",
+            top: "50%",
+            transform: `translate(-50%, -50%) rotate(${isT1 ? -4 : 4}deg) scaleX(${isT1 ? 1 : -1})`,
+            animation: `${
+              isT1 ? "parrot-fly-to-left" : "parrot-fly-to-right"
+            } 1100ms cubic-bezier(0.45, 0, 0.35, 1) both, parrot-hover 2.6s ease-in-out 1100ms infinite`,
+          }}
         >
-          <defs>
-            <linearGradient id="feather" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="oklch(0.25 0.04 250)" />
-              <stop offset="100%" stopColor="oklch(0.55 0.10 250)" />
-            </linearGradient>
-          </defs>
-          <path d="M 10 30 Q 90 4 180 18" stroke="url(#feather)" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <path d="M 30 26 q 6 -8 14 -10 M 50 22 q 6 -8 14 -9 M 70 18 q 6 -7 14 -8 M 90 15 q 6 -7 14 -7 M 110 14 q 6 -6 14 -6 M 130 14 q 6 -5 14 -4" stroke="oklch(0.30 0.05 250)" strokeWidth="1" fill="none" opacity="0.7" />
-          <path d="M 178 18 l 8 -2 l -2 6 z" fill="oklch(0.20 0.04 250)" />
-        </svg>
+          <img
+            src={parrotImg}
+            alt=""
+            width={184}
+            height={184}
+            loading="lazy"
+            className="h-full w-full select-none object-contain drop-shadow-[0_8px_16px_oklch(0.20_0.05_40_/_0.30)]"
+            draggable={false}
+          />
+        </div>
       </div>
-
-      <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/50">
-        {isT1 ? "Letter unsealed — Task 1 selected" : "Scroll unfurled — Task 2 selected"}
-      </p>
     </div>
-  );
-}
-
-// ───────── Flying Parrot ─────────
-// SVG parrot that arcs from one task to the other when toggled.
-function FlyingParrot({ task, isAcademic }: { task: Task; isAcademic: boolean }) {
-  const isT1 = task === "task1";
-
-  const bodyTop = isAcademic ? "oklch(0.65 0.18 255)" : "oklch(0.62 0.16 155)";
-  const bodyBot = isAcademic ? "oklch(0.45 0.18 260)" : "oklch(0.42 0.16 160)";
-  const wingTop = isAcademic ? "oklch(0.78 0.16 240)" : "oklch(0.75 0.14 175)";
-  const wingBot = isAcademic ? "oklch(0.55 0.20 270)" : "oklch(0.52 0.18 145)";
-  const accentChip = isAcademic ? "oklch(0.85 0.18 60)" : "oklch(0.82 0.18 50)";
-
-  // Re-mount on toggle so the keyframe animation always re-plays
-  const animKey = `${task}-${isAcademic ? "a" : "g"}`;
-
-  return (
-    <>
-      <style>{`
-        @keyframes parrot-fly-to-right {
-          0%   { left: 22%; top: 56%; transform: translate(-50%, -50%) rotate(-6deg) scaleX(1); }
-          45%  { left: 50%; top: 14%; transform: translate(-50%, -50%) rotate(8deg) scaleX(1); }
-          100% { left: 78%; top: 56%; transform: translate(-50%, -50%) rotate(-4deg) scaleX(1); }
-        }
-        @keyframes parrot-fly-to-left {
-          0%   { left: 78%; top: 56%; transform: translate(-50%, -50%) rotate(6deg) scaleX(-1); }
-          45%  { left: 50%; top: 14%; transform: translate(-50%, -50%) rotate(-8deg) scaleX(-1); }
-          100% { left: 22%; top: 56%; transform: translate(-50%, -50%) rotate(4deg) scaleX(-1); }
-        }
-        @keyframes parrot-perch-bob {
-          0%, 100% { translate: 0 0; }
-          50%      { translate: 0 -2px; }
-        }
-        @keyframes parrot-wing-flap {
-          0%, 100% { transform: rotate(-10deg); }
-          50%      { transform: rotate(28deg); }
-        }
-        @keyframes parrot-wing-flap-fast {
-          0%, 100% { transform: rotate(-22deg); }
-          50%      { transform: rotate(42deg); }
-        }
-        @keyframes feather-puff {
-          0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
-          100% { opacity: 0;   transform: translate(var(--fx, 14px), 18px) scale(0.4); }
-        }
-      `}</style>
-
-      <div
-        key={animKey}
-        aria-hidden
-        className="pointer-events-none absolute z-20"
-        style={{
-          width: "64px",
-          height: "64px",
-          left: isT1 ? "22%" : "78%",
-          top: "56%",
-          transform: `translate(-50%, -50%) rotate(${isT1 ? -4 : 4}deg) scaleX(${isT1 ? 1 : -1})`,
-          animation: `${isT1 ? "parrot-fly-to-left" : "parrot-fly-to-right"} 950ms cubic-bezier(0.45, 0, 0.35, 1) both, parrot-perch-bob 2.4s ease-in-out 950ms infinite`,
-        }}
-      >
-        {/* Feather puffs on takeoff */}
-        <span
-          className="absolute h-1.5 w-1.5 rounded-full"
-          style={{
-            top: "60%",
-            left: "20%",
-            background: accentChip,
-            ["--fx" as never]: "-12px",
-            animation: "feather-puff 700ms ease-out both",
-          }}
-        />
-        <span
-          className="absolute h-1 w-1 rounded-full"
-          style={{
-            top: "62%",
-            left: "30%",
-            background: bodyTop,
-            ["--fx" as never]: "-6px",
-            animation: "feather-puff 800ms ease-out 80ms both",
-          }}
-        />
-
-        <svg viewBox="0 0 80 80" className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.20_0.05_40_/_0.45)]">
-          <defs>
-            <linearGradient id="parrotBody" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={bodyTop} />
-              <stop offset="100%" stopColor={bodyBot} />
-            </linearGradient>
-            <linearGradient id="parrotWing" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={wingTop} />
-              <stop offset="100%" stopColor={wingBot} />
-            </linearGradient>
-            <radialGradient id="parrotBelly" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="oklch(0.96 0.10 80)" />
-              <stop offset="100%" stopColor="oklch(0.82 0.14 70)" />
-            </radialGradient>
-          </defs>
-
-          {/* Tail feathers */}
-          <path d="M 12 46 q -8 4 -10 12 q 8 -2 14 -6 z" fill={wingBot} stroke="oklch(0.25 0.06 250)" strokeWidth="0.8" />
-          <path d="M 14 50 q -6 6 -6 12 q 6 -2 10 -8 z" fill={accentChip} opacity="0.9" />
-
-          {/* Body */}
-          <ellipse cx="34" cy="44" rx="20" ry="18" fill="url(#parrotBody)" stroke="oklch(0.22 0.06 250)" strokeWidth="1" />
-          <ellipse cx="32" cy="50" rx="12" ry="10" fill="url(#parrotBelly)" />
-
-          {/* Back wing */}
-          <g style={{ transformOrigin: "32px 38px", animation: "parrot-wing-flap 320ms ease-in-out infinite" }}>
-            <path d="M 30 36 q -10 -4 -16 6 q 4 8 16 6 z" fill={wingBot} opacity="0.75" stroke="oklch(0.22 0.06 250)" strokeWidth="0.6" />
-          </g>
-
-          {/* Front wing */}
-          <g style={{ transformOrigin: "36px 38px", animation: "parrot-wing-flap-fast 240ms ease-in-out infinite" }}>
-            <path d="M 36 36 q 6 -14 22 -10 q 4 12 -8 22 q -10 4 -14 -2 z" fill="url(#parrotWing)" stroke="oklch(0.22 0.06 250)" strokeWidth="0.9" />
-            <path d="M 40 32 q 6 0 14 4 M 40 38 q 8 0 16 4 M 42 44 q 6 0 12 4" stroke="oklch(0.20 0.06 250)" strokeWidth="0.5" fill="none" opacity="0.55" />
-          </g>
-
-          {/* Head */}
-          <circle cx="52" cy="30" r="13" fill="url(#parrotBody)" stroke="oklch(0.22 0.06 250)" strokeWidth="1" />
-          <circle cx="56" cy="34" r="3" fill={accentChip} opacity="0.85" />
-          <circle cx="56" cy="28" r="2.4" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.05 250)" strokeWidth="0.6" />
-          <circle cx="56.6" cy="28" r="1.3" fill="oklch(0.15 0.04 250)" />
-          <circle cx="57" cy="27.4" r="0.5" fill="white" />
-
-          {/* Hooked beak */}
-          <path d="M 60 30 q 8 0 8 6 q 0 4 -6 4 q -2 -1 -2 -3 q 0 -4 0 -7 z" fill="oklch(0.78 0.16 60)" stroke="oklch(0.45 0.14 50)" strokeWidth="0.8" />
-          <path d="M 62 36 q 3 0 4 2" stroke="oklch(0.40 0.12 45)" strokeWidth="0.6" fill="none" />
-
-          {/* Crest */}
-          <path d="M 50 18 q -2 -8 4 -12 q 2 6 0 12 z" fill={accentChip} stroke="oklch(0.45 0.14 50)" strokeWidth="0.6" />
-
-          {/* Feet */}
-          <path d="M 30 60 q 2 4 6 4 M 38 60 q 2 4 6 4" stroke="oklch(0.40 0.12 45)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-        </svg>
-      </div>
-    </>
   );
 }
 
