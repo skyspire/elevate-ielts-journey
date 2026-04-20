@@ -550,6 +550,240 @@ function TaskCard({
   );
 }
 
+function TaskEnvelopeScroll({
+  task,
+  onTaskChange,
+  isAcademic,
+}: {
+  task: Task;
+  onTaskChange: (t: Task) => void;
+  isAcademic: boolean;
+}) {
+  const isT1 = task === "task1";
+  const isT2 = task === "task2";
+
+  const envBody = isAcademic ? "oklch(0.92 0.05 265)" : "oklch(0.93 0.06 160)";
+  const envFlap = isAcademic ? "oklch(0.78 0.10 265)" : "oklch(0.72 0.09 160)";
+  const envSeal = "oklch(0.55 0.16 30)";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
+
+  return (
+    <div className="relative">
+      <div className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 rounded-3xl border border-foreground/10 bg-[oklch(0.94_0.03_75)] p-4 shadow-soft sm:gap-6 sm:p-8">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl opacity-30"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(90deg, transparent 0 28px, oklch(0.85 0.04 70 / 0.35) 28px 29px), repeating-linear-gradient(90deg, transparent 0 80px, oklch(0.80 0.05 65 / 0.25) 80px 81px)",
+          }}
+        />
+
+        {/* TASK 1 — Envelope */}
+        <button
+          type="button"
+          onClick={() => onTaskChange("task1")}
+          aria-pressed={isT1}
+          className={`group relative flex flex-col items-center gap-3 rounded-2xl p-3 text-center transition-all duration-300 sm:p-5 ${
+            isT1 ? "-translate-y-1 scale-[1.03]" : "opacity-65 hover:opacity-90"
+          }`}
+        >
+          <svg viewBox="0 0 200 160" className="h-28 w-full max-w-[180px] sm:h-36" aria-label="Envelope">
+            <ellipse
+              cx="100"
+              cy="148"
+              rx={isT1 ? 70 : 55}
+              ry="6"
+              fill="oklch(0.30 0.04 60)"
+              opacity={isT1 ? 0.18 : 0.1}
+              style={{ transition: "all 400ms ease" }}
+            />
+            <g
+              style={{
+                transform: isT1 ? "translateY(-18px)" : "translateY(0)",
+                opacity: isT1 ? 1 : 0,
+                transition: "all 500ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            >
+              <rect x="42" y="38" width="116" height="62" rx="3" fill="oklch(0.99 0.01 80)" stroke="oklch(0.20 0.02 250)" strokeWidth="1.5" />
+              <line x1="52" y1="52" x2="148" y2="52" stroke="oklch(0.55 0.06 60)" strokeWidth="1.2" />
+              <line x1="52" y1="62" x2="140" y2="62" stroke="oklch(0.55 0.06 60)" strokeWidth="1.2" />
+              <line x1="52" y1="72" x2="148" y2="72" stroke="oklch(0.55 0.06 60)" strokeWidth="1.2" />
+              <line x1="52" y1="82" x2="120" y2="82" stroke="oklch(0.55 0.06 60)" strokeWidth="1.2" />
+            </g>
+
+            <path
+              d="M 30 70 L 30 138 Q 30 144 36 144 L 164 144 Q 170 144 170 138 L 170 70 Z"
+              fill={envBody}
+              stroke="oklch(0.20 0.02 250)"
+              strokeWidth="2"
+            />
+            <path d="M 30 70 L 100 118 L 170 70" fill="none" stroke="oklch(0.20 0.02 250)" strokeWidth="1.5" opacity="0.5" />
+            <path d="M 30 144 L 78 108 M 170 144 L 122 108" stroke="oklch(0.20 0.02 250)" strokeWidth="1.2" opacity="0.4" fill="none" />
+
+            <g
+              style={{
+                transformOrigin: "100px 70px",
+                transform: isT1 ? "rotateX(165deg)" : "rotateX(0deg)",
+                transition: "transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            >
+              <path
+                d="M 30 70 L 100 118 L 170 70 Z"
+                fill={envFlap}
+                stroke="oklch(0.20 0.02 250)"
+                strokeWidth="2"
+              />
+            </g>
+
+            <circle
+              cx="100"
+              cy={isT1 ? 50 : 116}
+              r="9"
+              fill={envSeal}
+              stroke="oklch(0.30 0.10 30)"
+              strokeWidth="1.5"
+              style={{ transition: "cy 500ms ease" }}
+            />
+            <text
+              x="100"
+              y={isT1 ? 53 : 119}
+              textAnchor="middle"
+              fontSize="9"
+              fontWeight="900"
+              fill="oklch(0.99 0.01 30)"
+              fontFamily="serif"
+              style={{ transition: "y 500ms ease" }}
+            >
+              T1
+            </text>
+          </svg>
+
+          <div>
+            <div className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
+              Task 1
+            </div>
+            <div className={`mt-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.2em] ${isT1 ? accentText : "text-foreground/40"}`}>
+              {isAcademic ? "Charts & Graphs" : "Letters"}
+            </div>
+            <div className="mt-1.5 text-[11px] font-medium text-foreground/55 sm:text-xs">
+              150 words · 20 min
+            </div>
+          </div>
+        </button>
+
+        {/* TASK 2 — Scroll */}
+        <button
+          type="button"
+          onClick={() => onTaskChange("task2")}
+          aria-pressed={isT2}
+          className={`group relative flex flex-col items-center gap-3 rounded-2xl p-3 text-center transition-all duration-300 sm:p-5 ${
+            isT2 ? "-translate-y-1 scale-[1.03]" : "opacity-65 hover:opacity-90"
+          }`}
+        >
+          <svg viewBox="0 0 200 160" className="h-28 w-full max-w-[180px] sm:h-36" aria-label="Scroll">
+            <ellipse
+              cx="100"
+              cy="148"
+              rx={isT2 ? 72 : 56}
+              ry="6"
+              fill="oklch(0.30 0.04 60)"
+              opacity={isT2 ? 0.18 : 0.1}
+              style={{ transition: "all 400ms ease" }}
+            />
+
+            <rect
+              x={isT2 ? 42 : 78}
+              y="32"
+              width={isT2 ? 116 : 44}
+              height="104"
+              fill="oklch(0.97 0.03 85)"
+              stroke="oklch(0.45 0.08 60)"
+              strokeWidth="1.5"
+              style={{ transition: "all 500ms cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+            />
+            <g
+              style={{
+                opacity: isT2 ? 1 : 0,
+                transition: "opacity 400ms ease 200ms",
+              }}
+            >
+              <line x1="56" y1="50" x2="144" y2="50" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="62" x2="138" y2="62" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="74" x2="144" y2="74" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="86" x2="132" y2="86" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="98" x2="144" y2="98" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="110" x2="120" y2="110" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+              <line x1="56" y1="122" x2="140" y2="122" stroke="oklch(0.50 0.08 60)" strokeWidth="1.2" />
+            </g>
+
+            <g
+              style={{
+                transform: isT2 ? "translateX(-8px)" : "translateX(28px)",
+                transition: "transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            >
+              <rect x="30" y="28" width="20" height="112" rx="10" fill="oklch(0.55 0.10 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+              <ellipse cx="40" cy="32" rx="10" ry="4" fill="oklch(0.65 0.11 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+              <ellipse cx="40" cy="136" rx="10" ry="4" fill="oklch(0.45 0.09 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+            </g>
+
+            <g
+              style={{
+                transform: isT2 ? "translateX(8px)" : "translateX(-28px)",
+                transition: "transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            >
+              <rect x="150" y="28" width="20" height="112" rx="10" fill="oklch(0.55 0.10 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+              <ellipse cx="160" cy="32" rx="10" ry="4" fill="oklch(0.65 0.11 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+              <ellipse cx="160" cy="136" rx="10" ry="4" fill="oklch(0.45 0.09 60)" stroke="oklch(0.30 0.08 60)" strokeWidth="1.5" />
+            </g>
+
+            <rect
+              x="78"
+              y="28"
+              width="44"
+              height="108"
+              fill="oklch(0.50 0.16 30)"
+              opacity={isT2 ? 0 : 0.85}
+              style={{ transition: "opacity 300ms ease" }}
+            />
+            <text
+              x="100"
+              y="88"
+              textAnchor="middle"
+              fontSize="14"
+              fontWeight="900"
+              fill="oklch(0.99 0.01 30)"
+              fontFamily="serif"
+              opacity={isT2 ? 0 : 1}
+              style={{ transition: "opacity 300ms ease" }}
+            >
+              T2
+            </text>
+          </svg>
+
+          <div>
+            <div className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
+              Task 2
+            </div>
+            <div className={`mt-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.2em] ${isT2 ? accentText : "text-foreground/40"}`}>
+              Essay
+            </div>
+            <div className="mt-1.5 text-[11px] font-medium text-foreground/55 sm:text-xs">
+              250 words · 40 min
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/45">
+        {isT1 ? "Envelope opened — Task 1 selected" : "Scroll unfurled — Task 2 selected"}
+      </p>
+    </div>
+  );
+}
+
 const toneMap: Record<Tone, string> = {
   blue: "bg-brand-soft text-brand",
   mint: "bg-mint text-foreground",
