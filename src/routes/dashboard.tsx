@@ -439,25 +439,25 @@ function FeatureCard({
         <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
 
-      {/* Oversized gradient number — the hero of the card */}
-      <div className="relative mt-5 flex items-baseline gap-2">
+      {/* Title-first hierarchy */}
+      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-foreground">
+        {feature.title}
+      </h3>
+      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-foreground/65">
+        {feature.description[module]}
+      </p>
+
+      {/* Stat row — number + label as a small footer pill */}
+      <div className="relative mt-5 flex items-baseline gap-2 border-t border-foreground/10 pt-4">
         <span
-          className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
+          className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
         >
           {value}
         </span>
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
+          {label}
+        </span>
       </div>
-      <span className="relative mt-2 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
-        {label}
-      </span>
-
-      {/* Title + description */}
-      <h3 className="relative mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
-        {feature.title}
-      </h3>
-      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/70">
-        {feature.description[module]}
-      </p>
     </button>
   );
 }
@@ -478,9 +478,6 @@ function Glossy3DIcon({
   return (
     <div
       className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
-      style={{
-        filter: `drop-shadow(0 10px 18px ${tone.iconShadow}) drop-shadow(0 2px 4px ${tone.iconShadow})`,
-      }}
     >
       <svg
         viewBox="0 0 64 64"
