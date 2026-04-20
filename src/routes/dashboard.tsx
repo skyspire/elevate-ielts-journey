@@ -431,15 +431,15 @@ function FeatureCard({
       type="button"
       className={`group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
     >
-      {/* subtle paper grain */}
+      {/* subtle paper grain (light specks on dark cards) */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:3px_3px]"
       />
       {/* glossy top-edge highlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
       />
 
       {/* Top row: small arrow on the LEFT, glossy 3D icon on the RIGHT */}
@@ -454,21 +454,21 @@ function FeatureCard({
       </div>
 
       {/* Title-first hierarchy */}
-      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-foreground">
+      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-white">
         {feature.title}
       </h3>
-      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-foreground/65">
+      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-white/75">
         {feature.description[module]}
       </p>
 
       {/* Stat row — number + label as a small footer pill */}
-      <div className="relative mt-5 flex items-baseline gap-2 border-t border-foreground/10 pt-4">
+      <div className="relative mt-5 flex items-baseline gap-2 border-t border-white/15 pt-4">
         <span
           className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
         >
           {value}
         </span>
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-white/65">
           {label}
         </span>
       </div>
