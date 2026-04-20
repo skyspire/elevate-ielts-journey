@@ -1,4 +1,5 @@
 import { Check, Minus } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 const freeIncludes = [
@@ -190,8 +191,11 @@ export function FreeVsPaid() {
                 })}
               </div>
 
-              <Button className="mt-6 h-12 w-full rounded-full bg-brand text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90">
-                Continue to checkout
+              <Button
+                asChild
+                className="mt-6 h-12 w-full rounded-full bg-brand text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90"
+              >
+                <Link to="/dashboard">Continue to checkout</Link>
               </Button>
 
               <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
