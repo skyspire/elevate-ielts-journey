@@ -138,7 +138,7 @@ function WritingSamplesPage() {
     : "ring-[oklch(0.55_0.10_160)]/40 border-[oklch(0.55_0.10_160)]/40";
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
-  const questions = makeQuestions(activeCategory.label);
+  const questions = makeQuestions(activeCategory.id, activeCategory.label);
 
   return (
     <div className="min-h-screen bg-paper-cream">
