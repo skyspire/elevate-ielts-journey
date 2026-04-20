@@ -433,138 +433,29 @@ function WritingSamplesPage() {
             />
           </div>
 
-          {/* Step 2 — Library card catalog */}
+          {/* Step 2 — Outlined serif chips */}
           <StepLabel index={2} label="Select Category" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((c, i) => {
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {categories.map((c) => {
               const active = categoryId === c.id;
               const Icon = c.icon;
-              const palettes = [
-                { card: "oklch(0.95 0.05 75)",  ink: "oklch(0.42 0.13 45)",  stamp: "oklch(0.58 0.18 35)"  },
-                { card: "oklch(0.95 0.06 90)",  ink: "oklch(0.40 0.10 70)",  stamp: "oklch(0.62 0.16 70)"  },
-                { card: "oklch(0.94 0.04 130)", ink: "oklch(0.38 0.08 145)", stamp: "oklch(0.52 0.12 145)" },
-                { card: "oklch(0.95 0.05 55)",  ink: "oklch(0.40 0.12 40)",  stamp: "oklch(0.58 0.16 45)"  },
-                { card: "oklch(0.96 0.04 100)", ink: "oklch(0.40 0.09 80)",  stamp: "oklch(0.60 0.14 80)"  },
-                { card: "oklch(0.94 0.05 30)",  ink: "oklch(0.40 0.13 30)",  stamp: "oklch(0.58 0.17 30)"  },
-                { card: "oklch(0.95 0.05 110)", ink: "oklch(0.40 0.10 110)", stamp: "oklch(0.58 0.14 110)" },
-              ];
-              const p = palettes[i % palettes.length];
-              const cardNumber = String(i + 1).padStart(3, "0");
-
               return (
                 <button
                   key={c.id}
                   type="button"
                   onClick={() => setCategoryId(c.id)}
                   aria-pressed={active}
-                  className={`group relative overflow-hidden rounded-[14px] border text-left transition-all duration-300 ${
+                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-serif text-[14px] font-medium tracking-tight transition-all duration-200 ${
                     active
-                      ? "scale-[1.02] -translate-y-1 shadow-card"
-                      : "shadow-soft hover:-translate-y-0.5 hover:shadow-card"
+                      ? "border-foreground bg-foreground text-background shadow-soft"
+                      : "border-foreground/15 bg-white/60 text-foreground/70 hover:border-foreground/35 hover:text-foreground"
                   }`}
-                  style={{
-                    backgroundColor: p.card,
-                    borderColor: active ? p.stamp : "oklch(0.85 0.04 75)",
-                    borderWidth: active ? "2px" : "1px",
-                    backgroundImage:
-                      "repeating-linear-gradient(to bottom, transparent 0 27px, oklch(0.55 0.06 50 / 0.18) 27px 28px)",
-                    backgroundPosition: "0 38px",
-                  }}
                 >
-                  {/* Header strip */}
-                  <div
-                    className="flex items-center justify-between px-4 py-2 border-b"
-                    style={{
-                      backgroundColor: "oklch(0.99 0.01 80 / 0.55)",
-                      borderColor: "oklch(0.55 0.06 50 / 0.25)",
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="block h-2.5 w-2.5 rounded-full"
-                        style={{
-                          backgroundColor: "oklch(0.92 0.02 75)",
-                          boxShadow: "inset 0 1px 2px oklch(0.30 0.04 50 / 0.45)",
-                        }}
-                      />
-                      <span
-                        className="font-mono text-[10px] font-bold tracking-[0.2em]"
-                        style={{ color: p.ink, opacity: 0.7 }}
-                      >
-                        N° {cardNumber}
-                      </span>
-                    </div>
-                    <span
-                      className="font-mono text-[9px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: p.ink, opacity: 0.55 }}
-                    >
-                      {task === "task1" ? "T1" : "T2"} · Essay
-                    </span>
-                  </div>
-
-                  {/* Stamped icon */}
-                  <span
-                    className="absolute right-3 top-12 flex h-12 w-12 items-center justify-center rounded-full border-[2.5px]"
-                    style={{
-                      borderColor: p.stamp,
-                      color: p.stamp,
-                      transform: "rotate(-8deg)",
-                      opacity: active ? 0.95 : 0.7,
-                    }}
-                  >
-                    <Icon className="h-5 w-5" strokeWidth={2.6} />
-                  </span>
-
-                  {/* Body */}
-                  <div className="px-4 pt-5 pb-5 pr-20">
-                    <p
-                      className="font-mono text-[10px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: p.ink, opacity: 0.55 }}
-                    >
-                      Subject Card
-                    </p>
-                    <h4
-                      className="mt-1 font-display text-[17px] font-extrabold leading-tight tracking-tight"
-                      style={{ color: p.ink }}
-                    >
-                      {c.label}
-                    </h4>
-                    <p
-                      className="mt-2 text-[12.5px] font-medium leading-relaxed"
-                      style={{ color: p.ink, opacity: 0.75 }}
-                    >
-                      {c.hint}
-                    </p>
-
-                    {active && (
-                      <svg
-                        aria-hidden
-                        viewBox="0 0 200 10"
-                        preserveAspectRatio="none"
-                        className="mt-3 h-2 w-32"
-                        fill="none"
-                        stroke={p.stamp}
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                      >
-                        <path d="M2 6 C 40 1, 90 9, 140 4 S 195 7, 198 5" />
-                      </svg>
-                    )}
-                  </div>
-
-                  {active && (
-                    <span
-                      className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded border-[1.5px] px-2 py-0.5 font-mono text-[9px] font-black uppercase tracking-[0.22em]"
-                      style={{
-                        borderColor: p.stamp,
-                        color: p.stamp,
-                        transform: "rotate(-4deg)",
-                      }}
-                    >
-                      <CheckCircle2 className="h-3 w-3" strokeWidth={2.8} />
-                      Checked Out
-                    </span>
-                  )}
+                  <Icon
+                    className={`h-3.5 w-3.5 ${active ? "opacity-90" : "opacity-55"}`}
+                    strokeWidth={2}
+                  />
+                  {c.label}
                 </button>
               );
             })}
