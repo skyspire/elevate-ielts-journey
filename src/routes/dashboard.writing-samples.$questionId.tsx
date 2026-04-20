@@ -63,7 +63,7 @@ function QuestionDetailPage() {
           </Link>
 
           <Link
-            to="/dashboard/writing-samples"
+            to="/dashboard.writing-samples"
             search={{ module }}
             className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-[12px] font-semibold text-foreground/70 shadow-soft transition-colors hover:text-foreground"
           >
@@ -84,7 +84,7 @@ function QuestionDetailPage() {
           <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
             <Link to="/dashboard" className="hover:text-foreground/80">Dashboard</Link>
             <span>/</span>
-            <Link to="/dashboard/writing-samples" search={{ module }} className="hover:text-foreground/80">
+            <Link to="/dashboard.writing-samples" search={{ module }} className="hover:text-foreground/80">
               Writing Samples
             </Link>
             <span>/</span>
@@ -147,7 +147,7 @@ function QuestionDetailPage() {
 
           <div className="mt-10 flex justify-center">
             <Link
-              to="/dashboard/writing-samples"
+              to="/dashboard.writing-samples"
               search={{ module }}
               className="inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white px-5 py-2.5 text-sm font-bold text-foreground/70 shadow-soft transition-colors hover:text-foreground"
             >
