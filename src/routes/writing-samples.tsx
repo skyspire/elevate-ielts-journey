@@ -163,27 +163,27 @@ function WritingSamplesPage() {
             <span className={accentText}>Writing Samples</span>
           </div>
 
-          {/* Module switcher — Rotary dial selector */}
-          <div className="mt-8 flex justify-center">
-            <div className="relative flex items-center gap-4 sm:gap-6">
+          {/* Module switcher — Premium rotary dial */}
+          <div className="mt-10 flex flex-col items-center gap-6">
+            <div className="relative flex items-center justify-center gap-3 sm:gap-6">
               {/* Academic label (left) */}
               <button
                 type="button"
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
                 aria-pressed={isAcademic}
-                className={`group flex flex-col items-end text-right transition-all ${
-                  isAcademic ? "scale-105" : "opacity-50 hover:opacity-80"
+                className={`group flex flex-col items-end text-right transition-all duration-300 ${
+                  isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
                 }`}
               >
                 <span
-                  className={`text-[10px] font-extrabold uppercase tracking-[0.18em] transition-colors ${
+                  className={`text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors ${
                     isAcademic ? "text-brand" : "text-foreground/40"
                   }`}
                 >
                   Module
                 </span>
                 <span
-                  className={`font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                  className={`font-display text-lg font-extrabold tracking-tight sm:text-2xl ${
                     isAcademic ? "text-foreground" : "text-foreground/55"
                   }`}
                 >
@@ -191,53 +191,115 @@ function WritingSamplesPage() {
                 </span>
               </button>
 
-              {/* The Dial */}
-              <div
-                className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-foreground/10 to-foreground/5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.12),0_8px_20px_-8px_rgba(0,0,0,0.25)] sm:h-24 sm:w-24"
-                aria-hidden
-              >
-                {/* Tick marks around dial */}
-                <svg
-                  viewBox="0 0 100 100"
-                  className="absolute inset-0 h-full w-full text-foreground/25"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                >
-                  {Array.from({ length: 12 }).map((_, i) => {
-                    const angle = (i * 30 * Math.PI) / 180;
-                    const x1 = 50 + Math.cos(angle) * 42;
-                    const y1 = 50 + Math.sin(angle) * 42;
-                    const x2 = 50 + Math.cos(angle) * 46;
-                    const y2 = 50 + Math.sin(angle) * 46;
-                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />;
-                  })}
-                </svg>
-
-                {/* Inner knob */}
+              {/* The Dial — Big & Premium */}
+              <div className="relative shrink-0">
+                {/* Pulsing glow halo */}
                 <div
-                  className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15),inset_0_-2px_4px_rgba(0,0,0,0.08),inset_0_2px_4px_rgba(255,255,255,0.8)] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-16 sm:w-16 ${
-                    isAcademic ? "-rotate-45" : "rotate-45"
+                  aria-hidden
+                  className={`absolute inset-0 -m-4 rounded-full blur-2xl transition-all duration-700 ${
+                    isAcademic
+                      ? "bg-[oklch(0.55_0.16_265)]/40"
+                      : "bg-[oklch(0.55_0.10_160)]/40"
                   }`}
-                  style={{
-                    boxShadow: isAcademic
-                      ? "0 0 0 3px oklch(0.55 0.16 265 / 0.25), 0 4px 14px oklch(0.55 0.16 265 / 0.35), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8)"
-                      : "0 0 0 3px oklch(0.55 0.10 160 / 0.25), 0 4px 14px oklch(0.55 0.10 160 / 0.35), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8)",
-                  }}
-                >
-                  {/* Pointer line */}
-                  <span
-                    className={`absolute top-1.5 h-3 w-1 rounded-full ${
-                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+                />
+
+                {/* Outer bezel — dark metallic ring */}
+                <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-foreground/[0.18] via-foreground/[0.08] to-foreground/[0.18] shadow-[0_12px_30px_-10px_rgba(0,0,0,0.4),inset_0_2px_3px_rgba(255,255,255,0.6),inset_0_-2px_4px_rgba(0,0,0,0.15)] sm:h-40 sm:w-40">
+                  {/* Bezel marker labels & ticks */}
+                  <svg
+                    viewBox="0 0 100 100"
+                    className="absolute inset-0 h-full w-full"
+                    fill="none"
+                  >
+                    {/* Tick marks */}
+                    {Array.from({ length: 24 }).map((_, i) => {
+                      const angle = ((i * 15 - 90) * Math.PI) / 180;
+                      const isMajor = i % 6 === 0;
+                      const inner = isMajor ? 38 : 41;
+                      const x1 = 50 + Math.cos(angle) * inner;
+                      const y1 = 50 + Math.sin(angle) * inner;
+                      const x2 = 50 + Math.cos(angle) * 45;
+                      const y2 = 50 + Math.sin(angle) * 45;
+                      return (
+                        <line
+                          key={i}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="currentColor"
+                          strokeWidth={isMajor ? 2 : 1}
+                          strokeLinecap="round"
+                          className={isMajor ? "text-foreground/55" : "text-foreground/25"}
+                        />
+                      );
+                    })}
+
+                    {/* Active position highlight arc — left for Academic, right for General */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="44"
+                      stroke={isAcademic ? "oklch(0.55 0.16 265)" : "oklch(0.55 0.10 160)"}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeDasharray={isAcademic ? "30 246" : "30 246"}
+                      strokeDashoffset={isAcademic ? "62" : "192"}
+                      className="transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                      fill="none"
+                    />
+                  </svg>
+
+                  {/* Inner knob — rotates */}
+                  <div
+                    className={`relative flex h-[72%] w-[72%] items-center justify-center rounded-full bg-gradient-to-br from-white via-white to-foreground/[0.04] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                      isAcademic ? "-rotate-[60deg]" : "rotate-[60deg]"
                     }`}
-                  />
-                  {/* Center dot */}
-                  <span
-                    className={`h-2 w-2 rounded-full ${
-                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-                    }`}
-                  />
+                    style={{
+                      boxShadow: isAcademic
+                        ? "0 0 0 4px oklch(0.55 0.16 265 / 0.18), 0 8px 24px -4px oklch(0.55 0.16 265 / 0.45), inset 0 -3px 6px rgba(0,0,0,0.1), inset 0 3px 6px rgba(255,255,255,0.9)"
+                        : "0 0 0 4px oklch(0.55 0.10 160 / 0.18), 0 8px 24px -4px oklch(0.55 0.10 160 / 0.45), inset 0 -3px 6px rgba(0,0,0,0.1), inset 0 3px 6px rgba(255,255,255,0.9)",
+                    }}
+                  >
+                    {/* Long pointer arrow */}
+                    <div className="absolute top-1.5 flex flex-col items-center">
+                      <div
+                        className={`h-0 w-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent ${
+                          isAcademic
+                            ? "border-b-brand"
+                            : "border-b-[oklch(0.55_0.10_160)]"
+                        }`}
+                      />
+                      <div
+                        className={`h-5 w-1.5 rounded-b-full ${
+                          isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+                        }`}
+                      />
+                    </div>
+
+                    {/* Knurled grip lines around knob center */}
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <span
+                        key={i}
+                        aria-hidden
+                        className="absolute h-2 w-0.5 rounded-full bg-foreground/15"
+                        style={{
+                          transform: `rotate(${i * 45}deg) translateY(-22px)`,
+                        }}
+                      />
+                    ))}
+
+                    {/* Center hub */}
+                    <div
+                      className={`relative flex h-7 w-7 items-center justify-center rounded-full shadow-inner ${
+                        isAcademic
+                          ? "bg-gradient-to-br from-brand to-[oklch(0.42_0.16_265)]"
+                          : "bg-gradient-to-br from-[oklch(0.55_0.10_160)] to-[oklch(0.38_0.10_160)]"
+                      }`}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-white/80" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -246,19 +308,19 @@ function WritingSamplesPage() {
                 type="button"
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
                 aria-pressed={!isAcademic}
-                className={`group flex flex-col items-start text-left transition-all ${
-                  !isAcademic ? "scale-105" : "opacity-50 hover:opacity-80"
+                className={`group flex flex-col items-start text-left transition-all duration-300 ${
+                  !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
                 }`}
               >
                 <span
-                  className={`text-[10px] font-extrabold uppercase tracking-[0.18em] transition-colors ${
+                  className={`text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors ${
                     !isAcademic ? "text-[oklch(0.42_0.10_160)]" : "text-foreground/40"
                   }`}
                 >
                   Module
                 </span>
                 <span
-                  className={`font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                  className={`font-display text-lg font-extrabold tracking-tight sm:text-2xl ${
                     !isAcademic ? "text-foreground" : "text-foreground/55"
                   }`}
                 >
@@ -266,6 +328,11 @@ function WritingSamplesPage() {
                 </span>
               </button>
             </div>
+
+            {/* Helper text */}
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/45">
+              Turn the dial · Choose your module
+            </p>
           </div>
 
           {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
