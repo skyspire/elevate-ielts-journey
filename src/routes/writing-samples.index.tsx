@@ -619,115 +619,232 @@ function TaskEnvelopeScroll({
     </button>
   );
 
-  // Arrow rotation: -90° = points left (Task 1), 0° = up (none), +90° = right (Task 2)
-  const arrowAngle = isT1 ? -90 : isT2 ? 90 : 0;
-  const dialAccent = isAcademic ? "oklch(0.58 0.17 255)" : "oklch(0.55 0.10 160)";
-  const dialAccentSoft = isAcademic ? "oklch(0.58 0.17 255 / 0.20)" : "oklch(0.55 0.10 160 / 0.20)";
+  // Flame lean: -1 = leans left (Task 1), 0 = upright (none), +1 = leans right (Task 2)
+  const flameDir = isT1 ? -1 : isT2 ? 1 : 0;
+  const accentColor = isAcademic ? "oklch(0.58 0.17 255)" : "oklch(0.55 0.10 160)";
 
   return (
     <div className="relative mx-auto max-w-3xl">
       <style>{`
-        @keyframes dial-tick {
-          0%, 100% { transform: scale(1); }
-          50%      { transform: scale(1.04); }
+        @keyframes flame-flicker {
+          0%, 100% { transform: scaleY(1) scaleX(1); }
+          25%      { transform: scaleY(1.06) scaleX(0.96); }
+          50%      { transform: scaleY(0.96) scaleX(1.04); }
+          75%      { transform: scaleY(1.04) scaleX(0.98); }
+        }
+        @keyframes flame-glow {
+          0%, 100% { opacity: 0.55; }
+          50%      { opacity: 0.85; }
+        }
+        @keyframes smoke-rise {
+          0%   { transform: translateY(0) translateX(0) scale(0.6); opacity: 0; }
+          25%  { opacity: 0.35; }
+          100% { transform: translateY(-40px) translateX(var(--smoke-x, 0px)) scale(1.4); opacity: 0; }
+        }
+        @keyframes wick-glow {
+          0%, 100% { opacity: 0.6; }
+          50%      { opacity: 1; }
         }
       `}</style>
 
-      {/* 3-column layout — dial sits in its OWN column so typography never overlaps it */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
-        {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
+      {/* 3-column layout — candle sits in its OWN column */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3 sm:gap-8">
+        <div className="pb-6 sm:pb-10">
+          {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
+        </div>
 
-        {/* Dial */}
-        <div className="flex flex-col items-center justify-center">
+        {/* Candle */}
+        <div
+          className="relative flex flex-col items-center justify-end"
+          style={{ width: "clamp(64px, 9vw, 96px)" }}
+        >
+          {/* Smoke wisps when no flame direction (calm) — subtle */}
           <div
-            className="relative flex items-center justify-center rounded-full border-4 bg-white shadow-card"
-            style={{
-              width: "clamp(88px, 14vw, 128px)",
-              height: "clamp(88px, 14vw, 128px)",
-              borderColor: dialAccent,
-              background:
-                "radial-gradient(circle at 35% 28%, oklch(1 0 0) 0%, oklch(0.97 0.01 250) 70%, oklch(0.93 0.02 250) 100%)",
-              animation: noSelection ? "dial-tick 2.2s ease-in-out infinite" : "none",
-            }}
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+            style={{ top: "8px" }}
           >
-            {/* Inner ring */}
-            <div
-              aria-hidden
-              className="absolute inset-2 rounded-full border"
-              style={{ borderColor: dialAccentSoft }}
-            />
-
-            {/* Tick marks (left, top, right) */}
-            <div
-              aria-hidden
-              className="absolute inset-0"
+            <span
+              className="absolute block h-2 w-2 rounded-full bg-foreground/25 blur-[2px]"
               style={{
-                background: `
-                  conic-gradient(from 0deg,
-                    transparent 0deg,
-                    transparent 88deg, ${dialAccent} 88deg, ${dialAccent} 92deg,
-                    transparent 92deg,
-                    transparent 178deg, ${dialAccent} 178deg, ${dialAccent} 182deg,
-                    transparent 182deg,
-                    transparent 268deg, ${dialAccent} 268deg, ${dialAccent} 272deg,
-                    transparent 272deg, transparent 360deg)`,
-                WebkitMask: "radial-gradient(circle, transparent 56%, black 57%, black 64%, transparent 65%)",
-                mask: "radial-gradient(circle, transparent 56%, black 57%, black 64%, transparent 65%)",
-                opacity: 0.55,
+                ["--smoke-x" as never]: `${flameDir * 8}px`,
+                animation: "smoke-rise 3.2s ease-out infinite",
               }}
             />
-
-            {/* Rotating arrow */}
-            <svg
-              viewBox="0 0 100 100"
-              className="absolute inset-0 h-full w-full"
+            <span
+              className="absolute block h-1.5 w-1.5 rounded-full bg-foreground/20 blur-[2px]"
               style={{
-                transform: `rotate(${arrowAngle}deg)`,
-                transformOrigin: "50% 50%",
-                transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+                ["--smoke-x" as never]: `${flameDir * 12}px`,
+                animation: "smoke-rise 3.6s ease-out 0.8s infinite",
               }}
-              aria-hidden
-            >
-              {/* Arrow shaft */}
-              <line
-                x1="50"
-                y1="50"
-                x2="50"
-                y2="18"
-                stroke={dialAccent}
-                strokeWidth="5"
-                strokeLinecap="round"
-              />
-              {/* Arrow head */}
-              <path
-                d="M 50 10 L 42 24 L 58 24 Z"
-                fill={dialAccent}
-                stroke={dialAccent}
-                strokeWidth="2"
-                strokeLinejoin="round"
-              />
-              {/* Counterweight (small dot opposite head) */}
-              <circle cx="50" cy="68" r="4" fill={dialAccent} opacity="0.6" />
-            </svg>
-
-            {/* Center hub */}
-            <div
-              className="relative h-3.5 w-3.5 rounded-full border-2 bg-white sm:h-4 sm:w-4"
-              style={{ borderColor: dialAccent }}
             />
           </div>
 
-          {/* Label below dial — only when nothing selected */}
+          {/* Flame group — leans toward selection */}
+          <div
+            className="relative"
+            style={{
+              width: "32px",
+              height: "56px",
+              transformOrigin: "50% 100%",
+              transform: `rotate(${flameDir * 22}deg)`,
+              transition: "transform 800ms cubic-bezier(0.34, 1.4, 0.64, 1)",
+            }}
+            aria-hidden
+          >
+            {/* Outer glow halo */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 rounded-full blur-md"
+              style={{
+                width: "44px",
+                height: "60px",
+                bottom: "-6px",
+                background:
+                  "radial-gradient(ellipse at 50% 70%, oklch(0.85 0.18 70 / 0.55) 0%, oklch(0.75 0.20 50 / 0.25) 50%, transparent 75%)",
+                animation: "flame-glow 1.6s ease-in-out infinite",
+              }}
+            />
+
+            {/* Flame body — flickers */}
+            <svg
+              viewBox="0 0 32 56"
+              className="absolute inset-0 h-full w-full"
+              style={{
+                transformOrigin: "50% 100%",
+                animation: "flame-flicker 240ms ease-in-out infinite",
+              }}
+            >
+              <defs>
+                <radialGradient id="flameOuter" cx="50%" cy="75%" r="55%">
+                  <stop offset="0%" stopColor="oklch(0.92 0.18 80)" />
+                  <stop offset="40%" stopColor="oklch(0.78 0.21 55)" />
+                  <stop offset="80%" stopColor="oklch(0.62 0.22 38)" />
+                  <stop offset="100%" stopColor="oklch(0.50 0.20 30 / 0)" />
+                </radialGradient>
+                <radialGradient id="flameInner" cx="50%" cy="78%" r="40%">
+                  <stop offset="0%" stopColor="oklch(0.97 0.10 95)" />
+                  <stop offset="60%" stopColor="oklch(0.88 0.18 80)" />
+                  <stop offset="100%" stopColor="oklch(0.78 0.20 60 / 0)" />
+                </radialGradient>
+                <radialGradient id="flameCore" cx="50%" cy="85%" r="25%">
+                  <stop offset="0%" stopColor="oklch(0.55 0.18 250)" />
+                  <stop offset="100%" stopColor="oklch(0.55 0.18 250 / 0)" />
+                </radialGradient>
+              </defs>
+              {/* Outer flame teardrop */}
+              <path
+                d="M 16 4 C 24 18, 28 30, 26 42 C 24 52, 20 54, 16 54 C 12 54, 8 52, 6 42 C 4 30, 8 18, 16 4 Z"
+                fill="url(#flameOuter)"
+              />
+              {/* Inner flame */}
+              <path
+                d="M 16 14 C 21 24, 23 34, 22 42 C 21 49, 18 51, 16 51 C 14 51, 11 49, 10 42 C 9 34, 11 24, 16 14 Z"
+                fill="url(#flameInner)"
+              />
+              {/* Blue core at base */}
+              <ellipse cx="16" cy="48" rx="5" ry="6" fill="url(#flameCore)" />
+            </svg>
+          </div>
+
+          {/* Wick */}
+          <div
+            className="relative -mt-1 h-3 w-[2px] rounded-full"
+            style={{
+              background: "linear-gradient(180deg, oklch(0.20 0.04 40) 0%, oklch(0.35 0.06 40) 100%)",
+            }}
+          >
+            <span
+              aria-hidden
+              className="absolute inset-x-[-1px] top-0 h-1 rounded-full"
+              style={{
+                background: "oklch(0.85 0.18 60)",
+                boxShadow: "0 0 6px oklch(0.85 0.18 60)",
+                animation: "wick-glow 1.2s ease-in-out infinite",
+              }}
+            />
+          </div>
+
+          {/* Candle body */}
+          <div
+            className="relative w-full overflow-hidden rounded-t-[6px] rounded-b-sm shadow-card"
+            style={{
+              height: "clamp(120px, 18vw, 180px)",
+              background:
+                "linear-gradient(180deg, oklch(0.97 0.02 80) 0%, oklch(0.92 0.04 75) 30%, oklch(0.86 0.05 70) 100%)",
+              borderTop: "1px solid oklch(0.78 0.06 70)",
+            }}
+          >
+            {/* Wax drip highlight on the side that flame leans away from */}
+            <div
+              aria-hidden
+              className="absolute top-2 h-full w-[14%] rounded-full opacity-60 blur-[1px]"
+              style={{
+                left: flameDir > 0 ? "12%" : flameDir < 0 ? "auto" : "12%",
+                right: flameDir < 0 ? "12%" : "auto",
+                background:
+                  "linear-gradient(180deg, oklch(1 0 0 / 0.7) 0%, oklch(1 0 0 / 0) 70%)",
+                transition: "left 600ms ease, right 600ms ease",
+              }}
+            />
+            {/* Wax drip texture on the leaning side */}
+            {flameDir !== 0 && (
+              <div
+                aria-hidden
+                className="absolute top-3 h-3/4 w-2"
+                style={{
+                  [flameDir > 0 ? "right" : "left"]: "8%",
+                  background:
+                    "radial-gradient(ellipse at 50% 0%, oklch(0.96 0.03 75) 0%, oklch(0.88 0.05 70) 60%, transparent 100%)",
+                  borderRadius: "999px",
+                  opacity: 0.8,
+                  transition: "all 600ms ease",
+                }}
+              />
+            )}
+            {/* Subtle vertical shading on the shadow side */}
+            <div
+              aria-hidden
+              className="absolute inset-y-0 w-1/3"
+              style={{
+                right: flameDir > 0 ? "0" : flameDir < 0 ? "auto" : "0",
+                left: flameDir < 0 ? "0" : "auto",
+                background:
+                  "linear-gradient(90deg, transparent 0%, oklch(0.50 0.06 50 / 0.18) 100%)",
+                transition: "all 600ms ease",
+              }}
+            />
+            {/* Accent ring near top */}
+            <div
+              aria-hidden
+              className="absolute left-0 right-0 top-2 h-px"
+              style={{ background: accentColor, opacity: 0.35 }}
+            />
+          </div>
+
+          {/* Candle base/holder */}
+          <div
+            className="relative -mt-1 w-[120%] rounded-md shadow-soft"
+            style={{
+              height: "10px",
+              background:
+                "linear-gradient(180deg, oklch(0.55 0.04 50) 0%, oklch(0.38 0.04 45) 100%)",
+              borderTop: "1px solid oklch(0.65 0.05 55)",
+            }}
+          />
+
+          {/* Hint label when nothing selected */}
           {noSelection && (
             <span
               className={`mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
             >
-              Select Task
+              Pick a Task
             </span>
           )}
         </div>
 
-        {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
+        <div className="pb-6 sm:pb-10">
+          {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
+        </div>
       </div>
     </div>
   );
