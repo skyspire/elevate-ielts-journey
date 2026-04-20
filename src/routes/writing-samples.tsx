@@ -15,6 +15,10 @@ import {
   Calendar,
   Lock,
   ArrowUpRight,
+  Scaling,
+  SplitSquareHorizontal,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
 import { z } from "zod";
 
