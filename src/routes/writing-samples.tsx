@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   GraduationCap,
   ArrowLeft,
@@ -102,6 +102,7 @@ const makeQuestions = (label: string): Question[] =>
 
 function WritingSamplesPage() {
   const search = Route.useSearch();
+  const navigate = useNavigate();
   const module: Module = search.module ?? "general";
   const [task, setTask] = useState<Task>("task1");
   const categories = categoriesByModuleTask[module][task];
@@ -155,20 +156,50 @@ function WritingSamplesPage() {
         />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Breadcrumb / module pill */}
+          {/* Breadcrumb */}
           <div className="flex items-center justify-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
             <Link to="/dashboard" className="hover:text-foreground/80">Dashboard</Link>
             <span>/</span>
             <span className={accentText}>Writing Samples</span>
           </div>
 
-          {/* Hero */}
-          <div className="mt-5 text-center">
-            <div className={`mx-auto inline-flex items-center gap-2 rounded-full border ${accentChip} px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em]`}>
-              <span className={`h-1.5 w-1.5 rounded-full ${accentBg}`} />
+          {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
+          <div className="mt-8 text-center">
+            <h2
+              className={`font-display font-black uppercase leading-[0.95] tracking-[-0.02em] ${accentText}`}
+              style={{ fontSize: "clamp(2.25rem, 8vw, 5rem)" }}
+            >
               IELTS {isAcademic ? "Academic" : "General Training"}
+            </h2>
+
+            {/* Module switcher */}
+            <div className="mt-5 inline-flex items-center rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
+                aria-pressed={isAcademic}
+                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
+                  isAcademic ? "bg-brand text-brand-foreground shadow-soft" : "text-foreground/55 hover:text-foreground"
+                }`}
+              >
+                Academic
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
+                aria-pressed={!isAcademic}
+                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
+                  !isAcademic
+                    ? "bg-[oklch(0.55_0.10_160)] text-white shadow-soft"
+                    : "text-foreground/55 hover:text-foreground"
+                }`}
+              >
+                General Training
+              </button>
             </div>
-            <h1 className="mt-4 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+
+            {/* Sub-hero */}
+            <h1 className="mt-8 font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-4xl md:text-5xl">
               Writing Samples
               <br />
               <span className="text-foreground/55">Choose your task.</span>
