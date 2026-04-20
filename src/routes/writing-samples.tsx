@@ -320,7 +320,7 @@ function WritingSamplesPage() {
                   Module
                 </span>
                 <span
-                  className={`font-display text-lg font-extrabold tracking-tight sm:text-2xl ${
+                  className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
                     !isAcademic ? "text-foreground" : "text-foreground/55"
                   }`}
                 >
