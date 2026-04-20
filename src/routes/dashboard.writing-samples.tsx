@@ -328,7 +328,7 @@ function QuestionRowCard({
 
   return (
     <Link
-      to="/dashboard.writing-samples/$questionId"
+      to="/dashboard/writing-samples/$questionId"
       params={{ questionId: q.id }}
       search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
       className="group relative flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-white p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
