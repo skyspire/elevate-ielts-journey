@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  PenLine,
-  Mic,
-  BookOpen,
-  FileText,
-  Sparkles,
-  AlertTriangle,
-  CalendarDays,
   GraduationCap,
   ArrowUpRight,
   CheckCircle2,
@@ -39,8 +32,13 @@ type Feature = {
   key: string;
   title: string;
   description: { academic: string; general: string };
-  count: { academic: string; general: string };
-  icon: typeof PenLine;
+  // count is split: numeric headline + small unit label
+  count: {
+    academic: { value: string; label: string };
+    general: { value: string; label: string };
+  };
+  // tone for the card tint (independent of module accent)
+  tone: "blue" | "sage" | "lilac" | "peach" | "mint" | "kraft" | "rose";
 };
 
 const features: Feature[] = [
@@ -51,8 +49,11 @@ const features: Feature[] = [
       academic: "Task 1 reports & Task 2 essays with Band 8+ model answers.",
       general: "Letter writing & Task 2 essays with Band 8+ model answers.",
     },
-    count: { academic: "240+ samples", general: "180+ samples" },
-    icon: PenLine,
+    count: {
+      academic: { value: "240+", label: "model essays" },
+      general: { value: "180+", label: "model letters & essays" },
+    },
+    tone: "blue",
   },
   {
     key: "speaking",
@@ -61,8 +62,11 @@ const features: Feature[] = [
       academic: "Part 1, 2 & 3 model answers with examiner-style follow-ups.",
       general: "Part 1, 2 & 3 model answers focused on everyday topics.",
     },
-    count: { academic: "320+ recordings", general: "260+ recordings" },
-    icon: Mic,
+    count: {
+      academic: { value: "320+", label: "recorded answers" },
+      general: { value: "260+", label: "recorded answers" },
+    },
+    tone: "peach",
   },
   {
     key: "vocab",
@@ -71,8 +75,11 @@ const features: Feature[] = [
       academic: "Topic-wise academic lexis, collocations & paraphrasing drills.",
       general: "High-frequency everyday vocabulary with usage examples.",
     },
-    count: { academic: "1,800+ words", general: "1,200+ words" },
-    icon: BookOpen,
+    count: {
+      academic: { value: "1,800+", label: "words & collocations" },
+      general: { value: "1,200+", label: "everyday words" },
+    },
+    tone: "sage",
   },
   {
     key: "templates",
@@ -81,8 +88,11 @@ const features: Feature[] = [
       academic: "Reusable structures for graphs, processes and essays.",
       general: "Letter formats, opinion essays and discussion templates.",
     },
-    count: { academic: "60+ templates", general: "45+ templates" },
-    icon: FileText,
+    count: {
+      academic: { value: "60+", label: "ready templates" },
+      general: { value: "45+", label: "ready templates" },
+    },
+    tone: "lilac",
   },
   {
     key: "predictions",
@@ -91,8 +101,11 @@ const features: Feature[] = [
       academic: "Most likely Writing & Speaking topics for the next exam.",
       general: "High-probability questions for upcoming General tests.",
     },
-    count: { academic: "Updated weekly", general: "Updated weekly" },
-    icon: Sparkles,
+    count: {
+      academic: { value: "Weekly", label: "fresh predictions" },
+      general: { value: "Weekly", label: "fresh predictions" },
+    },
+    tone: "rose",
   },
   {
     key: "mistakes",
@@ -101,8 +114,11 @@ const features: Feature[] = [
       academic: "Grammar, lexical and coherence errors that hurt your band.",
       general: "Frequent errors test-takers make in letters and essays.",
     },
-    count: { academic: "120+ patterns", general: "90+ patterns" },
-    icon: AlertTriangle,
+    count: {
+      academic: { value: "120+", label: "error patterns" },
+      general: { value: "90+", label: "error patterns" },
+    },
+    tone: "mint",
   },
   {
     key: "plan",
@@ -111,10 +127,82 @@ const features: Feature[] = [
       academic: "Personalized 4–8 week roadmap to your target band.",
       general: "Structured weekly plan tailored to your timeline.",
     },
-    count: { academic: "4 / 6 / 8 weeks", general: "4 / 6 / 8 weeks" },
-    icon: CalendarDays,
+    count: {
+      academic: { value: "4–8", label: "week roadmaps" },
+      general: { value: "4–8", label: "week roadmaps" },
+    },
+    tone: "kraft",
   },
 ];
+
+// Per-tone color sets for tinted cards & gradient numbers
+const tones: Record<
+  Feature["tone"],
+  {
+    bg: string;
+    border: string;
+    arrowBg: string;
+    arrowText: string;
+    numberGradient: string;
+  }
+> = {
+  blue: {
+    bg: "bg-[oklch(0.96_0.04_255)]",
+    border: "border-[oklch(0.62_0.16_255)]/20",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.16_255)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.45_0.18_260)_0%,oklch(0.62_0.18_245)_100%)]",
+  },
+  sage: {
+    bg: "bg-[oklch(0.94_0.05_160)]",
+    border: "border-[oklch(0.55_0.10_160)]/20",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.42_0.10_160)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.38_0.10_160)_0%,oklch(0.58_0.13_155)_100%)]",
+  },
+  peach: {
+    bg: "bg-[oklch(0.94_0.055_55)]",
+    border: "border-[oklch(0.65_0.12_50)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.12_45)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.42_0.12_40)_0%,oklch(0.6_0.14_55)_100%)]",
+  },
+  lilac: {
+    bg: "bg-[oklch(0.94_0.055_295)]",
+    border: "border-[oklch(0.6_0.12_295)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.42_0.12_295)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.4_0.13_295)_0%,oklch(0.58_0.15_290)_100%)]",
+  },
+  mint: {
+    bg: "bg-[oklch(0.94_0.05_185)]",
+    border: "border-[oklch(0.6_0.10_185)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.4_0.1_185)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.38_0.10_185)_0%,oklch(0.55_0.12_180)_100%)]",
+  },
+  rose: {
+    bg: "bg-[oklch(0.95_0.045_15)]",
+    border: "border-[oklch(0.62_0.14_15)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.14_15)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.42_0.16_10)_0%,oklch(0.6_0.18_20)_100%)]",
+  },
+  kraft: {
+    bg: "bg-[oklch(0.92_0.04_75)]",
+    border: "border-[oklch(0.55_0.07_70)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.4_0.07_70)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.35_0.06_70)_0%,oklch(0.55_0.09_70)_100%)]",
+  },
+};
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
 const sage = {
@@ -225,7 +313,6 @@ function DashboardPage() {
                 key={f.key}
                 feature={f}
                 module={module}
-                accent={accent}
               />
             ))}
           </div>
@@ -271,59 +358,60 @@ function ModuleToggle({
   );
 }
 
-type Accent = typeof blue;
-
 function FeatureCard({
   feature,
   module,
-  accent,
 }: {
   feature: Feature;
   module: Module;
-  accent: Accent;
 }) {
-  const Icon = feature.icon;
+  const tone = tones[feature.tone];
+  const { value, label } = feature.count[module];
+
   return (
     <button
       type="button"
-      className="group relative flex flex-col items-start overflow-hidden rounded-2xl border border-foreground/10 bg-paper-cream p-6 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-card"
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
     >
-      {/* paper texture overlay (very subtle) */}
+      {/* subtle paper grain */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(oklch(0.4_0.05_60_/_0.06)_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
       />
-      {/* warm top edge highlight */}
+      {/* top edge highlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
       />
 
-      <div className="relative flex w-full items-start justify-between">
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-xl ${accent.bgSoft} ${accent.text} transition-transform group-hover:scale-105`}
-        >
-          <Icon className="h-[18px] w-[18px]" strokeWidth={2.25} />
-        </div>
+      {/* Top row: arrow only */}
+      <div className="relative flex w-full items-start justify-end">
         <span
-          className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-foreground/40 ring-1 ring-foreground/10 transition-all group-hover:bg-foreground group-hover:text-background group-hover:ring-foreground`}
+          className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
         >
-          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
         </span>
       </div>
 
+      {/* Oversized gradient number — the hero of the card */}
+      <div className="relative mt-1 flex items-baseline gap-2">
+        <span
+          className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
+        >
+          {value}
+        </span>
+      </div>
+      <span className="relative mt-2 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+        {label}
+      </span>
+
+      {/* Title + description */}
       <h3 className="relative mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
         {feature.title}
       </h3>
-      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/65">
+      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/70">
         {feature.description[module]}
       </p>
-
-      <div className="relative mt-5 w-full border-t border-dashed border-foreground/15 pt-3">
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/45">
-          {feature.count[module]}
-        </span>
-      </div>
     </button>
   );
 }
