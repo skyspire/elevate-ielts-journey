@@ -80,7 +80,16 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
 };
 
 // ───────── Placeholder questions ─────────
-type Question = { id: string; title: string; topic: string; difficulty: "Easy" | "Medium" | "Hard" };
+type Tone = "blue" | "mint" | "peach" | "lilac";
+type Question = {
+  id: string;
+  title: string;
+  topic: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  tone: Tone;
+};
+
+const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
 
 const makeQuestions = (label: string): Question[] =>
   Array.from({ length: 8 }).map((_, i) => ({
@@ -88,6 +97,7 @@ const makeQuestions = (label: string): Question[] =>
     title: `${label} — Sample Question ${i + 1}`,
     topic: ["Work", "Education", "Society", "Environment", "Technology", "Health", "Travel", "Lifestyle"][i],
     difficulty: (["Easy", "Medium", "Hard"] as const)[i % 3],
+    tone: TONES[i % TONES.length],
   }));
 
 function WritingSamplesPage() {
