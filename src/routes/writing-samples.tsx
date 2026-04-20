@@ -163,10 +163,38 @@ function WritingSamplesPage() {
             <span className={accentText}>Writing Samples</span>
           </div>
 
+          {/* Module switcher — placed above so it never crowds the title doodles */}
+          <div className="mt-6 flex justify-center">
+            <div className="inline-flex items-center rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
+                aria-pressed={isAcademic}
+                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
+                  isAcademic ? "bg-brand text-brand-foreground shadow-soft" : "text-foreground/55 hover:text-foreground"
+                }`}
+              >
+                Academic
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
+                aria-pressed={!isAcademic}
+                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
+                  !isAcademic
+                    ? "bg-[oklch(0.55_0.10_160)] text-white shadow-soft"
+                    : "text-foreground/55 hover:text-foreground"
+                }`}
+              >
+                General Training
+              </button>
+            </div>
+          </div>
+
           {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
           <div className="mt-8 text-center">
             <h2
-              className={`relative inline-block font-display font-black uppercase leading-[0.95] tracking-[-0.02em] ${accentText}`}
+              className={`relative inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${accentText}`}
               style={{ fontSize: "clamp(2.25rem, 8vw, 5rem)" }}
             >
               {/* Sparkle doodle (top-left) */}
@@ -181,21 +209,6 @@ function WritingSamplesPage() {
                 strokeLinejoin="round"
               >
                 <path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.5 5.5l3 3M15.5 15.5l3 3M5.5 18.5l3-3M15.5 8.5l3-3" />
-              </svg>
-
-              {/* Curved arrow doodle (top-right) */}
-              <svg
-                aria-hidden
-                viewBox="0 0 60 40"
-                className={`absolute -right-6 -top-5 h-7 w-10 sm:-right-14 sm:-top-8 sm:h-12 sm:w-16 ${accentText} opacity-60`}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 30 C 15 5, 40 5, 55 22" />
-                <path d="M48 14 L 55 22 L 46 25" />
               </svg>
 
               IELTS{" "}
@@ -228,32 +241,6 @@ function WritingSamplesPage() {
                 </svg>
               </span>
             </h2>
-
-            {/* Module switcher */}
-            <div className="mt-5 inline-flex items-center rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
-              <button
-                type="button"
-                onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
-                aria-pressed={isAcademic}
-                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
-                  isAcademic ? "bg-brand text-brand-foreground shadow-soft" : "text-foreground/55 hover:text-foreground"
-                }`}
-              >
-                Academic
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
-                aria-pressed={!isAcademic}
-                className={`rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.14em] transition-all ${
-                  !isAcademic
-                    ? "bg-[oklch(0.55_0.10_160)] text-white shadow-soft"
-                    : "text-foreground/55 hover:text-foreground"
-                }`}
-              >
-                General Training
-              </button>
-            </div>
 
             {/* Sub-hero */}
             <h1 className="mt-8 font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-4xl md:text-5xl">
