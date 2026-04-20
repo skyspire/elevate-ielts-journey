@@ -571,59 +571,49 @@ function TaskEnvelopeScroll({
   const highlightBg = isAcademic
     ? "bg-[oklch(0.92_0.13_85)]"
     : "bg-[oklch(0.90_0.14_150)]";
-  const accentBorder = isAcademic ? "border-brand" : "border-[oklch(0.55_0.10_160)]";
+  const accentBorder = isAcademic
+    ? "border-brand/55"
+    : "border-[oklch(0.55_0.10_160)]/55";
   const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
 
-  const renderCard = (
+  const renderItem = (
     active: boolean,
     onClick: () => void,
     taskNum: "Task 1" | "Task 2",
     name: string,
+    align: "left" | "right",
   ) => (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
-        active
-          ? "border-foreground/15 shadow-card -translate-y-0.5"
-          : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
+      className={`group block bg-transparent p-2 sm:p-4 ${
+        align === "left" ? "text-left" : "text-right"
+      } transition-opacity duration-300 ${
+        active ? "opacity-100" : "opacity-55 hover:opacity-85"
       }`}
     >
-      <span
-        aria-hidden
-        className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
-          isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-        } ${active ? "opacity-100" : "opacity-0"}`}
-      />
-
-      <span
-        className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
-          active
-            ? isAcademic
-              ? "bg-brand text-brand-foreground"
-              : "bg-[oklch(0.55_0.10_160)] text-white"
-            : "bg-foreground/8 text-foreground/55"
-        }`}
-      >
-        {taskNum}
-      </span>
-
       <h3
-        className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
+        className={`relative inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
           active ? "text-foreground" : "text-foreground/70"
         }`}
-        style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
+        style={{ fontSize: "clamp(1.5rem, 5vw, 2.75rem)" }}
       >
         <span className="relative inline-block">
           {active && (
             <span
               aria-hidden
-              className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
+              className={`absolute inset-x-[-6px] bottom-[8%] -z-10 h-[52%] -rotate-1 ${highlightBg} opacity-75`}
               style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
             />
           )}
-          <span className="relative">{name}</span>
+          <span className="relative">
+            {taskNum}
+            <span className="text-foreground/45"> — </span>
+            <span className={active ? "text-foreground/85" : "text-foreground/55"}>
+              {name}
+            </span>
+          </span>
         </span>
       </h3>
     </button>
@@ -632,34 +622,44 @@ function TaskEnvelopeScroll({
   return (
     <div className="relative mx-auto max-w-3xl">
       <style>{`
-        @keyframes select-disc-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 var(--ring-color, oklch(0.58 0.17 255 / 0.35)), 0 8px 24px oklch(0.20 0.05 250 / 0.10); }
-          50%      { box-shadow: 0 0 0 10px transparent, 0 8px 24px oklch(0.20 0.05 250 / 0.10); }
+        @keyframes glass-disc-pulse {
+          0%, 100% { box-shadow:
+            0 0 0 0 var(--ring-color, oklch(0.58 0.17 255 / 0.30)),
+            0 12px 32px oklch(0.20 0.05 250 / 0.12),
+            inset 0 1px 0 oklch(1 0 0 / 0.6);
+          }
+          50%      { box-shadow:
+            0 0 0 12px transparent,
+            0 12px 32px oklch(0.20 0.05 250 / 0.12),
+            inset 0 1px 0 oklch(1 0 0 / 0.6);
+          }
         }
       `}</style>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
-        {renderCard(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters")}
-        {renderCard(isT2, () => onTaskChange("task2"), "Task 2", "Essay")}
+      <div className="grid grid-cols-2 items-center gap-3 sm:gap-6">
+        {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "left")}
+        {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "right")}
       </div>
 
-      {/* Center disc — only shown until user picks a task */}
+      {/* Center frosted glass disc — only shown until user picks a task */}
       {noSelection && (
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
         >
           <div
-            className={`flex h-24 w-24 items-center justify-center rounded-full border-4 bg-white text-center sm:h-28 sm:w-28 ${accentBorder}`}
+            className={`flex h-24 w-24 items-center justify-center rounded-full border-[3px] backdrop-blur-md text-center sm:h-32 sm:w-32 sm:border-4 ${accentBorder}`}
             style={{
+              background:
+                "linear-gradient(135deg, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0.30) 100%)",
               ["--ring-color" as never]: isAcademic
-                ? "oklch(0.58 0.17 255 / 0.35)"
-                : "oklch(0.55 0.10 160 / 0.35)",
-              animation: "select-disc-pulse 2.2s ease-out infinite",
+                ? "oklch(0.58 0.17 255 / 0.30)"
+                : "oklch(0.55 0.10 160 / 0.30)",
+              animation: "glass-disc-pulse 2.4s ease-out infinite",
             }}
           >
             <span
-              className={`px-2 font-display text-[10px] font-black uppercase leading-[1.15] tracking-[0.14em] sm:text-[11px] ${accentText}`}
+              className={`px-2 font-display text-[10px] font-black uppercase leading-[1.15] tracking-[0.16em] sm:text-[12px] ${accentText}`}
             >
               Select<br />Your<br />Task
             </span>
