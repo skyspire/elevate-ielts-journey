@@ -470,7 +470,7 @@ function FeatureCard({
 
   if (feature.to === "/dashboard/writing-samples") {
     return (
-      <Link to="/dashboard/writing-samples" search={{ module }} className={cardClass}>
+      <Link to="/writing-samples" search={{ module }} className={cardClass}>
         {inner}
       </Link>
     );
