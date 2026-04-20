@@ -89,7 +89,8 @@ const makeQuestions = (label: string): Question[] =>
   }));
 
 function WritingSamplesPage() {
-  const { module } = Route.useSearch();
+  const search = Route.useSearch();
+  const module: Module = search.module ?? "general";
   const [task, setTask] = useState<Task>("task1");
   const categories = categoriesByModuleTask[module][task];
   const [categoryId, setCategoryId] = useState<string>(categories[0].id);
