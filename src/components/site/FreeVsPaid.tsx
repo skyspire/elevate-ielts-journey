@@ -125,33 +125,24 @@ export function FreeVsPaid() {
           </article>
 
           {/* ============ PAID ============ */}
-          <article className="relative flex flex-col rounded-3xl border-transparent bg-card p-7 shadow-card ring-2 ring-brand sm:p-9">
+          <article className="relative flex flex-col rounded-3xl border-transparent bg-card p-7 shadow-card ring-2 ring-brand sm:p-10">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-foreground shadow-soft">
               Most popular
             </span>
 
-            <div className="flex items-center justify-between">
-              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-brand">
-                Full Access
-              </span>
-              <span className="rounded-full border border-brand/25 bg-brand-soft px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-brand">
-                One sub · everything
-              </span>
-            </div>
-
-            <h3 className="mt-6 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            <h3 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
               Unlimited access to the complete library
             </h3>
-            <p className="mt-2 text-sm font-medium leading-relaxed text-muted-foreground sm:text-base">
-              Every sample, template, vocabulary set, prediction, and resource
-              we publish — under a single subscription.
+            <p className="mt-3 text-sm font-medium leading-relaxed text-muted-foreground sm:text-base">
+              One subscription unlocks every sample, template, vocabulary set,
+              prediction, and resource we publish.
             </p>
 
-            <ul className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-x-6">
+            <ul className="mt-7 space-y-3.5">
               {paidIncludes.map((f) => (
                 <li
                   key={f}
-                  className="flex items-start gap-2.5 text-[14.5px] font-semibold text-foreground"
+                  className="flex items-start gap-3 text-[15px] font-semibold text-foreground"
                 >
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
                     <Check className="h-3 w-3" strokeWidth={3} />
@@ -162,64 +153,49 @@ export function FreeVsPaid() {
             </ul>
 
             {/* Plans */}
-            <div className="mt-9 border-t border-foreground/8 pt-7">
-              <div className="flex items-baseline justify-between gap-4">
-                <p className="font-display text-base font-extrabold tracking-tight text-foreground sm:text-lg">
-                  Pick your plan
-                </p>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Cancel anytime
-                </p>
-              </div>
-
-              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            <div className="mt-10 border-t border-foreground/8 pt-8">
+              <div className="grid gap-3 sm:grid-cols-3">
                 {plans.map((p) => {
                   const popular = p.popular;
                   return (
                     <div
                       key={p.name}
-                      className={`relative flex flex-col rounded-2xl border p-5 transition-all ${
+                      className={`relative flex flex-col items-center rounded-2xl border p-4 text-center transition-all ${
                         popular
-                          ? "border-transparent bg-brand-soft/40 ring-1 ring-brand"
-                          : "border-foreground/10 bg-white hover:-translate-y-0.5 hover:shadow-soft"
+                          ? "border-transparent bg-brand-soft/50 ring-1 ring-brand"
+                          : "border-foreground/10 bg-white"
                       }`}
                     >
                       {popular && (
-                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-brand px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-brand-foreground shadow-soft">
+                        <span className="absolute -top-2.5 rounded-full bg-brand px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-brand-foreground shadow-soft">
                           Recommended
                         </span>
                       )}
-                      <h4 className="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
+                      <h4 className="font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
                         {p.name}
                       </h4>
                       <div className="mt-2 flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold tracking-tight text-foreground">
                           {p.price}
                         </span>
-                        <span className="text-xs font-bold text-muted-foreground">
+                        <span className="text-[11px] font-bold text-muted-foreground">
                           CAD
                         </span>
                       </div>
-                      <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
+                      <p className="mt-0.5 text-[11px] font-semibold text-muted-foreground">
                         {p.period}
                       </p>
-                      <Button
-                        size="sm"
-                        className={`mt-4 h-9 rounded-full text-xs font-bold ${
-                          popular
-                            ? "bg-brand text-brand-foreground hover:bg-brand/90"
-                            : "bg-foreground text-background hover:bg-foreground/90"
-                        }`}
-                      >
-                        Choose {p.name}
-                      </Button>
                     </div>
                   );
                 })}
               </div>
 
-              <p className="mt-5 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Instant access · One account, all devices
+              <Button className="mt-6 h-12 w-full rounded-full bg-brand text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90">
+                Continue to checkout
+              </Button>
+
+              <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Cancel anytime · Instant access · All devices
               </p>
             </div>
           </article>
