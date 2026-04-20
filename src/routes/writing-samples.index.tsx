@@ -1039,6 +1039,143 @@ function TaskEnvelopeScroll({
   );
 }
 
+// ───────── Flying Parrot ─────────
+// SVG parrot that arcs from one task to the other when toggled.
+function FlyingParrot({ task, isAcademic }: { task: Task; isAcademic: boolean }) {
+  const isT1 = task === "task1";
+
+  const bodyTop = isAcademic ? "oklch(0.65 0.18 255)" : "oklch(0.62 0.16 155)";
+  const bodyBot = isAcademic ? "oklch(0.45 0.18 260)" : "oklch(0.42 0.16 160)";
+  const wingTop = isAcademic ? "oklch(0.78 0.16 240)" : "oklch(0.75 0.14 175)";
+  const wingBot = isAcademic ? "oklch(0.55 0.20 270)" : "oklch(0.52 0.18 145)";
+  const accentChip = isAcademic ? "oklch(0.85 0.18 60)" : "oklch(0.82 0.18 50)";
+
+  // Re-mount on toggle so the keyframe animation always re-plays
+  const animKey = `${task}-${isAcademic ? "a" : "g"}`;
+
+  return (
+    <>
+      <style>{`
+        @keyframes parrot-fly-to-right {
+          0%   { left: 22%; top: 56%; transform: translate(-50%, -50%) rotate(-6deg) scaleX(1); }
+          45%  { left: 50%; top: 14%; transform: translate(-50%, -50%) rotate(8deg) scaleX(1); }
+          100% { left: 78%; top: 56%; transform: translate(-50%, -50%) rotate(-4deg) scaleX(1); }
+        }
+        @keyframes parrot-fly-to-left {
+          0%   { left: 78%; top: 56%; transform: translate(-50%, -50%) rotate(6deg) scaleX(-1); }
+          45%  { left: 50%; top: 14%; transform: translate(-50%, -50%) rotate(-8deg) scaleX(-1); }
+          100% { left: 22%; top: 56%; transform: translate(-50%, -50%) rotate(4deg) scaleX(-1); }
+        }
+        @keyframes parrot-perch-bob {
+          0%, 100% { translate: 0 0; }
+          50%      { translate: 0 -2px; }
+        }
+        @keyframes parrot-wing-flap {
+          0%, 100% { transform: rotate(-10deg); }
+          50%      { transform: rotate(28deg); }
+        }
+        @keyframes parrot-wing-flap-fast {
+          0%, 100% { transform: rotate(-22deg); }
+          50%      { transform: rotate(42deg); }
+        }
+        @keyframes feather-puff {
+          0%   { opacity: 0.9; transform: translate(0, 0) scale(1); }
+          100% { opacity: 0;   transform: translate(var(--fx, 14px), 18px) scale(0.4); }
+        }
+      `}</style>
+
+      <div
+        key={animKey}
+        aria-hidden
+        className="pointer-events-none absolute z-20"
+        style={{
+          width: "64px",
+          height: "64px",
+          left: isT1 ? "22%" : "78%",
+          top: "56%",
+          transform: `translate(-50%, -50%) rotate(${isT1 ? -4 : 4}deg) scaleX(${isT1 ? 1 : -1})`,
+          animation: `${isT1 ? "parrot-fly-to-left" : "parrot-fly-to-right"} 950ms cubic-bezier(0.45, 0, 0.35, 1) both, parrot-perch-bob 2.4s ease-in-out 950ms infinite`,
+        }}
+      >
+        {/* Feather puffs on takeoff */}
+        <span
+          className="absolute h-1.5 w-1.5 rounded-full"
+          style={{
+            top: "60%",
+            left: "20%",
+            background: accentChip,
+            ["--fx" as never]: "-12px",
+            animation: "feather-puff 700ms ease-out both",
+          }}
+        />
+        <span
+          className="absolute h-1 w-1 rounded-full"
+          style={{
+            top: "62%",
+            left: "30%",
+            background: bodyTop,
+            ["--fx" as never]: "-6px",
+            animation: "feather-puff 800ms ease-out 80ms both",
+          }}
+        />
+
+        <svg viewBox="0 0 80 80" className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.20_0.05_40_/_0.45)]">
+          <defs>
+            <linearGradient id="parrotBody" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={bodyTop} />
+              <stop offset="100%" stopColor={bodyBot} />
+            </linearGradient>
+            <linearGradient id="parrotWing" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={wingTop} />
+              <stop offset="100%" stopColor={wingBot} />
+            </linearGradient>
+            <radialGradient id="parrotBelly" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="oklch(0.96 0.10 80)" />
+              <stop offset="100%" stopColor="oklch(0.82 0.14 70)" />
+            </radialGradient>
+          </defs>
+
+          {/* Tail feathers */}
+          <path d="M 12 46 q -8 4 -10 12 q 8 -2 14 -6 z" fill={wingBot} stroke="oklch(0.25 0.06 250)" strokeWidth="0.8" />
+          <path d="M 14 50 q -6 6 -6 12 q 6 -2 10 -8 z" fill={accentChip} opacity="0.9" />
+
+          {/* Body */}
+          <ellipse cx="34" cy="44" rx="20" ry="18" fill="url(#parrotBody)" stroke="oklch(0.22 0.06 250)" strokeWidth="1" />
+          <ellipse cx="32" cy="50" rx="12" ry="10" fill="url(#parrotBelly)" />
+
+          {/* Back wing */}
+          <g style={{ transformOrigin: "32px 38px", animation: "parrot-wing-flap 320ms ease-in-out infinite" }}>
+            <path d="M 30 36 q -10 -4 -16 6 q 4 8 16 6 z" fill={wingBot} opacity="0.75" stroke="oklch(0.22 0.06 250)" strokeWidth="0.6" />
+          </g>
+
+          {/* Front wing */}
+          <g style={{ transformOrigin: "36px 38px", animation: "parrot-wing-flap-fast 240ms ease-in-out infinite" }}>
+            <path d="M 36 36 q 6 -14 22 -10 q 4 12 -8 22 q -10 4 -14 -2 z" fill="url(#parrotWing)" stroke="oklch(0.22 0.06 250)" strokeWidth="0.9" />
+            <path d="M 40 32 q 6 0 14 4 M 40 38 q 8 0 16 4 M 42 44 q 6 0 12 4" stroke="oklch(0.20 0.06 250)" strokeWidth="0.5" fill="none" opacity="0.55" />
+          </g>
+
+          {/* Head */}
+          <circle cx="52" cy="30" r="13" fill="url(#parrotBody)" stroke="oklch(0.22 0.06 250)" strokeWidth="1" />
+          <circle cx="56" cy="34" r="3" fill={accentChip} opacity="0.85" />
+          <circle cx="56" cy="28" r="2.4" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.05 250)" strokeWidth="0.6" />
+          <circle cx="56.6" cy="28" r="1.3" fill="oklch(0.15 0.04 250)" />
+          <circle cx="57" cy="27.4" r="0.5" fill="white" />
+
+          {/* Hooked beak */}
+          <path d="M 60 30 q 8 0 8 6 q 0 4 -6 4 q -2 -1 -2 -3 q 0 -4 0 -7 z" fill="oklch(0.78 0.16 60)" stroke="oklch(0.45 0.14 50)" strokeWidth="0.8" />
+          <path d="M 62 36 q 3 0 4 2" stroke="oklch(0.40 0.12 45)" strokeWidth="0.6" fill="none" />
+
+          {/* Crest */}
+          <path d="M 50 18 q -2 -8 4 -12 q 2 6 0 12 z" fill={accentChip} stroke="oklch(0.45 0.14 50)" strokeWidth="0.6" />
+
+          {/* Feet */}
+          <path d="M 30 60 q 2 4 6 4 M 38 60 q 2 4 6 4" stroke="oklch(0.40 0.12 45)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+        </svg>
+      </div>
+    </>
+  );
+}
+
 const toneMap: Record<Tone, string> = {
   blue: "bg-brand-soft text-brand",
   mint: "bg-mint text-foreground",
