@@ -3,6 +3,12 @@
 
 const BOOKMARKS_KEY = "bandpath:bookmarks";
 const COMMENTS_KEY_PREFIX = "bandpath:comments:";
+const STUDIED_KEY = "bandpath:studied";
+const DIFFICULTY_VOTES_KEY = "bandpath:difficulty-votes"; // user's own votes
+const DIFFICULTY_TALLY_KEY = "bandpath:difficulty-tally"; // aggregate counts (local-only stand-in for community)
+
+export type DifficultyVote = "Easy" | "Medium" | "Hard";
+export type DifficultyTally = Record<DifficultyVote, number>;
 
 export type Comment = {
   id: string;
