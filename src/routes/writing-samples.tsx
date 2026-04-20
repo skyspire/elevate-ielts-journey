@@ -6,13 +6,15 @@ import {
   PenLine,
   FileText,
   Mail,
-  BookOpen,
   BarChart3,
   MessageSquare,
   Lightbulb,
   Scale,
   HelpCircle,
   CheckCircle2,
+  Calendar,
+  Lock,
+  ArrowUpRight,
 } from "lucide-react";
 import { z } from "zod";
 
