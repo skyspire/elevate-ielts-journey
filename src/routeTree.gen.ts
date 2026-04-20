@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardWritingSamplesRouteImport } from './routes/dashboard.writing-samples'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -28,35 +29,48 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardWritingSamplesRoute = DashboardWritingSamplesRouteImport.update({
+  id: '/writing-samples',
+  path: '/writing-samples',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/writing-samples': typeof DashboardWritingSamplesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/writing-samples': typeof DashboardWritingSamplesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/writing-samples': typeof DashboardWritingSamplesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bg-options' | '/dashboard'
+  fullPaths: '/' | '/bg-options' | '/dashboard' | '/dashboard/writing-samples'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bg-options' | '/dashboard'
-  id: '__root__' | '/' | '/bg-options' | '/dashboard'
+  to: '/' | '/bg-options' | '/dashboard' | '/dashboard/writing-samples'
+  id:
+    | '__root__'
+    | '/'
+    | '/bg-options'
+    | '/dashboard'
+    | '/dashboard/writing-samples'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -82,14 +96,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/writing-samples': {
+      id: '/dashboard/writing-samples'
+      path: '/writing-samples'
+      fullPath: '/dashboard/writing-samples'
+      preLoaderRoute: typeof DashboardWritingSamplesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardWritingSamplesRoute: typeof DashboardWritingSamplesRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardWritingSamplesRoute: DashboardWritingSamplesRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
