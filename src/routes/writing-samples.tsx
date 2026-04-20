@@ -238,9 +238,6 @@ function WritingSamplesPage() {
                       "inset 0 4px 10px rgba(0,0,0,0.12), inset 0 -2px 4px rgba(255,255,255,0.6)",
                   }}
                 >
-                  <span className="text-[8px] font-extrabold uppercase tracking-[0.22em] text-foreground/50">
-                    Module
-                  </span>
                   <span
                     className={`font-display text-2xl font-black leading-none tracking-tight transition-colors duration-500 sm:text-3xl ${
                       isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]"
