@@ -417,30 +417,13 @@ function WritingSamplesPage() {
             </p>
           </div>
 
-          {/* Step 1 — Task selector (large card-style toggle) */}
+          {/* Step 1 — Task selector: Envelope (Task 1) + Scroll (Task 2) */}
           <StepLabel index={1} label="Select Task" />
-          <div className="grid gap-4 sm:grid-cols-2">
-            <TaskCard
-              active={task === "task1"}
-              onClick={() => onTaskChange("task1")}
-              icon={isAcademic ? BarChart3 : Mail}
-              title="Task 1"
-              subtitle={isAcademic ? "Graphs, charts, processes & maps (150 words)" : "Letter writing — formal & informal (150 words)"}
-              accentRing={accentRing}
-              accentText={accentText}
-              accentBg={accentBg}
-            />
-            <TaskCard
-              active={task === "task2"}
-              onClick={() => onTaskChange("task2")}
-              icon={PenLine}
-              title="Task 2"
-              subtitle="Essay writing — opinion, discussion & more (250 words)"
-              accentRing={accentRing}
-              accentText={accentText}
-              accentBg={accentBg}
-            />
-          </div>
+          <TaskEnvelopeScroll
+            task={task}
+            onTaskChange={onTaskChange}
+            isAcademic={isAcademic}
+          />
 
           {/* Step 2 — Soft colored chips */}
           <StepLabel index={2} label="Select Category" />
