@@ -468,7 +468,7 @@ function FeatureCard({
         >
           {value}
         </span>
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-white/65">
+        <span className="text-[13px] font-extrabold uppercase leading-tight tracking-[0.18em] text-white/90">
           {label}
         </span>
       </div>
