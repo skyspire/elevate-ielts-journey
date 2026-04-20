@@ -418,7 +418,7 @@ function WritingSamplesPage() {
             </p>
           </div>
 
-          {/* Step 1 — Task selector: Envelope (Task 1) + Scroll (Task 2) */}
+          {/* Step 1 — Task selector with center "Select Your Task" disc */}
           <StepLabel index={1} label="Select Task" />
           <TaskEnvelopeScroll
             task={task}
@@ -426,60 +426,65 @@ function WritingSamplesPage() {
             isAcademic={isAcademic}
           />
 
-          {/* Step 2 — Soft colored chips */}
-          <StepLabel index={2} label="Select Category" />
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {categories.map((c, i) => {
-              const active = categoryId === c.id;
-              const Icon = c.icon;
-              // Rotate through site palette tokens
-              const tones = [
-                { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
-                { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
-                { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
-                { soft: "bg-lilac",      text: "text-foreground", border: "border-[oklch(0.65_0.10_295)]/30", activeBg: "bg-[oklch(0.58_0.12_295)]", activeText: "text-white", activeBorder: "border-[oklch(0.58_0.12_295)]" },
-                { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
-                { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
-                { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
-              ];
-              const t = tones[i % tones.length];
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setCategoryId(c.id)}
-                  aria-pressed={active}
-                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
-                    active
-                      ? `${t.activeBg} ${t.activeText} ${t.activeBorder} shadow-soft`
-                      : `${t.soft} ${t.text} ${t.border} hover:-translate-y-0.5 hover:shadow-soft`
-                  }`}
-                >
-                  <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
-                  {c.label}
-                </button>
-              );
-            })}
-          </div>
+          {/* Steps 2 & 3 — gated until a task is selected */}
+          {task && (
+            <>
+              {/* Step 2 — Soft colored chips */}
+              <StepLabel index={2} label="Select Category" />
+              <div className="flex flex-wrap justify-center gap-2.5">
+                {categories.map((c, i) => {
+                  const active = categoryId === c.id;
+                  const Icon = c.icon;
+                  // Rotate through site palette tokens
+                  const tones = [
+                    { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
+                    { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
+                    { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
+                    { soft: "bg-lilac",      text: "text-foreground", border: "border-[oklch(0.65_0.10_295)]/30", activeBg: "bg-[oklch(0.58_0.12_295)]", activeText: "text-white", activeBorder: "border-[oklch(0.58_0.12_295)]" },
+                    { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
+                    { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
+                    { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
+                  ];
+                  const t = tones[i % tones.length];
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setCategoryId(c.id)}
+                      aria-pressed={active}
+                      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                        active
+                          ? `${t.activeBg} ${t.activeText} ${t.activeBorder} shadow-soft`
+                          : `${t.soft} ${t.text} ${t.border} hover:-translate-y-0.5 hover:shadow-soft`
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
 
-          {/* Step 3 — Questions list */}
-          <StepLabel index={3} label={`${activeCategory.label} Questions`} />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {questions.map((q, i) => (
-              <QuestionRowCard
-                key={q.id}
-                index={i + 1}
-                q={q}
-                module={module}
-                task={task}
-                category={activeCategory.label}
-              />
-            ))}
-          </div>
+              {/* Step 3 — Questions list */}
+              <StepLabel index={3} label={`${activeCategory.label} Questions`} />
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {questions.map((q, i) => (
+                  <QuestionRowCard
+                    key={q.id}
+                    index={i + 1}
+                    q={q}
+                    module={module}
+                    task={task}
+                    category={activeCategory.label}
+                  />
+                ))}
+              </div>
 
-          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
-            Sample questions · Model answers coming soon
-          </p>
+              <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
+                Sample questions · Model answers coming soon
+              </p>
+            </>
+          )}
         </div>
       </main>
       <Footer />
