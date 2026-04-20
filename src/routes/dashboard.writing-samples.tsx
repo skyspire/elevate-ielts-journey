@@ -222,7 +222,14 @@ function WritingSamplesPage() {
           <StepLabel index={3} label={`${activeCategory.label} Questions`} />
           <div className="grid gap-3 sm:grid-cols-2">
             {questions.map((q) => (
-              <QuestionRowCard key={q.id} q={q} accentText={accentText} />
+              <QuestionRowCard
+                key={q.id}
+                q={q}
+                accentText={accentText}
+                module={module}
+                task={task}
+                category={activeCategory.label}
+              />
             ))}
           </div>
 
