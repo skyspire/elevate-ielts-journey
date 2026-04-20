@@ -15,6 +15,9 @@ import {
   Calendar,
   Lock,
   ArrowUpRight,
+  SplitSquareHorizontal,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
 import { z } from "zod";
 
@@ -54,28 +57,30 @@ type Category = {
   icon: typeof Mail;
 };
 
+const task2Essays: Category[] = [
+  { id: "opinion", label: "Opinion Essay", hint: "Agree / Disagree", icon: Lightbulb },
+  { id: "discussion", label: "Discussion Essay", hint: "Discuss both views + opinion", icon: Scale },
+  { id: "advdis", label: "Advantages & Disadvantages Essay", hint: "Weigh pros and cons", icon: SplitSquareHorizontal },
+  { id: "problem", label: "Problem & Solution Essay", hint: "Identify problems, propose solutions", icon: HelpCircle },
+  { id: "direct", label: "Direct Question Essay", hint: "Two-part question", icon: MessageSquare },
+  { id: "posneg", label: "Positive or Negative Development Essay", hint: "Evaluate a development", icon: TrendingUp },
+  { id: "cause", label: "Cause and Effect Essay", hint: "Reasons and results", icon: Zap },
+];
+
 const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
   general: {
     task1: [
       { id: "formal", label: "Formal Letters", hint: "To officials, managers, companies", icon: Mail },
       { id: "informal", label: "Informal Letters", hint: "To friends & family", icon: MessageSquare },
     ],
-    task2: [
-      { id: "opinion", label: "Opinion Essays", hint: "Agree / disagree prompts", icon: Lightbulb },
-      { id: "discussion", label: "Discussion Essays", hint: "Discuss both views", icon: Scale },
-      { id: "problem", label: "Problem & Solution", hint: "Causes, effects, solutions", icon: HelpCircle },
-    ],
+    task2: task2Essays,
   },
   academic: {
     task1: [
       { id: "graphs", label: "Graphs & Charts", hint: "Bar, line, pie, table", icon: BarChart3 },
       { id: "process", label: "Processes & Maps", hint: "Diagrams & map changes", icon: FileText },
     ],
-    task2: [
-      { id: "opinion", label: "Opinion Essays", hint: "Agree / disagree prompts", icon: Lightbulb },
-      { id: "discussion", label: "Discussion Essays", hint: "Discuss both views", icon: Scale },
-      { id: "problem", label: "Problem & Solution", hint: "Causes, effects, solutions", icon: HelpCircle },
-    ],
+    task2: task2Essays,
   },
 };
 
