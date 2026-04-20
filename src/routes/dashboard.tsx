@@ -46,7 +46,7 @@ type Feature = {
     general: { value: string; label: string };
   };
   // tone for the card tint (independent of module accent)
-  tone: "blue" | "sage" | "lilac" | "peach" | "mint" | "kraft" | "rose";
+  tone: "espresso" | "navy" | "forest" | "plum" | "rust" | "teal" | "ochre";
   // Lucide icon used for the glossy 3D mark in the corner
   icon: ComponentType<LucideProps>;
 };
