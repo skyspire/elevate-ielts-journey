@@ -169,7 +169,7 @@ const tones: Record<
 > = {
   blue: {
     bg: "bg-[oklch(0.96_0.04_255)]",
-    border: "border-[2px] border-[oklch(0.62_0.16_255)]/35",
+    border: "border border-[oklch(0.62_0.16_255)]/20 ring-2 ring-inset ring-[oklch(0.62_0.16_255)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.16_255)]",
     numberGradient:
@@ -180,7 +180,7 @@ const tones: Record<
   },
   sage: {
     bg: "bg-[oklch(0.94_0.05_160)]",
-    border: "border-[2px] border-[oklch(0.55_0.10_160)]/35",
+    border: "border border-[oklch(0.55_0.10_160)]/20 ring-2 ring-inset ring-[oklch(0.55_0.10_160)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.10_160)]",
     numberGradient:
@@ -191,7 +191,7 @@ const tones: Record<
   },
   peach: {
     bg: "bg-[oklch(0.94_0.055_55)]",
-    border: "border-[2px] border-[oklch(0.65_0.12_50)]/35",
+    border: "border border-[oklch(0.65_0.12_50)]/20 ring-2 ring-inset ring-[oklch(0.65_0.12_50)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.12_45)]",
     numberGradient:
@@ -202,7 +202,7 @@ const tones: Record<
   },
   lilac: {
     bg: "bg-[oklch(0.94_0.055_295)]",
-    border: "border-[2px] border-[oklch(0.6_0.12_295)]/35",
+    border: "border border-[oklch(0.6_0.12_295)]/20 ring-2 ring-inset ring-[oklch(0.6_0.12_295)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.12_295)]",
     numberGradient:
@@ -213,7 +213,7 @@ const tones: Record<
   },
   mint: {
     bg: "bg-[oklch(0.94_0.05_185)]",
-    border: "border-[2px] border-[oklch(0.6_0.10_185)]/35",
+    border: "border border-[oklch(0.6_0.10_185)]/20 ring-2 ring-inset ring-[oklch(0.6_0.10_185)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.1_185)]",
     numberGradient:
@@ -224,7 +224,7 @@ const tones: Record<
   },
   rose: {
     bg: "bg-[oklch(0.95_0.045_15)]",
-    border: "border-[2px] border-[oklch(0.62_0.14_15)]/35",
+    border: "border border-[oklch(0.62_0.14_15)]/20 ring-2 ring-inset ring-[oklch(0.62_0.14_15)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.14_15)]",
     numberGradient:
@@ -235,7 +235,7 @@ const tones: Record<
   },
   kraft: {
     bg: "bg-[oklch(0.92_0.04_75)]",
-    border: "border-[2px] border-[oklch(0.55_0.07_70)]/40",
+    border: "border border-[oklch(0.55_0.07_70)]/25 ring-2 ring-inset ring-[oklch(0.55_0.07_70)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.07_70)]",
     numberGradient:
@@ -439,25 +439,25 @@ function FeatureCard({
         <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
 
-      {/* Oversized gradient number — the hero of the card */}
-      <div className="relative mt-5 flex items-baseline gap-2">
+      {/* Title-first hierarchy */}
+      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-foreground">
+        {feature.title}
+      </h3>
+      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-foreground/65">
+        {feature.description[module]}
+      </p>
+
+      {/* Stat row — number + label as a small footer pill */}
+      <div className="relative mt-5 flex items-baseline gap-2 border-t border-foreground/10 pt-4">
         <span
-          className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
+          className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
         >
           {value}
         </span>
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
+          {label}
+        </span>
       </div>
-      <span className="relative mt-2 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
-        {label}
-      </span>
-
-      {/* Title + description */}
-      <h3 className="relative mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
-        {feature.title}
-      </h3>
-      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/70">
-        {feature.description[module]}
-      </p>
     </button>
   );
 }
@@ -478,9 +478,6 @@ function Glossy3DIcon({
   return (
     <div
       className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
-      style={{
-        filter: `drop-shadow(0 10px 18px ${tone.iconShadow}) drop-shadow(0 2px 4px ${tone.iconShadow})`,
-      }}
     >
       <svg
         viewBox="0 0 64 64"
