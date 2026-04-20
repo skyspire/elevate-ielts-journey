@@ -1011,6 +1011,9 @@ function TaskEnvelopeScroll({
           </div>
         </button>
 
+        {/* Flying parrot — arcs between Task 1 and Task 2 */}
+        <FlyingParrot task={task} isAcademic={isAcademic} />
+
         {/* Quill pen lying across the desk between them (decorative) */}
         <svg
           aria-hidden
