@@ -167,82 +167,96 @@ const tones: Record<
     iconShadow: string; // soft tone-colored shadow under the icon disc
   }
 > = {
-  blue: {
-    bg: "bg-[oklch(0.96_0.04_255)]",
-    border: "border border-[oklch(0.62_0.16_255)]/20 ring-2 ring-inset ring-[oklch(0.62_0.16_255)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.45_0.16_255)]",
+  navy: {
+    // Deep navy-clay
+    bg: "bg-[oklch(0.32_0.06_255)]",
+    border:
+      "border border-[oklch(0.22_0.05_255)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.32_0.06_255)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.45_0.18_260)_0%,oklch(0.62_0.18_245)_100%)]",
-    iconStart: "oklch(0.78 0.13 250)",
-    iconEnd: "oklch(0.45 0.18 260)",
-    iconShadow: "oklch(0.45 0.18 260 / 0.35)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.02_250)_0%,oklch(0.82_0.10_240)_100%)]",
+    iconStart: "oklch(0.62 0.12 250)",
+    iconEnd: "oklch(0.30 0.08 255)",
+    iconShadow: "oklch(0.20 0.06 255 / 0.5)",
   },
-  sage: {
-    bg: "bg-[oklch(0.94_0.05_160)]",
-    border: "border border-[oklch(0.55_0.10_160)]/20 ring-2 ring-inset ring-[oklch(0.55_0.10_160)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.42_0.10_160)]",
+  rust: {
+    // Burnt rust / terracotta
+    bg: "bg-[oklch(0.40_0.13_40)]",
+    border:
+      "border border-[oklch(0.28_0.10_40)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.40_0.13_40)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.38_0.10_160)_0%,oklch(0.58_0.13_155)_100%)]",
-    iconStart: "oklch(0.78 0.10 160)",
-    iconEnd: "oklch(0.42 0.10 160)",
-    iconShadow: "oklch(0.42 0.10 160 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.04_60)_0%,oklch(0.82_0.13_55)_100%)]",
+    iconStart: "oklch(0.68 0.15 45)",
+    iconEnd: "oklch(0.38 0.13 40)",
+    iconShadow: "oklch(0.30 0.12 40 / 0.5)",
   },
-  peach: {
-    bg: "bg-[oklch(0.94_0.055_55)]",
-    border: "border border-[oklch(0.65_0.12_50)]/20 ring-2 ring-inset ring-[oklch(0.65_0.12_50)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.45_0.12_45)]",
+  forest: {
+    // Deep forest green
+    bg: "bg-[oklch(0.34_0.07_160)]",
+    border:
+      "border border-[oklch(0.22_0.06_160)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.34_0.07_160)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.42_0.12_40)_0%,oklch(0.6_0.14_55)_100%)]",
-    iconStart: "oklch(0.82 0.10 60)",
-    iconEnd: "oklch(0.5 0.14 45)",
-    iconShadow: "oklch(0.5 0.14 45 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.04_160)_0%,oklch(0.82_0.11_155)_100%)]",
+    iconStart: "oklch(0.60 0.10 160)",
+    iconEnd: "oklch(0.30 0.08 160)",
+    iconShadow: "oklch(0.22 0.06 160 / 0.5)",
   },
-  lilac: {
-    bg: "bg-[oklch(0.94_0.055_295)]",
-    border: "border border-[oklch(0.6_0.12_295)]/20 ring-2 ring-inset ring-[oklch(0.6_0.12_295)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.42_0.12_295)]",
+  plum: {
+    // Deep plum / aubergine
+    bg: "bg-[oklch(0.34_0.08_320)]",
+    border:
+      "border border-[oklch(0.22_0.07_320)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.34_0.08_320)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.4_0.13_295)_0%,oklch(0.58_0.15_290)_100%)]",
-    iconStart: "oklch(0.8 0.11 295)",
-    iconEnd: "oklch(0.45 0.14 295)",
-    iconShadow: "oklch(0.45 0.14 295 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.03_320)_0%,oklch(0.82_0.10_315)_100%)]",
+    iconStart: "oklch(0.62 0.12 315)",
+    iconEnd: "oklch(0.32 0.10 320)",
+    iconShadow: "oklch(0.22 0.07 320 / 0.5)",
   },
-  mint: {
-    bg: "bg-[oklch(0.94_0.05_185)]",
-    border: "border border-[oklch(0.6_0.10_185)]/20 ring-2 ring-inset ring-[oklch(0.6_0.10_185)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.4_0.1_185)]",
+  ochre: {
+    // Warm ochre / mustard
+    bg: "bg-[oklch(0.45_0.11_75)]",
+    border:
+      "border border-[oklch(0.32_0.09_75)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.40_0.10_75)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.38_0.10_185)_0%,oklch(0.55_0.12_180)_100%)]",
-    iconStart: "oklch(0.8 0.10 185)",
-    iconEnd: "oklch(0.42 0.11 185)",
-    iconShadow: "oklch(0.42 0.11 185 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.97_0.04_85)_0%,oklch(0.85_0.13_80)_100%)]",
+    iconStart: "oklch(0.72 0.13 80)",
+    iconEnd: "oklch(0.42 0.11 75)",
+    iconShadow: "oklch(0.30 0.09 75 / 0.5)",
   },
-  rose: {
-    bg: "bg-[oklch(0.95_0.045_15)]",
-    border: "border border-[oklch(0.62_0.14_15)]/20 ring-2 ring-inset ring-[oklch(0.62_0.14_15)]/30",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.45_0.14_15)]",
+  teal: {
+    // Deep teal-ink
+    bg: "bg-[oklch(0.34_0.07_200)]",
+    border:
+      "border border-[oklch(0.22_0.06_200)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.34_0.07_200)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.42_0.16_10)_0%,oklch(0.6_0.18_20)_100%)]",
-    iconStart: "oklch(0.82 0.13 15)",
-    iconEnd: "oklch(0.5 0.18 12)",
-    iconShadow: "oklch(0.5 0.18 12 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.03_200)_0%,oklch(0.82_0.10_195)_100%)]",
+    iconStart: "oklch(0.62 0.10 200)",
+    iconEnd: "oklch(0.30 0.08 200)",
+    iconShadow: "oklch(0.22 0.06 200 / 0.5)",
   },
-  kraft: {
-    bg: "bg-[oklch(0.92_0.04_75)]",
-    border: "border border-[oklch(0.55_0.07_70)]/25 ring-2 ring-inset ring-[oklch(0.55_0.07_70)]/35",
-    arrowBg: "bg-white",
-    arrowText: "text-[oklch(0.4_0.07_70)]",
+  espresso: {
+    // Espresso / dark cocoa
+    bg: "bg-[oklch(0.30_0.04_60)]",
+    border:
+      "border border-[oklch(0.20_0.03_60)]/60 ring-2 ring-inset ring-white/10",
+    arrowBg: "bg-white/95",
+    arrowText: "text-[oklch(0.30_0.04_60)]",
     numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.35_0.06_70)_0%,oklch(0.55_0.09_70)_100%)]",
-    iconStart: "oklch(0.78 0.07 75)",
-    iconEnd: "oklch(0.42 0.08 70)",
-    iconShadow: "oklch(0.42 0.08 70 / 0.32)",
+      "bg-[linear-gradient(135deg,oklch(0.96_0.02_70)_0%,oklch(0.84_0.07_65)_100%)]",
+    iconStart: "oklch(0.58 0.07 65)",
+    iconEnd: "oklch(0.28 0.04 60)",
+    iconShadow: "oklch(0.18 0.03 60 / 0.5)",
   },
 };
 
