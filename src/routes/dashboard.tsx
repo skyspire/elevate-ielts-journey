@@ -49,6 +49,8 @@ type Feature = {
   tone: "espresso" | "navy" | "forest" | "plum" | "rust" | "teal" | "ochre";
   // Lucide icon used for the glossy 3D mark in the corner
   icon: ComponentType<LucideProps>;
+  // Optional route to navigate to when the card is clicked
+  to?: string;
 };
 
 const features: Feature[] = [
