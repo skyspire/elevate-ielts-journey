@@ -63,7 +63,7 @@ const features: Feature[] = [
       academic: { value: "240+", label: "model essays" },
       general: { value: "180+", label: "model letters & essays" },
     },
-    tone: "blue",
+    tone: "navy",
     icon: PenLine,
   },
   {
@@ -77,7 +77,7 @@ const features: Feature[] = [
       academic: { value: "320+", label: "recorded answers" },
       general: { value: "260+", label: "recorded answers" },
     },
-    tone: "peach",
+    tone: "rust",
     icon: Mic,
   },
   {
@@ -91,7 +91,7 @@ const features: Feature[] = [
       academic: { value: "1,800+", label: "words & collocations" },
       general: { value: "1,200+", label: "everyday words" },
     },
-    tone: "sage",
+    tone: "forest",
     icon: BookOpen,
   },
   {
@@ -105,7 +105,7 @@ const features: Feature[] = [
       academic: { value: "60+", label: "ready templates" },
       general: { value: "45+", label: "ready templates" },
     },
-    tone: "lilac",
+    tone: "plum",
     icon: FileText,
   },
   {
@@ -119,7 +119,7 @@ const features: Feature[] = [
       academic: { value: "Weekly", label: "fresh predictions" },
       general: { value: "Weekly", label: "fresh predictions" },
     },
-    tone: "rose",
+    tone: "ochre",
     icon: Sparkles,
   },
   {
@@ -133,7 +133,7 @@ const features: Feature[] = [
       academic: { value: "120+", label: "error patterns" },
       general: { value: "90+", label: "error patterns" },
     },
-    tone: "mint",
+    tone: "teal",
     icon: AlertTriangle,
   },
   {
@@ -147,7 +147,7 @@ const features: Feature[] = [
       academic: { value: "4–8", label: "week roadmaps" },
       general: { value: "4–8", label: "week roadmaps" },
     },
-    tone: "kraft",
+    tone: "espresso",
     icon: CalendarDays,
   },
 ];
