@@ -313,7 +313,6 @@ function DashboardPage() {
                 key={f.key}
                 feature={f}
                 module={module}
-                accent={accent}
               />
             ))}
           </div>
@@ -359,59 +358,60 @@ function ModuleToggle({
   );
 }
 
-type Accent = typeof blue;
-
 function FeatureCard({
   feature,
   module,
-  accent,
 }: {
   feature: Feature;
   module: Module;
-  accent: Accent;
 }) {
-  const Icon = feature.icon;
+  const tone = tones[feature.tone];
+  const { value, label } = feature.count[module];
+
   return (
     <button
       type="button"
-      className="group relative flex flex-col items-start overflow-hidden rounded-2xl border border-foreground/10 bg-paper-cream p-6 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-card"
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
     >
-      {/* paper texture overlay (very subtle) */}
+      {/* subtle paper grain */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(oklch(0.4_0.05_60_/_0.06)_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
       />
-      {/* warm top edge highlight */}
+      {/* top edge highlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
       />
 
-      <div className="relative flex w-full items-start justify-between">
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-xl ${accent.bgSoft} ${accent.text} transition-transform group-hover:scale-105`}
-        >
-          <Icon className="h-[18px] w-[18px]" strokeWidth={2.25} />
-        </div>
+      {/* Top row: arrow only */}
+      <div className="relative flex w-full items-start justify-end">
         <span
-          className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-foreground/40 ring-1 ring-foreground/10 transition-all group-hover:bg-foreground group-hover:text-background group-hover:ring-foreground`}
+          className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
         >
-          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
         </span>
       </div>
 
+      {/* Oversized gradient number — the hero of the card */}
+      <div className="relative mt-1 flex items-baseline gap-2">
+        <span
+          className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
+        >
+          {value}
+        </span>
+      </div>
+      <span className="relative mt-2 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+        {label}
+      </span>
+
+      {/* Title + description */}
       <h3 className="relative mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
         {feature.title}
       </h3>
-      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/65">
+      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/70">
         {feature.description[module]}
       </p>
-
-      <div className="relative mt-5 w-full border-t border-dashed border-foreground/15 pt-3">
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/45">
-          {feature.count[module]}
-        </span>
-      </div>
     </button>
   );
 }
