@@ -20,6 +20,7 @@ import {
   Zap,
 } from "lucide-react";
 import { z } from "zod";
+import { Footer } from "@/components/site/Footer";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -497,6 +498,7 @@ function WritingSamplesPage() {
           </p>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

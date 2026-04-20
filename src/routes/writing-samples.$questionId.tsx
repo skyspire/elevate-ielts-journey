@@ -30,6 +30,7 @@ import {
   toggleBookmark,
   type Comment,
 } from "@/lib/engagement-storage";
+import { Footer } from "@/components/site/Footer";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -356,6 +357,7 @@ function QuestionDetailPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
