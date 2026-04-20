@@ -11,7 +11,7 @@ const searchSchema = z.object({
   difficulty: z.enum(["Easy", "Medium", "Hard"]).optional().default("Medium"),
 });
 
-export const Route = createFileRoute("/dashboard/writing-samples/$questionId")({
+export const Route = createFileRoute("/writing-samples/$questionId")({
   validateSearch: searchSchema,
   head: ({ match }) => ({
     meta: [
