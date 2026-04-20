@@ -65,6 +65,9 @@ const features: Feature[] = [
     },
     tone: "blue",
     icon: PenLine,
+  },
+  {
+    key: "speaking",
     title: "Speaking Samples",
     description: {
       academic: "Part 1, 2 & 3 model answers with examiner-style follow-ups.",
@@ -75,6 +78,7 @@ const features: Feature[] = [
       general: { value: "260+", label: "recorded answers" },
     },
     tone: "peach",
+    icon: Mic,
   },
   {
     key: "vocab",
@@ -88,6 +92,7 @@ const features: Feature[] = [
       general: { value: "1,200+", label: "everyday words" },
     },
     tone: "sage",
+    icon: BookOpen,
   },
   {
     key: "templates",
@@ -101,6 +106,7 @@ const features: Feature[] = [
       general: { value: "45+", label: "ready templates" },
     },
     tone: "lilac",
+    icon: FileText,
   },
   {
     key: "predictions",
@@ -114,6 +120,7 @@ const features: Feature[] = [
       general: { value: "Weekly", label: "fresh predictions" },
     },
     tone: "rose",
+    icon: Sparkles,
   },
   {
     key: "mistakes",
@@ -127,6 +134,7 @@ const features: Feature[] = [
       general: { value: "90+", label: "error patterns" },
     },
     tone: "mint",
+    icon: AlertTriangle,
   },
   {
     key: "plan",
@@ -140,6 +148,7 @@ const features: Feature[] = [
       general: { value: "4–8", label: "week roadmaps" },
     },
     tone: "kraft",
+    icon: CalendarDays,
   },
 ];
 
