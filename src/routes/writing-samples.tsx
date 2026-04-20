@@ -184,72 +184,136 @@ function WritingSamplesPage() {
                 </span>
               </button>
 
-              {/* The Dial — Combination lock */}
-              <div className="relative shrink-0">
-                {/* Outer knurled ring */}
-                <div
-                  className={`relative flex h-36 w-36 items-center justify-center rounded-full bg-gradient-to-br from-foreground/[0.22] via-foreground/[0.10] to-foreground/[0.20] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-44 sm:w-44 ${
-                    isAcademic ? "-rotate-[40deg]" : "rotate-[40deg]"
-                  }`}
-                  style={{
-                    backgroundImage:
-                      "repeating-conic-gradient(from 0deg, oklch(0.30 0.02 250 / 0.55) 0deg 4deg, transparent 4deg 8deg)",
-                  }}
+              {/* The Owl — head turns to choose module */}
+              <div className="relative flex shrink-0 items-end justify-center">
+                <svg
+                  viewBox="0 0 200 220"
+                  className="h-44 w-44 sm:h-56 sm:w-56"
+                  aria-label="Wise owl mascot"
                 >
-                  {/* BigIELTS engraved on the ring (curved text via SVG) */}
-                  <svg
-                    viewBox="0 0 200 200"
-                    className="absolute inset-0 h-full w-full"
-                  >
-                    <defs>
-                      <path
-                        id="brandArc"
-                        d="M 30,100 A 70,70 0 0,1 170,100"
-                      />
-                    </defs>
-                    <text
-                      fill="currentColor"
-                      className="fill-foreground/55 font-display text-[14px] font-black tracking-[0.18em]"
-                      style={{ letterSpacing: "0.18em" }}
-                    >
-                      <textPath href="#brandArc" startOffset="50%" textAnchor="middle">
-                        BIGIELTS · COM
-                      </textPath>
-                    </text>
-                  </svg>
-                </div>
-
-                {/* Fixed pointer notch at top (does NOT rotate) */}
-                <div className="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1">
-                  <div
-                    className={`h-0 w-0 border-l-[8px] border-r-[8px] border-t-[14px] border-l-transparent border-r-transparent ${
-                      isAcademic ? "border-t-brand" : "border-t-[oklch(0.55_0.10_160)]"
-                    } drop-shadow-sm`}
+                  {/* Branch */}
+                  <path
+                    d="M 20 200 Q 100 195 180 200"
+                    stroke="oklch(0.45 0.06 60)"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    fill="none"
                   />
-                </div>
+                  <path
+                    d="M 60 198 q -4 -8 -10 -10 M 140 198 q 4 -8 10 -10"
+                    stroke="oklch(0.45 0.06 60)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
 
-                {/* Center display window — fixed, does NOT rotate */}
-                <div
-                  className={`pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-[3px] bg-paper-cream transition-colors duration-500 ${
-                    isAcademic ? "border-brand/60" : "border-[oklch(0.55_0.10_160)]/60"
-                  }`}
-                  style={{
-                    boxShadow:
-                      "inset 0 4px 10px rgba(0,0,0,0.12), inset 0 -2px 4px rgba(255,255,255,0.6)",
-                  }}
-                >
-                  <span
-                    className={`font-display text-2xl font-black leading-none tracking-tight transition-colors duration-500 sm:text-3xl ${
-                      isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]"
-                    }`}
+                  {/* Body */}
+                  <ellipse
+                    cx="100"
+                    cy="150"
+                    rx="48"
+                    ry="46"
+                    fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.58 0.09 160)"}
+                    className="transition-colors duration-500"
+                  />
+                  {/* Belly */}
+                  <ellipse cx="100" cy="158" rx="30" ry="32" fill="oklch(0.96 0.02 80)" />
+                  {/* Wings */}
+                  <path
+                    d="M 60 145 Q 50 175 70 188 Q 75 170 78 150 Z"
+                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                    className="transition-colors duration-500"
+                  />
+                  <path
+                    d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
+                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                    className="transition-colors duration-500"
+                  />
+                  {/* Feet */}
+                  <path
+                    d="M 88 196 v 6 m -4 -3 h 8 M 112 196 v 6 m -4 -3 h 8"
+                    stroke="oklch(0.55 0.14 60)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+
+                  {/* HEAD GROUP — rotates */}
+                  <g
+                    style={{
+                      transformOrigin: "100px 100px",
+                      transform: isAcademic ? "rotate(-22deg)" : "rotate(22deg)",
+                      transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+                    }}
                   >
-                    {isAcademic ? "ACAD" : "GEN"}
+                    {/* Head */}
+                    <circle
+                      cx="100"
+                      cy="92"
+                      r="48"
+                      fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.58 0.09 160)"}
+                      className="transition-colors duration-500"
+                    />
+                    {/* Ear tufts */}
+                    <path
+                      d="M 64 58 l 8 -18 l 12 14 Z M 136 58 l -8 -18 l -12 14 Z"
+                      fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                      className="transition-colors duration-500"
+                    />
+
+                    {/* Glasses frame */}
+                    <circle cx="82" cy="92" r="18" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+                    <circle cx="118" cy="92" r="18" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+                    <line x1="100" y1="92" x2="100" y2="92" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+                    <path d="M 100 92 q 0 -2 0 -2" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+                    <line x1="98" y1="92" x2="102" y2="92" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+
+                    {/* Eyes (pupils shift to side based on selection) */}
+                    <circle
+                      cx={isAcademic ? "76" : "88"}
+                      cy="92"
+                      r="5"
+                      fill="oklch(0.18 0.02 250)"
+                      style={{ transition: "cx 500ms ease" }}
+                    />
+                    <circle
+                      cx={isAcademic ? "112" : "124"}
+                      cy="92"
+                      r="5"
+                      fill="oklch(0.18 0.02 250)"
+                      style={{ transition: "cx 500ms ease" }}
+                    />
+                    {/* Eye shine */}
+                    <circle
+                      cx={isAcademic ? "78" : "90"}
+                      cy="90"
+                      r="1.5"
+                      fill="white"
+                      style={{ transition: "cx 500ms ease" }}
+                    />
+                    <circle
+                      cx={isAcademic ? "114" : "126"}
+                      cy="90"
+                      r="1.5"
+                      fill="white"
+                      style={{ transition: "cx 500ms ease" }}
+                    />
+
+                    {/* Beak */}
+                    <path
+                      d="M 92 112 L 100 124 L 108 112 Z"
+                      fill="oklch(0.70 0.16 60)"
+                      stroke="oklch(0.45 0.14 60)"
+                      strokeWidth="1.5"
+                    />
+                  </g>
+                </svg>
+
+                {/* BigIELTS.com brand chip below */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-foreground/15 bg-white px-3 py-1 shadow-soft">
+                  <span className="font-display text-[11px] font-black tracking-tight text-foreground">
+                    BigIELTS<span className="text-foreground/50">.com</span>
                   </span>
-                  <span
-                    className={`mt-1 h-0.5 w-6 rounded-full transition-colors duration-500 ${
-                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-                    }`}
-                  />
                 </div>
               </div>
 
