@@ -84,11 +84,13 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
   },
 };
 
-// ───────── Placeholder questions ─────────
+// ───────── Questions ─────────
+import { task2Prompts } from "@/data/writing-prompts";
+
 type Tone = "blue" | "mint" | "peach" | "lilac";
 type Question = {
   id: string;
-  title: string;
+  title: string; // Full question statement
   topic: string;
   difficulty: "Easy" | "Medium" | "Hard";
   tone: Tone;
@@ -96,14 +98,20 @@ type Question = {
 
 const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
 
-const makeQuestions = (label: string): Question[] =>
-  Array.from({ length: 8 }).map((_, i) => ({
-    id: `${label}-${i + 1}`,
-    title: `${label} — Sample Question ${i + 1}`,
-    topic: ["Work", "Education", "Society", "Environment", "Technology", "Health", "Travel", "Lifestyle"][i],
+const makeQuestions = (categoryId: string, label: string): Question[] => {
+  const prompts = task2Prompts[categoryId];
+  const items = prompts && prompts.length > 0
+    ? prompts
+    : Array.from({ length: 8 }).map((_, i) => `${label} — Sample Question ${i + 1}`);
+
+  return items.map((statement, i) => ({
+    id: `${categoryId}-${i + 1}`,
+    title: statement,
+    topic: ["Work", "Education", "Society", "Environment", "Technology", "Health", "Travel", "Lifestyle"][i % 8],
     difficulty: (["Easy", "Medium", "Hard"] as const)[i % 3],
     tone: TONES[i % TONES.length],
   }));
+};
 
 function WritingSamplesPage() {
   const search = Route.useSearch();
