@@ -15,7 +15,6 @@ import {
   Calendar,
   Lock,
   ArrowUpRight,
-  Scaling,
   SplitSquareHorizontal,
   TrendingUp,
   Zap,
