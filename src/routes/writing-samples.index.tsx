@@ -25,7 +25,7 @@ const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
 });
 
-export const Route = createFileRoute("/writing-samples")({
+export const Route = createFileRoute("/writing-samples/")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
