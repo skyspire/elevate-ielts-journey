@@ -41,31 +41,28 @@ type Feature = {
   description: { academic: string; general: string };
   count: { academic: string; general: string };
   icon: typeof PenLine;
-  tone: "blue" | "mint" | "peach" | "lilac" | "kraft";
 };
 
 const features: Feature[] = [
   {
     key: "writing",
-    title: "IELTS Writing Samples",
+    title: "Writing Samples",
     description: {
       academic: "Task 1 reports & Task 2 essays with Band 8+ model answers.",
       general: "Letter writing & Task 2 essays with Band 8+ model answers.",
     },
     count: { academic: "240+ samples", general: "180+ samples" },
     icon: PenLine,
-    tone: "blue",
   },
   {
     key: "speaking",
-    title: "IELTS Speaking Samples",
+    title: "Speaking Samples",
     description: {
       academic: "Part 1, 2 & 3 model answers with examiner-style follow-ups.",
       general: "Part 1, 2 & 3 model answers focused on everyday topics.",
     },
     count: { academic: "320+ recordings", general: "260+ recordings" },
     icon: Mic,
-    tone: "peach",
   },
   {
     key: "vocab",
@@ -76,7 +73,6 @@ const features: Feature[] = [
     },
     count: { academic: "1,800+ words", general: "1,200+ words" },
     icon: BookOpen,
-    tone: "mint",
   },
   {
     key: "templates",
@@ -87,7 +83,6 @@ const features: Feature[] = [
     },
     count: { academic: "60+ templates", general: "45+ templates" },
     icon: FileText,
-    tone: "lilac",
   },
   {
     key: "predictions",
@@ -98,18 +93,16 @@ const features: Feature[] = [
     },
     count: { academic: "Updated weekly", general: "Updated weekly" },
     icon: Sparkles,
-    tone: "blue",
   },
   {
     key: "mistakes",
-    title: "Common Mistakes Analysis",
+    title: "Common Mistakes",
     description: {
       academic: "Grammar, lexical and coherence errors that hurt your band.",
       general: "Frequent errors test-takers make in letters and essays.",
     },
     count: { academic: "120+ patterns", general: "90+ patterns" },
     icon: AlertTriangle,
-    tone: "peach",
   },
   {
     key: "plan",
@@ -120,43 +113,41 @@ const features: Feature[] = [
     },
     count: { academic: "4 / 6 / 8 weeks", general: "4 / 6 / 8 weeks" },
     icon: CalendarDays,
-    tone: "kraft",
   },
 ];
+
+// Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
+const sage = {
+  ring: "ring-[oklch(0.62_0.10_160)]",
+  bg: "bg-[oklch(0.62_0.10_160)]",
+  bgSoft: "bg-[oklch(0.94_0.04_160)]",
+  text: "text-[oklch(0.42_0.10_160)]",
+  border: "border-[oklch(0.62_0.10_160)]/30",
+  chipBg: "bg-[oklch(0.94_0.04_160)]",
+  chipText: "text-[oklch(0.38_0.10_160)]",
+  toggleActive: "bg-[oklch(0.55_0.10_160)] text-white shadow-soft",
+};
+
+const blue = {
+  ring: "ring-brand",
+  bg: "bg-brand",
+  bgSoft: "bg-brand-soft",
+  text: "text-brand",
+  border: "border-brand/30",
+  chipBg: "bg-brand-soft",
+  chipText: "text-brand",
+  toggleActive: "bg-brand text-brand-foreground shadow-soft",
+};
 
 function DashboardPage() {
   const [module, setModule] = useState<Module>("academic");
   const isAcademic = module === "academic";
-
-  // Module accent: Academic = brand blue, General = warm amber/terracotta
-  const accent = isAcademic
-    ? {
-        ring: "ring-brand",
-        bg: "bg-brand",
-        bgSoft: "bg-brand-soft",
-        text: "text-brand",
-        border: "border-brand/30",
-        chipBg: "bg-brand-soft",
-        chipText: "text-brand",
-        gradient:
-          "bg-[linear-gradient(135deg,oklch(0.97_0.025_250)_0%,oklch(0.94_0.05_255)_100%)]",
-      }
-    : {
-        ring: "ring-[oklch(0.7_0.14_55)]",
-        bg: "bg-[oklch(0.68_0.16_55)]",
-        bgSoft: "bg-[oklch(0.94_0.06_55)]",
-        text: "text-[oklch(0.55_0.16_50)]",
-        border: "border-[oklch(0.7_0.14_55)]/30",
-        chipBg: "bg-[oklch(0.94_0.06_55)]",
-        chipText: "text-[oklch(0.45_0.15_45)]",
-        gradient:
-          "bg-[linear-gradient(135deg,oklch(0.97_0.03_70)_0%,oklch(0.94_0.06_55)_100%)]",
-      };
+  const accent = isAcademic ? blue : sage;
 
   return (
     <div className="min-h-screen bg-paper-cream">
       {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-foreground/8 bg-background/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-foreground/8 bg-paper-cream/85 backdrop-blur-xl">
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
@@ -179,48 +170,56 @@ function DashboardPage() {
         </div>
       </header>
 
-      <main className="container-page py-10 sm:py-14">
-        {/* Hero / module summary */}
-        <section className="mx-auto max-w-5xl">
-          <div
-            className={`flex items-center gap-2 rounded-full border ${accent.border} ${accent.chipBg} ${accent.chipText} w-fit px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em]`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${accent.bg}`} />
-            {isAcademic ? "IELTS Academic" : "IELTS General Training"}
-          </div>
+      <main className="relative py-12 sm:py-16">
+        {/* Subtle ruled-paper accent in the background, only behind the hero */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+        />
 
-          <h1 className="mt-5 font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
-            Welcome back.
-            <br className="hidden sm:block" />
-            <span className="text-foreground/60">
-              Continue your {isAcademic ? "Academic" : "General"} preparation.
-            </span>
-          </h1>
-
-          <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-foreground/65 sm:text-lg">
-            Everything you need is below. Switch between modules anytime — your
-            samples, vocabulary, templates and predictions will adapt to the
-            module you're preparing for.
-          </p>
-
-          {/* Module toggle */}
-          <ModuleToggle module={module} setModule={setModule} />
-        </section>
-
-        {/* Feature cards */}
-        <section className="mx-auto mt-14 max-w-6xl">
-          <div className="mb-6 flex items-end justify-between">
-            <div>
-              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-                Your toolkit
-              </h2>
-              <p className="mt-1 text-sm font-medium text-foreground/60">
-                Tap any tool to start practicing.
-              </p>
+        {/* Centered content column */}
+        <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
+          {/* Module pill */}
+          <div className="flex justify-center">
+            <div
+              className={`inline-flex items-center gap-2 rounded-full border ${accent.border} ${accent.chipBg} ${accent.chipText} px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em]`}
+            >
+              <span className={`h-1.5 w-1.5 rounded-full ${accent.bg}`} />
+              {isAcademic ? "IELTS Academic" : "IELTS General Training"}
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Hero */}
+          <div className="mt-6 text-center">
+            <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              Welcome back.
+              <br />
+              <span className="text-foreground/55">
+                Your {isAcademic ? "Academic" : "General"} desk awaits.
+              </span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-[15px] font-medium leading-relaxed text-foreground/65 sm:text-base">
+              Switch modules anytime — your samples, vocabulary, templates and
+              predictions adapt to whichever test you're preparing for.
+            </p>
+          </div>
+
+          {/* Toggle */}
+          <div className="mt-8 flex justify-center">
+            <ModuleToggle module={module} setModule={setModule} />
+          </div>
+
+          {/* Section label */}
+          <div className="mt-14 mb-5 flex items-center justify-center gap-3">
+            <span className="h-px w-10 bg-foreground/15" />
+            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/50">
+              Your Toolkit
+            </span>
+            <span className="h-px w-10 bg-foreground/15" />
+          </div>
+
+          {/* Feature cards */}
+          <div className="grid gap-4 sm:grid-cols-2">
             {features.map((f) => (
               <FeatureCard
                 key={f.key}
@@ -230,11 +229,11 @@ function DashboardPage() {
               />
             ))}
           </div>
-        </section>
 
-        <p className="mx-auto mt-14 max-w-6xl text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/45">
-          More tools coming soon · Your access never expires during your plan
-        </p>
+          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
+            More tools coming soon · Access never expires during your plan
+          </p>
+        </div>
       </main>
     </div>
   );
@@ -248,27 +247,20 @@ function ModuleToggle({
   setModule: (m: Module) => void;
 }) {
   return (
-    <div className="mt-9 inline-flex w-full max-w-md items-center rounded-full border border-foreground/10 bg-white p-1.5 shadow-soft sm:w-auto">
-      {(
-        [
-          { id: "academic" as const, label: "Academic" },
-          { id: "general" as const, label: "General Training" },
-        ]
-      ).map((opt) => {
+    <div className="inline-flex items-center rounded-full border border-foreground/10 bg-white p-1.5 shadow-soft">
+      {[
+        { id: "academic" as const, label: "Academic", accent: blue },
+        { id: "general" as const, label: "General", accent: sage },
+      ].map((opt) => {
         const active = module === opt.id;
-        const isAcademicOpt = opt.id === "academic";
         return (
           <button
             key={opt.id}
             type="button"
             onClick={() => setModule(opt.id)}
             aria-pressed={active}
-            className={`relative flex-1 rounded-full px-5 py-2.5 text-sm font-bold tracking-tight transition-all sm:px-7 ${
-              active
-                ? isAcademicOpt
-                  ? "bg-brand text-brand-foreground shadow-soft"
-                  : "bg-[oklch(0.68_0.16_55)] text-white shadow-soft"
-                : "text-foreground/55 hover:text-foreground"
+            className={`relative rounded-full px-6 py-2.5 text-sm font-bold tracking-tight transition-all sm:px-8 ${
+              active ? opt.accent.toggleActive : "text-foreground/55 hover:text-foreground"
             }`}
           >
             {opt.label}
@@ -279,6 +271,8 @@ function ModuleToggle({
   );
 }
 
+type Accent = typeof blue;
+
 function FeatureCard({
   feature,
   module,
@@ -286,44 +280,48 @@ function FeatureCard({
 }: {
   feature: Feature;
   module: Module;
-  accent: {
-    ring: string;
-    bg: string;
-    bgSoft: string;
-    text: string;
-    border: string;
-    chipBg: string;
-    chipText: string;
-    gradient: string;
-  };
+  accent: Accent;
 }) {
   const Icon = feature.icon;
   return (
     <button
       type="button"
-      className="group relative flex flex-col items-start rounded-3xl border border-foreground/8 bg-white p-6 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-card sm:p-7"
+      className="group relative flex flex-col items-start overflow-hidden rounded-2xl border border-foreground/10 bg-paper-cream p-6 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-card"
     >
-      <div
-        className={`flex h-12 w-12 items-center justify-center rounded-2xl ${accent.bgSoft} ${accent.text} transition-transform group-hover:scale-105`}
-      >
-        <Icon className="h-5 w-5" strokeWidth={2.25} />
+      {/* paper texture overlay (very subtle) */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-60 [background-image:radial-gradient(oklch(0.4_0.05_60_/_0.06)_1px,transparent_1px)] [background-size:3px_3px]"
+      />
+      {/* warm top edge highlight */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent"
+      />
+
+      <div className="relative flex w-full items-start justify-between">
+        <div
+          className={`flex h-11 w-11 items-center justify-center rounded-xl ${accent.bgSoft} ${accent.text} transition-transform group-hover:scale-105`}
+        >
+          <Icon className="h-[18px] w-[18px]" strokeWidth={2.25} />
+        </div>
+        <span
+          className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-foreground/40 ring-1 ring-foreground/10 transition-all group-hover:bg-foreground group-hover:text-background group-hover:ring-foreground`}
+        >
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+        </span>
       </div>
 
-      <h3 className="mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
+      <h3 className="relative mt-5 font-display text-lg font-extrabold tracking-tight text-foreground">
         {feature.title}
       </h3>
-      <p className="mt-2 text-[14px] font-medium leading-relaxed text-foreground/65">
+      <p className="relative mt-1.5 text-[13.5px] font-medium leading-relaxed text-foreground/65">
         {feature.description[module]}
       </p>
 
-      <div className="mt-5 flex w-full items-center justify-between">
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-foreground/45">
+      <div className="relative mt-5 w-full border-t border-dashed border-foreground/15 pt-3">
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/45">
           {feature.count[module]}
-        </span>
-        <span
-          className={`flex h-8 w-8 items-center justify-center rounded-full ${accent.bgSoft} ${accent.text} transition-transform group-hover:translate-x-0.5`}
-        >
-          <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
         </span>
       </div>
     </button>
