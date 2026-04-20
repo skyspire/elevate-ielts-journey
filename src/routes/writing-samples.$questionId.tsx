@@ -305,6 +305,9 @@ function QuestionDetailPage() {
             </div>
           )}
 
+          {/* Difficulty voting */}
+          <DifficultyVoteCard questionId={questionId} accentBg={accentBg} accentText={accentText} accentChip={accentChip} />
+
           {/* Comments / Q&A */}
           <CommentsSection questionId={questionId} accentBg={accentBg} accentText={accentText} accentChip={accentChip} />
 
@@ -633,3 +636,228 @@ function RelatedCard({
     </Link>
   );
 }
+
+// ───────── Studied button ─────────
+function StudiedButton({
+  questionId,
+  accentBg,
+  accentText,
+}: {
+  questionId: string;
+  accentBg: string;
+  accentText: string;
+}) {
+  const [studied, setStudied] = useState(false);
+
+  useEffect(() => {
+    setStudied(isStudied(questionId));
+  }, [questionId]);
+
+  const onClick = () => {
+    setStudied(toggleStudied(questionId));
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={studied}
+      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.18em] shadow-soft transition-all hover:-translate-y-0.5 ${
+        studied
+          ? `${accentBg} border-transparent text-white`
+          : `border-foreground/15 bg-white ${accentText} hover:border-foreground/25`
+      }`}
+    >
+      {studied ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
+      {studied ? "Studied" : "Mark as studied"}
+    </button>
+  );
+}
+
+// ───────── Share button ─────────
+function ShareButton({ title, accentText }: { title: string; accentText: string }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const url = typeof window !== "undefined" ? window.location.href : "";
+  const text = `IELTS sample answer — ${title}`;
+
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // ignore
+    }
+  };
+
+  const onNativeShare = async () => {
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await (navigator as Navigator & { share: (d: ShareData) => Promise<void> }).share({
+          title,
+          text,
+          url,
+        });
+        return;
+      } catch {
+        // user cancelled — fall through to popover
+      }
+    }
+    setOpen((v) => !v);
+  };
+
+  const enc = encodeURIComponent;
+  const wa = `https://wa.me/?text=${enc(`${text} ${url}`)}`;
+  const tw = `https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`;
+  const li = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`;
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={onNativeShare}
+        className={`inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.18em] shadow-soft transition-all hover:-translate-y-0.5 hover:border-foreground/25 ${accentText}`}
+      >
+        <Share2 className="h-3.5 w-3.5" />
+        Share
+      </button>
+
+      {open && (
+        <div
+          className="absolute left-1/2 top-full z-30 mt-2 w-56 -translate-x-1/2 rounded-2xl border border-foreground/10 bg-white p-2 shadow-card"
+          role="menu"
+        >
+          <a
+            href={wa}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-bold text-foreground/80 transition-colors hover:bg-paper-cream"
+            onClick={() => setOpen(false)}
+          >
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[oklch(0.78_0.15_150)] text-[10px] text-white">W</span>
+            WhatsApp
+          </a>
+          <a
+            href={tw}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-bold text-foreground/80 transition-colors hover:bg-paper-cream"
+            onClick={() => setOpen(false)}
+          >
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-foreground text-[10px] text-white">X</span>
+            Twitter / X
+          </a>
+          <a
+            href={li}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-bold text-foreground/80 transition-colors hover:bg-paper-cream"
+            onClick={() => setOpen(false)}
+          >
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[oklch(0.45_0.12_240)] text-[10px] text-white">in</span>
+            LinkedIn
+          </a>
+          <button
+            type="button"
+            onClick={onCopy}
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-[13px] font-bold text-foreground/80 transition-colors hover:bg-paper-cream"
+          >
+            <Link2 className="h-4 w-4" />
+            {copied ? "Link copied!" : "Copy link"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ───────── Difficulty vote card ─────────
+function DifficultyVoteCard({
+  questionId,
+  accentBg,
+  accentText,
+  accentChip,
+}: {
+  questionId: string;
+  accentBg: string;
+  accentText: string;
+  accentChip: string;
+}) {
+  const options: DifficultyVote[] = ["Easy", "Medium", "Hard"];
+  const [myVote, setMyVote] = useState<DifficultyVote | null>(null);
+  const [tally, setTally] = useState<DifficultyTally>({ Easy: 0, Medium: 0, Hard: 0 });
+
+  useEffect(() => {
+    setMyVote(getMyDifficultyVote(questionId));
+    setTally(getDifficultyTally(questionId));
+  }, [questionId]);
+
+  const total = tally.Easy + tally.Medium + tally.Hard;
+
+  const onVote = (v: DifficultyVote) => {
+    const next = setDifficultyVote(questionId, v);
+    setTally(next);
+    setMyVote(v);
+  };
+
+  return (
+    <section className="mt-10 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
+      <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
+        <Sparkles className="h-3.5 w-3.5" />
+        How hard did this feel?
+      </div>
+      <p className="mt-2 text-[14px] font-medium text-foreground/70">
+        Vote so other students see how this question compares.
+      </p>
+
+      <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
+        {options.map((opt) => {
+          const count = tally[opt];
+          const pct = total ? Math.round((count / total) * 100) : 0;
+          const selected = myVote === opt;
+          return (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onVote(opt)}
+              aria-pressed={selected}
+              className={`relative overflow-hidden rounded-xl border px-4 py-3 text-left transition-all hover:-translate-y-0.5 ${
+                selected
+                  ? `${accentChip} border`
+                  : "border-foreground/10 bg-paper-cream hover:border-foreground/25"
+              }`}
+            >
+              {/* progress fill */}
+              <span
+                aria-hidden
+                className={`absolute inset-y-0 left-0 ${accentBg} opacity-10`}
+                style={{ width: `${pct}%` }}
+              />
+              <span className="relative flex items-center justify-between">
+                <span className={`font-display text-[14px] font-extrabold tracking-tight ${selected ? accentText : "text-foreground"}`}>
+                  {opt}
+                </span>
+                <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+                  {pct}%
+                </span>
+              </span>
+              <span className="relative mt-1 block text-[11px] font-bold text-foreground/55">
+                {count} {count === 1 ? "vote" : "votes"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {total > 0 && (
+        <p className="mt-4 text-[12px] font-bold text-foreground/55">
+          {total} {total === 1 ? "person has" : "people have"} voted
+          {myVote ? ` · you voted ${myVote}` : ""}
+        </p>
+      )}
+    </section>
+  );
+}
+
