@@ -163,49 +163,27 @@ function WritingSamplesPage() {
             <span className={accentText}>Writing Samples</span>
           </div>
 
-          {/* Module switcher — Notebook tabs */}
-          <div className="mt-6 flex justify-center px-2">
-            <div
-              role="tablist"
-              aria-label="IELTS module"
-              className="relative flex w-full max-w-md items-end gap-2 border-b-2 border-foreground/15"
-            >
-              {/* Academic tab */}
+          {/* Module switcher — Rotary dial selector */}
+          <div className="mt-8 flex justify-center">
+            <div className="relative flex items-center gap-4 sm:gap-6">
+              {/* Academic label (left) */}
               <button
                 type="button"
-                role="tab"
-                aria-selected={isAcademic}
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "academic" } })}
-                className={`group relative flex-1 rounded-t-2xl border-2 border-b-0 px-3 pt-3 pb-3.5 text-center transition-all ${
-                  isAcademic
-                    ? "-mb-[2px] border-brand/40 bg-white shadow-[0_-6px_18px_-8px_oklch(0.55_0.16_265/0.35)] translate-y-0"
-                    : "border-foreground/10 bg-foreground/[0.04] translate-y-1.5 hover:translate-y-0.5 hover:bg-foreground/[0.06]"
+                aria-pressed={isAcademic}
+                className={`group flex flex-col items-end text-right transition-all ${
+                  isAcademic ? "scale-105" : "opacity-50 hover:opacity-80"
                 }`}
               >
-                {/* Paper clip doodle on active */}
-                {isAcademic && (
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 24 24"
-                    className="absolute -top-2.5 left-3 h-5 w-5 -rotate-12 text-brand drop-shadow-sm"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 10.5l-9.2 9.2a5 5 0 0 1-7.07-7.07l9.2-9.2a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.2a2 2 0 0 1-2.83-2.83l8.49-8.49" />
-                  </svg>
-                )}
                 <span
-                  className={`block text-[10px] font-extrabold uppercase tracking-[0.18em] ${
+                  className={`text-[10px] font-extrabold uppercase tracking-[0.18em] transition-colors ${
                     isAcademic ? "text-brand" : "text-foreground/40"
                   }`}
                 >
                   Module
                 </span>
                 <span
-                  className={`mt-0.5 block font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                  className={`font-display text-base font-extrabold tracking-tight sm:text-lg ${
                     isAcademic ? "text-foreground" : "text-foreground/55"
                   }`}
                 >
@@ -213,49 +191,78 @@ function WritingSamplesPage() {
                 </span>
               </button>
 
-              {/* General tab */}
+              {/* The Dial */}
+              <div
+                className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-foreground/10 to-foreground/5 shadow-[inset_0_2px_6px_rgba(0,0,0,0.12),0_8px_20px_-8px_rgba(0,0,0,0.25)] sm:h-24 sm:w-24"
+                aria-hidden
+              >
+                {/* Tick marks around dial */}
+                <svg
+                  viewBox="0 0 100 100"
+                  className="absolute inset-0 h-full w-full text-foreground/25"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                >
+                  {Array.from({ length: 12 }).map((_, i) => {
+                    const angle = (i * 30 * Math.PI) / 180;
+                    const x1 = 50 + Math.cos(angle) * 42;
+                    const y1 = 50 + Math.sin(angle) * 42;
+                    const x2 = 50 + Math.cos(angle) * 46;
+                    const y2 = 50 + Math.sin(angle) * 46;
+                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />;
+                  })}
+                </svg>
+
+                {/* Inner knob */}
+                <div
+                  className={`relative flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15),inset_0_-2px_4px_rgba(0,0,0,0.08),inset_0_2px_4px_rgba(255,255,255,0.8)] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-16 sm:w-16 ${
+                    isAcademic ? "-rotate-45" : "rotate-45"
+                  }`}
+                  style={{
+                    boxShadow: isAcademic
+                      ? "0 0 0 3px oklch(0.55 0.16 265 / 0.25), 0 4px 14px oklch(0.55 0.16 265 / 0.35), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8)"
+                      : "0 0 0 3px oklch(0.55 0.10 160 / 0.25), 0 4px 14px oklch(0.55 0.10 160 / 0.35), inset 0 -2px 4px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8)",
+                  }}
+                >
+                  {/* Pointer line */}
+                  <span
+                    className={`absolute top-1.5 h-3 w-1 rounded-full ${
+                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+                    }`}
+                  />
+                  {/* Center dot */}
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* General label (right) */}
               <button
                 type="button"
-                role="tab"
-                aria-selected={!isAcademic}
                 onClick={() => navigate({ to: "/writing-samples", search: { module: "general" } })}
-                className={`group relative flex-1 rounded-t-2xl border-2 border-b-0 px-3 pt-3 pb-3.5 text-center transition-all ${
-                  !isAcademic
-                    ? "-mb-[2px] border-[oklch(0.62_0.10_160)]/40 bg-white shadow-[0_-6px_18px_-8px_oklch(0.55_0.10_160/0.35)] translate-y-0"
-                    : "border-foreground/10 bg-foreground/[0.04] translate-y-1.5 hover:translate-y-0.5 hover:bg-foreground/[0.06]"
+                aria-pressed={!isAcademic}
+                className={`group flex flex-col items-start text-left transition-all ${
+                  !isAcademic ? "scale-105" : "opacity-50 hover:opacity-80"
                 }`}
               >
-                {/* Pencil doodle on active */}
-                {!isAcademic && (
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 24 24"
-                    className="absolute -top-2.5 right-3 h-5 w-5 rotate-12 text-[oklch(0.45_0.10_160)] drop-shadow-sm"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 19l7-7 3 3-7 7-3-3z" />
-                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-                    <path d="M2 2l7.586 7.586" />
-                    <circle cx="11" cy="11" r="2" />
-                  </svg>
-                )}
                 <span
-                  className={`block text-[10px] font-extrabold uppercase tracking-[0.18em] ${
+                  className={`text-[10px] font-extrabold uppercase tracking-[0.18em] transition-colors ${
                     !isAcademic ? "text-[oklch(0.42_0.10_160)]" : "text-foreground/40"
                   }`}
                 >
                   Module
                 </span>
                 <span
-                  className={`mt-0.5 block font-display text-base font-extrabold tracking-tight sm:text-lg ${
+                  className={`font-display text-base font-extrabold tracking-tight sm:text-lg ${
                     !isAcademic ? "text-foreground" : "text-foreground/55"
                   }`}
                 >
-                  General Training
+                  General
                 </span>
               </button>
             </div>
