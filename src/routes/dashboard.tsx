@@ -429,42 +429,32 @@ function FeatureCard({
   const Icon = feature.icon;
   const gradId = `grad-${feature.key}`;
 
-  return (
-    <button
-      type="button"
-      className={`group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
-    >
-      {/* subtle paper grain (light specks on dark cards) */}
+  const cardClass = `group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`;
+
+  const inner = (
+    <>
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:3px_3px]"
       />
-      {/* glossy top-edge highlight */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
       />
-
-      {/* Top row: small arrow on the LEFT, glossy 3D icon on the RIGHT */}
       <div className="relative flex w-full items-start justify-between">
         <span
           className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
         </span>
-
         <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
-
-      {/* Title-first hierarchy */}
       <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-white">
         {feature.title}
       </h3>
       <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-white/75">
         {feature.description[module]}
       </p>
-
-      {/* Stat row — number + label as a small footer pill */}
       <div className="relative mt-5 flex items-baseline gap-2 border-t border-white/15 pt-4">
         <span
           className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
@@ -475,6 +465,20 @@ function FeatureCard({
           {label}
         </span>
       </div>
+    </>
+  );
+
+  if (feature.to === "/dashboard/writing-samples") {
+    return (
+      <Link to="/dashboard/writing-samples" search={{ module }} className={cardClass}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <button type="button" className={cardClass}>
+      {inner}
     </button>
   );
 }
