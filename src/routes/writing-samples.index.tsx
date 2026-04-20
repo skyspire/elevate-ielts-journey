@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
-import parrotImg from "@/assets/parrot-flying.png";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -561,193 +560,69 @@ function TaskEnvelopeScroll({
   isAcademic: boolean;
 }) {
   const isT1 = task === "task1";
-
-  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
   const highlightBg = isAcademic
     ? "bg-[oklch(0.92_0.13_85)]"
     : "bg-[oklch(0.90_0.14_150)]";
 
-  // Re-mount parrot on toggle so the keyframe animation re-plays each time
-  const animKey = `parrot-${task}-${isAcademic ? "a" : "g"}`;
+  const renderCard = (
+    active: boolean,
+    onClick: () => void,
+    taskNum: "Task 1" | "Task 2",
+    name: string,
+  ) => (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
+        active
+          ? "border-foreground/15 shadow-card -translate-y-0.5"
+          : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
+      }`}
+    >
+      <span
+        aria-hidden
+        className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
+          isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
+        } ${active ? "opacity-100" : "opacity-0"}`}
+      />
+
+      <span
+        className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
+          active
+            ? isAcademic
+              ? "bg-brand text-brand-foreground"
+              : "bg-[oklch(0.55_0.10_160)] text-white"
+            : "bg-foreground/8 text-foreground/55"
+        }`}
+      >
+        {taskNum}
+      </span>
+
+      <h3
+        className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
+          active ? "text-foreground" : "text-foreground/70"
+        }`}
+        style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
+      >
+        <span className="relative inline-block">
+          {active && (
+            <span
+              aria-hidden
+              className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
+              style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
+            />
+          )}
+          <span className="relative">{name}</span>
+        </span>
+      </h3>
+    </button>
+  );
 
   return (
-    <div className="relative">
-      <style>{`
-        @keyframes parrot-fly-to-right {
-          0%   { left: 25%; top: 50%; transform: translate(-50%, -50%) rotate(-8deg) scaleX(1); }
-          50%  { left: 50%; top: 8%;  transform: translate(-50%, -50%) rotate(6deg)  scaleX(1); }
-          100% { left: 75%; top: 50%; transform: translate(-50%, -50%) rotate(-4deg) scaleX(1); }
-        }
-        @keyframes parrot-fly-to-left {
-          0%   { left: 75%; top: 50%; transform: translate(-50%, -50%) rotate(8deg)  scaleX(-1); }
-          50%  { left: 50%; top: 8%;  transform: translate(-50%, -50%) rotate(-6deg) scaleX(-1); }
-          100% { left: 25%; top: 50%; transform: translate(-50%, -50%) rotate(4deg)  scaleX(-1); }
-        }
-        @keyframes parrot-hover {
-          0%, 100% { translate: 0 0; }
-          50%      { translate: 0 -4px; }
-        }
-      `}</style>
-
-      <div className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:gap-5">
-        {/* TASK 1 */}
-        <button
-          type="button"
-          onClick={() => onTaskChange("task1")}
-          aria-pressed={isT1}
-          className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
-            isT1
-              ? "border-foreground/15 shadow-card -translate-y-0.5"
-              : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
-          }`}
-        >
-          {/* Active accent bar */}
-          <span
-            aria-hidden
-            className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
-              isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-            } ${isT1 ? "opacity-100" : "opacity-0"}`}
-          />
-
-          <div className="flex items-center gap-2">
-            <span
-              className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
-                isT1
-                  ? isAcademic
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-[oklch(0.55_0.10_160)] text-white"
-                  : "bg-foreground/8 text-foreground/55"
-              }`}
-            >
-              Task 1
-            </span>
-            {isT1 && (
-              <CheckCircle2 className={`h-4 w-4 ${accentText}`} strokeWidth={2.5} />
-            )}
-          </div>
-
-          <h3
-            className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
-              isT1 ? "text-foreground" : "text-foreground/70"
-            }`}
-            style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
-          >
-            <span className="relative inline-block">
-              {isT1 && (
-                <span
-                  aria-hidden
-                  className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
-                  style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
-                />
-              )}
-              <span className="relative">{isAcademic ? "Charts" : "Letters"}</span>
-            </span>
-          </h3>
-
-          <p className="mt-3 text-[13px] font-medium leading-relaxed text-foreground/65 sm:text-sm">
-            {isAcademic
-              ? "Describe graphs, tables, processes & maps."
-              : "Write formal & informal letters."}
-          </p>
-
-          <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55">
-            <span>150 words</span>
-            <span className="h-1 w-1 rounded-full bg-foreground/25" />
-            <span>20 min</span>
-          </div>
-        </button>
-
-        {/* TASK 2 */}
-        <button
-          type="button"
-          onClick={() => onTaskChange("task2")}
-          aria-pressed={!isT1}
-          className={`group relative overflow-hidden rounded-2xl border bg-white p-5 text-left transition-all duration-300 sm:p-7 ${
-            !isT1
-              ? "border-foreground/15 shadow-card -translate-y-0.5"
-              : "border-foreground/8 shadow-soft hover:border-foreground/15 hover:-translate-y-0.5"
-          }`}
-        >
-          <span
-            aria-hidden
-            className={`absolute left-0 top-0 h-full w-1 transition-opacity duration-300 ${
-              isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]"
-            } ${!isT1 ? "opacity-100" : "opacity-0"}`}
-          />
-
-          <div className="flex items-center gap-2">
-            <span
-              className={`inline-flex h-6 items-center rounded-full px-2 font-display text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
-                !isT1
-                  ? isAcademic
-                    ? "bg-brand text-brand-foreground"
-                    : "bg-[oklch(0.55_0.10_160)] text-white"
-                  : "bg-foreground/8 text-foreground/55"
-              }`}
-            >
-              Task 2
-            </span>
-            {!isT1 && (
-              <CheckCircle2 className={`h-4 w-4 ${accentText}`} strokeWidth={2.5} />
-            )}
-          </div>
-
-          <h3
-            className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
-              !isT1 ? "text-foreground" : "text-foreground/70"
-            }`}
-            style={{ fontSize: "clamp(1.5rem, 4.2vw, 2.25rem)" }}
-          >
-            <span className="relative inline-block">
-              {!isT1 && (
-                <span
-                  aria-hidden
-                  className={`absolute inset-x-[-4px] bottom-[6%] -z-10 h-[55%] -rotate-1 ${highlightBg} opacity-70`}
-                  style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
-                />
-              )}
-              <span className="relative">Essay</span>
-            </span>
-          </h3>
-
-          <p className="mt-3 text-[13px] font-medium leading-relaxed text-foreground/65 sm:text-sm">
-            Argue a position, weigh views, propose solutions.
-          </p>
-
-          <div className="mt-5 flex items-center gap-3 border-t border-foreground/8 pt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55">
-            <span>250 words</span>
-            <span className="h-1 w-1 rounded-full bg-foreground/25" />
-            <span>40 min</span>
-          </div>
-        </button>
-
-        {/* Realistic parrot mascot — flies between cards on toggle */}
-        <div
-          key={animKey}
-          aria-hidden
-          className="pointer-events-none absolute z-20"
-          style={{
-            width: "92px",
-            height: "92px",
-            left: isT1 ? "25%" : "75%",
-            top: "50%",
-            transform: `translate(-50%, -50%) rotate(${isT1 ? -4 : 4}deg) scaleX(${isT1 ? 1 : -1})`,
-            animation: `${
-              isT1 ? "parrot-fly-to-left" : "parrot-fly-to-right"
-            } 1100ms cubic-bezier(0.45, 0, 0.35, 1) both, parrot-hover 2.6s ease-in-out 1100ms infinite`,
-          }}
-        >
-          <img
-            src={parrotImg}
-            alt=""
-            width={184}
-            height={184}
-            loading="lazy"
-            className="h-full w-full select-none object-contain drop-shadow-[0_8px_16px_oklch(0.20_0.05_40_/_0.30)]"
-            draggable={false}
-          />
-        </div>
-      </div>
+    <div className="relative mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:gap-5">
+      {renderCard(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters")}
+      {renderCard(!isT1, () => onTaskChange("task2"), "Task 2", "Essay")}
     </div>
   );
 }
