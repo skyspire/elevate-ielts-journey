@@ -171,9 +171,11 @@ function QuestionDetailPage() {
               </span>
             </div>
 
-            {/* Bookmark button */}
-            <div className="mt-5 flex justify-center">
+            {/* Action buttons */}
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
               <BookmarkButton questionId={questionId} accentBg={accentBg} accentText={accentText} />
+              <StudiedButton questionId={questionId} accentBg={accentBg} accentText={accentText} />
+              <ShareButton title={title} accentText={accentText} />
             </div>
           </div>
 
