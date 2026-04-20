@@ -409,34 +409,38 @@ function FeatureCard({
 }) {
   const tone = tones[feature.tone];
   const { value, label } = feature.count[module];
+  const Icon = feature.icon;
+  const gradId = `grad-${feature.key}`;
 
   return (
     <button
       type="button"
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
     >
       {/* subtle paper grain */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
       />
-      {/* top edge highlight */}
+      {/* glossy top-edge highlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
       />
 
-      {/* Top row: arrow only */}
-      <div className="relative flex w-full items-start justify-end">
+      {/* Top row: small arrow on the LEFT, glossy 3D icon on the RIGHT */}
+      <div className="relative flex w-full items-start justify-between">
         <span
           className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
         </span>
+
+        <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
 
       {/* Oversized gradient number — the hero of the card */}
-      <div className="relative mt-1 flex items-baseline gap-2">
+      <div className="relative mt-5 flex items-baseline gap-2">
         <span
           className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
         >
@@ -455,5 +459,73 @@ function FeatureCard({
         {feature.description[module]}
       </p>
     </button>
+  );
+}
+
+/**
+ * Glossy 3D icon — Apple visionOS style.
+ * Rounded-square disc with diagonal gradient + glass highlight + soft shadow.
+ */
+function Glossy3DIcon({
+  Icon,
+  tone,
+  gradId,
+}: {
+  Icon: ComponentType<LucideProps>;
+  tone: (typeof tones)[Feature["tone"]];
+  gradId: string;
+}) {
+  return (
+    <div
+      className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
+      style={{
+        filter: `drop-shadow(0 10px 18px ${tone.iconShadow}) drop-shadow(0 2px 4px ${tone.iconShadow})`,
+      }}
+    >
+      <svg
+        viewBox="0 0 64 64"
+        className="absolute inset-0 h-full w-full"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={tone.iconStart} />
+            <stop offset="100%" stopColor={tone.iconEnd} />
+          </linearGradient>
+          <radialGradient id={`${gradId}-gloss`} cx="30%" cy="20%" r="60%">
+            <stop offset="0%" stopColor="white" stopOpacity="0.9" />
+            <stop offset="60%" stopColor="white" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect x="2" y="2" width="60" height="60" rx="18" fill={`url(#${gradId})`} />
+        <rect
+          x="2"
+          y="2"
+          width="60"
+          height="60"
+          rx="18"
+          fill={`url(#${gradId}-gloss)`}
+        />
+        <rect
+          x="2.5"
+          y="2.5"
+          width="59"
+          height="59"
+          rx="17.5"
+          fill="none"
+          stroke="white"
+          strokeOpacity="0.4"
+          strokeWidth="1"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Icon
+          className="h-6 w-6 text-white sm:h-7 sm:w-7"
+          strokeWidth={2.4}
+          style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.25))" }}
+        />
+      </div>
+    </div>
   );
 }
