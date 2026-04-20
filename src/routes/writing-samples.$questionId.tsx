@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
+  Bookmark,
+  BookmarkCheck,
   Clock,
   FileText,
   GraduationCap,
@@ -12,9 +15,21 @@ import {
   ListOrdered,
   Lightbulb,
   PenLine,
+  MessageSquare,
+  Trash2,
+  Send,
 } from "lucide-react";
 import { z } from "zod";
 import { sampleAnswers } from "@/data/sample-answers";
+import { getSiblingQuestions, type SiblingQuestion } from "@/data/question-helpers";
+import {
+  addComment,
+  deleteComment,
+  getComments,
+  isBookmarked,
+  toggleBookmark,
+  type Comment,
+} from "@/lib/engagement-storage";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -51,6 +66,14 @@ function QuestionDetailPage() {
   const difficulty = search.difficulty ?? "Medium";
 
   const answer = sampleAnswers[questionId];
+
+  // Sibling navigation (prev/next + related)
+  const siblings = useMemo(() => getSiblingQuestions(questionId), [questionId]);
+  const related = useMemo(() => {
+    if (!siblings.all.length) return [] as SiblingQuestion[];
+    const others = siblings.all.filter((q) => q.id !== questionId);
+    return others.slice(0, 3);
+  }, [siblings.all, questionId]);
 
   // Always start at the top when this page opens
   useEffect(() => {
@@ -134,6 +157,11 @@ function QuestionDetailPage() {
                 <Clock className="h-3.5 w-3.5" />
                 {wordCount}
               </span>
+            </div>
+
+            {/* Bookmark button */}
+            <div className="mt-5 flex justify-center">
+              <BookmarkButton questionId={questionId} accentBg={accentBg} accentText={accentText} />
             </div>
           </div>
 
@@ -263,6 +291,59 @@ function QuestionDetailPage() {
             </div>
           )}
 
+          {/* Comments / Q&A */}
+          <CommentsSection questionId={questionId} accentBg={accentBg} accentText={accentText} accentChip={accentChip} />
+
+          {/* Prev / Next */}
+          {(siblings.prev || siblings.next) && (
+            <nav className="mt-10 grid gap-3 sm:grid-cols-2">
+              {siblings.prev ? (
+                <PrevNextCard
+                  direction="prev"
+                  question={siblings.prev}
+                  module={module}
+                  task={task}
+                  category={siblings.categoryLabel}
+                />
+              ) : (
+                <div />
+              )}
+              {siblings.next ? (
+                <PrevNextCard
+                  direction="next"
+                  question={siblings.next}
+                  module={module}
+                  task={task}
+                  category={siblings.categoryLabel}
+                />
+              ) : (
+                <div />
+              )}
+            </nav>
+          )}
+
+          {/* Related questions */}
+          {related.length > 0 && (
+            <section className="mt-10">
+              <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
+                <Sparkles className="h-3.5 w-3.5" />
+                More from {siblings.categoryLabel}
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {related.map((q) => (
+                  <RelatedCard
+                    key={q.id}
+                    question={q}
+                    module={module}
+                    task={task}
+                    category={siblings.categoryLabel}
+                    accentText={accentText}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
           <div className="mt-10 flex justify-center">
             <Link
               to="/writing-samples"
@@ -276,5 +357,264 @@ function QuestionDetailPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// ───────── Bookmark button ─────────
+function BookmarkButton({
+  questionId,
+  accentBg,
+  accentText,
+}: {
+  questionId: string;
+  accentBg: string;
+  accentText: string;
+}) {
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setSaved(isBookmarked(questionId));
+  }, [questionId]);
+
+  const onClick = () => {
+    const next = toggleBookmark(questionId);
+    setSaved(next);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={saved}
+      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.18em] shadow-soft transition-all hover:-translate-y-0.5 ${
+        saved
+          ? `${accentBg} border-transparent text-white`
+          : `border-foreground/15 bg-white ${accentText} hover:border-foreground/25`
+      }`}
+    >
+      {saved ? <BookmarkCheck className="h-3.5 w-3.5" /> : <Bookmark className="h-3.5 w-3.5" />}
+      {saved ? "Saved" : "Save for later"}
+    </button>
+  );
+}
+
+// ───────── Comments section ─────────
+function CommentsSection({
+  questionId,
+  accentBg,
+  accentText,
+  accentChip,
+}: {
+  questionId: string;
+  accentBg: string;
+  accentText: string;
+  accentChip: string;
+}) {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [author, setAuthor] = useState("");
+  const [body, setBody] = useState("");
+
+  useEffect(() => {
+    setComments(getComments(questionId));
+  }, [questionId]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = body.trim();
+    if (!trimmed) return;
+    addComment(questionId, author, trimmed);
+    setComments(getComments(questionId));
+    setBody("");
+  };
+
+  const handleDelete = (id: string) => {
+    deleteComment(questionId, id);
+    setComments(getComments(questionId));
+  };
+
+  return (
+    <section className="mt-10 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
+          <MessageSquare className="h-3.5 w-3.5" />
+          Comments &amp; doubts
+        </div>
+        <span className={`inline-flex items-center rounded-full border ${accentChip} px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em]`}>
+          {comments.length} {comments.length === 1 ? "reply" : "replies"}
+        </span>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="mt-5 space-y-3">
+        <input
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          placeholder="Your name (optional)"
+          maxLength={40}
+          className="w-full rounded-xl border border-foreground/10 bg-paper-cream px-3.5 py-2.5 text-[14px] font-medium text-foreground placeholder:text-foreground/40 focus:border-foreground/25 focus:outline-none"
+        />
+        <textarea
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          placeholder="Ask a doubt or share a thought about this answer…"
+          rows={3}
+          maxLength={1000}
+          className="w-full rounded-xl border border-foreground/10 bg-paper-cream px-3.5 py-2.5 text-[14px] font-medium text-foreground placeholder:text-foreground/40 focus:border-foreground/25 focus:outline-none"
+        />
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-[11px] font-semibold text-foreground/40">
+            Stored locally in your browser
+          </span>
+          <button
+            type="submit"
+            disabled={!body.trim()}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.18em] text-white shadow-soft transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 ${accentBg}`}
+          >
+            <Send className="h-3.5 w-3.5" />
+            Post
+          </button>
+        </div>
+      </form>
+
+      {/* List */}
+      {comments.length > 0 ? (
+        <ul className="mt-6 space-y-3">
+          {comments.map((c) => (
+            <li
+              key={c.id}
+              className="rounded-xl border border-foreground/8 bg-paper-cream p-4"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className={`font-display text-[13px] font-extrabold tracking-tight ${accentText}`}>
+                      {c.author}
+                    </span>
+                    <span className="text-[11px] font-semibold text-foreground/40">
+                      {formatTime(c.createdAt)}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 whitespace-pre-wrap text-[14px] font-medium leading-relaxed text-foreground/85">
+                    {c.body}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(c.id)}
+                  aria-label="Delete comment"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-foreground/35 transition-colors hover:bg-foreground/5 hover:text-destructive"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-6 text-center text-[13px] font-medium text-foreground/50">
+          No comments yet — be the first to start the discussion.
+        </p>
+      )}
+    </section>
+  );
+}
+
+function formatTime(ms: number): string {
+  const diff = Date.now() - ms;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(ms).toLocaleDateString();
+}
+
+// ───────── Prev / Next card ─────────
+function PrevNextCard({
+  direction,
+  question,
+  module,
+  task,
+  category,
+}: {
+  direction: "prev" | "next";
+  question: SiblingQuestion;
+  module: "academic" | "general";
+  task: "task1" | "task2";
+  category: string;
+}) {
+  const isPrev = direction === "prev";
+  return (
+    <Link
+      to="/writing-samples/$questionId"
+      params={{ questionId: question.id }}
+      search={{
+        module,
+        task,
+        category,
+        title: question.title,
+        topic: question.topic,
+        difficulty: question.difficulty,
+      }}
+      className={`group flex items-start gap-3 rounded-2xl border border-foreground/10 bg-white p-4 shadow-soft transition-all hover:-translate-y-0.5 hover:border-foreground/25 hover:shadow-card ${
+        isPrev ? "" : "sm:flex-row-reverse sm:text-right"
+      }`}
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground/5 text-foreground/60 transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
+        {isPrev ? <ArrowLeft className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[10.5px] font-extrabold uppercase tracking-[0.2em] text-foreground/45">
+          {isPrev ? "Previous" : "Next"}
+        </p>
+        <p className="mt-1 line-clamp-2 font-display text-[14px] font-bold leading-snug tracking-tight text-foreground">
+          {question.title}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+// ───────── Related card ─────────
+function RelatedCard({
+  question,
+  module,
+  task,
+  category,
+  accentText,
+}: {
+  question: SiblingQuestion;
+  module: "academic" | "general";
+  task: "task1" | "task2";
+  category: string;
+  accentText: string;
+}) {
+  return (
+    <Link
+      to="/writing-samples/$questionId"
+      params={{ questionId: question.id }}
+      search={{
+        module,
+        task,
+        category,
+        title: question.title,
+        topic: question.topic,
+        difficulty: question.difficulty,
+      }}
+      className="group flex h-full flex-col rounded-2xl border border-foreground/10 bg-white p-4 shadow-soft transition-all hover:-translate-y-0.5 hover:border-foreground/25 hover:shadow-card"
+    >
+      <span className={`text-[10.5px] font-extrabold uppercase tracking-[0.2em] ${accentText}`}>
+        {question.topic}
+      </span>
+      <p className="mt-2 line-clamp-3 font-display text-[14px] font-bold leading-snug tracking-tight text-foreground">
+        {question.title}
+      </p>
+      <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/50 transition-colors group-hover:text-foreground">
+        Read
+        <ArrowRight className="h-3 w-3" />
+      </span>
+    </Link>
   );
 }
