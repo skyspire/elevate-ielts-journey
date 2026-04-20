@@ -40,11 +40,11 @@ export function Header() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <FreeQuotaBadge used={0} total={3} />
-          <Button variant="ghost" className="font-semibold">
-            Sign In
+          <Button asChild variant="ghost" className="font-semibold">
+            <Link to="/dashboard">Dashboard</Link>
           </Button>
-          <Button className="rounded-full bg-brand font-semibold text-brand-foreground shadow-soft hover:bg-brand/90">
-            Sign Up
+          <Button asChild className="rounded-full bg-brand font-semibold text-brand-foreground shadow-soft hover:bg-brand/90">
+            <Link to="/dashboard">Sign Up</Link>
           </Button>
         </div>
 
@@ -71,11 +71,11 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-2 flex gap-2 pt-2">
-              <Button variant="outline" className="flex-1 font-semibold">
-                Sign In
+              <Button asChild variant="outline" className="flex-1 font-semibold">
+                <Link to="/dashboard" onClick={() => setOpen(false)}>Dashboard</Link>
               </Button>
-              <Button className="flex-1 bg-brand font-semibold text-brand-foreground hover:bg-brand/90">
-                Sign Up
+              <Button asChild className="flex-1 bg-brand font-semibold text-brand-foreground hover:bg-brand/90">
+                <Link to="/dashboard" onClick={() => setOpen(false)}>Sign Up</Link>
               </Button>
             </div>
           </div>
