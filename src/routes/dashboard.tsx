@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  PenLine,
-  Mic,
-  BookOpen,
-  FileText,
-  Sparkles,
-  AlertTriangle,
-  CalendarDays,
   GraduationCap,
   ArrowUpRight,
   CheckCircle2,
@@ -39,8 +32,13 @@ type Feature = {
   key: string;
   title: string;
   description: { academic: string; general: string };
-  count: { academic: string; general: string };
-  icon: typeof PenLine;
+  // count is split: numeric headline + small unit label
+  count: {
+    academic: { value: string; label: string };
+    general: { value: string; label: string };
+  };
+  // tone for the card tint (independent of module accent)
+  tone: "blue" | "sage" | "lilac" | "peach" | "mint" | "kraft" | "rose";
 };
 
 const features: Feature[] = [
@@ -51,8 +49,11 @@ const features: Feature[] = [
       academic: "Task 1 reports & Task 2 essays with Band 8+ model answers.",
       general: "Letter writing & Task 2 essays with Band 8+ model answers.",
     },
-    count: { academic: "240+ samples", general: "180+ samples" },
-    icon: PenLine,
+    count: {
+      academic: { value: "240+", label: "model essays" },
+      general: { value: "180+", label: "model letters & essays" },
+    },
+    tone: "blue",
   },
   {
     key: "speaking",
@@ -61,8 +62,11 @@ const features: Feature[] = [
       academic: "Part 1, 2 & 3 model answers with examiner-style follow-ups.",
       general: "Part 1, 2 & 3 model answers focused on everyday topics.",
     },
-    count: { academic: "320+ recordings", general: "260+ recordings" },
-    icon: Mic,
+    count: {
+      academic: { value: "320+", label: "recorded answers" },
+      general: { value: "260+", label: "recorded answers" },
+    },
+    tone: "peach",
   },
   {
     key: "vocab",
@@ -71,8 +75,11 @@ const features: Feature[] = [
       academic: "Topic-wise academic lexis, collocations & paraphrasing drills.",
       general: "High-frequency everyday vocabulary with usage examples.",
     },
-    count: { academic: "1,800+ words", general: "1,200+ words" },
-    icon: BookOpen,
+    count: {
+      academic: { value: "1,800+", label: "words & collocations" },
+      general: { value: "1,200+", label: "everyday words" },
+    },
+    tone: "sage",
   },
   {
     key: "templates",
@@ -81,8 +88,11 @@ const features: Feature[] = [
       academic: "Reusable structures for graphs, processes and essays.",
       general: "Letter formats, opinion essays and discussion templates.",
     },
-    count: { academic: "60+ templates", general: "45+ templates" },
-    icon: FileText,
+    count: {
+      academic: { value: "60+", label: "ready templates" },
+      general: { value: "45+", label: "ready templates" },
+    },
+    tone: "lilac",
   },
   {
     key: "predictions",
@@ -91,8 +101,11 @@ const features: Feature[] = [
       academic: "Most likely Writing & Speaking topics for the next exam.",
       general: "High-probability questions for upcoming General tests.",
     },
-    count: { academic: "Updated weekly", general: "Updated weekly" },
-    icon: Sparkles,
+    count: {
+      academic: { value: "Weekly", label: "fresh predictions" },
+      general: { value: "Weekly", label: "fresh predictions" },
+    },
+    tone: "rose",
   },
   {
     key: "mistakes",
@@ -101,8 +114,11 @@ const features: Feature[] = [
       academic: "Grammar, lexical and coherence errors that hurt your band.",
       general: "Frequent errors test-takers make in letters and essays.",
     },
-    count: { academic: "120+ patterns", general: "90+ patterns" },
-    icon: AlertTriangle,
+    count: {
+      academic: { value: "120+", label: "error patterns" },
+      general: { value: "90+", label: "error patterns" },
+    },
+    tone: "mint",
   },
   {
     key: "plan",
@@ -111,10 +127,82 @@ const features: Feature[] = [
       academic: "Personalized 4–8 week roadmap to your target band.",
       general: "Structured weekly plan tailored to your timeline.",
     },
-    count: { academic: "4 / 6 / 8 weeks", general: "4 / 6 / 8 weeks" },
-    icon: CalendarDays,
+    count: {
+      academic: { value: "4–8", label: "week roadmaps" },
+      general: { value: "4–8", label: "week roadmaps" },
+    },
+    tone: "kraft",
   },
 ];
+
+// Per-tone color sets for tinted cards & gradient numbers
+const tones: Record<
+  Feature["tone"],
+  {
+    bg: string;
+    border: string;
+    arrowBg: string;
+    arrowText: string;
+    numberGradient: string;
+  }
+> = {
+  blue: {
+    bg: "bg-[oklch(0.96_0.04_255)]",
+    border: "border-[oklch(0.62_0.16_255)]/20",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.16_255)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.45_0.18_260)_0%,oklch(0.62_0.18_245)_100%)]",
+  },
+  sage: {
+    bg: "bg-[oklch(0.94_0.05_160)]",
+    border: "border-[oklch(0.55_0.10_160)]/20",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.42_0.10_160)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.38_0.10_160)_0%,oklch(0.58_0.13_155)_100%)]",
+  },
+  peach: {
+    bg: "bg-[oklch(0.94_0.055_55)]",
+    border: "border-[oklch(0.65_0.12_50)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.12_45)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.42_0.12_40)_0%,oklch(0.6_0.14_55)_100%)]",
+  },
+  lilac: {
+    bg: "bg-[oklch(0.94_0.055_295)]",
+    border: "border-[oklch(0.6_0.12_295)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.42_0.12_295)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.4_0.13_295)_0%,oklch(0.58_0.15_290)_100%)]",
+  },
+  mint: {
+    bg: "bg-[oklch(0.94_0.05_185)]",
+    border: "border-[oklch(0.6_0.10_185)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.4_0.1_185)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.38_0.10_185)_0%,oklch(0.55_0.12_180)_100%)]",
+  },
+  rose: {
+    bg: "bg-[oklch(0.95_0.045_15)]",
+    border: "border-[oklch(0.62_0.14_15)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.45_0.14_15)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.42_0.16_10)_0%,oklch(0.6_0.18_20)_100%)]",
+  },
+  kraft: {
+    bg: "bg-[oklch(0.92_0.04_75)]",
+    border: "border-[oklch(0.55_0.07_70)]/22",
+    arrowBg: "bg-white",
+    arrowText: "text-[oklch(0.4_0.07_70)]",
+    numberGradient:
+      "bg-[linear-gradient(135deg,oklch(0.35_0.06_70)_0%,oklch(0.55_0.09_70)_100%)]",
+  },
+};
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
 const sage = {
