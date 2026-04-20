@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -50,6 +51,11 @@ function QuestionDetailPage() {
   const difficulty = search.difficulty ?? "Medium";
 
   const answer = sampleAnswers[questionId];
+
+  // Always start at the top when this page opens
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [questionId]);
 
   const isAcademic = module === "academic";
   const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
