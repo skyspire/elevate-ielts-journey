@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
-import parrotImg from "@/assets/parrot-flying.png";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
