@@ -572,6 +572,93 @@ const toneMap: Record<Tone, string> = {
   lilac: "bg-lilac text-foreground",
 };
 
+// Deeper, accessible accent palettes that rotate per card.
+// `topic` and `cue` use slightly different hues so the eye separates them.
+const HIGHLIGHT_PALETTES: Array<{ topic: string; cue: string }> = [
+  { topic: "oklch(0.45 0.16 255)", cue: "oklch(0.50 0.16 30)"  }, // blue + terracotta
+  { topic: "oklch(0.42 0.13 160)", cue: "oklch(0.48 0.16 320)" }, // forest + magenta
+  { topic: "oklch(0.45 0.15 60)",  cue: "oklch(0.45 0.15 270)" }, // amber + violet
+  { topic: "oklch(0.45 0.16 295)", cue: "oklch(0.45 0.14 145)" }, // aubergine + sage
+];
+
+// Common IELTS Task 2 cue phrases (case-insensitive, longest first to win match).
+const CUE_PATTERNS: RegExp[] = [
+  /\bdo you agree or disagree\??/i,
+  /\bto what extent do you agree or disagree\??/i,
+  /\bdiscuss both views and give your opinion\??/i,
+  /\bdiscuss both views\b/i,
+  /\bwhat are the (?:advantages and disadvantages|problems and solutions|causes and (?:solutions|consequences)|effects|impacts|consequences|results|reasons)\??/i,
+  /\bis this (?:a )?positive or negative(?: development)?\??/i,
+  /\bis it (?:a )?positive(?: trend)?\??/i,
+  /\bwhat can be done\??/i,
+  /\bhow can (?:it|crime|stress) be (?:reduced|prevented|saved)\??/i,
+  /\bwhat measures can reduce it\??/i,
+  /\bwhat are its (?:effects|impacts|consequences|results)\??/i,
+];
+
+// Curated topic keywords (case-insensitive). Multi-word phrases listed first.
+const TOPIC_KEYWORDS: string[] = [
+  "university education", "online education", "online shopping", "social media",
+  "public transport", "fast food", "international travel", "international migration",
+  "public libraries", "animal testing", "death penalty", "team sports",
+  "foreign languages", "traffic congestion", "youth unemployment", "plastic waste",
+  "air pollution", "food waste", "water scarcity", "internet addiction",
+  "global travel", "digital payments", "fast food consumption", "climate change",
+  "traditional skills", "consumerism", "obesity", "pollution", "smartphones",
+  "tourism", "automation", "urbanization", "advertising", "globalization",
+  "homework", "exams", "crime", "stress", "zoos", "technology", "students",
+  "children", "parents", "advertisements", "e-books", "marriage", "family",
+];
+
+type Segment = { text: string; kind: "plain" | "topic" | "cue" };
+
+function segmentStatement(text: string): Segment[] {
+  // 1. Find cue match (longest)
+  let cueMatch: { start: number; end: number } | null = null;
+  for (const re of CUE_PATTERNS) {
+    const m = text.match(re);
+    if (m && m.index !== undefined) {
+      const span = { start: m.index, end: m.index + m[0].length };
+      if (!cueMatch || span.end - span.start > cueMatch.end - cueMatch.start) {
+        cueMatch = span;
+      }
+    }
+  }
+
+  // 2. Find topic match (first occurrence, longest keyword wins)
+  let topicMatch: { start: number; end: number } | null = null;
+  const sortedKeywords = [...TOPIC_KEYWORDS].sort((a, b) => b.length - a.length);
+  for (const kw of sortedKeywords) {
+    const re = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+    const m = text.match(re);
+    if (m && m.index !== undefined) {
+      const span = { start: m.index, end: m.index + m[0].length };
+      // Skip if it overlaps the cue
+      if (cueMatch && span.start < cueMatch.end && span.end > cueMatch.start) continue;
+      topicMatch = span;
+      break;
+    }
+  }
+
+  // 3. Build segments by sorting matches and slicing
+  const marks = [
+    ...(topicMatch ? [{ ...topicMatch, kind: "topic" as const }] : []),
+    ...(cueMatch ? [{ ...cueMatch, kind: "cue" as const }] : []),
+  ].sort((a, b) => a.start - b.start);
+
+  if (marks.length === 0) return [{ text, kind: "plain" }];
+
+  const segs: Segment[] = [];
+  let cursor = 0;
+  for (const m of marks) {
+    if (m.start > cursor) segs.push({ text: text.slice(cursor, m.start), kind: "plain" });
+    segs.push({ text: text.slice(m.start, m.end), kind: m.kind });
+    cursor = m.end;
+  }
+  if (cursor < text.length) segs.push({ text: text.slice(cursor), kind: "plain" });
+  return segs;
+}
+
 function QuestionRowCard({
   q,
   index,
@@ -586,6 +673,8 @@ function QuestionRowCard({
   category: string;
 }) {
   const idx = String(index).padStart(2, "0");
+  const palette = HIGHLIGHT_PALETTES[(index - 1) % HIGHLIGHT_PALETTES.length];
+  const segments = segmentStatement(q.title);
 
   return (
     <Link
@@ -601,10 +690,18 @@ function QuestionRowCard({
         </span>
       </div>
 
-      {/* Right column — question statement */}
+      {/* Right column — question statement with highlighted topic + cue */}
       <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
         <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-base">
-          {q.title}
+          {segments.map((s, i) => {
+            if (s.kind === "plain") return <span key={i}>{s.text}</span>;
+            const color = s.kind === "topic" ? palette.topic : palette.cue;
+            return (
+              <span key={i} style={{ color, fontWeight: 800 }}>
+                {s.text}
+              </span>
+            );
+          })}
         </p>
       </div>
     </Link>
