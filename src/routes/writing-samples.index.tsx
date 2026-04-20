@@ -619,53 +619,116 @@ function TaskEnvelopeScroll({
     </button>
   );
 
+  // Arrow rotation: -90° = points left (Task 1), 0° = up (none), +90° = right (Task 2)
+  const arrowAngle = isT1 ? -90 : isT2 ? 90 : 0;
+  const dialAccent = isAcademic ? "oklch(0.58 0.17 255)" : "oklch(0.55 0.10 160)";
+  const dialAccentSoft = isAcademic ? "oklch(0.58 0.17 255 / 0.20)" : "oklch(0.55 0.10 160 / 0.20)";
+
   return (
     <div className="relative mx-auto max-w-3xl">
       <style>{`
-        @keyframes glass-disc-pulse {
-          0%, 100% { box-shadow:
-            0 0 0 0 var(--ring-color, oklch(0.58 0.17 255 / 0.30)),
-            0 12px 32px oklch(0.20 0.05 250 / 0.12),
-            inset 0 1px 0 oklch(1 0 0 / 0.6);
-          }
-          50%      { box-shadow:
-            0 0 0 12px transparent,
-            0 12px 32px oklch(0.20 0.05 250 / 0.12),
-            inset 0 1px 0 oklch(1 0 0 / 0.6);
-          }
+        @keyframes dial-tick {
+          0%, 100% { transform: scale(1); }
+          50%      { transform: scale(1.04); }
         }
       `}</style>
 
-      <div className="grid grid-cols-2 items-center gap-3 sm:gap-6">
-        {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "left")}
-        {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "right")}
-      </div>
+      {/* 3-column layout — dial sits in its OWN column so typography never overlaps it */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
+        {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
 
-      {/* Center frosted glass disc — only shown until user picks a task */}
-      {noSelection && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2"
-        >
+        {/* Dial */}
+        <div className="flex flex-col items-center justify-center">
           <div
-            className={`flex h-24 w-24 items-center justify-center rounded-full border-[3px] backdrop-blur-md text-center sm:h-32 sm:w-32 sm:border-4 ${accentBorder}`}
+            className="relative flex items-center justify-center rounded-full border-4 bg-white shadow-card"
             style={{
+              width: "clamp(88px, 14vw, 128px)",
+              height: "clamp(88px, 14vw, 128px)",
+              borderColor: dialAccent,
               background:
-                "linear-gradient(135deg, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0.30) 100%)",
-              ["--ring-color" as never]: isAcademic
-                ? "oklch(0.58 0.17 255 / 0.30)"
-                : "oklch(0.55 0.10 160 / 0.30)",
-              animation: "glass-disc-pulse 2.4s ease-out infinite",
+                "radial-gradient(circle at 35% 28%, oklch(1 0 0) 0%, oklch(0.97 0.01 250) 70%, oklch(0.93 0.02 250) 100%)",
+              animation: noSelection ? "dial-tick 2.2s ease-in-out infinite" : "none",
             }}
           >
-            <span
-              className={`px-2 font-display text-[10px] font-black uppercase leading-[1.15] tracking-[0.16em] sm:text-[12px] ${accentText}`}
+            {/* Inner ring */}
+            <div
+              aria-hidden
+              className="absolute inset-2 rounded-full border"
+              style={{ borderColor: dialAccentSoft }}
+            />
+
+            {/* Tick marks (left, top, right) */}
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background: `
+                  conic-gradient(from 0deg,
+                    transparent 0deg,
+                    transparent 88deg, ${dialAccent} 88deg, ${dialAccent} 92deg,
+                    transparent 92deg,
+                    transparent 178deg, ${dialAccent} 178deg, ${dialAccent} 182deg,
+                    transparent 182deg,
+                    transparent 268deg, ${dialAccent} 268deg, ${dialAccent} 272deg,
+                    transparent 272deg, transparent 360deg)`,
+                WebkitMask: "radial-gradient(circle, transparent 56%, black 57%, black 64%, transparent 65%)",
+                mask: "radial-gradient(circle, transparent 56%, black 57%, black 64%, transparent 65%)",
+                opacity: 0.55,
+              }}
+            />
+
+            {/* Rotating arrow */}
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute inset-0 h-full w-full"
+              style={{
+                transform: `rotate(${arrowAngle}deg)`,
+                transformOrigin: "50% 50%",
+                transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+              aria-hidden
             >
-              Select<br />Your<br />Task
-            </span>
+              {/* Arrow shaft */}
+              <line
+                x1="50"
+                y1="50"
+                x2="50"
+                y2="18"
+                stroke={dialAccent}
+                strokeWidth="5"
+                strokeLinecap="round"
+              />
+              {/* Arrow head */}
+              <path
+                d="M 50 10 L 42 24 L 58 24 Z"
+                fill={dialAccent}
+                stroke={dialAccent}
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              {/* Counterweight (small dot opposite head) */}
+              <circle cx="50" cy="68" r="4" fill={dialAccent} opacity="0.6" />
+            </svg>
+
+            {/* Center hub */}
+            <div
+              className="relative h-3.5 w-3.5 rounded-full border-2 bg-white sm:h-4 sm:w-4"
+              style={{ borderColor: dialAccent }}
+            />
           </div>
+
+          {/* Label below dial — only when nothing selected */}
+          {noSelection && (
+            <span
+              className={`mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
+            >
+              Select Task
+            </span>
+          )}
         </div>
-      )}
+
+        {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
+      </div>
     </div>
   );
 }
