@@ -152,72 +152,97 @@ const features: Feature[] = [
   },
 ];
 
-// Per-tone color sets for tinted cards & gradient numbers
+// Per-tone color sets for tinted cards, gradient numbers, and glossy 3D icon
 const tones: Record<
   Feature["tone"],
   {
     bg: string;
-    border: string;
+    border: string; // 2px solid tone-colored border
     arrowBg: string;
     arrowText: string;
     numberGradient: string;
+    // Glossy 3D icon — gradient stops + drop shadow color
+    iconStart: string; // light tone (top of icon)
+    iconEnd: string; // deep tone (bottom of icon)
+    iconShadow: string; // soft tone-colored shadow under the icon disc
   }
 > = {
   blue: {
     bg: "bg-[oklch(0.96_0.04_255)]",
-    border: "border-[oklch(0.62_0.16_255)]/20",
+    border: "border-[2px] border-[oklch(0.62_0.16_255)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.16_255)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.45_0.18_260)_0%,oklch(0.62_0.18_245)_100%)]",
+    iconStart: "oklch(0.78 0.13 250)",
+    iconEnd: "oklch(0.45 0.18 260)",
+    iconShadow: "oklch(0.45 0.18 260 / 0.35)",
   },
   sage: {
     bg: "bg-[oklch(0.94_0.05_160)]",
-    border: "border-[oklch(0.55_0.10_160)]/20",
+    border: "border-[2px] border-[oklch(0.55_0.10_160)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.10_160)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.38_0.10_160)_0%,oklch(0.58_0.13_155)_100%)]",
+    iconStart: "oklch(0.78 0.10 160)",
+    iconEnd: "oklch(0.42 0.10 160)",
+    iconShadow: "oklch(0.42 0.10 160 / 0.32)",
   },
   peach: {
     bg: "bg-[oklch(0.94_0.055_55)]",
-    border: "border-[oklch(0.65_0.12_50)]/22",
+    border: "border-[2px] border-[oklch(0.65_0.12_50)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.12_45)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.42_0.12_40)_0%,oklch(0.6_0.14_55)_100%)]",
+    iconStart: "oklch(0.82 0.10 60)",
+    iconEnd: "oklch(0.5 0.14 45)",
+    iconShadow: "oklch(0.5 0.14 45 / 0.32)",
   },
   lilac: {
     bg: "bg-[oklch(0.94_0.055_295)]",
-    border: "border-[oklch(0.6_0.12_295)]/22",
+    border: "border-[2px] border-[oklch(0.6_0.12_295)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.12_295)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.4_0.13_295)_0%,oklch(0.58_0.15_290)_100%)]",
+    iconStart: "oklch(0.8 0.11 295)",
+    iconEnd: "oklch(0.45 0.14 295)",
+    iconShadow: "oklch(0.45 0.14 295 / 0.32)",
   },
   mint: {
     bg: "bg-[oklch(0.94_0.05_185)]",
-    border: "border-[oklch(0.6_0.10_185)]/22",
+    border: "border-[2px] border-[oklch(0.6_0.10_185)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.1_185)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.38_0.10_185)_0%,oklch(0.55_0.12_180)_100%)]",
+    iconStart: "oklch(0.8 0.10 185)",
+    iconEnd: "oklch(0.42 0.11 185)",
+    iconShadow: "oklch(0.42 0.11 185 / 0.32)",
   },
   rose: {
     bg: "bg-[oklch(0.95_0.045_15)]",
-    border: "border-[oklch(0.62_0.14_15)]/22",
+    border: "border-[2px] border-[oklch(0.62_0.14_15)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.14_15)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.42_0.16_10)_0%,oklch(0.6_0.18_20)_100%)]",
+    iconStart: "oklch(0.82 0.13 15)",
+    iconEnd: "oklch(0.5 0.18 12)",
+    iconShadow: "oklch(0.5 0.18 12 / 0.32)",
   },
   kraft: {
     bg: "bg-[oklch(0.92_0.04_75)]",
-    border: "border-[oklch(0.55_0.07_70)]/22",
+    border: "border-[2px] border-[oklch(0.55_0.07_70)]/40",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.07_70)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.35_0.06_70)_0%,oklch(0.55_0.09_70)_100%)]",
+    iconStart: "oklch(0.78 0.07 75)",
+    iconEnd: "oklch(0.42 0.08 70)",
+    iconShadow: "oklch(0.42 0.08 70 / 0.32)",
   },
 };
 
