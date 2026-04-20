@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useState, type ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   GraduationCap,
   ArrowUpRight,
   CheckCircle2,
+  PenLine,
+  Mic,
+  BookOpen,
+  FileText,
+  Sparkles,
+  AlertTriangle,
+  CalendarDays,
+  type LucideProps,
 } from "lucide-react";
 
 type Module = "academic" | "general";
@@ -39,6 +47,8 @@ type Feature = {
   };
   // tone for the card tint (independent of module accent)
   tone: "blue" | "sage" | "lilac" | "peach" | "mint" | "kraft" | "rose";
+  // Lucide icon used for the glossy 3D mark in the corner
+  icon: ComponentType<LucideProps>;
 };
 
 const features: Feature[] = [
@@ -54,6 +64,7 @@ const features: Feature[] = [
       general: { value: "180+", label: "model letters & essays" },
     },
     tone: "blue",
+    icon: PenLine,
   },
   {
     key: "speaking",
@@ -67,6 +78,7 @@ const features: Feature[] = [
       general: { value: "260+", label: "recorded answers" },
     },
     tone: "peach",
+    icon: Mic,
   },
   {
     key: "vocab",
@@ -80,6 +92,7 @@ const features: Feature[] = [
       general: { value: "1,200+", label: "everyday words" },
     },
     tone: "sage",
+    icon: BookOpen,
   },
   {
     key: "templates",
@@ -93,6 +106,7 @@ const features: Feature[] = [
       general: { value: "45+", label: "ready templates" },
     },
     tone: "lilac",
+    icon: FileText,
   },
   {
     key: "predictions",
@@ -106,6 +120,7 @@ const features: Feature[] = [
       general: { value: "Weekly", label: "fresh predictions" },
     },
     tone: "rose",
+    icon: Sparkles,
   },
   {
     key: "mistakes",
@@ -119,6 +134,7 @@ const features: Feature[] = [
       general: { value: "90+", label: "error patterns" },
     },
     tone: "mint",
+    icon: AlertTriangle,
   },
   {
     key: "plan",
@@ -132,75 +148,101 @@ const features: Feature[] = [
       general: { value: "4–8", label: "week roadmaps" },
     },
     tone: "kraft",
+    icon: CalendarDays,
   },
 ];
 
-// Per-tone color sets for tinted cards & gradient numbers
+// Per-tone color sets for tinted cards, gradient numbers, and glossy 3D icon
 const tones: Record<
   Feature["tone"],
   {
     bg: string;
-    border: string;
+    border: string; // 2px solid tone-colored border
     arrowBg: string;
     arrowText: string;
     numberGradient: string;
+    // Glossy 3D icon — gradient stops + drop shadow color
+    iconStart: string; // light tone (top of icon)
+    iconEnd: string; // deep tone (bottom of icon)
+    iconShadow: string; // soft tone-colored shadow under the icon disc
   }
 > = {
   blue: {
     bg: "bg-[oklch(0.96_0.04_255)]",
-    border: "border-[oklch(0.62_0.16_255)]/20",
+    border: "border-[2px] border-[oklch(0.62_0.16_255)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.16_255)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.45_0.18_260)_0%,oklch(0.62_0.18_245)_100%)]",
+    iconStart: "oklch(0.78 0.13 250)",
+    iconEnd: "oklch(0.45 0.18 260)",
+    iconShadow: "oklch(0.45 0.18 260 / 0.35)",
   },
   sage: {
     bg: "bg-[oklch(0.94_0.05_160)]",
-    border: "border-[oklch(0.55_0.10_160)]/20",
+    border: "border-[2px] border-[oklch(0.55_0.10_160)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.10_160)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.38_0.10_160)_0%,oklch(0.58_0.13_155)_100%)]",
+    iconStart: "oklch(0.78 0.10 160)",
+    iconEnd: "oklch(0.42 0.10 160)",
+    iconShadow: "oklch(0.42 0.10 160 / 0.32)",
   },
   peach: {
     bg: "bg-[oklch(0.94_0.055_55)]",
-    border: "border-[oklch(0.65_0.12_50)]/22",
+    border: "border-[2px] border-[oklch(0.65_0.12_50)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.12_45)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.42_0.12_40)_0%,oklch(0.6_0.14_55)_100%)]",
+    iconStart: "oklch(0.82 0.10 60)",
+    iconEnd: "oklch(0.5 0.14 45)",
+    iconShadow: "oklch(0.5 0.14 45 / 0.32)",
   },
   lilac: {
     bg: "bg-[oklch(0.94_0.055_295)]",
-    border: "border-[oklch(0.6_0.12_295)]/22",
+    border: "border-[2px] border-[oklch(0.6_0.12_295)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.12_295)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.4_0.13_295)_0%,oklch(0.58_0.15_290)_100%)]",
+    iconStart: "oklch(0.8 0.11 295)",
+    iconEnd: "oklch(0.45 0.14 295)",
+    iconShadow: "oklch(0.45 0.14 295 / 0.32)",
   },
   mint: {
     bg: "bg-[oklch(0.94_0.05_185)]",
-    border: "border-[oklch(0.6_0.10_185)]/22",
+    border: "border-[2px] border-[oklch(0.6_0.10_185)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.1_185)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.38_0.10_185)_0%,oklch(0.55_0.12_180)_100%)]",
+    iconStart: "oklch(0.8 0.10 185)",
+    iconEnd: "oklch(0.42 0.11 185)",
+    iconShadow: "oklch(0.42 0.11 185 / 0.32)",
   },
   rose: {
     bg: "bg-[oklch(0.95_0.045_15)]",
-    border: "border-[oklch(0.62_0.14_15)]/22",
+    border: "border-[2px] border-[oklch(0.62_0.14_15)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.14_15)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.42_0.16_10)_0%,oklch(0.6_0.18_20)_100%)]",
+    iconStart: "oklch(0.82 0.13 15)",
+    iconEnd: "oklch(0.5 0.18 12)",
+    iconShadow: "oklch(0.5 0.18 12 / 0.32)",
   },
   kraft: {
     bg: "bg-[oklch(0.92_0.04_75)]",
-    border: "border-[oklch(0.55_0.07_70)]/22",
+    border: "border-[2px] border-[oklch(0.55_0.07_70)]/40",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.07_70)]",
     numberGradient:
       "bg-[linear-gradient(135deg,oklch(0.35_0.06_70)_0%,oklch(0.55_0.09_70)_100%)]",
+    iconStart: "oklch(0.78 0.07 75)",
+    iconEnd: "oklch(0.42 0.08 70)",
+    iconShadow: "oklch(0.42 0.08 70 / 0.32)",
   },
 };
 
@@ -367,34 +409,38 @@ function FeatureCard({
 }) {
   const tone = tones[feature.tone];
   const { value, label } = feature.count[module];
+  const Icon = feature.icon;
+  const gradId = `grad-${feature.key}`;
 
   return (
     <button
       type="button"
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`}
     >
       {/* subtle paper grain */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-50 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.3_0.05_60_/_0.05)_1px,transparent_1px)] [background-size:3px_3px]"
       />
-      {/* top edge highlight */}
+      {/* glossy top-edge highlight */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"
       />
 
-      {/* Top row: arrow only */}
-      <div className="relative flex w-full items-start justify-end">
+      {/* Top row: small arrow on the LEFT, glossy 3D icon on the RIGHT */}
+      <div className="relative flex w-full items-start justify-between">
         <span
           className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
         >
           <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
         </span>
+
+        <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
 
       {/* Oversized gradient number — the hero of the card */}
-      <div className="relative mt-1 flex items-baseline gap-2">
+      <div className="relative mt-5 flex items-baseline gap-2">
         <span
           className={`bg-clip-text font-display text-[56px] font-extrabold leading-none tracking-tight text-transparent sm:text-[64px] ${tone.numberGradient}`}
         >
@@ -413,5 +459,73 @@ function FeatureCard({
         {feature.description[module]}
       </p>
     </button>
+  );
+}
+
+/**
+ * Glossy 3D icon — Apple visionOS style.
+ * Rounded-square disc with diagonal gradient + glass highlight + soft shadow.
+ */
+function Glossy3DIcon({
+  Icon,
+  tone,
+  gradId,
+}: {
+  Icon: ComponentType<LucideProps>;
+  tone: (typeof tones)[Feature["tone"]];
+  gradId: string;
+}) {
+  return (
+    <div
+      className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
+      style={{
+        filter: `drop-shadow(0 10px 18px ${tone.iconShadow}) drop-shadow(0 2px 4px ${tone.iconShadow})`,
+      }}
+    >
+      <svg
+        viewBox="0 0 64 64"
+        className="absolute inset-0 h-full w-full"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={tone.iconStart} />
+            <stop offset="100%" stopColor={tone.iconEnd} />
+          </linearGradient>
+          <radialGradient id={`${gradId}-gloss`} cx="30%" cy="20%" r="60%">
+            <stop offset="0%" stopColor="white" stopOpacity="0.9" />
+            <stop offset="60%" stopColor="white" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect x="2" y="2" width="60" height="60" rx="18" fill={`url(#${gradId})`} />
+        <rect
+          x="2"
+          y="2"
+          width="60"
+          height="60"
+          rx="18"
+          fill={`url(#${gradId}-gloss)`}
+        />
+        <rect
+          x="2.5"
+          y="2.5"
+          width="59"
+          height="59"
+          rx="17.5"
+          fill="none"
+          stroke="white"
+          strokeOpacity="0.4"
+          strokeWidth="1"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Icon
+          className="h-6 w-6 text-white sm:h-7 sm:w-7"
+          strokeWidth={2.4}
+          style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.25))" }}
+        />
+      </div>
+    </div>
   );
 }
