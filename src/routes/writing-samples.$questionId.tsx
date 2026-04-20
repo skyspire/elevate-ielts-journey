@@ -6,6 +6,8 @@ import {
   BookOpen,
   Bookmark,
   BookmarkCheck,
+  Check,
+  CheckCircle2,
   Clock,
   FileText,
   GraduationCap,
@@ -14,8 +16,10 @@ import {
   Hash,
   ListOrdered,
   Lightbulb,
+  Link2,
   PenLine,
   MessageSquare,
+  Share2,
   Trash2,
   Send,
 } from "lucide-react";
@@ -26,9 +30,16 @@ import {
   addComment,
   deleteComment,
   getComments,
+  getDifficultyTally,
+  getMyDifficultyVote,
   isBookmarked,
+  isStudied,
+  setDifficultyVote,
   toggleBookmark,
+  toggleStudied,
   type Comment,
+  type DifficultyTally,
+  type DifficultyVote,
 } from "@/lib/engagement-storage";
 import { Footer } from "@/components/site/Footer";
 
