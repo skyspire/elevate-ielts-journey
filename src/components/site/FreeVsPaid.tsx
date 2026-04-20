@@ -1,7 +1,8 @@
-import { Check, Minus, Star } from "lucide-react";
+import { Check, Minus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const freeIncludes = [
-  "Sign up required to view any sample",
+  "Sign up required to view samples",
   "5 Writing sample answers (lifetime)",
   "5 Speaking sample answers (lifetime)",
   "Browse questions & topics",
@@ -17,372 +18,207 @@ const freeLimits = [
 const paidIncludes = [
   "Unlimited Writing & Speaking samples",
   "Hundreds of Writing & Speaking templates",
-  "Full vocabulary builder — words, phrases, expressions",
+  "Full vocabulary builder",
   "Prediction questions for upcoming exams",
   "Topic-wise organized practice sets",
   "All learning resources & survival kits",
   "New questions added every month",
 ];
 
-// Ivory + deep navy + burgundy palette
-const NAVY = "oklch(0.28 0.04 260)";
-const NAVY_SOFT = "oklch(0.42 0.04 260)";
-const BURGUNDY = "oklch(0.42 0.13 20)";
-const IVORY = "oklch(0.985 0.008 85)";
-const IVORY_DEEP = "oklch(0.96 0.012 80)";
-const HAIRLINE = "oklch(0.85 0.015 80)";
-
 const plans = [
-  {
-    duration: "15 Days",
-    price: "$7",
-    sub: "CAD",
-    tag: null as string | null,
-  },
-  {
-    duration: "1 Month",
-    price: "$12",
-    sub: "CAD",
-    tag: "Most Popular",
-  },
-  {
-    duration: "3 Months",
-    price: "$29",
-    sub: "CAD",
-    tag: "Best Value",
-  },
+  { name: "Weekly", price: "7", period: "15-day access", popular: false },
+  { name: "Monthly", price: "12", period: "30-day access", popular: true },
+  { name: "3-Month", price: "29", period: "90-day access", popular: false },
 ];
 
 export function FreeVsPaid() {
   return (
-    <section
-      className="relative overflow-hidden py-20 sm:py-28"
-      style={{ background: IVORY }}
-    >
-      {/* One subtle detail: faint ruled-paper baseline grid, very low opacity */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: `repeating-linear-gradient(0deg, transparent 0 39px, ${NAVY} 39px 40px)`,
-        }}
-      />
-
-      <div className="container-page relative">
-        {/* Eyebrow */}
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2">
-            <span
-              className="h-px w-8"
-              style={{ background: NAVY, opacity: 0.4 }}
-            />
-            <span
-              className="text-[11px] font-semibold uppercase tracking-[0.28em]"
-              style={{ color: NAVY_SOFT }}
-            >
-              Plans & Access
-            </span>
-            <span
-              className="h-px w-8"
-              style={{ background: NAVY, opacity: 0.4 }}
-            />
+    <section className="relative bg-paper-cream py-20 sm:py-28">
+      <div className="container-page">
+        {/* Header */}
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-semibold tracking-wide text-foreground/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+            Free vs Full Access
           </div>
-
-          <h2
-            className="mt-5 font-display text-3xl font-semibold tracking-tight sm:text-5xl"
-            style={{ color: NAVY }}
-          >
-            Free to start.{" "}
-            <span style={{ color: BURGUNDY, fontStyle: "italic" }}>
-              Built for Band 8+.
-            </span>
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+            Start free. Unlock everything when you're ready.
           </h2>
-          <p
-            className="mx-auto mt-4 max-w-xl text-base leading-relaxed"
-            style={{ color: NAVY_SOFT }}
-          >
-            A limited free tier to explore the platform, and a complete
-            subscription for serious preparation.
+          <p className="mt-4 text-base font-medium text-foreground/65 sm:text-lg">
+            A limited free tier to explore the platform — and one subscription
+            that opens the entire library.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="mx-auto mt-14 grid max-w-6xl gap-6 lg:grid-cols-[1fr_1.25fr] lg:gap-8">
+        {/* Two cards */}
+        <div className="mx-auto mt-14 grid max-w-6xl gap-5 lg:grid-cols-[1fr_1.3fr] lg:gap-6">
           {/* ============ FREE ============ */}
-          <article
-            className="relative flex flex-col rounded-2xl p-8 sm:p-10"
-            style={{
-              background: IVORY_DEEP,
-              border: `1px solid ${HAIRLINE}`,
-            }}
-          >
+          <article className="relative flex flex-col rounded-3xl border border-foreground/10 bg-white p-7 sm:p-9">
             <div className="flex items-center justify-between">
-              <span
-                className="text-[11px] font-semibold uppercase tracking-[0.22em]"
-                style={{ color: NAVY_SOFT }}
-              >
+              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
                 Free Tier
               </span>
-              <span
-                className="rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest"
-                style={{
-                  color: NAVY_SOFT,
-                  border: `1px solid ${HAIRLINE}`,
-                }}
-              >
+              <span className="rounded-full border border-foreground/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-foreground/55">
                 Sign up required
               </span>
             </div>
 
-            <h3
-              className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-3xl"
-              style={{ color: NAVY }}
-            >
+            <h3 className="mt-6 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
               Explore the basics
             </h3>
-            <p
-              className="mt-2 text-sm leading-relaxed"
-              style={{ color: NAVY_SOFT }}
-            >
+            <p className="mt-2 text-sm font-medium leading-relaxed text-muted-foreground">
               A taste of the platform. Limited samples, no recurring access.
             </p>
 
-            <div className="mt-7 flex items-baseline gap-2">
-              <span
-                className="font-display text-5xl font-semibold tracking-tight"
-                style={{ color: NAVY }}
-              >
+            <div className="mt-7 flex items-baseline gap-1.5">
+              <span className="font-display text-5xl font-extrabold tracking-tight text-foreground">
                 $0
               </span>
-              <span
-                className="text-sm font-medium"
-                style={{ color: NAVY_SOFT }}
-              >
+              <span className="text-sm font-bold text-muted-foreground">
                 / forever
               </span>
             </div>
 
-            <div
-              className="mt-7 h-px w-full"
-              style={{ background: HAIRLINE }}
-            />
+            <div className="mt-7 h-px w-full bg-foreground/8" />
 
-            <p
-              className="mt-6 text-[11px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: NAVY_SOFT }}
-            >
+            <p className="mt-6 font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
               Included
             </p>
             <ul className="mt-4 space-y-3">
               {freeIncludes.map((f) => (
                 <li
                   key={f}
-                  className="flex items-start gap-3 text-[15px] leading-relaxed"
-                  style={{ color: NAVY }}
+                  className="flex items-start gap-2.5 text-[15px] font-medium text-foreground/85"
                 >
-                  <Check
-                    className="mt-1 h-4 w-4 shrink-0"
-                    strokeWidth={2.5}
-                    style={{ color: NAVY }}
-                  />
-                  <span>{f}</span>
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-foreground/5 text-foreground/70">
+                    <Check className="h-3 w-3" strokeWidth={3} />
+                  </span>
+                  {f}
                 </li>
               ))}
             </ul>
 
-            <p
-              className="mt-7 text-[11px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: NAVY_SOFT }}
-            >
+            <p className="mt-7 font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
               Not included
             </p>
             <ul className="mt-4 space-y-2.5">
               {freeLimits.map((f) => (
                 <li
                   key={f}
-                  className="flex items-start gap-3 text-sm leading-relaxed"
-                  style={{ color: NAVY_SOFT, opacity: 0.75 }}
+                  className="flex items-start gap-2.5 text-sm font-medium text-foreground/55"
                 >
                   <Minus
-                    className="mt-1 h-4 w-4 shrink-0"
-                    strokeWidth={2.5}
+                    className="mt-1 h-3.5 w-3.5 shrink-0 text-foreground/35"
+                    strokeWidth={3}
                   />
-                  <span>{f}</span>
+                  {f}
                 </li>
               ))}
             </ul>
 
-            <button
-              className="mt-9 h-11 rounded-md text-sm font-semibold tracking-wide transition-colors hover:opacity-90"
-              style={{
-                color: NAVY,
-                border: `1px solid ${NAVY}`,
-                background: "transparent",
-              }}
+            <Button
+              variant="outline"
+              className="mt-9 h-11 rounded-full border-foreground/15 bg-white font-bold hover:bg-secondary"
             >
               Sign up free
-            </button>
+            </Button>
           </article>
 
           {/* ============ PAID ============ */}
-          <article
-            className="relative flex flex-col overflow-hidden rounded-2xl p-8 sm:p-10"
-            style={{
-              background: NAVY,
-              color: IVORY,
-              boxShadow:
-                "0 30px 60px -30px oklch(0.28 0.04 260 / 0.45), 0 8px 20px -10px oklch(0.28 0.04 260 / 0.3)",
-            }}
-          >
-            {/* subtle inner top hairline accent */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-px"
-              style={{
-                background: `linear-gradient(90deg, transparent, ${BURGUNDY}, transparent)`,
-                opacity: 0.6,
-              }}
-            />
+          <article className="relative flex flex-col rounded-3xl border-transparent bg-card p-7 shadow-card ring-2 ring-brand sm:p-9">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-foreground shadow-soft">
+              Most popular
+            </span>
 
             <div className="flex items-center justify-between">
-              <span
-                className="text-[11px] font-semibold uppercase tracking-[0.22em]"
-                style={{ color: IVORY, opacity: 0.7 }}
-              >
+              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-brand">
                 Full Access
               </span>
-              <span
-                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest"
-                style={{
-                  color: IVORY,
-                  background: BURGUNDY,
-                }}
-              >
-                <Star className="h-3 w-3 fill-current" />
-                Recommended
+              <span className="rounded-full border border-brand/25 bg-brand-soft px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-brand">
+                One sub · everything
               </span>
             </div>
 
-            <h3
-              className="mt-6 font-display text-2xl font-semibold tracking-tight sm:text-[2rem] sm:leading-[1.15]"
-              style={{ color: IVORY }}
-            >
-              Unlimited access.{" "}
-              <span style={{ color: "oklch(0.85 0.08 25)", fontStyle: "italic" }}>
-                The complete library.
-              </span>
+            <h3 className="mt-6 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              Unlimited access to the complete library
             </h3>
-            <p
-              className="mt-3 text-sm leading-relaxed sm:text-base"
-              style={{ color: IVORY, opacity: 0.72 }}
-            >
-              One subscription unlocks every sample, template, vocabulary set,
-              prediction, and resource we publish.
+            <p className="mt-2 text-sm font-medium leading-relaxed text-muted-foreground sm:text-base">
+              Every sample, template, vocabulary set, prediction, and resource
+              we publish — under a single subscription.
             </p>
 
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-x-6">
+            <ul className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-x-6">
               {paidIncludes.map((f) => (
                 <li
                   key={f}
-                  className="flex items-start gap-3 text-[14.5px] leading-relaxed"
-                  style={{ color: IVORY, opacity: 0.95 }}
+                  className="flex items-start gap-2.5 text-[14.5px] font-semibold text-foreground"
                 >
-                  <Check
-                    className="mt-1 h-4 w-4 shrink-0"
-                    strokeWidth={2.5}
-                    style={{ color: "oklch(0.85 0.08 25)" }}
-                  />
-                  <span>{f}</span>
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+                    <Check className="h-3 w-3" strokeWidth={3} />
+                  </span>
+                  {f}
                 </li>
               ))}
             </ul>
 
             {/* Plans */}
-            <div
-              className="mt-10 pt-8"
-              style={{ borderTop: `1px solid oklch(1 0 0 / 0.12)` }}
-            >
+            <div className="mt-9 border-t border-foreground/8 pt-7">
               <div className="flex items-baseline justify-between gap-4">
-                <p
-                  className="font-display text-base font-semibold tracking-tight sm:text-lg"
-                  style={{ color: IVORY }}
-                >
-                  Choose your plan
+                <p className="font-display text-base font-extrabold tracking-tight text-foreground sm:text-lg">
+                  Pick your plan
                 </p>
-                <p
-                  className="text-[11px] font-medium uppercase tracking-[0.18em]"
-                  style={{ color: IVORY, opacity: 0.55 }}
-                >
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Cancel anytime
                 </p>
               </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                {plans.map((p, i) => {
-                  const isPopular = i === 1;
+              <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                {plans.map((p) => {
+                  const popular = p.popular;
                   return (
-                    <button
-                      key={p.duration}
-                      className="group/plan relative flex flex-col items-start rounded-xl p-4 text-left transition-all duration-200 hover:-translate-y-0.5"
-                      style={{
-                        background: isPopular
-                          ? "oklch(1 0 0 / 0.08)"
-                          : "oklch(1 0 0 / 0.03)",
-                        border: isPopular
-                          ? `1px solid ${BURGUNDY}`
-                          : `1px solid oklch(1 0 0 / 0.1)`,
-                      }}
+                    <div
+                      key={p.name}
+                      className={`relative flex flex-col rounded-2xl border p-5 transition-all ${
+                        popular
+                          ? "border-transparent bg-brand-soft/40 ring-1 ring-brand"
+                          : "border-foreground/10 bg-white hover:-translate-y-0.5 hover:shadow-soft"
+                      }`}
                     >
-                      {p.tag && (
-                        <span
-                          className="absolute -top-2.5 left-4 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-widest"
-                          style={{
-                            background: isPopular ? BURGUNDY : IVORY,
-                            color: isPopular ? IVORY : NAVY,
-                          }}
-                        >
-                          {p.tag}
+                      {popular && (
+                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-brand px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-brand-foreground shadow-soft">
+                          Recommended
                         </span>
                       )}
-                      <span
-                        className="text-[10px] font-semibold uppercase tracking-[0.2em]"
-                        style={{ color: IVORY, opacity: 0.6 }}
-                      >
-                        {p.duration}
-                      </span>
+                      <h4 className="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
+                        {p.name}
+                      </h4>
                       <div className="mt-2 flex items-baseline gap-1">
-                        <span
-                          className="font-display text-2xl font-semibold tracking-tight"
-                          style={{ color: IVORY }}
-                        >
+                        <span className="font-display text-3xl font-extrabold tracking-tight text-foreground">
                           {p.price}
                         </span>
-                        <span
-                          className="text-[11px] font-medium"
-                          style={{ color: IVORY, opacity: 0.55 }}
-                        >
-                          {p.sub}
+                        <span className="text-xs font-bold text-muted-foreground">
+                          CAD
                         </span>
                       </div>
-                    </button>
+                      <p className="mt-0.5 text-xs font-semibold text-muted-foreground">
+                        {p.period}
+                      </p>
+                      <Button
+                        size="sm"
+                        className={`mt-4 h-9 rounded-full text-xs font-bold ${
+                          popular
+                            ? "bg-brand text-brand-foreground hover:bg-brand/90"
+                            : "bg-foreground text-background hover:bg-foreground/90"
+                        }`}
+                      >
+                        Choose {p.name}
+                      </Button>
+                    </div>
                   );
                 })}
               </div>
 
-              <button
-                className="mt-6 h-11 w-full rounded-md text-sm font-semibold tracking-wide transition-opacity hover:opacity-90"
-                style={{
-                  background: IVORY,
-                  color: NAVY,
-                }}
-              >
-                Continue with selected plan
-              </button>
-
-              <p
-                className="mt-4 text-center text-[11px] font-medium uppercase tracking-[0.18em]"
-                style={{ color: IVORY, opacity: 0.5 }}
-              >
+              <p className="mt-5 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Instant access · One account, all devices
               </p>
             </div>
