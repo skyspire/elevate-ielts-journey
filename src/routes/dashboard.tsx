@@ -169,7 +169,7 @@ const tones: Record<
 > = {
   blue: {
     bg: "bg-[oklch(0.96_0.04_255)]",
-    border: "border-[2px] border-[oklch(0.62_0.16_255)]/35",
+    border: "border border-[oklch(0.62_0.16_255)]/20 ring-2 ring-inset ring-[oklch(0.62_0.16_255)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.16_255)]",
     numberGradient:
@@ -180,7 +180,7 @@ const tones: Record<
   },
   sage: {
     bg: "bg-[oklch(0.94_0.05_160)]",
-    border: "border-[2px] border-[oklch(0.55_0.10_160)]/35",
+    border: "border border-[oklch(0.55_0.10_160)]/20 ring-2 ring-inset ring-[oklch(0.55_0.10_160)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.10_160)]",
     numberGradient:
@@ -191,7 +191,7 @@ const tones: Record<
   },
   peach: {
     bg: "bg-[oklch(0.94_0.055_55)]",
-    border: "border-[2px] border-[oklch(0.65_0.12_50)]/35",
+    border: "border border-[oklch(0.65_0.12_50)]/20 ring-2 ring-inset ring-[oklch(0.65_0.12_50)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.12_45)]",
     numberGradient:
@@ -202,7 +202,7 @@ const tones: Record<
   },
   lilac: {
     bg: "bg-[oklch(0.94_0.055_295)]",
-    border: "border-[2px] border-[oklch(0.6_0.12_295)]/35",
+    border: "border border-[oklch(0.6_0.12_295)]/20 ring-2 ring-inset ring-[oklch(0.6_0.12_295)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.42_0.12_295)]",
     numberGradient:
@@ -213,7 +213,7 @@ const tones: Record<
   },
   mint: {
     bg: "bg-[oklch(0.94_0.05_185)]",
-    border: "border-[2px] border-[oklch(0.6_0.10_185)]/35",
+    border: "border border-[oklch(0.6_0.10_185)]/20 ring-2 ring-inset ring-[oklch(0.6_0.10_185)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.1_185)]",
     numberGradient:
@@ -224,7 +224,7 @@ const tones: Record<
   },
   rose: {
     bg: "bg-[oklch(0.95_0.045_15)]",
-    border: "border-[2px] border-[oklch(0.62_0.14_15)]/35",
+    border: "border border-[oklch(0.62_0.14_15)]/20 ring-2 ring-inset ring-[oklch(0.62_0.14_15)]/30",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.45_0.14_15)]",
     numberGradient:
@@ -235,7 +235,7 @@ const tones: Record<
   },
   kraft: {
     bg: "bg-[oklch(0.92_0.04_75)]",
-    border: "border-[2px] border-[oklch(0.55_0.07_70)]/40",
+    border: "border border-[oklch(0.55_0.07_70)]/25 ring-2 ring-inset ring-[oklch(0.55_0.07_70)]/35",
     arrowBg: "bg-white",
     arrowText: "text-[oklch(0.4_0.07_70)]",
     numberGradient:
