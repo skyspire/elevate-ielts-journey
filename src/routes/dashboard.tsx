@@ -394,27 +394,176 @@ function ModuleToggle({
   module: Module;
   setModule: (m: Module) => void;
 }) {
+  const isAcademic = module === "academic";
+
   return (
-    <div className="inline-flex items-center rounded-full border border-foreground/10 bg-white p-1.5 shadow-soft">
-      {[
-        { id: "academic" as const, label: "Academic", accent: blue },
-        { id: "general" as const, label: "General", accent: sage },
-      ].map((opt) => {
-        const active = module === opt.id;
-        return (
-          <button
-            key={opt.id}
-            type="button"
-            onClick={() => setModule(opt.id)}
-            aria-pressed={active}
-            className={`relative rounded-full px-6 py-2.5 text-sm font-bold tracking-tight transition-all sm:px-8 ${
-              active ? opt.accent.toggleActive : "text-foreground/55 hover:text-foreground"
-            }`}
+    <div className="relative flex items-center justify-center gap-3 sm:gap-6">
+      {/* Academic label (left) */}
+      <button
+        type="button"
+        onClick={() => setModule("academic")}
+        aria-pressed={isAcademic}
+        className={`group transition-all duration-300 ${
+          isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+        }`}
+      >
+        <span
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
+            isAcademic ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          Academic
+        </span>
+      </button>
+
+      {/* The Owl — head turns to choose module */}
+      <div className="relative flex shrink-0 items-end justify-center">
+        <svg
+          viewBox="0 0 200 220"
+          className="h-44 w-44 sm:h-56 sm:w-56"
+          aria-label="Wise owl mascot"
+        >
+          {/* Branch */}
+          <path
+            d="M 20 200 Q 100 195 180 200"
+            stroke="oklch(0.45 0.06 60)"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M 60 198 q -4 -8 -10 -10 M 140 198 q 4 -8 10 -10"
+            stroke="oklch(0.45 0.06 60)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+          />
+
+          {/* Body */}
+          <ellipse
+            cx="100"
+            cy="150"
+            rx="48"
+            ry="46"
+            fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+            className="transition-colors duration-500"
+          />
+          {/* Belly */}
+          <ellipse cx="100" cy="158" rx="30" ry="32" fill="oklch(0.96 0.02 80)" />
+          {/* Wings */}
+          <path
+            d="M 60 145 Q 50 175 70 188 Q 75 170 78 150 Z"
+            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            className="transition-colors duration-500"
+          />
+          <path
+            d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
+            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            className="transition-colors duration-500"
+          />
+          {/* Feet */}
+          <path
+            d="M 88 196 v 6 m -4 -3 h 8 M 112 196 v 6 m -4 -3 h 8"
+            stroke="oklch(0.55 0.14 60)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            fill="none"
+          />
+
+          {/* HEAD GROUP — rotates */}
+          <g
+            style={{
+              transformOrigin: "100px 100px",
+              transform: isAcademic ? "rotate(-22deg)" : "rotate(22deg)",
+              transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
           >
-            {opt.label}
-          </button>
-        );
-      })}
+            {/* Head */}
+            <circle
+              cx="100"
+              cy="92"
+              r="48"
+              fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+              className="transition-colors duration-500"
+            />
+            {/* Ear tufts */}
+            <path
+              d="M 64 58 l 8 -18 l 12 14 Z M 136 58 l -8 -18 l -12 14 Z"
+              fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+              className="transition-colors duration-500"
+            />
+
+            {/* Glasses frame */}
+            <circle cx="82" cy="92" r="18" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+            <circle cx="118" cy="92" r="18" fill="oklch(0.99 0 0)" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+            <line x1="100" y1="92" x2="100" y2="92" stroke="oklch(0.20 0.02 250)" strokeWidth="3.5" />
+
+            {/* Eyes (pupils shift to side based on selection) */}
+            <circle
+              cx={isAcademic ? "76" : "88"}
+              cy="92"
+              r="5"
+              fill="oklch(0.18 0.02 250)"
+              style={{ transition: "cx 500ms ease" }}
+            />
+            <circle
+              cx={isAcademic ? "112" : "124"}
+              cy="92"
+              r="5"
+              fill="oklch(0.18 0.02 250)"
+              style={{ transition: "cx 500ms ease" }}
+            />
+            {/* Eye shine */}
+            <circle
+              cx={isAcademic ? "78" : "90"}
+              cy="90"
+              r="1.5"
+              fill="white"
+              style={{ transition: "cx 500ms ease" }}
+            />
+            <circle
+              cx={isAcademic ? "114" : "126"}
+              cy="90"
+              r="1.5"
+              fill="white"
+              style={{ transition: "cx 500ms ease" }}
+            />
+
+            {/* Beak */}
+            <path
+              d="M 92 112 L 100 124 L 108 112 Z"
+              fill="oklch(0.70 0.16 60)"
+              stroke="oklch(0.45 0.14 60)"
+              strokeWidth="1.5"
+            />
+          </g>
+        </svg>
+
+        {/* BigIELTS.com brand chip below */}
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-foreground/15 bg-white px-3 py-1 shadow-soft">
+          <span className="font-display text-[11px] font-black tracking-tight text-foreground">
+            BigIELTS<span className="text-foreground/50">.com</span>
+          </span>
+        </div>
+      </div>
+
+      {/* General label (right) */}
+      <button
+        type="button"
+        onClick={() => setModule("general")}
+        aria-pressed={!isAcademic}
+        className={`group transition-all duration-300 ${
+          !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+        }`}
+      >
+        <span
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
+            !isAcademic ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          General
+        </span>
+      </button>
     </div>
   );
 }
