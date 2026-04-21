@@ -522,73 +522,23 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — base color shifts to a tint of the active answer's palette.
-          Uses a single, explicit background-color transition aligned with the
-          640ms slide window. The decorative gradient orbs intentionally have
-          no transition: a radial-gradient cannot be smoothly interpolated, so
-          a transition there causes a visible snap-flicker. The orbs simply
-          re-render with the new color while the mood veil masks the change. */}
+      {/* ── BILLBOARD background: bold solid palette fill + diagonal gradient + film grain.
+          Mirrors the FollowUpReader treatment. No vignettes — explicit user request. */}
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
         style={{
-          backgroundColor: activePalette.screen,
-          transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
+          transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundColor: activePalette.fill,
         }}
       >
+        {/* Film grain — fine SVG-noise via radial dots, blended */}
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl"
+          className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
           style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-a 26s ease-in-out infinite",
-          }}
-        />
-        <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl"
-          style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-b 32s ease-in-out infinite",
-          }}
-        />
-        <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl"
-          style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-a 38s ease-in-out infinite reverse",
-          }}
-        />
-        {/* Letterpress paper grain — whisper-intensity (~3-5%).
-            Layer 1: fine fiber speckle (two offset dot fields at different
-            scales) for cold-pressed paper tooth.
-            Layer 2: short directional fibers for handmade-paper feel.
-            Layer 3: soft inner debossed vignette so the screen feels pressed
-            into the page edge — premium printed-journal quality. */}
-        <div
-          className="absolute inset-0 mix-blend-multiply opacity-[0.045]"
-          style={{
-            backgroundImage: [
-              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.6px, transparent 1.2px)",
-              "radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.5px, transparent 1px)",
-              "radial-gradient(circle at 4px 1px, oklch(0.20 0.02 60) 0.4px, transparent 0.9px)",
-            ].join(", "),
-            backgroundSize: "7px 7px, 13px 11px, 19px 17px",
-            backgroundPosition: "0 0, 3px 5px, 7px 2px",
-          }}
-        />
-        <div
-          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
-          style={{
-            backgroundImage: [
-              "repeating-linear-gradient(102deg, transparent 0 3px, oklch(0.28 0.02 60 / 0.55) 3px 3.4px, transparent 3.4px 9px)",
-              "repeating-linear-gradient(14deg, transparent 0 5px, oklch(0.30 0.02 60 / 0.4) 5px 5.3px, transparent 5.3px 14px)",
-            ].join(", "),
-          }}
-        />
-        {/* Soft inner debossed vignette — letterpress press-edge */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            boxShadow:
-              "inset 0 0 80px oklch(0.30 0.04 60 / 0.08), inset 0 0 200px oklch(0.30 0.04 60 / 0.05)",
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+            backgroundSize: "4px 4px, 7px 7px",
           }}
         />
       </div>
