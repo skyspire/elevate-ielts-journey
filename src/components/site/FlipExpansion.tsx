@@ -186,10 +186,10 @@ export function FlipExpansion({
   const accentChip =
     "bg-[oklch(0.94_0.04_165)] text-[oklch(0.38_0.10_165)] border-[oklch(0.55_0.10_165)]/30";
 
-  // Header softens (shrinks + de-emphasises) as the reader scrolls deeper.
-  const headerSoften = Math.min(1, scrollProgress * 1.6);
-  const headerScale = 1 - headerSoften * 0.06;
-  const headerOpacity = 1 - headerSoften * 0.25;
+  // Header stays stable and independent — it must not visually merge with
+  // the answer content while scrolling. We keep scale/opacity locked.
+  const headerScale = 1;
+  const headerOpacity = 1;
 
   return createPortal(
     <div
