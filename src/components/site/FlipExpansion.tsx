@@ -476,10 +476,18 @@ function CueCardReader({
         aria-hidden
       />
 
-      {/* Scrollable reading lane */}
+      {/* Scrollable reading lane.
+          NOTE: Bottom padding intentionally large so the answer text never
+          crashes into the colorful footer pager that floats above it. */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[120px] sm:pt-[140px] sm:pb-[128px]"
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[220px] sm:pt-[140px] sm:pb-[240px]"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
+        }}
       >
         <article
           className="mx-auto w-full max-w-[640px] px-6 sm:px-10"
@@ -631,46 +639,37 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Mario power-up footer pager — every tab has its own vivid color block.
-          Answer 1 = fire-red · Answer 2 = star-yellow · Answer 3 = 1-up green.
-          Sky-blue shoulder buttons. Bold black-outlined white text, chunky shadows. */}
+      {/* Sober-but-colorful footer pager.
+          A clean white card hovering above the reader with three softly-tinted
+          tabs — mint · butter · blush — and a quiet sage active state.
+          No game-y shadows, no neon. */}
       {variants.length > 1 && (() => {
         const tones = [
-          // fire red
-          { base: "oklch(0.62 0.22 28)",  deep: "oklch(0.50 0.20 28)",  ink: "oklch(0.30 0.14 28)" },
-          // star yellow
-          { base: "oklch(0.86 0.18 92)",  deep: "oklch(0.74 0.18 80)",  ink: "oklch(0.38 0.14 70)" },
-          // 1-up green
-          { base: "oklch(0.72 0.20 145)", deep: "oklch(0.58 0.18 145)", ink: "oklch(0.30 0.14 150)" },
+          // mint sage (matches brand)
+          { tint: "oklch(0.96 0.03 165)", text: "oklch(0.34 0.10 165)", dot: "oklch(0.58 0.12 165)" },
+          // soft butter
+          { tint: "oklch(0.97 0.04 90)",  text: "oklch(0.42 0.10 75)",  dot: "oklch(0.72 0.13 85)" },
+          // muted blush
+          { tint: "oklch(0.96 0.03 25)",  text: "oklch(0.44 0.10 25)",  dot: "oklch(0.66 0.13 30)" },
         ];
-        const sky = { base: "oklch(0.78 0.14 235)", deep: "oklch(0.62 0.16 240)", ink: "oklch(0.28 0.14 250)" };
-        // Black outline simulated via multi-direction text-shadow (works on any font).
-        const blackOutline =
-          "-1.5px -1.5px 0 oklch(0.12 0.02 250), 1.5px -1.5px 0 oklch(0.12 0.02 250), -1.5px 1.5px 0 oklch(0.12 0.02 250), 1.5px 1.5px 0 oklch(0.12 0.02 250), 0 2px 0 oklch(0.12 0.02 250), 0 3px 0 oklch(0.12 0.02 250 / 0.6)";
         return (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
-            <div className="pointer-events-auto flex w-full max-w-[680px] items-stretch gap-2">
-              {/* L shoulder — sky blue */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
+            <div
+              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-foreground/8 bg-white/95 p-1.5 shadow-[0_18px_44px_-18px_oklch(0.2_0.05_165/0.28)] backdrop-blur-xl"
+            >
+              {/* Prev */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[0_2px_0_oklch(0.12_0.02_250)] sm:h-[52px] sm:w-[52px]"
-                style={{
-                  background: `linear-gradient(180deg, ${sky.base} 0%, ${sky.deep} 100%)`,
-                  borderColor: "oklch(0.12 0.02 250)",
-                  boxShadow: `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.35)`,
-                }}
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-foreground/65 transition-all duration-200 hover:text-foreground sm:h-12 sm:w-12"
+                style={{ backgroundColor: "oklch(0.96 0.03 165)" }}
                 aria-label="Previous sample answer"
               >
-                <ChevronLeft
-                  className="h-5 w-5 transition-transform group-hover:-translate-x-0.5"
-                  strokeWidth={3.5}
-                  style={{ filter: "drop-shadow(0 1.5px 0 oklch(0.12 0.02 250))" }}
-                />
+                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
               </button>
 
-              {/* Tab strip */}
-              <div className="flex flex-1 items-stretch gap-2" role="tablist" aria-label="Sample answers">
+              {/* Tabs */}
+              <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
                 {variants.map((_, i) => {
                   const active = i === variantIndex;
                   const tone = tones[i % tones.length];
@@ -681,21 +680,25 @@ function CueCardReader({
                       role="tab"
                       aria-selected={active}
                       onClick={() => goToVariant(i)}
-                      className="group relative flex flex-1 items-center justify-center rounded-2xl border-[3px] px-2 py-2.5 transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] sm:py-3"
+                      className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-200 ease-out hover:-translate-y-[1px] sm:py-3"
                       style={{
-                        background: active
-                          ? `linear-gradient(180deg, ${tone.base} 0%, ${tone.deep} 100%)`
-                          : `linear-gradient(180deg, ${tone.base} 0%, ${tone.deep} 100%)`,
-                        borderColor: "oklch(0.12 0.02 250)",
+                        backgroundColor: tone.tint,
                         boxShadow: active
-                          ? `0 6px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.45), 0 0 0 3px oklch(1 0 0 / 0.5)`
-                          : `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.30)`,
-                        opacity: active ? 1 : 0.78,
+                          ? `inset 0 0 0 1.5px ${tone.dot}, 0 4px 14px -6px ${tone.dot}`
+                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
+                        opacity: active ? 1 : 0.72,
                       }}
                     >
                       <span
-                        className="font-display text-[15px] font-black leading-none tracking-tight text-white sm:text-[16px]"
-                        style={{ textShadow: blackOutline }}
+                        className="block h-[7px] w-[7px] rounded-full transition-all duration-300"
+                        style={{
+                          backgroundColor: tone.dot,
+                          boxShadow: active ? `0 0 0 3px ${tone.tint}, 0 0 0 4px ${tone.dot}` : "none",
+                        }}
+                      />
+                      <span
+                        className="font-display text-[13px] font-bold tracking-tight sm:text-[14px]"
+                        style={{ color: tone.text }}
                       >
                         Answer {i + 1}
                       </span>
@@ -704,23 +707,15 @@ function CueCardReader({
                 })}
               </div>
 
-              {/* R shoulder — sky blue */}
+              {/* Next */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[0_2px_0_oklch(0.12_0.02_250)] sm:h-[52px] sm:w-[52px]"
-                style={{
-                  background: `linear-gradient(180deg, ${sky.base} 0%, ${sky.deep} 100%)`,
-                  borderColor: "oklch(0.12 0.02 250)",
-                  boxShadow: `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.35)`,
-                }}
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-foreground/65 transition-all duration-200 hover:text-foreground sm:h-12 sm:w-12"
+                style={{ backgroundColor: "oklch(0.96 0.03 25)" }}
                 aria-label="Next sample answer"
               >
-                <ChevronRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-0.5"
-                  strokeWidth={3.5}
-                  style={{ filter: "drop-shadow(0 1.5px 0 oklch(0.12 0.02 250))" }}
-                />
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
               </button>
             </div>
           </div>
