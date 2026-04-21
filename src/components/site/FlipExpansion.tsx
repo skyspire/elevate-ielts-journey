@@ -61,6 +61,8 @@ export function FlipExpansion({
   const [followUpReader, setFollowUpReader] = useState<{
     question: { id: string; title: string };
     origin: { x: number; y: number };
+    index: number;
+    total: number;
   } | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
@@ -332,8 +334,8 @@ export function FlipExpansion({
             followUps={followUps}
             accentText={accentText}
             accentChip={accentChip}
-            onOpenFollowUp={(question, origin) =>
-              setFollowUpReader({ question, origin })
+            onOpenFollowUp={(question, origin, index, total) =>
+              setFollowUpReader({ question, origin, index, total })
             }
           />
         ) : (
@@ -363,6 +365,8 @@ export function FlipExpansion({
           onClose={() => setFollowUpReader(null)}
           question={followUpReader.question}
           origin={followUpReader.origin}
+          index={followUpReader.index}
+          total={followUpReader.total}
         />
       )}
     </div>,
@@ -401,6 +405,8 @@ type CueReaderProps = {
   onOpenFollowUp: (
     question: { id: string; title: string },
     origin: { x: number; y: number },
+    index: number,
+    total: number,
   ) => void;
 };
 
@@ -798,10 +804,12 @@ function CueCardReader({
                   type="button"
                   onClick={(e) => {
                     const r = e.currentTarget.getBoundingClientRect();
-                    onOpenFollowUp(q, {
-                      x: r.left + r.width / 2,
-                      y: r.top + r.height / 2,
-                    });
+                    onOpenFollowUp(
+                      q,
+                      { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+                      i + 1,
+                      followUps.length,
+                    );
                   }}
                   className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 text-left shadow-card backdrop-blur-md transition-transform hover:-translate-y-0.5 hover:shadow-lg"
                 >
@@ -860,10 +868,12 @@ function CueCardReader({
                     type="button"
                     onClick={(e) => {
                       const r = e.currentTarget.getBoundingClientRect();
-                      onOpenFollowUp(q, {
-                        x: r.left + r.width / 2,
-                        y: r.top + r.height / 2,
-                      });
+                      onOpenFollowUp(
+                        q,
+                        { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+                        i + 1,
+                        followUps.length,
+                      );
                     }}
                     className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/85 p-3.5 text-left shadow-card backdrop-blur-md transition-transform active:scale-[0.98]"
                   >
