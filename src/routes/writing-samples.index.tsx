@@ -466,7 +466,6 @@ function WritingSamplesPage() {
               {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
               <div className="relative mt-2 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-                  <StepLabel index={3} label={`${activeCategory.label} Questions`} />
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {questions.map((q, i) => (
                       <QuestionRowCard
