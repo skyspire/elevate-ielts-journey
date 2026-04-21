@@ -456,13 +456,15 @@ export function WritingAnswerBillboard({
                 {activePalette.label}
               </span>
               <span className="inline-flex items-center rounded-full border border-foreground/10 bg-paper-cream px-2.5 py-1">
-                Band {answer.bandScore}
+                Band {activeAnswer.bandScore}
               </span>
             </div>
 
-            {/* Essay body — paragraphs with subtle headings. */}
+            {/* Essay / letter body — paragraphs with subtle headings.
+                `whiteSpace: pre-line` preserves the `\n` line breaks used
+                inside letter bodies (greetings, sign-offs). */}
             <div className="mt-6 space-y-7">
-              {answer.paragraphs.map((p) => (
+              {activeAnswer.paragraphs.map((p) => (
                 <div key={p.heading}>
                   <h3
                     className="font-display text-[15px] font-extrabold uppercase tracking-[0.16em]"
@@ -477,6 +479,7 @@ export function WritingAnswerBillboard({
                       fontSize: "clamp(1rem, 1.45vw, 1.125rem)",
                       lineHeight: 1.78,
                       fontWeight: 500,
+                      whiteSpace: "pre-line",
                     }}
                   >
                     {p.body}
