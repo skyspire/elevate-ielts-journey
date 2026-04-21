@@ -55,36 +55,68 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
   }, [followUpAnswer]);
 
   const currentVariant = variants[Math.min(variantIndex, variants.length - 1)];
-  const sections = currentVariant.sections;
 
-  // ── Fresh trio: AMBER · TEAL · PLUM ─────────────────────────────────────
+  // Flatten the variant's sections into a single flowing answer body.
+  // Follow-up answers are conversational replies, not sectioned essays —
+  // so we present them as one continuous response, billboard-style.
+  const fullBody = useMemo(
+    () => currentVariant.sections.map((s) => s.body).join(" "),
+    [currentVariant],
+  );
+
+  // Split the body so we can emphasize the opening phrase (first sentence
+  // or first ~14 words, whichever is shorter). This becomes the bold
+  // pull-quote that opens the billboard.
+  const { openingPhrase, restOfBody } = useMemo(() => {
+    const text = fullBody.trim();
+    // Prefer first sentence boundary (., !, ?) within first 120 chars.
+    const sentenceMatch = text.match(/^[^.!?]{1,120}[.!?]/);
+    if (sentenceMatch) {
+      return {
+        openingPhrase: sentenceMatch[0].trim(),
+        restOfBody: text.slice(sentenceMatch[0].length).trim(),
+      };
+    }
+    // Fallback: first 14 words.
+    const words = text.split(/\s+/);
+    const head = words.slice(0, 14).join(" ");
+    return {
+      openingPhrase: head + (words.length > 14 ? "…" : ""),
+      restOfBody: words.slice(14).join(" "),
+    };
+  }, [fullBody]);
+
+  // ── BILLBOARD palette: AMBER · TEAL · PLUM ─────────────────────────────
+  // For follow-ups we go BOLD: the full screen fills with the active
+  // palette's saturated color, text is white/cream, and the footer tabs
+  // each carry their own signature color.
   const palette = [
     {
-      // Amber
-      tabBg:    "oklch(0.68 0.16 70)",
-      tabBorder:"oklch(0.32 0.14 70)",
-      screen:   "oklch(0.97 0.035 80)",
-      glow:     "oklch(0.82 0.13 75)",
-      heading:  "oklch(0.42 0.14 70)",
-      laneBorder:"oklch(0.55 0.16 70)",
+      // Amber — warm, energetic
+      fill:      "oklch(0.62 0.18 65)",   // bold saturated amber-orange
+      fillDeep:  "oklch(0.48 0.16 60)",   // for shadows / accents
+      tabBg:     "oklch(0.62 0.18 65)",
+      tabBorder: "oklch(0.30 0.14 60)",
+      ink:       "oklch(0.99 0.015 80)",  // warm cream text
+      inkSoft:   "oklch(0.99 0.015 80 / 0.85)",
     },
     {
-      // Teal
-      tabBg:    "oklch(0.55 0.13 195)",
-      tabBorder:"oklch(0.28 0.11 195)",
-      screen:   "oklch(0.965 0.030 195)",
-      glow:     "oklch(0.78 0.12 195)",
-      heading:  "oklch(0.40 0.13 195)",
-      laneBorder:"oklch(0.50 0.13 195)",
+      // Teal — cool, considered
+      fill:      "oklch(0.50 0.13 200)",  // deep teal
+      fillDeep:  "oklch(0.36 0.11 200)",
+      tabBg:     "oklch(0.50 0.13 200)",
+      tabBorder: "oklch(0.26 0.10 200)",
+      ink:       "oklch(0.99 0.012 200)",
+      inkSoft:   "oklch(0.99 0.012 200 / 0.85)",
     },
     {
-      // Plum
-      tabBg:    "oklch(0.50 0.16 330)",
-      tabBorder:"oklch(0.28 0.14 330)",
-      screen:   "oklch(0.965 0.030 325)",
-      glow:     "oklch(0.78 0.12 325)",
-      heading:  "oklch(0.40 0.16 330)",
-      laneBorder:"oklch(0.48 0.16 330)",
+      // Plum — rich, sophisticated
+      fill:      "oklch(0.46 0.16 330)",  // deep plum
+      fillDeep:  "oklch(0.32 0.14 330)",
+      tabBg:     "oklch(0.46 0.16 330)",
+      tabBorder: "oklch(0.24 0.13 330)",
+      ink:       "oklch(0.99 0.015 330)",
+      inkSoft:   "oklch(0.99 0.015 330 / 0.85)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
@@ -106,26 +138,16 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
     return () => clearTimeout(t);
   }, [open]);
 
-  // Reveal sections progressively on first open; instant on variant switch.
+  // Billboard: the whole answer appears as one block — no per-section reveal.
+  // We keep `revealedSections` for compatibility with the lane-slide effect:
+  // it just toggles 0 → 1 once the reader settles.
   useEffect(() => {
-    if (phase !== "settled") return;
-    const total = sections.length;
-    if (laneAnim === "in" || laneAnim === "out") {
-      setRevealedSections(total);
+    if (phase !== "settled") {
+      setRevealedSections(0);
       return;
     }
-    setRevealedSections(0);
-    const timers: number[] = [];
-    for (let i = 0; i < total; i++) {
-      timers.push(
-        window.setTimeout(
-          () => setRevealedSections((n) => Math.max(n, i + 1)),
-          200 + i * 280,
-        ),
-      );
-    }
-    return () => timers.forEach((id) => clearTimeout(id));
-  }, [phase, variantIndex, sections.length, laneAnim]);
+    setRevealedSections(1);
+  }, [phase, variantIndex]);
 
   // Body scroll lock.
   useEffect(() => {
@@ -237,8 +259,8 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
                   height: 12,
                   marginLeft: -6,
                   marginTop: -6,
-                  background: p.glow,
-                  boxShadow: `0 0 30px 8px ${p.glow}`,
+                  background: p.fill,
+                  boxShadow: `0 0 30px 8px ${p.fill}`,
                   ["--fu-dx" as string]: `${dx}px`,
                   ["--fu-dy" as string]: `${dy}px`,
                   animation: `fu-stream 520ms cubic-bezier(0.22, 1, 0.36, 1) ${i * 50}ms forwards`,
@@ -262,95 +284,70 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* Atmospheric background tint (palette.screen) */}
+        {/* ── BILLBOARD: full screen filled with the active palette color.
+            Bold, saturated, high-impact — like a billboard ad. The header
+            sits on top, the answer card is centered, footer tabs at the
+            bottom. Color cross-fades smoothly on variant switch. */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
           style={{
-            backgroundColor: activePalette.screen,
+            backgroundColor: activePalette.fill,
             transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
+          {/* Soft inner vignette so the edges deepen toward the corners — gives
+              the billboard a printed, premium-poster feel. */}
           <div
-            className="absolute -left-[15%] top-[8%] h-[55vh] w-[55vh] rounded-full opacity-[0.16] blur-3xl"
+            className="absolute inset-0"
             style={{
-              background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-              animation: "drift-a 26s ease-in-out infinite",
+              background: `radial-gradient(ellipse at center, transparent 50%, ${activePalette.fillDeep} 130%)`,
+              opacity: 0.6,
             }}
           />
+          {/* Whisper paper grain so the solid color doesn't feel flat. */}
           <div
-            className="absolute -right-[12%] bottom-[10%] h-[50vh] w-[50vh] rounded-full opacity-[0.14] blur-3xl"
+            className="absolute inset-0 mix-blend-overlay opacity-[0.08]"
             style={{
-              background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-              animation: "drift-b 32s ease-in-out infinite",
-            }}
-          />
-          {/* Subtle paper grain — same recipe as the cue-card reader. */}
-          <div
-            className="absolute inset-0 mix-blend-multiply opacity-[0.045]"
-            style={{
-              backgroundImage: [
-                "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.6px, transparent 1.2px)",
-                "radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.5px, transparent 1px)",
-              ].join(", "),
-              backgroundSize: "7px 7px, 13px 11px",
-              backgroundPosition: "0 0, 3px 5px",
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1px)",
+              backgroundSize: "5px 5px",
             }}
           />
         </div>
 
-        {/* Header */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6">
-          <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/10 bg-white/65 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-2.5">
-                <span
-                  className="inline-flex shrink-0 items-center gap-1.5 pr-1"
-                  style={{ color: activePalette.heading }}
-                  aria-label="Follow-up question"
-                >
-                  <MessageCircleQuestion className="h-4 w-4" strokeWidth={2.4} />
-                  <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em]">
-                    Follow-up
-                  </span>
-                </span>
-                <span aria-hidden className="h-4 w-px shrink-0 bg-foreground/15" />
-                <h2 className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[17px]">
-                  {question.title}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-foreground/10 bg-white/70 px-3 py-1.5 text-[12px] font-semibold text-foreground/70 transition-colors hover:text-foreground"
-                aria-label="Close"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                Back
-              </button>
-            </div>
-          </div>
+        {/* Header — small "Follow-up" pill, just enough context. The big
+            question is shown inside the billboard card itself. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-between items-center px-4 pt-4 sm:px-6 sm:pt-6">
+          <span
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 backdrop-blur-md"
+            style={{ color: activePalette.ink }}
+          >
+            <MessageCircleQuestion className="h-3.5 w-3.5" strokeWidth={2.6} />
+            <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]">
+              Follow-up
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
+            style={{ color: activePalette.ink }}
+            aria-label="Close"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back
+          </button>
         </div>
 
-        {/* Scrollable reading lane with a solid 2px colored border in the
-            active palette color — wraps the entire reading column. */}
+        {/* ── Billboard card ─────────────────────────────────────────────
+            Centered card with the QUESTION as a big header at the top
+            and the single-flow ANSWER body underneath. The opening phrase
+            is auto-emphasized as a bold pull-out. */}
         <div
           ref={scrollRef}
-          className="absolute inset-0 overflow-y-auto pt-[120px] pb-[200px] sm:pt-[140px] sm:pb-[220px]"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(to bottom, black 0, black calc(100% - 120px), transparent 100%)",
-            maskImage:
-              "linear-gradient(to bottom, black 0, black calc(100% - 120px), transparent 100%)",
-          }}
+          className="absolute inset-0 overflow-y-auto pt-[80px] pb-[140px] sm:pt-[96px] sm:pb-[160px]"
         >
-          <article
-            className="mx-auto w-full max-w-[640px] rounded-3xl bg-white/45 px-6 py-8 backdrop-blur-sm sm:px-10 sm:py-10"
-            style={{
-              border: `2px solid ${activePalette.laneBorder}`,
-              transition: "border-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: `0 18px 48px -22px ${activePalette.laneBorder}`,
-            }}
-          >
+          <div className="flex min-h-full items-center justify-center px-5 sm:px-8">
             {(() => {
               const isOut = laneAnim === "out";
               const outStyle: React.CSSProperties = {
@@ -367,43 +364,66 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
                     : undefined,
                 ["--lane-from-x" as string]: `${switchDir * 36}px`,
               };
+              const visible = revealedSections > 0;
 
               return (
-                <div
-                  key={`fu-lane-${variantIndex}`}
-                  className="space-y-10"
-                  style={isOut ? outStyle : inOrIdleStyle}
+                <article
+                  key={`fu-billboard-${variantIndex}`}
+                  className="w-full max-w-[760px]"
+                  style={{
+                    visibility: visible ? "visible" : "hidden",
+                    ...(isOut ? outStyle : inOrIdleStyle),
+                  }}
                 >
-                  {sections.map((s, i) => {
-                    const visible = i < revealedSections;
-                    return (
-                      <section
-                        key={`${variantIndex}-${s.heading}`}
-                        style={{ visibility: visible ? "visible" : "hidden" }}
-                      >
-                        <h3
-                          className="-mx-6 rounded-2xl px-6 py-3 font-display text-[18px] font-extrabold leading-tight tracking-tight sm:-mx-10 sm:px-10 sm:py-3.5 sm:text-[20px]"
-                          style={{
-                            color: activePalette.heading,
-                            backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
-                            boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
-                          }}
-                        >
-                          {s.heading}
-                        </h3>
-                        <p className="mt-4 text-[15.5px] leading-[1.85] text-foreground/85 sm:text-[16.5px]">
-                          {s.body}
-                        </p>
-                        {i < sections.length - 1 && (
-                          <div className="mx-auto mt-10 h-px w-16 bg-foreground/10" />
-                        )}
-                      </section>
-                    );
-                  })}
-                </div>
+                  {/* Big question header — billboard headline */}
+                  <h1
+                    className="font-display font-black leading-[1.1] tracking-tight"
+                    style={{
+                      color: activePalette.ink,
+                      fontSize: "clamp(1.75rem, 4.4vw, 2.6rem)",
+                      textShadow: `0 2px 24px ${activePalette.fillDeep}`,
+                    }}
+                  >
+                    {question.title}
+                  </h1>
+
+                  {/* Hairline divider in the cream ink color */}
+                  <div
+                    className="mt-6 h-[2px] w-16 rounded-full"
+                    style={{ backgroundColor: activePalette.ink, opacity: 0.7 }}
+                  />
+
+                  {/* Single-flow answer body — opening phrase emphasized */}
+                  <div
+                    className="mt-6 font-display"
+                    style={{
+                      color: activePalette.inkSoft,
+                      fontSize: "clamp(1.0625rem, 1.9vw, 1.25rem)",
+                      lineHeight: 1.65,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span
+                      className="font-display font-extrabold"
+                      style={{
+                        color: activePalette.ink,
+                        fontSize: "1.12em",
+                        letterSpacing: "-0.005em",
+                      }}
+                    >
+                      {openingPhrase}
+                    </span>
+                    {restOfBody && (
+                      <span>
+                        {" "}
+                        {restOfBody}
+                      </span>
+                    )}
+                  </div>
+                </article>
               );
             })()}
-          </article>
+          </div>
         </div>
 
         {/* Footer pager — three always-colored tabs, active gets tonal border. */}
