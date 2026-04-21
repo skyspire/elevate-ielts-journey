@@ -94,6 +94,7 @@ const features: Feature[] = [
     },
     tone: "forest",
     icon: BookOpen,
+    to: "/dashboard/vocabulary",
   },
   {
     key: "templates",
@@ -525,6 +526,14 @@ function FeatureCard({
   if (feature.to === "/dashboard/speaking-samples") {
     return (
       <Link to="/speaking-samples" search={{ module }} className={cardClass}>
+        {inner}
+      </Link>
+    );
+  }
+
+  if (feature.to === "/dashboard/vocabulary") {
+    return (
+      <Link to="/vocabulary" search={{ module }} className={cardClass}>
         {inner}
       </Link>
     );
