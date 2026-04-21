@@ -612,50 +612,88 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Minimal footer pager — switch between the three sample answers */}
+      {/* Split-card footer pager — three equal regions, one per sample answer.
+          Active region lifts and accents in sage. Prev/Next arrows flank it. */}
       {variants.length > 1 && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-4 pb-5 sm:pb-7">
-          <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-foreground/10 bg-white/70 px-2 py-1.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.25)] backdrop-blur-xl">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
+          <div className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-2">
             <button
               type="button"
               onClick={() => goToVariant(variantIndex - 1)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-foreground/5 hover:text-foreground"
+              className="group inline-flex shrink-0 items-center justify-center rounded-2xl border border-foreground/10 bg-white/75 px-3 text-foreground/55 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:text-foreground sm:px-4"
               aria-label="Previous sample answer"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" strokeWidth={2.4} />
             </button>
 
-            <div className="flex items-center gap-3 px-2">
-              <div className="flex items-center gap-1.5">
-                {variants.map((_, i) => (
+            <div
+              className="flex flex-1 overflow-hidden rounded-2xl border border-foreground/10 bg-white/75 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl"
+              role="tablist"
+              aria-label="Sample answers"
+            >
+              {variants.map((_, i) => {
+                const active = i === variantIndex;
+                return (
                   <button
                     key={i}
                     type="button"
+                    role="tab"
+                    aria-selected={active}
                     onClick={() => goToVariant(i)}
-                    aria-label={`Go to sample ${i + 1}`}
-                    className="h-1.5 rounded-full transition-all duration-300"
+                    className="group relative flex flex-1 flex-col items-center justify-center gap-1.5 px-2 py-2.5 transition-all duration-300 sm:py-3"
                     style={{
-                      width: i === variantIndex ? 22 : 6,
-                      backgroundColor:
-                        i === variantIndex
-                          ? "oklch(0.50 0.10 165)"
-                          : "oklch(0.20 0.02 165 / 0.20)",
+                      backgroundColor: active
+                        ? "oklch(0.50 0.10 165 / 0.08)"
+                        : "transparent",
+                      transform: active ? "translateY(-1px)" : "translateY(0)",
                     }}
-                  />
-                ))}
-              </div>
-              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/55">
-                Answer {variantIndex + 1} of {variants.length}
-              </span>
+                  >
+                    <div className="flex items-baseline gap-1.5">
+                      <span
+                        className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors"
+                        style={{
+                          color: active
+                            ? "oklch(0.42 0.10 165)"
+                            : "oklch(0.20 0.02 165 / 0.45)",
+                        }}
+                      >
+                        Answer
+                      </span>
+                      <span
+                        className="font-display text-[16px] font-black leading-none transition-colors sm:text-[18px]"
+                        style={{
+                          color: active
+                            ? "oklch(0.42 0.10 165)"
+                            : "oklch(0.20 0.02 165 / 0.50)",
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                    </div>
+                    {/* Thin progress bar — full + sage when active, faint otherwise */}
+                    <div className="relative h-[2px] w-full overflow-hidden rounded-full bg-foreground/8">
+                      <div
+                        className="absolute inset-y-0 left-0 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          width: active ? "100%" : "20%",
+                          backgroundColor: active
+                            ? "oklch(0.50 0.10 165)"
+                            : "oklch(0.20 0.02 165 / 0.18)",
+                        }}
+                      />
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             <button
               type="button"
               onClick={() => goToVariant(variantIndex + 1)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-foreground/60 transition-colors hover:bg-foreground/5 hover:text-foreground"
+              className="group inline-flex shrink-0 items-center justify-center rounded-2xl border border-foreground/10 bg-white/75 px-3 text-foreground/55 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:text-foreground sm:px-4"
               aria-label="Next sample answer"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
             </button>
           </div>
         </div>
