@@ -152,84 +152,20 @@ const features: Feature[] = [
   },
 ];
 
-// Bento tone system — each card gets a unique soft gradient + accent color.
-// Backgrounds are restrained (white-leaning) so the page reads premium and quiet.
+// Bold solid color blocks — each card is one confident color.
+// `bg` is the card background, `bgHover` for the hover lift state,
+// `chip` is the translucent white icon chip background.
 const tones: Record<
   Feature["tone"],
-  {
-    gradient: string; // soft corner gradient
-    accent: string; // strong accent color (text + icon + bar)
-    accentSoft: string; // tint for icon chip background
-    ring: string; // ring color on hover
-  }
+  { bg: string; bgHover: string }
 > = {
-  navy: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.05 255 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.16 260)",
-    accentSoft: "oklch(0.95 0.04 255)",
-    ring: "oklch(0.55 0.14 255 / 0.35)",
-  },
-  rust: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 45 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.50 0.16 35)",
-    accentSoft: "oklch(0.95 0.05 45)",
-    ring: "oklch(0.60 0.15 35 / 0.35)",
-  },
-  forest: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 160 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.42 0.11 165)",
-    accentSoft: "oklch(0.95 0.04 160)",
-    ring: "oklch(0.55 0.12 160 / 0.35)",
-  },
-  plum: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 320 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.14 320)",
-    accentSoft: "oklch(0.95 0.04 320)",
-    ring: "oklch(0.58 0.14 320 / 0.35)",
-  },
-  ochre: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.08 85 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.50 0.13 75)",
-    accentSoft: "oklch(0.95 0.06 85)",
-    ring: "oklch(0.62 0.13 80 / 0.35)",
-  },
-  teal: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 200 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.11 205)",
-    accentSoft: "oklch(0.95 0.04 200)",
-    ring: "oklch(0.58 0.12 200 / 0.35)",
-  },
-  espresso: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.04 70 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.38 0.06 60)",
-    accentSoft: "oklch(0.95 0.03 70)",
-    ring: "oklch(0.50 0.06 60 / 0.35)",
-  },
-};
-
-// Bento layout: each feature claims a span on a 6-col grid.
-// Mobile: everything 1-col. Tablet+: asymmetric "widget" feel.
-type Span = {
-  col: string; // tailwind col-span classes
-  row: string; // tailwind row-span classes
-  variant: "hero" | "wide" | "tall" | "compact";
-};
-
-const spans: Record<string, Span> = {
-  writing: { col: "sm:col-span-4 lg:col-span-4", row: "sm:row-span-2", variant: "hero" },
-  speaking: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  vocab: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  templates: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
-  predictions: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
-  mistakes: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  plan: { col: "sm:col-span-6 lg:col-span-6", row: "sm:row-span-1", variant: "wide" },
+  navy: { bg: "oklch(0.42 0.18 260)", bgHover: "oklch(0.46 0.18 260)" },
+  rust: { bg: "oklch(0.58 0.20 25)", bgHover: "oklch(0.62 0.20 25)" },
+  forest: { bg: "oklch(0.50 0.15 160)", bgHover: "oklch(0.54 0.15 160)" },
+  plum: { bg: "oklch(0.45 0.18 320)", bgHover: "oklch(0.49 0.18 320)" },
+  ochre: { bg: "oklch(0.65 0.17 70)", bgHover: "oklch(0.69 0.17 70)" },
+  teal: { bg: "oklch(0.55 0.13 200)", bgHover: "oklch(0.59 0.13 200)" },
+  espresso: { bg: "oklch(0.32 0.04 60)", bgHover: "oklch(0.36 0.04 60)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
@@ -342,8 +278,8 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Bento grid — mixed-size widget cards */}
-          <div className="-mx-2 grid grid-cols-1 gap-3 sm:mx-0 sm:grid-cols-6 sm:gap-4 sm:[grid-auto-rows:minmax(150px,auto)] lg:gap-5">
+          {/* Bold color blocks — equal-size grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
             {features.map((f) => (
               <FeatureCard key={f.key} feature={f} module={module} />
             ))}
@@ -548,97 +484,67 @@ function FeatureCard({
   module: Module;
 }) {
   const tone = tones[feature.tone];
-  const span = spans[feature.key] ?? {
-    col: "sm:col-span-3",
-    row: "sm:row-span-1",
-    variant: "compact" as const,
-  };
   const { value, label } = feature.count[module];
   const Icon = feature.icon;
-  const isHero = span.variant === "hero";
-  const isWide = span.variant === "wide";
 
-  const cardClass = `bento-card group relative flex h-full min-h-[160px] flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-white p-5 text-left shadow-[0_1px_2px_oklch(0.20_0.04_60/0.04),0_8px_24px_-12px_oklch(0.20_0.04_60/0.10)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_18px_40px_-16px_oklch(0.20_0.04_60/0.18)] focus-visible:outline-none focus-visible:ring-2 ${span.col} ${span.row}`;
+  const cardClass =
+    "color-card group relative flex aspect-square w-full flex-col overflow-hidden rounded-2xl p-5 text-left text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_12px_30px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_24px_50px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2";
 
   const inner = (
     <>
-      {/* Soft corner gradient — the unique color signature of this card */}
+      {/* Solid color background with subtle hover brighten */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-90 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: tone.gradient }}
+        className="pointer-events-none absolute inset-0 transition-colors duration-300"
+        style={{ background: tone.bg }}
       />
-      {/* Subtle dot grid texture, masked to top-right corner */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(oklch(0.30_0.04_60)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(120%_90%_at_100%_0%,black,transparent_55%)]"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: tone.bgHover }}
       />
-      {/* Hover ring accent */}
+      {/* Soft white shine in top-right for depth */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset transition-opacity duration-300 group-hover:opacity-100"
-        style={{ ["--tw-ring-color" as string]: tone.ring }}
+        className="pointer-events-none absolute inset-0 [background:radial-gradient(120%_80%_at_100%_0%,rgba(255,255,255,0.18)_0%,transparent_55%)]"
+      />
+      {/* Subtle dot grid texture */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:14px_14px]"
       />
 
-      {/* Top row: icon chip + count chip */}
+      {/* Top: white icon chip + count chip */}
       <div className="relative flex items-start justify-between gap-3">
-        <span
-          className="flex h-11 w-11 items-center justify-center rounded-xl shadow-[inset_0_1px_0_oklch(1_0_0/0.6),0_1px_2px_oklch(0.20_0.04_60/0.06)] transition-transform duration-300 group-hover:scale-105"
-          style={{ background: tone.accentSoft, color: tone.accent }}
-        >
-          <Icon className="h-[22px] w-[22px]" strokeWidth={2} />
+        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
+          <Icon className="h-6 w-6 text-white" strokeWidth={2.2} />
         </span>
-        <span
-          className="rounded-full bg-white/85 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ring-1 ring-foreground/8"
-          style={{ color: tone.accent }}
-        >
+        <span className="rounded-full bg-white/15 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wider text-white ring-1 ring-inset ring-white/20 backdrop-blur-sm">
           {value}
         </span>
       </div>
 
-      {/* Title + description */}
-      <div className={`relative mt-auto pt-6 ${isWide ? "max-w-xl" : ""}`}>
-        <h3
-          className={`font-display font-bold tracking-tight text-foreground ${
-            isHero ? "text-2xl sm:text-[26px]" : isWide ? "text-xl" : "text-[17px]"
-          }`}
-        >
+      {/* Title + description pinned to bottom */}
+      <div className="relative mt-auto pt-6">
+        <h3 className="font-display text-[19px] font-bold leading-tight tracking-tight text-white">
           {feature.title}
         </h3>
-        <p
-          className={`mt-1.5 text-foreground/60 ${
-            isHero || isWide ? "text-[14px] leading-relaxed" : "text-[13px] leading-snug"
-          }`}
-        >
+        <p className="mt-1.5 text-[13px] leading-snug text-white/80">
           {feature.description[module]}
         </p>
 
-        {/* Bottom meta row: small label + animated arrow */}
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/40">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/65">
             {label}
           </span>
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-full ring-1 ring-foreground/10 transition-all duration-300 group-hover:ring-2"
-            style={{
-              color: tone.accent,
-              ["--tw-ring-color" as string]: tone.ring,
-            }}
-          >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 ring-1 ring-inset ring-white/25 transition-all duration-300 group-hover:bg-white group-hover:ring-white">
             <ArrowUpRight
-              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              strokeWidth={2.5}
+              className="h-4 w-4 text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+              strokeWidth={2.6}
             />
           </span>
         </div>
       </div>
-
-      {/* Accent bar — bottom edge, grows on hover */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-5 bottom-0 h-[2px] origin-left scale-x-0 rounded-full transition-transform duration-500 ease-out group-hover:scale-x-100"
-        style={{ background: tone.accent }}
-      />
     </>
   );
 
