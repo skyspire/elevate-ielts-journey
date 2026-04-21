@@ -373,8 +373,7 @@ function FormatTogglePair({
   const renderItem = (
     active: boolean,
     onClick: () => void,
-    eyebrow: string,
-    name: string,
+    label: string,
     align: "left" | "right",
   ) => (
     <button
@@ -392,11 +391,9 @@ function FormatTogglePair({
           className={`font-display font-bold leading-tight tracking-tight ${
             active ? "text-foreground" : "text-foreground/70"
           }`}
-          style={{ fontSize: "clamp(1.15rem, 3.2vw, 1.75rem)" }}
+          style={{ fontSize: "clamp(1.05rem, 2.8vw, 1.6rem)" }}
         >
-          <span>{eyebrow}</span>
-          <span className="mx-2 text-foreground/30">·</span>
-          <span>{name}</span>
+          {label}
         </h3>
         <span
           aria-hidden
@@ -415,7 +412,7 @@ function FormatTogglePair({
     <div className="relative mx-auto max-w-3xl">
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 sm:gap-10">
         <div className="flex justify-end">
-          {renderItem(isGeneral, () => onChange("general"), "Part 1 / 3", "General", "right")}
+          {renderItem(isGeneral, () => onChange("general"), "General Questions", "right")}
         </div>
 
         {/* Vintage brass compass */}
@@ -506,7 +503,7 @@ function FormatTogglePair({
         </div>
 
         <div className="flex justify-start">
-          {renderItem(isCue, () => onChange("cuecards"), "Part 2", "Cue Cards", "left")}
+          {renderItem(isCue, () => onChange("cuecards"), "Cue Cards & Follow-Ups", "left")}
         </div>
       </div>
     </div>
