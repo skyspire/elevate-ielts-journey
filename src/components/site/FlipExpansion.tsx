@@ -362,6 +362,34 @@ function CueCardReader({
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
+  // Coordinated palette — drives both the reading-screen warm tint and the
+  // vibrant footer tabs. Index matches the active variant.
+  // 1. Coral · 2. Marigold · 3. Emerald
+  const palette = [
+    {
+      // Coral
+      tabBg:    "oklch(0.68 0.20 25)",
+      tabHover: "oklch(0.74 0.18 25)",
+      screen:   "oklch(0.965 0.035 35)",   // warm blush peach
+      glow:     "oklch(0.85 0.12 30)",
+    },
+    {
+      // Marigold
+      tabBg:    "oklch(0.78 0.17 80)",
+      tabHover: "oklch(0.83 0.15 80)",
+      screen:   "oklch(0.975 0.04 92)",    // cream butter
+      glow:     "oklch(0.88 0.13 88)",
+    },
+    {
+      // Emerald
+      tabBg:    "oklch(0.62 0.16 155)",
+      tabHover: "oklch(0.68 0.15 155)",
+      screen:   "oklch(0.97 0.035 145)",   // soft pistachio
+      glow:     "oklch(0.82 0.12 150)",
+    },
+  ];
+  const activePalette = palette[variantIndex % palette.length];
+
   return (
     <div
       className={`pointer-events-auto absolute inset-0 origin-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -370,8 +398,11 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — barely-there gradients & drifting shapes */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[oklch(0.985_0.012_165)]">
+      {/* Atmospheric background — base color shifts to a warm tint of the active answer's palette. */}
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden transition-colors duration-700 ease-out"
+        style={{ backgroundColor: activePalette.screen }}
+      >
         <div
           className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.10] blur-3xl"
           style={{
