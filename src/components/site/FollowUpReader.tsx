@@ -563,10 +563,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                               ”
                             </span>
                           </blockquote>
-                          <span
-                            className="mt-4 block h-[2px] w-12 rounded-full"
-                            style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
-                          />
                         </figure>
                       )}
 
