@@ -46,14 +46,10 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
-  // Typographic zoom-through overlay state for the answer transition
-  const [wash, setWash] = useState<{
-    x: number;
-    y: number;
-    color: string;
-    numeral: string;
-    key: number;
-  } | null>(null);
+  // Gravity drop & settle — drives the silent answer-swap choreography.
+  // "out": current paragraphs lift then drop & dissolve.
+  // "in":  new paragraphs fall in from above with a soft settle.
+  const [gravityPhase, setGravityPhase] = useState<"idle" | "out" | "in">("idle");
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
