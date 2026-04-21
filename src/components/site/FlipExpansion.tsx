@@ -216,53 +216,7 @@ export function FlipExpansion({
       aria-modal="true"
       aria-label={`${topic.label} — Sample answer`}
     >
-      {/* Typographic zoom-through overlay — a giant numeral inflates from the
-          clicked tab in the next answer's color, holds as a typographic
-          moment, then shrinks into place as the page settles underneath.
-          A soft color veil rides along to bridge the two screens. */}
-      {wash && (
-        <div
-          key={wash.key}
-          className="pointer-events-none absolute inset-0 z-[110] overflow-hidden"
-          style={{ animation: "zoom-veil 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards" }}
-        >
-          {/* Soft tinted veil that fades the screens together */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(60% 60% at ${wash.x}px ${wash.y}px, ${wash.color}, transparent 75%)`,
-              opacity: 0,
-              animation: "zoom-veil-tint 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
-              mixBlendMode: "multiply",
-            }}
-          />
-          {/* The hero numeral */}
-          <div
-            className="absolute"
-            style={{
-              left: wash.x,
-              top: wash.y,
-              transform: "translate(-50%, -50%)",
-              animation: "zoom-numeral 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
-              willChange: "transform, opacity",
-            }}
-          >
-            <span
-              className="font-display block select-none leading-none"
-              style={{
-                fontSize: "clamp(140px, 24vw, 320px)",
-                fontWeight: 900,
-                letterSpacing: "-0.06em",
-                color: wash.color,
-                textShadow: `0 30px 80px ${wash.color}55, 0 8px 24px ${wash.color}33`,
-                WebkitTextStroke: `1px ${wash.color}`,
-              }}
-            >
-              {wash.numeral}
-            </span>
-          </div>
-        </div>
-      )}
+      {/* No overlay needed — Gravity drop & settle happens in-place. */}
       {/* Backdrop */}
       <button
         type="button"
