@@ -362,6 +362,57 @@ export function FlipExpansion({
               );
             })}
           </div>
+
+          {/* Mobile / tablet — follow-ups surface from the bottom edge as the
+              reader scrolls deeper. They retract on scroll-up. */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 lg:hidden"
+            style={{
+              opacity: scrollProgress < 0.15 ? 0 : Math.min(1, (scrollProgress - 0.15) / 0.25),
+              transform: `translateY(${(1 - Math.min(1, scrollProgress * 1.8)) * 24}px)`,
+              transition: "opacity 350ms ease, transform 350ms ease",
+            }}
+          >
+            <div className="pointer-events-auto mx-auto flex max-w-3xl gap-2 overflow-x-auto px-4 pb-4 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {followUps.map((q, i) => {
+                const threshold = 0.18 + i * 0.14;
+                const local =
+                  scrollProgress <= threshold
+                    ? 0
+                    : Math.min(1, (scrollProgress - threshold) / 0.18);
+                return (
+                  <div
+                    key={q.id}
+                    className="shrink-0 basis-[78%] snap-start"
+                    style={{
+                      opacity: local,
+                      transform: `translateY(${(1 - local) * 16}px)`,
+                      transition:
+                        "opacity 400ms ease, transform 400ms cubic-bezier(0.16,1,0.3,1)",
+                      transitionDelay: `${i * 60}ms`,
+                    }}
+                  >
+                    <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/25 bg-white/90 p-3.5 shadow-card backdrop-blur-md">
+                      <div className="flex items-center gap-1.5">
+                        <MessageCircleQuestion
+                          className={`h-3.5 w-3.5 ${accentText}`}
+                          strokeWidth={2.6}
+                        />
+                        <span
+                          className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                        >
+                          Follow-up {i + 1}
+                        </span>
+                      </div>
+                      <p className="mt-1.5 text-[12.5px] font-semibold leading-snug text-foreground/85">
+                        {q.title}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
       </div>
     </div>,
