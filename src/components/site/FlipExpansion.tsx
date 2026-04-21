@@ -95,6 +95,28 @@ export function FlipExpansion({
     return () => window.removeEventListener("keydown", onKey);
   }, [phase, onClose]);
 
+  // Track scroll progress within the panel body (0 → 1) so we can react
+  // bidirectionally — surfacing follow-ups as the reader goes deeper, and
+  // retracting them when they scroll back up.
+  useEffect(() => {
+    if (phase !== "expanded") return;
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      const ratio = max > 0 ? el.scrollTop / max : 0;
+      setScrollProgress(Math.min(1, Math.max(0, ratio)));
+    };
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [phase]);
+
+  // Reset scroll progress whenever we leave the expanded state
+  useEffect(() => {
+    if (phase !== "expanded") setScrollProgress(0);
+  }, [phase]);
+
   if (phase === "closed" || typeof document === "undefined") return null;
 
   const isExpanded = phase === "expanded";
