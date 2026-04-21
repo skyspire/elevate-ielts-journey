@@ -365,6 +365,7 @@ type CueReaderProps = {
   goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
   gravityPhase: "idle" | "out" | "in";
+  switchDir: 1 | -1;
   sections: { heading: string; body: string }[];
   revealedSections: number;
   scrollProgress: number;
@@ -388,6 +389,7 @@ function CueCardReader({
   goToVariant,
   variantTransitioning,
   gravityPhase,
+  switchDir,
   sections,
   revealedSections,
   scrollProgress,
