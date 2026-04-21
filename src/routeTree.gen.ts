@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
+import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -35,6 +36,11 @@ const WritingSamplesIndexRoute = WritingSamplesIndexRouteImport.update({
   path: '/writing-samples/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpeakingSamplesIndexRoute = SpeakingSamplesIndexRouteImport.update({
+  id: '/speaking-samples/',
+  path: '/speaking-samples/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WritingSamplesQuestionIdRoute =
   WritingSamplesQuestionIdRouteImport.update({
     id: '/writing-samples/$questionId',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
 }
 export interface FileRoutesById {
@@ -62,6 +70,7 @@ export interface FileRoutesById {
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
 }
 export interface FileRouteTypes {
@@ -71,6 +80,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/writing-samples/$questionId'
+    | '/speaking-samples/'
     | '/writing-samples/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/writing-samples/$questionId'
+    | '/speaking-samples'
     | '/writing-samples'
   id:
     | '__root__'
@@ -85,6 +96,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/writing-samples/$questionId'
+    | '/speaking-samples/'
     | '/writing-samples/'
   fileRoutesById: FileRoutesById
 }
@@ -93,6 +105,7 @@ export interface RootRouteChildren {
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
+  SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
 }
 
@@ -126,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WritingSamplesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/speaking-samples/': {
+      id: '/speaking-samples/'
+      path: '/speaking-samples'
+      fullPath: '/speaking-samples/'
+      preLoaderRoute: typeof SpeakingSamplesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/writing-samples/$questionId': {
       id: '/writing-samples/$questionId'
       path: '/writing-samples/$questionId'
@@ -141,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
+  SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
 }
 export const routeTree = rootRouteImport
