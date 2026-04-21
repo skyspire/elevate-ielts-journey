@@ -935,6 +935,51 @@ function CueCardReader({
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
             </button>
           </div>
+
+          {/* Vibrant tri-color brand badge — bottom-right corner of the
+              graphite footer. Cap icon glows red, "BigIELTS" reads in
+              cream-white, ".com" picks up olive, and a thin blue underline
+              accent grounds the lockup. Hidden on very narrow screens to
+              avoid crowding the pager tabs. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute right-3 bottom-1.5 hidden items-center gap-2 sm:right-6 sm:bottom-2 sm:flex"
+          >
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-lg sm:h-8 sm:w-8"
+              style={{
+                backgroundColor: "oklch(0.55 0.135 25)",
+                boxShadow: "0 0 0 1px oklch(0.65 0.150 25 / 0.55), 0 4px 12px oklch(0.55 0.135 25 / 0.45)",
+              }}
+            >
+              <GraduationCap
+                className="h-4 w-4 sm:h-[18px] sm:w-[18px]"
+                strokeWidth={2.6}
+                style={{ color: "oklch(0.99 0.005 250)" }}
+              />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="flex items-baseline gap-[1px]">
+                <span
+                  className="font-display text-[13px] font-black tracking-tight sm:text-[14px]"
+                  style={{ color: "oklch(0.99 0.005 250)" }}
+                >
+                  BigIELTS
+                </span>
+                <span
+                  className="font-display text-[13px] font-black tracking-tight sm:text-[14px]"
+                  style={{ color: "oklch(0.72 0.110 125)" }}
+                >
+                  .com
+                </span>
+              </span>
+              <span
+                aria-hidden
+                className="mt-[3px] h-[2px] w-full rounded-full"
+                style={{ backgroundColor: "oklch(0.62 0.135 250)" }}
+              />
+            </span>
+          </div>
         </div>
       )}
 
