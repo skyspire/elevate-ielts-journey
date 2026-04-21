@@ -711,7 +711,10 @@ function CueCardReader({
               {/* Prev */}
               <button
                 type="button"
-                onClick={() => goToVariant(variantIndex - 1)}
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                }}
                 className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Previous sample answer"
               >
@@ -729,7 +732,10 @@ function CueCardReader({
                       type="button"
                       role="tab"
                       aria-selected={active}
-                      onClick={() => goToVariant(i)}
+                      onClick={(e) => {
+                        const r = e.currentTarget.getBoundingClientRect();
+                        goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                      }}
                       className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-300 ease-out hover:-translate-y-[1px] sm:py-3"
                       style={{
                         backgroundColor: active ? tone.tabBg : "oklch(1 0 0 / 0.04)",
@@ -761,7 +767,10 @@ function CueCardReader({
               {/* Next */}
               <button
                 type="button"
-                onClick={() => goToVariant(variantIndex + 1)}
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                }}
                 className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Next sample answer"
               >
