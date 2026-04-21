@@ -1128,10 +1128,10 @@ function CueCardReader({
           position: absolute;
           top: 0;
           left: 0;
-          width: 120px;
-          height: 120px;
-          margin-left: -60px;
-          margin-top: -60px;
+          width: 140px;
+          height: 140px;
+          margin-left: -70px;
+          margin-top: -70px;
           offset-rotate: auto;
           -webkit-offset-rotate: auto;
           offset-distance: 0%;
