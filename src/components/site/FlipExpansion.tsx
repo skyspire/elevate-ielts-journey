@@ -927,32 +927,17 @@ function CueCardReader({
         );
       })()}
 
-      {/* Atmospheric mood-shift veil — a soft palette-tinted wash that
-          briefly desaturates and dims the reading lane during a variant
-          switch, then resaturates into the new palette. Silent, premium. */}
+      {/* Atmospheric mood veil — a single solid layer that fades in then out
+          during a variant switch. Uses opacity (cheap, GPU-friendly, no
+          repaint flicker) instead of backdrop-filter, and a fixed neutral
+          tint instead of a color-mix value (which cannot be tweened). The
+          mask hides the brief snap as the gradient orbs re-render. */}
       <div
         className="pointer-events-none absolute inset-0 z-[15]"
         style={{
-          backgroundColor:
-            moodPhase === "out"
-              ? "oklch(0.18 0.005 80 / 0.18)"
-              : moodPhase === "in"
-                ? `color-mix(in oklch, ${activePalette.glow} 18%, transparent)`
-                : "transparent",
-          backdropFilter:
-            moodPhase === "out"
-              ? "saturate(0.55) brightness(0.96)"
-              : moodPhase === "in"
-                ? "saturate(1.05) brightness(1.01)"
-                : "none",
-          WebkitBackdropFilter:
-            moodPhase === "out"
-              ? "saturate(0.55) brightness(0.96)"
-              : moodPhase === "in"
-                ? "saturate(1.05) brightness(1.01)"
-                : "none",
-          transition:
-            "background-color 325ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundColor: "oklch(0.18 0.005 80)",
+          opacity: moodPhase === "out" ? 0.18 : 0,
+          transition: "opacity 320ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
         aria-hidden
       />
