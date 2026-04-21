@@ -781,7 +781,17 @@ function CueCardReader({
                     "opacity 500ms ease, transform 500ms cubic-bezier(0.16,1,0.3,1)",
                 }}
               >
-                <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 shadow-card backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const r = e.currentTarget.getBoundingClientRect();
+                    onOpenFollowUp(q, {
+                      x: r.left + r.width / 2,
+                      y: r.top + r.height / 2,
+                    });
+                  }}
+                  className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 text-left shadow-card backdrop-blur-md transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                >
                   <div className="flex items-center gap-1.5">
                     <MessageCircleQuestion
                       className={`h-3.5 w-3.5 ${accentText}`}
@@ -796,7 +806,7 @@ function CueCardReader({
                   <p className="mt-2 text-[13px] font-semibold leading-snug text-foreground/80">
                     {q.title}
                   </p>
-                </div>
+                </button>
               </div>
             );
           })}
