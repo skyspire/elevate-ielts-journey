@@ -623,11 +623,11 @@ function CueCardReader({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
               style={{
                 color: activePalette.ink,
-                backgroundColor: "oklch(1 0 0 / 0.10)",
-                border: `1px solid ${activePalette.ink}40`,
+                backgroundColor: `${activePalette.ink}10`,
+                border: `1px solid ${activePalette.ink}30`,
               }}
               aria-label="Close sample answer"
             >
