@@ -24,11 +24,15 @@ export type FollowUpReaderProps = {
   question: { id: string; title: string };
   // Click origin in viewport coords — drives the burst-and-split entrance.
   origin: { x: number; y: number } | null;
+  // Which follow-up this is (1-based) and how many there are total.
+  // Drives the prominent "01 / 03" circle badge above the headline.
+  index: number;
+  total: number;
 };
 
 type EntrancePhase = "closed" | "burst" | "settled";
 
-export function FollowUpReader({ open, onClose, question, origin }: FollowUpReaderProps) {
+export function FollowUpReader({ open, onClose, question, origin, index, total }: FollowUpReaderProps) {
   const [phase, setPhase] = useState<EntrancePhase>("closed");
   const [variantIndex, setVariantIndex] = useState(0);
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
