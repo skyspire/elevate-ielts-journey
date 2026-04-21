@@ -877,7 +877,8 @@ function CueCardReader({
                 const r = e.currentTarget.getBoundingClientRect();
                 goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
-              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+              style={{ color: activePalette.ink }}
               aria-label="Previous sample answer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -901,14 +902,15 @@ function CueCardReader({
                     style={{
                       backgroundColor: tone.tabBg,
                       boxShadow: active
-                        ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
-                        : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                        ? `inset 0 0 0 2px ${tone.tabBorder}`
+                        : `inset 0 0 0 1px ${tone.tabBorder}33`,
                     }}
                   >
                     <span
                       className="font-display tracking-tight transition-all duration-300"
                       style={{
-                        color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                        color: tone.ink,
+                        opacity: active ? 1 : 0.7,
                         fontWeight: active ? 800 : 600,
                         fontSize: "13px",
                         letterSpacing: active ? "-0.01em" : "0",
@@ -927,7 +929,8 @@ function CueCardReader({
                 const r = e.currentTarget.getBoundingClientRect();
                 goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
-              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+              style={{ color: activePalette.ink }}
               aria-label="Next sample answer"
             >
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
