@@ -759,13 +759,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Muted off-white tiles (taupe variants of ecru/oat/linen) so the
-        // rail stays visually quiet against the calm paper screen. Color
-        // identity comes from the deep ink numerals, not from saturated fills.
+        // Confident muted dusty-blue → slate tile palette so the rail
+        // visibly carries the brand color story above the pure-white lane.
+        // Each tile has its own slate variant; ink is deep slate-navy.
         const followUpPalette = [
-          { fill: "oklch(0.93 0.018 75)",  ink: "oklch(0.30 0.025 60)" },  // Warm taupe
-          { fill: "oklch(0.92 0.014 95)",  ink: "oklch(0.30 0.020 70)" },  // Sand
-          { fill: "oklch(0.92 0.010 110)", ink: "oklch(0.30 0.018 100)" }, // Stone
+          { fill: "oklch(0.86 0.040 240)", ink: "oklch(0.28 0.045 245)" }, // Dusty blue
+          { fill: "oklch(0.74 0.050 245)", ink: "oklch(0.24 0.045 248)" }, // Steel blue
+          { fill: "oklch(0.58 0.055 250)", ink: "oklch(0.98 0.012 245)" }, // Deep slate (light ink)
         ];
 
         return (
