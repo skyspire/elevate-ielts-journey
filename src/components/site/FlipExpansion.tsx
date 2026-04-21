@@ -362,6 +362,34 @@ function CueCardReader({
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
+  // Coordinated palette — drives both the reading-screen warm tint and the
+  // vibrant footer tabs. Index matches the active variant.
+  // 1. Coral · 2. Marigold · 3. Emerald
+  const palette = [
+    {
+      // Coral
+      tabBg:    "oklch(0.68 0.20 25)",
+      tabHover: "oklch(0.74 0.18 25)",
+      screen:   "oklch(0.965 0.035 35)",   // warm blush peach
+      glow:     "oklch(0.85 0.12 30)",
+    },
+    {
+      // Marigold
+      tabBg:    "oklch(0.78 0.17 80)",
+      tabHover: "oklch(0.83 0.15 80)",
+      screen:   "oklch(0.975 0.04 92)",    // cream butter
+      glow:     "oklch(0.88 0.13 88)",
+    },
+    {
+      // Emerald
+      tabBg:    "oklch(0.62 0.16 155)",
+      tabHover: "oklch(0.68 0.15 155)",
+      screen:   "oklch(0.97 0.035 145)",   // soft pistachio
+      glow:     "oklch(0.82 0.12 150)",
+    },
+  ];
+  const activePalette = palette[variantIndex % palette.length];
+
   return (
     <div
       className={`pointer-events-auto absolute inset-0 origin-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -370,29 +398,29 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — barely-there gradients & drifting shapes */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[oklch(0.985_0.012_165)]">
+      {/* Atmospheric background — base color shifts to a warm tint of the active answer's palette. */}
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden transition-colors duration-700 ease-out"
+        style={{ backgroundColor: activePalette.screen }}
+      >
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.10] blur-3xl"
+          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.78 0.10 165) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 26s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.09] blur-3xl"
+          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.82 0.08 90) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-b 32s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.08] blur-3xl"
+          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.75 0.10 200) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 38s ease-in-out infinite reverse",
           }}
         />
@@ -639,30 +667,24 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Sober-but-colorful footer pager.
-          A clean white card hovering above the reader with three softly-tinted
-          tabs — mint · butter · blush — and a quiet sage active state.
-          No game-y shadows, no neon. */}
+      {/* Footer pager — warm graphite ink bar housing three vibrant tabs.
+          Tabs use the same coordinated palette as the reading-screen tint,
+          so switching answers lights up both the tab and the screen behind it. */}
       {variants.length > 1 && (() => {
-        const tones = [
-          // mint sage (matches brand)
-          { tint: "oklch(0.96 0.03 165)", text: "oklch(0.34 0.10 165)", dot: "oklch(0.58 0.12 165)" },
-          // soft butter
-          { tint: "oklch(0.97 0.04 90)",  text: "oklch(0.42 0.10 75)",  dot: "oklch(0.72 0.13 85)" },
-          // muted blush
-          { tint: "oklch(0.96 0.03 25)",  text: "oklch(0.44 0.10 25)",  dot: "oklch(0.66 0.13 30)" },
-        ];
         return (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
             <div
-              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-foreground/8 bg-white/95 p-1.5 shadow-[0_18px_44px_-18px_oklch(0.2_0.05_165/0.28)] backdrop-blur-xl"
+              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-white/[0.06] p-1.5 shadow-[0_22px_50px_-18px_oklch(0_0_0/0.55)]"
+              style={{
+                background:
+                  "linear-gradient(180deg, oklch(0.26 0.015 75) 0%, oklch(0.18 0.015 75) 100%)",
+              }}
             >
               {/* Prev */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-foreground/65 transition-all duration-200 hover:text-foreground sm:h-12 sm:w-12"
-                style={{ backgroundColor: "oklch(0.96 0.03 165)" }}
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Previous sample answer"
               >
                 <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -672,7 +694,7 @@ function CueCardReader({
               <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
                 {variants.map((_, i) => {
                   const active = i === variantIndex;
-                  const tone = tones[i % tones.length];
+                  const tone = palette[i % palette.length];
                   return (
                     <button
                       key={i}
@@ -680,25 +702,26 @@ function CueCardReader({
                       role="tab"
                       aria-selected={active}
                       onClick={() => goToVariant(i)}
-                      className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-200 ease-out hover:-translate-y-[1px] sm:py-3"
+                      className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-300 ease-out hover:-translate-y-[1px] sm:py-3"
                       style={{
-                        backgroundColor: tone.tint,
+                        backgroundColor: active ? tone.tabBg : "oklch(1 0 0 / 0.04)",
                         boxShadow: active
-                          ? `inset 0 0 0 1.5px ${tone.dot}, 0 4px 14px -6px ${tone.dot}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
-                        opacity: active ? 1 : 0.72,
+                          ? `inset 0 1px 0 oklch(1 0 0 / 0.25), 0 6px 18px -6px ${tone.tabBg}`
+                          : "inset 0 0 0 1px oklch(1 0 0 / 0.05)",
                       }}
                     >
                       <span
                         className="block h-[7px] w-[7px] rounded-full transition-all duration-300"
                         style={{
-                          backgroundColor: tone.dot,
-                          boxShadow: active ? `0 0 0 3px ${tone.tint}, 0 0 0 4px ${tone.dot}` : "none",
+                          backgroundColor: active ? "oklch(1 0 0 / 0.95)" : tone.tabBg,
+                          boxShadow: active ? "0 0 0 3px oklch(1 0 0 / 0.18)" : "none",
                         }}
                       />
                       <span
-                        className="font-display text-[13px] font-bold tracking-tight sm:text-[14px]"
-                        style={{ color: tone.text }}
+                        className="font-display text-[13px] font-bold tracking-tight transition-colors sm:text-[14px]"
+                        style={{
+                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.62)",
+                        }}
                       >
                         Answer {i + 1}
                       </span>
@@ -711,8 +734,7 @@ function CueCardReader({
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-foreground/65 transition-all duration-200 hover:text-foreground sm:h-12 sm:w-12"
-                style={{ backgroundColor: "oklch(0.96 0.03 25)" }}
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Next sample answer"
               >
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
