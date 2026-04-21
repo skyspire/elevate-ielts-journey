@@ -304,6 +304,7 @@ export function FlipExpansion({
             They emerge from the screen edges as the reader scrolls deeper into
             the model answer, and gently retreat when scrolling back up. */}
         {isExpanded && isCue && followUps.length > 0 && (
+          <>
           <div className="pointer-events-none absolute inset-0 hidden lg:block">
             {followUps.map((q, i) => {
               // Each card has its own activation threshold along the scroll
