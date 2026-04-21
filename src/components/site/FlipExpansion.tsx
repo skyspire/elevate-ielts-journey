@@ -645,7 +645,7 @@ function CueCardReader({
                 >
                   <h3
                     className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
-                    style={{ color: activePalette.heading }}
+                    style={{ color: activePalette.heading, transition: "color 650ms cubic-bezier(0.4, 0, 0.2, 1)" }}
                   >
                     {s.heading}
                   </h3>
