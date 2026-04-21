@@ -97,6 +97,12 @@ export function WritingAnswerBillboard({
   const [laneAnim, setLaneAnim] = useState<"idle" | "out" | "in">("idle");
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // Touch-swipe state — tracks the starting point of a horizontal drag
+  // so we can decide on touchend whether the gesture should advance the
+  // active answer variant. Vertical-dominant gestures are ignored so the
+  // reading lane keeps its native scroll behaviour.
+  const touchStartRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const swipeHandledRef = useRef(false);
 
   const activePalette = PALETTE[variantIndex % PALETTE.length];
 
@@ -172,6 +178,37 @@ export function WritingAnswerBillboard({
 
   const frameHeight = fullScreen ? "100vh" : "min(720px, 78vh)";
 
+  // ── Touch-swipe handlers ───────────────────────────────────────────────
+  // Horizontal swipes on the billboard advance / rewind the active answer
+  // variant. Thresholds: ≥50px horizontal travel AND horizontal distance at
+  // least 1.4× vertical distance (so a near-vertical scroll never triggers
+  // a tab change). One swipe per touch — `swipeHandledRef` debounces the
+  // gesture across move events.
+  const SWIPE_THRESHOLD = 50;
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    if (!t) return;
+    touchStartRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+    swipeHandledRef.current = false;
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (swipeHandledRef.current) return;
+    const start = touchStartRef.current;
+    if (!start) return;
+    const t = e.touches[0];
+    if (!t) return;
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+    if (Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    swipeHandledRef.current = true;
+    // dx > 0 → finger moved right → previous answer; dx < 0 → next.
+    goToVariant(variantIndex + (dx < 0 ? 1 : -1));
+  };
+  const onTouchEnd = () => {
+    touchStartRef.current = null;
+  };
+
   return (
     <section
       className={
@@ -182,8 +219,13 @@ export function WritingAnswerBillboard({
       style={{
         borderColor: fullScreen ? undefined : "oklch(0.30 0.035 250 / 0.10)",
         minHeight: fullScreen ? undefined : frameHeight,
+        touchAction: "pan-y",
       }}
       aria-label="Sample answer reader"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={onTouchEnd}
     >
       {/* ── Two-column billboard frame ──────────────────────────────── */}
       <div
