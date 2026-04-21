@@ -629,9 +629,9 @@ function TaskEnvelopeScroll({
 
   return (
     <div className="relative mx-auto max-w-3xl">
-      {/* 3-column layout — vintage brass compass in its own column */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-10">
-        <div className="pb-2">
+      {/* 3-column layout — equal-width side columns mirror around the compass */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 sm:gap-10">
+        <div className="flex justify-end">
           {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
         </div>
 
@@ -731,7 +731,7 @@ function TaskEnvelopeScroll({
           )}
         </div>
 
-        <div className="pb-8 sm:pb-12">
+        <div className="flex justify-start">
           {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
         </div>
       </div>
