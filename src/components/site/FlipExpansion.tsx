@@ -46,10 +46,13 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
-  // Gravity drop & settle — drives the silent answer-swap choreography.
-  // "out": current paragraphs lift then drop & dissolve.
-  // "in":  new paragraphs fall in from above with a soft settle.
+  // Lateral slide choreography (sequential out → in).
+  // "out": current answer slides out in the switch direction (260ms).
+  // "in":  new answer slides in from the opposite side (380ms).
   const [gravityPhase, setGravityPhase] = useState<"idle" | "out" | "in">("idle");
+  // Direction of the most recent variant switch: +1 = next (slide left out,
+  // new arrives from right); -1 = prev (slide right out, new arrives from left).
+  const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
@@ -95,21 +98,17 @@ export function FlipExpansion({
     return () => clearTimeout(flipTimer);
   }, [open]);
 
-  // Sequentially reveal answer sections once expanded — and again every time
-  // the active variant changes, so each switch feels freshly composed.
+  // Reveal answer sections: gentle stagger on first open, instant on variant
+  // switch (so the lateral slide-in animation isn't fighting an opacity
+  // stagger underneath it).
   useEffect(() => {
     if (phase !== "expanded") return;
     const total = sections.length;
-    // On a variant switch (instant swap mid-flight), reveal all sections at
-    // once with no stagger — the answer text stays calm while the paper plane
-    // carries the visual transition.
-    const isVariantSwitch = gravityPhase === "in";
+    const isVariantSwitch = gravityPhase === "in" || gravityPhase === "out";
     if (isVariantSwitch) {
       setRevealedSections(total);
       return;
     }
-    // First open: keep the gentle, lingering reveal so the page composes
-    // itself as the reader settles in.
     setRevealedSections(0);
     const timers: number[] = [];
     const initialDelay = 220;
@@ -169,30 +168,36 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Atmospheric mood-shift — silent, premium answer swap.
-  // The CueCardReader handles its own desaturate/resaturate veil keyed on
-  // `variantIndex`; here we just flip the index at the right moment so the
-  // new text appears at the trough of the dip (~325ms in), perfectly synced
-  // with the reading lane's mood change. Total transition ≈ 650ms.
+  // Lateral slide — sequential, professional answer swap.
+  // 1. Out (0 → 260ms): current answer slides off in the switch direction.
+  // 2. Swap (at 260ms): variantIndex flips, scroll resets, new answer is
+  //    pre-positioned off-screen on the opposite side.
+  // 3. In  (260 → 640ms): new answer slides into place with a soft fade.
+  // Headings cross-fade their color over the full duration in parallel.
   function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
+    // Direction: forward (+1) when moving to a higher index (with wrap),
+    // backward (-1) otherwise. Used to choose slide-out/in directions.
+    const forward =
+      (clamped - variantIndex + variants.length) % variants.length === 1;
+    setSwitchDir(forward ? 1 : -1);
     setVariantTransitioning(true);
-    setGravityPhase("out"); // signals the reveal effect to swap instantly
+    setGravityPhase("out");
 
-    // Mid-trough swap: at ~325ms the lane is at its dimmest/most-desaturated.
+    // Mid-transition swap — old has fully slid out by now.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
       setGravityPhase("in");
-    }, 325);
+    }, 260);
 
-    // Release the transition lock once the resaturate has settled.
+    // Release transition lock once the slide-in has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
       setGravityPhase("idle");
-    }, 700);
+    }, 660);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
@@ -310,6 +315,7 @@ export function FlipExpansion({
             goToVariant={goToVariant}
             variantTransitioning={variantTransitioning}
             gravityPhase={gravityPhase}
+            switchDir={switchDir}
             sections={sections}
             revealedSections={revealedSections}
             scrollProgress={scrollProgress}
@@ -359,6 +365,7 @@ type CueReaderProps = {
   goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
   gravityPhase: "idle" | "out" | "in";
+  switchDir: 1 | -1;
   sections: { heading: string; body: string }[];
   revealedSections: number;
   scrollProgress: number;
@@ -382,6 +389,7 @@ function CueCardReader({
   goToVariant,
   variantTransitioning,
   gravityPhase,
+  switchDir,
   sections,
   revealedSections,
   scrollProgress,
@@ -629,47 +637,75 @@ function CueCardReader({
         }}
       >
         <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
-          <div
-            className="space-y-12 pt-4 ink-bleed-reveal"
-            // Re-key the entire lane on variant switch so the ink-bleed mask
-            // animation replays cleanly from the top each time.
-            key={`ink-${variantIndex}`}
-            style={{
-              // Ink bleed reveal — a soft downward mask wipes from top to
-              // bottom (~650ms), as if ink is bleeding into paper. Paired
-              // with a whisper blur-to-sharp focus for a premium, editorial
-              // arrival. After settling, a gentle breathing glow pulses
-              // behind the text every ~6s.
-              ["--ink-tint" as string]: activePalette.glow,
-            }}
-          >
-            {sections.map((s, i) => {
-              const visible = i < revealedSections;
-              return (
-                <section
-                  key={`${variantIndex}-${s.heading}`}
-                  style={{
-                    visibility: visible ? "visible" : "hidden",
-                  }}
-                >
-                  <h3
-                    className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
-                    style={{ color: activePalette.heading, transition: "color 650ms cubic-bezier(0.4, 0, 0.2, 1)" }}
-                  >
-                    {s.heading}
-                  </h3>
-                  <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
-                    {s.body}
-                  </p>
-                  {/* Soft rhythm marker between paragraphs */}
-                  {i < sections.length - 1 && (
-                    <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
-                  )}
-                </section>
-              );
-            })}
-          </div>
+          {(() => {
+            // Lateral slide choreography (sequential out → in):
+            //   out  → current text translates by  -switchDir * 36px and
+            //          fades to 0 over 260ms (ease-in / accelerate).
+            //   swap → variantIndex flips; the lane is re-keyed and remounts
+            //          fresh, immediately running the `lane-slide-in` CSS
+            //          keyframe which starts at +switchDir * 36px / opacity 0
+            //          and settles to 0 / 1 over 380ms (ease-out / decelerate).
+            // Headings cross-fade their color across the full 640ms.
+            const isOut = gravityPhase === "out";
 
+            const outStyle: React.CSSProperties = {
+              transform: `translate3d(${-switchDir * 36}px, 0, 0)`,
+              opacity: 0,
+              transition:
+                "transform 260ms cubic-bezier(0.4, 0, 1, 1), opacity 260ms cubic-bezier(0.4, 0, 1, 1)",
+              willChange: "transform, opacity",
+            };
+
+            const inOrIdleStyle: React.CSSProperties = {
+              // CSS keyframe handles the enter — runs once on mount when the
+              // lane is re-keyed by variantIndex. At rest, the element sits
+              // at translate(0) / opacity 1 with no transition.
+              animation:
+                gravityPhase === "in"
+                  ? `lane-slide-in 380ms cubic-bezier(0, 0, 0.2, 1) both`
+                  : undefined,
+              ["--lane-from-x" as string]: `${switchDir * 36}px`,
+            };
+
+            return (
+              <div
+                // Re-key on variant change so the incoming element mounts
+                // fresh and runs the enter keyframe cleanly.
+                key={`lane-${variantIndex}`}
+                className="space-y-12 pt-4"
+                style={isOut ? outStyle : inOrIdleStyle}
+                data-lane-phase={gravityPhase}
+              >
+                {sections.map((s, i) => {
+                  const visible = i < revealedSections;
+                  return (
+                    <section
+                      key={`${variantIndex}-${s.heading}`}
+                      style={{
+                        visibility: visible ? "visible" : "hidden",
+                      }}
+                    >
+                      <h3
+                        className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
+                        style={{
+                          color: activePalette.heading,
+                          transition: "color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+                        }}
+                      >
+                        {s.heading}
+                      </h3>
+                      <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
+                        {s.body}
+                      </p>
+                      {i < sections.length - 1 && (
+                        <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </article>
       </div>
 
