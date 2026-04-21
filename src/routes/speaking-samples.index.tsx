@@ -355,7 +355,7 @@ function SpeakingSamplesPage() {
   );
 }
 
-// ───────── Format toggle (the hero CTA) ─────────
+// ───────── Format toggle — vintage brass compass (matches Writing Samples) ─────────
 function FormatTogglePair({
   mode,
   onChange,
@@ -363,81 +363,155 @@ function FormatTogglePair({
   mode: Mode | null;
   onChange: (m: Mode) => void;
 }) {
-  return (
-    <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2 sm:gap-5">
-      <FormatCard
-        active={mode === "general"}
-        onClick={() => onChange("general")}
-        icon={MessageCircle}
-        eyebrow="Part 1 & Part 3"
-        title="General Questions"
-        subtitle="Short, conversational questions about you and abstract opinion topics."
-      />
-      <FormatCard
-        active={mode === "cuecards"}
-        onClick={() => onChange("cuecards")}
-        icon={ClipboardList}
-        eyebrow="Part 2"
-        title="Cue Cards & Follow-Ups"
-        subtitle="Long-turn descriptions from a topic card, plus examiner follow-up prompts."
-      />
-    </div>
-  );
-}
+  const isGeneral = mode === "general";
+  const isCue = mode === "cuecards";
+  const noSelection = mode === null;
 
-function FormatCard({
-  active,
-  onClick,
-  icon: Icon,
-  eyebrow,
-  title,
-  subtitle,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: ComponentType<LucideProps>;
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-}) {
-  return (
+  const accentText = "text-[oklch(0.42_0.10_165)]";
+  const accentRule = "bg-[oklch(0.50_0.10_165)]";
+
+  const renderItem = (
+    active: boolean,
+    onClick: () => void,
+    eyebrow: string,
+    name: string,
+    align: "left" | "right",
+  ) => (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group relative flex flex-col items-start gap-4 overflow-hidden rounded-3xl border bg-white p-6 text-left shadow-soft transition-all hover:-translate-y-1 hover:shadow-card sm:p-7 ${
-        active
-          ? "ring-2 ring-inset ring-[oklch(0.55_0.10_165)]/55 border-[oklch(0.55_0.10_165)]/55"
-          : "border-foreground/10"
+      className={`group block bg-transparent p-2 sm:p-4 ${
+        align === "left" ? "text-left" : "text-right"
+      } transition-opacity duration-300 ${
+        active ? "opacity-100" : "opacity-50 hover:opacity-80"
       }`}
     >
-      {/* Decorative corner doodle */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[oklch(0.92_0.06_165)] opacity-60 transition-transform duration-500 group-hover:scale-125"
-      />
+      <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-2`}>
+        <h3
+          className={`font-display font-bold leading-tight tracking-tight ${
+            active ? "text-foreground" : "text-foreground/70"
+          }`}
+          style={{ fontSize: "clamp(1.15rem, 3.2vw, 1.75rem)" }}
+        >
+          <span>{eyebrow}</span>
+          <span className="mx-2 text-foreground/30">·</span>
+          <span>{name}</span>
+        </h3>
+        <span
+          aria-hidden
+          className={`block h-px transition-all duration-500 ${
+            active ? `w-12 sm:w-16 ${accentRule}` : "w-6 bg-foreground/15"
+          }`}
+        />
+      </div>
+    </button>
+  );
 
-      <span
-        className={`relative flex h-14 w-14 items-center justify-center rounded-2xl shadow-soft transition-colors ${
-          active
-            ? "bg-[oklch(0.50_0.10_165)] text-white"
-            : "bg-[oklch(0.94_0.04_165)] text-[oklch(0.40_0.10_165)]"
-        }`}
-      >
-        <Icon className="h-7 w-7" strokeWidth={2.3} />
-      </span>
+  // Needle: -90° = General (left), +90° = Cue Cards (right), 0 = idle (north)
+  const needleDeg = isGeneral ? -90 : isCue ? 90 : 0;
 
-      <div className="relative">
-        <div className="font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-          {eyebrow}
+  return (
+    <div className="relative mx-auto max-w-3xl">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 sm:gap-10">
+        <div className="flex justify-end">
+          {renderItem(isGeneral, () => onChange("general"), "Part 1 / 3", "General", "right")}
         </div>
-        <div className="mt-1 flex items-center gap-2">
-          <h3 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-            {title}
-          </h3>
-          {active && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[oklch(0.40_0.10_165)]">
-              <CheckCircle2 className="h-3.5 w-3.5" />
+
+        {/* Vintage brass compass */}
+        <div
+          className="relative flex flex-col items-center justify-center"
+          style={{ width: "clamp(72px, 11vw, 96px)" }}
+        >
+          <svg
+            viewBox="0 0 100 100"
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            aria-label="Compass selector"
+          >
+            <defs>
+              <radialGradient id="brassRimSpk" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="oklch(0.88 0.12 80)" />
+                <stop offset="45%" stopColor="oklch(0.72 0.13 70)" />
+                <stop offset="80%" stopColor="oklch(0.52 0.11 55)" />
+                <stop offset="100%" stopColor="oklch(0.38 0.08 45)" />
+              </radialGradient>
+              <radialGradient id="compassFaceSpk" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.96 0.03 85)" />
+                <stop offset="70%" stopColor="oklch(0.90 0.05 80)" />
+                <stop offset="100%" stopColor="oklch(0.80 0.07 70)" />
+              </radialGradient>
+              <linearGradient id="needleNSpk" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.55 0.20 30)" />
+                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
+              </linearGradient>
+              <linearGradient id="needleSSpk" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.45 0.04 60)" />
+                <stop offset="100%" stopColor="oklch(0.30 0.03 55)" />
+              </linearGradient>
+            </defs>
+
+            <circle cx="50" cy="50" r="48" fill="url(#brassRimSpk)" />
+            <circle cx="50" cy="50" r="48" fill="none" stroke="oklch(0.32 0.06 40)" strokeWidth="0.6" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="oklch(0.38 0.08 45)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="40" fill="url(#compassFaceSpk)" />
+
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.sin(a) * 36;
+              const y1 = 50 - Math.cos(a) * 36;
+              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
+              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="oklch(0.30 0.05 45)"
+                  strokeWidth={i % 3 === 0 ? 1.2 : 0.6}
+                  strokeLinecap="round"
+                />
+              );
+            })}
+
+            <text x="50" y="18" textAnchor="middle" fontSize="7" fontWeight="800" fill="oklch(0.30 0.05 45)" fontFamily="serif">N</text>
+            <text x="84" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">E</text>
+            <text x="50" y="88" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">S</text>
+            <text x="16" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">W</text>
+
+            <g
+              style={{
+                transformOrigin: "50px 50px",
+                transform: `rotate(${needleDeg}deg)`,
+                transition: "transform 850ms cubic-bezier(0.34, 1.3, 0.64, 1)",
+              }}
+            >
+              <polygon points="50,12 46,50 54,50" fill="url(#needleNSpk)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.4" />
+              <polygon points="50,88 46,50 54,50" fill="url(#needleSSpk)" stroke="oklch(0.22 0.02 55)" strokeWidth="0.4" />
+            </g>
+
+            <circle cx="50" cy="50" r="3.2" fill="oklch(0.75 0.13 75)" stroke="oklch(0.38 0.08 45)" strokeWidth="0.6" />
+            <circle cx="49.2" cy="49.2" r="1" fill="oklch(0.95 0.06 85)" opacity="0.85" />
+          </svg>
+
+          {noSelection && (
+            <span
+              className={`relative z-10 mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
+            >
+              Pick a Format
+            </span>
+          )}
+        </div>
+
+        <div className="flex justify-start">
+          {renderItem(isCue, () => onChange("cuecards"), "Part 2", "Cue Cards", "left")}
+        </div>
+      </div>
+    </div>
+  );
+}
               Selected
             </span>
           )}
