@@ -687,10 +687,18 @@ function CueCardReader({
                       }}
                     >
                       <h3
-                        className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
+                        className="-mx-6 rounded-2xl px-6 py-3 font-display text-[20px] font-extrabold leading-tight tracking-tight sm:-mx-10 sm:px-10 sm:py-3.5 sm:text-[22px]"
                         style={{
                           color: activePalette.heading,
-                          transition: "color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+                          // Soft tinted band — derived from the active heading
+                          // color, mixed with the screen tint so it sits
+                          // gently on top of the already-tinted reading lane
+                          // without overwhelming the body text.
+                          backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
+                          // Hairline tonal border for a refined edge.
+                          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
+                          transition:
+                            "color 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 640ms cubic-bezier(0.4, 0, 0.2, 1)",
                         }}
                       >
                         {s.heading}
