@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ArrowLeft, Mic, Sparkles, ArrowUpRight, Link as LinkIcon } from "lucide-react";
+import { ArrowLeft, Mic, Sparkles, ArrowUpRight, Link as LinkIcon, MessageCircleQuestion } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
