@@ -266,7 +266,7 @@ function WritingSamplesPage() {
                       cx="100"
                       cy="92"
                       r="48"
-                      fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.58 0.09 160)"}
+                      fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
                       className="transition-colors duration-500"
                     />
                     {/* Ear tufts */}
