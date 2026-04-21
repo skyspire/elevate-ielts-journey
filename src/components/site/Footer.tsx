@@ -29,7 +29,7 @@ export function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
                 <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
               </span>
-              <span className="font-display text-lg font-extrabold tracking-tight">BandPath</span>
+              <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
             </div>
             <p className="mt-4 max-w-sm text-sm font-medium text-white/70">
               Recent IELTS Writing & Speaking questions with Band 8–9 sample answers — built to help
@@ -62,7 +62,7 @@ export function Footer() {
 
         <div className="mt-14 border-t border-white/10 pt-8">
           <p className="text-xs font-semibold leading-relaxed text-white/55">
-            Disclaimer: BandPath is an independent IELTS preparation resource and is{" "}
+            Disclaimer: BigIELTS.com is an independent IELTS preparation resource and is{" "}
             <span className="text-white/80">
               not affiliated with, endorsed by, or connected to IELTS, the British Council, IDP
               Education, or Cambridge Assessment English
@@ -71,7 +71,7 @@ export function Footer() {
             educational purposes only.
           </p>
           <p className="mt-4 text-xs font-bold text-white/50">
-            © {new Date().getFullYear()} BandPath. All rights reserved.
+            © {new Date().getFullYear()} BigIELTS.com. All rights reserved.
           </p>
         </div>
       </div>

@@ -31,7 +31,7 @@ export function WhyChooseUs() {
       <DoodleAccents density="sparse" />
       <div className="container-page relative">
         <SectionHeader
-          eyebrow="Why choose BandPath"
+          eyebrow="Why choose BigIELTS.com"
           title="Everything you need to reach Band 8+"
         />
         <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">

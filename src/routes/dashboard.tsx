@@ -20,13 +20,13 @@ type Module = "academic" | "general";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — BandPath" },
+      { title: "Dashboard — BigIELTS.com" },
       {
         name: "description",
         content:
           "Your IELTS preparation dashboard. Switch between Academic and General modules and access samples, vocabulary, templates, predictions and more.",
       },
-      { property: "og:title", content: "Dashboard — BandPath" },
+      { property: "og:title", content: "Dashboard — BigIELTS.com" },
       {
         property: "og:description",
         content:

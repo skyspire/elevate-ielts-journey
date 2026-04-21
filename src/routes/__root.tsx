@@ -30,13 +30,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BandPath — Recent IELTS Writing & Speaking Questions with Sample Answers" },
+      { title: "BigIELTS.com — Recent IELTS Writing & Speaking Questions with Sample Answers" },
       {
         name: "description",
         content:
           "Recent IELTS Writing and Speaking exam questions with Band 8–9 sample answers, vocabulary, and structure breakdowns. Updated monthly.",
       },
-      { property: "og:title", content: "BandPath — Recent IELTS Questions & Sample Answers" },
+      { property: "og:title", content: "BigIELTS.com — Recent IELTS Questions & Sample Answers" },
       {
         property: "og:description",
         content:
