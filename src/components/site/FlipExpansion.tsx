@@ -574,7 +574,7 @@ function CueCardReader({
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
         style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
       >
-        <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
+        <div ref={headerAnchorRef} className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2.5">
               <span
