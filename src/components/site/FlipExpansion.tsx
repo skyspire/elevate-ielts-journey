@@ -46,14 +46,10 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
-  // Typographic zoom-through overlay state for the answer transition
-  const [wash, setWash] = useState<{
-    x: number;
-    y: number;
-    color: string;
-    numeral: string;
-    key: number;
-  } | null>(null);
+  // Gravity drop & settle — drives the silent answer-swap choreography.
+  // "out": current paragraphs lift then drop & dissolve.
+  // "in":  new paragraphs fall in from above with a soft settle.
+  const [gravityPhase, setGravityPhase] = useState<"idle" | "out" | "in">("idle");
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
@@ -106,16 +102,21 @@ export function FlipExpansion({
     setRevealedSections(0);
     const total = sections.length;
     const timers: number[] = [];
+    // First open: gentle, lingering reveal. Variant switch: tight cascade
+    // synchronized with the gravity drop.
+    const isVariantSwitch = gravityPhase === "in";
+    const initialDelay = isVariantSwitch ? 40 : 220;
+    const stagger = isVariantSwitch ? 90 : 320;
     for (let i = 0; i < total; i++) {
       timers.push(
         window.setTimeout(
           () => setRevealedSections((n) => Math.max(n, i + 1)),
-          220 + i * 320,
+          initialDelay + i * stagger,
         ),
       );
     }
     return () => timers.forEach((id) => clearTimeout(id));
-  }, [phase, topic.id, variantIndex, sections.length]);
+  }, [phase, topic.id, variantIndex, sections.length, gravityPhase]);
 
   // Lock body scroll while open
   useEffect(() => {
@@ -161,38 +162,29 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Palette mirrored from CueCardReader so the wash color matches the next tab.
-  // Coral · Marigold · Emerald
-  const variantWashColors = [
-    "oklch(0.68 0.20 25)",  // coral
-    "oklch(0.78 0.17 80)",  // marigold
-    "oklch(0.62 0.16 155)", // emerald
-  ];
-
-  function goToVariant(next: number, origin?: { x: number; y: number }) {
+  // Gravity drop & settle — silent, organic, ultra-smooth.
+  // Phase "out" (380ms): paragraphs lift 6px then drop & dissolve under gravity.
+  // Mid-flight: swap variant so the new content is in place underneath.
+  // Phase "in" (~700ms total): each section falls in with bounce-settle,
+  // staggered 80ms apart (handled by the existing per-section reveal effect).
+  function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
+    setGravityPhase("out");
 
-    // Trigger typographic zoom-through from the tab's position (or screen center).
-    const x = origin?.x ?? window.innerWidth / 2;
-    const y = origin?.y ?? window.innerHeight - 80;
-    const color = variantWashColors[clamped % variantWashColors.length];
-    const numeral = String(clamped + 1);
-    setWash({ x, y, color, numeral, key: Date.now() });
-
-    // Switch content under the overlay mid-animation, so when it shrinks away
-    // the new screen + text are already in place underneath.
+    // Mid-air swap: by 380ms the old text has dropped & faded.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
-    }, 480);
+      setGravityPhase("in");
+    }, 380);
 
-    // Clear overlay + transition lock after the full sweep finishes.
+    // Release the lock once the falling-in stagger has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
-      setWash(null);
+      setGravityPhase("idle");
     }, 1100);
   }
 
@@ -229,53 +221,7 @@ export function FlipExpansion({
       aria-modal="true"
       aria-label={`${topic.label} — Sample answer`}
     >
-      {/* Typographic zoom-through overlay — a giant numeral inflates from the
-          clicked tab in the next answer's color, holds as a typographic
-          moment, then shrinks into place as the page settles underneath.
-          A soft color veil rides along to bridge the two screens. */}
-      {wash && (
-        <div
-          key={wash.key}
-          className="pointer-events-none absolute inset-0 z-[110] overflow-hidden"
-          style={{ animation: "zoom-veil 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards" }}
-        >
-          {/* Soft tinted veil that fades the screens together */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(60% 60% at ${wash.x}px ${wash.y}px, ${wash.color}, transparent 75%)`,
-              opacity: 0,
-              animation: "zoom-veil-tint 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
-              mixBlendMode: "multiply",
-            }}
-          />
-          {/* The hero numeral */}
-          <div
-            className="absolute"
-            style={{
-              left: wash.x,
-              top: wash.y,
-              transform: "translate(-50%, -50%)",
-              animation: "zoom-numeral 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
-              willChange: "transform, opacity",
-            }}
-          >
-            <span
-              className="font-display block select-none leading-none"
-              style={{
-                fontSize: "clamp(140px, 24vw, 320px)",
-                fontWeight: 900,
-                letterSpacing: "-0.06em",
-                color: wash.color,
-                textShadow: `0 30px 80px ${wash.color}55, 0 8px 24px ${wash.color}33`,
-                WebkitTextStroke: `1px ${wash.color}`,
-              }}
-            >
-              {wash.numeral}
-            </span>
-          </div>
-        </div>
-      )}
+      {/* No overlay needed — Gravity drop & settle happens in-place. */}
       {/* Backdrop */}
       <button
         type="button"
@@ -356,6 +302,7 @@ export function FlipExpansion({
             variantIndex={variantIndex}
             goToVariant={goToVariant}
             variantTransitioning={variantTransitioning}
+            gravityPhase={gravityPhase}
             sections={sections}
             revealedSections={revealedSections}
             scrollProgress={scrollProgress}
@@ -404,6 +351,7 @@ type CueReaderProps = {
   variantIndex: number;
   goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
+  gravityPhase: "idle" | "out" | "in";
   sections: { heading: string; body: string }[];
   revealedSections: number;
   scrollProgress: number;
@@ -426,6 +374,7 @@ function CueCardReader({
   variantIndex,
   goToVariant,
   variantTransitioning,
+  gravityPhase,
   sections,
   revealedSections,
   scrollProgress,
@@ -639,24 +588,44 @@ function CueCardReader({
             "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
         }}
       >
-        <article
-          className="mx-auto w-full max-w-[640px] px-6 sm:px-10"
-          style={{
-            opacity: variantTransitioning ? 0 : 1,
-            transform: variantTransitioning ? "translateY(8px)" : "translateY(0)",
-            transition: "opacity 220ms ease, transform 220ms ease",
-          }}
-        >
+        <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
           <div className="space-y-12 pt-4">
             {sections.map((s, i) => {
               const visible = i < revealedSections;
+              const isOut = gravityPhase === "out";
+
+              // Gravity drop & settle:
+              //   - "out": each line lifts 6px (anti-gravity), then drops 28px
+              //     while fading. Staggered by 50ms top-down so it cascades.
+              //   - settled (visible, idle/in): rests at translateY(0).
+              //   - hidden (not yet revealed): waits 32px above, ready to fall.
+              let translateY = "0px";
+              let opacity = visible ? 1 : 0;
+              let transition =
+                "transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 380ms ease-out";
+
+              if (isOut) {
+                // Two-stage motion via CSS animation — lift then drop.
+                translateY = "0px";
+                opacity = 0;
+                transition = "none";
+              } else if (!visible) {
+                // Pre-fall resting position: held just above its slot.
+                translateY = "-26px";
+                opacity = 0;
+              }
+
               return (
                 <section
                   key={`${variantIndex}-${s.heading}`}
-                  className="transition-all duration-700"
                   style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? "translateY(0)" : "translateY(14px)",
+                    opacity,
+                    transform: `translateY(${translateY})`,
+                    transition,
+                    animation: isOut
+                      ? `gravity-out 380ms cubic-bezier(0.55, 0, 0.85, 0.4) ${i * 50}ms forwards`
+                      : undefined,
+                    willChange: "transform, opacity",
                   }}
                 >
                   <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
