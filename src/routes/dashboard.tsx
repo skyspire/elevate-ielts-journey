@@ -156,112 +156,78 @@ const features: Feature[] = [
   },
 ];
 
-// Per-tone color sets for tinted cards, gradient numbers, and glossy 3D icon
+// Polaroid palette per tone — soft photo-area tint + ink color for the doodle.
+// The card itself stays cream/white (polaroid frame).
 const tones: Record<
   Feature["tone"],
   {
-    bg: string;
-    border: string; // 2px solid tone-colored border
-    arrowBg: string;
-    arrowText: string;
-    numberGradient: string;
-    // Glossy 3D icon — gradient stops + drop shadow color
-    iconStart: string; // light tone (top of icon)
-    iconEnd: string; // deep tone (bottom of icon)
-    iconShadow: string; // soft tone-colored shadow under the icon disc
+    photoBg: string; // soft pastel for the photo area
+    inkColor: string; // doodle / icon stroke color
+    tapeColor: string; // washi tape color
+    accentText: string; // small accent text color
   }
 > = {
   navy: {
-    // Deep navy-clay
-    bg: "bg-[oklch(0.32_0.06_255)]",
-    border:
-      "border border-[oklch(0.22_0.05_255)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.32_0.06_255)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.02_250)_0%,oklch(0.82_0.10_240)_100%)]",
-    iconStart: "oklch(0.62 0.12 250)",
-    iconEnd: "oklch(0.30 0.08 255)",
-    iconShadow: "oklch(0.20 0.06 255 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_255)]",
+    inkColor: "oklch(0.32 0.10 255)",
+    tapeColor: "oklch(0.78 0.10 250 / 0.75)",
+    accentText: "text-[oklch(0.36_0.10_255)]",
   },
   rust: {
-    // Burnt rust / terracotta
-    bg: "bg-[oklch(0.40_0.13_40)]",
-    border:
-      "border border-[oklch(0.28_0.10_40)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.40_0.13_40)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.04_60)_0%,oklch(0.82_0.13_55)_100%)]",
-    iconStart: "oklch(0.68 0.15 45)",
-    iconEnd: "oklch(0.38 0.13 40)",
-    iconShadow: "oklch(0.30 0.12 40 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.06_45)]",
+    inkColor: "oklch(0.42 0.14 40)",
+    tapeColor: "oklch(0.82 0.10 50 / 0.75)",
+    accentText: "text-[oklch(0.42_0.13_40)]",
   },
   forest: {
-    // Deep forest green
-    bg: "bg-[oklch(0.34_0.07_160)]",
-    border:
-      "border border-[oklch(0.22_0.06_160)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.07_160)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.04_160)_0%,oklch(0.82_0.11_155)_100%)]",
-    iconStart: "oklch(0.60 0.10 160)",
-    iconEnd: "oklch(0.30 0.08 160)",
-    iconShadow: "oklch(0.22 0.06 160 / 0.5)",
+    photoBg: "bg-[oklch(0.93_0.05_160)]",
+    inkColor: "oklch(0.36 0.09 160)",
+    tapeColor: "oklch(0.82 0.08 155 / 0.75)",
+    accentText: "text-[oklch(0.36_0.09_160)]",
   },
   plum: {
-    // Deep plum / aubergine
-    bg: "bg-[oklch(0.34_0.08_320)]",
-    border:
-      "border border-[oklch(0.22_0.07_320)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.08_320)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.03_320)_0%,oklch(0.82_0.10_315)_100%)]",
-    iconStart: "oklch(0.62 0.12 315)",
-    iconEnd: "oklch(0.32 0.10 320)",
-    iconShadow: "oklch(0.22 0.07 320 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_320)]",
+    inkColor: "oklch(0.36 0.10 320)",
+    tapeColor: "oklch(0.82 0.08 315 / 0.75)",
+    accentText: "text-[oklch(0.38_0.10_320)]",
   },
   ochre: {
-    // Warm ochre / mustard
-    bg: "bg-[oklch(0.45_0.11_75)]",
-    border:
-      "border border-[oklch(0.32_0.09_75)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.40_0.10_75)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.97_0.04_85)_0%,oklch(0.85_0.13_80)_100%)]",
-    iconStart: "oklch(0.72 0.13 80)",
-    iconEnd: "oklch(0.42 0.11 75)",
-    iconShadow: "oklch(0.30 0.09 75 / 0.5)",
+    photoBg: "bg-[oklch(0.94_0.07_85)]",
+    inkColor: "oklch(0.42 0.11 75)",
+    tapeColor: "oklch(0.85 0.11 80 / 0.75)",
+    accentText: "text-[oklch(0.42_0.11_75)]",
   },
   teal: {
-    // Deep teal-ink
-    bg: "bg-[oklch(0.34_0.07_200)]",
-    border:
-      "border border-[oklch(0.22_0.06_200)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.07_200)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.03_200)_0%,oklch(0.82_0.10_195)_100%)]",
-    iconStart: "oklch(0.62 0.10 200)",
-    iconEnd: "oklch(0.30 0.08 200)",
-    iconShadow: "oklch(0.22 0.06 200 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_200)]",
+    inkColor: "oklch(0.34 0.09 200)",
+    tapeColor: "oklch(0.82 0.08 195 / 0.75)",
+    accentText: "text-[oklch(0.36_0.09_200)]",
   },
   espresso: {
-    // Espresso / dark cocoa
-    bg: "bg-[oklch(0.30_0.04_60)]",
-    border:
-      "border border-[oklch(0.20_0.03_60)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.30_0.04_60)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.02_70)_0%,oklch(0.84_0.07_65)_100%)]",
-    iconStart: "oklch(0.58 0.07 65)",
-    iconEnd: "oklch(0.28 0.04 60)",
-    iconShadow: "oklch(0.18 0.03 60 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.03_70)]",
+    inkColor: "oklch(0.32 0.05 60)",
+    tapeColor: "oklch(0.80 0.06 65 / 0.75)",
+    accentText: "text-[oklch(0.34_0.05_60)]",
   },
+};
+
+// Per-card "personality": rotation, size variant, pin position — gives the
+// corkboard masonry feel. Indexed by feature.key for stable look.
+type Personality = {
+  rotate: string; // e.g. "-2.5deg"
+  size: "sm" | "md" | "lg"; // controls grid span + photo height
+  pin: "tape-top" | "pin-left" | "pin-right" | "tape-corner";
+  peekColor: string; // color of the paper peeking behind on hover
+};
+
+const personalities: Record<string, Personality> = {
+  writing: { rotate: "-2.5deg", size: "lg", pin: "tape-top", peekColor: "oklch(0.92 0.06 60)" },
+  speaking: { rotate: "1.8deg", size: "sm", pin: "pin-right", peekColor: "oklch(0.92 0.05 200)" },
+  vocab: { rotate: "-1.2deg", size: "md", pin: "tape-corner", peekColor: "oklch(0.92 0.05 320)" },
+  templates: { rotate: "2.4deg", size: "sm", pin: "pin-left", peekColor: "oklch(0.93 0.05 160)" },
+  predictions: { rotate: "-1.8deg", size: "md", pin: "tape-top", peekColor: "oklch(0.92 0.06 45)" },
+  mistakes: { rotate: "1.5deg", size: "md", pin: "pin-right", peekColor: "oklch(0.92 0.05 255)" },
+  plan: { rotate: "-2deg", size: "sm", pin: "tape-corner", peekColor: "oklch(0.94 0.07 85)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
