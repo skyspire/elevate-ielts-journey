@@ -130,14 +130,14 @@ function WritingSamplesPage() {
   };
 
   const isAcademic = module === "academic";
-  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
-  const accentBg = isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.45_0.15_28)]";
+  const accentBg = isAcademic ? "bg-brand" : "bg-[oklch(0.58_0.16_28)]";
   const accentChip = isAcademic
     ? "bg-brand-soft text-brand border-brand/30"
-    : "bg-[oklch(0.94_0.04_160)] text-[oklch(0.38_0.10_160)] border-[oklch(0.62_0.10_160)]/30";
+    : "bg-[oklch(0.95_0.04_30)] text-[oklch(0.42_0.16_28)] border-[oklch(0.62_0.16_28)]/30";
   const accentRing = isAcademic
     ? "ring-brand/40 border-brand/40"
-    : "ring-[oklch(0.55_0.10_160)]/40 border-[oklch(0.55_0.10_160)]/40";
+    : "ring-[oklch(0.58_0.16_28)]/40 border-[oklch(0.58_0.16_28)]/40";
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
@@ -228,7 +228,7 @@ function WritingSamplesPage() {
                     cy="150"
                     rx="48"
                     ry="46"
-                    fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.58 0.09 160)"}
+                    fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
                     className="transition-colors duration-500"
                   />
                   {/* Belly */}
@@ -236,12 +236,12 @@ function WritingSamplesPage() {
                   {/* Wings */}
                   <path
                     d="M 60 145 Q 50 175 70 188 Q 75 170 78 150 Z"
-                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
                     className="transition-colors duration-500"
                   />
                   <path
                     d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
-                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
                     className="transition-colors duration-500"
                   />
                   {/* Feet */}
@@ -266,13 +266,13 @@ function WritingSamplesPage() {
                       cx="100"
                       cy="92"
                       r="48"
-                      fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.58 0.09 160)"}
+                      fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
                       className="transition-colors duration-500"
                     />
                     {/* Ear tufts */}
                     <path
                       d="M 64 58 l 8 -18 l 12 14 Z M 136 58 l -8 -18 l -12 14 Z"
-                      fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                      fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
                       className="transition-colors duration-500"
                     />
 
@@ -382,7 +382,7 @@ function WritingSamplesPage() {
                 <span
                   aria-hidden
                   className={`absolute inset-x-[-6px] bottom-[6%] -z-10 h-[58%] -rotate-1 ${
-                    isAcademic ? "bg-[oklch(0.92_0.13_85)]" : "bg-[oklch(0.90_0.14_150)]"
+                    isAcademic ? "bg-[oklch(0.92_0.13_85)]" : "bg-[oklch(0.88_0.14_30)]"
                   } opacity-70`}
                   style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
                 />
@@ -574,11 +574,11 @@ function TaskEnvelopeScroll({
   const noSelection = task === null;
   const highlightBg = isAcademic
     ? "bg-[oklch(0.92_0.13_85)]"
-    : "bg-[oklch(0.90_0.14_150)]";
+    : "bg-[oklch(0.88_0.14_30)]";
   const accentBorder = isAcademic
     ? "border-brand/55"
-    : "border-[oklch(0.55_0.10_160)]/55";
-  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
+    : "border-[oklch(0.58_0.16_28)]/55";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.45_0.15_28)]";
 
   const renderItem = (
     active: boolean,
