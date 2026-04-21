@@ -447,55 +447,57 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: GALLERY WHITES (cool grey · porcelain · alabaster)
-  // Three near-white papers with luxury fashion-editorial feel (COS / Aesop).
-  // A single signature deep-navy ink runs across all three variants on
-  // chips, numerals, dividers and follow-up tile borders for brand cohesion.
-  //   • fill / fillDeep   — paper background + slightly toned variant for footer
-  //   • ink               — signature deep navy (used for accents & headings)
-  //   • inkSoft           — softened navy for body text (still high contrast)
-  //   • tabBg / tabBorder — footer pager tab fill + active border
-  //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
-  const SIGNATURE_INK      = "oklch(0.24 0.04 260)";          // deep navy
-  const SIGNATURE_INK_SOFT = "oklch(0.30 0.04 260 / 0.92)";   // softened navy
+  // ── PURE WHITE cue-card surface ─────────────────────────────────────────
+  // All three answer variants share the SAME pure-white paper — no tint,
+  // no gradient, no texture. Color identity (dusty blue → slate) lives only
+  // in the footer pager tabs and the follow-up rail, so the reading lane
+  // itself stays gallery-clean and uninterrupted across variant switches.
+  //   • PURE_WHITE        — flat paper background (used for fill + fillDeep)
+  //   • SIGNATURE_INK     — deep slate-navy for headings & accents
+  //   • SIGNATURE_INK_SOFT — softened slate for body text
+  // Footer tab tones (tabBg/tabBorder) carry the dusty-blue → slate palette
+  // so each variant tab still feels distinct in the colorful footer band.
+  const PURE_WHITE         = "oklch(1 0 0)";
+  const SIGNATURE_INK      = "oklch(0.30 0.035 250)";          // deep slate
+  const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // COOL GREY — crisp neutral white with the faintest blue undertone
-      fill:      "oklch(0.975 0.004 240)",
-      fillDeep:  "oklch(0.93 0.006 240)",
-      tabBg:     "oklch(0.95 0.005 240)",
-      tabBorder: SIGNATURE_INK,
+      // DUSTY BLUE — light, airy
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.78 0.045 240)",
+      tabBorder: "oklch(0.42 0.055 240)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.965 0.004 240)",
-      screen:    "oklch(0.975 0.004 240)",
-      glow:      "oklch(0.86 0.01 240)",
+      tabHover:  "oklch(0.82 0.040 240)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.78 0.045 240)",
       heading:   SIGNATURE_INK,
     },
     {
-      // PORCELAIN — warm pale white, slightly creamy
-      fill:      "oklch(0.975 0.006 80)",
-      fillDeep:  "oklch(0.93 0.01 80)",
-      tabBg:     "oklch(0.95 0.008 80)",
-      tabBorder: SIGNATURE_INK,
+      // STEEL BLUE — mid-tone, considered
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.62 0.055 245)",
+      tabBorder: "oklch(0.32 0.055 245)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.965 0.006 80)",
-      screen:    "oklch(0.975 0.006 80)",
-      glow:      "oklch(0.86 0.012 80)",
+      tabHover:  "oklch(0.66 0.050 245)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.62 0.055 245)",
       heading:   SIGNATURE_INK,
     },
     {
-      // ALABASTER — soft luminous off-white with a whisper of pink-stone
-      fill:      "oklch(0.97 0.005 30)",
-      fillDeep:  "oklch(0.92 0.008 30)",
-      tabBg:     "oklch(0.945 0.006 30)",
-      tabBorder: SIGNATURE_INK,
+      // DEEP SLATE — confident, magazine-like
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.42 0.045 250)",
+      tabBorder: "oklch(0.24 0.040 250)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.96 0.005 30)",
-      screen:    "oklch(0.97 0.005 30)",
-      glow:      "oklch(0.86 0.01 30)",
+      tabHover:  "oklch(0.46 0.040 250)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.42 0.045 250)",
       heading:   SIGNATURE_INK,
     },
   ];
