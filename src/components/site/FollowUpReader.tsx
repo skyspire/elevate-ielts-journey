@@ -55,36 +55,68 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
   }, [followUpAnswer]);
 
   const currentVariant = variants[Math.min(variantIndex, variants.length - 1)];
-  const sections = currentVariant.sections;
 
-  // ── Fresh trio: AMBER · TEAL · PLUM ─────────────────────────────────────
+  // Flatten the variant's sections into a single flowing answer body.
+  // Follow-up answers are conversational replies, not sectioned essays —
+  // so we present them as one continuous response, billboard-style.
+  const fullBody = useMemo(
+    () => currentVariant.sections.map((s) => s.body).join(" "),
+    [currentVariant],
+  );
+
+  // Split the body so we can emphasize the opening phrase (first sentence
+  // or first ~14 words, whichever is shorter). This becomes the bold
+  // pull-quote that opens the billboard.
+  const { openingPhrase, restOfBody } = useMemo(() => {
+    const text = fullBody.trim();
+    // Prefer first sentence boundary (., !, ?) within first 120 chars.
+    const sentenceMatch = text.match(/^[^.!?]{1,120}[.!?]/);
+    if (sentenceMatch) {
+      return {
+        openingPhrase: sentenceMatch[0].trim(),
+        restOfBody: text.slice(sentenceMatch[0].length).trim(),
+      };
+    }
+    // Fallback: first 14 words.
+    const words = text.split(/\s+/);
+    const head = words.slice(0, 14).join(" ");
+    return {
+      openingPhrase: head + (words.length > 14 ? "…" : ""),
+      restOfBody: words.slice(14).join(" "),
+    };
+  }, [fullBody]);
+
+  // ── BILLBOARD palette: AMBER · TEAL · PLUM ─────────────────────────────
+  // For follow-ups we go BOLD: the full screen fills with the active
+  // palette's saturated color, text is white/cream, and the footer tabs
+  // each carry their own signature color.
   const palette = [
     {
-      // Amber
-      tabBg:    "oklch(0.68 0.16 70)",
-      tabBorder:"oklch(0.32 0.14 70)",
-      screen:   "oklch(0.97 0.035 80)",
-      glow:     "oklch(0.82 0.13 75)",
-      heading:  "oklch(0.42 0.14 70)",
-      laneBorder:"oklch(0.55 0.16 70)",
+      // Amber — warm, energetic
+      fill:      "oklch(0.62 0.18 65)",   // bold saturated amber-orange
+      fillDeep:  "oklch(0.48 0.16 60)",   // for shadows / accents
+      tabBg:     "oklch(0.62 0.18 65)",
+      tabBorder: "oklch(0.30 0.14 60)",
+      ink:       "oklch(0.99 0.015 80)",  // warm cream text
+      inkSoft:   "oklch(0.99 0.015 80 / 0.85)",
     },
     {
-      // Teal
-      tabBg:    "oklch(0.55 0.13 195)",
-      tabBorder:"oklch(0.28 0.11 195)",
-      screen:   "oklch(0.965 0.030 195)",
-      glow:     "oklch(0.78 0.12 195)",
-      heading:  "oklch(0.40 0.13 195)",
-      laneBorder:"oklch(0.50 0.13 195)",
+      // Teal — cool, considered
+      fill:      "oklch(0.50 0.13 200)",  // deep teal
+      fillDeep:  "oklch(0.36 0.11 200)",
+      tabBg:     "oklch(0.50 0.13 200)",
+      tabBorder: "oklch(0.26 0.10 200)",
+      ink:       "oklch(0.99 0.012 200)",
+      inkSoft:   "oklch(0.99 0.012 200 / 0.85)",
     },
     {
-      // Plum
-      tabBg:    "oklch(0.50 0.16 330)",
-      tabBorder:"oklch(0.28 0.14 330)",
-      screen:   "oklch(0.965 0.030 325)",
-      glow:     "oklch(0.78 0.12 325)",
-      heading:  "oklch(0.40 0.16 330)",
-      laneBorder:"oklch(0.48 0.16 330)",
+      // Plum — rich, sophisticated
+      fill:      "oklch(0.46 0.16 330)",  // deep plum
+      fillDeep:  "oklch(0.32 0.14 330)",
+      tabBg:     "oklch(0.46 0.16 330)",
+      tabBorder: "oklch(0.24 0.13 330)",
+      ink:       "oklch(0.99 0.015 330)",
+      inkSoft:   "oklch(0.99 0.015 330 / 0.85)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
