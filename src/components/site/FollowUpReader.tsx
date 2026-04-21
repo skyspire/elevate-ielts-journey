@@ -730,7 +730,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
         )}
       </div>
 
-      {/* Local keyframes for the burst & split entrance. */}
+      {/* Local keyframes for the burst & split entrance + headline rule sweep. */}
       <style>{`
         @keyframes fu-burst-core {
           0%   { transform: scale(0.4); opacity: 0; }
@@ -745,6 +745,25 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           100% {
             transform: translate3d(var(--fu-dx, 0), var(--fu-dy, 0), 0) scale(0.6);
             opacity: 0;
+          }
+        }
+        /* Ink-bleed underline sweep — a thin rule grows left→right beneath
+           the headline on entrance, then stays as a permanent accent. Re-runs
+           per variant switch because the rule element is re-keyed by mount. */
+        @keyframes fu-rule-sweep {
+          0%   { transform: scaleX(0); opacity: 0; }
+          18%  { opacity: 1; }
+          100% { transform: scaleX(1); opacity: 1; }
+        }
+        .fu-headline-rule {
+          transform: scaleX(0);
+          animation: fu-rule-sweep 780ms cubic-bezier(0.22, 1, 0.36, 1) 220ms forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .fu-headline-rule {
+            animation: none;
+            transform: scaleX(1);
+            opacity: 1;
           }
         }
       `}</style>
