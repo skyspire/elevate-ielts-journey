@@ -1050,18 +1050,18 @@ function CueCardReader({
           position: absolute;
           top: 0;
           left: 0;
-          width: 4px;
-          height: 4px;
-          margin-left: -2px;
-          margin-top: -2px;
+          width: 6px;
+          height: 6px;
+          margin-left: -3px;
+          margin-top: -3px;
           border-radius: 9999px;
           opacity: 0;
           offset-rotate: 0deg;
           -webkit-offset-rotate: 0deg;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-trail-fade 1500ms ease-out forwards;
-          filter: blur(0.3px);
+          animation: paper-trail-fade 2200ms ease-out forwards;
+          filter: blur(0.4px);
           will-change: offset-distance, opacity;
         }
         @keyframes paper-trail-fade {
