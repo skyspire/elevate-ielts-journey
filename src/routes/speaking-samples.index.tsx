@@ -206,7 +206,7 @@ function SpeakingSamplesPage() {
     "ring-[oklch(0.55_0.10_165)]/45 border-[oklch(0.55_0.10_165)]/45";
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
-  const questions = makeQuestions(activeCategory.id);
+  const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
   return (
     <div className="min-h-screen bg-[oklch(0.985_0.014_165)]">
@@ -332,19 +332,27 @@ function SpeakingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Questions list with sage paper-dots background */}
+              {/* Step 3 — Topic cards with sage paper-dots background */}
               <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-sage pb-20 sm:mt-20 sm:pb-28">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {questions.map((q, i) => (
-                      <SpeakingQuestionCard
-                        key={q.id}
+                  <div className="mb-8 text-center">
+                    <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
+                      {activeCategory.label} · {topics.length} topics
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                      Pick a topic to explore
+                    </h3>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {topics.map((t, i) => (
+                      <TopicCard
+                        key={t.id}
                         index={i + 1}
-                        q={q}
-                        category={activeCategory.label}
+                        topic={t}
+                        categoryId={activeCategory.id}
+                        categoryLabel={activeCategory.label}
                         mode={mode}
                         accentChip={accentChip}
-                        accentRing={accentRing}
                       />
                     ))}
                   </div>
