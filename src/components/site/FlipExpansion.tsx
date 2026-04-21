@@ -876,11 +876,18 @@ function CueCardReader({
 
         return (
           <div
-            // Sit just above the 64-72px footer band. pointer-events follow
-            // reveal so the rail can't catch clicks while invisible.
-            className="pointer-events-none absolute inset-x-0 z-[18]"
+            // Anchor the rail safely above the footer band. The footer
+            // measures ~76–88px (py-3/sm:py-4 + 44/48px tab height + 1px
+            // top rule), so we clear it with 104px on mobile and 120px on
+            // desktop — enough breathing room that the rail's drop shadow
+            // never kisses the footer's top rule.
+            //
+            // Horizontally, on md+ the rail is INSET to start where the
+            // right (answer) column starts, so it can never overlap the
+            // sticky left card. On mobile the rail spans full width.
+            className="pointer-events-none absolute right-0 left-0 z-[18] md:left-[36%] lg:left-[34%]"
             style={{
-              bottom: "76px",
+              bottom: "104px",
               opacity: reveal,
               transform: `translateY(${(1 - reveal) * 18}px)`,
               transition:
@@ -888,9 +895,11 @@ function CueCardReader({
             }}
             aria-hidden={reveal < 0.05}
           >
-            {/* Horizontal scrollable rail with peek. */}
+            {/* Horizontal scrollable rail with peek.
+                Inner padding mirrors the answer article (px-6 / sm:px-10)
+                so the first tile aligns with the body text above it. */}
             <div
-              className={`pointer-events-auto mx-auto flex max-w-[1280px] gap-3 overflow-x-auto px-4 pb-1 sm:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+              className={`pointer-events-auto mx-auto flex max-w-[760px] gap-3 overflow-x-auto px-6 pt-2 pb-3 sm:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
                 reveal < 0.5 ? "pointer-events-none" : ""
               }`}
               style={{ scrollSnapType: "x mandatory" }}
@@ -900,7 +909,10 @@ function CueCardReader({
                 return (
                   <div
                     key={q.id}
-                    className="shrink-0 basis-[78%] snap-start sm:basis-[42%] lg:basis-[30%]"
+                    // Slightly tighter basis on lg so 3 cards fit cleanly
+                    // inside the inset right column without horizontal
+                    // overflow / forced scrolling.
+                    className="shrink-0 basis-[80%] snap-start sm:basis-[46%] lg:basis-[31%]"
                   >
                     <button
                       type="button"
