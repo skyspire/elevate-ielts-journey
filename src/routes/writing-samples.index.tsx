@@ -241,7 +241,7 @@ function WritingSamplesPage() {
                   />
                   <path
                     d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
-                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.46 0.10 160)"}
+                    fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
                     className="transition-colors duration-500"
                   />
                   {/* Feet */}
