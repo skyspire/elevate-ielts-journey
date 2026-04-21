@@ -99,14 +99,21 @@ export function FlipExpansion({
   // the active variant changes, so each switch feels freshly composed.
   useEffect(() => {
     if (phase !== "expanded") return;
-    setRevealedSections(0);
     const total = sections.length;
-    const timers: number[] = [];
-    // First open: gentle, lingering reveal. Variant switch: tight cascade
-    // synchronized with the gravity drop.
+    // On a variant switch (instant swap mid-flight), reveal all sections at
+    // once with no stagger — the answer text stays calm while the paper plane
+    // carries the visual transition.
     const isVariantSwitch = gravityPhase === "in";
-    const initialDelay = isVariantSwitch ? 40 : 220;
-    const stagger = isVariantSwitch ? 90 : 320;
+    if (isVariantSwitch) {
+      setRevealedSections(total);
+      return;
+    }
+    // First open: keep the gentle, lingering reveal so the page composes
+    // itself as the reader settles in.
+    setRevealedSections(0);
+    const timers: number[] = [];
+    const initialDelay = 220;
+    const stagger = 320;
     for (let i = 0; i < total; i++) {
       timers.push(
         window.setTimeout(
@@ -681,40 +688,15 @@ function CueCardReader({
           <div className="space-y-12 pt-4">
             {sections.map((s, i) => {
               const visible = i < revealedSections;
-              const isOut = gravityPhase === "out";
-
-              // Gravity drop & settle:
-              //   - "out": each line lifts 6px (anti-gravity), then drops 28px
-              //     while fading. Staggered by 50ms top-down so it cascades.
-              //   - settled (visible, idle/in): rests at translateY(0).
-              //   - hidden (not yet revealed): waits 32px above, ready to fall.
-              let translateY = "0px";
-              let opacity = visible ? 1 : 0;
-              let transition =
-                "transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 380ms ease-out";
-
-              if (isOut) {
-                // Two-stage motion via CSS animation — lift then drop.
-                translateY = "0px";
-                opacity = 0;
-                transition = "none";
-              } else if (!visible) {
-                // Pre-fall resting position: held just above its slot.
-                translateY = "-26px";
-                opacity = 0;
-              }
-
+              // Instant swap mid-flight — no fade, no transform, no transition.
+              // The paper plane animation carries the visual story; the text
+              // simply appears or disappears with the swap. This keeps the
+              // reading lane perfectly calm while the plane is in motion.
               return (
                 <section
                   key={`${variantIndex}-${s.heading}`}
                   style={{
-                    opacity,
-                    transform: `translateY(${translateY})`,
-                    transition,
-                    animation: isOut
-                      ? `gravity-out 380ms cubic-bezier(0.55, 0, 0.85, 0.4) ${i * 50}ms forwards`
-                      : undefined,
-                    willChange: "transform, opacity",
+                    visibility: visible ? "visible" : "hidden",
                   }}
                 >
                   <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
