@@ -252,7 +252,8 @@ export function FlipExpansion({
 
           {/* Scrollable body */}
           <div
-            className="overflow-y-auto px-5 py-7 sm:px-7 sm:py-9"
+            ref={scrollRef}
+            className="relative overflow-y-auto px-5 py-7 sm:px-7 sm:py-9"
             style={{ maxHeight: "calc(100vh - 6rem - 88px)" }}
           >
             <div className="space-y-6">
@@ -298,6 +299,70 @@ export function FlipExpansion({
             </div>
           </div>
         </div>
+
+        {/* Floating follow-up cards — only for cue cards.
+            They emerge from the screen edges as the reader scrolls deeper into
+            the model answer, and gently retreat when scrolling back up. */}
+        {isExpanded && isCue && followUps.length > 0 && (
+          <div className="pointer-events-none absolute inset-0 hidden lg:block">
+            {followUps.map((q, i) => {
+              // Each card has its own activation threshold along the scroll
+              const start = 0.12 + i * 0.18;
+              const end = start + 0.18;
+              const local =
+                scrollProgress <= start
+                  ? 0
+                  : scrollProgress >= end
+                    ? 1
+                    : (scrollProgress - start) / (end - start);
+
+              // Alternate sides: even → left, odd → right
+              const side: "left" | "right" = i % 2 === 0 ? "left" : "right";
+              // Vertical staggering down the viewport
+              const topPct = 18 + i * 16;
+              const offset = (1 - local) * 60; // px slide from edge
+              const opacity = local;
+              const scale = 0.92 + local * 0.08;
+
+              const sideStyle: React.CSSProperties =
+                side === "left"
+                  ? { left: `calc(2vw + ${-offset}px)` }
+                  : { right: `calc(2vw + ${-offset}px)` };
+
+              return (
+                <div
+                  key={q.id}
+                  className="pointer-events-auto absolute w-[230px] xl:w-[260px]"
+                  style={{
+                    top: `${topPct}%`,
+                    ...sideStyle,
+                    opacity,
+                    transform: `scale(${scale})`,
+                    transition:
+                      "opacity 450ms ease, transform 450ms cubic-bezier(0.16,1,0.3,1)",
+                  }}
+                >
+                  <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/25 bg-white/85 p-4 shadow-card backdrop-blur-md">
+                    <div className="flex items-center gap-1.5">
+                      <MessageCircleQuestion
+                        className={`h-3.5 w-3.5 ${accentText}`}
+                        strokeWidth={2.6}
+                      />
+                      <span
+                        className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                      >
+                        Follow-up {i + 1}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[13px] font-semibold leading-snug text-foreground/85">
+                      {q.title}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>,
     document.body,
