@@ -152,84 +152,20 @@ const features: Feature[] = [
   },
 ];
 
-// Bento tone system — each card gets a unique soft gradient + accent color.
-// Backgrounds are restrained (white-leaning) so the page reads premium and quiet.
+// Bold solid color blocks — each card is one confident color.
+// `bg` is the card background, `bgHover` for the hover lift state,
+// `chip` is the translucent white icon chip background.
 const tones: Record<
   Feature["tone"],
-  {
-    gradient: string; // soft corner gradient
-    accent: string; // strong accent color (text + icon + bar)
-    accentSoft: string; // tint for icon chip background
-    ring: string; // ring color on hover
-  }
+  { bg: string; bgHover: string }
 > = {
-  navy: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.05 255 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.16 260)",
-    accentSoft: "oklch(0.95 0.04 255)",
-    ring: "oklch(0.55 0.14 255 / 0.35)",
-  },
-  rust: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 45 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.50 0.16 35)",
-    accentSoft: "oklch(0.95 0.05 45)",
-    ring: "oklch(0.60 0.15 35 / 0.35)",
-  },
-  forest: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 160 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.42 0.11 165)",
-    accentSoft: "oklch(0.95 0.04 160)",
-    ring: "oklch(0.55 0.12 160 / 0.35)",
-  },
-  plum: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 320 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.14 320)",
-    accentSoft: "oklch(0.95 0.04 320)",
-    ring: "oklch(0.58 0.14 320 / 0.35)",
-  },
-  ochre: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.08 85 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.50 0.13 75)",
-    accentSoft: "oklch(0.95 0.06 85)",
-    ring: "oklch(0.62 0.13 80 / 0.35)",
-  },
-  teal: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 200 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.45 0.11 205)",
-    accentSoft: "oklch(0.95 0.04 200)",
-    ring: "oklch(0.58 0.12 200 / 0.35)",
-  },
-  espresso: {
-    gradient:
-      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.04 70 / 0.9) 0%, transparent 55%)",
-    accent: "oklch(0.38 0.06 60)",
-    accentSoft: "oklch(0.95 0.03 70)",
-    ring: "oklch(0.50 0.06 60 / 0.35)",
-  },
-};
-
-// Bento layout: each feature claims a span on a 6-col grid.
-// Mobile: everything 1-col. Tablet+: asymmetric "widget" feel.
-type Span = {
-  col: string; // tailwind col-span classes
-  row: string; // tailwind row-span classes
-  variant: "hero" | "wide" | "tall" | "compact";
-};
-
-const spans: Record<string, Span> = {
-  writing: { col: "sm:col-span-4 lg:col-span-4", row: "sm:row-span-2", variant: "hero" },
-  speaking: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  vocab: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  templates: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
-  predictions: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
-  mistakes: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
-  plan: { col: "sm:col-span-6 lg:col-span-6", row: "sm:row-span-1", variant: "wide" },
+  navy: { bg: "oklch(0.42 0.18 260)", bgHover: "oklch(0.46 0.18 260)" },
+  rust: { bg: "oklch(0.58 0.20 25)", bgHover: "oklch(0.62 0.20 25)" },
+  forest: { bg: "oklch(0.50 0.15 160)", bgHover: "oklch(0.54 0.15 160)" },
+  plum: { bg: "oklch(0.45 0.18 320)", bgHover: "oklch(0.49 0.18 320)" },
+  ochre: { bg: "oklch(0.65 0.17 70)", bgHover: "oklch(0.69 0.17 70)" },
+  teal: { bg: "oklch(0.55 0.13 200)", bgHover: "oklch(0.59 0.13 200)" },
+  espresso: { bg: "oklch(0.32 0.04 60)", bgHover: "oklch(0.36 0.04 60)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
