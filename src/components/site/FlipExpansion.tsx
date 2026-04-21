@@ -157,38 +157,29 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Palette mirrored from CueCardReader so the wash color matches the next tab.
-  // Coral · Marigold · Emerald
-  const variantWashColors = [
-    "oklch(0.68 0.20 25)",  // coral
-    "oklch(0.78 0.17 80)",  // marigold
-    "oklch(0.62 0.16 155)", // emerald
-  ];
-
-  function goToVariant(next: number, origin?: { x: number; y: number }) {
+  // Gravity drop & settle — silent, organic, ultra-smooth.
+  // Phase "out" (380ms): paragraphs lift 6px then drop & dissolve under gravity.
+  // Mid-flight: swap variant so the new content is in place underneath.
+  // Phase "in" (~700ms total): each section falls in with bounce-settle,
+  // staggered 80ms apart (handled by the existing per-section reveal effect).
+  function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
+    setGravityPhase("out");
 
-    // Trigger typographic zoom-through from the tab's position (or screen center).
-    const x = origin?.x ?? window.innerWidth / 2;
-    const y = origin?.y ?? window.innerHeight - 80;
-    const color = variantWashColors[clamped % variantWashColors.length];
-    const numeral = String(clamped + 1);
-    setWash({ x, y, color, numeral, key: Date.now() });
-
-    // Switch content under the overlay mid-animation, so when it shrinks away
-    // the new screen + text are already in place underneath.
+    // Mid-air swap: by 380ms the old text has dropped & faded.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
-    }, 480);
+      setGravityPhase("in");
+    }, 380);
 
-    // Clear overlay + transition lock after the full sweep finishes.
+    // Release the lock once the falling-in stagger has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
-      setWash(null);
+      setGravityPhase("idle");
     }, 1100);
   }
 
