@@ -599,78 +599,23 @@ function CueCardReader({
         </div>
       </div>
 
-      {/* Sticky LEFT column — desktop only (≥md). Designed as a scaled-up
-          version of the TopicCard from the Speaking Samples index page:
-          a vertical tinted strip on the LEFT EDGE holds the big numeral
-          (tinted with the active variant accent so it shifts when the
-          reader switches Answer 1/2/3), and the main area carries the
-          'Cue Card 14' label + topic title in sage. Brand logo sits at
-          the very bottom; the close pill floats top-right. */}
+      {/* Sticky LEFT column — desktop only (≥md). A single tinted column
+          with the index numeral + cue-card title stacked together and
+          centered vertically. Typography mirrors the Speaking Samples
+          index page (TopicCard): foreground/45 numeral, sage-green title.
+          Part Two eyebrow sits at the top, brand logo at the bottom. */}
       <aside
-        className="pointer-events-auto absolute inset-y-0 left-0 z-20 hidden w-[36%] max-w-[440px] flex-row md:flex lg:w-[34%]"
+        className="pointer-events-auto absolute inset-y-0 left-0 z-20 hidden w-[36%] max-w-[440px] flex-col md:flex lg:w-[34%]"
         style={{
-          backgroundColor: PURE_WHITE,
+          backgroundColor: LEFT_TINT,
           borderRight: `1px solid ${LEFT_BORDER}`,
         }}
       >
-        {/* ── Variant-tinted numeral strip (LEFT EDGE of the left column).
-            Soft-tinted background with the active palette accent + a thick
-            colored side rule. The "14" itself uses the deep accent so it
-            reads as the visual anchor of the page. */}
-        <div
-          className="relative flex w-[88px] shrink-0 flex-col items-center justify-start pt-10 lg:w-[104px]"
-          style={{
-            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 8%, ${LEFT_TINT})`,
-            borderRight: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 18%, transparent)`,
-            transition: "background-color 380ms ease, border-color 380ms ease",
-          }}
-        >
-          <span
-            className="font-display font-black tabular-nums leading-none"
-            style={{
-              color: activePalette.tabBorder,
-              fontSize: "clamp(2.75rem, 5.6vw, 4rem)",
-              letterSpacing: "-0.04em",
-              transition: "color 380ms ease",
-            }}
-          >
-            {topicNumber}
-          </span>
-          <span
-            aria-hidden
-            className="mt-3 h-[3px] w-[36px] rounded-full"
-            style={{
-              backgroundColor: activePalette.tabBorder,
-              opacity: 0.55,
-              transition: "background-color 380ms ease",
-            }}
-          />
-        </div>
-
-        {/* ── Main area of the topic card: eyebrow → title → spacer → brand. */}
-        <div
-          className="relative flex min-w-0 flex-1 flex-col px-7 py-10"
-          style={{ backgroundColor: LEFT_TINT }}
-        >
-          {/* Floating close pill — top-right of the card body. */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute right-5 top-5 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
-            style={{
-              color: activePalette.ink,
-              backgroundColor: `${activePalette.ink}10`,
-              border: `1px solid ${activePalette.ink}30`,
-            }}
-            aria-label="Close sample answer"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
-          </button>
-
+        {/* ── Top: Part Two eyebrow + close pill ───────────────────────── */}
+        <div className="relative flex items-start justify-between px-7 pt-8">
           {/* Part Two handwritten eyebrow */}
           <span
-            className="inline-flex items-center gap-1.5 self-start"
+            className="inline-flex items-center gap-1.5"
             style={{ color: activePalette.ink }}
           >
             <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
@@ -694,28 +639,71 @@ function CueCardReader({
             </span>
           </span>
 
-          {/* Topic body — "Cue Card 14" eyebrow + sage-green title. */}
-          <div ref={headerAnchorRef} className="mt-auto">
-            <p
-              className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
-              style={{ color: activePalette.ink, opacity: 0.72 }}
-            >
-              Cue Card {topicIndex || 1}
-            </p>
-            <h2
-              className="mt-3 font-display font-black leading-[1.08] tracking-tight"
-              style={{
-                // Sage-green title matches the TopicCard on the index page
-                color: "oklch(0.42 0.10 165)",
-                fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
-              }}
-            >
-              {topic.label}
-            </h2>
-          </div>
+          {/* Close pill */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+            style={{
+              color: activePalette.ink,
+              backgroundColor: `${activePalette.ink}10`,
+              border: `1px solid ${activePalette.ink}30`,
+            }}
+            aria-label="Close sample answer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back
+          </button>
+        </div>
 
-          {/* Brand lockup — bottom of the card. */}
-          <div className="mt-10 flex items-center gap-2.5">
+        {/* ── Center: Stacked index numeral + cue-card title.
+            Typography matches the TopicCard on the Speaking Samples index:
+              • Numeral: font-display font-black, foreground/45 tone
+              • Title:   font-display font-black, sage oklch(0.42 0.10 165)
+            Both are centered horizontally and vertically anchored in the
+            middle of the column for a poised, balanced composition. */}
+        <div
+          ref={headerAnchorRef}
+          className="flex flex-1 flex-col items-center justify-center px-7 text-center"
+        >
+          <span
+            className="font-display font-black tabular-nums leading-none text-foreground/45"
+            style={{
+              fontSize: "clamp(3rem, 6vw, 4.5rem)",
+              letterSpacing: "-0.04em",
+            }}
+          >
+            {topicNumber}
+          </span>
+          <span
+            aria-hidden
+            className="mt-4 h-[2px] w-[44px] rounded-full"
+            style={{
+              backgroundColor: activePalette.tabBorder,
+              opacity: 0.55,
+              transition: "background-color 380ms ease",
+            }}
+          />
+          <p
+            className="mt-5 font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+            style={{ color: activePalette.ink, opacity: 0.72 }}
+          >
+            Cue Card {topicIndex || 1}
+          </p>
+          <h2
+            className="mt-3 font-display font-black leading-[1.08] tracking-tight"
+            style={{
+              // Sage-green title matches the TopicCard on the index page
+              color: "oklch(0.42 0.10 165)",
+              fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
+            }}
+          >
+            {topic.label}
+          </h2>
+        </div>
+
+        {/* Brand lockup — bottom of the card. */}
+        <div className="flex items-center gap-2.5 px-7 pb-8">
             <span
               className="flex h-9 w-9 items-center justify-center rounded-xl"
               style={{
@@ -746,8 +734,7 @@ function CueCardReader({
                 className="mt-[3px] h-[2px] w-full rounded-full"
                 style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
               />
-            </span>
-          </div>
+          </span>
         </div>
       </aside>
 
