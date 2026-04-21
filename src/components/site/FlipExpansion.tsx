@@ -569,6 +569,7 @@ function CueCardReader({
             backgroundColor: LEFT_TINT,
             border: `1px solid ${LEFT_BORDER}`,
             boxShadow: "0 6px 18px -10px oklch(0.20 0.010 250 / 0.20)",
+            transition: "background-color 380ms ease, border-color 380ms ease",
           }}
         >
           <div className="flex min-w-0 flex-col gap-0.5">
