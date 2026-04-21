@@ -169,30 +169,30 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Gravity drop & settle — silent, organic, ultra-smooth.
-  // Phase "out" (380ms): paragraphs lift 6px then drop & dissolve under gravity.
-  // Mid-flight: swap variant so the new content is in place underneath.
-  // Phase "in" (~700ms total): each section falls in with bounce-settle,
-  // staggered 80ms apart (handled by the existing per-section reveal effect).
+  // Atmospheric mood-shift — silent, premium answer swap.
+  // The CueCardReader handles its own desaturate/resaturate veil keyed on
+  // `variantIndex`; here we just flip the index at the right moment so the
+  // new text appears at the trough of the dip (~325ms in), perfectly synced
+  // with the reading lane's mood change. Total transition ≈ 650ms.
   function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
-    setGravityPhase("out");
+    setGravityPhase("out"); // signals the reveal effect to swap instantly
 
-    // Mid-air swap: by 380ms the old text has dropped & faded.
+    // Mid-trough swap: at ~325ms the lane is at its dimmest/most-desaturated.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
       setGravityPhase("in");
-    }, 380);
+    }, 325);
 
-    // Release the lock once the falling-in stagger has settled.
+    // Release the transition lock once the resaturate has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
       setGravityPhase("idle");
-    }, 1100);
+    }, 700);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
