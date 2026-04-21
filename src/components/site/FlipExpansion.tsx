@@ -790,16 +790,6 @@ function CueCardReader({
             }}
             aria-hidden={reveal < 0.05}
           >
-            {/* Section eyebrow — small "Continue with" label */}
-            <div className="mx-auto mb-2 max-w-[1280px] px-4 sm:px-10">
-              <span
-                className="font-display text-[10px] font-extrabold uppercase tracking-[0.28em]"
-                style={{ color: activePalette.ink, opacity: 0.75 }}
-              >
-                Continue with examiner follow-ups
-              </span>
-            </div>
-
             {/* Horizontal scrollable rail with peek. */}
             <div
               className={`pointer-events-auto mx-auto flex max-w-[1280px] gap-3 overflow-x-auto px-4 pb-1 sm:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
