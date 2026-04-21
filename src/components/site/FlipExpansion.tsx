@@ -447,55 +447,57 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: GALLERY WHITES (cool grey · porcelain · alabaster)
-  // Three near-white papers with luxury fashion-editorial feel (COS / Aesop).
-  // A single signature deep-navy ink runs across all three variants on
-  // chips, numerals, dividers and follow-up tile borders for brand cohesion.
-  //   • fill / fillDeep   — paper background + slightly toned variant for footer
-  //   • ink               — signature deep navy (used for accents & headings)
-  //   • inkSoft           — softened navy for body text (still high contrast)
-  //   • tabBg / tabBorder — footer pager tab fill + active border
-  //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
-  const SIGNATURE_INK      = "oklch(0.24 0.04 260)";          // deep navy
-  const SIGNATURE_INK_SOFT = "oklch(0.30 0.04 260 / 0.92)";   // softened navy
+  // ── PURE WHITE cue-card surface ─────────────────────────────────────────
+  // All three answer variants share the SAME pure-white paper — no tint,
+  // no gradient, no texture. Color identity (dusty blue → slate) lives only
+  // in the footer pager tabs and the follow-up rail, so the reading lane
+  // itself stays gallery-clean and uninterrupted across variant switches.
+  //   • PURE_WHITE        — flat paper background (used for fill + fillDeep)
+  //   • SIGNATURE_INK     — deep slate-navy for headings & accents
+  //   • SIGNATURE_INK_SOFT — softened slate for body text
+  // Footer tab tones (tabBg/tabBorder) carry the dusty-blue → slate palette
+  // so each variant tab still feels distinct in the colorful footer band.
+  const PURE_WHITE         = "oklch(1 0 0)";
+  const SIGNATURE_INK      = "oklch(0.30 0.035 250)";          // deep slate
+  const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // COOL GREY — crisp neutral white with the faintest blue undertone
-      fill:      "oklch(0.975 0.004 240)",
-      fillDeep:  "oklch(0.93 0.006 240)",
-      tabBg:     "oklch(0.95 0.005 240)",
-      tabBorder: SIGNATURE_INK,
+      // DUSTY BLUE — light, airy
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.78 0.045 240)",
+      tabBorder: "oklch(0.42 0.055 240)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.965 0.004 240)",
-      screen:    "oklch(0.975 0.004 240)",
-      glow:      "oklch(0.86 0.01 240)",
+      tabHover:  "oklch(0.82 0.040 240)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.78 0.045 240)",
       heading:   SIGNATURE_INK,
     },
     {
-      // PORCELAIN — warm pale white, slightly creamy
-      fill:      "oklch(0.975 0.006 80)",
-      fillDeep:  "oklch(0.93 0.01 80)",
-      tabBg:     "oklch(0.95 0.008 80)",
-      tabBorder: SIGNATURE_INK,
+      // STEEL BLUE — mid-tone, considered
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.62 0.055 245)",
+      tabBorder: "oklch(0.32 0.055 245)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.965 0.006 80)",
-      screen:    "oklch(0.975 0.006 80)",
-      glow:      "oklch(0.86 0.012 80)",
+      tabHover:  "oklch(0.66 0.050 245)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.62 0.055 245)",
       heading:   SIGNATURE_INK,
     },
     {
-      // ALABASTER — soft luminous off-white with a whisper of pink-stone
-      fill:      "oklch(0.97 0.005 30)",
-      fillDeep:  "oklch(0.92 0.008 30)",
-      tabBg:     "oklch(0.945 0.006 30)",
-      tabBorder: SIGNATURE_INK,
+      // DEEP SLATE — confident, magazine-like
+      fill:      PURE_WHITE,
+      fillDeep:  PURE_WHITE,
+      tabBg:     "oklch(0.42 0.045 250)",
+      tabBorder: "oklch(0.24 0.040 250)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.96 0.005 30)",
-      screen:    "oklch(0.97 0.005 30)",
-      glow:      "oklch(0.86 0.01 30)",
+      tabHover:  "oklch(0.46 0.040 250)",
+      screen:    PURE_WHITE,
+      glow:      "oklch(0.42 0.045 250)",
       heading:   SIGNATURE_INK,
     },
   ];
@@ -526,59 +528,13 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* ── BILLBOARD background: bold solid palette fill + diagonal gradient + film grain.
-          Mirrors the FollowUpReader treatment. No vignettes — explicit user request. */}
+      {/* ── PURE WHITE reading surface — flat, no gradient, no texture.
+          The user explicitly asked for pure white across all variants;
+          color identity lives only in the footer pager + follow-up rail. */}
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
-          transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
-          backgroundColor: activePalette.fill,
-        }}
-      >
-        {/* Soft vellum grain — fibrous tracing-paper feel.
-            Three whisper-faint layers compose a premium vellum surface:
-            1. Long diagonal fibres (anisotropic streaks, the hallmark of vellum)
-            2. Counter-diagonal cross fibres (subtle interleave)
-            3. Faint cloudy translucency (large soft luminance variation)
-            All sit at <5% effective opacity so the texture is felt, not seen. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-multiply opacity-[0.05]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(118deg,
-              transparent 0px,
-              transparent 2px,
-              ${SIGNATURE_INK} 2px,
-              transparent 2.6px,
-              transparent 5px,
-              ${SIGNATURE_INK} 5px,
-              transparent 5.4px,
-              transparent 11px)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(62deg,
-              transparent 0px,
-              transparent 3px,
-              ${SIGNATURE_INK} 3px,
-              transparent 3.5px,
-              transparent 9px)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-soft-light opacity-[0.55]"
-          style={{
-            backgroundImage: `radial-gradient(ellipse 60% 45% at 22% 28%, oklch(1 0 0) 0%, transparent 60%),
-              radial-gradient(ellipse 55% 50% at 78% 72%, oklch(1 0 0) 0%, transparent 65%),
-              radial-gradient(ellipse 40% 35% at 55% 50%, ${SIGNATURE_INK} 0%, transparent 70%)`,
-          }}
-        />
-      </div>
+        style={{ backgroundColor: PURE_WHITE }}
+      />
 
       {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
@@ -803,13 +759,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Muted off-white tiles (taupe variants of ecru/oat/linen) so the
-        // rail stays visually quiet against the calm paper screen. Color
-        // identity comes from the deep ink numerals, not from saturated fills.
+        // Confident muted dusty-blue → slate tile palette so the rail
+        // visibly carries the brand color story above the pure-white lane.
+        // Each tile has its own slate variant; ink is deep slate-navy.
         const followUpPalette = [
-          { fill: "oklch(0.93 0.018 75)",  ink: "oklch(0.30 0.025 60)" },  // Warm taupe
-          { fill: "oklch(0.92 0.014 95)",  ink: "oklch(0.30 0.020 70)" },  // Sand
-          { fill: "oklch(0.92 0.010 110)", ink: "oklch(0.30 0.018 100)" }, // Stone
+          { fill: "oklch(0.86 0.040 240)", ink: "oklch(0.28 0.045 245)" }, // Dusty blue
+          { fill: "oklch(0.74 0.050 245)", ink: "oklch(0.24 0.045 248)" }, // Steel blue
+          { fill: "oklch(0.58 0.055 250)", ink: "oklch(0.98 0.012 245)" }, // Deep slate (light ink)
         ];
 
         return (
@@ -900,8 +856,10 @@ function CueCardReader({
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
           style={{
-            borderTop: `1px solid ${activePalette.ink}26`,
-            background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+            // Confident muted slate band — independent of the pure-white
+            // reading lane so the footer reads as its own colored zone.
+            borderTop: `1px solid oklch(0.32 0.045 248 / 0.20)`,
+            background: `linear-gradient(180deg, oklch(0.94 0.020 240) 0%, oklch(0.88 0.030 245) 100%)`,
             backdropFilter: "blur(6px)",
           }}
         >
@@ -913,7 +871,7 @@ function CueCardReader({
                 goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
               className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-              style={{ color: activePalette.ink }}
+              style={{ color: "oklch(0.32 0.045 248)" }}
               aria-label="Previous sample answer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -923,6 +881,10 @@ function CueCardReader({
               {variants.map((_, i) => {
                 const active = i === variantIndex;
                 const tone = palette[i % palette.length];
+                // White ink across all three tabs — the dusty/steel/slate
+                // tab fills are saturated enough that light text reads as
+                // a confident magazine band.
+                const tabTextColor = "oklch(0.99 0.012 245)";
                 return (
                   <button
                     key={i}
@@ -937,15 +899,15 @@ function CueCardReader({
                     style={{
                       backgroundColor: tone.tabBg,
                       boxShadow: active
-                        ? `inset 0 0 0 2px ${tone.tabBorder}`
-                        : `inset 0 0 0 1px ${tone.tabBorder}33`,
+                        ? `inset 0 0 0 2px ${tone.tabBorder}, 0 4px 14px ${tone.tabBorder}55`
+                        : `inset 0 0 0 1px ${tone.tabBorder}40`,
                     }}
                   >
                     <span
                       className="font-display tracking-tight transition-all duration-300"
                       style={{
-                        color: tone.ink,
-                        opacity: active ? 1 : 0.7,
+                        color: tabTextColor,
+                        opacity: active ? 1 : 0.82,
                         fontWeight: active ? 800 : 600,
                         fontSize: "13px",
                         letterSpacing: active ? "-0.01em" : "0",
