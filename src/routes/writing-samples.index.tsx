@@ -619,230 +619,316 @@ function TaskEnvelopeScroll({
     </button>
   );
 
-  // Flame lean: -1 = leans left (Task 1), 0 = upright (none), +1 = leans right (Task 2)
+  // Flame lean: -1 = leans left (Task 1), 0 = upright, +1 = leans right (Task 2)
   const flameDir = isT1 ? -1 : isT2 ? 1 : 0;
+  const leanDeg = flameDir * 40; // L3: strong 40° lean
   const accentColor = isAcademic ? "oklch(0.58 0.17 255)" : "oklch(0.55 0.10 160)";
+  void accentColor;
+
+  const embers = [0, 1, 2, 3, 4];
 
   return (
     <div className="relative mx-auto max-w-3xl">
       <style>{`
-        @keyframes flame-flicker {
+        @keyframes flame-flicker-v {
           0%, 100% { transform: scaleY(1) scaleX(1); }
-          25%      { transform: scaleY(1.06) scaleX(0.96); }
-          50%      { transform: scaleY(0.96) scaleX(1.04); }
-          75%      { transform: scaleY(1.04) scaleX(0.98); }
+          25%      { transform: scaleY(1.08) scaleX(0.94); }
+          50%      { transform: scaleY(0.94) scaleX(1.06); }
+          75%      { transform: scaleY(1.05) scaleX(0.97); }
         }
-        @keyframes flame-glow {
-          0%, 100% { opacity: 0.55; }
-          50%      { opacity: 0.85; }
+        @keyframes halo-pulse {
+          0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+          50%      { opacity: 0.85; transform: translate(-50%, -50%) scale(1.12); }
         }
-        @keyframes smoke-rise {
-          0%   { transform: translateY(0) translateX(0) scale(0.6); opacity: 0; }
-          25%  { opacity: 0.35; }
-          100% { transform: translateY(-40px) translateX(var(--smoke-x, 0px)) scale(1.4); opacity: 0; }
-        }
-        @keyframes wick-glow {
-          0%, 100% { opacity: 0.6; }
+        @keyframes wick-glow-v {
+          0%, 100% { opacity: 0.65; }
           50%      { opacity: 1; }
+        }
+        @keyframes ember-fly {
+          0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+          70%  { opacity: 0.9; }
+          100% { transform: translate(var(--ember-x, 30px), var(--ember-y, -60px)) scale(0.3); opacity: 0; }
+        }
+        @keyframes dust-drift {
+          0%   { transform: translate(0, 0); opacity: 0; }
+          20%  { opacity: 0.55; }
+          80%  { opacity: 0.4; }
+          100% { transform: translate(var(--dust-x, 20px), var(--dust-y, -80px)); opacity: 0; }
         }
       `}</style>
 
-      {/* 3-column layout — candle sits in its OWN column */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3 sm:gap-8">
-        <div className="pb-6 sm:pb-10">
+      {/* 3-column layout — bronze candle in its own column */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3 sm:gap-10">
+        <div className="pb-8 sm:pb-12">
           {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
         </div>
 
-        {/* Candle */}
+        {/* Bronze oil-lamp candle column */}
         <div
           className="relative flex flex-col items-center justify-end"
-          style={{ width: "clamp(64px, 9vw, 96px)" }}
+          style={{ width: "clamp(96px, 14vw, 140px)", minHeight: "320px" }}
         >
-          {/* Smoke wisps when no flame direction (calm) — subtle */}
+          {/* A3: WARM HALO GLOW */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 -translate-x-1/2"
-            style={{ top: "8px" }}
-          >
-            <span
-              className="absolute block h-2 w-2 rounded-full bg-foreground/25 blur-[2px]"
-              style={{
-                ["--smoke-x" as never]: `${flameDir * 8}px`,
-                animation: "smoke-rise 3.2s ease-out infinite",
-              }}
-            />
-            <span
-              className="absolute block h-1.5 w-1.5 rounded-full bg-foreground/20 blur-[2px]"
-              style={{
-                ["--smoke-x" as never]: `${flameDir * 12}px`,
-                animation: "smoke-rise 3.6s ease-out 0.8s infinite",
-              }}
-            />
+            className="pointer-events-none absolute rounded-full blur-3xl"
+            style={{
+              width: "260px",
+              height: "260px",
+              top: "60px",
+              left: "50%",
+              background:
+                "radial-gradient(circle, oklch(0.78 0.20 55 / 0.55) 0%, oklch(0.65 0.22 40 / 0.30) 35%, oklch(0.55 0.18 30 / 0.10) 60%, transparent 80%)",
+              animation: "halo-pulse 3.2s ease-in-out infinite",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+
+          {/* A3: DUST MOTES */}
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            {[
+              { x: 18, y: -90, d: "0s", sz: 1.5, lx: 28 },
+              { x: -14, y: -110, d: "1.2s", sz: 1, lx: 60 },
+              { x: 22, y: -70, d: "2.1s", sz: 1.2, lx: 45 },
+              { x: -20, y: -95, d: "3.4s", sz: 0.8, lx: 35 },
+              { x: 12, y: -130, d: "4.5s", sz: 1.4, lx: 70 },
+              { x: -8, y: -80, d: "5.8s", sz: 1, lx: 20 },
+            ].map((m, i) => (
+              <span
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: `${m.sz * 2}px`,
+                  height: `${m.sz * 2}px`,
+                  left: `${m.lx}%`,
+                  top: "60%",
+                  background: "oklch(0.95 0.08 80 / 0.85)",
+                  boxShadow: "0 0 4px oklch(0.92 0.12 75 / 0.7)",
+                  ["--dust-x" as never]: `${m.x}px`,
+                  ["--dust-y" as never]: `${m.y}px`,
+                  animation: `dust-drift 7s ease-out ${m.d} infinite`,
+                }}
+              />
+            ))}
           </div>
 
-          {/* Flame group — leans toward selection */}
+          {/* L3: FLYING EMBERS in lean direction */}
+          {flameDir !== 0 && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute"
+              style={{ top: "30px", left: "50%", width: 0, height: 0 }}
+            >
+              {embers.map((i) => {
+                const baseX = flameDir * (20 + i * 10);
+                const baseY = -30 - i * 14;
+                return (
+                  <span
+                    key={`${flameDir}-${i}`}
+                    className="absolute block rounded-full"
+                    style={{
+                      width: "3px",
+                      height: "3px",
+                      background: "oklch(0.88 0.22 55)",
+                      boxShadow: "0 0 6px oklch(0.85 0.22 50), 0 0 12px oklch(0.75 0.22 40 / 0.6)",
+                      ["--ember-x" as never]: `${baseX}px`,
+                      ["--ember-y" as never]: `${baseY}px`,
+                      animation: `ember-fly ${1.4 + i * 0.3}s ease-out ${i * 0.4}s infinite`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
+
+          {/* Flame — leans 40° toward selection */}
           <div
-            className="relative"
+            className="relative z-10"
             style={{
-              width: "32px",
-              height: "56px",
+              width: "36px",
+              height: "62px",
               transformOrigin: "50% 100%",
-              transform: `rotate(${flameDir * 22}deg)`,
-              transition: "transform 800ms cubic-bezier(0.34, 1.4, 0.64, 1)",
+              transform: `rotate(${leanDeg}deg)`,
+              transition: "transform 900ms cubic-bezier(0.34, 1.4, 0.64, 1)",
             }}
             aria-hidden
           >
-            {/* Outer glow halo */}
-            <div
-              className="absolute left-1/2 -translate-x-1/2 rounded-full blur-md"
-              style={{
-                width: "44px",
-                height: "60px",
-                bottom: "-6px",
-                background:
-                  "radial-gradient(ellipse at 50% 70%, oklch(0.85 0.18 70 / 0.55) 0%, oklch(0.75 0.20 50 / 0.25) 50%, transparent 75%)",
-                animation: "flame-glow 1.6s ease-in-out infinite",
-              }}
-            />
-
-            {/* Flame body — flickers */}
             <svg
               viewBox="0 0 32 56"
-              className="absolute inset-0 h-full w-full"
+              className="absolute inset-0 h-full w-full drop-shadow-[0_0_10px_oklch(0.78_0.22_55_/_0.7)]"
               style={{
                 transformOrigin: "50% 100%",
-                animation: "flame-flicker 240ms ease-in-out infinite",
+                animation: "flame-flicker-v 220ms ease-in-out infinite",
               }}
             >
               <defs>
-                <radialGradient id="flameOuter" cx="50%" cy="75%" r="55%">
-                  <stop offset="0%" stopColor="oklch(0.92 0.18 80)" />
-                  <stop offset="40%" stopColor="oklch(0.78 0.21 55)" />
+                <radialGradient id="flameOuterV" cx="50%" cy="78%" r="55%">
+                  <stop offset="0%" stopColor="oklch(0.94 0.18 80)" />
+                  <stop offset="40%" stopColor="oklch(0.78 0.22 55)" />
                   <stop offset="80%" stopColor="oklch(0.62 0.22 38)" />
                   <stop offset="100%" stopColor="oklch(0.50 0.20 30 / 0)" />
                 </radialGradient>
-                <radialGradient id="flameInner" cx="50%" cy="78%" r="40%">
-                  <stop offset="0%" stopColor="oklch(0.97 0.10 95)" />
+                <radialGradient id="flameInnerV" cx="50%" cy="80%" r="40%">
+                  <stop offset="0%" stopColor="oklch(0.98 0.10 95)" />
                   <stop offset="60%" stopColor="oklch(0.88 0.18 80)" />
                   <stop offset="100%" stopColor="oklch(0.78 0.20 60 / 0)" />
                 </radialGradient>
-                <radialGradient id="flameCore" cx="50%" cy="85%" r="25%">
+                <radialGradient id="flameCoreV" cx="50%" cy="88%" r="22%">
                   <stop offset="0%" stopColor="oklch(0.55 0.18 250)" />
                   <stop offset="100%" stopColor="oklch(0.55 0.18 250 / 0)" />
                 </radialGradient>
               </defs>
-              {/* Outer flame teardrop */}
               <path
-                d="M 16 4 C 24 18, 28 30, 26 42 C 24 52, 20 54, 16 54 C 12 54, 8 52, 6 42 C 4 30, 8 18, 16 4 Z"
-                fill="url(#flameOuter)"
+                d="M 16 2 C 25 16, 29 30, 27 42 C 25 52, 20 55, 16 55 C 12 55, 7 52, 5 42 C 3 30, 7 16, 16 2 Z"
+                fill="url(#flameOuterV)"
               />
-              {/* Inner flame */}
               <path
-                d="M 16 14 C 21 24, 23 34, 22 42 C 21 49, 18 51, 16 51 C 14 51, 11 49, 10 42 C 9 34, 11 24, 16 14 Z"
-                fill="url(#flameInner)"
+                d="M 16 12 C 22 22, 24 34, 22 42 C 21 49, 18 52, 16 52 C 14 52, 11 49, 10 42 C 8 34, 10 22, 16 12 Z"
+                fill="url(#flameInnerV)"
               />
-              {/* Blue core at base */}
-              <ellipse cx="16" cy="48" rx="5" ry="6" fill="url(#flameCore)" />
+              <ellipse cx="16" cy="48" rx="5" ry="7" fill="url(#flameCoreV)" />
             </svg>
           </div>
 
           {/* Wick */}
           <div
-            className="relative -mt-1 h-3 w-[2px] rounded-full"
+            className="relative z-10 -mt-1 h-3 w-[2.5px] rounded-full"
             style={{
-              background: "linear-gradient(180deg, oklch(0.20 0.04 40) 0%, oklch(0.35 0.06 40) 100%)",
+              background: "linear-gradient(180deg, oklch(0.18 0.04 40) 0%, oklch(0.32 0.06 40) 100%)",
             }}
           >
             <span
               aria-hidden
               className="absolute inset-x-[-1px] top-0 h-1 rounded-full"
               style={{
-                background: "oklch(0.85 0.18 60)",
-                boxShadow: "0 0 6px oklch(0.85 0.18 60)",
-                animation: "wick-glow 1.2s ease-in-out infinite",
+                background: "oklch(0.88 0.20 55)",
+                boxShadow: "0 0 8px oklch(0.85 0.20 55)",
+                animation: "wick-glow-v 1.2s ease-in-out infinite",
               }}
             />
           </div>
 
-          {/* Candle body */}
+          {/* V3: Beeswax pillar */}
           <div
-            className="relative w-full overflow-hidden rounded-t-[6px] rounded-b-sm shadow-card"
+            className="relative z-10 w-[78%] overflow-hidden"
             style={{
-              height: "clamp(120px, 18vw, 180px)",
+              height: "clamp(90px, 13vw, 130px)",
+              borderRadius: "10px 10px 4px 4px",
               background:
-                "linear-gradient(180deg, oklch(0.97 0.02 80) 0%, oklch(0.92 0.04 75) 30%, oklch(0.86 0.05 70) 100%)",
-              borderTop: "1px solid oklch(0.78 0.06 70)",
+                "linear-gradient(180deg, oklch(0.92 0.13 82) 0%, oklch(0.85 0.16 75) 25%, oklch(0.76 0.17 68) 65%, oklch(0.68 0.16 60) 100%)",
+              boxShadow:
+                "inset 4px 0 8px oklch(0.40 0.10 50 / 0.25), inset -4px 0 8px oklch(1 0 0 / 0.25), 0 4px 12px oklch(0.35 0.08 50 / 0.3)",
             }}
           >
-            {/* Wax drip highlight on the side that flame leans away from */}
             <div
               aria-hidden
-              className="absolute top-2 h-full w-[14%] rounded-full opacity-60 blur-[1px]"
+              className="absolute left-0 right-0 top-0 h-2"
               style={{
-                left: flameDir > 0 ? "12%" : flameDir < 0 ? "auto" : "12%",
-                right: flameDir < 0 ? "12%" : "auto",
                 background:
-                  "linear-gradient(180deg, oklch(1 0 0 / 0.7) 0%, oklch(1 0 0 / 0) 70%)",
-                transition: "left 600ms ease, right 600ms ease",
+                  "radial-gradient(ellipse at 50% 100%, oklch(0.95 0.10 80) 0%, oklch(0.80 0.14 70) 60%, oklch(0.65 0.14 60) 100%)",
+                borderRadius: "10px 10px 0 0",
               }}
             />
-            {/* Wax drip texture on the leaning side */}
-            {flameDir !== 0 && (
-              <div
-                aria-hidden
-                className="absolute top-3 h-3/4 w-2"
-                style={{
-                  [flameDir > 0 ? "right" : "left"]: "8%",
-                  background:
-                    "radial-gradient(ellipse at 50% 0%, oklch(0.96 0.03 75) 0%, oklch(0.88 0.05 70) 60%, transparent 100%)",
-                  borderRadius: "999px",
-                  opacity: 0.8,
-                  transition: "all 600ms ease",
-                }}
-              />
-            )}
-            {/* Subtle vertical shading on the shadow side */}
             <div
               aria-hidden
-              className="absolute inset-y-0 w-1/3"
+              className="absolute top-1 bottom-2 w-[18%] rounded-full opacity-70 blur-[2px]"
               style={{
-                right: flameDir > 0 ? "0" : flameDir < 0 ? "auto" : "0",
-                left: flameDir < 0 ? "0" : "auto",
+                left: flameDir > 0 ? "auto" : "16%",
+                right: flameDir > 0 ? "16%" : "auto",
                 background:
-                  "linear-gradient(90deg, transparent 0%, oklch(0.50 0.06 50 / 0.18) 100%)",
-                transition: "all 600ms ease",
+                  "linear-gradient(180deg, oklch(1 0 0 / 0.85) 0%, oklch(0.98 0.05 80 / 0.3) 70%, transparent 100%)",
+                transition: "left 700ms ease, right 700ms ease",
               }}
             />
-            {/* Accent ring near top */}
             <div
               aria-hidden
-              className="absolute left-0 right-0 top-2 h-px"
-              style={{ background: accentColor, opacity: 0.35 }}
+              className="absolute top-3 w-[10px]"
+              style={{
+                height: "60%",
+                [flameDir > 0 ? "left" : "right"]: "10%",
+                background:
+                  "radial-gradient(ellipse at 50% 0%, oklch(0.92 0.13 80) 0%, oklch(0.78 0.16 68) 60%, transparent 100%)",
+                borderRadius: "999px",
+                opacity: 0.85,
+                transition: "all 700ms ease",
+              }}
+            />
+            <div
+              aria-hidden
+              className="absolute inset-y-0 w-[40%]"
+              style={{
+                right: flameDir > 0 ? "0" : "auto",
+                left: flameDir > 0 ? "auto" : "0",
+                background:
+                  "linear-gradient(90deg, oklch(0.40 0.08 50 / 0.30) 0%, transparent 100%)",
+                transition: "all 700ms ease",
+              }}
             />
           </div>
 
-          {/* Candle base/holder */}
-          <div
-            className="relative -mt-1 w-[120%] rounded-md shadow-soft"
-            style={{
-              height: "10px",
-              background:
-                "linear-gradient(180deg, oklch(0.55 0.04 50) 0%, oklch(0.38 0.04 45) 100%)",
-              borderTop: "1px solid oklch(0.65 0.05 55)",
-            }}
-          />
+          {/* V3: Squat bronze base with engraved rim */}
+          <div className="relative z-10 -mt-1 flex w-full flex-col items-center">
+            <div
+              className="relative w-[115%] rounded-t-md"
+              style={{
+                height: "6px",
+                background:
+                  "linear-gradient(180deg, oklch(0.72 0.10 55) 0%, oklch(0.58 0.10 50) 50%, oklch(0.42 0.08 45) 100%)",
+                boxShadow:
+                  "inset 0 1px 0 oklch(0.92 0.10 65), inset 0 -1px 0 oklch(0.30 0.06 40)",
+              }}
+            >
+              <div
+                className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2"
+                style={{ background: "oklch(0.30 0.05 40 / 0.6)" }}
+              />
+            </div>
+            <div
+              className="relative w-[145%]"
+              style={{
+                height: "26px",
+                background:
+                  "linear-gradient(180deg, oklch(0.62 0.11 55) 0%, oklch(0.48 0.10 50) 40%, oklch(0.35 0.08 45) 75%, oklch(0.55 0.10 55) 100%)",
+                borderRadius: "4px 4px 50% 50% / 4px 4px 30% 30%",
+                boxShadow:
+                  "inset 6px 0 8px oklch(0.25 0.05 40 / 0.5), inset -6px 0 8px oklch(0.92 0.10 65 / 0.4), 0 8px 16px oklch(0.20 0.05 40 / 0.4)",
+              }}
+            >
+              <div
+                className="absolute left-[8%] right-[8%] top-[35%] h-[2px] rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent 0%, oklch(0.25 0.05 40 / 0.7) 20%, oklch(0.25 0.05 40 / 0.7) 80%, transparent 100%)",
+                  boxShadow: "0 1px 0 oklch(0.85 0.10 65 / 0.5)",
+                }}
+              />
+              <div
+                className="absolute left-[20%] top-[15%] h-[3px] w-[25%] rounded-full opacity-70 blur-[1px]"
+                style={{ background: "oklch(0.95 0.10 70)" }}
+              />
+            </div>
+            <div
+              className="w-[120%]"
+              style={{
+                height: "4px",
+                background:
+                  "linear-gradient(180deg, oklch(0.40 0.08 45) 0%, oklch(0.28 0.06 40) 100%)",
+                borderRadius: "0 0 6px 6px",
+                boxShadow: "0 2px 6px oklch(0.20 0.05 40 / 0.5)",
+              }}
+            />
+          </div>
 
-          {/* Hint label when nothing selected */}
           {noSelection && (
             <span
-              className={`mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
+              className={`relative z-10 mt-3 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
             >
               Pick a Task
             </span>
           )}
         </div>
 
-        <div className="pb-6 sm:pb-10">
+        <div className="pb-8 sm:pb-12">
           {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
         </div>
       </div>
