@@ -17,25 +17,7 @@ const INK_SOFT = "oklch(0.45 0.01 250)";
 const HAIRLINE = "oklch(0.92 0.003 250)";
 const HOVER_BG = "oklch(0.97 0.003 250)";
 
-// Hand-drawn squiggle underline (SVG) — animates in on hover/active
-function DoodleUnderline() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 100 8"
-      preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-2 -bottom-1 h-[6px] w-[calc(100%-1rem)] origin-left scale-x-0 opacity-0 transition-all duration-300 ease-out group-hover:scale-x-100 group-hover:opacity-100 group-data-[status=active]:scale-x-100 group-data-[status=active]:opacity-100"
-    >
-      <path
-        d="M1 5 Q 12 1, 25 4 T 50 4 T 75 4 T 99 4"
-        fill="none"
-        stroke={INK}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -69,18 +51,23 @@ export function Header() {
               key={item.label}
               to={item.to}
               activeOptions={{ exact: item.exact }}
-              className="group relative rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
+              className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
               style={{ color: INK_SOFT }}
-              activeProps={{ style: { color: INK } }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = INK)}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = INK;
+                if (e.currentTarget.getAttribute("data-status") !== "active") {
+                  e.currentTarget.style.backgroundColor = HOVER_BG;
+                }
+              }}
               onMouseLeave={(e) => {
                 const isActive =
                   e.currentTarget.getAttribute("data-status") === "active";
                 e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+                if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
               {item.label}
-              <DoodleUnderline />
             </Link>
           ))}
         </nav>
