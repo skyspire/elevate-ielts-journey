@@ -512,17 +512,7 @@ function FormatTogglePair({
     </div>
   );
 }
-              Selected
-            </span>
-          )}
-        </div>
-        <p className="mt-3 max-w-sm text-[14px] font-medium leading-relaxed text-foreground/65">
-          {subtitle}
-        </p>
-      </div>
-    </button>
-  );
-}
+
 
 // ───────── Question card (mirrors Writing Samples styling, with mic affordance) ─────────
 function SpeakingQuestionCard({
