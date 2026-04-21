@@ -636,13 +636,6 @@ function CueCardReader({
         </div>
       </div>
 
-      {/* Hairline separator between header and reading lane — keeps the
-          two regions visually independent while scrolling. */}
-      <div
-        className="pointer-events-none absolute inset-x-0 z-10 h-px bg-foreground/10"
-        style={{ top: "92px" }}
-        aria-hidden
-      />
 
       {/* Scrollable reading lane.
           NOTE: Bottom padding intentionally large so the answer text never
