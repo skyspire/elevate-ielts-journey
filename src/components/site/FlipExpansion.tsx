@@ -21,6 +21,7 @@ import {
   getSpeakingQuestions,
   isCueCardCategory,
 } from "@/data/speaking-questions";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { FollowUpReader } from "./FollowUpReader";
 
 type FlipExpansionProps = {
@@ -503,6 +504,17 @@ function CueCardReader({
   ];
   const activePalette = palette[variantIndex % palette.length];
 
+  // Topic index within its category (1-based) — drives the big numeral
+  // displayed at the top of the sticky left column.
+  const topicsInCategory = speakingTopicsByCategory[categoryId] ?? [];
+  const topicIndex = Math.max(0, topicsInCategory.findIndex((t) => t.id === topic.id)) + 1;
+  const topicNumber = String(topicIndex || 1).padStart(2, "0");
+
+  // Tinted cream/ivory tone for the left column — sits on the pure white
+  // reader and creates spatial separation through tone alone (no divider).
+  const LEFT_TINT = "oklch(0.985 0.008 90)";
+  const LEFT_BORDER = "oklch(0.30 0.035 250 / 0.08)";
+
   // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
     if (!isExpanded) return;
@@ -536,108 +548,182 @@ function CueCardReader({
         style={{ backgroundColor: PURE_WHITE }}
       />
 
-      {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
-      <div
-        className="pointer-events-none absolute z-[1]"
-        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.10 }}
-      >
-        <div
-          className="flex items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
-          style={{ border: `3px solid ${activePalette.ink}` }}
-        >
-          <GraduationCap className="h-7 w-7" strokeWidth={2.5} style={{ color: activePalette.ink }} />
-          <div className="flex flex-col leading-none">
-            <span
-              className="font-display text-[15px] font-black tracking-tight"
-              style={{ color: activePalette.ink }}
-            >
-              BigIELTS
-            </span>
-            <span
-              className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em]"
-              style={{ color: activePalette.ink }}
-            >
-              .COM
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* ── Two-column reading layout ─────────────────────────────────────
+          Desktop (≥md): tinted left column (sticky) carries the topic
+          index numeral, title and brand logo + close. Pure-white right
+          column scrolls the answer body.
+          Mobile (<md): left column collapses into a sticky compact pill
+          at the top, answer scrolls underneath full-width. */}
 
-      {/* Stable, isolated topic header — minimal, transparent, cream-on-palette. */}
+      {/* Sticky compact left-column header for mobile (<md). */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
-        style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
+        className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center px-3 pt-3 md:hidden"
       >
         <div
           ref={headerAnchorRef}
-          className="pointer-events-auto w-full max-w-[680px] rounded-2xl px-5 py-3.5 backdrop-blur-md sm:px-7 sm:py-4"
+          className="pointer-events-auto flex w-full max-w-[680px] items-center justify-between gap-3 rounded-2xl px-4 py-2.5 backdrop-blur-md"
           style={{
-            backgroundColor: `${activePalette.ink}0A`,
-            border: `1px solid ${activePalette.ink}1F`,
+            backgroundColor: LEFT_TINT,
+            border: `1px solid ${LEFT_BORDER}`,
+            boxShadow: "0 6px 18px -10px oklch(0.20 0.010 250 / 0.20)",
           }}
         >
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 flex items-center gap-2.5">
-              <span
-                className="inline-flex shrink-0 items-center gap-1.5 pr-1"
-                style={{ color: activePalette.ink }}
-                aria-label="Speaking Part Two"
-              >
-                <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
-                <span className="relative font-handwriting text-[20px] leading-none tracking-tight sm:text-[22px]">
-                  Part Two
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 80 6"
-                    className="pointer-events-none absolute -bottom-1 left-0 h-[5px] w-full"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 4 Q 20 1, 40 3 T 78 2.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      opacity="0.8"
-                    />
-                  </svg>
-                </span>
-              </span>
-              <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}40` }} />
-              <h2
-                className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight sm:text-[19px]"
-                style={{ color: activePalette.ink }}
-              >
-                {topic.label}
-              </h2>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
-              style={{
-                color: activePalette.ink,
-                backgroundColor: `${activePalette.ink}10`,
-                border: `1px solid ${activePalette.ink}30`,
-              }}
-              aria-label="Close sample answer"
+          <div className="flex min-w-0 items-center gap-2.5">
+            <span
+              className="font-display text-[18px] font-black tabular-nums leading-none"
+              style={{ color: activePalette.ink, letterSpacing: "-0.02em" }}
             >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Back
-            </button>
+              {topicNumber}
+            </span>
+            <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}30` }} />
+            <h2
+              className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight"
+              style={{ color: activePalette.ink }}
+            >
+              {topic.label}
+            </h2>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+            style={{
+              color: activePalette.ink,
+              backgroundColor: `${activePalette.ink}10`,
+              border: `1px solid ${activePalette.ink}30`,
+            }}
+            aria-label="Close sample answer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back
+          </button>
         </div>
       </div>
 
+      {/* Sticky LEFT column — desktop only (≥md). Tinted cream/ivory tone
+          separates it from the pure-white right column without a divider. */}
+      <aside
+        className="pointer-events-auto absolute inset-y-0 left-0 z-20 hidden w-[36%] max-w-[420px] flex-col justify-between px-8 py-10 md:flex lg:w-[32%]"
+        style={{
+          backgroundColor: LEFT_TINT,
+          borderRight: `1px solid ${LEFT_BORDER}`,
+        }}
+      >
+        {/* Top: close + part eyebrow */}
+        <div className="flex items-center justify-between">
+          <span
+            className="inline-flex items-center gap-1.5"
+            style={{ color: activePalette.ink }}
+          >
+            <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
+            <span className="relative font-handwriting text-[20px] leading-none tracking-tight">
+              Part Two
+              <svg
+                aria-hidden
+                viewBox="0 0 80 6"
+                className="pointer-events-none absolute -bottom-1 left-0 h-[5px] w-full"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M2 4 Q 20 1, 40 3 T 78 2.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  opacity="0.8"
+                />
+              </svg>
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+            style={{
+              color: activePalette.ink,
+              backgroundColor: `${activePalette.ink}10`,
+              border: `1px solid ${activePalette.ink}30`,
+            }}
+            aria-label="Close sample answer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back
+          </button>
+        </div>
 
-      {/* Scrollable reading lane.
-          NOTE: Bottom padding intentionally large so the answer text never
-          crashes into the colorful footer pager that floats above it. */}
+        {/* Middle: oversized topic numeral + title */}
+        <div ref={headerAnchorRef} className="my-auto">
+          <div
+            className="font-display font-black tabular-nums leading-none"
+            style={{
+              color: activePalette.ink,
+              fontSize: "clamp(4rem, 9vw, 7rem)",
+              letterSpacing: "-0.04em",
+              opacity: 0.92,
+            }}
+          >
+            {topicNumber}
+          </div>
+          <div
+            className="mt-4 h-[3px] w-[64px] rounded-full"
+            style={{ backgroundColor: activePalette.ink, opacity: 0.6 }}
+          />
+          <h2
+            className="mt-5 font-display font-black leading-[1.08] tracking-tight"
+            style={{
+              color: activePalette.ink,
+              fontSize: "clamp(1.5rem, 2.4vw, 2rem)",
+            }}
+          >
+            {topic.label}
+          </h2>
+        </div>
+
+        {/* Bottom: brand lockup */}
+        <div className="flex items-center gap-2.5">
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-xl"
+            style={{
+              backgroundColor: "oklch(0.55 0.135 25)",
+              boxShadow:
+                "0 0 0 1px oklch(0.65 0.150 25 / 0.55), 0 6px 16px oklch(0.55 0.135 25 / 0.35)",
+            }}
+          >
+            <GraduationCap className="h-5 w-5" strokeWidth={2.6} style={{ color: "oklch(0.99 0.005 250)" }} />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="flex items-baseline gap-[1px]">
+              <span
+                className="font-display text-[15px] font-black tracking-tight"
+                style={{ color: activePalette.ink }}
+              >
+                BigIELTS
+              </span>
+              <span
+                className="font-display text-[15px] font-black tracking-tight"
+                style={{ color: "oklch(0.55 0.080 125)" }}
+              >
+                .com
+              </span>
+            </span>
+            <span
+              aria-hidden
+              className="mt-[3px] h-[2px] w-full rounded-full"
+              style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
+            />
+          </span>
+        </div>
+      </aside>
+
+      {/* Scrollable RIGHT column — pure-white answer lane.
+          On mobile this fills the full width; on desktop it sits next to
+          the sticky left column. Bottom padding leaves room for the
+          colored footer pager + follow-up rail. */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[260px] sm:pt-[140px] sm:pb-[280px]"
+        className="absolute inset-y-0 right-0 left-0 overflow-y-auto pt-[72px] pb-[260px] md:left-[36%] md:pt-10 md:pb-[280px] lg:left-[32%]"
       >
-        <article className="mx-auto w-full max-w-[820px] px-6 sm:px-10">
+        <article className="mx-auto w-full max-w-[720px] px-6 sm:px-10">
           {(() => {
             // Lateral slide choreography (sequential out → in):
             //   out  → current text translates by  -switchDir * 36px and
@@ -677,26 +763,18 @@ function CueCardReader({
                 style={isOut ? outStyle : inOrIdleStyle}
                 data-lane-phase={gravityPhase}
               >
-                {/* Billboard topic headline — oversized, cream-on-palette,
-                    with a thick palette-toned underline swash beneath. */}
-                <header className="mb-10">
+                {/* Answer header — eyebrow + thin accent rule. The topic
+                    title now lives in the sticky left column, so the right
+                    column opens straight into the answer prose. */}
+                <header className="mb-8">
                   <span
                     className="font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
                     style={{ color: activePalette.ink, opacity: 0.8 }}
                   >
                     Sample answer · Band {currentVariant.bandScore}
                   </span>
-                  <h1
-                    className="mt-3 font-display font-black leading-[1.05] tracking-tight"
-                    style={{
-                      color: activePalette.ink,
-                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
-                    }}
-                  >
-                    {topic.label}
-                  </h1>
                   <div
-                    className="mt-5 h-[3px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    className="mt-4 h-[2px] w-[clamp(60px,14vw,120px)] rounded-full"
                     style={{
                       background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
                       opacity: 0.55,
