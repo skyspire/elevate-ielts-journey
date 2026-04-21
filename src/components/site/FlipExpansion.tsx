@@ -581,8 +581,8 @@ function CueCardReader({
           ref={headerAnchorRef}
           className="pointer-events-auto w-full max-w-[680px] rounded-2xl px-5 py-3.5 backdrop-blur-md sm:px-7 sm:py-4"
           style={{
-            backgroundColor: "oklch(1 0 0 / 0.08)",
-            border: `1px solid ${activePalette.ink}26`,
+            backgroundColor: `${activePalette.ink}0A`,
+            border: `1px solid ${activePalette.ink}1F`,
           }}
         >
           <div className="flex items-center justify-between gap-3">
