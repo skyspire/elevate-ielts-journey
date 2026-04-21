@@ -12,12 +12,20 @@ export type SpeakingQuestion = {
 };
 
 const cueCardCategoryIds = new Set([
-  "person",
-  "place",
-  "object",
-  "event",
-  "experience",
-  "activity",
+  "cc-people",
+  "cc-places",
+  "cc-buildings",
+  "cc-objects",
+  "cc-events",
+  "cc-activities",
+  "cc-study-work",
+  "cc-opinions",
+  "cc-future",
+  "cc-media",
+  "cc-travel",
+  "cc-lifestyle",
+  "cc-tech",
+  "cc-society",
 ]);
 
 export function isCueCardCategory(categoryId: string): boolean {
