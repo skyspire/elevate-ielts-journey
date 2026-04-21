@@ -385,6 +385,10 @@ type CueReaderProps = {
   followUps: { id: string; title: string }[];
   accentText: string;
   accentChip: string;
+  onOpenFollowUp: (
+    question: { id: string; title: string },
+    origin: { x: number; y: number },
+  ) => void;
 };
 
 function CueCardReader({
