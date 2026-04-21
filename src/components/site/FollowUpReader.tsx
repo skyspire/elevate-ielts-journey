@@ -451,66 +451,95 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           };
 
           // ── LEFT: fixed question stack (centered vertically) ──────────
+          // Editorial treatment:
+          //   • Massive display numeral (e.g. "01") set tight & heavy, with a
+          //     hairline rule beneath and a tiny "/ 03 FOLLOW-UPS" counter.
+          //   • "Follow-up" label uses the site's display font, bold, with a
+          //     short accent underline in the variant color.
+          //   • Headline gets an ink-bleed underline sweep on entrance: a
+          //     thin rule expands left→right under the question, then settles
+          //     as a permanent accent.
           const QuestionStack = (
-            <aside className="flex w-full flex-col items-center justify-center text-center">
-              {/* Outlined circle index badge */}
-              <div
-                className="relative mb-5 flex items-center justify-center rounded-full"
-                style={{
-                  width: "clamp(84px, 9vw, 108px)",
-                  height: "clamp(84px, 9vw, 108px)",
-                  border: `3px solid ${activePalette.ink}`,
-                  boxShadow: `0 6px 24px ${activePalette.fillDeep}, inset 0 0 0 1px ${activePalette.ink}33`,
-                }}
-                aria-hidden
-              >
+            <aside className="flex w-full flex-col items-start text-left">
+              {/* Editorial numeral block */}
+              <div className="relative flex items-baseline gap-3" aria-hidden>
                 <span
-                  className="font-display font-black tabular-nums leading-none tracking-tight"
+                  className="font-display font-black leading-[0.85] tabular-nums"
                   style={{
                     color: activePalette.ink,
-                    fontSize: "clamp(1.85rem, 3vw, 2.5rem)",
-                    letterSpacing: "-0.02em",
+                    fontSize: "clamp(5rem, 9vw, 8.5rem)",
+                    letterSpacing: "-0.055em",
+                    fontFeatureSettings: '"ss01", "cv11", "lnum"',
+                    textShadow: `0 6px 32px ${activePalette.fillDeep}`,
                   }}
                 >
                   {String(index).padStart(2, "0")}
                 </span>
+              </div>
+              {/* Hairline rule + counter */}
+              <div className="mt-3 flex w-full items-center gap-3">
                 <span
-                  className="absolute -bottom-[10px] left-1/2 -translate-x-1/2 rounded-full px-2 py-[2px] font-display font-extrabold tabular-nums"
+                  className="block h-px flex-1"
+                  style={{ backgroundColor: `${activePalette.ink}66` }}
+                  aria-hidden
+                />
+                <span
+                  className="font-display font-extrabold uppercase tabular-nums"
                   style={{
-                    backgroundColor: activePalette.fillDeep,
                     color: activePalette.ink,
-                    fontSize: "10px",
-                    letterSpacing: "0.08em",
-                    border: `1.5px solid ${activePalette.ink}`,
+                    fontSize: "10.5px",
+                    letterSpacing: "0.28em",
+                    opacity: 0.78,
                   }}
                 >
-                  / {String(total).padStart(2, "0")}
+                  / {String(total).padStart(2, "0")} Follow-ups
                 </span>
               </div>
-              <span
-                className="mb-4 font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
-                style={{ color: activePalette.ink, opacity: 0.9 }}
-              >
-                Follow-up
-              </span>
+
+              {/* "Follow-up" label — bold display + accent underline */}
+              <div className="mt-9 inline-flex flex-col items-start">
+                <span
+                  className="font-display font-black leading-none"
+                  style={{
+                    color: activePalette.ink,
+                    fontSize: "clamp(1rem, 1.35vw, 1.15rem)",
+                    letterSpacing: "-0.005em",
+                  }}
+                >
+                  Follow-up
+                </span>
+                <span
+                  className="mt-2 block h-[3px] rounded-full"
+                  style={{
+                    width: "clamp(36px, 4.5vw, 56px)",
+                    backgroundColor: activePalette.accent,
+                    boxShadow: `0 1px 8px ${activePalette.fillDeep}`,
+                  }}
+                  aria-hidden
+                />
+              </div>
+
+              {/* Headline + ink-bleed underline sweep */}
               <h1
-                className="font-display font-black leading-[1.08] tracking-tight"
+                className="fu-headline relative mt-4 font-display font-black leading-[1.05] tracking-tight"
                 style={{
                   color: activePalette.ink,
-                  fontSize: "clamp(1.65rem, 3.2vw, 2.5rem)",
+                  fontSize: "clamp(1.7rem, 3.4vw, 2.65rem)",
+                  letterSpacing: "-0.012em",
                   textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                 }}
               >
                 {question.title}
+                <span
+                  aria-hidden
+                  className="fu-headline-rule absolute left-0 -bottom-3 block h-[2.5px] origin-left rounded-full"
+                  style={{
+                    width: "100%",
+                    backgroundImage: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.accent} 75%, transparent 100%)`,
+                    boxShadow: `0 1px 10px ${activePalette.fillDeep}`,
+                  }}
+                />
               </h1>
-              <div
-                className="mt-5 h-[6px] w-[clamp(72px,12vw,140px)] rounded-full"
-                style={{
-                  background: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 30%, ${activePalette.ink} 70%, transparent 100%)`,
-                  opacity: 0.92,
-                  boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
-                }}
-              />
             </aside>
           );
 
