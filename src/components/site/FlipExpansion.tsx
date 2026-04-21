@@ -447,54 +447,55 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: ECRU · OAT · LINEN ───────────────────────────────
-  // Three off-white papers — near-white with a whisper of warm hue. Reads
-  // exactly like a physical book or magazine page. Dark warm-grey ink for
-  // body text. Calm, low-fatigue, premium long-form reading.
-  //   • fill / fillDeep   — paper background + slightly toned variant for footer
-  //   • ink               — deep warm-graphite text (headings, strong copy)
+  // ── BILLBOARD palette: CLAY · OLIVE · TEAL ──────────────────────────────
+  // Three muted earth-tone papers — magazine-style backgrounds with a clear
+  // hue identity but low chroma so long-form reading stays comfortable.
+  // Each variant pairs a tinted paper with a matching deeper "ink" used on
+  // numerals, chips, dividers and follow-up tile borders for cohesion.
+  //   • fill / fillDeep   — paper background + deeper variant for footer
+  //   • ink               — deep tinted text (headings, strong copy, accents)
   //   • inkSoft           — softened ink for body text (still high contrast)
   //   • tabBg / tabBorder — footer pager tab fill + active border
   //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
   const palette = [
     {
-      // ECRU — warm pale champagne
-      fill:      "oklch(0.97 0.012 80)",
-      fillDeep:  "oklch(0.92 0.014 80)",
-      tabBg:     "oklch(0.94 0.014 80)",
-      tabBorder: "oklch(0.62 0.04 80)",
-      ink:       "oklch(0.26 0.02 60)",
-      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
-      tabHover:  "oklch(0.96 0.012 80)",
-      screen:    "oklch(0.97 0.012 80)",
-      glow:      "oklch(0.85 0.02 80)",
-      heading:   "oklch(0.26 0.02 60)",
+      // CLAY — dusty terracotta
+      fill:      "oklch(0.90 0.028 55)",
+      fillDeep:  "oklch(0.84 0.038 55)",
+      tabBg:     "oklch(0.87 0.032 55)",
+      tabBorder: "oklch(0.42 0.07 50)",
+      ink:       "oklch(0.34 0.06 45)",
+      inkSoft:   "oklch(0.38 0.05 45 / 0.92)",
+      tabHover:  "oklch(0.92 0.028 55)",
+      screen:    "oklch(0.90 0.028 55)",
+      glow:      "oklch(0.78 0.05 50)",
+      heading:   "oklch(0.32 0.07 45)",
     },
     {
-      // OAT — soft warm beige
-      fill:      "oklch(0.955 0.014 70)",
-      fillDeep:  "oklch(0.90 0.018 70)",
-      tabBg:     "oklch(0.92 0.018 70)",
-      tabBorder: "oklch(0.58 0.04 70)",
-      ink:       "oklch(0.26 0.02 60)",
-      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
-      tabHover:  "oklch(0.96 0.014 70)",
-      screen:    "oklch(0.955 0.014 70)",
-      glow:      "oklch(0.84 0.024 70)",
-      heading:   "oklch(0.26 0.02 60)",
+      // OLIVE — soft muted olive
+      fill:      "oklch(0.91 0.025 125)",
+      fillDeep:  "oklch(0.85 0.034 125)",
+      tabBg:     "oklch(0.88 0.028 125)",
+      tabBorder: "oklch(0.42 0.06 130)",
+      ink:       "oklch(0.34 0.05 130)",
+      inkSoft:   "oklch(0.38 0.045 130 / 0.92)",
+      tabHover:  "oklch(0.93 0.025 125)",
+      screen:    "oklch(0.91 0.025 125)",
+      glow:      "oklch(0.78 0.045 130)",
+      heading:   "oklch(0.32 0.06 130)",
     },
     {
-      // LINEN — cool pale stone
-      fill:      "oklch(0.965 0.008 110)",
-      fillDeep:  "oklch(0.91 0.012 110)",
-      tabBg:     "oklch(0.93 0.012 110)",
-      tabBorder: "oklch(0.60 0.03 110)",
-      ink:       "oklch(0.26 0.015 100)",
-      inkSoft:   "oklch(0.32 0.015 100 / 0.92)",
-      tabHover:  "oklch(0.95 0.008 110)",
-      screen:    "oklch(0.965 0.008 110)",
-      glow:      "oklch(0.84 0.014 110)",
-      heading:   "oklch(0.26 0.015 100)",
+      // TEAL — muted dusty teal
+      fill:      "oklch(0.91 0.024 200)",
+      fillDeep:  "oklch(0.84 0.034 200)",
+      tabBg:     "oklch(0.88 0.028 200)",
+      tabBorder: "oklch(0.42 0.06 205)",
+      ink:       "oklch(0.32 0.055 210)",
+      inkSoft:   "oklch(0.36 0.05 210 / 0.92)",
+      tabHover:  "oklch(0.93 0.024 200)",
+      screen:    "oklch(0.91 0.024 200)",
+      glow:      "oklch(0.78 0.045 205)",
+      heading:   "oklch(0.30 0.06 210)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
