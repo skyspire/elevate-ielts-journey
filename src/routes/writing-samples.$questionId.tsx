@@ -149,7 +149,7 @@ function QuestionDetailPage() {
           className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
         />
 
-        <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
+        <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Breadcrumb */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
             <Link to="/dashboard" className="hover:text-foreground/80">Dashboard</Link>
