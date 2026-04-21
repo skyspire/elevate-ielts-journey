@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { FlipExpansion } from "@/components/site/FlipExpansion";
 import {
   GraduationCap,
   ArrowLeft,
@@ -97,6 +98,23 @@ function SpeakingSamplesPage() {
   const fallbackCategories = categoriesByMode["general"];
   const categories = mode ? categoriesByMode[mode] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
+
+  // Flip Expansion state
+  const [flipOpen, setFlipOpen] = useState(false);
+  const [flipTopic, setFlipTopic] = useState<{ id: string; label: string } | null>(null);
+  const [flipCategoryId, setFlipCategoryId] = useState<string>(fallbackCategories[0].id);
+  const [flipAnchor, setFlipAnchor] = useState<DOMRect | null>(null);
+
+  const handleOpenFlip = (
+    topic: { id: string; label: string },
+    catId: string,
+    rect: DOMRect,
+  ) => {
+    setFlipTopic(topic);
+    setFlipCategoryId(catId);
+    setFlipAnchor(rect);
+    setFlipOpen(true);
+  };
 
   const onModeChange = (next: Mode) => {
     setMode(next);
@@ -255,6 +273,7 @@ function SpeakingSamplesPage() {
                         index={i + 1}
                         topic={t}
                         categoryId={activeCategory.id}
+                        onOpen={handleOpenFlip}
                       />
                     ))}
                   </div>
@@ -265,6 +284,16 @@ function SpeakingSamplesPage() {
         </div>
       </main>
       <Footer />
+
+      {flipTopic && (
+        <FlipExpansion
+          open={flipOpen}
+          onClose={() => setFlipOpen(false)}
+          categoryId={flipCategoryId}
+          topic={flipTopic}
+          anchorRect={flipAnchor}
+        />
+      )}
     </div>
   );
 }
@@ -425,23 +454,37 @@ function FormatTogglePair({
 }
 
 
-// ───────── Topic row card — mirrors Writing Samples QuestionRowCard ─────────
+// ───────── Topic row card — triggers FlipExpansion in-place ─────────
 function TopicCard({
   index,
   topic,
   categoryId,
+  onOpen,
 }: {
   index: number;
   topic: { id: string; label: string };
   categoryId: string;
+  onOpen: (
+    topic: { id: string; label: string },
+    catId: string,
+    rect: DOMRect,
+  ) => void;
 }) {
   const idx = String(index).padStart(2, "0");
+  const ref = useRef<HTMLButtonElement | null>(null);
+
+  const handleClick = () => {
+    const rect = ref.current?.getBoundingClientRect() ?? null;
+    if (rect) onOpen(topic, categoryId, rect);
+  };
 
   return (
-    <Link
-      to="/speaking-samples/$category/$topic"
-      params={{ category: categoryId, topic: topic.id }}
-      className="group relative flex h-full overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
+    <button
+      ref={ref}
+      type="button"
+      onClick={handleClick}
+      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.50_0.10_165)] focus-visible:ring-offset-2"
+      aria-label={`Open sample answer for ${topic.label}`}
     >
       {/* Left column — index */}
       <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20">
@@ -450,7 +493,7 @@ function TopicCard({
         </span>
       </div>
 
-      {/* Right column — topic name (sized to match the big index numeral) */}
+      {/* Right column — topic name */}
       <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
         <p
           className="font-display font-black leading-tight tracking-tight"
@@ -459,7 +502,7 @@ function TopicCard({
           {topic.label}
         </p>
       </div>
-    </Link>
+    </button>
   );
 }
 
