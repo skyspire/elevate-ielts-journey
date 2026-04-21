@@ -226,16 +226,13 @@ function SpeakingSamplesPage() {
                       Pick a topic to explore
                     </h3>
                   </div>
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="flex flex-col gap-3">
                     {topics.map((t, i) => (
                       <TopicCard
                         key={t.id}
                         index={i + 1}
                         topic={t}
                         categoryId={activeCategory.id}
-                        categoryLabel={activeCategory.label}
-                        mode={mode}
-                        accentChip={accentChip}
                       />
                     ))}
                   </div>
@@ -406,55 +403,38 @@ function FormatTogglePair({
 }
 
 
-// ───────── Topic card — numbered tile that links to the topic detail page ─────────
+// ───────── Topic row card — mirrors Writing Samples QuestionRowCard ─────────
 function TopicCard({
   index,
   topic,
   categoryId,
-  categoryLabel,
-  mode,
-  accentChip,
 }: {
   index: number;
   topic: { id: string; label: string };
   categoryId: string;
-  categoryLabel: string;
-  mode: Mode;
-  accentChip: string;
 }) {
+  const idx = String(index).padStart(2, "0");
+
   return (
     <Link
       to="/speaking-samples/$category/$topic"
       params={{ category: categoryId, topic: topic.id }}
-      className="group relative flex h-full flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:border-[oklch(0.55_0.10_165)]/45 hover:shadow-card"
+      className="group relative flex h-full overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
     >
-      {/* Top row: index + part badge */}
-      <div className="flex items-start justify-between gap-3">
-        <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-          T{String(index).padStart(2, "0")}
-        </span>
-        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}>
-          {mode === "cuecards" ? "Part 2" : "Part 1 / 3"}
+      {/* Left column — index */}
+      <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20">
+        <span className="font-display text-2xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-3xl">
+          {idx}
         </span>
       </div>
 
-      {/* Topic name — the hero of the card */}
-      <h4
-        className="font-display font-black leading-tight tracking-tight text-foreground"
-        style={{ fontSize: "clamp(1.25rem, 3.2vw, 1.6rem)" }}
-      >
-        {topic.label}
-      </h4>
-
-      {/* Footer */}
-      <div className="mt-1 flex items-center justify-between gap-2 border-t border-foreground/8 pt-3">
-        <span className="text-[11px] font-semibold text-foreground/55">
-          {categoryLabel}
-        </span>
-        <span className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform group-hover:-translate-y-0.5">
-          Open
-          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-        </span>
+      {/* Right column — topic name */}
+      <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
+        <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-base">
+          <span style={{ color: "oklch(0.42 0.10 165)", fontWeight: 800 }}>
+            {topic.label}
+          </span>
+        </p>
       </div>
     </Link>
   );
