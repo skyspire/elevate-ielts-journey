@@ -294,7 +294,7 @@ function DashboardPage() {
         />
 
         {/* Centered content column */}
-        <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
+        <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Hero — handwriting headline with sketchy pencil underline */}
           <div className="text-center">
             <div className="relative inline-block">
