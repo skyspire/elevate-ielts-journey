@@ -1,7 +1,7 @@
 // Helper: look up the list of questions for a given questionId.
 // Mirrors the logic in writing-samples.index.tsx so the detail page can
 // build prev/next + related-question links from the same source of truth.
-import { task2Prompts } from "./writing-prompts";
+import { task2Prompts, task1GeneralPrompts } from "./writing-prompts";
 
 const TOPICS = ["Work", "Education", "Society", "Environment", "Technology", "Health", "Travel", "Lifestyle"] as const;
 const DIFFICULTIES = ["Easy", "Medium", "Hard"] as const;
@@ -13,8 +13,9 @@ export type SiblingQuestion = {
   difficulty: (typeof DIFFICULTIES)[number];
 };
 
-// All categories that have a defined prompt set in writing-prompts.ts
+// All categories that have a defined prompt set
 const CATEGORY_LABELS: Record<string, string> = {
+  // Task 2 essays
   opinion: "Opinion Essay",
   discussion: "Discussion Essay",
   advdis: "Advantages & Disadvantages Essay",
@@ -22,6 +23,15 @@ const CATEGORY_LABELS: Record<string, string> = {
   direct: "Direct Question Essay",
   posneg: "Positive or Negative Development Essay",
   cause: "Cause and Effect Essay",
+  // Task 1 General — letters
+  formal: "Formal Letters",
+  informal: "Informal Letters",
+};
+
+// Unified prompt lookup across all task / module categories.
+const ALL_PROMPTS: Record<string, string[]> = {
+  ...task2Prompts,
+  ...task1GeneralPrompts,
 };
 
 export function getCategoryLabel(categoryId: string): string {
@@ -38,7 +48,7 @@ export function parseQuestionId(questionId: string): { categoryId: string; index
 }
 
 export function getQuestionsForCategory(categoryId: string): SiblingQuestion[] {
-  const prompts = task2Prompts[categoryId];
+  const prompts = ALL_PROMPTS[categoryId];
   if (!prompts || prompts.length === 0) return [];
   return prompts.map((statement, i) => ({
     id: `${categoryId}-${i + 1}`,
