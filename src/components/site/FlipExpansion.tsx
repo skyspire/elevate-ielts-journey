@@ -98,21 +98,17 @@ export function FlipExpansion({
     return () => clearTimeout(flipTimer);
   }, [open]);
 
-  // Sequentially reveal answer sections once expanded — and again every time
-  // the active variant changes, so each switch feels freshly composed.
+  // Reveal answer sections: gentle stagger on first open, instant on variant
+  // switch (so the lateral slide-in animation isn't fighting an opacity
+  // stagger underneath it).
   useEffect(() => {
     if (phase !== "expanded") return;
     const total = sections.length;
-    // On a variant switch (instant swap mid-flight), reveal all sections at
-    // once with no stagger — the answer text stays calm while the paper plane
-    // carries the visual transition.
-    const isVariantSwitch = gravityPhase === "in";
+    const isVariantSwitch = gravityPhase === "in" || gravityPhase === "out";
     if (isVariantSwitch) {
       setRevealedSections(total);
       return;
     }
-    // First open: keep the gentle, lingering reveal so the page composes
-    // itself as the reader settles in.
     setRevealedSections(0);
     const timers: number[] = [];
     const initialDelay = 220;
