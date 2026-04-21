@@ -681,40 +681,15 @@ function CueCardReader({
           <div className="space-y-12 pt-4">
             {sections.map((s, i) => {
               const visible = i < revealedSections;
-              const isOut = gravityPhase === "out";
-
-              // Gravity drop & settle:
-              //   - "out": each line lifts 6px (anti-gravity), then drops 28px
-              //     while fading. Staggered by 50ms top-down so it cascades.
-              //   - settled (visible, idle/in): rests at translateY(0).
-              //   - hidden (not yet revealed): waits 32px above, ready to fall.
-              let translateY = "0px";
-              let opacity = visible ? 1 : 0;
-              let transition =
-                "transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 380ms ease-out";
-
-              if (isOut) {
-                // Two-stage motion via CSS animation — lift then drop.
-                translateY = "0px";
-                opacity = 0;
-                transition = "none";
-              } else if (!visible) {
-                // Pre-fall resting position: held just above its slot.
-                translateY = "-26px";
-                opacity = 0;
-              }
-
+              // Instant swap mid-flight — no fade, no transform, no transition.
+              // The paper plane animation carries the visual story; the text
+              // simply appears or disappears with the swap. This keeps the
+              // reading lane perfectly calm while the plane is in motion.
               return (
                 <section
                   key={`${variantIndex}-${s.heading}`}
                   style={{
-                    opacity,
-                    transform: `translateY(${translateY})`,
-                    transition,
-                    animation: isOut
-                      ? `gravity-out 380ms cubic-bezier(0.55, 0, 0.85, 0.4) ${i * 50}ms forwards`
-                      : undefined,
-                    willChange: "transform, opacity",
+                    visibility: visible ? "visible" : "hidden",
                   }}
                 >
                   <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
