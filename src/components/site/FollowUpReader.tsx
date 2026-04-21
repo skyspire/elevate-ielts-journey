@@ -624,8 +624,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 style={laneStyle}
               >
                 <div className="mx-auto grid h-full w-full max-w-[1280px] grid-cols-[2fr_3fr] gap-14 px-10">
-                  {/* Fixed (non-scrolling) question column */}
-                  <div className="flex h-full items-center justify-center pr-12">
+                  {/* Fixed (non-scrolling) question column — left-aligned editorial */}
+                  <div className="flex h-full items-center justify-start pr-8">
                     {QuestionStack}
                   </div>
                   {/* Scrollable answer column */}
