@@ -273,6 +273,7 @@ function SpeakingSamplesPage() {
                         index={i + 1}
                         topic={t}
                         categoryId={activeCategory.id}
+                        onOpen={handleOpenFlip}
                       />
                     ))}
                   </div>
@@ -283,6 +284,16 @@ function SpeakingSamplesPage() {
         </div>
       </main>
       <Footer />
+
+      {flipTopic && (
+        <FlipExpansion
+          open={flipOpen}
+          onClose={() => setFlipOpen(false)}
+          categoryId={flipCategoryId}
+          topic={flipTopic}
+          anchorRect={flipAnchor}
+        />
+      )}
     </div>
   );
 }
