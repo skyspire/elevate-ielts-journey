@@ -933,7 +933,7 @@ function CueCardReader({
                 {dots.map((i) => {
                   const t = (i + 1) / (dots.length + 1);
                   // Same path sampling as the plane for perfect alignment.
-                  const offsetDelay = t * 950;
+                  const offsetDelay = t * 1400;
                   return (
                     <span
                       key={i}
