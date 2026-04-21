@@ -447,52 +447,54 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: INDIGO · FOREST · BURGUNDY ───────────────────────
-  // Premium long-form reading palette — distinct from the follow-up reader's
-  // amber/teal/plum, and from the cue-card's old red/blue/olive.
-  // Each tone is a deep saturated fill that the whole screen takes on, with
-  // a deeper shade for the diagonal gradient + footer band, and cream ink
-  // for headings and body text on top.
+  // ── BILLBOARD palette: ECRU · OAT · LINEN ───────────────────────────────
+  // Three off-white papers — near-white with a whisper of warm hue. Reads
+  // exactly like a physical book or magazine page. Dark warm-grey ink for
+  // body text. Calm, low-fatigue, premium long-form reading.
+  //   • fill / fillDeep   — paper background + slightly toned variant for footer
+  //   • ink               — deep warm-graphite text (headings, strong copy)
+  //   • inkSoft           — softened ink for body text (still high contrast)
+  //   • tabBg / tabBorder — footer pager tab fill + active border
+  //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
   const palette = [
     {
-      // Indigo — deep, focused, intellectual
-      fill:      "oklch(0.42 0.14 270)",
-      fillDeep:  "oklch(0.30 0.13 270)",
-      tabBg:     "oklch(0.42 0.14 270)",
-      tabBorder: "oklch(0.22 0.12 270)",
-      ink:       "oklch(0.99 0.012 270)",
-      inkSoft:   "oklch(0.99 0.012 270 / 0.85)",
-      // Legacy keys retained so other code paths (mobile chip, etc) don't break
-      tabHover:  "oklch(0.48 0.13 270)",
-      screen:    "oklch(0.42 0.14 270)",
-      glow:      "oklch(0.62 0.13 270)",
-      heading:   "oklch(0.99 0.012 270)",
+      // ECRU — warm pale champagne
+      fill:      "oklch(0.97 0.012 80)",
+      fillDeep:  "oklch(0.92 0.014 80)",
+      tabBg:     "oklch(0.94 0.014 80)",
+      tabBorder: "oklch(0.62 0.04 80)",
+      ink:       "oklch(0.26 0.02 60)",
+      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
+      tabHover:  "oklch(0.96 0.012 80)",
+      screen:    "oklch(0.97 0.012 80)",
+      glow:      "oklch(0.85 0.02 80)",
+      heading:   "oklch(0.26 0.02 60)",
     },
     {
-      // Forest — grounded, calm, considered
-      fill:      "oklch(0.40 0.10 155)",
-      fillDeep:  "oklch(0.28 0.09 155)",
-      tabBg:     "oklch(0.40 0.10 155)",
-      tabBorder: "oklch(0.20 0.08 155)",
-      ink:       "oklch(0.99 0.012 155)",
-      inkSoft:   "oklch(0.99 0.012 155 / 0.85)",
-      tabHover:  "oklch(0.46 0.10 155)",
-      screen:    "oklch(0.40 0.10 155)",
-      glow:      "oklch(0.60 0.10 155)",
-      heading:   "oklch(0.99 0.012 155)",
+      // OAT — soft warm beige
+      fill:      "oklch(0.955 0.014 70)",
+      fillDeep:  "oklch(0.90 0.018 70)",
+      tabBg:     "oklch(0.92 0.018 70)",
+      tabBorder: "oklch(0.58 0.04 70)",
+      ink:       "oklch(0.26 0.02 60)",
+      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
+      tabHover:  "oklch(0.96 0.014 70)",
+      screen:    "oklch(0.955 0.014 70)",
+      glow:      "oklch(0.84 0.024 70)",
+      heading:   "oklch(0.26 0.02 60)",
     },
     {
-      // Burgundy — rich, warm, premium
-      fill:      "oklch(0.40 0.13 18)",
-      fillDeep:  "oklch(0.28 0.12 18)",
-      tabBg:     "oklch(0.40 0.13 18)",
-      tabBorder: "oklch(0.20 0.11 18)",
-      ink:       "oklch(0.99 0.014 18)",
-      inkSoft:   "oklch(0.99 0.014 18 / 0.85)",
-      tabHover:  "oklch(0.46 0.13 18)",
-      screen:    "oklch(0.40 0.13 18)",
-      glow:      "oklch(0.60 0.13 18)",
-      heading:   "oklch(0.99 0.014 18)",
+      // LINEN — cool pale stone
+      fill:      "oklch(0.965 0.008 110)",
+      fillDeep:  "oklch(0.91 0.012 110)",
+      tabBg:     "oklch(0.93 0.012 110)",
+      tabBorder: "oklch(0.60 0.03 110)",
+      ink:       "oklch(0.26 0.015 100)",
+      inkSoft:   "oklch(0.32 0.015 100 / 0.92)",
+      tabHover:  "oklch(0.95 0.008 110)",
+      screen:    "oklch(0.965 0.008 110)",
+      glow:      "oklch(0.84 0.014 110)",
+      heading:   "oklch(0.26 0.015 100)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
@@ -532,13 +534,13 @@ function CueCardReader({
           backgroundColor: activePalette.fill,
         }}
       >
-        {/* Film grain — fine SVG-noise via radial dots, blended */}
+        {/* Paper grain — whisper-faint dark dots over the off-white paper for tactile tooth. */}
         <div
-          className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
+          className="absolute inset-0 mix-blend-multiply opacity-[0.04]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
-            backgroundSize: "4px 4px, 7px 7px",
+              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.4px, transparent 1px)",
+            backgroundSize: "5px 5px, 9px 9px",
           }}
         />
       </div>
@@ -546,7 +548,7 @@ function CueCardReader({
       {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
         className="pointer-events-none absolute z-[1]"
-        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.18 }}
+        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.10 }}
       >
         <div
           className="flex items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
@@ -579,8 +581,8 @@ function CueCardReader({
           ref={headerAnchorRef}
           className="pointer-events-auto w-full max-w-[680px] rounded-2xl px-5 py-3.5 backdrop-blur-md sm:px-7 sm:py-4"
           style={{
-            backgroundColor: "oklch(1 0 0 / 0.08)",
-            border: `1px solid ${activePalette.ink}26`,
+            backgroundColor: `${activePalette.ink}0A`,
+            border: `1px solid ${activePalette.ink}1F`,
           }}
         >
           <div className="flex items-center justify-between gap-3">
@@ -621,11 +623,11 @@ function CueCardReader({
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
               style={{
                 color: activePalette.ink,
-                backgroundColor: "oklch(1 0 0 / 0.10)",
-                border: `1px solid ${activePalette.ink}40`,
+                backgroundColor: `${activePalette.ink}10`,
+                border: `1px solid ${activePalette.ink}30`,
               }}
               aria-label="Close sample answer"
             >
@@ -698,17 +700,15 @@ function CueCardReader({
                     style={{
                       color: activePalette.ink,
                       fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
-                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                     }}
                   >
                     {topic.label}
                   </h1>
                   <div
-                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    className="mt-5 h-[3px] w-[clamp(80px,18vw,160px)] rounded-full"
                     style={{
                       background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
-                      opacity: 0.92,
-                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                      opacity: 0.55,
                     }}
                   />
                 </header>
@@ -768,12 +768,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Match FollowUpReader's amber/teal/plum palette so each tile's
-        // accent equals the answer-screen color it opens into.
+        // Muted off-white tiles (taupe variants of ecru/oat/linen) so the
+        // rail stays visually quiet against the calm paper screen. Color
+        // identity comes from the deep ink numerals, not from saturated fills.
         const followUpPalette = [
-          { fill: "oklch(0.62 0.18 65)",  ink: "oklch(0.99 0.015 80)" },  // Amber
-          { fill: "oklch(0.50 0.13 200)", ink: "oklch(0.99 0.012 200)" }, // Teal
-          { fill: "oklch(0.46 0.16 330)", ink: "oklch(0.99 0.015 330)" }, // Plum
+          { fill: "oklch(0.93 0.018 75)",  ink: "oklch(0.30 0.025 60)" },  // Warm taupe
+          { fill: "oklch(0.92 0.014 95)",  ink: "oklch(0.30 0.020 70)" },  // Sand
+          { fill: "oklch(0.92 0.010 110)", ink: "oklch(0.30 0.018 100)" }, // Stone
         ];
 
         return (
@@ -876,7 +877,8 @@ function CueCardReader({
                 const r = e.currentTarget.getBoundingClientRect();
                 goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
-              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+              style={{ color: activePalette.ink }}
               aria-label="Previous sample answer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -900,14 +902,15 @@ function CueCardReader({
                     style={{
                       backgroundColor: tone.tabBg,
                       boxShadow: active
-                        ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
-                        : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                        ? `inset 0 0 0 2px ${tone.tabBorder}`
+                        : `inset 0 0 0 1px ${tone.tabBorder}33`,
                     }}
                   >
                     <span
                       className="font-display tracking-tight transition-all duration-300"
                       style={{
-                        color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                        color: tone.ink,
+                        opacity: active ? 1 : 0.7,
                         fontWeight: active ? 800 : 600,
                         fontSize: "13px",
                         letterSpacing: active ? "-0.01em" : "0",
@@ -926,7 +929,8 @@ function CueCardReader({
                 const r = e.currentTarget.getBoundingClientRect();
                 goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
-              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+              style={{ color: activePalette.ink }}
               aria-label="Next sample answer"
             >
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
