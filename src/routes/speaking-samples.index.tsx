@@ -226,7 +226,7 @@ function SpeakingSamplesPage() {
                       Pick a topic to explore
                     </h3>
                   </div>
-                  <div className="flex flex-col gap-3">
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {topics.map((t, i) => (
                       <TopicCard
                         key={t.id}
