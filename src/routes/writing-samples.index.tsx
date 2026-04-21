@@ -731,7 +731,7 @@ function TaskEnvelopeScroll({
           )}
         </div>
 
-        <div className="pb-8 sm:pb-12">
+        <div className="flex justify-start">
           {renderItem(isT2, () => onTaskChange("task2"), "Task 2", "Essay", "left")}
         </div>
       </div>
