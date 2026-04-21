@@ -36,6 +36,11 @@ export type WritingAnswerBillboardProps = {
   questionNumber: number;
   /** The single Band 8+ source answer. Repeated across the three tabs. */
   answer: SampleAnswer;
+  /**
+   * When true the billboard fills the viewport (100vh) instead of using
+   * the default min-height. Used by the dedicated full-screen route.
+   */
+  fullScreen?: boolean;
 };
 
 type VariantPalette = {
@@ -83,6 +88,7 @@ export function WritingAnswerBillboard({
   questionTitle,
   questionNumber,
   answer,
+  fullScreen = false,
 }: WritingAnswerBillboardProps) {
   const [variantIndex, setVariantIndex] = useState(0);
   // Lateral lane animation phase for variant switches: out → in → idle.
@@ -164,19 +170,26 @@ export function WritingAnswerBillboard({
   };
   const laneStyle: React.CSSProperties = isOut ? outStyle : inOrIdleStyle;
 
+  const frameHeight = fullScreen ? "100vh" : "min(720px, 78vh)";
+
   return (
     <section
-      className="relative mt-8 overflow-hidden rounded-3xl border bg-white shadow-card"
+      className={
+        fullScreen
+          ? "relative h-screen w-screen overflow-hidden border-0 bg-white"
+          : "relative mt-8 overflow-hidden rounded-3xl border bg-white shadow-card"
+      }
       style={{
-        borderColor: "oklch(0.30 0.035 250 / 0.10)",
-        // Tall enough that the right column gets a real scroll affordance
-        // on desktop while staying friendly on smaller screens.
-        minHeight: "min(720px, 78vh)",
+        borderColor: fullScreen ? undefined : "oklch(0.30 0.035 250 / 0.10)",
+        minHeight: fullScreen ? undefined : frameHeight,
       }}
       aria-label="Sample answer reader"
     >
       {/* ── Two-column billboard frame ──────────────────────────────── */}
-      <div className="flex h-[min(720px,78vh)] w-full flex-col md:flex-row">
+      <div
+        className="flex w-full flex-col md:flex-row"
+        style={{ height: frameHeight }}
+      >
         {/* Mobile-only sticky compact header pill with the question title. */}
         <div
           className="pointer-events-none sticky top-0 z-20 flex justify-center px-3 pt-3 md:hidden"
