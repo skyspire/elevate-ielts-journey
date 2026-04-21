@@ -462,42 +462,42 @@ function CueCardReader({
   const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // DUSTY BLUE — light, airy
+      // RED — confident, editorial crimson
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.78 0.045 240)",
-      tabBorder: "oklch(0.42 0.055 240)",
+      tabBg:     "oklch(0.55 0.180 25)",
+      tabBorder: "oklch(0.38 0.150 25)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.82 0.040 240)",
+      tabHover:  "oklch(0.59 0.170 25)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.78 0.045 240)",
+      glow:      "oklch(0.55 0.180 25)",
       heading:   SIGNATURE_INK,
     },
     {
-      // STEEL BLUE — mid-tone, considered
+      // BLUE — vibrant, professional cobalt
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.62 0.055 245)",
-      tabBorder: "oklch(0.32 0.055 245)",
+      tabBg:     "oklch(0.50 0.170 255)",
+      tabBorder: "oklch(0.34 0.140 255)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.66 0.050 245)",
+      tabHover:  "oklch(0.54 0.160 255)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.62 0.055 245)",
+      glow:      "oklch(0.50 0.170 255)",
       heading:   SIGNATURE_INK,
     },
     {
-      // DEEP SLATE — confident, magazine-like
+      // OLIVE GREEN — heritage, grounded
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.42 0.045 250)",
-      tabBorder: "oklch(0.24 0.040 250)",
+      tabBg:     "oklch(0.52 0.090 125)",
+      tabBorder: "oklch(0.36 0.080 125)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.46 0.040 250)",
+      tabHover:  "oklch(0.56 0.085 125)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.42 0.045 250)",
+      glow:      "oklch(0.52 0.090 125)",
       heading:   SIGNATURE_INK,
     },
   ];
