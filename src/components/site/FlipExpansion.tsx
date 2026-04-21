@@ -298,6 +298,8 @@ export function FlipExpansion({
             followUps={followUps}
             accentText={accentText}
             accentChip={accentChip}
+            watermarkPos={watermarkPos}
+            setWatermarkPos={setWatermarkPos}
           />
         ) : (
           <CompactPanel
@@ -346,6 +348,8 @@ type CueReaderProps = {
   followUps: { id: string; title: string }[];
   accentText: string;
   accentChip: string;
+  watermarkPos: "center" | "corner";
+  setWatermarkPos: (pos: "center" | "corner") => void;
 };
 
 function CueCardReader({
@@ -368,6 +372,8 @@ function CueCardReader({
   followUps,
   accentText,
   accentChip,
+  watermarkPos,
+  setWatermarkPos,
 }: CueReaderProps) {
   // Edge softening intensifies as the reader scrolls — creates the focus tunnel.
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
