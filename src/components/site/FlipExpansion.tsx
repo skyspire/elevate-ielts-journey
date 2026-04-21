@@ -700,17 +700,15 @@ function CueCardReader({
                     style={{
                       color: activePalette.ink,
                       fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
-                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                     }}
                   >
                     {topic.label}
                   </h1>
                   <div
-                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    className="mt-5 h-[3px] w-[clamp(80px,18vw,160px)] rounded-full"
                     style={{
                       background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
-                      opacity: 0.92,
-                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                      opacity: 0.55,
                     }}
                   />
                 </header>
