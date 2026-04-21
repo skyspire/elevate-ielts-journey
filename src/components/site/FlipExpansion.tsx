@@ -1042,7 +1042,7 @@ function CueCardReader({
           -webkit-offset-rotate: auto;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-plane-fly 2200ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
+          animation: paper-plane-fly 2800ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
           filter: drop-shadow(0 14px 22px oklch(0.2 0.05 60 / 0.28)) drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
           will-change: offset-distance, opacity;
         }
@@ -1050,17 +1050,23 @@ function CueCardReader({
           width: 100%;
           height: 100%;
           transform-origin: 50% 50%;
-          animation: paper-plane-wobble 520ms ease-in-out infinite;
+          /* Combined air-pocket dip + slight roll oscillation gives a
+             physical, hand-thrown feel. The plane gently lifts and drops
+             a few px while subtly rolling, like fighting indoor air. */
+          animation: paper-plane-wobble 1300ms ease-in-out infinite;
         }
         @keyframes paper-plane-fly {
-          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.6); }
-          8%   { opacity: 1; transform: scale(1); }
-          85%  { offset-distance: 100%; opacity: 1; transform: scale(0.85); }
-          100% { offset-distance: 100%; opacity: 0; transform: scale(0.55); }
+          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.5); }
+          6%   { opacity: 1; transform: scale(1); }
+          90%  { offset-distance: 100%; opacity: 1; transform: scale(0.9); }
+          100% { offset-distance: 100%; opacity: 0; transform: scale(0.6); }
         }
         @keyframes paper-plane-wobble {
-          0%, 100% { transform: rotate(-6deg) translateY(0); }
-          50%      { transform: rotate(6deg)  translateY(-1.5px); }
+          0%   { transform: rotate(-4deg) translateY(0); }
+          25%  { transform: rotate(2deg)  translateY(-3px); }
+          50%  { transform: rotate(5deg)  translateY(2px); }
+          75%  { transform: rotate(-2deg) translateY(4px); }
+          100% { transform: rotate(-4deg) translateY(0); }
         }
 
         /* Whisper dotted trail — tiny dots that fade in along the path
