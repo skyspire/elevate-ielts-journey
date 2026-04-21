@@ -41,16 +41,12 @@ type Feature = {
   key: string;
   title: string;
   description: { academic: string; general: string };
-  // count is split: numeric headline + small unit label
   count: {
     academic: { value: string; label: string };
     general: { value: string; label: string };
   };
-  // tone for the card tint (independent of module accent)
   tone: "espresso" | "navy" | "forest" | "plum" | "rust" | "teal" | "ochre";
-  // Lucide icon used for the glossy 3D mark in the corner
   icon: ComponentType<LucideProps>;
-  // Optional route to navigate to when the card is clicked
   to?: string;
 };
 
