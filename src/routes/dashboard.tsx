@@ -152,78 +152,84 @@ const features: Feature[] = [
   },
 ];
 
-// Polaroid palette per tone — soft photo-area tint + ink color for the doodle.
-// The card itself stays cream/white (polaroid frame).
+// Bento tone system — each card gets a unique soft gradient + accent color.
+// Backgrounds are restrained (white-leaning) so the page reads premium and quiet.
 const tones: Record<
   Feature["tone"],
   {
-    photoBg: string; // soft pastel for the photo area
-    inkColor: string; // doodle / icon stroke color
-    tapeColor: string; // washi tape color
-    accentText: string; // small accent text color
+    gradient: string; // soft corner gradient
+    accent: string; // strong accent color (text + icon + bar)
+    accentSoft: string; // tint for icon chip background
+    ring: string; // ring color on hover
   }
 > = {
   navy: {
-    photoBg: "bg-[oklch(0.92_0.05_255)]",
-    inkColor: "oklch(0.32 0.10 255)",
-    tapeColor: "oklch(0.78 0.10 250 / 0.75)",
-    accentText: "text-[oklch(0.36_0.10_255)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.05 255 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.16 260)",
+    accentSoft: "oklch(0.95 0.04 255)",
+    ring: "oklch(0.55 0.14 255 / 0.35)",
   },
   rust: {
-    photoBg: "bg-[oklch(0.92_0.06_45)]",
-    inkColor: "oklch(0.42 0.14 40)",
-    tapeColor: "oklch(0.82 0.10 50 / 0.75)",
-    accentText: "text-[oklch(0.42_0.13_40)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 45 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.50 0.16 35)",
+    accentSoft: "oklch(0.95 0.05 45)",
+    ring: "oklch(0.60 0.15 35 / 0.35)",
   },
   forest: {
-    photoBg: "bg-[oklch(0.93_0.05_160)]",
-    inkColor: "oklch(0.36 0.09 160)",
-    tapeColor: "oklch(0.82 0.08 155 / 0.75)",
-    accentText: "text-[oklch(0.36_0.09_160)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 160 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.42 0.11 165)",
+    accentSoft: "oklch(0.95 0.04 160)",
+    ring: "oklch(0.55 0.12 160 / 0.35)",
   },
   plum: {
-    photoBg: "bg-[oklch(0.92_0.05_320)]",
-    inkColor: "oklch(0.36 0.10 320)",
-    tapeColor: "oklch(0.82 0.08 315 / 0.75)",
-    accentText: "text-[oklch(0.38_0.10_320)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 320 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.14 320)",
+    accentSoft: "oklch(0.95 0.04 320)",
+    ring: "oklch(0.58 0.14 320 / 0.35)",
   },
   ochre: {
-    photoBg: "bg-[oklch(0.94_0.07_85)]",
-    inkColor: "oklch(0.42 0.11 75)",
-    tapeColor: "oklch(0.85 0.11 80 / 0.75)",
-    accentText: "text-[oklch(0.42_0.11_75)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.08 85 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.50 0.13 75)",
+    accentSoft: "oklch(0.95 0.06 85)",
+    ring: "oklch(0.62 0.13 80 / 0.35)",
   },
   teal: {
-    photoBg: "bg-[oklch(0.92_0.05_200)]",
-    inkColor: "oklch(0.34 0.09 200)",
-    tapeColor: "oklch(0.82 0.08 195 / 0.75)",
-    accentText: "text-[oklch(0.36_0.09_200)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 200 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.11 205)",
+    accentSoft: "oklch(0.95 0.04 200)",
+    ring: "oklch(0.58 0.12 200 / 0.35)",
   },
   espresso: {
-    photoBg: "bg-[oklch(0.92_0.03_70)]",
-    inkColor: "oklch(0.32 0.05 60)",
-    tapeColor: "oklch(0.80 0.06 65 / 0.75)",
-    accentText: "text-[oklch(0.34_0.05_60)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.04 70 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.38 0.06 60)",
+    accentSoft: "oklch(0.95 0.03 70)",
+    ring: "oklch(0.50 0.06 60 / 0.35)",
   },
 };
 
-// Per-card "personality": rotation, size variant, pin position — gives the
-// corkboard masonry feel. Indexed by feature.key for stable look.
-type Personality = {
-  rotate: string; // e.g. "-2.5deg"
-  size: "sm" | "md" | "lg"; // controls grid span + photo height
-  pin: "tape-top" | "pin-left" | "pin-right" | "tape-corner";
-  peekColor: string; // color of the paper peeking behind on hover
+// Bento layout: each feature claims a span on a 6-col grid.
+// Mobile: everything 1-col. Tablet+: asymmetric "widget" feel.
+type Span = {
+  col: string; // tailwind col-span classes
+  row: string; // tailwind row-span classes
+  variant: "hero" | "wide" | "tall" | "compact";
 };
 
-const personalities: Record<string, Personality> = {
-  writing: { rotate: "-2.5deg", size: "lg", pin: "tape-top", peekColor: "oklch(0.92 0.06 60)" },
-  speaking: { rotate: "1.8deg", size: "sm", pin: "pin-right", peekColor: "oklch(0.92 0.05 200)" },
-  vocab: { rotate: "-1.2deg", size: "md", pin: "tape-corner", peekColor: "oklch(0.92 0.05 320)" },
-  templates: { rotate: "2.4deg", size: "sm", pin: "pin-left", peekColor: "oklch(0.93 0.05 160)" },
-  predictions: { rotate: "-1.8deg", size: "md", pin: "tape-top", peekColor: "oklch(0.92 0.06 45)" },
-  mistakes: { rotate: "1.5deg", size: "md", pin: "pin-right", peekColor: "oklch(0.92 0.05 255)" },
-  plan: { rotate: "-2deg", size: "sm", pin: "tape-corner", peekColor: "oklch(0.94 0.07 85)" },
+const spans: Record<string, Span> = {
+  writing: { col: "sm:col-span-4 lg:col-span-4", row: "sm:row-span-2", variant: "hero" },
+  speaking: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  vocab: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  templates: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
+  predictions: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
+  mistakes: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  plan: { col: "sm:col-span-6 lg:col-span-6", row: "sm:row-span-1", variant: "wide" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
