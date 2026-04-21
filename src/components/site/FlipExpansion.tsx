@@ -46,6 +46,13 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
+  // Radial color-wash overlay state for the answer transition
+  const [wash, setWash] = useState<{
+    x: number;
+    y: number;
+    color: string;
+    key: number;
+  } | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
@@ -153,17 +160,38 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  function goToVariant(next: number) {
+  // Palette mirrored from CueCardReader so the wash color matches the next tab.
+  // Coral · Marigold · Emerald
+  const variantWashColors = [
+    "oklch(0.68 0.20 25)",  // coral
+    "oklch(0.78 0.17 80)",  // marigold
+    "oklch(0.62 0.16 155)", // emerald
+  ];
+
+  function goToVariant(next: number, origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
+
+    // Trigger radial color-wash reveal from the tab's position (or screen center).
+    const x = origin?.x ?? window.innerWidth / 2;
+    const y = origin?.y ?? window.innerHeight - 80;
+    const color = variantWashColors[clamped % variantWashColors.length];
+    setWash({ x, y, color, key: Date.now() });
+
+    // Switch content under the wash mid-animation, so when the wash fades the
+    // new screen + text are already in place underneath.
     window.setTimeout(() => {
       setVariantIndex(clamped);
-      // scroll back to top for the new answer
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
-      window.setTimeout(() => setVariantTransitioning(false), 40);
-    }, 220);
+    }, 360);
+
+    // Clear wash + transition lock after the full sweep finishes.
+    window.setTimeout(() => {
+      setVariantTransitioning(false);
+      setWash(null);
+    }, 920);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
