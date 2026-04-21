@@ -447,52 +447,54 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: INDIGO · FOREST · BURGUNDY ───────────────────────
-  // Premium long-form reading palette — distinct from the follow-up reader's
-  // amber/teal/plum, and from the cue-card's old red/blue/olive.
-  // Each tone is a deep saturated fill that the whole screen takes on, with
-  // a deeper shade for the diagonal gradient + footer band, and cream ink
-  // for headings and body text on top.
+  // ── BILLBOARD palette: ECRU · OAT · LINEN ───────────────────────────────
+  // Three off-white papers — near-white with a whisper of warm hue. Reads
+  // exactly like a physical book or magazine page. Dark warm-grey ink for
+  // body text. Calm, low-fatigue, premium long-form reading.
+  //   • fill / fillDeep   — paper background + slightly toned variant for footer
+  //   • ink               — deep warm-graphite text (headings, strong copy)
+  //   • inkSoft           — softened ink for body text (still high contrast)
+  //   • tabBg / tabBorder — footer pager tab fill + active border
+  //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
   const palette = [
     {
-      // Indigo — deep, focused, intellectual
-      fill:      "oklch(0.42 0.14 270)",
-      fillDeep:  "oklch(0.30 0.13 270)",
-      tabBg:     "oklch(0.42 0.14 270)",
-      tabBorder: "oklch(0.22 0.12 270)",
-      ink:       "oklch(0.99 0.012 270)",
-      inkSoft:   "oklch(0.99 0.012 270 / 0.85)",
-      // Legacy keys retained so other code paths (mobile chip, etc) don't break
-      tabHover:  "oklch(0.48 0.13 270)",
-      screen:    "oklch(0.42 0.14 270)",
-      glow:      "oklch(0.62 0.13 270)",
-      heading:   "oklch(0.99 0.012 270)",
+      // ECRU — warm pale champagne
+      fill:      "oklch(0.97 0.012 80)",
+      fillDeep:  "oklch(0.92 0.014 80)",
+      tabBg:     "oklch(0.94 0.014 80)",
+      tabBorder: "oklch(0.62 0.04 80)",
+      ink:       "oklch(0.26 0.02 60)",
+      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
+      tabHover:  "oklch(0.96 0.012 80)",
+      screen:    "oklch(0.97 0.012 80)",
+      glow:      "oklch(0.85 0.02 80)",
+      heading:   "oklch(0.26 0.02 60)",
     },
     {
-      // Forest — grounded, calm, considered
-      fill:      "oklch(0.40 0.10 155)",
-      fillDeep:  "oklch(0.28 0.09 155)",
-      tabBg:     "oklch(0.40 0.10 155)",
-      tabBorder: "oklch(0.20 0.08 155)",
-      ink:       "oklch(0.99 0.012 155)",
-      inkSoft:   "oklch(0.99 0.012 155 / 0.85)",
-      tabHover:  "oklch(0.46 0.10 155)",
-      screen:    "oklch(0.40 0.10 155)",
-      glow:      "oklch(0.60 0.10 155)",
-      heading:   "oklch(0.99 0.012 155)",
+      // OAT — soft warm beige
+      fill:      "oklch(0.955 0.014 70)",
+      fillDeep:  "oklch(0.90 0.018 70)",
+      tabBg:     "oklch(0.92 0.018 70)",
+      tabBorder: "oklch(0.58 0.04 70)",
+      ink:       "oklch(0.26 0.02 60)",
+      inkSoft:   "oklch(0.32 0.02 60 / 0.92)",
+      tabHover:  "oklch(0.96 0.014 70)",
+      screen:    "oklch(0.955 0.014 70)",
+      glow:      "oklch(0.84 0.024 70)",
+      heading:   "oklch(0.26 0.02 60)",
     },
     {
-      // Burgundy — rich, warm, premium
-      fill:      "oklch(0.40 0.13 18)",
-      fillDeep:  "oklch(0.28 0.12 18)",
-      tabBg:     "oklch(0.40 0.13 18)",
-      tabBorder: "oklch(0.20 0.11 18)",
-      ink:       "oklch(0.99 0.014 18)",
-      inkSoft:   "oklch(0.99 0.014 18 / 0.85)",
-      tabHover:  "oklch(0.46 0.13 18)",
-      screen:    "oklch(0.40 0.13 18)",
-      glow:      "oklch(0.60 0.13 18)",
-      heading:   "oklch(0.99 0.014 18)",
+      // LINEN — cool pale stone
+      fill:      "oklch(0.965 0.008 110)",
+      fillDeep:  "oklch(0.91 0.012 110)",
+      tabBg:     "oklch(0.93 0.012 110)",
+      tabBorder: "oklch(0.60 0.03 110)",
+      ink:       "oklch(0.26 0.015 100)",
+      inkSoft:   "oklch(0.32 0.015 100 / 0.92)",
+      tabHover:  "oklch(0.95 0.008 110)",
+      screen:    "oklch(0.965 0.008 110)",
+      glow:      "oklch(0.84 0.014 110)",
+      heading:   "oklch(0.26 0.015 100)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
