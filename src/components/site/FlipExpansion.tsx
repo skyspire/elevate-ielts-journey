@@ -543,33 +543,32 @@ function CueCardReader({
         />
       </div>
 
-      {/* Brand seal watermark — permanently anchored to the bottom-right corner. */}
+      {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
         className="pointer-events-none absolute z-[1]"
-        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.09 }}
+        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.18 }}
       >
-        <div className="flex items-center gap-2.5 rounded-2xl border-[3px] border-foreground/80 px-3.5 py-2.5">
-          <GraduationCap className="h-7 w-7 text-foreground" strokeWidth={2.5} />
+        <div
+          className="flex items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
+          style={{ border: `3px solid ${activePalette.ink}` }}
+        >
+          <GraduationCap className="h-7 w-7" strokeWidth={2.5} style={{ color: activePalette.ink }} />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-[15px] font-black tracking-tight text-foreground">
+            <span
+              className="font-display text-[15px] font-black tracking-tight"
+              style={{ color: activePalette.ink }}
+            >
               BigIELTS
             </span>
-            <span className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em] text-foreground">
+            <span
+              className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em]"
+              style={{ color: activePalette.ink }}
+            >
               .COM
             </span>
           </div>
         </div>
       </div>
-
-      {/* Focus-tunnel vignette — sharpens as user scrolls */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-500"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 45%, oklch(0.15 0.02 165) 130%)",
-          opacity: vignetteOpacity,
-        }}
-      />
 
       {/* Stable, isolated topic header — single clean heading line.
           Intentionally contains NO prompt text and stays fixed in its own
