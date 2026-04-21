@@ -462,42 +462,42 @@ function CueCardReader({
   const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // RED — confident, editorial crimson
+      // MUTED RED — dusty terracotta, refined on graphite
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.55 0.180 25)",
-      tabBorder: "oklch(0.38 0.150 25)",
+      tabBg:     "oklch(0.48 0.110 25)",
+      tabBorder: "oklch(0.62 0.130 25)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.59 0.170 25)",
+      tabHover:  "oklch(0.52 0.105 25)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.55 0.180 25)",
+      glow:      "oklch(0.62 0.130 25)",
       heading:   SIGNATURE_INK,
     },
     {
-      // BLUE — vibrant, professional cobalt
+      // MUTED BLUE — dusty cobalt, considered
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.50 0.170 255)",
-      tabBorder: "oklch(0.34 0.140 255)",
+      tabBg:     "oklch(0.45 0.095 250)",
+      tabBorder: "oklch(0.62 0.115 250)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.54 0.160 255)",
+      tabHover:  "oklch(0.49 0.090 250)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.50 0.170 255)",
+      glow:      "oklch(0.62 0.115 250)",
       heading:   SIGNATURE_INK,
     },
     {
-      // OLIVE GREEN — heritage, grounded
+      // MUTED OLIVE — dusty sage-olive, grounded
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.52 0.090 125)",
-      tabBorder: "oklch(0.36 0.080 125)",
+      tabBg:     "oklch(0.48 0.060 125)",
+      tabBorder: "oklch(0.64 0.080 125)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.56 0.085 125)",
+      tabHover:  "oklch(0.52 0.058 125)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.52 0.090 125)",
+      glow:      "oklch(0.64 0.080 125)",
       heading:   SIGNATURE_INK,
     },
   ];
@@ -759,13 +759,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Confident muted dusty-blue → slate tile palette so the rail
-        // visibly carries the brand color story above the pure-white lane.
-        // Each tile has its own slate variant; ink is deep slate-navy.
+        // White tile bodies with a thick colored top border. Each tile
+        // carries one of the muted red / blue / olive accent tones so the
+        // rail mirrors the footer pager palette while staying clean & light.
         const followUpPalette = [
-          { fill: "oklch(0.86 0.040 240)", ink: "oklch(0.28 0.045 245)" }, // Dusty blue
-          { fill: "oklch(0.74 0.050 245)", ink: "oklch(0.24 0.045 248)" }, // Steel blue
-          { fill: "oklch(0.58 0.055 250)", ink: "oklch(0.98 0.012 245)" }, // Deep slate (light ink)
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.135 25)" },  // Red
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.52 0.115 250)" }, // Blue
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.080 125)" }, // Olive
         ];
 
         return (
@@ -810,18 +810,19 @@ function CueCardReader({
                       className="relative block h-full w-full overflow-hidden rounded-2xl p-4 text-left transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
                       style={{
                         backgroundColor: tone.fill,
-                        boxShadow: `0 12px 30px -14px ${activePalette.fillDeep}`,
-                        border: `1px solid ${tone.ink}33`,
+                        boxShadow: `0 12px 30px -14px oklch(0.20 0.010 250 / 0.35)`,
+                        border: `1px solid oklch(0.20 0.010 250 / 0.10)`,
+                        borderTop: `5px solid ${tone.accent}`,
                       }}
                     >
                       {/* Eyebrow — oversized padded numeral with tiny
-                          uppercase label stacked beside it. No icon: pure
-                          typographic hierarchy. */}
+                          uppercase label stacked beside it. Numeral picks
+                          up the accent color; label stays in deep ink. */}
                       <div className="flex items-baseline gap-2">
                         <span
                           className="font-display font-black tabular-nums leading-none tracking-tight"
                           style={{
-                            color: tone.ink,
+                            color: tone.accent,
                             fontSize: "22px",
                             letterSpacing: "-0.02em",
                           }}
@@ -830,7 +831,7 @@ function CueCardReader({
                         </span>
                         <span
                           className="font-display text-[9px] font-extrabold uppercase tracking-[0.32em]"
-                          style={{ color: tone.ink, opacity: 0.78 }}
+                          style={{ color: tone.ink, opacity: 0.65 }}
                         >
                           Follow-up
                         </span>
@@ -856,10 +857,11 @@ function CueCardReader({
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
           style={{
-            // Confident muted slate band — independent of the pure-white
-            // reading lane so the footer reads as its own colored zone.
-            borderTop: `1px solid oklch(0.32 0.045 248 / 0.20)`,
-            background: `linear-gradient(180deg, oklch(0.94 0.020 240) 0%, oklch(0.88 0.030 245) 100%)`,
+            // Graphite footer band — true neutral dark grey, independent
+            // of the pure-white reading lane so the footer reads as its
+            // own confident colored zone (premium magazine masthead feel).
+            borderTop: `1px solid oklch(0.18 0 0 / 0.40)`,
+            background: `linear-gradient(180deg, oklch(0.32 0.003 250) 0%, oklch(0.26 0.003 250) 100%)`,
             backdropFilter: "blur(6px)",
           }}
         >
@@ -871,7 +873,7 @@ function CueCardReader({
                 goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
               className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-              style={{ color: "oklch(0.32 0.045 248)" }}
+              style={{ color: palette[(variantIndex - 1 + variants.length) % variants.length].tabBorder }}
               aria-label="Previous sample answer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -881,10 +883,10 @@ function CueCardReader({
               {variants.map((_, i) => {
                 const active = i === variantIndex;
                 const tone = palette[i % palette.length];
-                // White ink across all three tabs — the dusty/steel/slate
-                // tab fills are saturated enough that light text reads as
-                // a confident magazine band.
-                const tabTextColor = "oklch(0.99 0.012 245)";
+                // White ink across all three tabs — the muted red/blue/olive
+                // tab fills against graphite read as a confident, refined
+                // magazine band.
+                const tabTextColor = "oklch(0.99 0.005 250)";
                 return (
                   <button
                     key={i}
@@ -897,17 +899,17 @@ function CueCardReader({
                     }}
                     className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                     style={{
-                      backgroundColor: tone.tabBg,
+                      backgroundColor: active ? tone.tabBg : "oklch(0.38 0.003 250)",
                       boxShadow: active
                         ? `inset 0 0 0 2px ${tone.tabBorder}, 0 4px 14px ${tone.tabBorder}55`
-                        : `inset 0 0 0 1px ${tone.tabBorder}40`,
+                        : `inset 0 0 0 1px oklch(0.50 0.003 250 / 0.50)`,
                     }}
                   >
                     <span
                       className="font-display tracking-tight transition-all duration-300"
                       style={{
                         color: tabTextColor,
-                        opacity: active ? 1 : 0.82,
+                        opacity: active ? 1 : 0.78,
                         fontWeight: active ? 800 : 600,
                         fontSize: "13px",
                         letterSpacing: active ? "-0.01em" : "0",
@@ -927,7 +929,7 @@ function CueCardReader({
                 goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
               className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-              style={{ color: activePalette.ink }}
+              style={{ color: palette[(variantIndex + 1) % variants.length].tabBorder }}
               aria-label="Next sample answer"
             >
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
