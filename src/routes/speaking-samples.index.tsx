@@ -53,12 +53,12 @@ type Category = {
 
 const categoriesByMode: Record<Mode, Category[]> = {
   general: [
-    { id: "hometown", label: "Hometown & Home", hint: "Part 1 favourites", icon: MessageCircle },
-    { id: "work-study", label: "Work & Study", hint: "Daily life questions", icon: MessageCircle },
-    { id: "hobbies", label: "Hobbies & Free Time", hint: "Personal preferences", icon: MessageCircle },
-    { id: "technology", label: "Technology & Society", hint: "Part 3 abstract themes", icon: MessageCircle },
-    { id: "environment", label: "Environment", hint: "Discussion topics", icon: MessageCircle },
-    { id: "education-p3", label: "Education", hint: "Opinion & analysis", icon: MessageCircle },
+    { id: "things", label: "Things", hint: "Objects, gifts, items", icon: MessageCircle },
+    { id: "activities", label: "Activities", hint: "Hobbies & routines", icon: MessageCircle },
+    { id: "places", label: "Places", hint: "Hometown, cities, spaces", icon: MessageCircle },
+    { id: "people", label: "People", hint: "Family, friends, role models", icon: MessageCircle },
+    { id: "experiences", label: "Experiences", hint: "Memories & moments", icon: MessageCircle },
+    { id: "future-plans", label: "Future Plans", hint: "Goals & aspirations", icon: MessageCircle },
   ],
   cuecards: [
     { id: "person", label: "Describe a Person", hint: "Friend, mentor, family", icon: ClipboardList },
@@ -83,46 +83,53 @@ type Question = {
 const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
 
 const samplePrompts: Record<string, string[]> = {
-  hometown: [
-    "Where is your hometown and what is it best known for?",
-    "What do you like most about your hometown?",
-    "How has your hometown changed in the last ten years?",
-    "Would you like to live in your hometown in the future? Why or why not?",
-    "Do many tourists visit your hometown? What do they usually do there?",
-    "Is your hometown a good place for young people to grow up?",
+  things: [
+    "Tell me about a gift you received recently. Who gave it to you?",
+    "What is your favourite item of clothing? Why do you like it?",
+    "Is there a piece of technology you use every day? How does it help you?",
+    "What kind of things do you usually buy as souvenirs when you travel?",
+    "Are there any objects from your childhood that you still keep?",
+    "Do you think people today own too many things? Why or why not?",
   ],
-  "work-study": [
-    "Do you work or are you a student? Tell me about it.",
-    "Why did you choose this job / field of study?",
-    "What is the most interesting part of your work or studies?",
-    "Do you prefer working alone or with other people?",
-    "What would you like to do in the future?",
-  ],
-  hobbies: [
+  activities: [
     "What do you like to do in your free time?",
-    "Have your hobbies changed since you were a child?",
-    "Do you prefer indoor or outdoor activities?",
-    "Is there a new hobby you would like to try?",
-    "Do people in your country have enough free time?",
+    "Do you prefer indoor or outdoor activities? Why?",
+    "Is there a new activity or hobby you would like to try?",
+    "How often do you do physical exercise or sports?",
+    "Do you think people in your country have enough free time for hobbies?",
+    "Has the way young people spend their free time changed in recent years?",
   ],
-  technology: [
-    "How has technology changed the way people communicate in your country?",
-    "Do you think people rely too much on smartphones today?",
-    "What are the advantages and disadvantages of working from home?",
-    "Should children be allowed to use social media? Why?",
-    "How might technology change education in the next 20 years?",
+  places: [
+    "Where is your hometown and what is it best known for?",
+    "What do you like most about the area where you live now?",
+    "Is there a place in your country you would recommend tourists to visit?",
+    "Do you prefer living in a city or in the countryside? Why?",
+    "How has your hometown changed in the last ten years?",
+    "What makes a place feel like 'home' to you?",
   ],
-  environment: [
-    "What are the biggest environmental problems in your country?",
-    "Whose responsibility is it to protect the environment — governments or individuals?",
-    "How can cities be made more environmentally friendly?",
-    "Do you think electric cars will solve pollution problems?",
+  people: [
+    "Who is the person you spend the most time with?",
+    "Tell me about a friend who has influenced you in a positive way.",
+    "Do you prefer spending time with a small group of close friends or a large group?",
+    "Is there someone in your family you particularly admire? Why?",
+    "What qualities do you think make a good role model?",
+    "How important is it to keep in touch with old friends?",
   ],
-  "education-p3": [
-    "Should university education be free for everyone?",
-    "What skills should schools teach that they currently do not?",
-    "Is it better to study online or in a traditional classroom?",
-    "How important is it to learn a foreign language at school?",
+  experiences: [
+    "Tell me about a memorable trip you have taken.",
+    "Describe a time you learned a new skill. How did you feel?",
+    "Have you ever had to make an important decision? What happened?",
+    "Tell me about a celebration that you remember well.",
+    "Describe a challenging situation you managed to overcome.",
+    "What is an experience you would like to have in the future?",
+  ],
+  "future-plans": [
+    "What are your plans for the next few years?",
+    "Is there a country you would like to visit one day? Why?",
+    "What kind of job would you like to have in the future?",
+    "Do you have any goals you would like to achieve in the next five years?",
+    "Would you like to live in a different city in the future? Why or why not?",
+    "How important is it to plan ahead, in your opinion?",
   ],
   person: [
     "Describe a person who has had a strong influence on your life. You should say who they are, how you know them, what they are like, and why they have influenced you.",
