@@ -64,25 +64,65 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
     [currentVariant],
   );
 
-  // Split the body so we can emphasize the opening phrase (first sentence
-  // or first ~14 words, whichever is shorter). This becomes the bold
-  // pull-quote that opens the billboard.
-  const { openingPhrase, restOfBody } = useMemo(() => {
+  // Parse the body into:
+  //   • openingPhrase — bold pull-out (first sentence / 14 words)
+  //   • bodyBeforePullQuote — paragraph(s) leading up to the pull-quote
+  //   • pullQuote — strongest mid-answer sentence, broken out as centered quote
+  //   • bodyAfterPullQuote — remaining text after the pull-quote
+  const { openingPhrase, bodyBeforePullQuote, pullQuote, bodyAfterPullQuote } = useMemo(() => {
     const text = fullBody.trim();
-    // Prefer first sentence boundary (., !, ?) within first 120 chars.
+
+    // 1. Opening phrase (bold opener).
+    let opening = "";
+    let rest = text;
     const sentenceMatch = text.match(/^[^.!?]{1,120}[.!?]/);
     if (sentenceMatch) {
+      opening = sentenceMatch[0].trim();
+      rest = text.slice(sentenceMatch[0].length).trim();
+    } else {
+      const words = text.split(/\s+/);
+      opening = words.slice(0, 14).join(" ") + (words.length > 14 ? "…" : "");
+      rest = words.slice(14).join(" ");
+    }
+
+    // 2. Split the remainder into sentences and pick a mid-answer pull-quote.
+    //    Prefer a sentence in the middle third that is between 60–180 chars.
+    const sentences = rest
+      .split(/(?<=[.!?])\s+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (sentences.length < 3) {
       return {
-        openingPhrase: sentenceMatch[0].trim(),
-        restOfBody: text.slice(sentenceMatch[0].length).trim(),
+        openingPhrase: opening,
+        bodyBeforePullQuote: rest,
+        pullQuote: "",
+        bodyAfterPullQuote: "",
       };
     }
-    // Fallback: first 14 words.
-    const words = text.split(/\s+/);
-    const head = words.slice(0, 14).join(" ");
+
+    // Search the middle 60% of sentences for a good pull-quote candidate.
+    const startIdx = Math.floor(sentences.length * 0.25);
+    const endIdx = Math.ceil(sentences.length * 0.75);
+    let pullIdx = -1;
+    let bestLen = 0;
+    for (let i = startIdx; i < endIdx; i++) {
+      const len = sentences[i].length;
+      if (len >= 50 && len <= 180 && len > bestLen) {
+        bestLen = len;
+        pullIdx = i;
+      }
+    }
+    if (pullIdx === -1) {
+      // Fallback: middle sentence.
+      pullIdx = Math.floor(sentences.length / 2);
+    }
+
     return {
-      openingPhrase: head + (words.length > 14 ? "…" : ""),
-      restOfBody: words.slice(14).join(" "),
+      openingPhrase: opening,
+      bodyBeforePullQuote: sentences.slice(0, pullIdx).join(" "),
+      pullQuote: sentences[pullIdx],
+      bodyAfterPullQuote: sentences.slice(pullIdx + 1).join(" "),
     };
   }, [fullBody]);
 
@@ -284,33 +324,41 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* ── BILLBOARD: full screen filled with the active palette color.
-            Bold, saturated, high-impact — like a billboard ad. The header
-            sits on top, the answer card is centered, footer tabs at the
-            bottom. Color cross-fades smoothly on variant switch. */}
+        {/* ── BILLBOARD background: LAYERED GRADIENT + GRAIN ──────────────
+            • Diagonal gradient from deeper shade → bold palette fill
+            • Soft top vignette to anchor the header pill
+            • Whisper film grain via dotted overlay (mix-blend-overlay) */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
           style={{
+            backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
+            transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
             backgroundColor: activePalette.fill,
-            transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
-          {/* Soft inner vignette so the edges deepen toward the corners — gives
-              the billboard a printed, premium-poster feel. */}
+          {/* Top vignette — gentle darkening at the very top edge */}
+          <div
+            className="absolute inset-x-0 top-0 h-[40%]"
+            style={{
+              background: `linear-gradient(180deg, ${activePalette.fillDeep} 0%, transparent 100%)`,
+              opacity: 0.45,
+            }}
+          />
+          {/* Bottom corner deepening */}
           <div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(ellipse at center, transparent 50%, ${activePalette.fillDeep} 130%)`,
-              opacity: 0.6,
+              background: `radial-gradient(ellipse at 80% 100%, ${activePalette.fillDeep} 0%, transparent 55%)`,
+              opacity: 0.55,
             }}
           />
-          {/* Whisper paper grain so the solid color doesn't feel flat. */}
+          {/* Film grain — fine SVG-noise via radial dots, blended */}
           <div
-            className="absolute inset-0 mix-blend-overlay opacity-[0.08]"
+            className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1px)",
-              backgroundSize: "5px 5px",
+                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+              backgroundSize: "4px 4px, 7px 7px",
             }}
           />
         </div>
@@ -375,50 +423,107 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
                     ...(isOut ? outStyle : inOrIdleStyle),
                   }}
                 >
-                  {/* Big question header — billboard headline */}
+                  {/* Big question header — OVERSIZED with colored underline swash */}
                   <h1
-                    className="font-display font-black leading-[1.1] tracking-tight"
+                    className="font-display font-black leading-[1.05] tracking-tight"
                     style={{
                       color: activePalette.ink,
-                      fontSize: "clamp(1.75rem, 4.4vw, 2.6rem)",
-                      textShadow: `0 2px 24px ${activePalette.fillDeep}`,
+                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
+                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                     }}
                   >
                     {question.title}
                   </h1>
-
-                  {/* Hairline divider in the cream ink color */}
+                  {/* Thick palette-toned underline swash beneath the headline */}
                   <div
-                    className="mt-6 h-[2px] w-16 rounded-full"
-                    style={{ backgroundColor: activePalette.ink, opacity: 0.7 }}
+                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    style={{
+                      background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
+                      opacity: 0.92,
+                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                    }}
                   />
 
-                  {/* Single-flow answer body — opening phrase emphasized */}
+                  {/* Single-flow answer body — opening phrase emphasized,
+                      with a centered pull-quote breakout mid-answer. */}
                   <div
-                    className="mt-6 font-display"
+                    className="mt-7 font-display"
                     style={{
                       color: activePalette.inkSoft,
                       fontSize: "clamp(1.0625rem, 1.9vw, 1.25rem)",
-                      lineHeight: 1.65,
+                      lineHeight: 1.7,
                       fontWeight: 500,
                     }}
                   >
-                    <span
-                      className="font-display font-extrabold"
-                      style={{
-                        color: activePalette.ink,
-                        fontSize: "1.12em",
-                        letterSpacing: "-0.005em",
-                      }}
-                    >
-                      {openingPhrase}
-                    </span>
-                    {restOfBody && (
-                      <span>
-                        {" "}
-                        {restOfBody}
+                    <p>
+                      <span
+                        className="font-display font-extrabold"
+                        style={{
+                          color: activePalette.ink,
+                          fontSize: "1.12em",
+                          letterSpacing: "-0.005em",
+                        }}
+                      >
+                        {openingPhrase}
                       </span>
+                      {bodyBeforePullQuote && (
+                        <span> {bodyBeforePullQuote}</span>
+                      )}
+                    </p>
+
+                    {/* Pull-quote breakout — strong mid-answer sentence */}
+                    {pullQuote && (
+                      <figure
+                        className="my-8 flex flex-col items-center text-center"
+                        aria-label="Pull quote"
+                      >
+                        <span
+                          className="block h-[2px] w-12 rounded-full"
+                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                        />
+                        <blockquote
+                          className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                          style={{
+                            color: activePalette.ink,
+                            fontSize: "clamp(1.25rem, 2.6vw, 1.6rem)",
+                            maxWidth: "640px",
+                            textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                          }}
+                        >
+                          <span
+                            aria-hidden
+                            style={{
+                              opacity: 0.55,
+                              marginRight: "0.12em",
+                              fontSize: "1.4em",
+                              lineHeight: 0,
+                              verticalAlign: "-0.18em",
+                            }}
+                          >
+                            “
+                          </span>
+                          {pullQuote.replace(/^["“”]|["“”]$/g, "")}
+                          <span
+                            aria-hidden
+                            style={{
+                              opacity: 0.55,
+                              marginLeft: "0.08em",
+                              fontSize: "1.4em",
+                              lineHeight: 0,
+                              verticalAlign: "-0.18em",
+                            }}
+                          >
+                            ”
+                          </span>
+                        </blockquote>
+                        <span
+                          className="mt-4 block h-[2px] w-12 rounded-full"
+                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                        />
+                      </figure>
                     )}
+
+                    {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
                   </div>
                 </article>
               );
