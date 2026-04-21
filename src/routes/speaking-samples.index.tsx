@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { FlipExpansion } from "@/components/site/FlipExpansion";
 import {
   GraduationCap,
   ArrowLeft,
