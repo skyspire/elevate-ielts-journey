@@ -4,7 +4,7 @@ import {
   GraduationCap,
   ArrowLeft,
   MessageCircle,
-  ClipboardList,
+  
   ArrowUpRight,
   Users,
   MapPin,
