@@ -528,59 +528,13 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* ── BILLBOARD background: bold solid palette fill + diagonal gradient + film grain.
-          Mirrors the FollowUpReader treatment. No vignettes — explicit user request. */}
+      {/* ── PURE WHITE reading surface — flat, no gradient, no texture.
+          The user explicitly asked for pure white across all variants;
+          color identity lives only in the footer pager + follow-up rail. */}
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
-          transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
-          backgroundColor: activePalette.fill,
-        }}
-      >
-        {/* Soft vellum grain — fibrous tracing-paper feel.
-            Three whisper-faint layers compose a premium vellum surface:
-            1. Long diagonal fibres (anisotropic streaks, the hallmark of vellum)
-            2. Counter-diagonal cross fibres (subtle interleave)
-            3. Faint cloudy translucency (large soft luminance variation)
-            All sit at <5% effective opacity so the texture is felt, not seen. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-multiply opacity-[0.05]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(118deg,
-              transparent 0px,
-              transparent 2px,
-              ${SIGNATURE_INK} 2px,
-              transparent 2.6px,
-              transparent 5px,
-              ${SIGNATURE_INK} 5px,
-              transparent 5.4px,
-              transparent 11px)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(62deg,
-              transparent 0px,
-              transparent 3px,
-              ${SIGNATURE_INK} 3px,
-              transparent 3.5px,
-              transparent 9px)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 mix-blend-soft-light opacity-[0.55]"
-          style={{
-            backgroundImage: `radial-gradient(ellipse 60% 45% at 22% 28%, oklch(1 0 0) 0%, transparent 60%),
-              radial-gradient(ellipse 55% 50% at 78% 72%, oklch(1 0 0) 0%, transparent 65%),
-              radial-gradient(ellipse 40% 35% at 55% 50%, ${SIGNATURE_INK} 0%, transparent 70%)`,
-          }}
-        />
-      </div>
+        style={{ backgroundColor: PURE_WHITE }}
+      />
 
       {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
