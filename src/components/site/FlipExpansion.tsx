@@ -102,16 +102,21 @@ export function FlipExpansion({
     setRevealedSections(0);
     const total = sections.length;
     const timers: number[] = [];
+    // First open: gentle, lingering reveal. Variant switch: tight cascade
+    // synchronized with the gravity drop.
+    const isVariantSwitch = gravityPhase === "in";
+    const initialDelay = isVariantSwitch ? 40 : 220;
+    const stagger = isVariantSwitch ? 90 : 320;
     for (let i = 0; i < total; i++) {
       timers.push(
         window.setTimeout(
           () => setRevealedSections((n) => Math.max(n, i + 1)),
-          220 + i * 320,
+          initialDelay + i * stagger,
         ),
       );
     }
     return () => timers.forEach((id) => clearTimeout(id));
-  }, [phase, topic.id, variantIndex, sections.length]);
+  }, [phase, topic.id, variantIndex, sections.length, gravityPhase]);
 
   // Lock body scroll while open
   useEffect(() => {
