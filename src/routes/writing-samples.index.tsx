@@ -465,43 +465,8 @@ function WritingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Questions list on aged parchment (full-bleed) */}
-              <div className="relative mt-2 left-1/2 right-1/2 -mx-[50vw] w-screen">
-                {/* Aged parchment base */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at 20% 15%, oklch(0.93 0.04 78 / 0.55) 0%, transparent 55%), radial-gradient(ellipse at 80% 85%, oklch(0.85 0.06 65 / 0.45) 0%, transparent 60%), linear-gradient(180deg, oklch(0.94 0.035 82) 0%, oklch(0.91 0.05 75) 100%)",
-                  }}
-                />
-                {/* Paper fiber speckles */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-[0.28] mix-blend-multiply"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.32  0 0 0 0 0.22  0 0 0 0 0.12  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
-                  }}
-                />
-                {/* Soft fiber streaks */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-[0.22] mix-blend-multiply"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='f'><feTurbulence type='turbulence' baseFrequency='0.012 0.6' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.40  0 0 0 0 0.28  0 0 0 0 0.16  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>")`,
-                  }}
-                />
-                {/* Aged darkened edges */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at center, transparent 55%, oklch(0.55 0.10 55 / 0.20) 100%)",
-                  }}
-                />
-
+              {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
+              <div className="relative mt-2 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
                   <StepLabel index={3} label={`${activeCategory.label} Questions`} />
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
