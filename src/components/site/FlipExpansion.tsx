@@ -56,6 +56,13 @@ export function FlipExpansion({
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  // Follow-up reader — opened when the user taps a follow-up card. Holds the
+  // clicked question + the click coordinates (used as the burst origin).
+  const [followUpReader, setFollowUpReader] = useState<{
+    question: { id: string; title: string };
+    origin: { x: number; y: number };
+  } | null>(null);
+
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
   const headerQuestion = questions[0];
