@@ -548,125 +548,191 @@ function FeatureCard({
   module: Module;
 }) {
   const tone = tones[feature.tone];
+  const personality = personalities[feature.key] ?? {
+    rotate: "0deg",
+    size: "md" as const,
+    pin: "tape-top" as const,
+    peekColor: "oklch(0.92 0.05 60)",
+  };
   const { value, label } = feature.count[module];
   const Icon = feature.icon;
-  const gradId = `grad-${feature.key}`;
 
-  const cardClass = `group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`;
+  const photoH =
+    personality.size === "lg"
+      ? "h-44 sm:h-52"
+      : personality.size === "md"
+        ? "h-36 sm:h-40"
+        : "h-28 sm:h-32";
+
+  const cardClass =
+    "polaroid group relative block w-full cursor-pointer rounded-[6px] bg-[oklch(0.985_0.008_85)] p-3 pb-5 text-left shadow-[0_8px_22px_-10px_oklch(0.20_0.04_60/0.35),0_2px_4px_-2px_oklch(0.20_0.04_60/0.20)] transition-all duration-300 ease-out will-change-transform hover:z-10 hover:rotate-0 hover:scale-[1.025] hover:shadow-[0_22px_40px_-12px_oklch(0.20_0.04_60/0.35),0_4px_10px_-4px_oklch(0.20_0.04_60/0.25)]";
 
   const inner = (
     <>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 -z-10 rounded-[6px] opacity-0 shadow-[0_4px_14px_-6px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:translate-x-2 group-hover:rotate-[3deg] group-hover:opacity-100"
+        style={{ background: personality.peekColor }}
       />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
-      />
-      <div className="relative flex w-full items-start justify-between">
+
+      {personality.pin === "tape-top" && (
         <span
-          className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
+          aria-hidden
+          className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 rounded-[2px] shadow-sm"
+          style={{
+            background: tone.tapeColor,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
+          }}
+        />
+      )}
+      {personality.pin === "tape-corner" && (
+        <span
+          aria-hidden
+          className="absolute -top-2 -left-3 h-4 w-14 -rotate-[35deg] rounded-[2px] shadow-sm"
+          style={{
+            background: tone.tapeColor,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
+          }}
+        />
+      )}
+      {personality.pin === "pin-left" && (
+        <PushPin className="absolute -top-2 left-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
+      )}
+      {personality.pin === "pin-right" && (
+        <PushPin className="absolute -top-2 right-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
+      )}
+
+      <div className={`relative w-full ${photoH} overflow-hidden rounded-[3px] ${tone.photoBg}`}>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.30_0.04_60/0.10)_1px,transparent_1px)] [background-size:5px_5px]"
+        />
+        <svg
+          aria-hidden
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="absolute inset-0 h-full w-full"
         >
-          <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
+          <rect
+            x="2"
+            y="2"
+            width="96"
+            height="96"
+            rx="1"
+            fill="none"
+            stroke={tone.inkColor}
+            strokeOpacity="0.25"
+            strokeWidth="0.6"
+            strokeDasharray="2 1.5"
+          />
+        </svg>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="relative transition-transform duration-500 ease-out group-hover:-rotate-6 group-hover:scale-110"
+            style={{ color: tone.inkColor }}
+          >
+            <Icon
+              className={
+                personality.size === "lg"
+                  ? "h-20 w-20"
+                  : personality.size === "md"
+                    ? "h-16 w-16"
+                    : "h-12 w-12"
+              }
+              strokeWidth={1.6}
+            />
+            <svg
+              aria-hidden
+              viewBox="0 0 100 100"
+              className="pointer-events-none absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]"
+            >
+              <ellipse
+                cx="50"
+                cy="50"
+                rx="44"
+                ry="40"
+                fill="none"
+                stroke={tone.inkColor}
+                strokeOpacity="0.35"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeDasharray="3 2"
+                style={{ transform: "rotate(-8deg)", transformOrigin: "50% 50%" }}
+              />
+            </svg>
+          </div>
+        </div>
+
+        <span
+          className={`absolute bottom-2 right-2 rounded-full bg-white/85 px-2 py-0.5 font-display text-[10px] font-black tracking-tight ${tone.accentText}`}
+        >
+          {value} · {label}
         </span>
-        <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
-      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-white">
-        {feature.title}
-      </h3>
-      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-white/75">
-        {feature.description[module]}
-      </p>
-      <div className="relative mt-5 flex items-baseline gap-2 border-t border-white/15 pt-4">
-        <span
-          className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
+
+      <div className="relative mt-3 px-1">
+        <h3
+          className="font-handwriting text-[22px] leading-[1.05] text-foreground/85 sm:text-[24px]"
+          style={{ transform: "rotate(-1deg)" }}
         >
-          {value}
-        </span>
-        <span className="text-[13px] font-extrabold uppercase leading-tight tracking-[0.18em] text-white/90">
-          {label}
-        </span>
+          {feature.title}
+        </h3>
+        <p
+          className="mt-1 font-handwriting text-[15px] leading-snug text-foreground/55 sm:text-[16px]"
+          style={{ transform: "rotate(-0.5deg)" }}
+        >
+          {feature.description[module]}
+        </p>
+
+        <svg
+          aria-hidden
+          viewBox="0 0 60 24"
+          className="absolute -right-1 -bottom-2 h-5 w-14 translate-x-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+          fill="none"
+          stroke={tone.inkColor}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M 4 14 C 18 8, 34 16, 50 10" />
+          <path d="M 44 6 L 52 10 L 46 16" />
+        </svg>
       </div>
     </>
   );
 
+  const style = { transform: `rotate(${personality.rotate})` };
+
   if (feature.to === "/dashboard/writing-samples") {
     return (
-      <Link to="/writing-samples" search={{ module }} className={cardClass}>
+      <Link to="/writing-samples" search={{ module }} className={cardClass} style={style}>
         {inner}
       </Link>
     );
   }
 
   return (
-    <button type="button" className={cardClass}>
+    <button type="button" className={cardClass} style={style}>
       {inner}
     </button>
   );
 }
 
-/**
- * Glossy 3D icon — Apple visionOS style.
- * Rounded-square disc with diagonal gradient + glass highlight + soft shadow.
- */
-function Glossy3DIcon({
-  Icon,
-  tone,
-  gradId,
-}: {
-  Icon: ComponentType<LucideProps>;
-  tone: (typeof tones)[Feature["tone"]];
-  gradId: string;
-}) {
+function PushPin({ className, color }: { className?: string; color: string }) {
   return (
-    <div
-      className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
-    >
-      <svg
-        viewBox="0 0 64 64"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={tone.iconStart} />
-            <stop offset="100%" stopColor={tone.iconEnd} />
-          </linearGradient>
-          <radialGradient id={`${gradId}-gloss`} cx="30%" cy="20%" r="60%">
-            <stop offset="0%" stopColor="white" stopOpacity="0.9" />
-            <stop offset="60%" stopColor="white" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <rect x="2" y="2" width="60" height="60" rx="18" fill={`url(#${gradId})`} />
-        <rect
-          x="2"
-          y="2"
-          width="60"
-          height="60"
-          rx="18"
-          fill={`url(#${gradId}-gloss)`}
-        />
-        <rect
-          x="2.5"
-          y="2.5"
-          width="59"
-          height="59"
-          rx="17.5"
-          fill="none"
-          stroke="white"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <Icon
-          className="h-6 w-6 text-white sm:h-7 sm:w-7"
-          strokeWidth={2.4}
-          style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.25))" }}
-        />
-      </div>
-    </div>
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <circle cx="12" cy="9" r="6" fill={color} />
+      <circle cx="10" cy="7" r="2" fill="white" fillOpacity="0.6" />
+      <path
+        d="M 12 14 L 12 22"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+    </svg>
   );
 }
