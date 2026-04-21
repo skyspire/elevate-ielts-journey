@@ -404,26 +404,23 @@ function CueCardReader({
         style={{ backgroundColor: activePalette.screen }}
       >
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.10] blur-3xl"
+          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.78 0.10 165) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 26s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.09] blur-3xl"
+          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.82 0.08 90) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-b 32s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.08] blur-3xl"
+          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl transition-[background] duration-700 ease-out"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.75 0.10 200) 0%, transparent 65%)",
+            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 38s ease-in-out infinite reverse",
           }}
         />
