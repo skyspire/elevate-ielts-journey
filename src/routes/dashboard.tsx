@@ -156,112 +156,78 @@ const features: Feature[] = [
   },
 ];
 
-// Per-tone color sets for tinted cards, gradient numbers, and glossy 3D icon
+// Polaroid palette per tone — soft photo-area tint + ink color for the doodle.
+// The card itself stays cream/white (polaroid frame).
 const tones: Record<
   Feature["tone"],
   {
-    bg: string;
-    border: string; // 2px solid tone-colored border
-    arrowBg: string;
-    arrowText: string;
-    numberGradient: string;
-    // Glossy 3D icon — gradient stops + drop shadow color
-    iconStart: string; // light tone (top of icon)
-    iconEnd: string; // deep tone (bottom of icon)
-    iconShadow: string; // soft tone-colored shadow under the icon disc
+    photoBg: string; // soft pastel for the photo area
+    inkColor: string; // doodle / icon stroke color
+    tapeColor: string; // washi tape color
+    accentText: string; // small accent text color
   }
 > = {
   navy: {
-    // Deep navy-clay
-    bg: "bg-[oklch(0.32_0.06_255)]",
-    border:
-      "border border-[oklch(0.22_0.05_255)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.32_0.06_255)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.02_250)_0%,oklch(0.82_0.10_240)_100%)]",
-    iconStart: "oklch(0.62 0.12 250)",
-    iconEnd: "oklch(0.30 0.08 255)",
-    iconShadow: "oklch(0.20 0.06 255 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_255)]",
+    inkColor: "oklch(0.32 0.10 255)",
+    tapeColor: "oklch(0.78 0.10 250 / 0.75)",
+    accentText: "text-[oklch(0.36_0.10_255)]",
   },
   rust: {
-    // Burnt rust / terracotta
-    bg: "bg-[oklch(0.40_0.13_40)]",
-    border:
-      "border border-[oklch(0.28_0.10_40)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.40_0.13_40)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.04_60)_0%,oklch(0.82_0.13_55)_100%)]",
-    iconStart: "oklch(0.68 0.15 45)",
-    iconEnd: "oklch(0.38 0.13 40)",
-    iconShadow: "oklch(0.30 0.12 40 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.06_45)]",
+    inkColor: "oklch(0.42 0.14 40)",
+    tapeColor: "oklch(0.82 0.10 50 / 0.75)",
+    accentText: "text-[oklch(0.42_0.13_40)]",
   },
   forest: {
-    // Deep forest green
-    bg: "bg-[oklch(0.34_0.07_160)]",
-    border:
-      "border border-[oklch(0.22_0.06_160)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.07_160)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.04_160)_0%,oklch(0.82_0.11_155)_100%)]",
-    iconStart: "oklch(0.60 0.10 160)",
-    iconEnd: "oklch(0.30 0.08 160)",
-    iconShadow: "oklch(0.22 0.06 160 / 0.5)",
+    photoBg: "bg-[oklch(0.93_0.05_160)]",
+    inkColor: "oklch(0.36 0.09 160)",
+    tapeColor: "oklch(0.82 0.08 155 / 0.75)",
+    accentText: "text-[oklch(0.36_0.09_160)]",
   },
   plum: {
-    // Deep plum / aubergine
-    bg: "bg-[oklch(0.34_0.08_320)]",
-    border:
-      "border border-[oklch(0.22_0.07_320)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.08_320)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.03_320)_0%,oklch(0.82_0.10_315)_100%)]",
-    iconStart: "oklch(0.62 0.12 315)",
-    iconEnd: "oklch(0.32 0.10 320)",
-    iconShadow: "oklch(0.22 0.07 320 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_320)]",
+    inkColor: "oklch(0.36 0.10 320)",
+    tapeColor: "oklch(0.82 0.08 315 / 0.75)",
+    accentText: "text-[oklch(0.38_0.10_320)]",
   },
   ochre: {
-    // Warm ochre / mustard
-    bg: "bg-[oklch(0.45_0.11_75)]",
-    border:
-      "border border-[oklch(0.32_0.09_75)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.40_0.10_75)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.97_0.04_85)_0%,oklch(0.85_0.13_80)_100%)]",
-    iconStart: "oklch(0.72 0.13 80)",
-    iconEnd: "oklch(0.42 0.11 75)",
-    iconShadow: "oklch(0.30 0.09 75 / 0.5)",
+    photoBg: "bg-[oklch(0.94_0.07_85)]",
+    inkColor: "oklch(0.42 0.11 75)",
+    tapeColor: "oklch(0.85 0.11 80 / 0.75)",
+    accentText: "text-[oklch(0.42_0.11_75)]",
   },
   teal: {
-    // Deep teal-ink
-    bg: "bg-[oklch(0.34_0.07_200)]",
-    border:
-      "border border-[oklch(0.22_0.06_200)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.34_0.07_200)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.03_200)_0%,oklch(0.82_0.10_195)_100%)]",
-    iconStart: "oklch(0.62 0.10 200)",
-    iconEnd: "oklch(0.30 0.08 200)",
-    iconShadow: "oklch(0.22 0.06 200 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.05_200)]",
+    inkColor: "oklch(0.34 0.09 200)",
+    tapeColor: "oklch(0.82 0.08 195 / 0.75)",
+    accentText: "text-[oklch(0.36_0.09_200)]",
   },
   espresso: {
-    // Espresso / dark cocoa
-    bg: "bg-[oklch(0.30_0.04_60)]",
-    border:
-      "border border-[oklch(0.20_0.03_60)]/60 ring-2 ring-inset ring-white/10",
-    arrowBg: "bg-white/95",
-    arrowText: "text-[oklch(0.30_0.04_60)]",
-    numberGradient:
-      "bg-[linear-gradient(135deg,oklch(0.96_0.02_70)_0%,oklch(0.84_0.07_65)_100%)]",
-    iconStart: "oklch(0.58 0.07 65)",
-    iconEnd: "oklch(0.28 0.04 60)",
-    iconShadow: "oklch(0.18 0.03 60 / 0.5)",
+    photoBg: "bg-[oklch(0.92_0.03_70)]",
+    inkColor: "oklch(0.32 0.05 60)",
+    tapeColor: "oklch(0.80 0.06 65 / 0.75)",
+    accentText: "text-[oklch(0.34_0.05_60)]",
   },
+};
+
+// Per-card "personality": rotation, size variant, pin position — gives the
+// corkboard masonry feel. Indexed by feature.key for stable look.
+type Personality = {
+  rotate: string; // e.g. "-2.5deg"
+  size: "sm" | "md" | "lg"; // controls grid span + photo height
+  pin: "tape-top" | "pin-left" | "pin-right" | "tape-corner";
+  peekColor: string; // color of the paper peeking behind on hover
+};
+
+const personalities: Record<string, Personality> = {
+  writing: { rotate: "-2.5deg", size: "lg", pin: "tape-top", peekColor: "oklch(0.92 0.06 60)" },
+  speaking: { rotate: "1.8deg", size: "sm", pin: "pin-right", peekColor: "oklch(0.92 0.05 200)" },
+  vocab: { rotate: "-1.2deg", size: "md", pin: "tape-corner", peekColor: "oklch(0.92 0.05 320)" },
+  templates: { rotate: "2.4deg", size: "sm", pin: "pin-left", peekColor: "oklch(0.93 0.05 160)" },
+  predictions: { rotate: "-1.8deg", size: "md", pin: "tape-top", peekColor: "oklch(0.92 0.06 45)" },
+  mistakes: { rotate: "1.5deg", size: "md", pin: "pin-right", peekColor: "oklch(0.92 0.05 255)" },
+  plan: { rotate: "-2deg", size: "sm", pin: "tape-corner", peekColor: "oklch(0.94 0.07 85)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
@@ -374,14 +340,12 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Feature cards */}
-          <div className="grid gap-4 sm:grid-cols-2">
+          {/* Feature cards — corkboard masonry of polaroids */}
+          <div className="columns-1 gap-5 sm:columns-2 [column-fill:_balance]">
             {features.map((f) => (
-              <FeatureCard
-                key={f.key}
-                feature={f}
-                module={module}
-              />
+              <div key={f.key} className="mb-5 break-inside-avoid">
+                <FeatureCard feature={f} module={module} />
+              </div>
             ))}
           </div>
 
@@ -584,125 +548,191 @@ function FeatureCard({
   module: Module;
 }) {
   const tone = tones[feature.tone];
+  const personality = personalities[feature.key] ?? {
+    rotate: "0deg",
+    size: "md" as const,
+    pin: "tape-top" as const,
+    peekColor: "oklch(0.92 0.05 60)",
+  };
   const { value, label } = feature.count[module];
   const Icon = feature.icon;
-  const gradId = `grad-${feature.key}`;
 
-  const cardClass = `group relative flex flex-col overflow-hidden rounded-2xl ${tone.border} ${tone.bg} p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:p-6`;
+  const photoH =
+    personality.size === "lg"
+      ? "h-44 sm:h-52"
+      : personality.size === "md"
+        ? "h-36 sm:h-40"
+        : "h-28 sm:h-32";
+
+  const cardClass =
+    "polaroid group relative block w-full cursor-pointer rounded-[6px] bg-[oklch(0.985_0.008_85)] p-3 pb-5 text-left shadow-[0_8px_22px_-10px_oklch(0.20_0.04_60/0.35),0_2px_4px_-2px_oklch(0.20_0.04_60/0.20)] transition-all duration-300 ease-out will-change-transform hover:z-10 hover:rotate-0 hover:scale-[1.025] hover:shadow-[0_22px_40px_-12px_oklch(0.20_0.04_60/0.35),0_4px_10px_-4px_oklch(0.20_0.04_60/0.25)]";
 
   const inner = (
     <>
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:3px_3px]"
+        className="pointer-events-none absolute inset-0 -z-10 rounded-[6px] opacity-0 shadow-[0_4px_14px_-6px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:translate-x-2 group-hover:rotate-[3deg] group-hover:opacity-100"
+        style={{ background: personality.peekColor }}
       />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
-      />
-      <div className="relative flex w-full items-start justify-between">
+
+      {personality.pin === "tape-top" && (
         <span
-          className={`flex h-8 w-8 items-center justify-center rounded-full ${tone.arrowBg} ${tone.arrowText} shadow-soft transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
+          aria-hidden
+          className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 rounded-[2px] shadow-sm"
+          style={{
+            background: tone.tapeColor,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
+          }}
+        />
+      )}
+      {personality.pin === "tape-corner" && (
+        <span
+          aria-hidden
+          className="absolute -top-2 -left-3 h-4 w-14 -rotate-[35deg] rounded-[2px] shadow-sm"
+          style={{
+            background: tone.tapeColor,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
+          }}
+        />
+      )}
+      {personality.pin === "pin-left" && (
+        <PushPin className="absolute -top-2 left-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
+      )}
+      {personality.pin === "pin-right" && (
+        <PushPin className="absolute -top-2 right-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
+      )}
+
+      <div className={`relative w-full ${photoH} overflow-hidden rounded-[3px] ${tone.photoBg}`}>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.30_0.04_60/0.10)_1px,transparent_1px)] [background-size:5px_5px]"
+        />
+        <svg
+          aria-hidden
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="absolute inset-0 h-full w-full"
         >
-          <ArrowUpRight className="h-4 w-4" strokeWidth={2.75} />
+          <rect
+            x="2"
+            y="2"
+            width="96"
+            height="96"
+            rx="1"
+            fill="none"
+            stroke={tone.inkColor}
+            strokeOpacity="0.25"
+            strokeWidth="0.6"
+            strokeDasharray="2 1.5"
+          />
+        </svg>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="relative transition-transform duration-500 ease-out group-hover:-rotate-6 group-hover:scale-110"
+            style={{ color: tone.inkColor }}
+          >
+            <Icon
+              className={
+                personality.size === "lg"
+                  ? "h-20 w-20"
+                  : personality.size === "md"
+                    ? "h-16 w-16"
+                    : "h-12 w-12"
+              }
+              strokeWidth={1.6}
+            />
+            <svg
+              aria-hidden
+              viewBox="0 0 100 100"
+              className="pointer-events-none absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]"
+            >
+              <ellipse
+                cx="50"
+                cy="50"
+                rx="44"
+                ry="40"
+                fill="none"
+                stroke={tone.inkColor}
+                strokeOpacity="0.35"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeDasharray="3 2"
+                style={{ transform: "rotate(-8deg)", transformOrigin: "50% 50%" }}
+              />
+            </svg>
+          </div>
+        </div>
+
+        <span
+          className={`absolute bottom-2 right-2 rounded-full bg-white/85 px-2 py-0.5 font-display text-[10px] font-black tracking-tight ${tone.accentText}`}
+        >
+          {value} · {label}
         </span>
-        <Glossy3DIcon Icon={Icon} tone={tone} gradId={gradId} />
       </div>
-      <h3 className="relative mt-5 font-display text-xl font-extrabold tracking-tight text-white">
-        {feature.title}
-      </h3>
-      <p className="relative mt-1.5 text-[13px] font-medium leading-relaxed text-white/75">
-        {feature.description[module]}
-      </p>
-      <div className="relative mt-5 flex items-baseline gap-2 border-t border-white/15 pt-4">
-        <span
-          className={`bg-clip-text font-display text-[40px] font-extrabold leading-none tracking-tight text-transparent ${tone.numberGradient}`}
+
+      <div className="relative mt-3 px-1">
+        <h3
+          className="font-handwriting text-[22px] leading-[1.05] text-foreground/85 sm:text-[24px]"
+          style={{ transform: "rotate(-1deg)" }}
         >
-          {value}
-        </span>
-        <span className="text-[13px] font-extrabold uppercase leading-tight tracking-[0.18em] text-white/90">
-          {label}
-        </span>
+          {feature.title}
+        </h3>
+        <p
+          className="mt-1 font-handwriting text-[15px] leading-snug text-foreground/55 sm:text-[16px]"
+          style={{ transform: "rotate(-0.5deg)" }}
+        >
+          {feature.description[module]}
+        </p>
+
+        <svg
+          aria-hidden
+          viewBox="0 0 60 24"
+          className="absolute -right-1 -bottom-2 h-5 w-14 translate-x-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+          fill="none"
+          stroke={tone.inkColor}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M 4 14 C 18 8, 34 16, 50 10" />
+          <path d="M 44 6 L 52 10 L 46 16" />
+        </svg>
       </div>
     </>
   );
 
+  const style = { transform: `rotate(${personality.rotate})` };
+
   if (feature.to === "/dashboard/writing-samples") {
     return (
-      <Link to="/writing-samples" search={{ module }} className={cardClass}>
+      <Link to="/writing-samples" search={{ module }} className={cardClass} style={style}>
         {inner}
       </Link>
     );
   }
 
   return (
-    <button type="button" className={cardClass}>
+    <button type="button" className={cardClass} style={style}>
       {inner}
     </button>
   );
 }
 
-/**
- * Glossy 3D icon — Apple visionOS style.
- * Rounded-square disc with diagonal gradient + glass highlight + soft shadow.
- */
-function Glossy3DIcon({
-  Icon,
-  tone,
-  gradId,
-}: {
-  Icon: ComponentType<LucideProps>;
-  tone: (typeof tones)[Feature["tone"]];
-  gradId: string;
-}) {
+function PushPin({ className, color }: { className?: string; color: string }) {
   return (
-    <div
-      className="relative h-14 w-14 transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 sm:h-16 sm:w-16"
-    >
-      <svg
-        viewBox="0 0 64 64"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={tone.iconStart} />
-            <stop offset="100%" stopColor={tone.iconEnd} />
-          </linearGradient>
-          <radialGradient id={`${gradId}-gloss`} cx="30%" cy="20%" r="60%">
-            <stop offset="0%" stopColor="white" stopOpacity="0.9" />
-            <stop offset="60%" stopColor="white" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <rect x="2" y="2" width="60" height="60" rx="18" fill={`url(#${gradId})`} />
-        <rect
-          x="2"
-          y="2"
-          width="60"
-          height="60"
-          rx="18"
-          fill={`url(#${gradId}-gloss)`}
-        />
-        <rect
-          x="2.5"
-          y="2.5"
-          width="59"
-          height="59"
-          rx="17.5"
-          fill="none"
-          stroke="white"
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <Icon
-          className="h-6 w-6 text-white sm:h-7 sm:w-7"
-          strokeWidth={2.4}
-          style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.25))" }}
-        />
-      </div>
-    </div>
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
+      <circle cx="12" cy="9" r="6" fill={color} />
+      <circle cx="10" cy="7" r="2" fill="white" fillOpacity="0.6" />
+      <path
+        d="M 12 14 L 12 22"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+    </svg>
   );
 }
