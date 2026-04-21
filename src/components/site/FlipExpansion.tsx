@@ -862,164 +862,35 @@ function CueCardReader({
         );
       })()}
 
-      {/* Paper-plane flights — playful zig-zag with wobble + whisper trail.
-          Each flight is a fixed-positioned overlay tied to a launch event.
-          The plane uses CSS `offset-path` to follow a 3-segment zig-zag
-          composed from the live launch/target coordinates, while a sibling
-          dot trail fades behind along the same path. */}
-      {planeFlights.length > 0 && (
-        <div className="pointer-events-none fixed inset-0 z-[60]" aria-hidden>
-          {planeFlights.map((f) => {
-            const path = f.path;
-            // Sample dots along the path for the whisper trail.
-            const dots = Array.from({ length: 14 }, (_, i) => i);
-            return (
-              <div key={f.id} className="absolute inset-0">
-                {/* Whisper dotted trail — each dot fades in slightly delayed,
-                    then fades out with the plane. */}
-                {dots.map((i) => {
-                  const t = (i + 1) / (dots.length + 1);
-                  // Same path sampling as the plane for perfect alignment.
-                  const offsetDelay = t * 1900;
-                  return (
-                    <span
-                      key={i}
-                      className="paper-trail-dot"
-                      style={{
-                        offsetPath: `path("${path}")`,
-                        WebkitOffsetPath: `path("${path}")` as string,
-                        animationDelay: `${offsetDelay}ms`,
-                        backgroundColor: f.tone,
-                      } as React.CSSProperties}
-                    />
-                  );
-                })}
-                {/* The paper plane itself. */}
-                <div
-                  className="paper-plane-flight"
-                  style={{
-                    offsetPath: `path("${path}")`,
-                    WebkitOffsetPath: `path("${path}")` as string,
-                  } as React.CSSProperties}
-                >
-                  <div className="paper-plane-wobble">
-                    <svg
-                      width="140"
-                      height="140"
-                      viewBox="0 0 100 100"
-                      fill="none"
-                      style={{ display: "block", overflow: "visible" }}
-                    >
-                      <defs>
-                        {/* Warm cream paper gradient — slightly darker on the
-                            underside fold so the plane reads as folded paper
-                            with two visible faces, like a Ghibli watercolor. */}
-                        <linearGradient id={`ghibliPaper-${f.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%"  stopColor="oklch(0.985 0.018 85)" />
-                          <stop offset="60%" stopColor="oklch(0.96 0.025 80)" />
-                          <stop offset="100%" stopColor="oklch(0.92 0.04 75)" />
-                        </linearGradient>
-                        <linearGradient id={`ghibliShadow-${f.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%"  stopColor="oklch(0.86 0.04 75)" />
-                          <stop offset="100%" stopColor="oklch(0.78 0.05 70)" />
-                        </linearGradient>
-                        {/* Soft paper-grain noise — gives the plane that
-                            hand-painted Studio Ghibli watercolor feel. */}
-                        <filter id={`paperGrain-${f.id}`} x="-10%" y="-10%" width="120%" height="120%">
-                          <feTurbulence type="fractalNoise" baseFrequency="2.2" numOctaves="2" seed={f.id} />
-                          <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.12 0" />
-                          <feComposite in2="SourceGraphic" operator="in" />
-                        </filter>
-                      </defs>
-
-                      {/* ── Folded paper plane in 3 visible facets ────────
-                         Designed to feel hand-folded: the top wing catches
-                         light (cream gradient), the underside is in soft
-                         shadow, and the body crease runs down the middle.
-                         All edges are hand-drawn with a warm sepia ink
-                         stroke — a hallmark of Ghibli line art. */}
-
-                      {/* Underside / shadow wing (drawn first, sits behind) */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 64 Z"
-                        fill={`url(#ghibliShadow-${f.id})`}
-                        stroke="oklch(0.32 0.06 50)"
-                        strokeWidth="1.4"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                        opacity="0.95"
-                      />
-
-                      {/* Tail flap — the small triangular fold at the back */}
-                      <path
-                        d="M 50 64 L 64 80 L 50 70 Z"
-                        fill={`url(#ghibliShadow-${f.id})`}
-                        stroke="oklch(0.32 0.06 50)"
-                        strokeWidth="1.3"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Top wing (catches the light) — main visible facet,
-                         tinted with the active answer's palette tone for
-                         a hint of color while staying paper-like. */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill={`url(#ghibliPaper-${f.id})`}
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="1.6"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Subtle palette tint wash — only on the top wing,
-                         like a watercolor stain. Multiply blend keeps the
-                         paper texture readable underneath. */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill={f.tone}
-                        opacity="0.18"
-                        style={{ mixBlendMode: "multiply" }}
-                      />
-
-                      {/* Center crease — the fold line down the spine */}
-                      <path
-                        d="M 92 18 L 50 70"
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        opacity="0.85"
-                      />
-
-                      {/* Wing crease — short fold mark on the top wing */}
-                      <path
-                        d="M 92 18 L 70 38"
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="0.9"
-                        strokeLinecap="round"
-                        opacity="0.55"
-                      />
-
-                      {/* Hand-drawn paper-grain overlay — speckled wash */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill="oklch(0.4 0.05 60)"
-                        opacity="0.06"
-                        filter={`url(#paperGrain-${f.id})`}
-                      />
-
-                      {/* Tiny ink dots — Ghibli storyboard texture */}
-                      <circle cx="65" cy="32" r="0.6" fill="oklch(0.30 0.06 50)" opacity="0.4" />
-                      <circle cx="78" cy="24" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.35" />
-                      <circle cx="40" cy="56" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.3" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {/* Atmospheric mood-shift veil — a soft palette-tinted wash that
+          briefly desaturates and dims the reading lane during a variant
+          switch, then resaturates into the new palette. Silent, premium. */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[15]"
+        style={{
+          backgroundColor:
+            moodPhase === "out"
+              ? "oklch(0.18 0.005 80 / 0.18)"
+              : moodPhase === "in"
+                ? `color-mix(in oklch, ${activePalette.glow} 18%, transparent)`
+                : "transparent",
+          backdropFilter:
+            moodPhase === "out"
+              ? "saturate(0.55) brightness(0.96)"
+              : moodPhase === "in"
+                ? "saturate(1.05) brightness(1.01)"
+                : "none",
+          WebkitBackdropFilter:
+            moodPhase === "out"
+              ? "saturate(0.55) brightness(0.96)"
+              : moodPhase === "in"
+                ? "saturate(1.05) brightness(1.01)"
+                : "none",
+          transition:
+            "background-color 325ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+        aria-hidden
+      />
 
       {/* Drift + answer-transition keyframes */}
       <style>{`
