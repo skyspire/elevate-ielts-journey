@@ -424,197 +424,207 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
         </div>
 
         {/* ── Two-column billboard ───────────────────────────────────────
-            • LEFT (60%): single-flow answer body with pull-quote breakout
-            • RIGHT (40%): centered stack — outlined index badge above the
-              question headline
-            • Mobile: stacks with question column first, then answer.
-            • Footer (full-width band) lives outside this scroll area below. */}
-        <div
-          ref={scrollRef}
-          className="absolute inset-0 overflow-y-auto pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px]"
-        >
-          <div className="mx-auto flex min-h-full max-w-[1280px] items-stretch px-5 sm:px-10">
-            {(() => {
-              const isOut = laneAnim === "out";
-              const outStyle: React.CSSProperties = {
-                transform: `translate3d(${-switchDir * 36}px, 0, 0)`,
-                opacity: 0,
-                transition:
-                  "transform 260ms cubic-bezier(0.4, 0, 1, 1), opacity 260ms cubic-bezier(0.4, 0, 1, 1)",
-                willChange: "transform, opacity",
-              };
-              const inOrIdleStyle: React.CSSProperties = {
-                animation:
-                  laneAnim === "in"
-                    ? "lane-slide-in 380ms cubic-bezier(0, 0, 0.2, 1) both"
-                    : undefined,
-                ["--lane-from-x" as string]: `${switchDir * 36}px`,
-              };
-              const visible = revealedSections > 0;
+            Desktop (lg+): LEFT column (question stack) is FIXED — it does
+            not scroll. Only the RIGHT column (answer body) scrolls.
+            Mobile: single column, whole stage scrolls (question first,
+            answer below). */}
+        {(() => {
+          const isOut = laneAnim === "out";
+          const outStyle: React.CSSProperties = {
+            transform: `translate3d(${-switchDir * 36}px, 0, 0)`,
+            opacity: 0,
+            transition:
+              "transform 260ms cubic-bezier(0.4, 0, 1, 1), opacity 260ms cubic-bezier(0.4, 0, 1, 1)",
+            willChange: "transform, opacity",
+          };
+          const inOrIdleStyle: React.CSSProperties = {
+            animation:
+              laneAnim === "in"
+                ? "lane-slide-in 380ms cubic-bezier(0, 0, 0.2, 1) both"
+                : undefined,
+            ["--lane-from-x" as string]: `${switchDir * 36}px`,
+          };
+          const visible = revealedSections > 0;
+          const laneStyle: React.CSSProperties = {
+            visibility: visible ? "visible" : "hidden",
+            ...(isOut ? outStyle : inOrIdleStyle),
+          };
 
-              return (
-                <article
-                  key={`fu-billboard-${variantIndex}`}
-                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[2fr_3fr] lg:gap-14 lg:py-10"
+          // ── LEFT: fixed question stack (centered vertically) ──────────
+          const QuestionStack = (
+            <aside className="flex w-full flex-col items-center justify-center text-center">
+              {/* Outlined circle index badge */}
+              <div
+                className="relative mb-5 flex items-center justify-center rounded-full"
+                style={{
+                  width: "clamp(84px, 9vw, 108px)",
+                  height: "clamp(84px, 9vw, 108px)",
+                  border: `3px solid ${activePalette.ink}`,
+                  boxShadow: `0 6px 24px ${activePalette.fillDeep}, inset 0 0 0 1px ${activePalette.ink}33`,
+                }}
+                aria-hidden
+              >
+                <span
+                  className="font-display font-black tabular-nums leading-none tracking-tight"
                   style={{
-                    visibility: visible ? "visible" : "hidden",
-                    ...(isOut ? outStyle : inOrIdleStyle),
+                    color: activePalette.ink,
+                    fontSize: "clamp(1.85rem, 3vw, 2.5rem)",
+                    letterSpacing: "-0.02em",
                   }}
                 >
-                  {/* ── RIGHT COLUMN (mobile: first) ──────────────────────
-                      Centered stack: outlined circle index badge above the
-                      oversized question headline + underline swash. On
-                      desktop this sits in column 2 (right). On mobile it
-                      stacks above the answer (order-1). */}
-                  <aside
-                    className="order-1 flex flex-col items-center justify-center text-center lg:order-1 lg:pr-12"
+                  {String(index).padStart(2, "0")}
+                </span>
+                <span
+                  className="absolute -bottom-[10px] left-1/2 -translate-x-1/2 rounded-full px-2 py-[2px] font-display font-extrabold tabular-nums"
+                  style={{
+                    backgroundColor: activePalette.fillDeep,
+                    color: activePalette.ink,
+                    fontSize: "10px",
+                    letterSpacing: "0.08em",
+                    border: `1.5px solid ${activePalette.ink}`,
+                  }}
+                >
+                  / {String(total).padStart(2, "0")}
+                </span>
+              </div>
+              <span
+                className="mb-4 font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
+                style={{ color: activePalette.ink, opacity: 0.9 }}
+              >
+                Follow-up
+              </span>
+              <h1
+                className="font-display font-black leading-[1.08] tracking-tight"
+                style={{
+                  color: activePalette.ink,
+                  fontSize: "clamp(1.65rem, 3.2vw, 2.5rem)",
+                  textShadow: `0 2px 28px ${activePalette.fillDeep}`,
+                }}
+              >
+                {question.title}
+              </h1>
+              <div
+                className="mt-5 h-[6px] w-[clamp(72px,12vw,140px)] rounded-full"
+                style={{
+                  background: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 30%, ${activePalette.ink} 70%, transparent 100%)`,
+                  opacity: 0.92,
+                  boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                }}
+              />
+            </aside>
+          );
+
+          // ── RIGHT: scrollable answer body ─────────────────────────────
+          const AnswerBody = (
+            <div
+              className="font-display"
+              style={{
+                color: activePalette.inkSoft,
+                fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
+                lineHeight: 1.72,
+                fontWeight: 500,
+              }}
+            >
+              <p>
+                <span
+                  className="font-display font-extrabold"
+                  style={{
+                    color: activePalette.ink,
+                    fontSize: "1.12em",
+                    letterSpacing: "-0.005em",
+                  }}
+                >
+                  {openingPhrase}
+                </span>
+                {bodyBeforePullQuote && <span> {bodyBeforePullQuote}</span>}
+              </p>
+
+              {pullQuote && (
+                <figure
+                  className="my-8 flex flex-col items-center text-center"
+                  aria-label="Pull quote"
+                >
+                  <blockquote
+                    className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                    style={{
+                      color: activePalette.ink,
+                      fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
+                      maxWidth: "560px",
+                      textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                    }}
                   >
-                    {/* Outlined circle index badge */}
-                    <div
-                      className="relative mb-5 flex items-center justify-center rounded-full"
-                      style={{
-                        width: "clamp(84px, 9vw, 108px)",
-                        height: "clamp(84px, 9vw, 108px)",
-                        border: `3px solid ${activePalette.ink}`,
-                        boxShadow: `0 6px 24px ${activePalette.fillDeep}, inset 0 0 0 1px ${activePalette.ink}33`,
-                      }}
-                      aria-hidden
-                    >
-                      <span
-                        className="font-display font-black tabular-nums leading-none tracking-tight"
-                        style={{
-                          color: activePalette.ink,
-                          fontSize: "clamp(1.85rem, 3vw, 2.5rem)",
-                          letterSpacing: "-0.02em",
-                        }}
-                      >
-                        {String(index).padStart(2, "0")}
-                      </span>
-                      <span
-                        className="absolute -bottom-[10px] left-1/2 -translate-x-1/2 rounded-full px-2 py-[2px] font-display font-extrabold tabular-nums"
-                        style={{
-                          backgroundColor: activePalette.fillDeep,
-                          color: activePalette.ink,
-                          fontSize: "10px",
-                          letterSpacing: "0.08em",
-                          border: `1.5px solid ${activePalette.ink}`,
-                        }}
-                      >
-                        / {String(total).padStart(2, "0")}
-                      </span>
-                    </div>
                     <span
-                      className="mb-4 font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
-                      style={{ color: activePalette.ink, opacity: 0.9 }}
+                      aria-hidden
+                      style={{
+                        opacity: 0.55,
+                        marginRight: "0.12em",
+                        fontSize: "1.4em",
+                        lineHeight: 0,
+                        verticalAlign: "-0.18em",
+                      }}
                     >
-                      Follow-up
+                      “
                     </span>
-
-                    {/* Oversized question headline */}
-                    <h1
-                      className="font-display font-black leading-[1.08] tracking-tight"
+                    {pullQuote.replace(/^["“”]|["“”]$/g, "")}
+                    <span
+                      aria-hidden
                       style={{
-                        color: activePalette.ink,
-                        fontSize: "clamp(1.65rem, 3.2vw, 2.5rem)",
-                        textShadow: `0 2px 28px ${activePalette.fillDeep}`,
+                        opacity: 0.55,
+                        marginLeft: "0.08em",
+                        fontSize: "1.4em",
+                        lineHeight: 0,
+                        verticalAlign: "-0.18em",
                       }}
                     >
-                      {question.title}
-                    </h1>
-                    {/* Underline swash (centered) */}
-                    <div
-                      className="mt-5 h-[6px] w-[clamp(72px,12vw,140px)] rounded-full"
-                      style={{
-                        background: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 30%, ${activePalette.ink} 70%, transparent 100%)`,
-                        opacity: 0.92,
-                        boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
-                      }}
-                    />
-                  </aside>
+                      ”
+                    </span>
+                  </blockquote>
+                </figure>
+              )}
 
-                  {/* ── LEFT COLUMN (mobile: second) ──────────────────────
-                      Single-flow answer body with bold opening phrase and
-                      a centered pull-quote breakout mid-answer. */}
+              {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
+            </div>
+          );
+
+          return (
+            <>
+              {/* ── DESKTOP (lg+): split layout, only right column scrolls ── */}
+              <div
+                key={`fu-desktop-${variantIndex}`}
+                className="absolute inset-0 hidden pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px] lg:block"
+                style={laneStyle}
+              >
+                <div className="mx-auto grid h-full w-full max-w-[1280px] grid-cols-[2fr_3fr] gap-14 px-10">
+                  {/* Fixed (non-scrolling) question column */}
+                  <div className="flex h-full items-center justify-center pr-12">
+                    {QuestionStack}
+                  </div>
+                  {/* Scrollable answer column */}
                   <div
-                    className="order-2 lg:order-2 lg:border-l lg:pl-12"
+                    ref={scrollRef}
+                    className="h-full overflow-y-auto border-l py-10 pl-12 pr-2"
                     style={{ borderColor: `${activePalette.ink}26` }}
                   >
-                    <div
-                      className="font-display"
-                      style={{
-                        color: activePalette.inkSoft,
-                        fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
-                        lineHeight: 1.72,
-                        fontWeight: 500,
-                      }}
-                    >
-                      <p>
-                        <span
-                          className="font-display font-extrabold"
-                          style={{
-                            color: activePalette.ink,
-                            fontSize: "1.12em",
-                            letterSpacing: "-0.005em",
-                          }}
-                        >
-                          {openingPhrase}
-                        </span>
-                        {bodyBeforePullQuote && (
-                          <span> {bodyBeforePullQuote}</span>
-                        )}
-                      </p>
-
-                      {pullQuote && (
-                        <figure
-                          className="my-8 flex flex-col items-center text-center"
-                          aria-label="Pull quote"
-                        >
-                          <blockquote
-                            className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
-                            style={{
-                              color: activePalette.ink,
-                              fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
-                              maxWidth: "560px",
-                              textShadow: `0 2px 18px ${activePalette.fillDeep}`,
-                            }}
-                          >
-                            <span
-                              aria-hidden
-                              style={{
-                                opacity: 0.55,
-                                marginRight: "0.12em",
-                                fontSize: "1.4em",
-                                lineHeight: 0,
-                                verticalAlign: "-0.18em",
-                              }}
-                            >
-                              “
-                            </span>
-                            {pullQuote.replace(/^["“”]|["“”]$/g, "")}
-                            <span
-                              aria-hidden
-                              style={{
-                                opacity: 0.55,
-                                marginLeft: "0.08em",
-                                fontSize: "1.4em",
-                                lineHeight: 0,
-                                verticalAlign: "-0.18em",
-                              }}
-                            >
-                              ”
-                            </span>
-                          </blockquote>
-                        </figure>
-                      )}
-
-                      {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
-                    </div>
+                    {AnswerBody}
                   </div>
-                </article>
-              );
-            })()}
-          </div>
-        </div>
+                </div>
+              </div>
+
+              {/* ── MOBILE / TABLET: stacked, whole stage scrolls ────────── */}
+              <div
+                key={`fu-mobile-${variantIndex}`}
+                className="absolute inset-0 overflow-y-auto pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px] lg:hidden"
+              >
+                <div className="mx-auto flex min-h-full max-w-[1280px] flex-col gap-10 px-5 py-6 sm:px-10">
+                  <article style={laneStyle} className="flex flex-col gap-10">
+                    {QuestionStack}
+                    <div>{AnswerBody}</div>
+                  </article>
+                </div>
+              </div>
+            </>
+          );
+        })()}
 
         {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule. */}
         {variants.length > 1 && (
