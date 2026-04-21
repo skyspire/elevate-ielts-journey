@@ -21,6 +21,7 @@ import {
   getSpeakingQuestions,
   isCueCardCategory,
 } from "@/data/speaking-questions";
+import { FollowUpReader } from "./FollowUpReader";
 
 type FlipExpansionProps = {
   open: boolean;
@@ -54,6 +55,13 @@ export function FlipExpansion({
   // new arrives from right); -1 = prev (slide right out, new arrives from left).
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Follow-up reader — opened when the user taps a follow-up card. Holds the
+  // clicked question + the click coordinates (used as the burst origin).
+  const [followUpReader, setFollowUpReader] = useState<{
+    question: { id: string; title: string };
+    origin: { x: number; y: number };
+  } | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
@@ -324,6 +332,9 @@ export function FlipExpansion({
             followUps={followUps}
             accentText={accentText}
             accentChip={accentChip}
+            onOpenFollowUp={(question, origin) =>
+              setFollowUpReader({ question, origin })
+            }
           />
         ) : (
           <CompactPanel
@@ -341,6 +352,19 @@ export function FlipExpansion({
           />
         )}
       </div>
+
+      {/* Follow-up genie reader — opens above the cue-card stage when the
+          user taps any follow-up question. Burst & split entrance from the
+          click origin, then materializes a full-screen reader with three
+          amber/teal/plum sample answers. */}
+      {followUpReader && (
+        <FollowUpReader
+          open={Boolean(followUpReader)}
+          onClose={() => setFollowUpReader(null)}
+          question={followUpReader.question}
+          origin={followUpReader.origin}
+        />
+      )}
     </div>,
     document.body,
   );
@@ -374,6 +398,10 @@ type CueReaderProps = {
   followUps: { id: string; title: string }[];
   accentText: string;
   accentChip: string;
+  onOpenFollowUp: (
+    question: { id: string; title: string },
+    origin: { x: number; y: number },
+  ) => void;
 };
 
 function CueCardReader({
@@ -398,6 +426,7 @@ function CueCardReader({
   followUps,
   accentText,
   accentChip,
+  onOpenFollowUp,
 }: CueReaderProps) {
   // Edge softening intensifies as the reader scrolls — creates the focus tunnel.
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
@@ -765,7 +794,17 @@ function CueCardReader({
                     "opacity 500ms ease, transform 500ms cubic-bezier(0.16,1,0.3,1)",
                 }}
               >
-                <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 shadow-card backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    const r = e.currentTarget.getBoundingClientRect();
+                    onOpenFollowUp(q, {
+                      x: r.left + r.width / 2,
+                      y: r.top + r.height / 2,
+                    });
+                  }}
+                  className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 text-left shadow-card backdrop-blur-md transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                >
                   <div className="flex items-center gap-1.5">
                     <MessageCircleQuestion
                       className={`h-3.5 w-3.5 ${accentText}`}
@@ -780,7 +819,7 @@ function CueCardReader({
                   <p className="mt-2 text-[13px] font-semibold leading-snug text-foreground/80">
                     {q.title}
                   </p>
-                </div>
+                </button>
               </div>
             );
           })}
@@ -817,7 +856,17 @@ function CueCardReader({
                     transitionDelay: `${i * 60}ms`,
                   }}
                 >
-                  <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/85 p-3.5 shadow-card backdrop-blur-md">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      onOpenFollowUp(q, {
+                        x: r.left + r.width / 2,
+                        y: r.top + r.height / 2,
+                      });
+                    }}
+                    className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/85 p-3.5 text-left shadow-card backdrop-blur-md transition-transform active:scale-[0.98]"
+                  >
                     <div className="flex items-center gap-1.5">
                       <MessageCircleQuestion
                         className={`h-3.5 w-3.5 ${accentText}`}
@@ -832,7 +881,7 @@ function CueCardReader({
                     <p className="mt-1.5 text-[12.5px] font-semibold leading-snug text-foreground/85">
                       {q.title}
                     </p>
-                  </div>
+                  </button>
                 </div>
               );
             })}
