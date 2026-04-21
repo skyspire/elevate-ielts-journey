@@ -569,12 +569,6 @@ function CueCardReader({
           }}
         >
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span
-              className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: activePalette.ink, opacity: 0.72 }}
-            >
-              Cue Card {topicIndex || 1}
-            </span>
             <h2
               className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight"
               style={{ color: "oklch(0.42 0.10 165)" }}
