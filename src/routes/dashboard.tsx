@@ -340,14 +340,12 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Feature cards */}
-          <div className="grid gap-4 sm:grid-cols-2">
+          {/* Feature cards — corkboard masonry of polaroids */}
+          <div className="columns-1 gap-5 sm:columns-2 [column-fill:_balance]">
             {features.map((f) => (
-              <FeatureCard
-                key={f.key}
-                feature={f}
-                module={module}
-              />
+              <div key={f.key} className="mb-5 break-inside-avoid">
+                <FeatureCard feature={f} module={module} />
+              </div>
             ))}
           </div>
 
