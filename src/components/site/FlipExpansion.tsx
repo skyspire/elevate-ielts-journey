@@ -389,16 +389,17 @@ function CueCardReader({
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
   // ── Paper plane flight ───────────────────────────────────────────────────
-  // On every variant switch, launch a paper plane from the newly active tab
-  // (bottom of viewport) toward the header (top), traveling a playful zig-zag
-  // path with subtle wobble + roll. A whisper dotted trail fades behind it.
+  // On every variant switch, launch a paper plane from the newly active tab.
+  // The plane wanders across the entire viewport along a randomized 5-waypoint
+  // path (different every launch), banks into turns via offset-rotate: auto,
+  // pitches with each climb/dive, and occasionally hits soft "air pockets"
+  // that drop it a few pixels before recovering. Finally docks into the header.
   const headerAnchorRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [planeFlights, setPlaneFlights] = useState<
     Array<{
       id: number;
-      from: { x: number; y: number };
-      to: { x: number; y: number };
+      path: string;
       tone: string;
     }>
   >([]);
@@ -457,13 +458,49 @@ function CueCardReader({
       x: headerRect.left + headerRect.width / 2,
       y: headerRect.top + headerRect.height / 2,
     };
+
+    // Build a randomized "wandering breeze" path that roams the whole viewport.
+    // 5 waypoints scattered into different regions, biased to start near `from`
+    // and finish at `to`. Each launch produces a unique route.
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const margin = 90; // keep plane safely on-screen
+    const rand = (a: number, b: number) => a + Math.random() * (b - a);
+    // Pick four broad regions in random order so we visit different quadrants.
+    const regions = [
+      { x: [margin, vw * 0.45], y: [margin, vh * 0.45] },           // top-left
+      { x: [vw * 0.55, vw - margin], y: [margin, vh * 0.45] },      // top-right
+      { x: [margin, vw * 0.45], y: [vh * 0.55, vh - margin] },      // bottom-left
+      { x: [vw * 0.55, vw - margin], y: [vh * 0.55, vh - margin] }, // bottom-right
+    ].sort(() => Math.random() - 0.5);
+    // Use 4 randomized intermediate waypoints, plus a slight overshoot near
+    // the header for a graceful "swoop in" feel.
+    const wps = regions.map((r) => ({
+      x: rand(r.x[0], r.x[1]),
+      y: rand(r.y[0], r.y[1]),
+    }));
+    // Soft "air pocket" jitter: drop each waypoint a few px to mimic dips.
+    wps.forEach((p) => { p.y += rand(-12, 18); });
+
+    // Build a smooth poly-bezier through: from → wp1 → wp2 → wp3 → wp4 → to.
+    // Quadratic Bézier through midpoints gives a flowing, curvy line with no
+    // sharp corners — perfect for paper-plane glide.
+    const all = [from, ...wps, to];
+    let d = `M ${all[0].x} ${all[0].y}`;
+    for (let i = 1; i < all.length - 1; i++) {
+      const midX = (all[i].x + all[i + 1].x) / 2;
+      const midY = (all[i].y + all[i + 1].y) / 2;
+      d += ` Q ${all[i].x} ${all[i].y} ${midX} ${midY}`;
+    }
+    d += ` T ${all[all.length - 1].x} ${all[all.length - 1].y}`;
+
     const id = ++flightIdRef.current;
     const tone = palette[variantIndex % palette.length].tabBg;
-    setPlaneFlights((flights) => [...flights, { id, from, to, tone }]);
-    // Auto-cleanup after the animation finishes (~1700ms)
+    setPlaneFlights((flights) => [...flights, { id, path: d, tone }]);
+    // Auto-cleanup after the animation finishes (flight 2.8s + fade tail)
     const t = window.setTimeout(() => {
       setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
-    }, 2400);
+    }, 3200);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variantIndex, isExpanded]);
@@ -905,27 +942,9 @@ function CueCardReader({
       {planeFlights.length > 0 && (
         <div className="pointer-events-none fixed inset-0 z-[60]" aria-hidden>
           {planeFlights.map((f) => {
-            const dx = f.to.x - f.from.x;
-            const dy = f.to.y - f.from.y;
-            // Perpendicular unit vector for lateral zig-zag offsets.
-            const len = Math.max(1, Math.hypot(dx, dy));
-            const nx = -dy / len;
-            const ny = dx / len;
-            // Zig-zag amplitude scales with horizontal travel + flight height.
-            const amp = Math.min(110, Math.max(50, len * 0.18));
-            // Three waypoints at 25% / 55% / 80% along the trip, alternating sides.
-            const wp = (t: number, side: number) => ({
-              x: f.from.x + dx * t + nx * amp * side,
-              y: f.from.y + dy * t + ny * amp * side,
-            });
-            const p1 = wp(0.25, +1);
-            const p2 = wp(0.55, -1);
-            const p3 = wp(0.80, +0.6);
-            // Smooth cubic bezier-ish path with quadratic segments for a
-            // natural flowing zig-zag (rather than sharp corners).
-            const path = `M ${f.from.x} ${f.from.y} Q ${p1.x} ${p1.y} ${(p1.x + p2.x) / 2} ${(p1.y + p2.y) / 2} T ${p2.x} ${p2.y} Q ${p3.x} ${p3.y} ${f.to.x} ${f.to.y}`;
+            const path = f.path;
             // Sample dots along the path for the whisper trail.
-            const dots = Array.from({ length: 9 }, (_, i) => i);
+            const dots = Array.from({ length: 14 }, (_, i) => i);
             return (
               <div key={f.id} className="absolute inset-0">
                 {/* Whisper dotted trail — each dot fades in slightly delayed,
@@ -933,7 +952,7 @@ function CueCardReader({
                 {dots.map((i) => {
                   const t = (i + 1) / (dots.length + 1);
                   // Same path sampling as the plane for perfect alignment.
-                  const offsetDelay = t * 1400;
+                  const offsetDelay = t * 1900;
                   return (
                     <span
                       key={i}
@@ -1023,7 +1042,7 @@ function CueCardReader({
           -webkit-offset-rotate: auto;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-plane-fly 2200ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
+          animation: paper-plane-fly 2800ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
           filter: drop-shadow(0 14px 22px oklch(0.2 0.05 60 / 0.28)) drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
           will-change: offset-distance, opacity;
         }
@@ -1031,17 +1050,23 @@ function CueCardReader({
           width: 100%;
           height: 100%;
           transform-origin: 50% 50%;
-          animation: paper-plane-wobble 520ms ease-in-out infinite;
+          /* Combined air-pocket dip + slight roll oscillation gives a
+             physical, hand-thrown feel. The plane gently lifts and drops
+             a few px while subtly rolling, like fighting indoor air. */
+          animation: paper-plane-wobble 1300ms ease-in-out infinite;
         }
         @keyframes paper-plane-fly {
-          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.6); }
-          8%   { opacity: 1; transform: scale(1); }
-          85%  { offset-distance: 100%; opacity: 1; transform: scale(0.85); }
-          100% { offset-distance: 100%; opacity: 0; transform: scale(0.55); }
+          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.5); }
+          6%   { opacity: 1; transform: scale(1); }
+          90%  { offset-distance: 100%; opacity: 1; transform: scale(0.9); }
+          100% { offset-distance: 100%; opacity: 0; transform: scale(0.6); }
         }
         @keyframes paper-plane-wobble {
-          0%, 100% { transform: rotate(-6deg) translateY(0); }
-          50%      { transform: rotate(6deg)  translateY(-1.5px); }
+          0%   { transform: rotate(-4deg) translateY(0); }
+          25%  { transform: rotate(2deg)  translateY(-3px); }
+          50%  { transform: rotate(5deg)  translateY(2px); }
+          75%  { transform: rotate(-2deg) translateY(4px); }
+          100% { transform: rotate(-4deg) translateY(0); }
         }
 
         /* Whisper dotted trail — tiny dots that fade in along the path
@@ -1060,7 +1085,7 @@ function CueCardReader({
           -webkit-offset-rotate: 0deg;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-trail-fade 2200ms ease-out forwards;
+          animation: paper-trail-fade 2800ms ease-out forwards;
           filter: blur(0.4px);
           will-change: offset-distance, opacity;
         }
