@@ -460,7 +460,7 @@ function CueCardReader({
       {/* Scrollable reading lane */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[148px] pb-[120px] sm:pt-[168px] sm:pb-[128px]"
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[120px] sm:pt-[140px] sm:pb-[128px]"
       >
         <article
           className="mx-auto w-full max-w-[640px] px-6 sm:px-10"
@@ -470,18 +470,7 @@ function CueCardReader({
             transition: "opacity 220ms ease, transform 220ms ease",
           }}
         >
-          {/* Variant label — a gentle whisper of which sample is showing */}
-          <div className="mb-8 flex items-center justify-center gap-3">
-            <span className="h-px flex-1 bg-foreground/10" />
-            <span
-              className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.28em] ${accentText}`}
-            >
-              {currentVariant.label}
-            </span>
-            <span className="h-px flex-1 bg-foreground/10" />
-          </div>
-
-          <div className="space-y-10">
+          <div className="space-y-12 pt-4">
             {sections.map((s, i) => {
               const visible = i < revealedSections;
               return (
@@ -493,17 +482,15 @@ function CueCardReader({
                     transform: visible ? "translateY(0)" : "translateY(14px)",
                   }}
                 >
-                  <p
-                    className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.26em] ${accentText}`}
-                  >
+                  <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
                     {s.heading}
-                  </p>
-                  <p className="mt-3 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
+                  </h3>
+                  <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
                     {s.body}
                   </p>
                   {/* Soft rhythm marker between paragraphs */}
                   {i < sections.length - 1 && (
-                    <div className="mx-auto mt-10 h-px w-16 bg-foreground/10" />
+                    <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
                   )}
                 </section>
               );
