@@ -130,37 +130,66 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     };
   }, [fullBody]);
 
-  // ── BILLBOARD palette: DUSTY BLUE · STEEL BLUE · DEEP SLATE ─────────────
-  // Confident muted blues that match the cue-card footer band. The full
-  // screen fills with the active variant's slate tone, text is a luminous
-  // cream so it reads with magazine-band weight against the rich background.
+  // ── PARCHMENT + INK palette with bold per-variant gradient washes ──────
+  // Background base is a warm cream parchment for premium long-read comfort.
+  // Each variant overlays its own gradient wash (Sunrise · Forest · Twilight)
+  // as a translucent atmospheric tint — rich but readable. Text stays a deep
+  // espresso ink for full contrast on parchment.
+  const PARCHMENT      = "oklch(0.965 0.022 82)";   // warm cream paper
+  const PARCHMENT_DEEP = "oklch(0.93 0.030 78)";    // edge / vignette
+  const INK            = "oklch(0.24 0.030 60)";    // deep espresso
+  const INK_SOFT       = "oklch(0.32 0.028 60 / 0.92)";
+
   const palette = [
     {
-      // Dusty blue — light, airy, editorial
-      fill:      "oklch(0.62 0.060 240)",   // muted dusty blue
-      fillDeep:  "oklch(0.46 0.055 240)",   // for shadows / accents
-      tabBg:     "oklch(0.62 0.060 240)",
-      tabBorder: "oklch(0.30 0.050 240)",
-      ink:       "oklch(0.99 0.012 240)",   // luminous cream-white
-      inkSoft:   "oklch(0.99 0.012 240 / 0.85)",
+      // SUNRISE — warm peach → amber → rose
+      label:        "Sunrise",
+      gradTop:      "oklch(0.88 0.085 55)",
+      gradMid:      "oklch(0.83 0.105 35)",
+      gradBottom:   "oklch(0.78 0.110 22)",
+      accent:       "oklch(0.58 0.150 32)",   // burnt sienna
+      accentDeep:   "oklch(0.42 0.130 32)",
+      tabBg:        "oklch(0.78 0.105 38)",
+      tabBorder:    "oklch(0.44 0.140 32)",
+      tabInk:       "oklch(0.20 0.040 35)",
+      // Legacy aliases used by JSX below — body stays ink-on-parchment;
+      // chrome/badges/borders take the variant's accent hue.
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.58 0.150 32)",
+      fillDeep:     "oklch(0.42 0.130 32)",
     },
     {
-      // Steel blue — mid-tone, considered
-      fill:      "oklch(0.50 0.065 245)",   // confident steel blue
-      fillDeep:  "oklch(0.36 0.055 245)",
-      tabBg:     "oklch(0.50 0.065 245)",
-      tabBorder: "oklch(0.26 0.050 245)",
-      ink:       "oklch(0.99 0.012 245)",
-      inkSoft:   "oklch(0.99 0.012 245 / 0.85)",
+      // FOREST — sage → moss → deep pine
+      label:        "Forest",
+      gradTop:      "oklch(0.86 0.060 155)",
+      gradMid:      "oklch(0.74 0.080 150)",
+      gradBottom:   "oklch(0.58 0.090 148)",
+      accent:       "oklch(0.42 0.090 150)",
+      accentDeep:   "oklch(0.30 0.070 150)",
+      tabBg:        "oklch(0.70 0.085 150)",
+      tabBorder:    "oklch(0.34 0.080 150)",
+      tabInk:       "oklch(0.18 0.030 150)",
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.42 0.090 150)",
+      fillDeep:     "oklch(0.30 0.070 150)",
     },
     {
-      // Deep slate — rich, magazine-like
-      fill:      "oklch(0.36 0.055 250)",   // deep slate-navy
-      fillDeep:  "oklch(0.24 0.045 252)",
-      tabBg:     "oklch(0.36 0.055 250)",
-      tabBorder: "oklch(0.18 0.040 252)",
-      ink:       "oklch(0.99 0.012 250)",
-      inkSoft:   "oklch(0.99 0.012 250 / 0.85)",
+      // TWILIGHT — lilac → indigo → deep plum
+      label:        "Twilight",
+      gradTop:      "oklch(0.84 0.075 295)",
+      gradMid:      "oklch(0.66 0.105 285)",
+      gradBottom:   "oklch(0.46 0.110 290)",
+      accent:       "oklch(0.40 0.130 295)",
+      accentDeep:   "oklch(0.28 0.110 295)",
+      tabBg:        "oklch(0.62 0.100 290)",
+      tabBorder:    "oklch(0.32 0.115 295)",
+      tabInk:       "oklch(0.99 0.012 290)",
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.40 0.130 295)",
+      fillDeep:     "oklch(0.28 0.110 295)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
@@ -328,37 +357,65 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* ── BILLBOARD background: LAYERED GRADIENT + GRAIN ──────────────
-            • Diagonal gradient from deeper shade → bold palette fill
-            • Soft top vignette to anchor the header pill
-            • Whisper film grain via dotted overlay (mix-blend-overlay) */}
+        {/* ── PARCHMENT background + per-variant gradient wash ──────────────
+            Layered for richness:
+              1. Warm cream parchment base (constant — readable, premium)
+              2. Per-variant atmospheric gradient wash (multiply blend, ~32%)
+                 — Sunrise / Forest / Twilight tints the room without
+                 fighting the ink
+              3. Soft top→bottom vignette to give depth
+              4. Faint paper grain (multiply, ~10%) for tactility */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
-            transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
-            backgroundColor: activePalette.fill,
-          }}
+          style={{ backgroundColor: PARCHMENT }}
         >
-          {/* Film grain — fine SVG-noise via radial dots, blended */}
+          {/* Atmospheric gradient wash — variant-specific */}
           <div
-            className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(160deg, ${activePalette.gradTop} 0%, ${activePalette.gradMid} 55%, ${activePalette.gradBottom} 100%)`,
+              mixBlendMode: "multiply",
+              opacity: 0.32,
+              transition:
+                "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), opacity 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          />
+          {/* Top vignette anchoring the header pill */}
+          <div
+            className="absolute inset-x-0 top-0 h-48"
+            style={{
+              background: `linear-gradient(180deg, ${activePalette.accentDeep}33 0%, transparent 100%)`,
+            }}
+          />
+          {/* Bottom vignette toward the footer band */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-56"
+            style={{
+              background: `linear-gradient(0deg, ${PARCHMENT_DEEP}cc 0%, transparent 100%)`,
+            }}
+          />
+          {/* Paper grain — fine dotted overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.10] mix-blend-multiply"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+                "radial-gradient(circle at 1px 1px, oklch(0.30 0.04 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.04 60) 0.4px, transparent 1px)",
               backgroundSize: "4px 4px, 7px 7px",
             }}
           />
         </div>
 
-        {/* Header — only the Back button. The follow-up index gets its
-            own prominent circle badge above the headline inside the card. */}
+        {/* Header — Back button. Now sits on parchment, so use ink color. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end items-center px-4 pt-4 sm:px-6 sm:pt-6">
           <button
             type="button"
             onClick={onClose}
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
-            style={{ color: activePalette.ink }}
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
+            style={{
+              color: INK,
+              borderColor: `${activePalette.accentDeep}55`,
+              backgroundColor: `${PARCHMENT}cc`,
+            }}
             aria-label="Close"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -564,16 +621,18 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
             style={{
-              borderTop: `1px solid ${activePalette.ink}26`,
-              background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+              borderTop: `1px solid ${activePalette.accentDeep}55`,
+              background: `linear-gradient(180deg, ${PARCHMENT_DEEP} 0%, ${PARCHMENT} 100%)`,
               backdropFilter: "blur(6px)",
+              boxShadow: `0 -8px 24px ${activePalette.accentDeep}1a`,
             }}
           >
             <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+                style={{ color: `${INK}b3` }}
                 aria-label="Previous answer"
               >
                 <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
@@ -596,22 +655,22 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       onClick={() => goToVariant(i)}
                       className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                       style={{
-                        backgroundColor: tone.tabBg,
+                        backgroundColor: active ? tone.accent : `${tone.accent}1f`,
                         boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                          ? `inset 0 0 0 2px ${tone.accentDeep}, 0 6px 18px ${tone.accentDeep}55`
+                          : `inset 0 0 0 1px ${tone.accent}55`,
                       }}
                     >
                       <span
                         className="font-display tracking-tight transition-all duration-300"
                         style={{
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
-                          fontWeight: active ? 800 : 600,
+                          color: active ? "oklch(1 0 0 / 0.98)" : tone.accentDeep,
+                          fontWeight: active ? 800 : 700,
                           fontSize: "13px",
                           letterSpacing: active ? "-0.01em" : "0",
                         }}
                       >
-                        Answer {i + 1}
+                        {tone.label}
                       </span>
                     </button>
                   );
@@ -621,7 +680,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+                style={{ color: `${INK}b3` }}
                 aria-label="Next answer"
               >
                 <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
