@@ -116,7 +116,6 @@ const makeQuestions = (categoryId: string, label: string): Question[] => {
 
 function WritingSamplesPage() {
   const search = Route.useSearch();
-  const navigate = useNavigate();
   const module: Module = search.module ?? "general";
   const [task, setTask] = useState<Task | null>(null);
   const fallbackCategories = categoriesByModuleTask[module]["task1"];
