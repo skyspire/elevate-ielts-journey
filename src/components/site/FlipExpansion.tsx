@@ -612,92 +612,97 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Split-card footer pager — three equal regions, one per sample answer.
-          Active region lifts and accents in sage. Prev/Next arrows flank it. */}
-      {variants.length > 1 && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
-          <div className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-2">
-            <button
-              type="button"
-              onClick={() => goToVariant(variantIndex - 1)}
-              className="group inline-flex shrink-0 items-center justify-center rounded-2xl border border-foreground/10 bg-white/75 px-3 text-foreground/55 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:text-foreground sm:px-4"
-              aria-label="Previous sample answer"
-            >
-              <ChevronLeft className="h-4 w-4" strokeWidth={2.4} />
-            </button>
-
+      {/* Solid dark footer pager — strong presence, three harmonious accents.
+          Answer 1 = sage · Answer 2 = warm amber · Answer 3 = soft terracotta. */}
+      {variants.length > 1 && (() => {
+        const tones = [
+          { accent: "oklch(0.72 0.13 165)", soft: "oklch(0.72 0.13 165 / 0.16)" }, // sage
+          { accent: "oklch(0.82 0.14 75)",  soft: "oklch(0.82 0.14 75 / 0.16)"  }, // amber
+          { accent: "oklch(0.74 0.13 35)",  soft: "oklch(0.74 0.13 35 / 0.16)"  }, // terracotta
+        ];
+        const activeTone = tones[variantIndex % tones.length];
+        return (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
             <div
-              className="flex flex-1 overflow-hidden rounded-2xl border border-foreground/10 bg-white/75 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl"
-              role="tablist"
-              aria-label="Sample answers"
+              className="pointer-events-auto flex w-full max-w-[680px] items-stretch overflow-hidden rounded-2xl border border-white/8 shadow-[0_20px_50px_-15px_oklch(0.1_0.02_165/0.6)]"
+              style={{
+                background:
+                  "linear-gradient(180deg, oklch(0.22 0.02 240) 0%, oklch(0.16 0.02 240) 100%)",
+              }}
             >
-              {variants.map((_, i) => {
-                const active = i === variantIndex;
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => goToVariant(i)}
-                    className="group relative flex flex-1 flex-col items-center justify-center gap-1.5 px-2 py-2.5 transition-all duration-300 sm:py-3"
-                    style={{
-                      backgroundColor: active
-                        ? "oklch(0.50 0.10 165 / 0.08)"
-                        : "transparent",
-                      transform: active ? "translateY(-1px)" : "translateY(0)",
-                    }}
-                  >
-                    <div className="flex items-baseline gap-1.5">
-                      <span
-                        className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors"
-                        style={{
-                          color: active
-                            ? "oklch(0.42 0.10 165)"
-                            : "oklch(0.20 0.02 165 / 0.45)",
-                        }}
-                      >
-                        Answer
-                      </span>
-                      <span
-                        className="font-display text-[16px] font-black leading-none transition-colors sm:text-[18px]"
-                        style={{
-                          color: active
-                            ? "oklch(0.42 0.10 165)"
-                            : "oklch(0.20 0.02 165 / 0.50)",
-                        }}
-                      >
-                        {i + 1}
-                      </span>
-                    </div>
-                    {/* Thin progress bar — full + sage when active, faint otherwise */}
-                    <div className="relative h-[2px] w-full overflow-hidden rounded-full bg-foreground/8">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                        style={{
-                          width: active ? "100%" : "20%",
-                          backgroundColor: active
-                            ? "oklch(0.50 0.10 165)"
-                            : "oklch(0.20 0.02 165 / 0.18)",
-                        }}
-                      />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+              <button
+                type="button"
+                onClick={() => goToVariant(variantIndex - 1)}
+                className="group inline-flex shrink-0 items-center justify-center px-4 text-white/55 transition-all hover:bg-white/5 hover:text-white sm:px-5"
+                aria-label="Previous sample answer"
+              >
+                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.4} />
+              </button>
 
-            <button
-              type="button"
-              onClick={() => goToVariant(variantIndex + 1)}
-              className="group inline-flex shrink-0 items-center justify-center rounded-2xl border border-foreground/10 bg-white/75 px-3 text-foreground/55 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.22)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:text-foreground sm:px-4"
-              aria-label="Next sample answer"
-            >
-              <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
-            </button>
+              <div className="flex flex-1 border-x border-white/8" role="tablist" aria-label="Sample answers">
+                {variants.map((_, i) => {
+                  const active = i === variantIndex;
+                  const tone = tones[i % tones.length];
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      onClick={() => goToVariant(i)}
+                      className={`group relative flex flex-1 flex-col items-center justify-center gap-2 px-2 py-3 transition-all duration-300 sm:py-3.5 ${
+                        i > 0 ? "border-l border-white/8" : ""
+                      }`}
+                      style={{
+                        backgroundColor: active ? tone.soft : "transparent",
+                      }}
+                    >
+                      <div className="flex items-baseline gap-1.5">
+                        <span
+                          className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors"
+                          style={{
+                            color: active ? tone.accent : "oklch(1 0 0 / 0.40)",
+                          }}
+                        >
+                          Answer
+                        </span>
+                        <span
+                          className="font-display text-[17px] font-black leading-none transition-colors sm:text-[19px]"
+                          style={{
+                            color: active ? tone.accent : "oklch(1 0 0 / 0.50)",
+                          }}
+                        >
+                          {i + 1}
+                        </span>
+                      </div>
+                      {/* Thin indicator bar — fills with the segment's tone when active */}
+                      <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/8">
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                          style={{
+                            width: active ? "100%" : "18%",
+                            backgroundColor: active ? tone.accent : "oklch(1 0 0 / 0.18)",
+                          }}
+                        />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => goToVariant(variantIndex + 1)}
+                className="group inline-flex shrink-0 items-center justify-center px-4 text-white/55 transition-all hover:bg-white/5 hover:text-white sm:px-5"
+                aria-label="Next sample answer"
+                style={{ color: undefined }}
+              >
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.4} />
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Drift keyframes */}
       <style>{`
