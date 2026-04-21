@@ -428,12 +428,13 @@ function TopicCard({
         </span>
       </div>
 
-      {/* Right column — topic name */}
+      {/* Right column — topic name (sized to match the big index numeral) */}
       <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
-        <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-base">
-          <span style={{ color: "oklch(0.42 0.10 165)", fontWeight: 800 }}>
-            {topic.label}
-          </span>
+        <p
+          className="font-display font-black leading-tight tracking-tight"
+          style={{ color: "oklch(0.42 0.10 165)", fontSize: "clamp(1.5rem, 3.2vw, 1.875rem)" }}
+        >
+          {topic.label}
         </p>
       </div>
     </Link>
