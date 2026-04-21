@@ -324,33 +324,41 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* ── BILLBOARD: full screen filled with the active palette color.
-            Bold, saturated, high-impact — like a billboard ad. The header
-            sits on top, the answer card is centered, footer tabs at the
-            bottom. Color cross-fades smoothly on variant switch. */}
+        {/* ── BILLBOARD background: LAYERED GRADIENT + GRAIN ──────────────
+            • Diagonal gradient from deeper shade → bold palette fill
+            • Soft top vignette to anchor the header pill
+            • Whisper film grain via dotted overlay (mix-blend-overlay) */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
           style={{
+            backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
+            transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
             backgroundColor: activePalette.fill,
-            transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         >
-          {/* Soft inner vignette so the edges deepen toward the corners — gives
-              the billboard a printed, premium-poster feel. */}
+          {/* Top vignette — gentle darkening at the very top edge */}
+          <div
+            className="absolute inset-x-0 top-0 h-[40%]"
+            style={{
+              background: `linear-gradient(180deg, ${activePalette.fillDeep} 0%, transparent 100%)`,
+              opacity: 0.45,
+            }}
+          />
+          {/* Bottom corner deepening */}
           <div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(ellipse at center, transparent 50%, ${activePalette.fillDeep} 130%)`,
-              opacity: 0.6,
+              background: `radial-gradient(ellipse at 80% 100%, ${activePalette.fillDeep} 0%, transparent 55%)`,
+              opacity: 0.55,
             }}
           />
-          {/* Whisper paper grain so the solid color doesn't feel flat. */}
+          {/* Film grain — fine SVG-noise via radial dots, blended */}
           <div
-            className="absolute inset-0 mix-blend-overlay opacity-[0.08]"
+            className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1px)",
-              backgroundSize: "5px 5px",
+                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+              backgroundSize: "4px 4px, 7px 7px",
             }}
           />
         </div>
