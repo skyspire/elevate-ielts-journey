@@ -99,14 +99,21 @@ export function FlipExpansion({
   // the active variant changes, so each switch feels freshly composed.
   useEffect(() => {
     if (phase !== "expanded") return;
-    setRevealedSections(0);
     const total = sections.length;
-    const timers: number[] = [];
-    // First open: gentle, lingering reveal. Variant switch: tight cascade
-    // synchronized with the gravity drop.
+    // On a variant switch (instant swap mid-flight), reveal all sections at
+    // once with no stagger — the answer text stays calm while the paper plane
+    // carries the visual transition.
     const isVariantSwitch = gravityPhase === "in";
-    const initialDelay = isVariantSwitch ? 40 : 220;
-    const stagger = isVariantSwitch ? 90 : 320;
+    if (isVariantSwitch) {
+      setRevealedSections(total);
+      return;
+    }
+    // First open: keep the gentle, lingering reveal so the page composes
+    // itself as the reader settles in.
+    setRevealedSections(0);
+    const timers: number[] = [];
+    const initialDelay = 220;
+    const stagger = 320;
     for (let i = 0; i < total; i++) {
       timers.push(
         window.setTimeout(
