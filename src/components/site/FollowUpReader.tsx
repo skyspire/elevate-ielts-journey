@@ -144,47 +144,55 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     {
       // SUNRISE — warm peach → amber → rose
       label:        "Sunrise",
-      gradTop:      "oklch(0.88 0.085 55)",   // peach
-      gradMid:      "oklch(0.83 0.105 35)",   // amber-rose
-      gradBottom:   "oklch(0.78 0.110 22)",   // rose
+      gradTop:      "oklch(0.88 0.085 55)",
+      gradMid:      "oklch(0.83 0.105 35)",
+      gradBottom:   "oklch(0.78 0.110 22)",
       accent:       "oklch(0.58 0.150 32)",   // burnt sienna
       accentDeep:   "oklch(0.42 0.130 32)",
       tabBg:        "oklch(0.78 0.105 38)",
       tabBorder:    "oklch(0.44 0.140 32)",
       tabInk:       "oklch(0.20 0.040 35)",
+      // Legacy aliases used by JSX below — body stays ink-on-parchment;
+      // chrome/badges/borders take the variant's accent hue.
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.58 0.150 32)",
+      fillDeep:     "oklch(0.42 0.130 32)",
     },
     {
       // FOREST — sage → moss → deep pine
       label:        "Forest",
-      gradTop:      "oklch(0.86 0.060 155)",   // sage mist
-      gradMid:      "oklch(0.74 0.080 150)",   // moss
-      gradBottom:   "oklch(0.58 0.090 148)",   // pine
-      accent:       "oklch(0.42 0.090 150)",   // deep forest
+      gradTop:      "oklch(0.86 0.060 155)",
+      gradMid:      "oklch(0.74 0.080 150)",
+      gradBottom:   "oklch(0.58 0.090 148)",
+      accent:       "oklch(0.42 0.090 150)",
       accentDeep:   "oklch(0.30 0.070 150)",
       tabBg:        "oklch(0.70 0.085 150)",
       tabBorder:    "oklch(0.34 0.080 150)",
       tabInk:       "oklch(0.18 0.030 150)",
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.42 0.090 150)",
+      fillDeep:     "oklch(0.30 0.070 150)",
     },
     {
       // TWILIGHT — lilac → indigo → deep plum
       label:        "Twilight",
-      gradTop:      "oklch(0.84 0.075 295)",   // lilac
-      gradMid:      "oklch(0.66 0.105 285)",   // periwinkle
-      gradBottom:   "oklch(0.46 0.110 290)",   // indigo plum
-      accent:       "oklch(0.40 0.130 295)",   // deep plum
+      gradTop:      "oklch(0.84 0.075 295)",
+      gradMid:      "oklch(0.66 0.105 285)",
+      gradBottom:   "oklch(0.46 0.110 290)",
+      accent:       "oklch(0.40 0.130 295)",
       accentDeep:   "oklch(0.28 0.110 295)",
       tabBg:        "oklch(0.62 0.100 290)",
       tabBorder:    "oklch(0.32 0.115 295)",
       tabInk:       "oklch(0.99 0.012 290)",
+      ink:          INK,
+      inkSoft:      INK_SOFT,
+      fill:         "oklch(0.40 0.130 295)",
+      fillDeep:     "oklch(0.28 0.110 295)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
-
-  // Compatibility shim — older JSX below references `ink/inkSoft/fill/fillDeep`.
-  // Map them to the new parchment + ink scheme so the body stays readable
-  // and per-variant accents come through the `accent` field.
-  const ink = INK;
-  const inkSoft = INK_SOFT;
 
   // Open / close phase machine.
   useEffect(() => {
