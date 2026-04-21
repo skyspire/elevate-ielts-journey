@@ -572,13 +572,13 @@ function TaskEnvelopeScroll({
   const isT1 = task === "task1";
   const isT2 = task === "task2";
   const noSelection = task === null;
-  const highlightBg = isAcademic
-    ? "bg-[oklch(0.92_0.13_85)]"
-    : "bg-[oklch(0.88_0.14_30)]";
   const accentBorder = isAcademic
     ? "border-brand/55"
     : "border-[oklch(0.58_0.16_28)]/55";
   const accentText = isAcademic ? "text-brand" : "text-[oklch(0.45_0.15_28)]";
+  const accentRule = isAcademic
+    ? "bg-brand"
+    : "bg-[oklch(0.50_0.16_28)]";
 
   const renderItem = (
     active: boolean,
@@ -586,42 +586,50 @@ function TaskEnvelopeScroll({
     taskNum: "Task 1" | "Task 2",
     name: string,
     align: "left" | "right",
-  ) => (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`group block bg-transparent p-2 sm:p-4 ${
-        align === "left" ? "text-left" : "text-right"
-      } transition-opacity duration-300 ${
-        active ? "opacity-100" : "opacity-55 hover:opacity-85"
-      }`}
-    >
-      <h3
-        className={`relative inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${
-          active ? "text-foreground" : "text-foreground/70"
+  ) => {
+    const taskNumber = taskNum === "Task 1" ? "01" : "02";
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        aria-pressed={active}
+        className={`group block bg-transparent p-2 sm:p-4 ${
+          align === "left" ? "text-left" : "text-right"
+        } transition-opacity duration-300 ${
+          active ? "opacity-100" : "opacity-50 hover:opacity-80"
         }`}
-        style={{ fontSize: "clamp(1.5rem, 5vw, 2.75rem)" }}
       >
-        <span className="relative inline-block">
-          {active && (
-            <span
-              aria-hidden
-              className={`absolute inset-x-[-6px] bottom-[8%] -z-10 h-[52%] -rotate-1 ${highlightBg} opacity-75`}
-              style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
-            />
-          )}
-          <span className="relative">
-            {taskNum}
-            <span className="text-foreground/45"> — </span>
-            <span className={active ? "text-foreground/85" : "text-foreground/55"}>
-              {name}
-            </span>
+        <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-1.5 sm:gap-2`}>
+          {/* Eyebrow: TASK 01 / TASK 02 */}
+          <span
+            className={`font-display text-[10px] font-semibold uppercase tracking-[0.32em] sm:text-[11px] ${
+              active ? accentText : "text-foreground/45"
+            }`}
+          >
+            Task <span className="tabular-nums">{taskNumber}</span>
           </span>
-        </span>
-      </h3>
-    </button>
-  );
+
+          {/* Descriptor — formal serif-feeling display */}
+          <h3
+            className={`font-display leading-[1.05] tracking-[-0.025em] ${
+              active ? "font-semibold text-foreground" : "font-medium text-foreground/75"
+            }`}
+            style={{ fontSize: "clamp(1.5rem, 4.6vw, 2.5rem)" }}
+          >
+            {name}
+          </h3>
+
+          {/* Thin accent rule — only on active */}
+          <span
+            aria-hidden
+            className={`mt-1 block h-px transition-all duration-500 ${
+              active ? `w-10 sm:w-14 ${accentRule}` : "w-6 bg-foreground/15"
+            }`}
+          />
+        </div>
+      </button>
+    );
+  };
 
   // Compass needle: -90° points left (Task 1), +90° points right (Task 2), 0 = idle (north)
   const needleDeg = isT1 ? -90 : isT2 ? 90 : 0;
