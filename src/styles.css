@@ -284,6 +284,15 @@
   animation: float-slow 9s ease-in-out infinite;
 }
 
+/* Gravity drop & settle — silent, organic answer transition.
+   Stage 1 (0→25%): tiny anti-gravity lift (-6px) — like an inhale.
+   Stage 2 (25→100%): accelerating drop (+28px) under gravity, fading to 0. */
+@keyframes gravity-out {
+  0%   { transform: translateY(0);     opacity: 1; }
+  25%  { transform: translateY(-6px);  opacity: 0.95; }
+  100% { transform: translateY(28px);  opacity: 0; }
+}
+
 @keyframes marquee-left {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
