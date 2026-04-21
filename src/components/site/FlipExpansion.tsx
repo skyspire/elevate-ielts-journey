@@ -642,7 +642,7 @@ function CueCardReader({
           crashes into the colorful footer pager that floats above it. */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[180px] sm:pt-[140px] sm:pb-[200px]"
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[260px] sm:pt-[140px] sm:pb-[280px]"
       >
         <article className="mx-auto w-full max-w-[820px] px-6 sm:px-10">
           {(() => {
@@ -753,161 +753,112 @@ function CueCardReader({
         </article>
       </div>
 
-      {/* Follow-up cards — desktop, edge-emerging */}
-      {followUps.length > 0 && (
-        <div className="pointer-events-none absolute inset-0 hidden lg:block">
-          {followUps.map((q, i) => {
-            const start = 0.14 + i * 0.18;
-            const end = start + 0.18;
-            const local =
-              scrollProgress <= start
-                ? 0
-                : scrollProgress >= end
-                  ? 1
-                  : (scrollProgress - start) / (end - start);
+      {/* ── Follow-up rail ────────────────────────────────────────────────
+          Reveal-on-scroll horizontal rail anchored above the footer band.
+          Tiles are color-coded with the AMBER · TEAL · PLUM follow-up
+          palette so they visually match what they open into. Horizontally
+          scrollable with a peek of the next card so the rail works for
+          any count and stays mobile-friendly. */}
+      {followUps.length > 0 && (() => {
+        // Reveal threshold: tile-band fades + lifts in once the user has
+        // scrolled past ~55% of the answer.
+        const REVEAL_AT = 0.55;
+        const reveal =
+          scrollProgress <= REVEAL_AT
+            ? 0
+            : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-            const side: "left" | "right" = i % 2 === 0 ? "left" : "right";
-            const topPct = 22 + i * 16;
-            const offset = (1 - local) * 70;
-            const opacity = local * 0.95;
-            const scale = 0.9 + local * 0.1;
+        // Match FollowUpReader's amber/teal/plum palette so each tile's
+        // accent equals the answer-screen color it opens into.
+        const followUpPalette = [
+          { fill: "oklch(0.62 0.18 65)",  ink: "oklch(0.99 0.015 80)" },  // Amber
+          { fill: "oklch(0.50 0.13 200)", ink: "oklch(0.99 0.012 200)" }, // Teal
+          { fill: "oklch(0.46 0.16 330)", ink: "oklch(0.99 0.015 330)" }, // Plum
+        ];
 
-            const sideStyle: React.CSSProperties =
-              side === "left"
-                ? { left: `calc(2vw + ${-offset}px)` }
-                : { right: `calc(2vw + ${-offset}px)` };
-
-            return (
-              <div
-                key={q.id}
-                className="pointer-events-auto absolute w-[230px] xl:w-[260px]"
-                style={{
-                  top: `${topPct}%`,
-                  ...sideStyle,
-                  opacity,
-                  transform: `scale(${scale})`,
-                  transition:
-                    "opacity 500ms ease, transform 500ms cubic-bezier(0.16,1,0.3,1)",
-                }}
+        return (
+          <div
+            // Sit just above the 64-72px footer band. pointer-events follow
+            // reveal so the rail can't catch clicks while invisible.
+            className="pointer-events-none absolute inset-x-0 z-[18]"
+            style={{
+              bottom: "76px",
+              opacity: reveal,
+              transform: `translateY(${(1 - reveal) * 18}px)`,
+              transition:
+                "opacity 380ms cubic-bezier(0.16,1,0.3,1), transform 380ms cubic-bezier(0.16,1,0.3,1)",
+            }}
+            aria-hidden={reveal < 0.05}
+          >
+            {/* Section eyebrow — small "Continue with" label */}
+            <div className="mx-auto mb-2 max-w-[1280px] px-4 sm:px-10">
+              <span
+                className="font-display text-[10px] font-extrabold uppercase tracking-[0.28em]"
+                style={{ color: activePalette.ink, opacity: 0.75 }}
               >
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    const r = e.currentTarget.getBoundingClientRect();
-                    onOpenFollowUp(
-                      q,
-                      { x: r.left + r.width / 2, y: r.top + r.height / 2 },
-                      i + 1,
-                      followUps.length,
-                    );
-                  }}
-                  className="block w-full rounded-2xl p-4 text-left backdrop-blur-md transition-transform hover:-translate-y-0.5"
-                  style={{
-                    backgroundColor: "oklch(1 0 0 / 0.10)",
-                    border: `1px solid ${activePalette.ink}33`,
-                    boxShadow: `0 10px 30px -12px ${activePalette.fillDeep}`,
-                  }}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <MessageCircleQuestion
-                      className="h-3.5 w-3.5"
-                      strokeWidth={2.6}
-                      style={{ color: activePalette.ink, opacity: 0.9 }}
-                    />
-                    <span
-                      className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
-                      style={{ color: activePalette.ink, opacity: 0.9 }}
-                    >
-                      Follow-up {i + 1}
-                    </span>
-                  </div>
-                  <p
-                    className="mt-2 text-[13px] font-semibold leading-snug"
-                    style={{ color: activePalette.ink }}
-                  >
-                    {q.title}
-                  </p>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
+                Continue with examiner follow-ups
+              </span>
+            </div>
 
-      {/* Follow-up cards — mobile bottom carousel */}
-      {followUps.length > 0 && (
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-[88px] lg:hidden"
-          style={{
-            opacity:
-              scrollProgress < 0.15 ? 0 : Math.min(1, (scrollProgress - 0.15) / 0.25),
-            transform: `translateY(${(1 - Math.min(1, scrollProgress * 1.8)) * 24}px)`,
-            transition: "opacity 350ms ease, transform 350ms ease",
-          }}
-        >
-          <div className="pointer-events-auto mx-auto flex max-w-3xl gap-2 overflow-x-auto px-4 pb-2 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {followUps.map((q, i) => {
-              const threshold = 0.18 + i * 0.14;
-              const local =
-                scrollProgress <= threshold
-                  ? 0
-                  : Math.min(1, (scrollProgress - threshold) / 0.18);
-              return (
-                <div
-                  key={q.id}
-                  className="shrink-0 basis-[78%] snap-start"
-                  style={{
-                    opacity: local,
-                    transform: `translateY(${(1 - local) * 16}px)`,
-                    transition:
-                      "opacity 400ms ease, transform 400ms cubic-bezier(0.16,1,0.3,1)",
-                    transitionDelay: `${i * 60}ms`,
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      const r = e.currentTarget.getBoundingClientRect();
-                      onOpenFollowUp(
-                        q,
-                        { x: r.left + r.width / 2, y: r.top + r.height / 2 },
-                        i + 1,
-                        followUps.length,
-                      );
-                    }}
-                    className="block w-full rounded-2xl p-3.5 text-left backdrop-blur-md transition-transform active:scale-[0.98]"
-                    style={{
-                      backgroundColor: "oklch(1 0 0 / 0.12)",
-                      border: `1px solid ${activePalette.ink}33`,
-                      boxShadow: `0 10px 30px -12px ${activePalette.fillDeep}`,
-                    }}
+            {/* Horizontal scrollable rail with peek. */}
+            <div
+              className={`pointer-events-auto mx-auto flex max-w-[1280px] gap-3 overflow-x-auto px-4 pb-1 sm:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+                reveal < 0.5 ? "pointer-events-none" : ""
+              }`}
+              style={{ scrollSnapType: "x mandatory" }}
+            >
+              {followUps.map((q, i) => {
+                const tone = followUpPalette[i % followUpPalette.length];
+                return (
+                  <div
+                    key={q.id}
+                    className="shrink-0 basis-[78%] snap-start sm:basis-[42%] lg:basis-[30%]"
                   >
-                    <div className="flex items-center gap-1.5">
-                      <MessageCircleQuestion
-                        className="h-3.5 w-3.5"
-                        strokeWidth={2.6}
-                        style={{ color: activePalette.ink, opacity: 0.9 }}
-                      />
-                      <span
-                        className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
-                        style={{ color: activePalette.ink, opacity: 0.9 }}
-                      >
-                        Follow-up {i + 1}
-                      </span>
-                    </div>
-                    <p
-                      className="mt-1.5 text-[12.5px] font-semibold leading-snug"
-                      style={{ color: activePalette.ink }}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        const r = e.currentTarget.getBoundingClientRect();
+                        onOpenFollowUp(
+                          q,
+                          { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+                          i + 1,
+                          followUps.length,
+                        );
+                      }}
+                      className="relative block h-full w-full overflow-hidden rounded-2xl p-4 text-left transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                      style={{
+                        backgroundColor: tone.fill,
+                        boxShadow: `0 12px 30px -14px ${activePalette.fillDeep}`,
+                        border: `1px solid ${tone.ink}33`,
+                      }}
                     >
-                      {q.title}
-                    </p>
-                  </button>
-                </div>
-              );
-            })}
+                      <div className="flex items-center gap-1.5">
+                        <MessageCircleQuestion
+                          className="h-3.5 w-3.5"
+                          strokeWidth={2.6}
+                          style={{ color: tone.ink, opacity: 0.95 }}
+                        />
+                        <span
+                          className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
+                          style={{ color: tone.ink, opacity: 0.95 }}
+                        >
+                          Follow-up {String(i + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <p
+                        className="mt-2 text-[13px] font-semibold leading-snug"
+                        style={{ color: tone.ink }}
+                      >
+                        {q.title}
+                      </p>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule.
           Mirrors the FollowUpReader footer treatment. */}
