@@ -528,10 +528,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                           className="my-8 flex flex-col items-center text-center"
                           aria-label="Pull quote"
                         >
-                          <span
-                            className="block h-[2px] w-12 rounded-full"
-                            style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
-                          />
                           <blockquote
                             className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
                             style={{
