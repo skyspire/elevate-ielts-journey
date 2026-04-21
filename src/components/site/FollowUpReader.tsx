@@ -522,11 +522,11 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 />
               </div>
 
-              {/* Headline + ink-bleed underline sweep */}
+              {/* Headline + ink-bleed underline sweep — dark grey ink */}
               <h1
                 className="fu-headline relative mt-4 inline-block font-display font-black leading-[1.05] tracking-tight"
                 style={{
-                  color: activePalette.ink,
+                  color: "oklch(0.28 0.012 60)",
                   fontSize: "clamp(1.7rem, 3.4vw, 2.65rem)",
                   letterSpacing: "-0.012em",
                 }}
