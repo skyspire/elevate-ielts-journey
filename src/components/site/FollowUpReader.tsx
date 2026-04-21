@@ -631,7 +631,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+                style={{ color: `${INK}b3` }}
                 aria-label="Previous answer"
               >
                 <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
@@ -654,22 +655,22 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       onClick={() => goToVariant(i)}
                       className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                       style={{
-                        backgroundColor: tone.tabBg,
+                        backgroundColor: active ? tone.accent : `${tone.accent}1f`,
                         boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                          ? `inset 0 0 0 2px ${tone.accentDeep}, 0 6px 18px ${tone.accentDeep}55`
+                          : `inset 0 0 0 1px ${tone.accent}55`,
                       }}
                     >
                       <span
                         className="font-display tracking-tight transition-all duration-300"
                         style={{
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
-                          fontWeight: active ? 800 : 600,
+                          color: active ? "oklch(1 0 0 / 0.98)" : tone.accentDeep,
+                          fontWeight: active ? 800 : 700,
                           fontSize: "13px",
                           letterSpacing: active ? "-0.01em" : "0",
                         }}
                       >
-                        Answer {i + 1}
+                        {tone.label}
                       </span>
                     </button>
                   );
@@ -679,7 +680,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
+                style={{ color: `${INK}b3` }}
                 aria-label="Next answer"
               >
                 <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
