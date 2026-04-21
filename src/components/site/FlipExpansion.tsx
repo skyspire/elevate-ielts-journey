@@ -975,21 +975,115 @@ function CueCardReader({
                   } as React.CSSProperties}
                 >
                   <div className="paper-plane-wobble">
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
-                      {/* Paper plane silhouette */}
+                    <svg
+                      width="140"
+                      height="140"
+                      viewBox="0 0 100 100"
+                      fill="none"
+                      style={{ display: "block", overflow: "visible" }}
+                    >
+                      <defs>
+                        {/* Warm cream paper gradient — slightly darker on the
+                            underside fold so the plane reads as folded paper
+                            with two visible faces, like a Ghibli watercolor. */}
+                        <linearGradient id={`ghibliPaper-${f.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%"  stopColor="oklch(0.985 0.018 85)" />
+                          <stop offset="60%" stopColor="oklch(0.96 0.025 80)" />
+                          <stop offset="100%" stopColor="oklch(0.92 0.04 75)" />
+                        </linearGradient>
+                        <linearGradient id={`ghibliShadow-${f.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%"  stopColor="oklch(0.86 0.04 75)" />
+                          <stop offset="100%" stopColor="oklch(0.78 0.05 70)" />
+                        </linearGradient>
+                        {/* Soft paper-grain noise — gives the plane that
+                            hand-painted Studio Ghibli watercolor feel. */}
+                        <filter id={`paperGrain-${f.id}`} x="-10%" y="-10%" width="120%" height="120%">
+                          <feTurbulence type="fractalNoise" baseFrequency="2.2" numOctaves="2" seed={f.id} />
+                          <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.12 0" />
+                          <feComposite in2="SourceGraphic" operator="in" />
+                        </filter>
+                      </defs>
+
+                      {/* ── Folded paper plane in 3 visible facets ────────
+                         Designed to feel hand-folded: the top wing catches
+                         light (cream gradient), the underside is in soft
+                         shadow, and the body crease runs down the middle.
+                         All edges are hand-drawn with a warm sepia ink
+                         stroke — a hallmark of Ghibli line art. */}
+
+                      {/* Underside / shadow wing (drawn first, sits behind) */}
                       <path
-                        d="M2.5 12 L21.5 3.5 L14 21 L11 13.5 L2.5 12 Z"
-                        fill={f.tone}
-                        stroke="oklch(0.18 0.02 60 / 0.55)"
-                        strokeWidth="0.6"
+                        d="M 8 52 L 92 18 L 50 64 Z"
+                        fill={`url(#ghibliShadow-${f.id})`}
+                        stroke="oklch(0.32 0.06 50)"
+                        strokeWidth="1.4"
                         strokeLinejoin="round"
+                        strokeLinecap="round"
+                        opacity="0.95"
                       />
-                      {/* Inner crease for paper feel */}
+
+                      {/* Tail flap — the small triangular fold at the back */}
                       <path
-                        d="M21.5 3.5 L11 13.5"
-                        stroke="oklch(0.18 0.02 60 / 0.35)"
-                        strokeWidth="0.5"
+                        d="M 50 64 L 64 80 L 50 70 Z"
+                        fill={`url(#ghibliShadow-${f.id})`}
+                        stroke="oklch(0.32 0.06 50)"
+                        strokeWidth="1.3"
+                        strokeLinejoin="round"
+                        strokeLinecap="round"
                       />
+
+                      {/* Top wing (catches the light) — main visible facet,
+                         tinted with the active answer's palette tone for
+                         a hint of color while staying paper-like. */}
+                      <path
+                        d="M 8 52 L 92 18 L 50 70 Z"
+                        fill={`url(#ghibliPaper-${f.id})`}
+                        stroke="oklch(0.30 0.06 50)"
+                        strokeWidth="1.6"
+                        strokeLinejoin="round"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Subtle palette tint wash — only on the top wing,
+                         like a watercolor stain. Multiply blend keeps the
+                         paper texture readable underneath. */}
+                      <path
+                        d="M 8 52 L 92 18 L 50 70 Z"
+                        fill={f.tone}
+                        opacity="0.18"
+                        style={{ mixBlendMode: "multiply" }}
+                      />
+
+                      {/* Center crease — the fold line down the spine */}
+                      <path
+                        d="M 92 18 L 50 70"
+                        stroke="oklch(0.30 0.06 50)"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        opacity="0.85"
+                      />
+
+                      {/* Wing crease — short fold mark on the top wing */}
+                      <path
+                        d="M 92 18 L 70 38"
+                        stroke="oklch(0.30 0.06 50)"
+                        strokeWidth="0.9"
+                        strokeLinecap="round"
+                        opacity="0.55"
+                      />
+
+                      {/* Hand-drawn paper-grain overlay — speckled wash */}
+                      <path
+                        d="M 8 52 L 92 18 L 50 70 Z"
+                        fill="oklch(0.4 0.05 60)"
+                        opacity="0.06"
+                        filter={`url(#paperGrain-${f.id})`}
+                      />
+
+                      {/* Tiny ink dots — Ghibli storyboard texture */}
+                      <circle cx="65" cy="32" r="0.6" fill="oklch(0.30 0.06 50)" opacity="0.4" />
+                      <circle cx="78" cy="24" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.35" />
+                      <circle cx="40" cy="56" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.3" />
                     </svg>
                   </div>
                 </div>
