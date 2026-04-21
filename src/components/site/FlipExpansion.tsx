@@ -650,7 +650,7 @@ function CueCardReader({
             "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
         }}
       >
-        <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
+        <article className="mx-auto w-full max-w-[820px] px-6 sm:px-10">
           {(() => {
             // Lateral slide choreography (sequential out → in):
             //   out  → current text translates by  -switchDir * 36px and
