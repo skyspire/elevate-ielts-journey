@@ -426,10 +426,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       desktop this sits in column 2 (right). On mobile it
                       stacks above the answer (order-1). */}
                   <aside
-                    className="order-1 flex flex-col items-center justify-center text-center lg:order-2 lg:border-l lg:pl-12"
-                    style={{
-                      borderColor: `${activePalette.ink}26`,
-                    }}
+                    className="order-1 flex flex-col items-center justify-center text-center lg:order-1 lg:pr-12"
                   >
                     {/* Outlined circle index badge */}
                     <div
