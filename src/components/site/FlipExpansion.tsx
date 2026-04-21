@@ -447,55 +447,56 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // ── BILLBOARD palette: CLAY · OLIVE · TEAL ──────────────────────────────
-  // Three muted earth-tone papers — magazine-style backgrounds with a clear
-  // hue identity but low chroma so long-form reading stays comfortable.
-  // Each variant pairs a tinted paper with a matching deeper "ink" used on
-  // numerals, chips, dividers and follow-up tile borders for cohesion.
-  //   • fill / fillDeep   — paper background + deeper variant for footer
-  //   • ink               — deep tinted text (headings, strong copy, accents)
-  //   • inkSoft           — softened ink for body text (still high contrast)
+  // ── BILLBOARD palette: GALLERY WHITES (cool grey · porcelain · alabaster)
+  // Three near-white papers with luxury fashion-editorial feel (COS / Aesop).
+  // A single signature deep-navy ink runs across all three variants on
+  // chips, numerals, dividers and follow-up tile borders for brand cohesion.
+  //   • fill / fillDeep   — paper background + slightly toned variant for footer
+  //   • ink               — signature deep navy (used for accents & headings)
+  //   • inkSoft           — softened navy for body text (still high contrast)
   //   • tabBg / tabBorder — footer pager tab fill + active border
   //   Legacy keys (heading, screen, glow, tabHover) retained for compat.
+  const SIGNATURE_INK      = "oklch(0.24 0.04 260)";          // deep navy
+  const SIGNATURE_INK_SOFT = "oklch(0.30 0.04 260 / 0.92)";   // softened navy
   const palette = [
     {
-      // CLAY — dusty terracotta
-      fill:      "oklch(0.90 0.028 55)",
-      fillDeep:  "oklch(0.84 0.038 55)",
-      tabBg:     "oklch(0.87 0.032 55)",
-      tabBorder: "oklch(0.42 0.07 50)",
-      ink:       "oklch(0.34 0.06 45)",
-      inkSoft:   "oklch(0.38 0.05 45 / 0.92)",
-      tabHover:  "oklch(0.92 0.028 55)",
-      screen:    "oklch(0.90 0.028 55)",
-      glow:      "oklch(0.78 0.05 50)",
-      heading:   "oklch(0.32 0.07 45)",
+      // COOL GREY — crisp neutral white with the faintest blue undertone
+      fill:      "oklch(0.975 0.004 240)",
+      fillDeep:  "oklch(0.93 0.006 240)",
+      tabBg:     "oklch(0.95 0.005 240)",
+      tabBorder: SIGNATURE_INK,
+      ink:       SIGNATURE_INK,
+      inkSoft:   SIGNATURE_INK_SOFT,
+      tabHover:  "oklch(0.965 0.004 240)",
+      screen:    "oklch(0.975 0.004 240)",
+      glow:      "oklch(0.86 0.01 240)",
+      heading:   SIGNATURE_INK,
     },
     {
-      // OLIVE — soft muted olive
-      fill:      "oklch(0.91 0.025 125)",
-      fillDeep:  "oklch(0.85 0.034 125)",
-      tabBg:     "oklch(0.88 0.028 125)",
-      tabBorder: "oklch(0.42 0.06 130)",
-      ink:       "oklch(0.34 0.05 130)",
-      inkSoft:   "oklch(0.38 0.045 130 / 0.92)",
-      tabHover:  "oklch(0.93 0.025 125)",
-      screen:    "oklch(0.91 0.025 125)",
-      glow:      "oklch(0.78 0.045 130)",
-      heading:   "oklch(0.32 0.06 130)",
+      // PORCELAIN — warm pale white, slightly creamy
+      fill:      "oklch(0.975 0.006 80)",
+      fillDeep:  "oklch(0.93 0.01 80)",
+      tabBg:     "oklch(0.95 0.008 80)",
+      tabBorder: SIGNATURE_INK,
+      ink:       SIGNATURE_INK,
+      inkSoft:   SIGNATURE_INK_SOFT,
+      tabHover:  "oklch(0.965 0.006 80)",
+      screen:    "oklch(0.975 0.006 80)",
+      glow:      "oklch(0.86 0.012 80)",
+      heading:   SIGNATURE_INK,
     },
     {
-      // TEAL — muted dusty teal
-      fill:      "oklch(0.91 0.024 200)",
-      fillDeep:  "oklch(0.84 0.034 200)",
-      tabBg:     "oklch(0.88 0.028 200)",
-      tabBorder: "oklch(0.42 0.06 205)",
-      ink:       "oklch(0.32 0.055 210)",
-      inkSoft:   "oklch(0.36 0.05 210 / 0.92)",
-      tabHover:  "oklch(0.93 0.024 200)",
-      screen:    "oklch(0.91 0.024 200)",
-      glow:      "oklch(0.78 0.045 205)",
-      heading:   "oklch(0.30 0.06 210)",
+      // ALABASTER — soft luminous off-white with a whisper of pink-stone
+      fill:      "oklch(0.97 0.005 30)",
+      fillDeep:  "oklch(0.92 0.008 30)",
+      tabBg:     "oklch(0.945 0.006 30)",
+      tabBorder: SIGNATURE_INK,
+      ink:       SIGNATURE_INK,
+      inkSoft:   SIGNATURE_INK_SOFT,
+      tabHover:  "oklch(0.96 0.005 30)",
+      screen:    "oklch(0.97 0.005 30)",
+      glow:      "oklch(0.86 0.01 30)",
+      heading:   SIGNATURE_INK,
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
