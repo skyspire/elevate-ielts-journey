@@ -418,8 +418,7 @@ function WritingSamplesPage() {
             </p>
           </div>
 
-          {/* Step 1 — Task selector with center "Select Your Task" disc */}
-          <StepLabel index={1} label="Select Task" />
+          {/* Step 1 — Task selector */}
           <TaskEnvelopeScroll
             task={task}
             onTaskChange={onTaskChange}
