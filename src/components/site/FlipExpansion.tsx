@@ -473,27 +473,35 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — base color shifts to a warm tint of the active answer's palette. */}
+      {/* Atmospheric background — base color shifts to a tint of the active answer's palette.
+          Uses a single, explicit background-color transition aligned with the
+          640ms slide window. The decorative gradient orbs intentionally have
+          no transition: a radial-gradient cannot be smoothly interpolated, so
+          a transition there causes a visible snap-flicker. The orbs simply
+          re-render with the new color while the mood veil masks the change. */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden transition-colors duration-700 ease-out"
-        style={{ backgroundColor: activePalette.screen }}
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{
+          backgroundColor: activePalette.screen,
+          transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
       >
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 26s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-b 32s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 38s ease-in-out infinite reverse",
