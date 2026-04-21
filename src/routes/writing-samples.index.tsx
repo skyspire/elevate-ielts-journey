@@ -130,14 +130,14 @@ function WritingSamplesPage() {
   };
 
   const isAcademic = module === "academic";
-  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
-  const accentBg = isAcademic ? "bg-brand" : "bg-[oklch(0.55_0.10_160)]";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.45_0.15_28)]";
+  const accentBg = isAcademic ? "bg-brand" : "bg-[oklch(0.58_0.16_28)]";
   const accentChip = isAcademic
     ? "bg-brand-soft text-brand border-brand/30"
-    : "bg-[oklch(0.94_0.04_160)] text-[oklch(0.38_0.10_160)] border-[oklch(0.62_0.10_160)]/30";
+    : "bg-[oklch(0.95_0.04_30)] text-[oklch(0.42_0.16_28)] border-[oklch(0.62_0.16_28)]/30";
   const accentRing = isAcademic
     ? "ring-brand/40 border-brand/40"
-    : "ring-[oklch(0.55_0.10_160)]/40 border-[oklch(0.55_0.10_160)]/40";
+    : "ring-[oklch(0.58_0.16_28)]/40 border-[oklch(0.58_0.16_28)]/40";
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
