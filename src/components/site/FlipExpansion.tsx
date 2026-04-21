@@ -497,22 +497,6 @@ function CueCardReader({
             })}
           </div>
 
-          {/* Footer link to full topic page — sits inside the reading lane */}
-          <div className="mt-16 flex flex-col items-start gap-3 border-t border-foreground/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-[13px] text-foreground/55">
-              Want all questions, follow-ups & vocab for this topic?
-            </p>
-            <Link
-              to="/speaking-samples/$category/$topic"
-              params={{ category: categoryId, topic: topic.id }}
-              onClick={onClose}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[oklch(0.50_0.10_165)] px-4 py-2 text-[12px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
-            >
-              <LinkIcon className="h-3.5 w-3.5" />
-              Open full topic
-              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-            </Link>
-          </div>
         </article>
       </div>
 
