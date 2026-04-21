@@ -875,20 +875,30 @@ function CueCardReader({
                         followUps.length,
                       );
                     }}
-                    className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/85 p-3.5 text-left shadow-card backdrop-blur-md transition-transform active:scale-[0.98]"
+                    className="block w-full rounded-2xl p-3.5 text-left backdrop-blur-md transition-transform active:scale-[0.98]"
+                    style={{
+                      backgroundColor: "oklch(1 0 0 / 0.12)",
+                      border: `1px solid ${activePalette.ink}33`,
+                      boxShadow: `0 10px 30px -12px ${activePalette.fillDeep}`,
+                    }}
                   >
                     <div className="flex items-center gap-1.5">
                       <MessageCircleQuestion
-                        className={`h-3.5 w-3.5 ${accentText}`}
+                        className="h-3.5 w-3.5"
                         strokeWidth={2.6}
+                        style={{ color: activePalette.ink, opacity: 0.9 }}
                       />
                       <span
-                        className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                        className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
+                        style={{ color: activePalette.ink, opacity: 0.9 }}
                       >
                         Follow-up {i + 1}
                       </span>
                     </div>
-                    <p className="mt-1.5 text-[12.5px] font-semibold leading-snug text-foreground/85">
+                    <p
+                      className="mt-1.5 text-[12.5px] font-semibold leading-snug"
+                      style={{ color: activePalette.ink }}
+                    >
                       {q.title}
                     </p>
                   </button>
