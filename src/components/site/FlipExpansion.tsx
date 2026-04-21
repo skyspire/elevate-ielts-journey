@@ -958,7 +958,7 @@ function CueCardReader({
                       >
                         {q.title}
                       </p>
-                    </button>
+                    </Link>
                   </div>
                 );
               })}
