@@ -621,9 +621,10 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
             style={{
-              borderTop: `1px solid ${activePalette.ink}26`,
-              background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+              borderTop: `1px solid ${activePalette.accentDeep}55`,
+              background: `linear-gradient(180deg, ${PARCHMENT_DEEP} 0%, ${PARCHMENT} 100%)`,
               backdropFilter: "blur(6px)",
+              boxShadow: `0 -8px 24px ${activePalette.accentDeep}1a`,
             }}
           >
             <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
