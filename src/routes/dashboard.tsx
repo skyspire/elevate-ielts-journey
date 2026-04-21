@@ -331,7 +331,7 @@ function DashboardPage() {
           <div className="text-center">
             <div className="relative inline-block">
               <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground sm:text-6xl md:text-7xl"
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
                 style={{ transform: "rotate(-2deg)" }}
               >
                 Pick your IELTS
