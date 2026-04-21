@@ -863,25 +863,28 @@ function CueCardReader({
                         const r = e.currentTarget.getBoundingClientRect();
                         goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
                       }}
-                      className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-300 ease-out hover:-translate-y-[1px] sm:py-3"
+                      className="group relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                       style={{
-                        backgroundColor: active ? tone.tabBg : "oklch(1 0 0 / 0.04)",
+                        // All tabs always show their full color — no dim state.
+                        backgroundColor: tone.tabBg,
+                        // Active tab gets a 2px tonal dark border in its own
+                        // color family. Inactive tabs use a near-invisible
+                        // hairline so layout stays perfectly aligned.
                         boxShadow: active
-                          ? `inset 0 1px 0 oklch(1 0 0 / 0.25), 0 6px 18px -6px ${tone.tabBg}`
-                          : "inset 0 0 0 1px oklch(1 0 0 / 0.05)",
+                          ? `inset 0 0 0 2px ${tone.tabBorder}`
+                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
                       }}
                     >
                       <span
-                        className="block h-[7px] w-[7px] rounded-full transition-all duration-300"
+                        className="font-display tracking-tight transition-all duration-300"
                         style={{
-                          backgroundColor: active ? "oklch(1 0 0 / 0.95)" : tone.tabBg,
-                          boxShadow: active ? "0 0 0 3px oklch(1 0 0 / 0.18)" : "none",
-                        }}
-                      />
-                      <span
-                        className="font-display text-[13px] font-bold tracking-tight transition-colors sm:text-[14px]"
-                        style={{
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.62)",
+                          // Active label: bolder weight, full white.
+                          // Inactive: slightly lighter weight, soft white so
+                          // the colored bg still reads, with clear hierarchy.
+                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                          fontWeight: active ? 800 : 600,
+                          fontSize: "13px",
+                          letterSpacing: active ? "-0.01em" : "0",
                         }}
                       >
                         Answer {i + 1}
