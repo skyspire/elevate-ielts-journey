@@ -351,6 +351,7 @@ type CueReaderProps = {
   variantIndex: number;
   goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
+  gravityPhase: "idle" | "out" | "in";
   sections: { heading: string; body: string }[];
   revealedSections: number;
   scrollProgress: number;
