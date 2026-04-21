@@ -340,22 +340,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             backgroundColor: activePalette.fill,
           }}
         >
-          {/* Top vignette — gentle darkening at the very top edge */}
-          <div
-            className="absolute inset-x-0 top-0 h-[40%]"
-            style={{
-              background: `linear-gradient(180deg, ${activePalette.fillDeep} 0%, transparent 100%)`,
-              opacity: 0.45,
-            }}
-          />
-          {/* Bottom corner deepening */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(ellipse at 80% 100%, ${activePalette.fillDeep} 0%, transparent 55%)`,
-              opacity: 0.55,
-            }}
-          />
           {/* Film grain — fine SVG-noise via radial dots, blended */}
           <div
             className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
