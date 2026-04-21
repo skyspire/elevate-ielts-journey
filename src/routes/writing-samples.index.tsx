@@ -574,11 +574,11 @@ function TaskEnvelopeScroll({
   const noSelection = task === null;
   const highlightBg = isAcademic
     ? "bg-[oklch(0.92_0.13_85)]"
-    : "bg-[oklch(0.90_0.14_150)]";
+    : "bg-[oklch(0.88_0.14_30)]";
   const accentBorder = isAcademic
     ? "border-brand/55"
-    : "border-[oklch(0.55_0.10_160)]/55";
-  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.42_0.10_160)]";
+    : "border-[oklch(0.58_0.16_28)]/55";
+  const accentText = isAcademic ? "text-brand" : "text-[oklch(0.45_0.15_28)]";
 
   const renderItem = (
     active: boolean,
