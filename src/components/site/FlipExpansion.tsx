@@ -413,6 +413,7 @@ function CueCardReader({
   followUps,
   accentText,
   accentChip,
+  onOpenFollowUp,
 }: CueReaderProps) {
   // Edge softening intensifies as the reader scrolls — creates the focus tunnel.
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
