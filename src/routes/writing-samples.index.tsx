@@ -419,17 +419,19 @@ function WritingSamplesPage() {
           </div>
 
           {/* Step 1 — Task selector */}
-          <TaskEnvelopeScroll
-            task={task}
-            onTaskChange={onTaskChange}
-            isAcademic={isAcademic}
-          />
+          <div className="mt-16 sm:mt-20">
+            <TaskEnvelopeScroll
+              task={task}
+              onTaskChange={onTaskChange}
+              isAcademic={isAcademic}
+            />
+          </div>
 
           {/* Steps 2 & 3 — gated until a task is selected */}
           {task && (
             <>
               {/* Step 2 — Category chips (monochrome + single module accent on active) */}
-              <div className="flex flex-wrap justify-center gap-2.5">
+              <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
                 {categories.map((c) => {
                   const active = categoryId === c.id;
                   const Icon = c.icon;
@@ -456,7 +458,7 @@ function WritingSamplesPage() {
               </div>
 
               {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
-              <div className="relative mt-2 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots">
+              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots sm:mt-20">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {questions.map((q, i) => (
