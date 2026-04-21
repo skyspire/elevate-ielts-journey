@@ -462,42 +462,42 @@ function CueCardReader({
   const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // RED — confident, editorial crimson
+      // MUTED RED — dusty terracotta, refined on graphite
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.55 0.180 25)",
-      tabBorder: "oklch(0.38 0.150 25)",
+      tabBg:     "oklch(0.48 0.110 25)",
+      tabBorder: "oklch(0.62 0.130 25)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.59 0.170 25)",
+      tabHover:  "oklch(0.52 0.105 25)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.55 0.180 25)",
+      glow:      "oklch(0.62 0.130 25)",
       heading:   SIGNATURE_INK,
     },
     {
-      // BLUE — vibrant, professional cobalt
+      // MUTED BLUE — dusty cobalt, considered
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.50 0.170 255)",
-      tabBorder: "oklch(0.34 0.140 255)",
+      tabBg:     "oklch(0.45 0.095 250)",
+      tabBorder: "oklch(0.62 0.115 250)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.54 0.160 255)",
+      tabHover:  "oklch(0.49 0.090 250)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.50 0.170 255)",
+      glow:      "oklch(0.62 0.115 250)",
       heading:   SIGNATURE_INK,
     },
     {
-      // OLIVE GREEN — heritage, grounded
+      // MUTED OLIVE — dusty sage-olive, grounded
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.52 0.090 125)",
-      tabBorder: "oklch(0.36 0.080 125)",
+      tabBg:     "oklch(0.48 0.060 125)",
+      tabBorder: "oklch(0.64 0.080 125)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.56 0.085 125)",
+      tabHover:  "oklch(0.52 0.058 125)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.52 0.090 125)",
+      glow:      "oklch(0.64 0.080 125)",
       heading:   SIGNATURE_INK,
     },
   ];
