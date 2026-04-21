@@ -389,16 +389,17 @@ function CueCardReader({
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
   // ── Paper plane flight ───────────────────────────────────────────────────
-  // On every variant switch, launch a paper plane from the newly active tab
-  // (bottom of viewport) toward the header (top), traveling a playful zig-zag
-  // path with subtle wobble + roll. A whisper dotted trail fades behind it.
+  // On every variant switch, launch a paper plane from the newly active tab.
+  // The plane wanders across the entire viewport along a randomized 5-waypoint
+  // path (different every launch), banks into turns via offset-rotate: auto,
+  // pitches with each climb/dive, and occasionally hits soft "air pockets"
+  // that drop it a few pixels before recovering. Finally docks into the header.
   const headerAnchorRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [planeFlights, setPlaneFlights] = useState<
     Array<{
       id: number;
-      from: { x: number; y: number };
-      to: { x: number; y: number };
+      path: string;
       tone: string;
     }>
   >([]);
