@@ -171,13 +171,6 @@ function WritingSamplesPage() {
         />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Breadcrumb */}
-          <div className="flex items-center justify-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-            <Link to="/dashboard" className="hover:text-foreground/80">Dashboard</Link>
-            <span>/</span>
-            <span className={accentText}>Writing Samples</span>
-          </div>
-
           {/* Module switcher — School-vibe rotary dial with BigIELTS branding */}
           <div className="mt-10 flex flex-col items-center gap-6">
             <div className="relative flex items-center justify-center gap-3 sm:gap-6">
