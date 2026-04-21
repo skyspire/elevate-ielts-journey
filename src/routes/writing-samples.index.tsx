@@ -428,22 +428,16 @@ function WritingSamplesPage() {
           {/* Steps 2 & 3 — gated until a task is selected */}
           {task && (
             <>
-              {/* Step 2 — Category chips */}
+              {/* Step 2 — Category chips (monochrome + single module accent on active) */}
               <div className="flex flex-wrap justify-center gap-2.5">
-                {categories.map((c, i) => {
+                {categories.map((c) => {
                   const active = categoryId === c.id;
                   const Icon = c.icon;
-                  // Rotate through site palette tokens
-                  const tones = [
-                    { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
-                    { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
-                    { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
-                    { soft: "bg-lilac",      text: "text-foreground", border: "border-[oklch(0.65_0.10_295)]/30", activeBg: "bg-[oklch(0.58_0.12_295)]", activeText: "text-white", activeBorder: "border-[oklch(0.58_0.12_295)]" },
-                    { soft: "bg-brand-soft", text: "text-brand", border: "border-brand/25", activeBg: "bg-brand", activeText: "text-brand-foreground", activeBorder: "border-brand" },
-                    { soft: "bg-peach",      text: "text-foreground", border: "border-[oklch(0.70_0.10_55)]/30",  activeBg: "bg-[oklch(0.70_0.13_55)]",  activeText: "text-white", activeBorder: "border-[oklch(0.70_0.13_55)]" },
-                    { soft: "bg-mint",       text: "text-foreground", border: "border-[oklch(0.62_0.10_175)]/30", activeBg: "bg-[oklch(0.55_0.10_175)]", activeText: "text-white", activeBorder: "border-[oklch(0.55_0.10_175)]" },
-                  ];
-                  const t = tones[i % tones.length];
+                  const activeClasses = isAcademic
+                    ? "bg-brand text-brand-foreground border-brand shadow-soft"
+                    : "bg-[oklch(0.50_0.16_28)] text-white border-[oklch(0.50_0.16_28)] shadow-soft";
+                  const restingClasses =
+                    "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
                   return (
                     <button
                       key={c.id}
@@ -451,9 +445,7 @@ function WritingSamplesPage() {
                       onClick={() => setCategoryId(c.id)}
                       aria-pressed={active}
                       className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
-                        active
-                          ? `${t.activeBg} ${t.activeText} ${t.activeBorder} shadow-soft`
-                          : `${t.soft} ${t.text} ${t.border} hover:-translate-y-0.5 hover:shadow-soft`
+                        active ? activeClasses : restingClasses
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
