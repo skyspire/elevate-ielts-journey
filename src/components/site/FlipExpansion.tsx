@@ -702,7 +702,10 @@ function CueCardReader({
                     visibility: visible ? "visible" : "hidden",
                   }}
                 >
-                  <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
+                  <h3
+                    className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
+                    style={{ color: activePalette.heading }}
+                  >
                     {s.heading}
                   </h3>
                   <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
