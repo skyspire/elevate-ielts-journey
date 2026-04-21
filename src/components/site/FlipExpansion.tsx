@@ -46,6 +46,13 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
+  // Radial color-wash overlay state for the answer transition
+  const [wash, setWash] = useState<{
+    x: number;
+    y: number;
+    color: string;
+    key: number;
+  } | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
@@ -153,17 +160,38 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  function goToVariant(next: number) {
+  // Palette mirrored from CueCardReader so the wash color matches the next tab.
+  // Coral · Marigold · Emerald
+  const variantWashColors = [
+    "oklch(0.68 0.20 25)",  // coral
+    "oklch(0.78 0.17 80)",  // marigold
+    "oklch(0.62 0.16 155)", // emerald
+  ];
+
+  function goToVariant(next: number, origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
+
+    // Trigger radial color-wash reveal from the tab's position (or screen center).
+    const x = origin?.x ?? window.innerWidth / 2;
+    const y = origin?.y ?? window.innerHeight - 80;
+    const color = variantWashColors[clamped % variantWashColors.length];
+    setWash({ x, y, color, key: Date.now() });
+
+    // Switch content under the wash mid-animation, so when the wash fades the
+    // new screen + text are already in place underneath.
     window.setTimeout(() => {
       setVariantIndex(clamped);
-      // scroll back to top for the new answer
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
-      window.setTimeout(() => setVariantTransitioning(false), 40);
-    }, 220);
+    }, 360);
+
+    // Clear wash + transition lock after the full sweep finishes.
+    window.setTimeout(() => {
+      setVariantTransitioning(false);
+      setWash(null);
+    }, 920);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
@@ -199,6 +227,28 @@ export function FlipExpansion({
       aria-modal="true"
       aria-label={`${topic.label} — Sample answer`}
     >
+      {/* Radial color-wash overlay — sweeps from the clicked tab outward in
+          the next answer's color, then fades, revealing the new screen+text. */}
+      {wash && (
+        <div
+          key={wash.key}
+          className="pointer-events-none absolute inset-0 z-[110]"
+          style={{ animation: "wash-fade 900ms ease-out forwards" }}
+        >
+          <div
+            className="absolute rounded-full"
+            style={{
+              left: wash.x,
+              top: wash.y,
+              width: 10,
+              height: 10,
+              transform: "translate(-50%, -50%)",
+              background: `radial-gradient(circle, ${wash.color} 0%, ${wash.color} 55%, transparent 70%)`,
+              animation: "wash-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards",
+            }}
+          />
+        </div>
+      )}
       {/* Backdrop */}
       <button
         type="button"
@@ -325,7 +375,7 @@ type CueReaderProps = {
   currentVariant: SpeakingAnswerVariant;
   variants: SpeakingAnswerVariant[];
   variantIndex: number;
-  goToVariant: (n: number) => void;
+  goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
   sections: { heading: string; body: string }[];
   revealedSections: number;
@@ -683,7 +733,10 @@ function CueCardReader({
               {/* Prev */}
               <button
                 type="button"
-                onClick={() => goToVariant(variantIndex - 1)}
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                }}
                 className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Previous sample answer"
               >
@@ -701,7 +754,10 @@ function CueCardReader({
                       type="button"
                       role="tab"
                       aria-selected={active}
-                      onClick={() => goToVariant(i)}
+                      onClick={(e) => {
+                        const r = e.currentTarget.getBoundingClientRect();
+                        goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                      }}
                       className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-300 ease-out hover:-translate-y-[1px] sm:py-3"
                       style={{
                         backgroundColor: active ? tone.tabBg : "oklch(1 0 0 / 0.04)",
@@ -733,7 +789,10 @@ function CueCardReader({
               {/* Next */}
               <button
                 type="button"
-                onClick={() => goToVariant(variantIndex + 1)}
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                }}
                 className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Next sample answer"
               >
@@ -744,7 +803,7 @@ function CueCardReader({
         );
       })()}
 
-      {/* Drift keyframes */}
+      {/* Drift + answer-transition keyframes */}
       <style>{`
         @keyframes drift-a {
           0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
@@ -753,6 +812,16 @@ function CueCardReader({
         @keyframes drift-b {
           0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
           50% { transform: translate3d(-3%, 4%, 0) scale(1.06); }
+        }
+        @keyframes wash-grow {
+          0%   { width: 10px; height: 10px; opacity: 0.0; filter: blur(8px); }
+          12%  { opacity: 0.95; }
+          60%  { width: 320vmax; height: 320vmax; opacity: 0.92; filter: blur(2px); }
+          100% { width: 360vmax; height: 360vmax; opacity: 0; filter: blur(20px); }
+        }
+        @keyframes wash-fade {
+          0%, 70% { opacity: 1; }
+          100%    { opacity: 0; }
         }
       `}</style>
     </div>
