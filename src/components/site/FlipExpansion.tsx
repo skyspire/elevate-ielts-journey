@@ -688,22 +688,22 @@ function CueCardReader({
                         backgroundColor: active ? tone.soft : "transparent",
                       }}
                     >
-                      <div className="flex items-baseline gap-1.5">
+                      <div className="flex items-baseline gap-2">
                         <span
-                          className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors"
+                          className="font-display text-[20px] font-black leading-none tracking-tight transition-colors sm:text-[22px]"
                           style={{
-                            color: active ? tone.accent : "oklch(1 0 0 / 0.40)",
-                          }}
-                        >
-                          Answer
-                        </span>
-                        <span
-                          className="font-display text-[17px] font-black leading-none transition-colors sm:text-[19px]"
-                          style={{
-                            color: active ? tone.accent : "oklch(1 0 0 / 0.50)",
+                            color: active ? tone.accent : "oklch(1 0 0 / 0.55)",
                           }}
                         >
                           {i + 1}
+                        </span>
+                        <span
+                          className="font-display text-[13px] font-semibold leading-none tracking-tight transition-colors sm:text-[14px]"
+                          style={{
+                            color: active ? "oklch(1 0 0 / 0.85)" : "oklch(1 0 0 / 0.50)",
+                          }}
+                        >
+                          Answer
                         </span>
                       </div>
                       {/* Thin indicator bar — fills with the segment's tone when active */}
