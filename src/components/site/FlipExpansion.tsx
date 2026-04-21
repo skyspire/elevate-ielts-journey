@@ -956,7 +956,7 @@ function CueCardReader({
                   } as React.CSSProperties}
                 >
                   <div className="paper-plane-wobble">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
                       {/* Paper plane silhouette */}
                       <path
                         d="M2.5 12 L21.5 3.5 L14 21 L11 13.5 L2.5 12 Z"
