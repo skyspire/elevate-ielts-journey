@@ -494,7 +494,10 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                   {/* ── LEFT COLUMN (mobile: second) ──────────────────────
                       Single-flow answer body with bold opening phrase and
                       a centered pull-quote breakout mid-answer. */}
-                  <div className="order-2 lg:order-1">
+                  <div
+                    className="order-2 lg:order-2 lg:border-l lg:pl-12"
+                    style={{ borderColor: `${activePalette.ink}26` }}
+                  >
                     <div
                       className="font-display"
                       style={{
