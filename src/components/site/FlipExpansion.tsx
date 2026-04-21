@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ArrowLeft, Mic, Sparkles, ArrowUpRight, Link as LinkIcon } from "lucide-react";
+import { ArrowLeft, Mic, Sparkles, ArrowUpRight, Link as LinkIcon, MessageCircleQuestion } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
@@ -32,10 +32,14 @@ export function FlipExpansion({
 }: FlipExpansionProps) {
   const [phase, setPhase] = useState<Phase>("closed");
   const [revealedSections, setRevealedSections] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
   const headerQuestion = questions[0];
+  // Examiner follow-ups (skip the cue card itself at index 0)
+  const followUps = isCue ? questions.slice(1) : [];
   const answer: SpeakingModelAnswer = getSpeakingModelAnswer(topic.label, isCue);
 
   // Drive the open/close phase machine
@@ -90,6 +94,28 @@ export function FlipExpansion({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [phase, onClose]);
+
+  // Track scroll progress within the panel body (0 → 1) so we can react
+  // bidirectionally — surfacing follow-ups as the reader goes deeper, and
+  // retracting them when they scroll back up.
+  useEffect(() => {
+    if (phase !== "expanded") return;
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      const ratio = max > 0 ? el.scrollTop / max : 0;
+      setScrollProgress(Math.min(1, Math.max(0, ratio)));
+    };
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [phase]);
+
+  // Reset scroll progress whenever we leave the expanded state
+  useEffect(() => {
+    if (phase !== "expanded") setScrollProgress(0);
+  }, [phase]);
 
   if (phase === "closed" || typeof document === "undefined") return null;
 
@@ -226,7 +252,8 @@ export function FlipExpansion({
 
           {/* Scrollable body */}
           <div
-            className="overflow-y-auto px-5 py-7 sm:px-7 sm:py-9"
+            ref={scrollRef}
+            className="relative overflow-y-auto px-5 py-7 sm:px-7 sm:py-9"
             style={{ maxHeight: "calc(100vh - 6rem - 88px)" }}
           >
             <div className="space-y-6">
@@ -272,6 +299,123 @@ export function FlipExpansion({
             </div>
           </div>
         </div>
+
+        {/* Floating follow-up cards — only for cue cards.
+            They emerge from the screen edges as the reader scrolls deeper into
+            the model answer, and gently retreat when scrolling back up. */}
+        {isExpanded && isCue && followUps.length > 0 && (
+          <>
+          <div className="pointer-events-none absolute inset-0 hidden lg:block">
+            {followUps.map((q, i) => {
+              // Each card has its own activation threshold along the scroll
+              const start = 0.12 + i * 0.18;
+              const end = start + 0.18;
+              const local =
+                scrollProgress <= start
+                  ? 0
+                  : scrollProgress >= end
+                    ? 1
+                    : (scrollProgress - start) / (end - start);
+
+              // Alternate sides: even → left, odd → right
+              const side: "left" | "right" = i % 2 === 0 ? "left" : "right";
+              // Vertical staggering down the viewport
+              const topPct = 18 + i * 16;
+              const offset = (1 - local) * 60; // px slide from edge
+              const opacity = local;
+              const scale = 0.92 + local * 0.08;
+
+              const sideStyle: React.CSSProperties =
+                side === "left"
+                  ? { left: `calc(2vw + ${-offset}px)` }
+                  : { right: `calc(2vw + ${-offset}px)` };
+
+              return (
+                <div
+                  key={q.id}
+                  className="pointer-events-auto absolute w-[230px] xl:w-[260px]"
+                  style={{
+                    top: `${topPct}%`,
+                    ...sideStyle,
+                    opacity,
+                    transform: `scale(${scale})`,
+                    transition:
+                      "opacity 450ms ease, transform 450ms cubic-bezier(0.16,1,0.3,1)",
+                  }}
+                >
+                  <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/25 bg-white/85 p-4 shadow-card backdrop-blur-md">
+                    <div className="flex items-center gap-1.5">
+                      <MessageCircleQuestion
+                        className={`h-3.5 w-3.5 ${accentText}`}
+                        strokeWidth={2.6}
+                      />
+                      <span
+                        className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                      >
+                        Follow-up {i + 1}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[13px] font-semibold leading-snug text-foreground/85">
+                      {q.title}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Mobile / tablet — follow-ups surface from the bottom edge as the
+              reader scrolls deeper. They retract on scroll-up. */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 lg:hidden"
+            style={{
+              opacity: scrollProgress < 0.15 ? 0 : Math.min(1, (scrollProgress - 0.15) / 0.25),
+              transform: `translateY(${(1 - Math.min(1, scrollProgress * 1.8)) * 24}px)`,
+              transition: "opacity 350ms ease, transform 350ms ease",
+            }}
+          >
+            <div className="pointer-events-auto mx-auto flex max-w-3xl gap-2 overflow-x-auto px-4 pb-4 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {followUps.map((q, i) => {
+                const threshold = 0.18 + i * 0.14;
+                const local =
+                  scrollProgress <= threshold
+                    ? 0
+                    : Math.min(1, (scrollProgress - threshold) / 0.18);
+                return (
+                  <div
+                    key={q.id}
+                    className="shrink-0 basis-[78%] snap-start"
+                    style={{
+                      opacity: local,
+                      transform: `translateY(${(1 - local) * 16}px)`,
+                      transition:
+                        "opacity 400ms ease, transform 400ms cubic-bezier(0.16,1,0.3,1)",
+                      transitionDelay: `${i * 60}ms`,
+                    }}
+                  >
+                    <div className="rounded-2xl border border-[oklch(0.55_0.10_165)]/25 bg-white/90 p-3.5 shadow-card backdrop-blur-md">
+                      <div className="flex items-center gap-1.5">
+                        <MessageCircleQuestion
+                          className={`h-3.5 w-3.5 ${accentText}`}
+                          strokeWidth={2.6}
+                        />
+                        <span
+                          className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                        >
+                          Follow-up {i + 1}
+                        </span>
+                      </div>
+                      <p className="mt-1.5 text-[12.5px] font-semibold leading-snug text-foreground/85">
+                        {q.title}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          </>
+        )}
       </div>
     </div>,
     document.body,
