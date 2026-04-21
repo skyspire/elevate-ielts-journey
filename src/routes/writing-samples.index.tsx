@@ -382,7 +382,7 @@ function WritingSamplesPage() {
                 <span
                   aria-hidden
                   className={`absolute inset-x-[-6px] bottom-[6%] -z-10 h-[58%] -rotate-1 ${
-                    isAcademic ? "bg-[oklch(0.92_0.13_85)]" : "bg-[oklch(0.90_0.14_150)]"
+                    isAcademic ? "bg-[oklch(0.92_0.13_85)]" : "bg-[oklch(0.88_0.14_30)]"
                   } opacity-70`}
                   style={{ clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)" }}
                 />
