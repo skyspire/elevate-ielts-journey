@@ -418,8 +418,7 @@ function WritingSamplesPage() {
             </p>
           </div>
 
-          {/* Step 1 — Task selector with center "Select Your Task" disc */}
-          <StepLabel index={1} label="Select Task" />
+          {/* Step 1 — Task selector */}
           <TaskEnvelopeScroll
             task={task}
             onTaskChange={onTaskChange}
@@ -429,8 +428,7 @@ function WritingSamplesPage() {
           {/* Steps 2 & 3 — gated until a task is selected */}
           {task && (
             <>
-              {/* Step 2 — Soft colored chips */}
-              <StepLabel index={2} label="Select Category" />
+              {/* Step 2 — Category chips */}
               <div className="flex flex-wrap justify-center gap-2.5">
                 {categories.map((c, i) => {
                   const active = categoryId === c.id;
@@ -468,7 +466,6 @@ function WritingSamplesPage() {
               {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
               <div className="relative mt-2 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-                  <StepLabel index={3} label={`${activeCategory.label} Questions`} />
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {questions.map((q, i) => (
                       <QuestionRowCard
