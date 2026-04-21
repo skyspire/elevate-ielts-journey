@@ -382,15 +382,17 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           </button>
         </div>
 
-        {/* ── Billboard card ─────────────────────────────────────────────
-            Centered card with the QUESTION as a big header at the top
-            and the single-flow ANSWER body underneath. The opening phrase
-            is auto-emphasized as a bold pull-out. */}
+        {/* ── Two-column billboard ───────────────────────────────────────
+            • LEFT (60%): single-flow answer body with pull-quote breakout
+            • RIGHT (40%): centered stack — outlined index badge above the
+              question headline
+            • Mobile: stacks with question column first, then answer.
+            • Footer (full-width band) lives outside this scroll area below. */}
         <div
           ref={scrollRef}
-          className="absolute inset-0 overflow-y-auto pt-[80px] pb-[140px] sm:pt-[96px] sm:pb-[160px]"
+          className="absolute inset-0 overflow-y-auto pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px]"
         >
-          <div className="flex min-h-full items-center justify-center px-5 sm:px-8">
+          <div className="mx-auto flex min-h-full max-w-[1280px] items-stretch px-5 sm:px-10">
             {(() => {
               const isOut = laneAnim === "out";
               const outStyle: React.CSSProperties = {
@@ -412,21 +414,29 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               return (
                 <article
                   key={`fu-billboard-${variantIndex}`}
-                  className="w-full max-w-[760px]"
+                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[3fr_2fr] lg:gap-14 lg:py-10"
                   style={{
                     visibility: visible ? "visible" : "hidden",
                     ...(isOut ? outStyle : inOrIdleStyle),
                   }}
                 >
-                  {/* ── Index badge ─ outlined circle (no fill), padded
-                      numeral "01 / 03". Sits above the headline as a
-                      prominent, equally-decorated marker. */}
-                  <div className="mb-6 flex flex-col items-start gap-2">
+                  {/* ── RIGHT COLUMN (mobile: first) ──────────────────────
+                      Centered stack: outlined circle index badge above the
+                      oversized question headline + underline swash. On
+                      desktop this sits in column 2 (right). On mobile it
+                      stacks above the answer (order-1). */}
+                  <aside
+                    className="order-1 flex flex-col items-center justify-center text-center lg:order-2 lg:border-l lg:pl-12"
+                    style={{
+                      borderColor: `${activePalette.ink}26`,
+                    }}
+                  >
+                    {/* Outlined circle index badge */}
                     <div
-                      className="relative flex items-center justify-center rounded-full"
+                      className="relative mb-5 flex items-center justify-center rounded-full"
                       style={{
-                        width: "clamp(76px, 11vw, 96px)",
-                        height: "clamp(76px, 11vw, 96px)",
+                        width: "clamp(84px, 9vw, 108px)",
+                        height: "clamp(84px, 9vw, 108px)",
                         border: `3px solid ${activePalette.ink}`,
                         boxShadow: `0 6px 24px ${activePalette.fillDeep}, inset 0 0 0 1px ${activePalette.ink}33`,
                       }}
@@ -436,14 +446,12 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                         className="font-display font-black tabular-nums leading-none tracking-tight"
                         style={{
                           color: activePalette.ink,
-                          fontSize: "clamp(1.75rem, 3.4vw, 2.25rem)",
+                          fontSize: "clamp(1.85rem, 3vw, 2.5rem)",
                           letterSpacing: "-0.02em",
                         }}
                       >
                         {String(index).padStart(2, "0")}
                       </span>
-                      {/* Tiny "/ total" arc-style label tucked at the
-                          bottom of the badge */}
                       <span
                         className="absolute -bottom-[10px] left-1/2 -translate-x-1/2 rounded-full px-2 py-[2px] font-display font-extrabold tabular-nums"
                         style={{
@@ -458,114 +466,116 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       </span>
                     </div>
                     <span
-                      className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+                      className="mb-4 font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
                       style={{ color: activePalette.ink, opacity: 0.9 }}
                     >
                       Follow-up
                     </span>
-                  </div>
 
-                  {/* Big question header — OVERSIZED with colored underline swash */}
-                  <h1
-                    className="font-display font-black leading-[1.05] tracking-tight"
-                    style={{
-                      color: activePalette.ink,
-                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
-                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
-                    }}
-                  >
-                    {question.title}
-                  </h1>
-                  {/* Thick palette-toned underline swash beneath the headline */}
-                  <div
-                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
-                    style={{
-                      background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
-                      opacity: 0.92,
-                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
-                    }}
-                  />
+                    {/* Oversized question headline */}
+                    <h1
+                      className="font-display font-black leading-[1.08] tracking-tight"
+                      style={{
+                        color: activePalette.ink,
+                        fontSize: "clamp(1.65rem, 3.2vw, 2.5rem)",
+                        textShadow: `0 2px 28px ${activePalette.fillDeep}`,
+                      }}
+                    >
+                      {question.title}
+                    </h1>
+                    {/* Underline swash (centered) */}
+                    <div
+                      className="mt-5 h-[6px] w-[clamp(72px,12vw,140px)] rounded-full"
+                      style={{
+                        background: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 30%, ${activePalette.ink} 70%, transparent 100%)`,
+                        opacity: 0.92,
+                        boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                      }}
+                    />
+                  </aside>
 
-                  {/* Single-flow answer body — opening phrase emphasized,
-                      with a centered pull-quote breakout mid-answer. */}
-                  <div
-                    className="mt-7 font-display"
-                    style={{
-                      color: activePalette.inkSoft,
-                      fontSize: "clamp(1.0625rem, 1.9vw, 1.25rem)",
-                      lineHeight: 1.7,
-                      fontWeight: 500,
-                    }}
-                  >
-                    <p>
-                      <span
-                        className="font-display font-extrabold"
-                        style={{
-                          color: activePalette.ink,
-                          fontSize: "1.12em",
-                          letterSpacing: "-0.005em",
-                        }}
-                      >
-                        {openingPhrase}
-                      </span>
-                      {bodyBeforePullQuote && (
-                        <span> {bodyBeforePullQuote}</span>
-                      )}
-                    </p>
-
-                    {/* Pull-quote breakout — strong mid-answer sentence */}
-                    {pullQuote && (
-                      <figure
-                        className="my-8 flex flex-col items-center text-center"
-                        aria-label="Pull quote"
-                      >
+                  {/* ── LEFT COLUMN (mobile: second) ──────────────────────
+                      Single-flow answer body with bold opening phrase and
+                      a centered pull-quote breakout mid-answer. */}
+                  <div className="order-2 lg:order-1">
+                    <div
+                      className="font-display"
+                      style={{
+                        color: activePalette.inkSoft,
+                        fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
+                        lineHeight: 1.72,
+                        fontWeight: 500,
+                      }}
+                    >
+                      <p>
                         <span
-                          className="block h-[2px] w-12 rounded-full"
-                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
-                        />
-                        <blockquote
-                          className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                          className="font-display font-extrabold"
                           style={{
                             color: activePalette.ink,
-                            fontSize: "clamp(1.25rem, 2.6vw, 1.6rem)",
-                            maxWidth: "640px",
-                            textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                            fontSize: "1.12em",
+                            letterSpacing: "-0.005em",
                           }}
                         >
-                          <span
-                            aria-hidden
-                            style={{
-                              opacity: 0.55,
-                              marginRight: "0.12em",
-                              fontSize: "1.4em",
-                              lineHeight: 0,
-                              verticalAlign: "-0.18em",
-                            }}
-                          >
-                            “
-                          </span>
-                          {pullQuote.replace(/^["“”]|["“”]$/g, "")}
-                          <span
-                            aria-hidden
-                            style={{
-                              opacity: 0.55,
-                              marginLeft: "0.08em",
-                              fontSize: "1.4em",
-                              lineHeight: 0,
-                              verticalAlign: "-0.18em",
-                            }}
-                          >
-                            ”
-                          </span>
-                        </blockquote>
-                        <span
-                          className="mt-4 block h-[2px] w-12 rounded-full"
-                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
-                        />
-                      </figure>
-                    )}
+                          {openingPhrase}
+                        </span>
+                        {bodyBeforePullQuote && (
+                          <span> {bodyBeforePullQuote}</span>
+                        )}
+                      </p>
 
-                    {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
+                      {pullQuote && (
+                        <figure
+                          className="my-8 flex flex-col items-center text-center"
+                          aria-label="Pull quote"
+                        >
+                          <span
+                            className="block h-[2px] w-12 rounded-full"
+                            style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                          />
+                          <blockquote
+                            className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                            style={{
+                              color: activePalette.ink,
+                              fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
+                              maxWidth: "560px",
+                              textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                            }}
+                          >
+                            <span
+                              aria-hidden
+                              style={{
+                                opacity: 0.55,
+                                marginRight: "0.12em",
+                                fontSize: "1.4em",
+                                lineHeight: 0,
+                                verticalAlign: "-0.18em",
+                              }}
+                            >
+                              “
+                            </span>
+                            {pullQuote.replace(/^["“”]|["“”]$/g, "")}
+                            <span
+                              aria-hidden
+                              style={{
+                                opacity: 0.55,
+                                marginLeft: "0.08em",
+                                fontSize: "1.4em",
+                                lineHeight: 0,
+                                verticalAlign: "-0.18em",
+                              }}
+                            >
+                              ”
+                            </span>
+                          </blockquote>
+                          <span
+                            className="mt-4 block h-[2px] w-12 rounded-full"
+                            style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                          />
+                        </figure>
+                      )}
+
+                      {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
+                    </div>
                   </div>
                 </article>
               );
@@ -573,20 +583,21 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           </div>
         </div>
 
-        {/* Footer pager — three always-colored tabs, active gets tonal border. */}
+        {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule. */}
         {variants.length > 1 && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
-            <div
-              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-white/[0.06] p-1.5 shadow-[0_22px_50px_-18px_oklch(0_0_0/0.55)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, oklch(0.26 0.015 75) 0%, oklch(0.18 0.015 75) 100%)",
-              }}
-            >
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+            style={{
+              borderTop: `1px solid ${activePalette.ink}26`,
+              background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+              backdropFilter: "blur(6px)",
+            }}
+          >
+            <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Previous answer"
               >
                 <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
@@ -611,8 +622,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       style={{
                         backgroundColor: tone.tabBg,
                         boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
+                          ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
+                          : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
                       }}
                     >
                       <span
@@ -634,7 +645,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Next answer"
               >
                 <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
