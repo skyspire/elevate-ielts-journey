@@ -638,50 +638,42 @@ function CueCardReader({
       >
         <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
           {(() => {
-            // Lateral slide choreography:
-            //   out  → translate by  -switchDir * 32px, opacity 0 (260ms)
-            //   in   → enters from  +switchDir * 32px, settles to 0 (380ms)
-            //   idle → resting at translate(0), opacity 1
-            // Note: switchDir = +1 for "next" (current goes left, new arrives
-            // from right); switchDir = -1 for "prev".
-            let translateX = 0;
-            let opacity = 1;
-            let transitionMs = 0;
-            let easing = "cubic-bezier(0.4, 0, 0.2, 1)";
+            // Lateral slide choreography (sequential out → in):
+            //   out  → current text translates by  -switchDir * 36px and
+            //          fades to 0 over 260ms (ease-in / accelerate).
+            //   swap → variantIndex flips; the lane is re-keyed and remounts
+            //          fresh, immediately running the `lane-slide-in` CSS
+            //          keyframe which starts at +switchDir * 36px / opacity 0
+            //          and settles to 0 / 1 over 380ms (ease-out / decelerate).
+            // Headings cross-fade their color across the full 640ms.
+            const isOut = gravityPhase === "out";
 
-            if (gravityPhase === "out") {
-              translateX = -switchDir * 32;
-              opacity = 0;
-              transitionMs = 260;
-              easing = "cubic-bezier(0.4, 0, 1, 1)"; // ease-in (accelerate out)
-            } else if (gravityPhase === "in") {
-              // Pre-position is handled by the keyed remount: a fresh element
-              // mounts at +switchDir * 32px / opacity 0, then transitions to 0/1.
-              translateX = 0;
-              opacity = 1;
-              transitionMs = 380;
-              easing = "cubic-bezier(0, 0, 0.2, 1)"; // ease-out (decelerate in)
-            }
+            const outStyle: React.CSSProperties = {
+              transform: `translate3d(${-switchDir * 36}px, 0, 0)`,
+              opacity: 0,
+              transition:
+                "transform 260ms cubic-bezier(0.4, 0, 1, 1), opacity 260ms cubic-bezier(0.4, 0, 1, 1)",
+              willChange: "transform, opacity",
+            };
+
+            const inOrIdleStyle: React.CSSProperties = {
+              // CSS keyframe handles the enter — runs once on mount when the
+              // lane is re-keyed by variantIndex. At rest, the element sits
+              // at translate(0) / opacity 1 with no transition.
+              animation:
+                gravityPhase === "in"
+                  ? `lane-slide-in 380ms cubic-bezier(0, 0, 0.2, 1) both`
+                  : undefined,
+              ["--lane-from-x" as string]: `${switchDir * 36}px`,
+            };
 
             return (
               <div
                 // Re-key on variant change so the incoming element mounts
-                // fresh from its starting offset (defined in the inline
-                // style below for the "in" phase).
+                // fresh and runs the enter keyframe cleanly.
                 key={`lane-${variantIndex}`}
                 className="space-y-12 pt-4"
-                style={{
-                  transform: `translate3d(${translateX}px, 0, 0)`,
-                  opacity,
-                  transition: transitionMs
-                    ? `transform ${transitionMs}ms ${easing}, opacity ${transitionMs}ms ${easing}`
-                    : "none",
-                  willChange: gravityPhase === "idle" ? "auto" : "transform, opacity",
-                  // Starting offset for the freshly-mounted incoming lane:
-                  // CSS animation reads from the data attribute via a tiny
-                  // helper class so we get a clean enter without a flicker.
-                  ["--enter-x" as string]: `${switchDir * 32}px`,
-                }}
+                style={isOut ? outStyle : inOrIdleStyle}
                 data-lane-phase={gravityPhase}
               >
                 {sections.map((s, i) => {
