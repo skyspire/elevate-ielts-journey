@@ -836,16 +836,19 @@ function CueCardReader({
                           visibility: visible ? "visible" : "hidden",
                         }}
                       >
-                        {/* Tinted pill chip — same vocabulary as the
-                            SectionHeader eyebrow used across the homepage.
-                            Tinted background + deep ink text, color tracks
-                            the active answer variant for cohesion. */}
+                        {/* Magazine masthead band — full-width tinted
+                            heading bar that spans edge-to-edge across the
+                            answer column. Variant-accent background, deep
+                            accent text, a thin top + bottom hairline rule
+                            for that printed-section feel. Color tracks the
+                            active answer variant. */}
                         <h3
-                          className="inline-flex items-center rounded-full px-3 py-1 font-display text-[13px] font-bold uppercase tracking-[0.18em] sm:text-[14px]"
+                          className="-mx-6 mb-4 flex items-center px-6 py-2.5 font-display text-[13px] font-bold uppercase tracking-[0.22em] sm:-mx-10 sm:px-10 sm:text-[14px]"
                           style={{
                             color: activePalette.tabBorder,
-                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 12%, oklch(1 0 0))`,
-                            border: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 22%, transparent)`,
+                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(1 0 0))`,
+                            borderTop: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
+                            borderBottom: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             transition:
                               "color 380ms ease, background-color 380ms ease, border-color 380ms ease",
                           }}
