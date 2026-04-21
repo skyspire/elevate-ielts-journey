@@ -99,6 +99,23 @@ function SpeakingSamplesPage() {
   const categories = mode ? categoriesByMode[mode] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
 
+  // Flip Expansion state
+  const [flipOpen, setFlipOpen] = useState(false);
+  const [flipTopic, setFlipTopic] = useState<{ id: string; label: string } | null>(null);
+  const [flipCategoryId, setFlipCategoryId] = useState<string>(fallbackCategories[0].id);
+  const [flipAnchor, setFlipAnchor] = useState<DOMRect | null>(null);
+
+  const handleOpenFlip = (
+    topic: { id: string; label: string },
+    catId: string,
+    rect: DOMRect,
+  ) => {
+    setFlipTopic(topic);
+    setFlipCategoryId(catId);
+    setFlipAnchor(rect);
+    setFlipOpen(true);
+  };
+
   const onModeChange = (next: Mode) => {
     setMode(next);
     setCategoryId(categoriesByMode[next][0].id);
