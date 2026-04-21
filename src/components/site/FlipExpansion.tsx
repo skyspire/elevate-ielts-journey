@@ -21,6 +21,7 @@ import {
   getSpeakingQuestions,
   isCueCardCategory,
 } from "@/data/speaking-questions";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { FollowUpReader } from "./FollowUpReader";
 
 type FlipExpansionProps = {
