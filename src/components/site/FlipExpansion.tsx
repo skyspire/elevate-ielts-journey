@@ -46,10 +46,13 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
-  // Gravity drop & settle — drives the silent answer-swap choreography.
-  // "out": current paragraphs lift then drop & dissolve.
-  // "in":  new paragraphs fall in from above with a soft settle.
+  // Lateral slide choreography (sequential out → in).
+  // "out": current answer slides out in the switch direction (260ms).
+  // "in":  new answer slides in from the opposite side (380ms).
   const [gravityPhase, setGravityPhase] = useState<"idle" | "out" | "in">("idle");
+  // Direction of the most recent variant switch: +1 = next (slide left out,
+  // new arrives from right); -1 = prev (slide right out, new arrives from left).
+  const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
