@@ -138,26 +138,16 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
     return () => clearTimeout(t);
   }, [open]);
 
-  // Reveal sections progressively on first open; instant on variant switch.
+  // Billboard: the whole answer appears as one block — no per-section reveal.
+  // We keep `revealedSections` for compatibility with the lane-slide effect:
+  // it just toggles 0 → 1 once the reader settles.
   useEffect(() => {
-    if (phase !== "settled") return;
-    const total = sections.length;
-    if (laneAnim === "in" || laneAnim === "out") {
-      setRevealedSections(total);
+    if (phase !== "settled") {
+      setRevealedSections(0);
       return;
     }
-    setRevealedSections(0);
-    const timers: number[] = [];
-    for (let i = 0; i < total; i++) {
-      timers.push(
-        window.setTimeout(
-          () => setRevealedSections((n) => Math.max(n, i + 1)),
-          200 + i * 280,
-        ),
-      );
-    }
-    return () => timers.forEach((id) => clearTimeout(id));
-  }, [phase, variantIndex, sections.length, laneAnim]);
+    setRevealedSections(1);
+  }, [phase, variantIndex]);
 
   // Body scroll lock.
   useEffect(() => {
