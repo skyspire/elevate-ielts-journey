@@ -606,6 +606,7 @@ function CueCardReader({
         style={{
           backgroundColor: LEFT_TINT,
           borderRight: `1px solid ${LEFT_BORDER}`,
+          transition: "background-color 380ms ease, border-color 380ms ease",
         }}
       >
         {/* ── Vellum paper grain overlay (~14% opacity).
