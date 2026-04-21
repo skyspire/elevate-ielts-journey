@@ -428,6 +428,7 @@ function CueCardReader({
       tabHover: "oklch(0.74 0.18 25)",
       screen:   "oklch(0.965 0.035 35)",   // warm blush peach
       glow:     "oklch(0.85 0.12 30)",
+      heading:  "oklch(0.42 0.13 25)",     // deep-but-soft watercolor coral
     },
     {
       // Marigold
@@ -435,6 +436,7 @@ function CueCardReader({
       tabHover: "oklch(0.83 0.15 80)",
       screen:   "oklch(0.975 0.04 92)",    // cream butter
       glow:     "oklch(0.88 0.13 88)",
+      heading:  "oklch(0.45 0.12 75)",     // toasted-amber marigold
     },
     {
       // Emerald
@@ -442,6 +444,7 @@ function CueCardReader({
       tabHover: "oklch(0.68 0.15 155)",
       screen:   "oklch(0.97 0.035 145)",   // soft pistachio
       glow:     "oklch(0.82 0.12 150)",
+      heading:  "oklch(0.40 0.10 155)",    // forest-emerald watercolor
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
