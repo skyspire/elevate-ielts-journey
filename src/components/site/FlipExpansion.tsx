@@ -631,45 +631,46 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Switch Joy-Con footer pager — charcoal console bar with neon accents.
-          Answer 1 = Joy-Con neon red · Answer 2 = Joy-Con neon blue · Answer 3 = neon yellow.
-          Squircle L/R shoulder buttons, glowing active tab, soft pop on press. */}
+      {/* Mario power-up footer pager — every tab has its own vivid color block.
+          Answer 1 = fire-red · Answer 2 = star-yellow · Answer 3 = 1-up green.
+          Sky-blue shoulder buttons. Bold black-outlined white text, chunky shadows. */}
       {variants.length > 1 && (() => {
         const tones = [
-          { accent: "oklch(0.66 0.22 25)",  glow: "oklch(0.66 0.22 25 / 0.55)",  soft: "oklch(0.66 0.22 25 / 0.14)" },  // Joy-Con neon red
-          { accent: "oklch(0.68 0.18 240)", glow: "oklch(0.68 0.18 240 / 0.55)", soft: "oklch(0.68 0.18 240 / 0.14)" }, // Joy-Con neon blue
-          { accent: "oklch(0.86 0.17 95)",  glow: "oklch(0.86 0.17 95 / 0.55)",  soft: "oklch(0.86 0.17 95 / 0.14)" },  // neon yellow
+          // fire red
+          { base: "oklch(0.62 0.22 28)",  deep: "oklch(0.50 0.20 28)",  ink: "oklch(0.30 0.14 28)" },
+          // star yellow
+          { base: "oklch(0.86 0.18 92)",  deep: "oklch(0.74 0.18 80)",  ink: "oklch(0.38 0.14 70)" },
+          // 1-up green
+          { base: "oklch(0.72 0.20 145)", deep: "oklch(0.58 0.18 145)", ink: "oklch(0.30 0.14 150)" },
         ];
-        const activeTone = tones[variantIndex % tones.length];
+        const sky = { base: "oklch(0.78 0.14 235)", deep: "oklch(0.62 0.16 240)", ink: "oklch(0.28 0.14 250)" };
+        // Black outline simulated via multi-direction text-shadow (works on any font).
+        const blackOutline =
+          "-1.5px -1.5px 0 oklch(0.12 0.02 250), 1.5px -1.5px 0 oklch(0.12 0.02 250), -1.5px 1.5px 0 oklch(0.12 0.02 250), 1.5px 1.5px 0 oklch(0.12 0.02 250), 0 2px 0 oklch(0.12 0.02 250), 0 3px 0 oklch(0.12 0.02 250 / 0.6)";
         return (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
-            <div
-              className="pointer-events-auto flex w-full max-w-[680px] items-stretch gap-2 rounded-[22px] border border-white/[0.06] p-1.5 shadow-[0_24px_60px_-18px_oklch(0_0_0/0.7),inset_0_1px_0_oklch(1_0_0/0.06)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, oklch(0.22 0.005 260) 0%, oklch(0.14 0.005 260) 100%)",
-              }}
-            >
-              {/* L shoulder button */}
+            <div className="pointer-events-auto flex w-full max-w-[680px] items-stretch gap-2">
+              {/* L shoulder — sky blue */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-white/[0.06] text-white/70 shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_2px_6px_-2px_oklch(0_0_0/0.6)] transition-all duration-150 hover:text-white active:translate-y-[1px] active:shadow-[inset_0_2px_4px_oklch(0_0_0/0.4)] sm:h-12 sm:w-12"
+                className="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[0_2px_0_oklch(0.12_0.02_250)] sm:h-[52px] sm:w-[52px]"
                 style={{
-                  background:
-                    "linear-gradient(180deg, oklch(0.30 0.006 260) 0%, oklch(0.20 0.006 260) 100%)",
+                  background: `linear-gradient(180deg, ${sky.base} 0%, ${sky.deep} 100%)`,
+                  borderColor: "oklch(0.12 0.02 250)",
+                  boxShadow: `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.35)`,
                 }}
                 aria-label="Previous sample answer"
               >
-                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
+                <ChevronLeft
+                  className="h-5 w-5 transition-transform group-hover:-translate-x-0.5"
+                  strokeWidth={3.5}
+                  style={{ filter: "drop-shadow(0 1.5px 0 oklch(0.12 0.02 250))" }}
+                />
               </button>
 
-              <div
-                className="relative flex flex-1 items-stretch gap-1 rounded-[14px] border border-white/[0.05] p-1 shadow-[inset_0_2px_6px_oklch(0_0_0/0.45)]"
-                style={{ background: "oklch(0.10 0.005 260)" }}
-                role="tablist"
-                aria-label="Sample answers"
-              >
+              {/* Tab strip */}
+              <div className="flex flex-1 items-stretch gap-2" role="tablist" aria-label="Sample answers">
                 {variants.map((_, i) => {
                   const active = i === variantIndex;
                   const tone = tones[i % tones.length];
@@ -680,60 +681,46 @@ function CueCardReader({
                       role="tab"
                       aria-selected={active}
                       onClick={() => goToVariant(i)}
-                      className="group relative flex flex-1 flex-col items-center justify-center gap-1.5 rounded-[10px] px-2 py-2 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.97] sm:py-2.5"
+                      className="group relative flex flex-1 items-center justify-center rounded-2xl border-[3px] px-2 py-2.5 transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] sm:py-3"
                       style={{
                         background: active
-                          ? `linear-gradient(180deg, ${tone.soft} 0%, transparent 100%)`
-                          : "transparent",
+                          ? `linear-gradient(180deg, ${tone.base} 0%, ${tone.deep} 100%)`
+                          : `linear-gradient(180deg, ${tone.base} 0%, ${tone.deep} 100%)`,
+                        borderColor: "oklch(0.12 0.02 250)",
                         boxShadow: active
-                          ? `inset 0 0 0 1px ${tone.accent}, 0 0 24px -4px ${tone.glow}`
-                          : "inset 0 0 0 1px oklch(1 0 0 / 0.04)",
+                          ? `0 6px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.45), 0 0 0 3px oklch(1 0 0 / 0.5)`
+                          : `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.30)`,
+                        opacity: active ? 1 : 0.78,
                       }}
                     >
-                      <div className="flex items-baseline gap-1.5">
-                        <span
-                          className="font-display text-[18px] font-black leading-none tracking-tight transition-colors sm:text-[20px]"
-                          style={{
-                            color: active ? tone.accent : "oklch(1 0 0 / 0.55)",
-                            textShadow: active ? `0 0 12px ${tone.glow}` : "none",
-                          }}
-                        >
-                          {i + 1}
-                        </span>
-                        <span
-                          className="font-display text-[12px] font-semibold leading-none tracking-tight transition-colors sm:text-[13px]"
-                          style={{
-                            color: active ? "oklch(1 0 0 / 0.92)" : "oklch(1 0 0 / 0.45)",
-                          }}
-                        >
-                          Answer
-                        </span>
-                      </div>
-                      {/* Joy-Con LED dot — solid glow when active, dim ring otherwise */}
                       <span
-                        className="block h-[6px] w-[6px] rounded-full transition-all duration-300"
-                        style={{
-                          backgroundColor: active ? tone.accent : "oklch(1 0 0 / 0.18)",
-                          boxShadow: active ? `0 0 10px ${tone.accent}, 0 0 18px ${tone.glow}` : "none",
-                        }}
-                      />
+                        className="font-display text-[15px] font-black leading-none tracking-tight text-white sm:text-[16px]"
+                        style={{ textShadow: blackOutline }}
+                      >
+                        Answer {i + 1}
+                      </span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* R shoulder button */}
+              {/* R shoulder — sky blue */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-white/[0.06] text-white/70 shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_2px_6px_-2px_oklch(0_0_0/0.6)] transition-all duration-150 hover:text-white active:translate-y-[1px] active:shadow-[inset_0_2px_4px_oklch(0_0_0/0.4)] sm:h-12 sm:w-12"
+                className="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-[3px] text-white transition-all duration-150 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[0_2px_0_oklch(0.12_0.02_250)] sm:h-[52px] sm:w-[52px]"
                 style={{
-                  background:
-                    "linear-gradient(180deg, oklch(0.30 0.006 260) 0%, oklch(0.20 0.006 260) 100%)",
+                  background: `linear-gradient(180deg, ${sky.base} 0%, ${sky.deep} 100%)`,
+                  borderColor: "oklch(0.12 0.02 250)",
+                  boxShadow: `0 5px 0 oklch(0.12 0.02 250), inset 0 2px 0 oklch(1 0 0 / 0.35)`,
                 }}
                 aria-label="Next sample answer"
               >
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+                <ChevronRight
+                  className="h-5 w-5 transition-transform group-hover:translate-x-0.5"
+                  strokeWidth={3.5}
+                  style={{ filter: "drop-shadow(0 1.5px 0 oklch(0.12 0.02 250))" }}
+                />
               </button>
             </div>
           </div>
