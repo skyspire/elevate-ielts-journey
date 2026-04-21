@@ -611,6 +611,21 @@ function CueCardReader({
           borderRight: `1px solid ${LEFT_BORDER}`,
         }}
       >
+        {/* ── Vellum paper grain overlay (~14% opacity).
+            SVG fractalNoise produces an organic, non-repeating grain that
+            reads as premium stationery rather than digital noise. Sits
+            absolutely beneath all content and is non-interactive. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            opacity: 0.14,
+            mixBlendMode: "multiply",
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.32  0 0 0 0 0.28  0 0 0 0 0.22  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
+            backgroundSize: "220px 220px",
+          }}
+        />
+
         {/* ── Top: Part Two eyebrow + close pill ───────────────────────── */}
         <div className="relative flex items-start justify-between px-7 pt-8">
           {/* Part Two handwritten eyebrow */}
