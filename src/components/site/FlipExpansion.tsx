@@ -1085,7 +1085,7 @@ function CueCardReader({
           -webkit-offset-rotate: 0deg;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-trail-fade 2200ms ease-out forwards;
+          animation: paper-trail-fade 2800ms ease-out forwards;
           filter: blur(0.4px);
           will-change: offset-distance, opacity;
         }
