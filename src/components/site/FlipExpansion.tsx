@@ -700,13 +700,15 @@ function CueCardReader({
                           color: activePalette.heading,
                           // Soft tinted band — derived from the active heading
                           // color, mixed with the screen tint so it sits
-                          // gently on top of the already-tinted reading lane
-                          // without overwhelming the body text.
+                          // gently on the already-tinted reading lane.
                           backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
                           // Hairline tonal border for a refined edge.
                           boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
-                          transition:
-                            "color 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+                          // No transition: the lane re-mounts on variant
+                          // switch (key={lane-${variantIndex}}) so there's no
+                          // "from" state to interpolate. Adding a transition
+                          // here causes a visible snap-flicker because
+                          // color-mix() values cannot be tweened by browsers.
                         }}
                       >
                         {s.heading}
