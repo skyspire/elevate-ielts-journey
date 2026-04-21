@@ -642,7 +642,7 @@ function CueCardReader({
           crashes into the colorful footer pager that floats above it. */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[180px] sm:pt-[140px] sm:pb-[200px]"
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[260px] sm:pt-[140px] sm:pb-[280px]"
       >
         <article className="mx-auto w-full max-w-[820px] px-6 sm:px-10">
           {(() => {
