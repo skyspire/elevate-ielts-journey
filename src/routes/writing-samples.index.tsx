@@ -587,7 +587,6 @@ function TaskEnvelopeScroll({
     name: string,
     align: "left" | "right",
   ) => {
-    const taskNumber = taskNum === "Task 1" ? "01" : "02";
     return (
       <button
         type="button"
@@ -599,31 +598,24 @@ function TaskEnvelopeScroll({
           active ? "opacity-100" : "opacity-50 hover:opacity-80"
         }`}
       >
-        <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-1.5 sm:gap-2`}>
-          {/* Eyebrow: TASK 01 / TASK 02 */}
-          <span
-            className={`font-display text-[10px] font-semibold uppercase tracking-[0.32em] sm:text-[11px] ${
-              active ? accentText : "text-foreground/45"
-            }`}
-          >
-            Task <span className="tabular-nums">{taskNumber}</span>
-          </span>
-
-          {/* Descriptor — formal serif-feeling display */}
+        <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-2`}>
+          {/* Single unified heading — same font, same weight, same size */}
           <h3
-            className={`font-display leading-[1.05] tracking-[-0.025em] ${
-              active ? "font-semibold text-foreground" : "font-medium text-foreground/75"
+            className={`font-display font-bold leading-tight tracking-tight ${
+              active ? "text-foreground" : "text-foreground/70"
             }`}
-            style={{ fontSize: "clamp(1.5rem, 4.6vw, 2.5rem)" }}
+            style={{ fontSize: "clamp(1.25rem, 3.4vw, 1.875rem)" }}
           >
-            {name}
+            <span>{taskNum}</span>
+            <span className="mx-2 text-foreground/30">·</span>
+            <span>{name}</span>
           </h3>
 
           {/* Thin accent rule — only on active */}
           <span
             aria-hidden
-            className={`mt-1 block h-px transition-all duration-500 ${
-              active ? `w-10 sm:w-14 ${accentRule}` : "w-6 bg-foreground/15"
+            className={`block h-px transition-all duration-500 ${
+              active ? `w-12 sm:w-16 ${accentRule}` : "w-6 bg-foreground/15"
             }`}
           />
         </div>
