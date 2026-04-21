@@ -367,18 +367,9 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           />
         </div>
 
-        {/* Header — small "Follow-up" pill, just enough context. The big
-            question is shown inside the billboard card itself. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-between items-center px-4 pt-4 sm:px-6 sm:pt-6">
-          <span
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 backdrop-blur-md"
-            style={{ color: activePalette.ink }}
-          >
-            <MessageCircleQuestion className="h-3.5 w-3.5" strokeWidth={2.6} />
-            <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]">
-              Follow-up
-            </span>
-          </span>
+        {/* Header — only the Back button. The follow-up index gets its
+            own prominent circle badge above the headline inside the card. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end items-center px-4 pt-4 sm:px-6 sm:pt-6">
           <button
             type="button"
             onClick={onClose}
@@ -427,6 +418,53 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                     ...(isOut ? outStyle : inOrIdleStyle),
                   }}
                 >
+                  {/* ── Index badge ─ outlined circle (no fill), padded
+                      numeral "01 / 03". Sits above the headline as a
+                      prominent, equally-decorated marker. */}
+                  <div className="mb-6 flex flex-col items-start gap-2">
+                    <div
+                      className="relative flex items-center justify-center rounded-full"
+                      style={{
+                        width: "clamp(76px, 11vw, 96px)",
+                        height: "clamp(76px, 11vw, 96px)",
+                        border: `3px solid ${activePalette.ink}`,
+                        boxShadow: `0 6px 24px ${activePalette.fillDeep}, inset 0 0 0 1px ${activePalette.ink}33`,
+                      }}
+                      aria-hidden
+                    >
+                      <span
+                        className="font-display font-black tabular-nums leading-none tracking-tight"
+                        style={{
+                          color: activePalette.ink,
+                          fontSize: "clamp(1.75rem, 3.4vw, 2.25rem)",
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {String(index).padStart(2, "0")}
+                      </span>
+                      {/* Tiny "/ total" arc-style label tucked at the
+                          bottom of the badge */}
+                      <span
+                        className="absolute -bottom-[10px] left-1/2 -translate-x-1/2 rounded-full px-2 py-[2px] font-display font-extrabold tabular-nums"
+                        style={{
+                          backgroundColor: activePalette.fillDeep,
+                          color: activePalette.ink,
+                          fontSize: "10px",
+                          letterSpacing: "0.08em",
+                          border: `1.5px solid ${activePalette.ink}`,
+                        }}
+                      >
+                        / {String(total).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <span
+                      className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+                      style={{ color: activePalette.ink, opacity: 0.9 }}
+                    >
+                      Follow-up
+                    </span>
+                  </div>
+
                   {/* Big question header — OVERSIZED with colored underline swash */}
                   <h1
                     className="font-display font-black leading-[1.05] tracking-tight"
