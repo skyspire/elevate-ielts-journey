@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   Link as LinkIcon,
   MessageCircleQuestion,
+  GraduationCap,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
