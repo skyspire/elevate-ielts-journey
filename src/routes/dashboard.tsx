@@ -513,13 +513,16 @@ function FeatureCard({
         aria-hidden
         className="pointer-events-none absolute inset-0 [background:radial-gradient(120%_80%_at_100%_0%,rgba(255,255,255,0.20)_0%,transparent_55%)]"
       />
-      {/* Subtle dot grid texture */}
+      {/* Film-grain noise texture — tactile, premium print-like quality */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:14px_14px]"
+        className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+          backgroundSize: "160px 160px",
+        }}
       />
-
-
 
 
       {/* Centered icon + title only */}
