@@ -512,8 +512,8 @@ function CueCardReader({
 
   // Tinted cream/ivory tone for the left column — sits on the pure white
   // reader and creates spatial separation through tone alone (no divider).
-  const LEFT_TINT = "oklch(0.985 0.008 90)";
-  const LEFT_BORDER = "oklch(0.30 0.035 250 / 0.08)";
+  const LEFT_TINT = "oklch(0.955 0.020 80)";
+  const LEFT_BORDER = "oklch(0.30 0.035 250 / 0.10)";
 
   // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
