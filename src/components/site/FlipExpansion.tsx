@@ -734,8 +734,7 @@ function CueCardReader({
                 className="mt-[3px] h-[2px] w-full rounded-full"
                 style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
               />
-            </span>
-          </div>
+          </span>
         </div>
       </aside>
 
