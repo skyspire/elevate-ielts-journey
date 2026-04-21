@@ -41,16 +41,12 @@ type Feature = {
   key: string;
   title: string;
   description: { academic: string; general: string };
-  // count is split: numeric headline + small unit label
   count: {
     academic: { value: string; label: string };
     general: { value: string; label: string };
   };
-  // tone for the card tint (independent of module accent)
   tone: "espresso" | "navy" | "forest" | "plum" | "rust" | "teal" | "ochre";
-  // Lucide icon used for the glossy 3D mark in the corner
   icon: ComponentType<LucideProps>;
-  // Optional route to navigate to when the card is clicked
   to?: string;
 };
 
@@ -156,78 +152,84 @@ const features: Feature[] = [
   },
 ];
 
-// Polaroid palette per tone — soft photo-area tint + ink color for the doodle.
-// The card itself stays cream/white (polaroid frame).
+// Bento tone system — each card gets a unique soft gradient + accent color.
+// Backgrounds are restrained (white-leaning) so the page reads premium and quiet.
 const tones: Record<
   Feature["tone"],
   {
-    photoBg: string; // soft pastel for the photo area
-    inkColor: string; // doodle / icon stroke color
-    tapeColor: string; // washi tape color
-    accentText: string; // small accent text color
+    gradient: string; // soft corner gradient
+    accent: string; // strong accent color (text + icon + bar)
+    accentSoft: string; // tint for icon chip background
+    ring: string; // ring color on hover
   }
 > = {
   navy: {
-    photoBg: "bg-[oklch(0.92_0.05_255)]",
-    inkColor: "oklch(0.32 0.10 255)",
-    tapeColor: "oklch(0.78 0.10 250 / 0.75)",
-    accentText: "text-[oklch(0.36_0.10_255)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.05 255 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.16 260)",
+    accentSoft: "oklch(0.95 0.04 255)",
+    ring: "oklch(0.55 0.14 255 / 0.35)",
   },
   rust: {
-    photoBg: "bg-[oklch(0.92_0.06_45)]",
-    inkColor: "oklch(0.42 0.14 40)",
-    tapeColor: "oklch(0.82 0.10 50 / 0.75)",
-    accentText: "text-[oklch(0.42_0.13_40)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 45 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.50 0.16 35)",
+    accentSoft: "oklch(0.95 0.05 45)",
+    ring: "oklch(0.60 0.15 35 / 0.35)",
   },
   forest: {
-    photoBg: "bg-[oklch(0.93_0.05_160)]",
-    inkColor: "oklch(0.36 0.09 160)",
-    tapeColor: "oklch(0.82 0.08 155 / 0.75)",
-    accentText: "text-[oklch(0.36_0.09_160)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 160 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.42 0.11 165)",
+    accentSoft: "oklch(0.95 0.04 160)",
+    ring: "oklch(0.55 0.12 160 / 0.35)",
   },
   plum: {
-    photoBg: "bg-[oklch(0.92_0.05_320)]",
-    inkColor: "oklch(0.36 0.10 320)",
-    tapeColor: "oklch(0.82 0.08 315 / 0.75)",
-    accentText: "text-[oklch(0.38_0.10_320)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 320 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.14 320)",
+    accentSoft: "oklch(0.95 0.04 320)",
+    ring: "oklch(0.58 0.14 320 / 0.35)",
   },
   ochre: {
-    photoBg: "bg-[oklch(0.94_0.07_85)]",
-    inkColor: "oklch(0.42 0.11 75)",
-    tapeColor: "oklch(0.85 0.11 80 / 0.75)",
-    accentText: "text-[oklch(0.42_0.11_75)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.94 0.08 85 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.50 0.13 75)",
+    accentSoft: "oklch(0.95 0.06 85)",
+    ring: "oklch(0.62 0.13 80 / 0.35)",
   },
   teal: {
-    photoBg: "bg-[oklch(0.92_0.05_200)]",
-    inkColor: "oklch(0.34 0.09 200)",
-    tapeColor: "oklch(0.82 0.08 195 / 0.75)",
-    accentText: "text-[oklch(0.36_0.09_200)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.06 200 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.45 0.11 205)",
+    accentSoft: "oklch(0.95 0.04 200)",
+    ring: "oklch(0.58 0.12 200 / 0.35)",
   },
   espresso: {
-    photoBg: "bg-[oklch(0.92_0.03_70)]",
-    inkColor: "oklch(0.32 0.05 60)",
-    tapeColor: "oklch(0.80 0.06 65 / 0.75)",
-    accentText: "text-[oklch(0.34_0.05_60)]",
+    gradient:
+      "radial-gradient(120% 90% at 100% 0%, oklch(0.93 0.04 70 / 0.9) 0%, transparent 55%)",
+    accent: "oklch(0.38 0.06 60)",
+    accentSoft: "oklch(0.95 0.03 70)",
+    ring: "oklch(0.50 0.06 60 / 0.35)",
   },
 };
 
-// Per-card "personality": rotation, size variant, pin position — gives the
-// corkboard masonry feel. Indexed by feature.key for stable look.
-type Personality = {
-  rotate: string; // e.g. "-2.5deg"
-  size: "sm" | "md" | "lg"; // controls grid span + photo height
-  pin: "tape-top" | "pin-left" | "pin-right" | "tape-corner";
-  peekColor: string; // color of the paper peeking behind on hover
+// Bento layout: each feature claims a span on a 6-col grid.
+// Mobile: everything 1-col. Tablet+: asymmetric "widget" feel.
+type Span = {
+  col: string; // tailwind col-span classes
+  row: string; // tailwind row-span classes
+  variant: "hero" | "wide" | "tall" | "compact";
 };
 
-const personalities: Record<string, Personality> = {
-  writing: { rotate: "-2.5deg", size: "lg", pin: "tape-top", peekColor: "oklch(0.92 0.06 60)" },
-  speaking: { rotate: "1.8deg", size: "sm", pin: "pin-right", peekColor: "oklch(0.92 0.05 200)" },
-  vocab: { rotate: "-1.2deg", size: "md", pin: "tape-corner", peekColor: "oklch(0.92 0.05 320)" },
-  templates: { rotate: "2.4deg", size: "sm", pin: "pin-left", peekColor: "oklch(0.93 0.05 160)" },
-  predictions: { rotate: "-1.8deg", size: "md", pin: "tape-top", peekColor: "oklch(0.92 0.06 45)" },
-  mistakes: { rotate: "1.5deg", size: "md", pin: "pin-right", peekColor: "oklch(0.92 0.05 255)" },
-  plan: { rotate: "-2deg", size: "sm", pin: "tape-corner", peekColor: "oklch(0.94 0.07 85)" },
+const spans: Record<string, Span> = {
+  writing: { col: "sm:col-span-4 lg:col-span-4", row: "sm:row-span-2", variant: "hero" },
+  speaking: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  vocab: { col: "sm:col-span-2 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  templates: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
+  predictions: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "tall" },
+  mistakes: { col: "sm:col-span-3 lg:col-span-2", row: "sm:row-span-1", variant: "compact" },
+  plan: { col: "sm:col-span-6 lg:col-span-6", row: "sm:row-span-1", variant: "wide" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
@@ -292,7 +294,7 @@ function DashboardPage() {
         />
 
         {/* Centered content column */}
-        <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
+        <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Hero — handwriting headline with sketchy pencil underline */}
           <div className="text-center">
             <div className="relative inline-block">
@@ -340,12 +342,10 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Feature cards — corkboard masonry of polaroids */}
-          <div className="columns-1 gap-5 sm:columns-2 [column-fill:_balance]">
+          {/* Bento grid — mixed-size widget cards */}
+          <div className="-mx-2 grid grid-cols-1 gap-3 sm:mx-0 sm:grid-cols-6 sm:gap-4 sm:[grid-auto-rows:minmax(150px,auto)] lg:gap-5">
             {features.map((f) => (
-              <div key={f.key} className="mb-5 break-inside-avoid">
-                <FeatureCard feature={f} module={module} />
-              </div>
+              <FeatureCard key={f.key} feature={f} module={module} />
             ))}
           </div>
 
@@ -548,191 +548,111 @@ function FeatureCard({
   module: Module;
 }) {
   const tone = tones[feature.tone];
-  const personality = personalities[feature.key] ?? {
-    rotate: "0deg",
-    size: "md" as const,
-    pin: "tape-top" as const,
-    peekColor: "oklch(0.92 0.05 60)",
+  const span = spans[feature.key] ?? {
+    col: "sm:col-span-3",
+    row: "sm:row-span-1",
+    variant: "compact" as const,
   };
   const { value, label } = feature.count[module];
   const Icon = feature.icon;
+  const isHero = span.variant === "hero";
+  const isWide = span.variant === "wide";
 
-  const photoH =
-    personality.size === "lg"
-      ? "h-44 sm:h-52"
-      : personality.size === "md"
-        ? "h-36 sm:h-40"
-        : "h-28 sm:h-32";
-
-  const cardClass =
-    "polaroid group relative block w-full cursor-pointer rounded-[6px] bg-[oklch(0.985_0.008_85)] p-3 pb-5 text-left shadow-[0_8px_22px_-10px_oklch(0.20_0.04_60/0.35),0_2px_4px_-2px_oklch(0.20_0.04_60/0.20)] transition-all duration-300 ease-out will-change-transform hover:z-10 hover:rotate-0 hover:scale-[1.025] hover:shadow-[0_22px_40px_-12px_oklch(0.20_0.04_60/0.35),0_4px_10px_-4px_oklch(0.20_0.04_60/0.25)]";
+  const cardClass = `bento-card group relative flex h-full min-h-[160px] flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-white p-5 text-left shadow-[0_1px_2px_oklch(0.20_0.04_60/0.04),0_8px_24px_-12px_oklch(0.20_0.04_60/0.10)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_18px_40px_-16px_oklch(0.20_0.04_60/0.18)] focus-visible:outline-none focus-visible:ring-2 ${span.col} ${span.row}`;
 
   const inner = (
     <>
+      {/* Soft corner gradient — the unique color signature of this card */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 rounded-[6px] opacity-0 shadow-[0_4px_14px_-6px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:translate-x-2 group-hover:rotate-[3deg] group-hover:opacity-100"
-        style={{ background: personality.peekColor }}
+        className="pointer-events-none absolute inset-0 opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: tone.gradient }}
+      />
+      {/* Subtle dot grid texture, masked to top-right corner */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(oklch(0.30_0.04_60)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(120%_90%_at_100%_0%,black,transparent_55%)]"
+      />
+      {/* Hover ring accent */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset transition-opacity duration-300 group-hover:opacity-100"
+        style={{ ["--tw-ring-color" as string]: tone.ring }}
       />
 
-      {personality.pin === "tape-top" && (
+      {/* Top row: icon chip + count chip */}
+      <div className="relative flex items-start justify-between gap-3">
         <span
-          aria-hidden
-          className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 rounded-[2px] shadow-sm"
-          style={{
-            background: tone.tapeColor,
-            backgroundImage:
-              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
-          }}
-        />
-      )}
-      {personality.pin === "tape-corner" && (
-        <span
-          aria-hidden
-          className="absolute -top-2 -left-3 h-4 w-14 -rotate-[35deg] rounded-[2px] shadow-sm"
-          style={{
-            background: tone.tapeColor,
-            backgroundImage:
-              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
-          }}
-        />
-      )}
-      {personality.pin === "pin-left" && (
-        <PushPin className="absolute -top-2 left-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
-      )}
-      {personality.pin === "pin-right" && (
-        <PushPin className="absolute -top-2 right-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
-      )}
-
-      <div className={`relative w-full ${photoH} overflow-hidden rounded-[3px] ${tone.photoBg}`}>
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.30_0.04_60/0.10)_1px,transparent_1px)] [background-size:5px_5px]"
-        />
-        <svg
-          aria-hidden
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="absolute inset-0 h-full w-full"
+          className="flex h-11 w-11 items-center justify-center rounded-xl shadow-[inset_0_1px_0_oklch(1_0_0/0.6),0_1px_2px_oklch(0.20_0.04_60/0.06)] transition-transform duration-300 group-hover:scale-105"
+          style={{ background: tone.accentSoft, color: tone.accent }}
         >
-          <rect
-            x="2"
-            y="2"
-            width="96"
-            height="96"
-            rx="1"
-            fill="none"
-            stroke={tone.inkColor}
-            strokeOpacity="0.25"
-            strokeWidth="0.6"
-            strokeDasharray="2 1.5"
-          />
-        </svg>
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="relative transition-transform duration-500 ease-out group-hover:-rotate-6 group-hover:scale-110"
-            style={{ color: tone.inkColor }}
-          >
-            <Icon
-              className={
-                personality.size === "lg"
-                  ? "h-20 w-20"
-                  : personality.size === "md"
-                    ? "h-16 w-16"
-                    : "h-12 w-12"
-              }
-              strokeWidth={1.6}
-            />
-            <svg
-              aria-hidden
-              viewBox="0 0 100 100"
-              className="pointer-events-none absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]"
-            >
-              <ellipse
-                cx="50"
-                cy="50"
-                rx="44"
-                ry="40"
-                fill="none"
-                stroke={tone.inkColor}
-                strokeOpacity="0.35"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeDasharray="3 2"
-                style={{ transform: "rotate(-8deg)", transformOrigin: "50% 50%" }}
-              />
-            </svg>
-          </div>
-        </div>
-
+          <Icon className="h-[22px] w-[22px]" strokeWidth={2} />
+        </span>
         <span
-          className={`absolute bottom-2 right-2 rounded-full bg-white/85 px-2 py-0.5 font-display text-[10px] font-black tracking-tight ${tone.accentText}`}
+          className="rounded-full bg-white/85 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ring-1 ring-foreground/8"
+          style={{ color: tone.accent }}
         >
-          {value} · {label}
+          {value}
         </span>
       </div>
 
-      <div className="relative mt-3 px-1">
+      {/* Title + description */}
+      <div className={`relative mt-auto pt-6 ${isWide ? "max-w-xl" : ""}`}>
         <h3
-          className="font-handwriting text-[22px] leading-[1.05] text-foreground/85 sm:text-[24px]"
-          style={{ transform: "rotate(-1deg)" }}
+          className={`font-display font-bold tracking-tight text-foreground ${
+            isHero ? "text-2xl sm:text-[26px]" : isWide ? "text-xl" : "text-[17px]"
+          }`}
         >
           {feature.title}
         </h3>
         <p
-          className="mt-1 font-handwriting text-[15px] leading-snug text-foreground/55 sm:text-[16px]"
-          style={{ transform: "rotate(-0.5deg)" }}
+          className={`mt-1.5 text-foreground/60 ${
+            isHero || isWide ? "text-[14px] leading-relaxed" : "text-[13px] leading-snug"
+          }`}
         >
           {feature.description[module]}
         </p>
 
-        <svg
-          aria-hidden
-          viewBox="0 0 60 24"
-          className="absolute -right-1 -bottom-2 h-5 w-14 translate-x-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
-          fill="none"
-          stroke={tone.inkColor}
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M 4 14 C 18 8, 34 16, 50 10" />
-          <path d="M 44 6 L 52 10 L 46 16" />
-        </svg>
+        {/* Bottom meta row: small label + animated arrow */}
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/40">
+            {label}
+          </span>
+          <span
+            className="flex h-7 w-7 items-center justify-center rounded-full ring-1 ring-foreground/10 transition-all duration-300 group-hover:ring-2"
+            style={{
+              color: tone.accent,
+              ["--tw-ring-color" as string]: tone.ring,
+            }}
+          >
+            <ArrowUpRight
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              strokeWidth={2.5}
+            />
+          </span>
+        </div>
       </div>
+
+      {/* Accent bar — bottom edge, grows on hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-5 bottom-0 h-[2px] origin-left scale-x-0 rounded-full transition-transform duration-500 ease-out group-hover:scale-x-100"
+        style={{ background: tone.accent }}
+      />
     </>
   );
 
-  const style = { transform: `rotate(${personality.rotate})` };
-
   if (feature.to === "/dashboard/writing-samples") {
     return (
-      <Link to="/writing-samples" search={{ module }} className={cardClass} style={style}>
+      <Link to="/writing-samples" search={{ module }} className={cardClass}>
         {inner}
       </Link>
     );
   }
 
   return (
-    <button type="button" className={cardClass} style={style}>
+    <button type="button" className={cardClass}>
       {inner}
     </button>
-  );
-}
-
-function PushPin({ className, color }: { className?: string; color: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      <circle cx="12" cy="9" r="6" fill={color} />
-      <circle cx="10" cy="7" r="2" fill="white" fillOpacity="0.6" />
-      <path
-        d="M 12 14 L 12 22"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
