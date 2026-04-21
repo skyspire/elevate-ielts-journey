@@ -857,10 +857,11 @@ function CueCardReader({
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
           style={{
-            // Confident muted slate band — independent of the pure-white
-            // reading lane so the footer reads as its own colored zone.
-            borderTop: `1px solid oklch(0.32 0.045 248 / 0.20)`,
-            background: `linear-gradient(180deg, oklch(0.94 0.020 240) 0%, oklch(0.88 0.030 245) 100%)`,
+            // Graphite footer band — true neutral dark grey, independent
+            // of the pure-white reading lane so the footer reads as its
+            // own confident colored zone (premium magazine masthead feel).
+            borderTop: `1px solid oklch(0.18 0 0 / 0.40)`,
+            background: `linear-gradient(180deg, oklch(0.32 0.003 250) 0%, oklch(0.26 0.003 250) 100%)`,
             backdropFilter: "blur(6px)",
           }}
         >
@@ -872,7 +873,7 @@ function CueCardReader({
                 goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
               className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-              style={{ color: "oklch(0.32 0.045 248)" }}
+              style={{ color: palette[(variantIndex - 1 + variants.length) % variants.length].tabBorder }}
               aria-label="Previous sample answer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
@@ -882,10 +883,10 @@ function CueCardReader({
               {variants.map((_, i) => {
                 const active = i === variantIndex;
                 const tone = palette[i % palette.length];
-                // White ink across all three tabs — the dusty/steel/slate
-                // tab fills are saturated enough that light text reads as
-                // a confident magazine band.
-                const tabTextColor = "oklch(0.99 0.012 245)";
+                // White ink across all three tabs — the muted red/blue/olive
+                // tab fills against graphite read as a confident, refined
+                // magazine band.
+                const tabTextColor = "oklch(0.99 0.005 250)";
                 return (
                   <button
                     key={i}
@@ -898,17 +899,17 @@ function CueCardReader({
                     }}
                     className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                     style={{
-                      backgroundColor: tone.tabBg,
+                      backgroundColor: active ? tone.tabBg : "oklch(0.38 0.003 250)",
                       boxShadow: active
                         ? `inset 0 0 0 2px ${tone.tabBorder}, 0 4px 14px ${tone.tabBorder}55`
-                        : `inset 0 0 0 1px ${tone.tabBorder}40`,
+                        : `inset 0 0 0 1px oklch(0.50 0.003 250 / 0.50)`,
                     }}
                   >
                     <span
                       className="font-display tracking-tight transition-all duration-300"
                       style={{
                         color: tabTextColor,
-                        opacity: active ? 1 : 0.82,
+                        opacity: active ? 1 : 0.78,
                         fontWeight: active ? 800 : 600,
                         fontSize: "13px",
                         letterSpacing: active ? "-0.01em" : "0",
@@ -928,7 +929,7 @@ function CueCardReader({
                 goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
               className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-              style={{ color: activePalette.ink }}
+              style={{ color: palette[(variantIndex + 1) % variants.length].tabBorder }}
               aria-label="Next sample answer"
             >
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
