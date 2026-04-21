@@ -64,25 +64,65 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
     [currentVariant],
   );
 
-  // Split the body so we can emphasize the opening phrase (first sentence
-  // or first ~14 words, whichever is shorter). This becomes the bold
-  // pull-quote that opens the billboard.
-  const { openingPhrase, restOfBody } = useMemo(() => {
+  // Parse the body into:
+  //   • openingPhrase — bold pull-out (first sentence / 14 words)
+  //   • bodyBeforePullQuote — paragraph(s) leading up to the pull-quote
+  //   • pullQuote — strongest mid-answer sentence, broken out as centered quote
+  //   • bodyAfterPullQuote — remaining text after the pull-quote
+  const { openingPhrase, bodyBeforePullQuote, pullQuote, bodyAfterPullQuote } = useMemo(() => {
     const text = fullBody.trim();
-    // Prefer first sentence boundary (., !, ?) within first 120 chars.
+
+    // 1. Opening phrase (bold opener).
+    let opening = "";
+    let rest = text;
     const sentenceMatch = text.match(/^[^.!?]{1,120}[.!?]/);
     if (sentenceMatch) {
+      opening = sentenceMatch[0].trim();
+      rest = text.slice(sentenceMatch[0].length).trim();
+    } else {
+      const words = text.split(/\s+/);
+      opening = words.slice(0, 14).join(" ") + (words.length > 14 ? "…" : "");
+      rest = words.slice(14).join(" ");
+    }
+
+    // 2. Split the remainder into sentences and pick a mid-answer pull-quote.
+    //    Prefer a sentence in the middle third that is between 60–180 chars.
+    const sentences = rest
+      .split(/(?<=[.!?])\s+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (sentences.length < 3) {
       return {
-        openingPhrase: sentenceMatch[0].trim(),
-        restOfBody: text.slice(sentenceMatch[0].length).trim(),
+        openingPhrase: opening,
+        bodyBeforePullQuote: rest,
+        pullQuote: "",
+        bodyAfterPullQuote: "",
       };
     }
-    // Fallback: first 14 words.
-    const words = text.split(/\s+/);
-    const head = words.slice(0, 14).join(" ");
+
+    // Search the middle 60% of sentences for a good pull-quote candidate.
+    const startIdx = Math.floor(sentences.length * 0.25);
+    const endIdx = Math.ceil(sentences.length * 0.75);
+    let pullIdx = -1;
+    let bestLen = 0;
+    for (let i = startIdx; i < endIdx; i++) {
+      const len = sentences[i].length;
+      if (len >= 50 && len <= 180 && len > bestLen) {
+        bestLen = len;
+        pullIdx = i;
+      }
+    }
+    if (pullIdx === -1) {
+      // Fallback: middle sentence.
+      pullIdx = Math.floor(sentences.length / 2);
+    }
+
     return {
-      openingPhrase: head + (words.length > 14 ? "…" : ""),
-      restOfBody: words.slice(14).join(" "),
+      openingPhrase: opening,
+      bodyBeforePullQuote: sentences.slice(0, pullIdx).join(" "),
+      pullQuote: sentences[pullIdx],
+      bodyAfterPullQuote: sentences.slice(pullIdx + 1).join(" "),
     };
   }, [fullBody]);
 
