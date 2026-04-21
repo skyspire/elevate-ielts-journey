@@ -352,6 +352,19 @@ export function FlipExpansion({
           />
         )}
       </div>
+
+      {/* Follow-up genie reader — opens above the cue-card stage when the
+          user taps any follow-up question. Burst & split entrance from the
+          click origin, then materializes a full-screen reader with three
+          amber/teal/plum sample answers. */}
+      {followUpReader && (
+        <FollowUpReader
+          open={Boolean(followUpReader)}
+          onClose={() => setFollowUpReader(null)}
+          question={followUpReader.question}
+          origin={followUpReader.origin}
+        />
+      )}
     </div>,
     document.body,
   );
