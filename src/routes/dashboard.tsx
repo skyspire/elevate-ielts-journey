@@ -153,19 +153,25 @@ const features: Feature[] = [
 ];
 
 // Bold solid color blocks — each card is one confident color.
-// `bg` is the card background, `bgHover` for the hover lift state,
-// `chip` is the translucent white icon chip background.
-const tones: Record<
-  Feature["tone"],
-  { bg: string; bgHover: string }
-> = {
+// Two palettes: cool/blue family for Academic, warm family for General.
+const tonesAcademic: Record<Feature["tone"], { bg: string; bgHover: string }> = {
   navy: { bg: "oklch(0.42 0.18 260)", bgHover: "oklch(0.46 0.18 260)" },
+  rust: { bg: "oklch(0.48 0.16 230)", bgHover: "oklch(0.52 0.16 230)" },
+  forest: { bg: "oklch(0.50 0.15 200)", bgHover: "oklch(0.54 0.15 200)" },
+  plum: { bg: "oklch(0.45 0.18 290)", bgHover: "oklch(0.49 0.18 290)" },
+  ochre: { bg: "oklch(0.55 0.16 250)", bgHover: "oklch(0.59 0.16 250)" },
+  teal: { bg: "oklch(0.52 0.14 215)", bgHover: "oklch(0.56 0.14 215)" },
+  espresso: { bg: "oklch(0.32 0.06 260)", bgHover: "oklch(0.36 0.06 260)" },
+};
+
+const tonesGeneral: Record<Feature["tone"], { bg: string; bgHover: string }> = {
+  navy: { bg: "oklch(0.55 0.18 35)", bgHover: "oklch(0.59 0.18 35)" },
   rust: { bg: "oklch(0.58 0.20 25)", bgHover: "oklch(0.62 0.20 25)" },
-  forest: { bg: "oklch(0.50 0.15 160)", bgHover: "oklch(0.54 0.15 160)" },
-  plum: { bg: "oklch(0.45 0.18 320)", bgHover: "oklch(0.49 0.18 320)" },
+  forest: { bg: "oklch(0.55 0.16 60)", bgHover: "oklch(0.59 0.16 60)" },
+  plum: { bg: "oklch(0.50 0.18 15)", bgHover: "oklch(0.54 0.18 15)" },
   ochre: { bg: "oklch(0.65 0.17 70)", bgHover: "oklch(0.69 0.17 70)" },
-  teal: { bg: "oklch(0.55 0.13 200)", bgHover: "oklch(0.59 0.13 200)" },
-  espresso: { bg: "oklch(0.32 0.04 60)", bgHover: "oklch(0.36 0.04 60)" },
+  teal: { bg: "oklch(0.52 0.16 45)", bgHover: "oklch(0.56 0.16 45)" },
+  espresso: { bg: "oklch(0.38 0.10 40)", bgHover: "oklch(0.42 0.10 40)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
