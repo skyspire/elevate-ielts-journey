@@ -619,309 +619,108 @@ function TaskEnvelopeScroll({
     </button>
   );
 
-  // Flame lean: -1 = leans left (Task 1), 0 = upright, +1 = leans right (Task 2)
-  const flameDir = isT1 ? -1 : isT2 ? 1 : 0;
-  const leanDeg = flameDir * 40; // L3: strong 40° lean
-  const accentColor = isAcademic ? "oklch(0.58 0.17 255)" : "oklch(0.55 0.10 160)";
-  void accentColor;
-
-  const embers = [0, 1, 2, 3, 4];
+  // Compass needle: -90° points left (Task 1), +90° points right (Task 2), 0 = idle (north)
+  const needleDeg = isT1 ? -90 : isT2 ? 90 : 0;
+  void accentBorder;
 
   return (
     <div className="relative mx-auto max-w-3xl">
-      <style>{`
-        @keyframes flame-flicker-v {
-          0%, 100% { transform: scaleY(1) scaleX(1); }
-          25%      { transform: scaleY(1.08) scaleX(0.94); }
-          50%      { transform: scaleY(0.94) scaleX(1.06); }
-          75%      { transform: scaleY(1.05) scaleX(0.97); }
-        }
-        @keyframes halo-pulse {
-          0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
-          50%      { opacity: 0.85; transform: translate(-50%, -50%) scale(1.12); }
-        }
-        @keyframes wick-glow-v {
-          0%, 100% { opacity: 0.65; }
-          50%      { opacity: 1; }
-        }
-        @keyframes ember-fly {
-          0%   { transform: translate(0, 0) scale(1); opacity: 1; }
-          70%  { opacity: 0.9; }
-          100% { transform: translate(var(--ember-x, 30px), var(--ember-y, -60px)) scale(0.3); opacity: 0; }
-        }
-        @keyframes dust-drift {
-          0%   { transform: translate(0, 0); opacity: 0; }
-          20%  { opacity: 0.55; }
-          80%  { opacity: 0.4; }
-          100% { transform: translate(var(--dust-x, 20px), var(--dust-y, -80px)); opacity: 0; }
-        }
-      `}</style>
-
-      {/* 3-column layout — bronze candle in its own column */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3 sm:gap-10">
-        <div className="pb-8 sm:pb-12">
+      {/* 3-column layout — vintage brass compass in its own column */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-10">
+        <div className="pb-2">
           {renderItem(isT1, () => onTaskChange("task1"), "Task 1", isAcademic ? "Charts" : "Letters", "right")}
         </div>
 
-        {/* Bronze oil-lamp candle column */}
+        {/* Vintage brass compass */}
         <div
-          className="relative flex flex-col items-center justify-end"
-          style={{ width: "clamp(96px, 14vw, 140px)", minHeight: "320px" }}
+          className="relative flex flex-col items-center justify-center"
+          style={{ width: "clamp(72px, 11vw, 96px)" }}
         >
-          {/* A3: WARM HALO GLOW */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute rounded-full blur-3xl"
-            style={{
-              width: "260px",
-              height: "260px",
-              top: "60px",
-              left: "50%",
-              background:
-                "radial-gradient(circle, oklch(0.78 0.20 55 / 0.55) 0%, oklch(0.65 0.22 40 / 0.30) 35%, oklch(0.55 0.18 30 / 0.10) 60%, transparent 80%)",
-              animation: "halo-pulse 3.2s ease-in-out infinite",
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-
-          {/* A3: DUST MOTES */}
-          <div aria-hidden className="pointer-events-none absolute inset-0">
-            {[
-              { x: 18, y: -90, d: "0s", sz: 1.5, lx: 28 },
-              { x: -14, y: -110, d: "1.2s", sz: 1, lx: 60 },
-              { x: 22, y: -70, d: "2.1s", sz: 1.2, lx: 45 },
-              { x: -20, y: -95, d: "3.4s", sz: 0.8, lx: 35 },
-              { x: 12, y: -130, d: "4.5s", sz: 1.4, lx: 70 },
-              { x: -8, y: -80, d: "5.8s", sz: 1, lx: 20 },
-            ].map((m, i) => (
-              <span
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  width: `${m.sz * 2}px`,
-                  height: `${m.sz * 2}px`,
-                  left: `${m.lx}%`,
-                  top: "60%",
-                  background: "oklch(0.95 0.08 80 / 0.85)",
-                  boxShadow: "0 0 4px oklch(0.92 0.12 75 / 0.7)",
-                  ["--dust-x" as never]: `${m.x}px`,
-                  ["--dust-y" as never]: `${m.y}px`,
-                  animation: `dust-drift 7s ease-out ${m.d} infinite`,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* L3: FLYING EMBERS in lean direction */}
-          {flameDir !== 0 && (
-            <div
-              aria-hidden
-              className="pointer-events-none absolute"
-              style={{ top: "30px", left: "50%", width: 0, height: 0 }}
-            >
-              {embers.map((i) => {
-                const baseX = flameDir * (20 + i * 10);
-                const baseY = -30 - i * 14;
-                return (
-                  <span
-                    key={`${flameDir}-${i}`}
-                    className="absolute block rounded-full"
-                    style={{
-                      width: "3px",
-                      height: "3px",
-                      background: "oklch(0.88 0.22 55)",
-                      boxShadow: "0 0 6px oklch(0.85 0.22 50), 0 0 12px oklch(0.75 0.22 40 / 0.6)",
-                      ["--ember-x" as never]: `${baseX}px`,
-                      ["--ember-y" as never]: `${baseY}px`,
-                      animation: `ember-fly ${1.4 + i * 0.3}s ease-out ${i * 0.4}s infinite`,
-                    }}
-                  />
-                );
-              })}
-            </div>
-          )}
-
-          {/* Flame — leans 40° toward selection */}
-          <div
-            className="relative z-10"
-            style={{
-              width: "36px",
-              height: "62px",
-              transformOrigin: "50% 100%",
-              transform: `rotate(${leanDeg}deg)`,
-              transition: "transform 900ms cubic-bezier(0.34, 1.4, 0.64, 1)",
-            }}
-            aria-hidden
+          <svg
+            viewBox="0 0 100 100"
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            aria-label="Compass selector"
           >
-            <svg
-              viewBox="0 0 32 56"
-              className="absolute inset-0 h-full w-full drop-shadow-[0_0_10px_oklch(0.78_0.22_55_/_0.7)]"
+            <defs>
+              <radialGradient id="brassRim" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="oklch(0.88 0.12 80)" />
+                <stop offset="45%" stopColor="oklch(0.72 0.13 70)" />
+                <stop offset="80%" stopColor="oklch(0.52 0.11 55)" />
+                <stop offset="100%" stopColor="oklch(0.38 0.08 45)" />
+              </radialGradient>
+              <radialGradient id="compassFace" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.96 0.03 85)" />
+                <stop offset="70%" stopColor="oklch(0.90 0.05 80)" />
+                <stop offset="100%" stopColor="oklch(0.80 0.07 70)" />
+              </radialGradient>
+              <linearGradient id="needleN" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.55 0.20 30)" />
+                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
+              </linearGradient>
+              <linearGradient id="needleS" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.45 0.04 60)" />
+                <stop offset="100%" stopColor="oklch(0.30 0.03 55)" />
+              </linearGradient>
+            </defs>
+
+            {/* Outer brass rim */}
+            <circle cx="50" cy="50" r="48" fill="url(#brassRim)" />
+            <circle cx="50" cy="50" r="48" fill="none" stroke="oklch(0.32 0.06 40)" strokeWidth="0.6" />
+            {/* Inner bezel */}
+            <circle cx="50" cy="50" r="42" fill="none" stroke="oklch(0.38 0.08 45)" strokeWidth="0.8" />
+            {/* Compass face */}
+            <circle cx="50" cy="50" r="40" fill="url(#compassFace)" />
+
+            {/* Tick marks (every 30°) */}
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.sin(a) * 36;
+              const y1 = 50 - Math.cos(a) * 36;
+              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
+              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="oklch(0.30 0.05 45)"
+                  strokeWidth={i % 3 === 0 ? 1.2 : 0.6}
+                  strokeLinecap="round"
+                />
+              );
+            })}
+
+            {/* Cardinal letters */}
+            <text x="50" y="18" textAnchor="middle" fontSize="7" fontWeight="800" fill="oklch(0.30 0.05 45)" fontFamily="serif">N</text>
+            <text x="84" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">E</text>
+            <text x="50" y="88" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">S</text>
+            <text x="16" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">W</text>
+
+            {/* Needle group — rotates smoothly */}
+            <g
               style={{
-                transformOrigin: "50% 100%",
-                animation: "flame-flicker-v 220ms ease-in-out infinite",
+                transformOrigin: "50px 50px",
+                transform: `rotate(${needleDeg}deg)`,
+                transition: "transform 850ms cubic-bezier(0.34, 1.3, 0.64, 1)",
               }}
             >
-              <defs>
-                <radialGradient id="flameOuterV" cx="50%" cy="78%" r="55%">
-                  <stop offset="0%" stopColor="oklch(0.94 0.18 80)" />
-                  <stop offset="40%" stopColor="oklch(0.78 0.22 55)" />
-                  <stop offset="80%" stopColor="oklch(0.62 0.22 38)" />
-                  <stop offset="100%" stopColor="oklch(0.50 0.20 30 / 0)" />
-                </radialGradient>
-                <radialGradient id="flameInnerV" cx="50%" cy="80%" r="40%">
-                  <stop offset="0%" stopColor="oklch(0.98 0.10 95)" />
-                  <stop offset="60%" stopColor="oklch(0.88 0.18 80)" />
-                  <stop offset="100%" stopColor="oklch(0.78 0.20 60 / 0)" />
-                </radialGradient>
-                <radialGradient id="flameCoreV" cx="50%" cy="88%" r="22%">
-                  <stop offset="0%" stopColor="oklch(0.55 0.18 250)" />
-                  <stop offset="100%" stopColor="oklch(0.55 0.18 250 / 0)" />
-                </radialGradient>
-              </defs>
-              <path
-                d="M 16 2 C 25 16, 29 30, 27 42 C 25 52, 20 55, 16 55 C 12 55, 7 52, 5 42 C 3 30, 7 16, 16 2 Z"
-                fill="url(#flameOuterV)"
-              />
-              <path
-                d="M 16 12 C 22 22, 24 34, 22 42 C 21 49, 18 52, 16 52 C 14 52, 11 49, 10 42 C 8 34, 10 22, 16 12 Z"
-                fill="url(#flameInnerV)"
-              />
-              <ellipse cx="16" cy="48" rx="5" ry="7" fill="url(#flameCoreV)" />
-            </svg>
-          </div>
+              {/* North half (red) */}
+              <polygon points="50,12 46,50 54,50" fill="url(#needleN)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.4" />
+              {/* South half (dark) */}
+              <polygon points="50,88 46,50 54,50" fill="url(#needleS)" stroke="oklch(0.22 0.02 55)" strokeWidth="0.4" />
+            </g>
 
-          {/* Wick */}
-          <div
-            className="relative z-10 -mt-1 h-3 w-[2.5px] rounded-full"
-            style={{
-              background: "linear-gradient(180deg, oklch(0.18 0.04 40) 0%, oklch(0.32 0.06 40) 100%)",
-            }}
-          >
-            <span
-              aria-hidden
-              className="absolute inset-x-[-1px] top-0 h-1 rounded-full"
-              style={{
-                background: "oklch(0.88 0.20 55)",
-                boxShadow: "0 0 8px oklch(0.85 0.20 55)",
-                animation: "wick-glow-v 1.2s ease-in-out infinite",
-              }}
-            />
-          </div>
-
-          {/* V3: Beeswax pillar */}
-          <div
-            className="relative z-10 w-[78%] overflow-hidden"
-            style={{
-              height: "clamp(90px, 13vw, 130px)",
-              borderRadius: "10px 10px 4px 4px",
-              background:
-                "linear-gradient(180deg, oklch(0.92 0.13 82) 0%, oklch(0.85 0.16 75) 25%, oklch(0.76 0.17 68) 65%, oklch(0.68 0.16 60) 100%)",
-              boxShadow:
-                "inset 4px 0 8px oklch(0.40 0.10 50 / 0.25), inset -4px 0 8px oklch(1 0 0 / 0.25), 0 4px 12px oklch(0.35 0.08 50 / 0.3)",
-            }}
-          >
-            <div
-              aria-hidden
-              className="absolute left-0 right-0 top-0 h-2"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 50% 100%, oklch(0.95 0.10 80) 0%, oklch(0.80 0.14 70) 60%, oklch(0.65 0.14 60) 100%)",
-                borderRadius: "10px 10px 0 0",
-              }}
-            />
-            <div
-              aria-hidden
-              className="absolute top-1 bottom-2 w-[18%] rounded-full opacity-70 blur-[2px]"
-              style={{
-                left: flameDir > 0 ? "auto" : "16%",
-                right: flameDir > 0 ? "16%" : "auto",
-                background:
-                  "linear-gradient(180deg, oklch(1 0 0 / 0.85) 0%, oklch(0.98 0.05 80 / 0.3) 70%, transparent 100%)",
-                transition: "left 700ms ease, right 700ms ease",
-              }}
-            />
-            <div
-              aria-hidden
-              className="absolute top-3 w-[10px]"
-              style={{
-                height: "60%",
-                [flameDir > 0 ? "left" : "right"]: "10%",
-                background:
-                  "radial-gradient(ellipse at 50% 0%, oklch(0.92 0.13 80) 0%, oklch(0.78 0.16 68) 60%, transparent 100%)",
-                borderRadius: "999px",
-                opacity: 0.85,
-                transition: "all 700ms ease",
-              }}
-            />
-            <div
-              aria-hidden
-              className="absolute inset-y-0 w-[40%]"
-              style={{
-                right: flameDir > 0 ? "0" : "auto",
-                left: flameDir > 0 ? "auto" : "0",
-                background:
-                  "linear-gradient(90deg, oklch(0.40 0.08 50 / 0.30) 0%, transparent 100%)",
-                transition: "all 700ms ease",
-              }}
-            />
-          </div>
-
-          {/* V3: Squat bronze base with engraved rim */}
-          <div className="relative z-10 -mt-1 flex w-full flex-col items-center">
-            <div
-              className="relative w-[115%] rounded-t-md"
-              style={{
-                height: "6px",
-                background:
-                  "linear-gradient(180deg, oklch(0.72 0.10 55) 0%, oklch(0.58 0.10 50) 50%, oklch(0.42 0.08 45) 100%)",
-                boxShadow:
-                  "inset 0 1px 0 oklch(0.92 0.10 65), inset 0 -1px 0 oklch(0.30 0.06 40)",
-              }}
-            >
-              <div
-                className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2"
-                style={{ background: "oklch(0.30 0.05 40 / 0.6)" }}
-              />
-            </div>
-            <div
-              className="relative w-[145%]"
-              style={{
-                height: "26px",
-                background:
-                  "linear-gradient(180deg, oklch(0.62 0.11 55) 0%, oklch(0.48 0.10 50) 40%, oklch(0.35 0.08 45) 75%, oklch(0.55 0.10 55) 100%)",
-                borderRadius: "4px 4px 50% 50% / 4px 4px 30% 30%",
-                boxShadow:
-                  "inset 6px 0 8px oklch(0.25 0.05 40 / 0.5), inset -6px 0 8px oklch(0.92 0.10 65 / 0.4), 0 8px 16px oklch(0.20 0.05 40 / 0.4)",
-              }}
-            >
-              <div
-                className="absolute left-[8%] right-[8%] top-[35%] h-[2px] rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent 0%, oklch(0.25 0.05 40 / 0.7) 20%, oklch(0.25 0.05 40 / 0.7) 80%, transparent 100%)",
-                  boxShadow: "0 1px 0 oklch(0.85 0.10 65 / 0.5)",
-                }}
-              />
-              <div
-                className="absolute left-[20%] top-[15%] h-[3px] w-[25%] rounded-full opacity-70 blur-[1px]"
-                style={{ background: "oklch(0.95 0.10 70)" }}
-              />
-            </div>
-            <div
-              className="w-[120%]"
-              style={{
-                height: "4px",
-                background:
-                  "linear-gradient(180deg, oklch(0.40 0.08 45) 0%, oklch(0.28 0.06 40) 100%)",
-                borderRadius: "0 0 6px 6px",
-                boxShadow: "0 2px 6px oklch(0.20 0.05 40 / 0.5)",
-              }}
-            />
-          </div>
+            {/* Center brass pin */}
+            <circle cx="50" cy="50" r="3.2" fill="oklch(0.75 0.13 75)" stroke="oklch(0.38 0.08 45)" strokeWidth="0.6" />
+            <circle cx="49.2" cy="49.2" r="1" fill="oklch(0.95 0.06 85)" opacity="0.85" />
+          </svg>
 
           {noSelection && (
             <span
-              className={`relative z-10 mt-3 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
+              className={`relative z-10 mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] sm:text-[10px] ${accentText}`}
             >
               Pick a Task
             </span>
