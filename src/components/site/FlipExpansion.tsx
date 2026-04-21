@@ -909,94 +909,82 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Footer pager — warm graphite ink bar housing three vibrant tabs.
-          Tabs use the same coordinated palette as the reading-screen tint,
-          so switching answers lights up both the tab and the screen behind it. */}
-      {variants.length > 1 && (() => {
-        return (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
-            <div
-              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-white/[0.06] p-1.5 shadow-[0_22px_50px_-18px_oklch(0_0_0/0.55)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, oklch(0.26 0.015 75) 0%, oklch(0.18 0.015 75) 100%)",
+      {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule.
+          Mirrors the FollowUpReader footer treatment. */}
+      {variants.length > 1 && (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+          style={{
+            borderTop: `1px solid ${activePalette.ink}26`,
+            background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
+            <button
+              type="button"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              aria-label="Previous sample answer"
             >
-              {/* Prev */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                }}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
-                aria-label="Previous sample answer"
-              >
-                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
-              </button>
+              <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
+            </button>
 
-              {/* Tabs */}
-              <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
-                {variants.map((_, i) => {
-                  const active = i === variantIndex;
-                  const tone = palette[i % palette.length];
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={(e) => {
-                        const r = e.currentTarget.getBoundingClientRect();
-                        goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                      }}
-                      className="group relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
+            <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
+              {variants.map((_, i) => {
+                const active = i === variantIndex;
+                const tone = palette[i % palette.length];
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                    }}
+                    className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
+                    style={{
+                      backgroundColor: tone.tabBg,
+                      boxShadow: active
+                        ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
+                        : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                    }}
+                  >
+                    <span
+                      className="font-display tracking-tight transition-all duration-300"
                       style={{
-                        // All tabs always show their full color — no dim state.
-                        backgroundColor: tone.tabBg,
-                        // Active tab gets a 2px tonal dark border in its own
-                        // color family. Inactive tabs use a near-invisible
-                        // hairline so layout stays perfectly aligned.
-                        boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
+                        color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                        fontWeight: active ? 800 : 600,
+                        fontSize: "13px",
+                        letterSpacing: active ? "-0.01em" : "0",
                       }}
                     >
-                      <span
-                        className="font-display tracking-tight transition-all duration-300"
-                        style={{
-                          // Active label: bolder weight, full white.
-                          // Inactive: slightly lighter weight, soft white so
-                          // the colored bg still reads, with clear hierarchy.
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
-                          fontWeight: active ? 800 : 600,
-                          fontSize: "13px",
-                          letterSpacing: active ? "-0.01em" : "0",
-                        }}
-                      >
-                        Answer {i + 1}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Next */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                }}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
-                aria-label="Next sample answer"
-              >
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-              </button>
+                      Answer {i + 1}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+              }}
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              aria-label="Next sample answer"
+            >
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+            </button>
           </div>
-        );
-      })()}
+        </div>
+      )}
 
       {/* Atmospheric mood veil — a single solid layer that fades in then out
           during a variant switch. Uses opacity (cheap, GPU-friendly, no
