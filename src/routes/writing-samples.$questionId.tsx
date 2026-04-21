@@ -25,7 +25,12 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { sampleAnswers } from "@/data/sample-answers";
-import { getSiblingQuestions, type SiblingQuestion } from "@/data/question-helpers";
+import {
+  getSiblingQuestions,
+  parseQuestionId,
+  type SiblingQuestion,
+} from "@/data/question-helpers";
+import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import {
   addComment,
   deleteComment,
