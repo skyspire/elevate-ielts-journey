@@ -686,47 +686,73 @@ function CueCardReader({
                 // Re-key on variant change so the incoming element mounts
                 // fresh and runs the enter keyframe cleanly.
                 key={`lane-${variantIndex}`}
-                className="space-y-12 pt-4"
+                className="pt-4"
                 style={isOut ? outStyle : inOrIdleStyle}
                 data-lane-phase={gravityPhase}
               >
-                {sections.map((s, i) => {
-                  const visible = i < revealedSections;
-                  return (
-                    <section
-                      key={`${variantIndex}-${s.heading}`}
-                      style={{
-                        visibility: visible ? "visible" : "hidden",
-                      }}
-                    >
-                      <h3
-                        className="-mx-6 rounded-2xl px-6 py-3 font-display text-[20px] font-extrabold leading-tight tracking-tight sm:-mx-10 sm:px-10 sm:py-3.5 sm:text-[22px]"
+                {/* Billboard topic headline — oversized, cream-on-palette,
+                    with a thick palette-toned underline swash beneath. */}
+                <header className="mb-10">
+                  <span
+                    className="font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
+                    style={{ color: activePalette.ink, opacity: 0.8 }}
+                  >
+                    Sample answer · Band {currentVariant.bandScore}
+                  </span>
+                  <h1
+                    className="mt-3 font-display font-black leading-[1.05] tracking-tight"
+                    style={{
+                      color: activePalette.ink,
+                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
+                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
+                    }}
+                  >
+                    {topic.label}
+                  </h1>
+                  <div
+                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    style={{
+                      background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
+                      opacity: 0.92,
+                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                    }}
+                  />
+                </header>
+
+                {/* Sections rendered as inline anchors inside one continuous
+                    flowing answer. Each section's heading becomes a small
+                    uppercase eyebrow above its body. */}
+                <div className="space-y-9">
+                  {sections.map((s, i) => {
+                    const visible = i < revealedSections;
+                    return (
+                      <section
+                        key={`${variantIndex}-${s.heading}`}
                         style={{
-                          color: activePalette.heading,
-                          // Soft tinted band — derived from the active heading
-                          // color, mixed with the screen tint so it sits
-                          // gently on the already-tinted reading lane.
-                          backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
-                          // Hairline tonal border for a refined edge.
-                          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
-                          // No transition: the lane re-mounts on variant
-                          // switch (key={lane-${variantIndex}}) so there's no
-                          // "from" state to interpolate. Adding a transition
-                          // here causes a visible snap-flicker because
-                          // color-mix() values cannot be tweened by browsers.
+                          visibility: visible ? "visible" : "hidden",
                         }}
                       >
-                        {s.heading}
-                      </h3>
-                      <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
-                        {s.body}
-                      </p>
-                      {i < sections.length - 1 && (
-                        <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
-                      )}
-                    </section>
-                  );
-                })}
+                        <h3
+                          className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+                          style={{ color: activePalette.ink, opacity: 0.85 }}
+                        >
+                          {s.heading}
+                        </h3>
+                        <p
+                          className="mt-3 font-display"
+                          style={{
+                            color: activePalette.inkSoft,
+                            fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
+                            lineHeight: 1.72,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {s.body}
+                        </p>
+                      </section>
+                    );
+                  })}
+                </div>
               </div>
             );
           })()}
