@@ -439,70 +439,21 @@ function CueCardReader({
   ];
   const activePalette = palette[variantIndex % palette.length];
 
-  // Launch a paper plane whenever the active answer changes.
+  // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
     if (!isExpanded) return;
     if (prevVariantRef.current === variantIndex) return;
     prevVariantRef.current = variantIndex;
 
-    const tabEl = tabRefs.current[variantIndex];
-    const headerEl = headerAnchorRef.current;
-    if (!tabEl || !headerEl) return;
-    const tabRect = tabEl.getBoundingClientRect();
-    const headerRect = headerEl.getBoundingClientRect();
-    const from = {
-      x: tabRect.left + tabRect.width / 2,
-      y: tabRect.top + tabRect.height / 2,
+    setMoodPhase("out");
+    // Halfway through (~325ms), the lane is at its dimmest/most-desaturated.
+    // Flip to "in" so the new palette resaturates and rises back to full.
+    const tIn = window.setTimeout(() => setMoodPhase("in"), 325);
+    const tEnd = window.setTimeout(() => setMoodPhase("idle"), 700);
+    return () => {
+      clearTimeout(tIn);
+      clearTimeout(tEnd);
     };
-    const to = {
-      x: headerRect.left + headerRect.width / 2,
-      y: headerRect.top + headerRect.height / 2,
-    };
-
-    // Build a randomized "wandering breeze" path that roams the whole viewport.
-    // 5 waypoints scattered into different regions, biased to start near `from`
-    // and finish at `to`. Each launch produces a unique route.
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const margin = 90; // keep plane safely on-screen
-    const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    // Pick four broad regions in random order so we visit different quadrants.
-    const regions = [
-      { x: [margin, vw * 0.45], y: [margin, vh * 0.45] },           // top-left
-      { x: [vw * 0.55, vw - margin], y: [margin, vh * 0.45] },      // top-right
-      { x: [margin, vw * 0.45], y: [vh * 0.55, vh - margin] },      // bottom-left
-      { x: [vw * 0.55, vw - margin], y: [vh * 0.55, vh - margin] }, // bottom-right
-    ].sort(() => Math.random() - 0.5);
-    // Use 4 randomized intermediate waypoints, plus a slight overshoot near
-    // the header for a graceful "swoop in" feel.
-    const wps = regions.map((r) => ({
-      x: rand(r.x[0], r.x[1]),
-      y: rand(r.y[0], r.y[1]),
-    }));
-    // Soft "air pocket" jitter: drop each waypoint a few px to mimic dips.
-    wps.forEach((p) => { p.y += rand(-12, 18); });
-
-    // Build a smooth poly-bezier through: from → wp1 → wp2 → wp3 → wp4 → to.
-    // Quadratic Bézier through midpoints gives a flowing, curvy line with no
-    // sharp corners — perfect for paper-plane glide.
-    const all = [from, ...wps, to];
-    let d = `M ${all[0].x} ${all[0].y}`;
-    for (let i = 1; i < all.length - 1; i++) {
-      const midX = (all[i].x + all[i + 1].x) / 2;
-      const midY = (all[i].y + all[i + 1].y) / 2;
-      d += ` Q ${all[i].x} ${all[i].y} ${midX} ${midY}`;
-    }
-    d += ` T ${all[all.length - 1].x} ${all[all.length - 1].y}`;
-
-    const id = ++flightIdRef.current;
-    const tone = palette[variantIndex % palette.length].tabBg;
-    setPlaneFlights((flights) => [...flights, { id, path: d, tone }]);
-    // Auto-cleanup after the animation finishes (flight 2.8s + fade tail)
-    const t = window.setTimeout(() => {
-      setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
-    }, 3200);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variantIndex, isExpanded]);
 
   return (
