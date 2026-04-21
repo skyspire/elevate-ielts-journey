@@ -327,30 +327,15 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
-          {/* Hero — warm shimmer headline above the owl */}
+          {/* Hero — quiet editorial line, lets the owl be the hero */}
           <div className="text-center">
-            <h1 className="relative inline-block font-display text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-              <span className="text-gradient-shimmer">Pick Your IELTS</span>
-
-              {/* Hand-drawn pencil swoosh */}
-              <svg
-                aria-hidden
-                viewBox="0 0 300 22"
-                preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-[oklch(0.65_0.15_55)] sm:-bottom-4 sm:h-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
-              </svg>
+            <h1 className="font-display text-2xl font-medium italic leading-snug tracking-tight text-foreground/60 sm:text-3xl">
+              Pick Your IELTS
             </h1>
           </div>
 
           {/* Toggle */}
-          <div className="mt-12 flex justify-center sm:mt-14">
+          <div className="mt-8 flex justify-center sm:mt-10">
             <ModuleToggle module={module} setModule={setModule} />
           </div>
 
