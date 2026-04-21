@@ -227,6 +227,28 @@ export function FlipExpansion({
       aria-modal="true"
       aria-label={`${topic.label} — Sample answer`}
     >
+      {/* Radial color-wash overlay — sweeps from the clicked tab outward in
+          the next answer's color, then fades, revealing the new screen+text. */}
+      {wash && (
+        <div
+          key={wash.key}
+          className="pointer-events-none absolute inset-0 z-[110]"
+          style={{ animation: "wash-fade 900ms ease-out forwards" }}
+        >
+          <div
+            className="absolute rounded-full"
+            style={{
+              left: wash.x,
+              top: wash.y,
+              width: 10,
+              height: 10,
+              transform: "translate(-50%, -50%)",
+              background: `radial-gradient(circle, ${wash.color} 0%, ${wash.color} 55%, transparent 70%)`,
+              animation: "wash-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards",
+            }}
+          />
+        </div>
+      )}
       {/* Backdrop */}
       <button
         type="button"
