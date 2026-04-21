@@ -942,27 +942,9 @@ function CueCardReader({
       {planeFlights.length > 0 && (
         <div className="pointer-events-none fixed inset-0 z-[60]" aria-hidden>
           {planeFlights.map((f) => {
-            const dx = f.to.x - f.from.x;
-            const dy = f.to.y - f.from.y;
-            // Perpendicular unit vector for lateral zig-zag offsets.
-            const len = Math.max(1, Math.hypot(dx, dy));
-            const nx = -dy / len;
-            const ny = dx / len;
-            // Zig-zag amplitude scales with horizontal travel + flight height.
-            const amp = Math.min(110, Math.max(50, len * 0.18));
-            // Three waypoints at 25% / 55% / 80% along the trip, alternating sides.
-            const wp = (t: number, side: number) => ({
-              x: f.from.x + dx * t + nx * amp * side,
-              y: f.from.y + dy * t + ny * amp * side,
-            });
-            const p1 = wp(0.25, +1);
-            const p2 = wp(0.55, -1);
-            const p3 = wp(0.80, +0.6);
-            // Smooth cubic bezier-ish path with quadratic segments for a
-            // natural flowing zig-zag (rather than sharp corners).
-            const path = `M ${f.from.x} ${f.from.y} Q ${p1.x} ${p1.y} ${(p1.x + p2.x) / 2} ${(p1.y + p2.y) / 2} T ${p2.x} ${p2.y} Q ${p3.x} ${p3.y} ${f.to.x} ${f.to.y}`;
+            const path = f.path;
             // Sample dots along the path for the whisper trail.
-            const dots = Array.from({ length: 9 }, (_, i) => i);
+            const dots = Array.from({ length: 14 }, (_, i) => i);
             return (
               <div key={f.id} className="absolute inset-0">
                 {/* Whisper dotted trail — each dot fades in slightly delayed,
