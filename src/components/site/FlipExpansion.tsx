@@ -510,10 +510,13 @@ function CueCardReader({
   const topicIndex = Math.max(0, topicsInCategory.findIndex((t) => t.id === topic.id)) + 1;
   const topicNumber = String(topicIndex || 1).padStart(2, "0");
 
-  // Tinted cream/ivory tone for the left column — sits on the pure white
-  // reader and creates spatial separation through tone alone (no divider).
-  const LEFT_TINT = "oklch(0.955 0.020 80)";
-  const LEFT_BORDER = "oklch(0.30 0.035 250 / 0.10)";
+  // Left column tint — derived from the active variant accent so the
+  // background quietly shifts when the reader switches Answer 1/2/3.
+  // We mix ~10% of the variant accent into a near-white parchment base,
+  // which keeps the column readable while making the color identity
+  // unmistakable. The border uses a slightly stronger mix for definition.
+  const LEFT_TINT = `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(0.985 0.005 90))`;
+  const LEFT_BORDER = `color-mix(in oklab, ${activePalette.tabBorder} 22%, transparent)`;
 
   // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
@@ -566,6 +569,7 @@ function CueCardReader({
             backgroundColor: LEFT_TINT,
             border: `1px solid ${LEFT_BORDER}`,
             boxShadow: "0 6px 18px -10px oklch(0.20 0.010 250 / 0.20)",
+            transition: "background-color 380ms ease, border-color 380ms ease",
           }}
         >
           <div className="flex min-w-0 flex-col gap-0.5">
@@ -603,6 +607,7 @@ function CueCardReader({
         style={{
           backgroundColor: LEFT_TINT,
           borderRight: `1px solid ${LEFT_BORDER}`,
+          transition: "background-color 380ms ease, border-color 380ms ease",
         }}
       >
         {/* ── Vellum paper grain overlay (~14% opacity).
