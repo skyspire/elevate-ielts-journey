@@ -106,6 +106,21 @@ export function WritingAnswerBillboard({
 
   const activePalette = PALETTE[variantIndex % PALETTE.length];
 
+  // Resolve which answer body to render. Questions can ship with a
+  // `variants` triple — one per footer-pager tab — or fall back to the
+  // top-level paragraphs/wordCount/bandScore for the same content across
+  // all three tabs (placeholder mode).
+  const activeAnswer = useMemo(() => {
+    if (answer.variants && answer.variants[variantIndex]) {
+      return answer.variants[variantIndex];
+    }
+    return {
+      bandScore: answer.bandScore,
+      wordCount: answer.wordCount,
+      paragraphs: answer.paragraphs,
+    };
+  }, [answer, variantIndex]);
+
   // Left-column tint: ~10% of the variant accent mixed into a near-white
   // parchment base. Same recipe as CueCardReader so the writing & speaking
   // billboards share visual DNA.
@@ -405,7 +420,7 @@ export function WritingAnswerBillboard({
                   fontVariantNumeric: "tabular-nums",
                 }}
               >
-                {answer.wordCount}
+                {activeAnswer.wordCount}
               </span>
               <span
                 style={{
