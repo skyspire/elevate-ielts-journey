@@ -423,50 +423,107 @@ export function FollowUpReader({ open, onClose, question, origin }: FollowUpRead
                     ...(isOut ? outStyle : inOrIdleStyle),
                   }}
                 >
-                  {/* Big question header — billboard headline */}
+                  {/* Big question header — OVERSIZED with colored underline swash */}
                   <h1
-                    className="font-display font-black leading-[1.1] tracking-tight"
+                    className="font-display font-black leading-[1.05] tracking-tight"
                     style={{
                       color: activePalette.ink,
-                      fontSize: "clamp(1.75rem, 4.4vw, 2.6rem)",
-                      textShadow: `0 2px 24px ${activePalette.fillDeep}`,
+                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
+                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                     }}
                   >
                     {question.title}
                   </h1>
-
-                  {/* Hairline divider in the cream ink color */}
+                  {/* Thick palette-toned underline swash beneath the headline */}
                   <div
-                    className="mt-6 h-[2px] w-16 rounded-full"
-                    style={{ backgroundColor: activePalette.ink, opacity: 0.7 }}
+                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    style={{
+                      background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
+                      opacity: 0.92,
+                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                    }}
                   />
 
-                  {/* Single-flow answer body — opening phrase emphasized */}
+                  {/* Single-flow answer body — opening phrase emphasized,
+                      with a centered pull-quote breakout mid-answer. */}
                   <div
-                    className="mt-6 font-display"
+                    className="mt-7 font-display"
                     style={{
                       color: activePalette.inkSoft,
                       fontSize: "clamp(1.0625rem, 1.9vw, 1.25rem)",
-                      lineHeight: 1.65,
+                      lineHeight: 1.7,
                       fontWeight: 500,
                     }}
                   >
-                    <span
-                      className="font-display font-extrabold"
-                      style={{
-                        color: activePalette.ink,
-                        fontSize: "1.12em",
-                        letterSpacing: "-0.005em",
-                      }}
-                    >
-                      {openingPhrase}
-                    </span>
-                    {restOfBody && (
-                      <span>
-                        {" "}
-                        {restOfBody}
+                    <p>
+                      <span
+                        className="font-display font-extrabold"
+                        style={{
+                          color: activePalette.ink,
+                          fontSize: "1.12em",
+                          letterSpacing: "-0.005em",
+                        }}
+                      >
+                        {openingPhrase}
                       </span>
+                      {bodyBeforePullQuote && (
+                        <span> {bodyBeforePullQuote}</span>
+                      )}
+                    </p>
+
+                    {/* Pull-quote breakout — strong mid-answer sentence */}
+                    {pullQuote && (
+                      <figure
+                        className="my-8 flex flex-col items-center text-center"
+                        aria-label="Pull quote"
+                      >
+                        <span
+                          className="block h-[2px] w-12 rounded-full"
+                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                        />
+                        <blockquote
+                          className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                          style={{
+                            color: activePalette.ink,
+                            fontSize: "clamp(1.25rem, 2.6vw, 1.6rem)",
+                            maxWidth: "640px",
+                            textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                          }}
+                        >
+                          <span
+                            aria-hidden
+                            style={{
+                              opacity: 0.55,
+                              marginRight: "0.12em",
+                              fontSize: "1.4em",
+                              lineHeight: 0,
+                              verticalAlign: "-0.18em",
+                            }}
+                          >
+                            “
+                          </span>
+                          {pullQuote.replace(/^["“”]|["“”]$/g, "")}
+                          <span
+                            aria-hidden
+                            style={{
+                              opacity: 0.55,
+                              marginLeft: "0.08em",
+                              fontSize: "1.4em",
+                              lineHeight: 0,
+                              verticalAlign: "-0.18em",
+                            }}
+                          >
+                            ”
+                          </span>
+                        </blockquote>
+                        <span
+                          className="mt-4 block h-[2px] w-12 rounded-full"
+                          style={{ backgroundColor: activePalette.ink, opacity: 0.55 }}
+                        />
+                      </figure>
                     )}
+
+                    {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
                   </div>
                 </article>
               );
