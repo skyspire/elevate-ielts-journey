@@ -810,7 +810,6 @@ function CueCardReader({
                   return (
                     <button
                       key={i}
-                      ref={(el) => { tabRefs.current[i] = el; }}
                       type="button"
                       role="tab"
                       aria-selected={active}
