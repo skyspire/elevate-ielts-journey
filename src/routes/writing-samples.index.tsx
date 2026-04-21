@@ -86,7 +86,12 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
 };
 
 // ───────── Questions ─────────
-import { task2Prompts } from "@/data/writing-prompts";
+import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
+
+const ALL_PROMPTS: Record<string, string[]> = {
+  ...task2Prompts,
+  ...task1GeneralPrompts,
+};
 
 type Tone = "blue" | "mint" | "peach" | "lilac";
 type Question = {
@@ -100,7 +105,7 @@ type Question = {
 const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
 
 const makeQuestions = (categoryId: string, label: string): Question[] => {
-  const prompts = task2Prompts[categoryId];
+  const prompts = ALL_PROMPTS[categoryId];
   const items = prompts && prompts.length > 0
     ? prompts
     : Array.from({ length: 8 }).map((_, i) => `${label} — Sample Question ${i + 1}`);

@@ -121,3 +121,42 @@ export const task2Prompts: Record<string, string[]> = {
     "Why is consumerism rising? What are the impacts?",
   ],
 };
+
+// Real IELTS GT Task 1 letter prompts.
+// Keys MUST match the category ids in writing-samples.index.tsx (formal / informal).
+export const task1GeneralPrompts: Record<string, string[]> = {
+  formal: [
+    "You recently bought a piece of equipment for your kitchen but it did not work. You phoned the shop but no action was taken. Write a letter to the shop manager. In your letter: describe the problem with the equipment, explain what happened when you phoned the shop, say what you would like the manager to do.",
+    "You have seen an advertisement in an English newspaper for a job working in the city museum shop during the holidays. Write a letter to the director of the museum. In your letter: explain why you are writing, describe your past work experience, give details of why you would be suitable for the job.",
+    "You are unhappy about a plan to make your local airport bigger and increase the number of flights. Write a letter to the local newspaper. In your letter: explain where you live and how it will be affected by the airport, give your reasons for not wanting this development, suggest an alternative plan.",
+    "You recently stayed at a hotel and were unhappy with the service you received. Write a letter to the hotel manager. In your letter: give details of your stay, explain what your complaints are, say what action you would like the manager to take.",
+    "You are organising a business event and you would like a famous local sportsperson to come and give a short speech. Write a letter to this sportsperson. In your letter: give details of the event, explain why you have chosen them, say what you would like them to talk about.",
+    "You have recently moved to a new house. Write a letter to your bank manager. In your letter: explain why you have moved, give your new address, ask the manager to update your records.",
+    "You have a problem with the heating system in your rented flat. Write a letter to the landlord. In your letter: introduce yourself, describe the problem, suggest a solution.",
+    "You have just spent a week with a friend on holiday. After your return home you discover you left a small bag in their house. Write a letter to your friend. In your letter: thank them for the holiday, explain what was in the bag, ask them to send it back.",
+    "You are a student at a college and you need an extra part-time job to earn some money. You see an advertisement for a job in a restaurant. Write a letter to the restaurant manager. In your letter: explain who you are, describe your relevant experience, say when you are available to start.",
+    "Your local council is planning to close a sports centre that you regularly use. Write a letter to the council. In your letter: explain how you use the centre, describe the effect this closure will have on you, suggest what could be done instead.",
+    "You took your family to a nearby restaurant. You were disappointed with the meal and wish to complain to the manager. Write a letter to the manager. In your letter: explain why you were at the restaurant, describe the problems, write about the action you want the manager to take.",
+    "You recently attended a training course for your job. Your employer has asked for your feedback. Write a letter to your employer. In your letter: describe the content of the course, explain what you found useful, say how it could be improved.",
+    "Your neighbours have recently written to you to complain about the noise from your house. Write a letter to your neighbours. In your letter: explain the reasons for the noise, apologise, describe what action you will take.",
+    "You want to apply for the following job advertised in a local newspaper: 'Tour guide needed for summer season'. Write a letter to the company. In your letter: introduce yourself, explain what experience and special skills you have, tell them when you would be available for an interview.",
+    "You recently lost an item of value on a bus. Write a letter to the bus company. In your letter: describe the item you lost, explain when and how you lost it, ask them what action they can take.",
+  ],
+  informal: [
+    "You are going to visit your friend in another country next month. Write a letter to your friend. In your letter: thank them for the invitation, give details of your travel arrangements, suggest things you would like to do together.",
+    "An English-speaking friend wants to spend a month in your country and has asked for your help with planning the trip. Write a letter to your friend. In your letter: say what time of year would be best to visit, suggest things to do during the visit, give advice on what they should bring.",
+    "A friend has agreed to look after your house and pet while you are on holiday. Write a letter to your friend. In your letter: give contact details for when you are away, give instructions about how to care for your pet, describe other household duties.",
+    "You and a friend are planning to go on a weekend break together. Your friend has asked you to organise the trip. Write a letter to your friend. In your letter: suggest where to go, explain why you have chosen this place, give details of what you will need to take.",
+    "You have been invited to a friend's birthday party but you are unable to attend. Write a letter to your friend. In your letter: thank them for the invitation, explain why you cannot come, suggest another time to meet.",
+    "A friend has recently moved to a new city for work. Write a letter to your friend. In your letter: ask how they are settling in, share some news from home, suggest a time to visit.",
+    "Your friend lent you a book that you have now finished reading. Write a letter to your friend. In your letter: thank them for the book, give your opinion about it, suggest another book they might enjoy.",
+    "You have just returned from a holiday that a friend recommended. Write a letter to your friend. In your letter: thank them for the recommendation, describe what you enjoyed most, suggest meeting up to share photos.",
+    "A friend has recently started learning English and has asked for your advice. Write a letter to your friend. In your letter: encourage them, suggest ways to practise, recommend useful resources.",
+    "You recently borrowed something from a friend and accidentally damaged it. Write a letter to your friend. In your letter: explain what happened, apologise, offer to replace or repair the item.",
+    "An old friend you have not seen for years is coming to visit. Write a letter to your friend. In your letter: say how excited you are, suggest places you can go together, ask if there is anything special they would like to do.",
+    "You recently celebrated a special occasion. Write a letter to a friend who could not attend. In your letter: describe the occasion, explain why it was special, invite them to celebrate with you another time.",
+    "A friend is thinking about moving to your city. Write a letter to your friend. In your letter: describe what life is like in your city, give advice about finding a place to live, offer to help.",
+    "Your friend is feeling stressed about an upcoming exam. Write a letter to your friend. In your letter: show that you understand, share study tips that worked for you, encourage them.",
+    "You attended your friend's wedding recently. Write a letter to your friend. In your letter: thank them for inviting you, describe what you enjoyed most, wish them well for the future.",
+  ],
+};
