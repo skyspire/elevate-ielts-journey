@@ -915,17 +915,14 @@ function CueCardReader({
                     // overflow / forced scrolling.
                     className="shrink-0 basis-[80%] snap-start sm:basis-[46%] lg:basis-[31%]"
                   >
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        const r = e.currentTarget.getBoundingClientRect();
-                        onOpenFollowUp(
-                          q,
-                          { x: r.left + r.width / 2, y: r.top + r.height / 2 },
-                          i + 1,
-                          followUps.length,
-                        );
+                    <Link
+                      to="/speaking-samples/$category/$topic/followup/$index"
+                      params={{
+                        category: categoryId,
+                        topic: topic.id,
+                        index: String(i + 1),
                       }}
+                      onClick={() => onClose()}
                       className="relative block h-full w-full overflow-hidden rounded-2xl p-4 text-left transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
                       style={{
                         backgroundColor: tone.fill,
@@ -961,7 +958,7 @@ function CueCardReader({
                       >
                         {q.title}
                       </p>
-                    </button>
+                    </Link>
                   </div>
                 );
               })}
