@@ -493,14 +493,49 @@ function TopicCard({
         </span>
       </div>
 
-      {/* Right column — topic name */}
-      <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
+      {/* Right column — topic name + brand lockup */}
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-3 px-5 py-6 sm:px-6">
         <p
           className="font-display font-black leading-tight tracking-tight"
           style={{ color: "oklch(0.42 0.10 165)", fontSize: "clamp(1.2rem, 2.56vw, 1.5rem)" }}
         >
           {topic.label}
         </p>
+
+        {/* BigIELTS brand lockup — same treatment as the FlipExpansion left column. */}
+        <div className="flex items-center gap-2">
+          <span
+            className="flex h-6 w-6 items-center justify-center rounded-md"
+            style={{
+              backgroundColor: "oklch(0.55 0.135 25)",
+              boxShadow:
+                "0 0 0 1px oklch(0.65 0.150 25 / 0.55), 0 4px 10px oklch(0.55 0.135 25 / 0.30)",
+            }}
+          >
+            <GraduationCap className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: "oklch(0.99 0.005 250)" }} />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="flex items-baseline gap-[1px]">
+              <span
+                className="font-display text-[12px] font-black tracking-tight"
+                style={{ color: "oklch(0.30 0.035 250)" }}
+              >
+                BigIELTS
+              </span>
+              <span
+                className="font-display text-[12px] font-black tracking-tight"
+                style={{ color: "oklch(0.55 0.080 125)" }}
+              >
+                .com
+              </span>
+            </span>
+            <span
+              aria-hidden
+              className="mt-[2px] h-[1.5px] w-full rounded-full"
+              style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
+            />
+          </span>
+        </div>
       </div>
     </button>
   );
