@@ -463,7 +463,7 @@ function CueCardReader({
     // Auto-cleanup after the animation finishes (~1700ms)
     const t = window.setTimeout(() => {
       setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
-    }, 1900);
+    }, 2400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variantIndex, isExpanded]);
