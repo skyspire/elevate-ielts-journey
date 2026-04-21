@@ -569,12 +569,6 @@ function CueCardReader({
           }}
         >
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span
-              className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: activePalette.ink, opacity: 0.72 }}
-            >
-              Cue Card {topicIndex || 1}
-            </span>
             <h2
               className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight"
               style={{ color: "oklch(0.42 0.10 165)" }}
@@ -626,9 +620,10 @@ function CueCardReader({
           }}
         />
 
-        {/* ── Top: Part Two eyebrow + close pill ───────────────────────── */}
-        <div className="relative flex items-start justify-between px-7 pt-8">
-          {/* Part Two handwritten eyebrow */}
+        {/* ── Top: Part Two handwritten eyebrow (left aligned).
+            The Back button has moved to the right column as a floating
+            translucent circle so the left card can breathe. */}
+        <div className="relative flex items-start px-7 pt-8">
           <span
             className="inline-flex items-center gap-1.5"
             style={{ color: activePalette.ink }}
@@ -653,22 +648,6 @@ function CueCardReader({
               </svg>
             </span>
           </span>
-
-          {/* Close pill */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
-            style={{
-              color: activePalette.ink,
-              backgroundColor: `${activePalette.ink}10`,
-              border: `1px solid ${activePalette.ink}30`,
-            }}
-            aria-label="Close sample answer"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
-          </button>
         </div>
 
         {/* ── Center: Stacked index numeral + cue-card title.
@@ -746,6 +725,31 @@ function CueCardReader({
           </span>
         </div>
       </aside>
+
+      {/* ── Floating circular close button (top-right of right column).
+          Translucent glass disc tinted with the active variant accent —
+          shifts color smoothly when the reader switches Answer 1/2/3.
+          Hidden on mobile (the mobile sticky header already carries Back). */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close sample answer"
+        className="group pointer-events-auto absolute right-6 top-6 z-30 hidden h-11 w-11 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 md:flex"
+        style={{
+          backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 14%, oklch(1 0 0 / 0.7))`,
+          border: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 32%, transparent)`,
+          color: activePalette.ink,
+          boxShadow:
+            "0 8px 24px -10px oklch(0.20 0.010 250 / 0.18), inset 0 1px 0 oklch(1 0 0 / 0.6)",
+          transition:
+            "background-color 380ms ease, border-color 380ms ease, color 380ms ease, transform 200ms ease",
+        }}
+      >
+        <ArrowLeft
+          className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5"
+          strokeWidth={2.4}
+        />
+      </button>
 
       {/* Scrollable RIGHT column — pure-white answer lane.
           On mobile this fills the full width; on desktop it sits next to
