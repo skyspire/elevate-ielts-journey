@@ -192,119 +192,22 @@ function QuestionDetailPage() {
             </div>
           </div>
 
-          {/* Question card */}
-          <div className="mt-10 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
-            <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-              <FileText className="h-3.5 w-3.5" />
-              Question
-            </div>
-            <p className="mt-3 font-display text-lg font-semibold leading-relaxed text-foreground sm:text-xl">
-              {title}
-            </p>
-          </div>
-
+          {/* ── Sample Answer billboard ────────────────────────────────
+              Replaces the previous stacked Question card + Sample Answer +
+              Structure breakdown + Vocabulary + Tips sections with the same
+              parchment-and-ink billboard reader used for cue cards. The
+              question lives in a sticky tinted left column on desktop; the
+              full essay scrolls in the pure-white right column. A footer
+              pager exposes three sample-answer tabs (placeholder content
+              for now — same essay across all three). */}
           {answer ? (
-            <>
-              {/* Answer meta strip */}
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-                <span className={`inline-flex items-center gap-1.5 rounded-full border ${accentChip} px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em]`}>
-                  <Award className="h-3.5 w-3.5" />
-                  Band {answer.bandScore}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/60">
-                  <Hash className="h-3.5 w-3.5" />
-                  {answer.wordCount} words
-                </span>
-              </div>
-
-              {/* Sample Answer */}
-              <section className="mt-6 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
-                <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-                  <PenLine className="h-3.5 w-3.5" />
-                  Sample Answer
-                </div>
-                <div className="mt-5 space-y-6">
-                  {answer.paragraphs.map((p) => (
-                    <div key={p.heading}>
-                      <h3 className={`font-display text-base font-extrabold tracking-tight ${accentText}`}>
-                        {p.heading}
-                      </h3>
-                      <p className="mt-2 text-[15px] font-medium leading-[1.75] text-foreground/85">
-                        {p.body}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {/* Structure breakdown */}
-              <section className="mt-6 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
-                <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-                  <ListOrdered className="h-3.5 w-3.5" />
-                  Structure breakdown
-                </div>
-                <ol className="mt-5 space-y-4">
-                  {answer.structure.map((s, i) => (
-                    <li key={s.label} className="flex gap-4">
-                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${accentBg} text-[12px] font-extrabold text-white`}>
-                        {i + 1}
-                      </span>
-                      <div>
-                        <p className="font-display text-[15px] font-extrabold tracking-tight text-foreground">
-                          {s.label}
-                        </p>
-                        <p className="mt-1 text-[14px] font-medium leading-relaxed text-foreground/70">
-                          {s.detail}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-
-              {/* Vocabulary */}
-              <section className="mt-6 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
-                <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-                  <BookOpen className="h-3.5 w-3.5" />
-                  Key vocabulary
-                </div>
-                <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {answer.vocabulary.map((v) => (
-                    <li
-                      key={v.term}
-                      className="rounded-xl border border-foreground/8 bg-paper-cream p-3.5"
-                    >
-                      <p className={`font-display text-[14px] font-extrabold tracking-tight ${accentText}`}>
-                        {v.term}
-                      </p>
-                      <p className="mt-1 text-[13px] font-medium leading-relaxed text-foreground/70">
-                        {v.meaning}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-
-              {/* Tips */}
-              <section className="mt-6 rounded-2xl border border-foreground/10 bg-white p-6 shadow-soft sm:p-8">
-                <div className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/50">
-                  <Lightbulb className="h-3.5 w-3.5" />
-                  Examiner tips
-                </div>
-                <ul className="mt-5 space-y-3">
-                  {answer.tips.map((t) => (
-                    <li key={t} className="flex gap-3">
-                      <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${accentBg}`} />
-                      <p className="text-[14px] font-medium leading-relaxed text-foreground/80">
-                        {t}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </>
+            <WritingAnswerBillboard
+              questionTitle={title}
+              questionNumber={questionNumber}
+              answer={answer}
+            />
           ) : (
-            <div className="mt-6 rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-6 text-center sm:p-8">
+            <div className="mt-10 rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-6 text-center sm:p-8">
               <span className={`inline-flex items-center gap-1.5 rounded-full ${accentChip} border px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em]`}>
                 <Sparkles className="h-3.5 w-3.5" />
                 Coming soon
