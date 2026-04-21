@@ -327,18 +327,30 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
-          {/* Hero — eyebrow + single headline above owl */}
+          {/* Hero — warm shimmer headline above the owl */}
           <div className="text-center">
-            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em] text-foreground/45 sm:text-[12px]">
-              Your Toolkit
-            </span>
-            <h1 className="mt-3 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-              Pick Your IELTS
+            <h1 className="relative inline-block font-display text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+              <span className="text-gradient-shimmer">Pick Your IELTS</span>
+
+              {/* Hand-drawn pencil swoosh */}
+              <svg
+                aria-hidden
+                viewBox="0 0 300 22"
+                preserveAspectRatio="none"
+                className="absolute -bottom-3 left-0 h-3 w-full text-[oklch(0.65_0.15_55)] sm:-bottom-4 sm:h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
+              </svg>
             </h1>
           </div>
 
           {/* Toggle */}
-          <div className="mt-10 flex justify-center">
+          <div className="mt-12 flex justify-center sm:mt-14">
             <ModuleToggle module={module} setModule={setModule} />
           </div>
 
