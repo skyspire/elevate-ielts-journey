@@ -53,12 +53,12 @@ type Category = {
 
 const categoriesByMode: Record<Mode, Category[]> = {
   general: [
-    { id: "hometown", label: "Hometown & Home", hint: "Part 1 favourites", icon: MessageCircle },
-    { id: "work-study", label: "Work & Study", hint: "Daily life questions", icon: MessageCircle },
-    { id: "hobbies", label: "Hobbies & Free Time", hint: "Personal preferences", icon: MessageCircle },
-    { id: "technology", label: "Technology & Society", hint: "Part 3 abstract themes", icon: MessageCircle },
-    { id: "environment", label: "Environment", hint: "Discussion topics", icon: MessageCircle },
-    { id: "education-p3", label: "Education", hint: "Opinion & analysis", icon: MessageCircle },
+    { id: "things", label: "Things", hint: "Objects, gifts, items", icon: MessageCircle },
+    { id: "activities", label: "Activities", hint: "Hobbies & routines", icon: MessageCircle },
+    { id: "places", label: "Places", hint: "Hometown, cities, spaces", icon: MessageCircle },
+    { id: "people", label: "People", hint: "Family, friends, role models", icon: MessageCircle },
+    { id: "experiences", label: "Experiences", hint: "Memories & moments", icon: MessageCircle },
+    { id: "future-plans", label: "Future Plans", hint: "Goals & aspirations", icon: MessageCircle },
   ],
   cuecards: [
     { id: "person", label: "Describe a Person", hint: "Friend, mentor, family", icon: ClipboardList },
