@@ -534,13 +534,13 @@ function CueCardReader({
           backgroundColor: activePalette.fill,
         }}
       >
-        {/* Film grain — fine SVG-noise via radial dots, blended */}
+        {/* Paper grain — whisper-faint dark dots over the off-white paper for tactile tooth. */}
         <div
-          className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
+          className="absolute inset-0 mix-blend-multiply opacity-[0.04]"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
-            backgroundSize: "4px 4px, 7px 7px",
+              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.4px, transparent 1px)",
+            backgroundSize: "5px 5px, 9px 9px",
           }}
         />
       </div>
