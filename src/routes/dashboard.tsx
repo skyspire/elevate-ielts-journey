@@ -278,8 +278,8 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Bento grid — mixed-size widget cards */}
-          <div className="-mx-2 grid grid-cols-1 gap-3 sm:mx-0 sm:grid-cols-6 sm:gap-4 sm:[grid-auto-rows:minmax(150px,auto)] lg:gap-5">
+          {/* Bold color blocks — equal-size grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
             {features.map((f) => (
               <FeatureCard key={f.key} feature={f} module={module} />
             ))}
