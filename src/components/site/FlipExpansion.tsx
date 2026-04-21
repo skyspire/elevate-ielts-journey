@@ -463,7 +463,7 @@ function CueCardReader({
     // Auto-cleanup after the animation finishes (~1700ms)
     const t = window.setTimeout(() => {
       setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
-    }, 1900);
+    }, 2400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variantIndex, isExpanded]);
@@ -933,7 +933,7 @@ function CueCardReader({
                 {dots.map((i) => {
                   const t = (i + 1) / (dots.length + 1);
                   // Same path sampling as the plane for perfect alignment.
-                  const offsetDelay = t * 950;
+                  const offsetDelay = t * 1400;
                   return (
                     <span
                       key={i}
@@ -956,7 +956,7 @@ function CueCardReader({
                   } as React.CSSProperties}
                 >
                   <div className="paper-plane-wobble">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
                       {/* Paper plane silhouette */}
                       <path
                         d="M2.5 12 L21.5 3.5 L14 21 L11 13.5 L2.5 12 Z"
@@ -1015,24 +1015,23 @@ function CueCardReader({
           position: absolute;
           top: 0;
           left: 0;
-          width: 22px;
-          height: 22px;
-          margin-left: -11px;
-          margin-top: -11px;
+          width: 120px;
+          height: 120px;
+          margin-left: -60px;
+          margin-top: -60px;
           offset-rotate: auto;
           -webkit-offset-rotate: auto;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-plane-fly 1500ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
-          filter: drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
+          animation: paper-plane-fly 2200ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
+          filter: drop-shadow(0 14px 22px oklch(0.2 0.05 60 / 0.28)) drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
           will-change: offset-distance, opacity;
         }
         .paper-plane-wobble {
           width: 100%;
           height: 100%;
-          /* Compensate the SVG art so its nose points along the path direction. */
           transform-origin: 50% 50%;
-          animation: paper-plane-wobble 460ms ease-in-out infinite;
+          animation: paper-plane-wobble 520ms ease-in-out infinite;
         }
         @keyframes paper-plane-fly {
           0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.6); }
@@ -1051,18 +1050,18 @@ function CueCardReader({
           position: absolute;
           top: 0;
           left: 0;
-          width: 4px;
-          height: 4px;
-          margin-left: -2px;
-          margin-top: -2px;
+          width: 6px;
+          height: 6px;
+          margin-left: -3px;
+          margin-top: -3px;
           border-radius: 9999px;
           opacity: 0;
           offset-rotate: 0deg;
           -webkit-offset-rotate: 0deg;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-trail-fade 1500ms ease-out forwards;
-          filter: blur(0.3px);
+          animation: paper-trail-fade 2200ms ease-out forwards;
+          filter: blur(0.4px);
           will-change: offset-distance, opacity;
         }
         @keyframes paper-trail-fade {
