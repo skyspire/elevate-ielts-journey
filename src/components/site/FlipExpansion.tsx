@@ -637,47 +637,83 @@ function CueCardReader({
         }}
       >
         <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
-          <div
-            className="space-y-12 pt-4 ink-bleed-reveal"
-            // Re-key the entire lane on variant switch so the ink-bleed mask
-            // animation replays cleanly from the top each time.
-            key={`ink-${variantIndex}`}
-            style={{
-              // Ink bleed reveal — a soft downward mask wipes from top to
-              // bottom (~650ms), as if ink is bleeding into paper. Paired
-              // with a whisper blur-to-sharp focus for a premium, editorial
-              // arrival. After settling, a gentle breathing glow pulses
-              // behind the text every ~6s.
-              ["--ink-tint" as string]: activePalette.glow,
-            }}
-          >
-            {sections.map((s, i) => {
-              const visible = i < revealedSections;
-              return (
-                <section
-                  key={`${variantIndex}-${s.heading}`}
-                  style={{
-                    visibility: visible ? "visible" : "hidden",
-                  }}
-                >
-                  <h3
-                    className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
-                    style={{ color: activePalette.heading, transition: "color 650ms cubic-bezier(0.4, 0, 0.2, 1)" }}
-                  >
-                    {s.heading}
-                  </h3>
-                  <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
-                    {s.body}
-                  </p>
-                  {/* Soft rhythm marker between paragraphs */}
-                  {i < sections.length - 1 && (
-                    <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
-                  )}
-                </section>
-              );
-            })}
-          </div>
+          {(() => {
+            // Lateral slide choreography:
+            //   out  → translate by  -switchDir * 32px, opacity 0 (260ms)
+            //   in   → enters from  +switchDir * 32px, settles to 0 (380ms)
+            //   idle → resting at translate(0), opacity 1
+            // Note: switchDir = +1 for "next" (current goes left, new arrives
+            // from right); switchDir = -1 for "prev".
+            let translateX = 0;
+            let opacity = 1;
+            let transitionMs = 0;
+            let easing = "cubic-bezier(0.4, 0, 0.2, 1)";
 
+            if (gravityPhase === "out") {
+              translateX = -switchDir * 32;
+              opacity = 0;
+              transitionMs = 260;
+              easing = "cubic-bezier(0.4, 0, 1, 1)"; // ease-in (accelerate out)
+            } else if (gravityPhase === "in") {
+              // Pre-position is handled by the keyed remount: a fresh element
+              // mounts at +switchDir * 32px / opacity 0, then transitions to 0/1.
+              translateX = 0;
+              opacity = 1;
+              transitionMs = 380;
+              easing = "cubic-bezier(0, 0, 0.2, 1)"; // ease-out (decelerate in)
+            }
+
+            return (
+              <div
+                // Re-key on variant change so the incoming element mounts
+                // fresh from its starting offset (defined in the inline
+                // style below for the "in" phase).
+                key={`lane-${variantIndex}`}
+                className="space-y-12 pt-4"
+                style={{
+                  transform: `translate3d(${translateX}px, 0, 0)`,
+                  opacity,
+                  transition: transitionMs
+                    ? `transform ${transitionMs}ms ${easing}, opacity ${transitionMs}ms ${easing}`
+                    : "none",
+                  willChange: gravityPhase === "idle" ? "auto" : "transform, opacity",
+                  // Starting offset for the freshly-mounted incoming lane:
+                  // CSS animation reads from the data attribute via a tiny
+                  // helper class so we get a clean enter without a flicker.
+                  ["--enter-x" as string]: `${switchDir * 32}px`,
+                }}
+                data-lane-phase={gravityPhase}
+              >
+                {sections.map((s, i) => {
+                  const visible = i < revealedSections;
+                  return (
+                    <section
+                      key={`${variantIndex}-${s.heading}`}
+                      style={{
+                        visibility: visible ? "visible" : "hidden",
+                      }}
+                    >
+                      <h3
+                        className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
+                        style={{
+                          color: activePalette.heading,
+                          transition: "color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+                        }}
+                      >
+                        {s.heading}
+                      </h3>
+                      <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
+                        {s.body}
+                      </p>
+                      {i < sections.length - 1 && (
+                        <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </article>
       </div>
 
