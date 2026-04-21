@@ -438,6 +438,36 @@ function CueCardReader({
   ];
   const activePalette = palette[variantIndex % palette.length];
 
+  // Launch a paper plane whenever the active answer changes.
+  useEffect(() => {
+    if (!isExpanded) return;
+    if (prevVariantRef.current === variantIndex) return;
+    prevVariantRef.current = variantIndex;
+
+    const tabEl = tabRefs.current[variantIndex];
+    const headerEl = headerAnchorRef.current;
+    if (!tabEl || !headerEl) return;
+    const tabRect = tabEl.getBoundingClientRect();
+    const headerRect = headerEl.getBoundingClientRect();
+    const from = {
+      x: tabRect.left + tabRect.width / 2,
+      y: tabRect.top + tabRect.height / 2,
+    };
+    const to = {
+      x: headerRect.left + headerRect.width / 2,
+      y: headerRect.top + headerRect.height / 2,
+    };
+    const id = ++flightIdRef.current;
+    const tone = palette[variantIndex % palette.length].tabBg;
+    setPlaneFlights((flights) => [...flights, { id, from, to, tone }]);
+    // Auto-cleanup after the animation finishes (~1700ms)
+    const t = window.setTimeout(() => {
+      setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
+    }, 1900);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variantIndex, isExpanded]);
+
   return (
     <div
       className={`pointer-events-auto absolute inset-0 origin-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
