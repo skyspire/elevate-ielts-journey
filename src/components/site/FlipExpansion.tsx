@@ -388,6 +388,28 @@ function CueCardReader({
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
+  // ── Paper plane flight ───────────────────────────────────────────────────
+  // On every variant switch, launch a paper plane from the newly active tab
+  // (bottom of viewport) toward the header (top), traveling a playful zig-zag
+  // path with subtle wobble + roll. A whisper dotted trail fades behind it.
+  const headerAnchorRef = useRef<HTMLDivElement | null>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const [planeFlights, setPlaneFlights] = useState<
+    Array<{
+      id: number;
+      from: { x: number; y: number };
+      to: { x: number; y: number };
+      tone: string;
+    }>
+  >([]);
+  const flightIdRef = useRef(0);
+  const prevVariantRef = useRef(variantIndex);
+
+  // Coordinated palette — drives both the reading-screen warm tint and the
+  // vibrant footer tabs. Index matches the active variant.
+  // 1. Coral · 2. Marigold · 3. Emerald
+  // (Defined early so the plane-launch effect below can reference it.)
+
   // Coordinated palette — drives both the reading-screen warm tint and the
   // vibrant footer tabs. Index matches the active variant.
   // 1. Coral · 2. Marigold · 3. Emerald
