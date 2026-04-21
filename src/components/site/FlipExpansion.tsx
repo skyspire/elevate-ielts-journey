@@ -625,35 +625,7 @@ function CueCardReader({
           }}
         />
 
-        {/* ── Top: Part Two handwritten eyebrow (left aligned).
-            The Back button has moved to the right column as a floating
-            translucent circle so the left card can breathe. */}
-        <div className="relative flex items-start px-7 pt-8">
-          <span
-            className="inline-flex items-center gap-1.5"
-            style={{ color: activePalette.ink }}
-          >
-            <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
-            <span className="relative font-handwriting text-[20px] leading-none tracking-tight">
-              Part Two
-              <svg
-                aria-hidden
-                viewBox="0 0 80 6"
-                className="pointer-events-none absolute -bottom-1 left-0 h-[5px] w-full"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M2 4 Q 20 1, 40 3 T 78 2.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  opacity="0.8"
-                />
-              </svg>
-            </span>
-          </span>
-        </div>
+
 
         {/* ── Center: Stacked index numeral + cue-card title.
             Typography matches the TopicCard on the Speaking Samples index:
