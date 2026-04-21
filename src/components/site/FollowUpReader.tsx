@@ -414,7 +414,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               return (
                 <article
                   key={`fu-billboard-${variantIndex}`}
-                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[3fr_2fr] lg:gap-14 lg:py-10"
+                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[2fr_3fr] lg:gap-14 lg:py-10"
                   style={{
                     visibility: visible ? "visible" : "hidden",
                     ...(isOut ? outStyle : inOrIdleStyle),
@@ -426,10 +426,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       desktop this sits in column 2 (right). On mobile it
                       stacks above the answer (order-1). */}
                   <aside
-                    className="order-1 flex flex-col items-center justify-center text-center lg:order-2 lg:border-l lg:pl-12"
-                    style={{
-                      borderColor: `${activePalette.ink}26`,
-                    }}
+                    className="order-1 flex flex-col items-center justify-center text-center lg:order-1 lg:pr-12"
                   >
                     {/* Outlined circle index badge */}
                     <div
@@ -497,7 +494,10 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                   {/* ── LEFT COLUMN (mobile: second) ──────────────────────
                       Single-flow answer body with bold opening phrase and
                       a centered pull-quote breakout mid-answer. */}
-                  <div className="order-2 lg:order-1">
+                  <div
+                    className="order-2 lg:order-2 lg:border-l lg:pl-12"
+                    style={{ borderColor: `${activePalette.ink}26` }}
+                  >
                     <div
                       className="font-display"
                       style={{
