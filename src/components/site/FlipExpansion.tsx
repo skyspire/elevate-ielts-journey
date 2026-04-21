@@ -416,29 +416,24 @@ function CueCardReader({
         }}
       />
 
-      {/* Soft floating sticky header */}
+      {/* Stable, isolated topic header — single clean heading line.
+          Intentionally contains NO prompt text and stays fixed in its own
+          space so it never visually merges with the scrolling answer. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
         style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
       >
-        <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/55 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}
-                >
-                  <Mic className="h-3 w-3" strokeWidth={2.6} />
-                  Part 2
-                </span>
-                <span
-                  className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
-                >
-                  {topic.label} · Band {currentVariant.bandScore}+
-                </span>
-              </div>
-              <h2 className="mt-1.5 whitespace-pre-line font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground/85 sm:text-[17px]">
-                {headerQuestion?.title ?? topic.label}
+        <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex items-center gap-2.5">
+              <span
+                className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}
+              >
+                <Mic className="h-3 w-3" strokeWidth={2.6} />
+                Part 2
+              </span>
+              <h2 className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[19px]">
+                {topic.label}
               </h2>
             </div>
             <button
@@ -453,6 +448,14 @@ function CueCardReader({
           </div>
         </div>
       </div>
+
+      {/* Hairline separator between header and reading lane — keeps the
+          two regions visually independent while scrolling. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 z-10 h-px bg-foreground/10"
+        style={{ top: "92px" }}
+        aria-hidden
+      />
 
       {/* Scrollable reading lane */}
       <div
