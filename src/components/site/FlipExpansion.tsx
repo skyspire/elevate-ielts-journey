@@ -504,6 +504,17 @@ function CueCardReader({
   ];
   const activePalette = palette[variantIndex % palette.length];
 
+  // Topic index within its category (1-based) — drives the big numeral
+  // displayed at the top of the sticky left column.
+  const topicsInCategory = speakingTopicsByCategory[categoryId] ?? [];
+  const topicIndex = Math.max(0, topicsInCategory.findIndex((t) => t.id === topic.id)) + 1;
+  const topicNumber = String(topicIndex || 1).padStart(2, "0");
+
+  // Tinted cream/ivory tone for the left column — sits on the pure white
+  // reader and creates spatial separation through tone alone (no divider).
+  const LEFT_TINT = "oklch(0.985 0.008 90)";
+  const LEFT_BORDER = "oklch(0.30 0.035 250 / 0.08)";
+
   // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
     if (!isExpanded) return;
