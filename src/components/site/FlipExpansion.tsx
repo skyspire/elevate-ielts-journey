@@ -768,12 +768,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Match FollowUpReader's amber/teal/plum palette so each tile's
-        // accent equals the answer-screen color it opens into.
+        // Muted off-white tiles (taupe variants of ecru/oat/linen) so the
+        // rail stays visually quiet against the calm paper screen. Color
+        // identity comes from the deep ink numerals, not from saturated fills.
         const followUpPalette = [
-          { fill: "oklch(0.62 0.18 65)",  ink: "oklch(0.99 0.015 80)" },  // Amber
-          { fill: "oklch(0.50 0.13 200)", ink: "oklch(0.99 0.012 200)" }, // Teal
-          { fill: "oklch(0.46 0.16 330)", ink: "oklch(0.99 0.015 330)" }, // Plum
+          { fill: "oklch(0.93 0.018 75)",  ink: "oklch(0.30 0.025 60)" },  // Warm taupe
+          { fill: "oklch(0.92 0.014 95)",  ink: "oklch(0.30 0.020 70)" },  // Sand
+          { fill: "oklch(0.92 0.010 110)", ink: "oklch(0.30 0.018 100)" }, // Stone
         ];
 
         return (
