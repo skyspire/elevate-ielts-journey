@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   Link as LinkIcon,
   MessageCircleQuestion,
+  GraduationCap,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -406,6 +407,36 @@ function CueCardReader({
         />
       </div>
 
+      {/* Centered brand seal watermark — embossed-stamp feel behind the reading column. */}
+      <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center" style={{ opacity: 0.05 }}>
+          <div
+            className="flex items-center justify-center rounded-[40px] border-[6px] border-foreground"
+            style={{ width: "min(58vmin, 460px)", height: "min(58vmin, 460px)" }}
+          >
+            <div className="flex flex-col items-center gap-5">
+              <GraduationCap
+                className="text-foreground"
+                style={{ width: "min(20vmin, 150px)", height: "min(20vmin, 150px)" }}
+                strokeWidth={2.5}
+              />
+              <div
+                className="font-display font-black tracking-tight text-foreground"
+                style={{ fontSize: "min(7vmin, 56px)", lineHeight: 1 }}
+              >
+                BigIELTS
+              </div>
+              <div
+                className="font-display font-extrabold tracking-[0.4em] text-foreground"
+                style={{ fontSize: "min(2.2vmin, 14px)" }}
+              >
+                .COM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Focus-tunnel vignette — sharpens as user scrolls */}
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-500"
@@ -657,22 +688,22 @@ function CueCardReader({
                         backgroundColor: active ? tone.soft : "transparent",
                       }}
                     >
-                      <div className="flex items-baseline gap-1.5">
+                      <div className="flex items-baseline gap-2">
                         <span
-                          className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] transition-colors"
+                          className="font-display text-[20px] font-black leading-none tracking-tight transition-colors sm:text-[22px]"
                           style={{
-                            color: active ? tone.accent : "oklch(1 0 0 / 0.40)",
-                          }}
-                        >
-                          Answer
-                        </span>
-                        <span
-                          className="font-display text-[17px] font-black leading-none transition-colors sm:text-[19px]"
-                          style={{
-                            color: active ? tone.accent : "oklch(1 0 0 / 0.50)",
+                            color: active ? tone.accent : "oklch(1 0 0 / 0.55)",
                           }}
                         >
                           {i + 1}
+                        </span>
+                        <span
+                          className="font-display text-[13px] font-semibold leading-none tracking-tight transition-colors sm:text-[14px]"
+                          style={{
+                            color: active ? "oklch(1 0 0 / 0.85)" : "oklch(1 0 0 / 0.50)",
+                          }}
+                        >
+                          Answer
                         </span>
                       </div>
                       {/* Thin indicator bar — fills with the segment's tone when active */}
