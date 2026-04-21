@@ -342,12 +342,10 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Feature cards — corkboard masonry of polaroids */}
-          <div className="columns-1 gap-5 sm:columns-2 [column-fill:_balance]">
+          {/* Bento grid — mixed-size widget cards */}
+          <div className="-mx-2 grid grid-cols-1 gap-3 sm:mx-0 sm:grid-cols-6 sm:gap-4 sm:[grid-auto-rows:minmax(150px,auto)] lg:gap-5">
             {features.map((f) => (
-              <div key={f.key} className="mb-5 break-inside-avoid">
-                <FeatureCard feature={f} module={module} />
-              </div>
+              <FeatureCard key={f.key} feature={f} module={module} />
             ))}
           </div>
 
