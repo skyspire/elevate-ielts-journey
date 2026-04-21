@@ -536,13 +536,46 @@ function CueCardReader({
           backgroundColor: activePalette.fill,
         }}
       >
-        {/* Paper grain — whisper-faint dark dots over the off-white paper for tactile tooth. */}
+        {/* Soft vellum grain — fibrous tracing-paper feel.
+            Three whisper-faint layers compose a premium vellum surface:
+            1. Long diagonal fibres (anisotropic streaks, the hallmark of vellum)
+            2. Counter-diagonal cross fibres (subtle interleave)
+            3. Faint cloudy translucency (large soft luminance variation)
+            All sit at <5% effective opacity so the texture is felt, not seen. */}
         <div
-          className="absolute inset-0 mix-blend-multiply opacity-[0.04]"
+          aria-hidden
+          className="absolute inset-0 mix-blend-multiply opacity-[0.05]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.4px, transparent 1px)",
-            backgroundSize: "5px 5px, 9px 9px",
+            backgroundImage: `repeating-linear-gradient(118deg,
+              transparent 0px,
+              transparent 2px,
+              ${SIGNATURE_INK} 2px,
+              transparent 2.6px,
+              transparent 5px,
+              ${SIGNATURE_INK} 5px,
+              transparent 5.4px,
+              transparent 11px)`,
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(62deg,
+              transparent 0px,
+              transparent 3px,
+              ${SIGNATURE_INK} 3px,
+              transparent 3.5px,
+              transparent 9px)`,
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 mix-blend-soft-light opacity-[0.55]"
+          style={{
+            backgroundImage: `radial-gradient(ellipse 60% 45% at 22% 28%, oklch(1 0 0) 0%, transparent 60%),
+              radial-gradient(ellipse 55% 50% at 78% 72%, oklch(1 0 0) 0%, transparent 65%),
+              radial-gradient(ellipse 40% 35% at 55% 50%, ${SIGNATURE_INK} 0%, transparent 70%)`,
           }}
         />
       </div>
