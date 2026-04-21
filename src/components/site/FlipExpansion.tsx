@@ -620,9 +620,10 @@ function CueCardReader({
           }}
         />
 
-        {/* ── Top: Part Two eyebrow + close pill ───────────────────────── */}
-        <div className="relative flex items-start justify-between px-7 pt-8">
-          {/* Part Two handwritten eyebrow */}
+        {/* ── Top: Part Two handwritten eyebrow (left aligned).
+            The Back button has moved to the right column as a floating
+            translucent circle so the left card can breathe. */}
+        <div className="relative flex items-start px-7 pt-8">
           <span
             className="inline-flex items-center gap-1.5"
             style={{ color: activePalette.ink }}
@@ -647,22 +648,6 @@ function CueCardReader({
               </svg>
             </span>
           </span>
-
-          {/* Close pill */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
-            style={{
-              color: activePalette.ink,
-              backgroundColor: `${activePalette.ink}10`,
-              border: `1px solid ${activePalette.ink}30`,
-            }}
-            aria-label="Close sample answer"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
-          </button>
         </div>
 
         {/* ── Center: Stacked index numeral + cue-card title.
