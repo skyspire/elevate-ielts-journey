@@ -32,10 +32,14 @@ export function FlipExpansion({
 }: FlipExpansionProps) {
   const [phase, setPhase] = useState<Phase>("closed");
   const [revealedSections, setRevealedSections] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
   const headerQuestion = questions[0];
+  // Examiner follow-ups (skip the cue card itself at index 0)
+  const followUps = isCue ? questions.slice(1) : [];
   const answer: SpeakingModelAnswer = getSpeakingModelAnswer(topic.label, isCue);
 
   // Drive the open/close phase machine
