@@ -548,7 +548,7 @@ function CueCardReader({
       {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
         className="pointer-events-none absolute z-[1]"
-        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.18 }}
+        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.10 }}
       >
         <div
           className="flex items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
