@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samp
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 
+const VocabularyRoute = VocabularyRouteImport.update({
+  id: '/vocabulary',
+  path: '/vocabulary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/vocabulary': typeof VocabularyRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/vocabulary': typeof VocabularyRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/vocabulary': typeof VocabularyRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/vocabulary'
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/vocabulary'
     | '/writing-samples/$questionId'
     | '/speaking-samples'
     | '/writing-samples'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/vocabulary'
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
+  VocabularyRoute: typeof VocabularyRoute
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
@@ -125,6 +138,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vocabulary': {
+      id: '/vocabulary'
+      path: '/vocabulary'
+      fullPath: '/vocabulary'
+      preLoaderRoute: typeof VocabularyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
+  VocabularyRoute: VocabularyRoute,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
