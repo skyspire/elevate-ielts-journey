@@ -473,27 +473,35 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — base color shifts to a warm tint of the active answer's palette. */}
+      {/* Atmospheric background — base color shifts to a tint of the active answer's palette.
+          Uses a single, explicit background-color transition aligned with the
+          640ms slide window. The decorative gradient orbs intentionally have
+          no transition: a radial-gradient cannot be smoothly interpolated, so
+          a transition there causes a visible snap-flicker. The orbs simply
+          re-render with the new color while the mood veil masks the change. */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden transition-colors duration-700 ease-out"
-        style={{ backgroundColor: activePalette.screen }}
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{
+          backgroundColor: activePalette.screen,
+          transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
       >
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 26s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-b 32s ease-in-out infinite",
           }}
         />
         <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl transition-[background] duration-700 ease-out"
+          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl"
           style={{
             background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
             animation: "drift-a 38s ease-in-out infinite reverse",
@@ -692,13 +700,15 @@ function CueCardReader({
                           color: activePalette.heading,
                           // Soft tinted band — derived from the active heading
                           // color, mixed with the screen tint so it sits
-                          // gently on top of the already-tinted reading lane
-                          // without overwhelming the body text.
+                          // gently on the already-tinted reading lane.
                           backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
                           // Hairline tonal border for a refined edge.
                           boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
-                          transition:
-                            "color 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+                          // No transition: the lane re-mounts on variant
+                          // switch (key={lane-${variantIndex}}) so there's no
+                          // "from" state to interpolate. Adding a transition
+                          // here causes a visible snap-flicker because
+                          // color-mix() values cannot be tweened by browsers.
                         }}
                       >
                         {s.heading}
@@ -919,32 +929,17 @@ function CueCardReader({
         );
       })()}
 
-      {/* Atmospheric mood-shift veil — a soft palette-tinted wash that
-          briefly desaturates and dims the reading lane during a variant
-          switch, then resaturates into the new palette. Silent, premium. */}
+      {/* Atmospheric mood veil — a single solid layer that fades in then out
+          during a variant switch. Uses opacity (cheap, GPU-friendly, no
+          repaint flicker) instead of backdrop-filter, and a fixed neutral
+          tint instead of a color-mix value (which cannot be tweened). The
+          mask hides the brief snap as the gradient orbs re-render. */}
       <div
         className="pointer-events-none absolute inset-0 z-[15]"
         style={{
-          backgroundColor:
-            moodPhase === "out"
-              ? "oklch(0.18 0.005 80 / 0.18)"
-              : moodPhase === "in"
-                ? `color-mix(in oklch, ${activePalette.glow} 18%, transparent)`
-                : "transparent",
-          backdropFilter:
-            moodPhase === "out"
-              ? "saturate(0.55) brightness(0.96)"
-              : moodPhase === "in"
-                ? "saturate(1.05) brightness(1.01)"
-                : "none",
-          WebkitBackdropFilter:
-            moodPhase === "out"
-              ? "saturate(0.55) brightness(0.96)"
-              : moodPhase === "in"
-                ? "saturate(1.05) brightness(1.01)"
-                : "none",
-          transition:
-            "background-color 325ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundColor: "oklch(0.18 0.005 80)",
+          opacity: moodPhase === "out" ? 0.18 : 0,
+          transition: "opacity 320ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
         aria-hidden
       />
