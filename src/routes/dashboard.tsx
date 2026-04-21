@@ -548,191 +548,111 @@ function FeatureCard({
   module: Module;
 }) {
   const tone = tones[feature.tone];
-  const personality = personalities[feature.key] ?? {
-    rotate: "0deg",
-    size: "md" as const,
-    pin: "tape-top" as const,
-    peekColor: "oklch(0.92 0.05 60)",
+  const span = spans[feature.key] ?? {
+    col: "sm:col-span-3",
+    row: "sm:row-span-1",
+    variant: "compact" as const,
   };
   const { value, label } = feature.count[module];
   const Icon = feature.icon;
+  const isHero = span.variant === "hero";
+  const isWide = span.variant === "wide";
 
-  const photoH =
-    personality.size === "lg"
-      ? "h-44 sm:h-52"
-      : personality.size === "md"
-        ? "h-36 sm:h-40"
-        : "h-28 sm:h-32";
-
-  const cardClass =
-    "polaroid group relative block w-full cursor-pointer rounded-[6px] bg-[oklch(0.985_0.008_85)] p-3 pb-5 text-left shadow-[0_8px_22px_-10px_oklch(0.20_0.04_60/0.35),0_2px_4px_-2px_oklch(0.20_0.04_60/0.20)] transition-all duration-300 ease-out will-change-transform hover:z-10 hover:rotate-0 hover:scale-[1.025] hover:shadow-[0_22px_40px_-12px_oklch(0.20_0.04_60/0.35),0_4px_10px_-4px_oklch(0.20_0.04_60/0.25)]";
+  const cardClass = `bento-card group relative flex h-full min-h-[160px] flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-white p-5 text-left shadow-[0_1px_2px_oklch(0.20_0.04_60/0.04),0_8px_24px_-12px_oklch(0.20_0.04_60/0.10)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_18px_40px_-16px_oklch(0.20_0.04_60/0.18)] focus-visible:outline-none focus-visible:ring-2 ${span.col} ${span.row}`;
 
   const inner = (
     <>
+      {/* Soft corner gradient — the unique color signature of this card */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 rounded-[6px] opacity-0 shadow-[0_4px_14px_-6px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:translate-x-2 group-hover:rotate-[3deg] group-hover:opacity-100"
-        style={{ background: personality.peekColor }}
+        className="pointer-events-none absolute inset-0 opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: tone.gradient }}
+      />
+      {/* Subtle dot grid texture, masked to top-right corner */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.18] [background-image:radial-gradient(oklch(0.30_0.04_60)_1px,transparent_1px)] [background-size:14px_14px] [mask-image:radial-gradient(120%_90%_at_100%_0%,black,transparent_55%)]"
+      />
+      {/* Hover ring accent */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset transition-opacity duration-300 group-hover:opacity-100"
+        style={{ ["--tw-ring-color" as string]: tone.ring }}
       />
 
-      {personality.pin === "tape-top" && (
+      {/* Top row: icon chip + count chip */}
+      <div className="relative flex items-start justify-between gap-3">
         <span
-          aria-hidden
-          className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 rounded-[2px] shadow-sm"
-          style={{
-            background: tone.tapeColor,
-            backgroundImage:
-              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
-          }}
-        />
-      )}
-      {personality.pin === "tape-corner" && (
-        <span
-          aria-hidden
-          className="absolute -top-2 -left-3 h-4 w-14 -rotate-[35deg] rounded-[2px] shadow-sm"
-          style={{
-            background: tone.tapeColor,
-            backgroundImage:
-              "repeating-linear-gradient(45deg, transparent 0 6px, rgba(255,255,255,0.25) 6px 7px)",
-          }}
-        />
-      )}
-      {personality.pin === "pin-left" && (
-        <PushPin className="absolute -top-2 left-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
-      )}
-      {personality.pin === "pin-right" && (
-        <PushPin className="absolute -top-2 right-4 h-6 w-6 drop-shadow" color={tone.inkColor} />
-      )}
-
-      <div className={`relative w-full ${photoH} overflow-hidden rounded-[3px] ${tone.photoBg}`}>
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(oklch(0.30_0.04_60/0.10)_1px,transparent_1px)] [background-size:5px_5px]"
-        />
-        <svg
-          aria-hidden
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="absolute inset-0 h-full w-full"
+          className="flex h-11 w-11 items-center justify-center rounded-xl shadow-[inset_0_1px_0_oklch(1_0_0/0.6),0_1px_2px_oklch(0.20_0.04_60/0.06)] transition-transform duration-300 group-hover:scale-105"
+          style={{ background: tone.accentSoft, color: tone.accent }}
         >
-          <rect
-            x="2"
-            y="2"
-            width="96"
-            height="96"
-            rx="1"
-            fill="none"
-            stroke={tone.inkColor}
-            strokeOpacity="0.25"
-            strokeWidth="0.6"
-            strokeDasharray="2 1.5"
-          />
-        </svg>
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="relative transition-transform duration-500 ease-out group-hover:-rotate-6 group-hover:scale-110"
-            style={{ color: tone.inkColor }}
-          >
-            <Icon
-              className={
-                personality.size === "lg"
-                  ? "h-20 w-20"
-                  : personality.size === "md"
-                    ? "h-16 w-16"
-                    : "h-12 w-12"
-              }
-              strokeWidth={1.6}
-            />
-            <svg
-              aria-hidden
-              viewBox="0 0 100 100"
-              className="pointer-events-none absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]"
-            >
-              <ellipse
-                cx="50"
-                cy="50"
-                rx="44"
-                ry="40"
-                fill="none"
-                stroke={tone.inkColor}
-                strokeOpacity="0.35"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeDasharray="3 2"
-                style={{ transform: "rotate(-8deg)", transformOrigin: "50% 50%" }}
-              />
-            </svg>
-          </div>
-        </div>
-
+          <Icon className="h-[22px] w-[22px]" strokeWidth={2} />
+        </span>
         <span
-          className={`absolute bottom-2 right-2 rounded-full bg-white/85 px-2 py-0.5 font-display text-[10px] font-black tracking-tight ${tone.accentText}`}
+          className="rounded-full bg-white/85 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ring-1 ring-foreground/8"
+          style={{ color: tone.accent }}
         >
-          {value} · {label}
+          {value}
         </span>
       </div>
 
-      <div className="relative mt-3 px-1">
+      {/* Title + description */}
+      <div className={`relative mt-auto pt-6 ${isWide ? "max-w-xl" : ""}`}>
         <h3
-          className="font-handwriting text-[22px] leading-[1.05] text-foreground/85 sm:text-[24px]"
-          style={{ transform: "rotate(-1deg)" }}
+          className={`font-display font-bold tracking-tight text-foreground ${
+            isHero ? "text-2xl sm:text-[26px]" : isWide ? "text-xl" : "text-[17px]"
+          }`}
         >
           {feature.title}
         </h3>
         <p
-          className="mt-1 font-handwriting text-[15px] leading-snug text-foreground/55 sm:text-[16px]"
-          style={{ transform: "rotate(-0.5deg)" }}
+          className={`mt-1.5 text-foreground/60 ${
+            isHero || isWide ? "text-[14px] leading-relaxed" : "text-[13px] leading-snug"
+          }`}
         >
           {feature.description[module]}
         </p>
 
-        <svg
-          aria-hidden
-          viewBox="0 0 60 24"
-          className="absolute -right-1 -bottom-2 h-5 w-14 translate-x-2 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
-          fill="none"
-          stroke={tone.inkColor}
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M 4 14 C 18 8, 34 16, 50 10" />
-          <path d="M 44 6 L 52 10 L 46 16" />
-        </svg>
+        {/* Bottom meta row: small label + animated arrow */}
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/40">
+            {label}
+          </span>
+          <span
+            className="flex h-7 w-7 items-center justify-center rounded-full ring-1 ring-foreground/10 transition-all duration-300 group-hover:ring-2"
+            style={{
+              color: tone.accent,
+              ["--tw-ring-color" as string]: tone.ring,
+            }}
+          >
+            <ArrowUpRight
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              strokeWidth={2.5}
+            />
+          </span>
+        </div>
       </div>
+
+      {/* Accent bar — bottom edge, grows on hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-5 bottom-0 h-[2px] origin-left scale-x-0 rounded-full transition-transform duration-500 ease-out group-hover:scale-x-100"
+        style={{ background: tone.accent }}
+      />
     </>
   );
 
-  const style = { transform: `rotate(${personality.rotate})` };
-
   if (feature.to === "/dashboard/writing-samples") {
     return (
-      <Link to="/writing-samples" search={{ module }} className={cardClass} style={style}>
+      <Link to="/writing-samples" search={{ module }} className={cardClass}>
         {inner}
       </Link>
     );
   }
 
   return (
-    <button type="button" className={cardClass} style={style}>
+    <button type="button" className={cardClass}>
       {inner}
     </button>
-  );
-}
-
-function PushPin({ className, color }: { className?: string; color: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden>
-      <circle cx="12" cy="9" r="6" fill={color} />
-      <circle cx="10" cy="7" r="2" fill="white" fillOpacity="0.6" />
-      <path
-        d="M 12 14 L 12 22"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
