@@ -461,14 +461,14 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           //     as a permanent accent.
           const QuestionStack = (
             <aside className="flex w-full flex-col items-center text-center">
-              {/* Editorial numeral block */}
+              {/* Editorial numeral block — muted grey, restrained scale */}
               <div className="relative flex items-baseline justify-center" aria-hidden>
                 <span
                   className="font-display font-black leading-[0.85] tabular-nums"
                   style={{
-                    color: activePalette.ink,
-                    fontSize: "clamp(5rem, 9vw, 8.5rem)",
-                    letterSpacing: "-0.055em",
+                    color: "oklch(0.62 0.008 60)",
+                    fontSize: "clamp(2.75rem, 4.4vw, 4rem)",
+                    letterSpacing: "-0.045em",
                     fontFeatureSettings: '"ss01", "cv11", "lnum"',
                   }}
                 >
@@ -522,11 +522,11 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 />
               </div>
 
-              {/* Headline + ink-bleed underline sweep */}
+              {/* Headline + ink-bleed underline sweep — dark grey ink */}
               <h1
                 className="fu-headline relative mt-4 inline-block font-display font-black leading-[1.05] tracking-tight"
                 style={{
-                  color: activePalette.ink,
+                  color: "oklch(0.28 0.012 60)",
                   fontSize: "clamp(1.7rem, 3.4vw, 2.65rem)",
                   letterSpacing: "-0.012em",
                 }}
