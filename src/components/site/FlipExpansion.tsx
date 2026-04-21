@@ -46,7 +46,18 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
+  const [watermarkPos, setWatermarkPos] = useState<"center" | "corner">(() => {
+    if (typeof window === "undefined") return "center";
+    const saved = window.localStorage.getItem("flip-watermark-pos");
+    return saved === "corner" ? "corner" : "center";
+  });
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Persist watermark preference
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("flip-watermark-pos", watermarkPos);
+  }, [watermarkPos]);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
