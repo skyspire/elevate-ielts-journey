@@ -1015,24 +1015,23 @@ function CueCardReader({
           position: absolute;
           top: 0;
           left: 0;
-          width: 22px;
-          height: 22px;
-          margin-left: -11px;
-          margin-top: -11px;
+          width: 120px;
+          height: 120px;
+          margin-left: -60px;
+          margin-top: -60px;
           offset-rotate: auto;
           -webkit-offset-rotate: auto;
           offset-distance: 0%;
           -webkit-offset-distance: 0%;
-          animation: paper-plane-fly 1500ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
-          filter: drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
+          animation: paper-plane-fly 2200ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
+          filter: drop-shadow(0 14px 22px oklch(0.2 0.05 60 / 0.28)) drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
           will-change: offset-distance, opacity;
         }
         .paper-plane-wobble {
           width: 100%;
           height: 100%;
-          /* Compensate the SVG art so its nose points along the path direction. */
           transform-origin: 50% 50%;
-          animation: paper-plane-wobble 460ms ease-in-out infinite;
+          animation: paper-plane-wobble 520ms ease-in-out infinite;
         }
         @keyframes paper-plane-fly {
           0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.6); }
