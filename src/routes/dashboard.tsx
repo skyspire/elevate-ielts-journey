@@ -519,27 +519,8 @@ function FeatureCard({
         className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:14px_14px]"
       />
 
-      {/* Floating translucent shapes — drift on hover for depth */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -left-6 -top-6 h-20 w-20 rounded-full bg-white/15 blur-[2px] transition-transform duration-700 ease-out group-hover:translate-x-2 group-hover:translate-y-2"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -bottom-8 -right-4 h-24 w-24 rounded-full bg-white/10 blur-[3px] transition-transform duration-700 ease-out group-hover:-translate-x-3 group-hover:-translate-y-2"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute right-3 top-4 h-2.5 w-2.5 rounded-full bg-white/40 transition-transform duration-500 ease-out group-hover:scale-150"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute bottom-5 left-4 h-2 w-2 rotate-45 bg-white/30 transition-transform duration-500 ease-out group-hover:rotate-[135deg]"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-[40%_60%_55%_45%/50%_45%_55%_50%] bg-white/[0.06] transition-transform duration-700 ease-out group-hover:scale-125 group-hover:rotate-12"
-      />
+
+
 
       {/* Centered icon + title only */}
       <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
