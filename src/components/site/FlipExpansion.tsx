@@ -688,10 +688,9 @@ function CueCardReader({
           >
             {topic.label}
           </h2>
-        </div>
 
-        {/* Brand lockup — bottom of the card. */}
-        <div className="flex items-center gap-2.5 px-7 pb-8">
+          {/* BigIELTS brand lockup — sits directly under the title, centered. */}
+          <div className="mt-6 flex items-center gap-2.5">
             <span
               className="flex h-9 w-9 items-center justify-center rounded-xl"
               style={{
@@ -722,7 +721,8 @@ function CueCardReader({
                 className="mt-[3px] h-[2px] w-full rounded-full"
                 style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
               />
-          </span>
+            </span>
+          </div>
         </div>
       </aside>
 
