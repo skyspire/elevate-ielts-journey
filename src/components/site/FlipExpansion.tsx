@@ -315,6 +315,7 @@ export function FlipExpansion({
             goToVariant={goToVariant}
             variantTransitioning={variantTransitioning}
             gravityPhase={gravityPhase}
+            switchDir={switchDir}
             sections={sections}
             revealedSections={revealedSections}
             scrollProgress={scrollProgress}
