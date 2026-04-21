@@ -759,13 +759,13 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // Confident muted dusty-blue → slate tile palette so the rail
-        // visibly carries the brand color story above the pure-white lane.
-        // Each tile has its own slate variant; ink is deep slate-navy.
+        // White tile bodies with a thick colored top border. Each tile
+        // carries one of the muted red / blue / olive accent tones so the
+        // rail mirrors the footer pager palette while staying clean & light.
         const followUpPalette = [
-          { fill: "oklch(0.86 0.040 240)", ink: "oklch(0.28 0.045 245)" }, // Dusty blue
-          { fill: "oklch(0.74 0.050 245)", ink: "oklch(0.24 0.045 248)" }, // Steel blue
-          { fill: "oklch(0.58 0.055 250)", ink: "oklch(0.98 0.012 245)" }, // Deep slate (light ink)
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.135 25)" },  // Red
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.52 0.115 250)" }, // Blue
+          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.080 125)" }, // Olive
         ];
 
         return (
