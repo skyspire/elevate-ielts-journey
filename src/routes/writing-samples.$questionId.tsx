@@ -84,6 +84,14 @@ function QuestionDetailPage() {
 
   const answer = sampleAnswers[questionId];
 
+  // 1-based question index within its category — drives the big numeral
+  // shown in the billboard's left column. Falls back to 1 if the id can't
+  // be parsed (defensive — should always parse for well-formed routes).
+  const questionNumber = useMemo(() => {
+    const parsed = parseQuestionId(questionId);
+    return parsed ? parsed.index + 1 : 1;
+  }, [questionId]);
+
   // Sibling navigation (prev/next + related)
   const siblings = useMemo(() => getSiblingQuestions(questionId), [questionId]);
   const related = useMemo(() => {
