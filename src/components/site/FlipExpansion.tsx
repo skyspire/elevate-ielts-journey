@@ -407,6 +407,36 @@ function CueCardReader({
         />
       </div>
 
+      {/* Centered brand seal watermark — embossed-stamp feel behind the reading column. */}
+      <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center" style={{ opacity: 0.05 }}>
+          <div
+            className="flex items-center justify-center rounded-[40px] border-[6px] border-foreground"
+            style={{ width: "min(58vmin, 460px)", height: "min(58vmin, 460px)" }}
+          >
+            <div className="flex flex-col items-center gap-5">
+              <GraduationCap
+                className="text-foreground"
+                style={{ width: "min(20vmin, 150px)", height: "min(20vmin, 150px)" }}
+                strokeWidth={2.5}
+              />
+              <div
+                className="font-display font-black tracking-tight text-foreground"
+                style={{ fontSize: "min(7vmin, 56px)", lineHeight: 1 }}
+              >
+                BigIELTS
+              </div>
+              <div
+                className="font-display font-extrabold tracking-[0.4em] text-foreground"
+                style={{ fontSize: "min(2.2vmin, 14px)" }}
+              >
+                .COM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Focus-tunnel vignette — sharpens as user scrolls */}
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-500"
