@@ -5,16 +5,13 @@ import {
   ArrowLeft,
   MessageCircle,
   ClipboardList,
-  Mic,
-  CheckCircle2,
-  Lock,
   ArrowUpRight,
-  Calendar,
   type LucideProps,
 } from "lucide-react";
 import { z } from "zod";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
