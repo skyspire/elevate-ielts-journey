@@ -46,7 +46,18 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
+  const [watermarkPos, setWatermarkPos] = useState<"center" | "corner">(() => {
+    if (typeof window === "undefined") return "center";
+    const saved = window.localStorage.getItem("flip-watermark-pos");
+    return saved === "corner" ? "corner" : "center";
+  });
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Persist watermark preference
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("flip-watermark-pos", watermarkPos);
+  }, [watermarkPos]);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
@@ -287,6 +298,8 @@ export function FlipExpansion({
             followUps={followUps}
             accentText={accentText}
             accentChip={accentChip}
+            watermarkPos={watermarkPos}
+            setWatermarkPos={setWatermarkPos}
           />
         ) : (
           <CompactPanel
@@ -335,6 +348,8 @@ type CueReaderProps = {
   followUps: { id: string; title: string }[];
   accentText: string;
   accentChip: string;
+  watermarkPos: "center" | "corner";
+  setWatermarkPos: (pos: "center" | "corner") => void;
 };
 
 function CueCardReader({
@@ -357,6 +372,8 @@ function CueCardReader({
   followUps,
   accentText,
   accentChip,
+  watermarkPos,
+  setWatermarkPos,
 }: CueReaderProps) {
   // Edge softening intensifies as the reader scrolls — creates the focus tunnel.
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
@@ -407,33 +424,92 @@ function CueCardReader({
         />
       </div>
 
-      {/* Centered brand seal watermark — embossed-stamp feel behind the reading column. */}
-      <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center" style={{ opacity: 0.05 }}>
-          <div
-            className="flex items-center justify-center rounded-[40px] border-[6px] border-foreground"
-            style={{ width: "min(58vmin, 460px)", height: "min(58vmin, 460px)" }}
-          >
-            <div className="flex flex-col items-center gap-5">
-              <GraduationCap
-                className="text-foreground"
-                style={{ width: "min(20vmin, 150px)", height: "min(20vmin, 150px)" }}
-                strokeWidth={2.5}
-              />
-              <div
-                className="font-display font-black tracking-tight text-foreground"
-                style={{ fontSize: "min(7vmin, 56px)", lineHeight: 1 }}
-              >
-                BigIELTS
-              </div>
-              <div
-                className="font-display font-extrabold tracking-[0.4em] text-foreground"
-                style={{ fontSize: "min(2.2vmin, 14px)" }}
-              >
-                .COM
+      {/* Brand seal watermark — switchable between centered (behind text) and bottom-right corner. */}
+      {watermarkPos === "center" ? (
+        <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center" style={{ opacity: 0.05 }}>
+            <div
+              className="flex items-center justify-center rounded-[40px] border-[6px] border-foreground"
+              style={{ width: "min(58vmin, 460px)", height: "min(58vmin, 460px)" }}
+            >
+              <div className="flex flex-col items-center gap-5">
+                <GraduationCap
+                  className="text-foreground"
+                  style={{ width: "min(20vmin, 150px)", height: "min(20vmin, 150px)" }}
+                  strokeWidth={2.5}
+                />
+                <div
+                  className="font-display font-black tracking-tight text-foreground"
+                  style={{ fontSize: "min(7vmin, 56px)", lineHeight: 1 }}
+                >
+                  BigIELTS
+                </div>
+                <div
+                  className="font-display font-extrabold tracking-[0.4em] text-foreground"
+                  style={{ fontSize: "min(2.2vmin, 14px)" }}
+                >
+                  .COM
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div
+          className="pointer-events-none absolute z-[1]"
+          style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.09 }}
+        >
+          <div className="flex items-center gap-2.5 rounded-2xl border-[3px] border-foreground/80 px-3.5 py-2.5">
+            <GraduationCap className="h-7 w-7 text-foreground" strokeWidth={2.5} />
+            <div className="flex flex-col leading-none">
+              <span className="font-display text-[15px] font-black tracking-tight text-foreground">
+                BigIELTS
+              </span>
+              <span className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em] text-foreground">
+                .COM
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Watermark position toggle — small native control, top-right of the screen */}
+      <div className="pointer-events-auto absolute right-4 top-[88px] z-30 sm:right-6 sm:top-[100px]">
+        <div
+          role="group"
+          aria-label="Watermark position"
+          className="flex items-center gap-0.5 rounded-full border border-foreground/10 bg-white/70 p-0.5 shadow-soft backdrop-blur-xl"
+        >
+          <button
+            type="button"
+            onClick={() => setWatermarkPos("center")}
+            aria-pressed={watermarkPos === "center"}
+            title="Watermark: centered behind text"
+            className="rounded-full px-2.5 py-1 font-display text-[11px] font-semibold tracking-tight transition-colors"
+            style={{
+              backgroundColor:
+                watermarkPos === "center" ? "oklch(0.50 0.10 165)" : "transparent",
+              color:
+                watermarkPos === "center" ? "white" : "oklch(0.20 0.02 165 / 0.65)",
+            }}
+          >
+            Center
+          </button>
+          <button
+            type="button"
+            onClick={() => setWatermarkPos("corner")}
+            aria-pressed={watermarkPos === "corner"}
+            title="Watermark: bottom-right corner"
+            className="rounded-full px-2.5 py-1 font-display text-[11px] font-semibold tracking-tight transition-colors"
+            style={{
+              backgroundColor:
+                watermarkPos === "corner" ? "oklch(0.50 0.10 165)" : "transparent",
+              color:
+                watermarkPos === "corner" ? "white" : "oklch(0.20 0.02 165 / 0.65)",
+            }}
+          >
+            Corner
+          </button>
         </div>
       </div>
 
