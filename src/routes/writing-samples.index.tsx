@@ -164,7 +164,7 @@ function WritingSamplesPage() {
         </div>
       </header>
 
-      <main className="relative py-10 sm:py-14">
+      <main className="relative pt-10 sm:pt-14">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
