@@ -631,34 +631,45 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Solid dark footer pager — strong presence, three harmonious accents.
-          Answer 1 = sage · Answer 2 = warm amber · Answer 3 = soft terracotta. */}
+      {/* Switch Joy-Con footer pager — charcoal console bar with neon accents.
+          Answer 1 = Joy-Con neon red · Answer 2 = Joy-Con neon blue · Answer 3 = neon yellow.
+          Squircle L/R shoulder buttons, glowing active tab, soft pop on press. */}
       {variants.length > 1 && (() => {
         const tones = [
-          { accent: "oklch(0.72 0.13 165)", soft: "oklch(0.72 0.13 165 / 0.16)" }, // sage
-          { accent: "oklch(0.82 0.14 75)",  soft: "oklch(0.82 0.14 75 / 0.16)"  }, // amber
-          { accent: "oklch(0.74 0.13 35)",  soft: "oklch(0.74 0.13 35 / 0.16)"  }, // terracotta
+          { accent: "oklch(0.66 0.22 25)",  glow: "oklch(0.66 0.22 25 / 0.55)",  soft: "oklch(0.66 0.22 25 / 0.14)" },  // Joy-Con neon red
+          { accent: "oklch(0.68 0.18 240)", glow: "oklch(0.68 0.18 240 / 0.55)", soft: "oklch(0.68 0.18 240 / 0.14)" }, // Joy-Con neon blue
+          { accent: "oklch(0.86 0.17 95)",  glow: "oklch(0.86 0.17 95 / 0.55)",  soft: "oklch(0.86 0.17 95 / 0.14)" },  // neon yellow
         ];
         const activeTone = tones[variantIndex % tones.length];
         return (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-4 sm:px-6 sm:pb-6">
             <div
-              className="pointer-events-auto flex w-full max-w-[680px] items-stretch overflow-hidden rounded-2xl border border-white/8 shadow-[0_20px_50px_-15px_oklch(0.1_0.02_165/0.6)]"
+              className="pointer-events-auto flex w-full max-w-[680px] items-stretch gap-2 rounded-[22px] border border-white/[0.06] p-1.5 shadow-[0_24px_60px_-18px_oklch(0_0_0/0.7),inset_0_1px_0_oklch(1_0_0/0.06)]"
               style={{
                 background:
-                  "linear-gradient(180deg, oklch(0.28 0.015 75) 0%, oklch(0.20 0.015 75) 100%)",
+                  "linear-gradient(180deg, oklch(0.22 0.005 260) 0%, oklch(0.14 0.005 260) 100%)",
               }}
             >
+              {/* L shoulder button */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="group inline-flex shrink-0 items-center justify-center px-4 text-white/55 transition-all hover:bg-white/5 hover:text-white sm:px-5"
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-white/[0.06] text-white/70 shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_2px_6px_-2px_oklch(0_0_0/0.6)] transition-all duration-150 hover:text-white active:translate-y-[1px] active:shadow-[inset_0_2px_4px_oklch(0_0_0/0.4)] sm:h-12 sm:w-12"
+                style={{
+                  background:
+                    "linear-gradient(180deg, oklch(0.30 0.006 260) 0%, oklch(0.20 0.006 260) 100%)",
+                }}
                 aria-label="Previous sample answer"
               >
-                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.4} />
+                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
               </button>
 
-              <div className="flex flex-1 border-x border-white/8" role="tablist" aria-label="Sample answers">
+              <div
+                className="relative flex flex-1 items-stretch gap-1 rounded-[14px] border border-white/[0.05] p-1 shadow-[inset_0_2px_6px_oklch(0_0_0/0.45)]"
+                style={{ background: "oklch(0.10 0.005 260)" }}
+                role="tablist"
+                aria-label="Sample answers"
+              >
                 {variants.map((_, i) => {
                   const active = i === variantIndex;
                   const tone = tones[i % tones.length];
@@ -669,54 +680,60 @@ function CueCardReader({
                       role="tab"
                       aria-selected={active}
                       onClick={() => goToVariant(i)}
-                      className={`group relative flex flex-1 flex-col items-center justify-center gap-2 px-2 py-3 transition-all duration-300 sm:py-3.5 ${
-                        i > 0 ? "border-l border-white/8" : ""
-                      }`}
+                      className="group relative flex flex-1 flex-col items-center justify-center gap-1.5 rounded-[10px] px-2 py-2 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.97] sm:py-2.5"
                       style={{
-                        backgroundColor: active ? tone.soft : "transparent",
+                        background: active
+                          ? `linear-gradient(180deg, ${tone.soft} 0%, transparent 100%)`
+                          : "transparent",
+                        boxShadow: active
+                          ? `inset 0 0 0 1px ${tone.accent}, 0 0 24px -4px ${tone.glow}`
+                          : "inset 0 0 0 1px oklch(1 0 0 / 0.04)",
                       }}
                     >
-                      <div className="flex items-baseline gap-2">
+                      <div className="flex items-baseline gap-1.5">
                         <span
-                          className="font-display text-[20px] font-black leading-none tracking-tight transition-colors sm:text-[22px]"
+                          className="font-display text-[18px] font-black leading-none tracking-tight transition-colors sm:text-[20px]"
                           style={{
                             color: active ? tone.accent : "oklch(1 0 0 / 0.55)",
+                            textShadow: active ? `0 0 12px ${tone.glow}` : "none",
                           }}
                         >
                           {i + 1}
                         </span>
                         <span
-                          className="font-display text-[13px] font-semibold leading-none tracking-tight transition-colors sm:text-[14px]"
+                          className="font-display text-[12px] font-semibold leading-none tracking-tight transition-colors sm:text-[13px]"
                           style={{
-                            color: active ? "oklch(1 0 0 / 0.85)" : "oklch(1 0 0 / 0.50)",
+                            color: active ? "oklch(1 0 0 / 0.92)" : "oklch(1 0 0 / 0.45)",
                           }}
                         >
                           Answer
                         </span>
                       </div>
-                      {/* Thin indicator bar — fills with the segment's tone when active */}
-                      <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/8">
-                        <div
-                          className="absolute inset-y-0 left-0 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                          style={{
-                            width: active ? "100%" : "18%",
-                            backgroundColor: active ? tone.accent : "oklch(1 0 0 / 0.18)",
-                          }}
-                        />
-                      </div>
+                      {/* Joy-Con LED dot — solid glow when active, dim ring otherwise */}
+                      <span
+                        className="block h-[6px] w-[6px] rounded-full transition-all duration-300"
+                        style={{
+                          backgroundColor: active ? tone.accent : "oklch(1 0 0 / 0.18)",
+                          boxShadow: active ? `0 0 10px ${tone.accent}, 0 0 18px ${tone.glow}` : "none",
+                        }}
+                      />
                     </button>
                   );
                 })}
               </div>
 
+              {/* R shoulder button */}
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="group inline-flex shrink-0 items-center justify-center px-4 text-white/55 transition-all hover:bg-white/5 hover:text-white sm:px-5"
+                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-white/[0.06] text-white/70 shadow-[inset_0_1px_0_oklch(1_0_0/0.08),0_2px_6px_-2px_oklch(0_0_0/0.6)] transition-all duration-150 hover:text-white active:translate-y-[1px] active:shadow-[inset_0_2px_4px_oklch(0_0_0/0.4)] sm:h-12 sm:w-12"
+                style={{
+                  background:
+                    "linear-gradient(180deg, oklch(0.30 0.006 260) 0%, oklch(0.20 0.006 260) 100%)",
+                }}
                 aria-label="Next sample answer"
-                style={{ color: undefined }}
               >
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.4} />
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
               </button>
             </div>
           </div>
