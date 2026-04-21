@@ -79,6 +79,7 @@ const features: Feature[] = [
     },
     tone: "rust",
     icon: Mic,
+    to: "/dashboard/speaking-samples",
   },
   {
     key: "vocab",
@@ -516,6 +517,14 @@ function FeatureCard({
   if (feature.to === "/dashboard/writing-samples") {
     return (
       <Link to="/writing-samples" search={{ module }} className={cardClass}>
+        {inner}
+      </Link>
+    );
+  }
+
+  if (feature.to === "/dashboard/speaking-samples") {
+    return (
+      <Link to="/speaking-samples" search={{ module }} className={cardClass}>
         {inner}
       </Link>
     );
