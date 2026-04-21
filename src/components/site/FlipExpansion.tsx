@@ -734,7 +734,7 @@ function CueCardReader({
           colored footer pager + follow-up rail. */}
       <div
         ref={scrollRef}
-        className="absolute inset-y-0 right-0 left-0 overflow-y-auto pt-[72px] pb-[260px] md:left-[36%] md:pt-10 md:pb-[280px] lg:left-[32%]"
+        className="absolute inset-y-0 right-0 left-0 overflow-y-auto pt-[72px] pb-[320px] md:left-[36%] md:pt-10 md:pb-[340px] lg:left-[34%]"
       >
         <article className="mx-auto w-full max-w-[720px] px-6 sm:px-10">
           {(() => {
