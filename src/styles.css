@@ -316,53 +316,28 @@
   animation-play-state: paused;
 }
 
-/* Ink bleed reveal — a soft luminance mask wipes from top to bottom over
-   650ms, as if ink is bleeding into paper. A whisper blur-to-sharp focus
-   accompanies the wipe for premium editorial arrival. After the reveal
-   settles, a barely-perceptible warm glow pulses behind the text every ~6s
-   (the "gentle breathing glow" resting state). */
-@keyframes ink-bleed-mask {
-  0%   { -webkit-mask-position: 0 -100%; mask-position: 0 -100%; filter: blur(2.5px); opacity: 0.0; }
-  18%  { opacity: 1; }
-  100% { -webkit-mask-position: 0 0;     mask-position: 0 0;     filter: blur(0);     opacity: 1; }
-}
-
-@keyframes ink-breathing-glow {
-  0%, 100% { box-shadow: 0 0 0 0 transparent; }
-  50%      { box-shadow: 0 0 60px 8px var(--ink-tint, transparent); }
-}
-
-.ink-bleed-reveal {
-  /* The mask is a vertical gradient that starts fully off-screen (top) and
-     slides down to fully reveal. The 1.5x size + position animation is what
-     creates the smooth top-to-bottom "bleed". */
-  -webkit-mask-image: linear-gradient(to bottom,
-    rgba(0,0,0,1) 0%,
-    rgba(0,0,0,1) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0) 100%);
-  mask-image: linear-gradient(to bottom,
-    rgba(0,0,0,1) 0%,
-    rgba(0,0,0,1) 55%,
-    rgba(0,0,0,0.6) 75%,
-    rgba(0,0,0,0) 100%);
-  -webkit-mask-size: 100% 220%;
-  mask-size: 100% 220%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  animation:
-    ink-bleed-mask 650ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
-    ink-breathing-glow 6s ease-in-out 900ms infinite;
-  border-radius: 24px;
+/* Lateral slide-in for the reading lane on variant switch.
+   The element mounts at translate3d(var(--lane-from-x), 0, 0) / opacity 0
+   and decelerates into translate3d(0, 0, 0) / opacity 1 over 380ms.
+   Pairs with an inline 260ms slide-out applied to the previous element so
+   the overall choreography is sequential (out → in), not crossfade. */
+@keyframes lane-slide-in {
+  from {
+    transform: translate3d(var(--lane-from-x, 36px), 0, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ink-bleed-reveal {
-    animation: none;
-    -webkit-mask-image: none;
-    mask-image: none;
-    filter: none;
-    opacity: 1;
+  [data-lane-phase] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
 
