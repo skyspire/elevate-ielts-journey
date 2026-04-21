@@ -353,7 +353,7 @@ type CueReaderProps = {
   currentVariant: SpeakingAnswerVariant;
   variants: SpeakingAnswerVariant[];
   variantIndex: number;
-  goToVariant: (n: number) => void;
+  goToVariant: (n: number, origin?: { x: number; y: number }) => void;
   variantTransitioning: boolean;
   sections: { heading: string; body: string }[];
   revealedSections: number;
