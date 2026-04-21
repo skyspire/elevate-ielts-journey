@@ -186,10 +186,10 @@ export function FlipExpansion({
   const accentChip =
     "bg-[oklch(0.94_0.04_165)] text-[oklch(0.38_0.10_165)] border-[oklch(0.55_0.10_165)]/30";
 
-  // Header softens (shrinks + de-emphasises) as the reader scrolls deeper.
-  const headerSoften = Math.min(1, scrollProgress * 1.6);
-  const headerScale = 1 - headerSoften * 0.06;
-  const headerOpacity = 1 - headerSoften * 0.25;
+  // Header stays stable and independent — it must not visually merge with
+  // the answer content while scrolling. We keep scale/opacity locked.
+  const headerScale = 1;
+  const headerOpacity = 1;
 
   return createPortal(
     <div
@@ -416,29 +416,24 @@ function CueCardReader({
         }}
       />
 
-      {/* Soft floating sticky header */}
+      {/* Stable, isolated topic header — single clean heading line.
+          Intentionally contains NO prompt text and stays fixed in its own
+          space so it never visually merges with the scrolling answer. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
         style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
       >
-        <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/55 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}
-                >
-                  <Mic className="h-3 w-3" strokeWidth={2.6} />
-                  Part 2
-                </span>
-                <span
-                  className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
-                >
-                  {topic.label} · Band {currentVariant.bandScore}+
-                </span>
-              </div>
-              <h2 className="mt-1.5 whitespace-pre-line font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground/85 sm:text-[17px]">
-                {headerQuestion?.title ?? topic.label}
+        <div className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex items-center gap-2.5">
+              <span
+                className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}
+              >
+                <Mic className="h-3 w-3" strokeWidth={2.6} />
+                Part 2
+              </span>
+              <h2 className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[19px]">
+                {topic.label}
               </h2>
             </div>
             <button
@@ -454,10 +449,18 @@ function CueCardReader({
         </div>
       </div>
 
+      {/* Hairline separator between header and reading lane — keeps the
+          two regions visually independent while scrolling. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 z-10 h-px bg-foreground/10"
+        style={{ top: "92px" }}
+        aria-hidden
+      />
+
       {/* Scrollable reading lane */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[148px] pb-[120px] sm:pt-[168px] sm:pb-[128px]"
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[120px] sm:pt-[140px] sm:pb-[128px]"
       >
         <article
           className="mx-auto w-full max-w-[640px] px-6 sm:px-10"
@@ -467,18 +470,7 @@ function CueCardReader({
             transition: "opacity 220ms ease, transform 220ms ease",
           }}
         >
-          {/* Variant label — a gentle whisper of which sample is showing */}
-          <div className="mb-8 flex items-center justify-center gap-3">
-            <span className="h-px flex-1 bg-foreground/10" />
-            <span
-              className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.28em] ${accentText}`}
-            >
-              {currentVariant.label}
-            </span>
-            <span className="h-px flex-1 bg-foreground/10" />
-          </div>
-
-          <div className="space-y-10">
+          <div className="space-y-12 pt-4">
             {sections.map((s, i) => {
               const visible = i < revealedSections;
               return (
@@ -490,17 +482,15 @@ function CueCardReader({
                     transform: visible ? "translateY(0)" : "translateY(14px)",
                   }}
                 >
-                  <p
-                    className={`font-display text-[10.5px] font-extrabold uppercase tracking-[0.26em] ${accentText}`}
-                  >
+                  <h3 className="font-display text-[20px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[22px]">
                     {s.heading}
-                  </p>
-                  <p className="mt-3 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
+                  </h3>
+                  <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
                     {s.body}
                   </p>
                   {/* Soft rhythm marker between paragraphs */}
                   {i < sections.length - 1 && (
-                    <div className="mx-auto mt-10 h-px w-16 bg-foreground/10" />
+                    <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
                   )}
                 </section>
               );
