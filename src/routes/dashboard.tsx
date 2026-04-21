@@ -153,19 +153,25 @@ const features: Feature[] = [
 ];
 
 // Bold solid color blocks — each card is one confident color.
-// `bg` is the card background, `bgHover` for the hover lift state,
-// `chip` is the translucent white icon chip background.
-const tones: Record<
-  Feature["tone"],
-  { bg: string; bgHover: string }
-> = {
+// Two palettes: cool/blue family for Academic, warm family for General.
+const tonesAcademic: Record<Feature["tone"], { bg: string; bgHover: string }> = {
   navy: { bg: "oklch(0.42 0.18 260)", bgHover: "oklch(0.46 0.18 260)" },
+  rust: { bg: "oklch(0.48 0.16 230)", bgHover: "oklch(0.52 0.16 230)" },
+  forest: { bg: "oklch(0.50 0.15 200)", bgHover: "oklch(0.54 0.15 200)" },
+  plum: { bg: "oklch(0.45 0.18 290)", bgHover: "oklch(0.49 0.18 290)" },
+  ochre: { bg: "oklch(0.55 0.16 250)", bgHover: "oklch(0.59 0.16 250)" },
+  teal: { bg: "oklch(0.52 0.14 215)", bgHover: "oklch(0.56 0.14 215)" },
+  espresso: { bg: "oklch(0.32 0.06 260)", bgHover: "oklch(0.36 0.06 260)" },
+};
+
+const tonesGeneral: Record<Feature["tone"], { bg: string; bgHover: string }> = {
+  navy: { bg: "oklch(0.55 0.18 35)", bgHover: "oklch(0.59 0.18 35)" },
   rust: { bg: "oklch(0.58 0.20 25)", bgHover: "oklch(0.62 0.20 25)" },
-  forest: { bg: "oklch(0.50 0.15 160)", bgHover: "oklch(0.54 0.15 160)" },
-  plum: { bg: "oklch(0.45 0.18 320)", bgHover: "oklch(0.49 0.18 320)" },
+  forest: { bg: "oklch(0.55 0.16 60)", bgHover: "oklch(0.59 0.16 60)" },
+  plum: { bg: "oklch(0.50 0.18 15)", bgHover: "oklch(0.54 0.18 15)" },
   ochre: { bg: "oklch(0.65 0.17 70)", bgHover: "oklch(0.69 0.17 70)" },
-  teal: { bg: "oklch(0.55 0.13 200)", bgHover: "oklch(0.59 0.13 200)" },
-  espresso: { bg: "oklch(0.32 0.04 60)", bgHover: "oklch(0.36 0.04 60)" },
+  teal: { bg: "oklch(0.52 0.16 45)", bgHover: "oklch(0.56 0.16 45)" },
+  espresso: { bg: "oklch(0.38 0.10 40)", bgHover: "oklch(0.42 0.10 40)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
@@ -279,7 +285,7 @@ function DashboardPage() {
           </div>
 
           {/* Bold color blocks — equal-size grid */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {features.map((f) => (
               <FeatureCard key={f.key} feature={f} module={module} />
             ))}
@@ -483,16 +489,15 @@ function FeatureCard({
   feature: Feature;
   module: Module;
 }) {
-  const tone = tones[feature.tone];
-  const { value, label } = feature.count[module];
+  const tone = (module === "academic" ? tonesAcademic : tonesGeneral)[feature.tone];
   const Icon = feature.icon;
 
   const cardClass =
-    "color-card group relative flex aspect-square w-full flex-col overflow-hidden rounded-2xl p-5 text-left text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_12px_30px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_24px_50px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2";
+    "color-card group relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-2xl p-3 text-center text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_10px_24px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_20px_40px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2";
 
   const inner = (
     <>
-      {/* Solid color background with subtle hover brighten */}
+      {/* Solid color background */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 transition-colors duration-300"
@@ -503,10 +508,10 @@ function FeatureCard({
         className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{ background: tone.bgHover }}
       />
-      {/* Soft white shine in top-right for depth */}
+      {/* Soft white shine for depth */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 [background:radial-gradient(120%_80%_at_100%_0%,rgba(255,255,255,0.18)_0%,transparent_55%)]"
+        className="pointer-events-none absolute inset-0 [background:radial-gradient(120%_80%_at_100%_0%,rgba(255,255,255,0.20)_0%,transparent_55%)]"
       />
       {/* Subtle dot grid texture */}
       <span
@@ -514,37 +519,13 @@ function FeatureCard({
         className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgba(255,255,255,0.9)_1px,transparent_1px)] [background-size:14px_14px]"
       />
 
-      {/* Top: white icon chip + count chip */}
-      <div className="relative flex items-start justify-between gap-3">
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
-          <Icon className="h-6 w-6 text-white" strokeWidth={2.2} />
-        </span>
-        <span className="rounded-full bg-white/15 px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-wider text-white ring-1 ring-inset ring-white/20 backdrop-blur-sm">
-          {value}
-        </span>
-      </div>
-
-      {/* Title + description pinned to bottom */}
-      <div className="relative mt-auto pt-6">
-        <h3 className="font-display text-[19px] font-bold leading-tight tracking-tight text-white">
-          {feature.title}
-        </h3>
-        <p className="mt-1.5 text-[13px] leading-snug text-white/80">
-          {feature.description[module]}
-        </p>
-
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/65">
-            {label}
-          </span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 ring-1 ring-inset ring-white/25 transition-all duration-300 group-hover:bg-white group-hover:ring-white">
-            <ArrowUpRight
-              className="h-4 w-4 text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
-              strokeWidth={2.6}
-            />
-          </span>
-        </div>
-      </div>
+      {/* Centered icon + title only */}
+      <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+        <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+      </span>
+      <h3 className="relative mt-3 font-display text-[13px] font-bold leading-tight tracking-tight text-white sm:text-sm">
+        {feature.title}
+      </h3>
     </>
   );
 
