@@ -836,9 +836,19 @@ function CueCardReader({
                           visibility: visible ? "visible" : "hidden",
                         }}
                       >
+                        {/* Tinted pill chip — same vocabulary as the
+                            SectionHeader eyebrow used across the homepage.
+                            Tinted background + deep ink text, color tracks
+                            the active answer variant for cohesion. */}
                         <h3
-                          className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
-                          style={{ color: activePalette.ink, opacity: 0.85 }}
+                          className="inline-flex items-center rounded-full px-3 py-1 font-display text-[13px] font-bold uppercase tracking-[0.18em] sm:text-[14px]"
+                          style={{
+                            color: activePalette.tabBorder,
+                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 12%, oklch(1 0 0))`,
+                            border: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 22%, transparent)`,
+                            transition:
+                              "color 380ms ease, background-color 380ms ease, border-color 380ms ease",
+                          }}
                         >
                           {s.heading}
                         </h3>
