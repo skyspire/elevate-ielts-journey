@@ -357,37 +357,65 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* ── BILLBOARD background: LAYERED GRADIENT + GRAIN ──────────────
-            • Diagonal gradient from deeper shade → bold palette fill
-            • Soft top vignette to anchor the header pill
-            • Whisper film grain via dotted overlay (mix-blend-overlay) */}
+        {/* ── PARCHMENT background + per-variant gradient wash ──────────────
+            Layered for richness:
+              1. Warm cream parchment base (constant — readable, premium)
+              2. Per-variant atmospheric gradient wash (multiply blend, ~32%)
+                 — Sunrise / Forest / Twilight tints the room without
+                 fighting the ink
+              3. Soft top→bottom vignette to give depth
+              4. Faint paper grain (multiply, ~10%) for tactility */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
-            transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
-            backgroundColor: activePalette.fill,
-          }}
+          style={{ backgroundColor: PARCHMENT }}
         >
-          {/* Film grain — fine SVG-noise via radial dots, blended */}
+          {/* Atmospheric gradient wash — variant-specific */}
           <div
-            className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(160deg, ${activePalette.gradTop} 0%, ${activePalette.gradMid} 55%, ${activePalette.gradBottom} 100%)`,
+              mixBlendMode: "multiply",
+              opacity: 0.32,
+              transition:
+                "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), opacity 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          />
+          {/* Top vignette anchoring the header pill */}
+          <div
+            className="absolute inset-x-0 top-0 h-48"
+            style={{
+              background: `linear-gradient(180deg, ${activePalette.accentDeep}33 0%, transparent 100%)`,
+            }}
+          />
+          {/* Bottom vignette toward the footer band */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-56"
+            style={{
+              background: `linear-gradient(0deg, ${PARCHMENT_DEEP}cc 0%, transparent 100%)`,
+            }}
+          />
+          {/* Paper grain — fine dotted overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.10] mix-blend-multiply"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+                "radial-gradient(circle at 1px 1px, oklch(0.30 0.04 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.04 60) 0.4px, transparent 1px)",
               backgroundSize: "4px 4px, 7px 7px",
             }}
           />
         </div>
 
-        {/* Header — only the Back button. The follow-up index gets its
-            own prominent circle badge above the headline inside the card. */}
+        {/* Header — Back button. Now sits on parchment, so use ink color. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end items-center px-4 pt-4 sm:px-6 sm:pt-6">
           <button
             type="button"
             onClick={onClose}
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
-            style={{ color: activePalette.ink }}
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
+            style={{
+              color: INK,
+              borderColor: `${activePalette.accentDeep}55`,
+              backgroundColor: `${PARCHMENT}cc`,
+            }}
             aria-label="Close"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
