@@ -327,33 +327,18 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
-          {/* Module pill */}
-          <div className="flex justify-center">
-            <div
-              className={`inline-flex items-center gap-2 rounded-full border ${accent.border} ${accent.chipBg} ${accent.chipText} px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em]`}
-            >
-              <span className={`h-1.5 w-1.5 rounded-full ${accent.bg}`} />
-              {isAcademic ? "IELTS Academic" : "IELTS General Training"}
-            </div>
-          </div>
-
-          {/* Hero */}
-          <div className="mt-6 text-center">
-            <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-              Welcome back.
-              <br />
-              <span className="text-foreground/55">
-                Your {isAcademic ? "Academic" : "General"} desk awaits.
-              </span>
+          {/* Hero — eyebrow + single headline above owl */}
+          <div className="text-center">
+            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em] text-foreground/45 sm:text-[12px]">
+              Your Toolkit
+            </span>
+            <h1 className="mt-3 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              Pick Your IELTS
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-[15px] font-medium leading-relaxed text-foreground/65 sm:text-base">
-              Switch modules anytime — your samples, vocabulary, templates and
-              predictions adapt to whichever test you're preparing for.
-            </p>
           </div>
 
           {/* Toggle */}
-          <div className="mt-8 flex justify-center">
+          <div className="mt-10 flex justify-center">
             <ModuleToggle module={module} setModule={setModule} />
           </div>
 
