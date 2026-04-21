@@ -130,40 +130,61 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     };
   }, [fullBody]);
 
-  // ── BILLBOARD palette: DUSTY BLUE · STEEL BLUE · DEEP SLATE ─────────────
-  // Confident muted blues that match the cue-card footer band. The full
-  // screen fills with the active variant's slate tone, text is a luminous
-  // cream so it reads with magazine-band weight against the rich background.
+  // ── PARCHMENT + INK palette with bold per-variant gradient washes ──────
+  // Background base is a warm cream parchment for premium long-read comfort.
+  // Each variant overlays its own gradient wash (Sunrise · Forest · Twilight)
+  // as a translucent atmospheric tint — rich but readable. Text stays a deep
+  // espresso ink for full contrast on parchment.
+  const PARCHMENT      = "oklch(0.965 0.022 82)";   // warm cream paper
+  const PARCHMENT_DEEP = "oklch(0.93 0.030 78)";    // edge / vignette
+  const INK            = "oklch(0.24 0.030 60)";    // deep espresso
+  const INK_SOFT       = "oklch(0.32 0.028 60 / 0.92)";
+
   const palette = [
     {
-      // Dusty blue — light, airy, editorial
-      fill:      "oklch(0.62 0.060 240)",   // muted dusty blue
-      fillDeep:  "oklch(0.46 0.055 240)",   // for shadows / accents
-      tabBg:     "oklch(0.62 0.060 240)",
-      tabBorder: "oklch(0.30 0.050 240)",
-      ink:       "oklch(0.99 0.012 240)",   // luminous cream-white
-      inkSoft:   "oklch(0.99 0.012 240 / 0.85)",
+      // SUNRISE — warm peach → amber → rose
+      label:        "Sunrise",
+      gradTop:      "oklch(0.88 0.085 55)",   // peach
+      gradMid:      "oklch(0.83 0.105 35)",   // amber-rose
+      gradBottom:   "oklch(0.78 0.110 22)",   // rose
+      accent:       "oklch(0.58 0.150 32)",   // burnt sienna
+      accentDeep:   "oklch(0.42 0.130 32)",
+      tabBg:        "oklch(0.78 0.105 38)",
+      tabBorder:    "oklch(0.44 0.140 32)",
+      tabInk:       "oklch(0.20 0.040 35)",
     },
     {
-      // Steel blue — mid-tone, considered
-      fill:      "oklch(0.50 0.065 245)",   // confident steel blue
-      fillDeep:  "oklch(0.36 0.055 245)",
-      tabBg:     "oklch(0.50 0.065 245)",
-      tabBorder: "oklch(0.26 0.050 245)",
-      ink:       "oklch(0.99 0.012 245)",
-      inkSoft:   "oklch(0.99 0.012 245 / 0.85)",
+      // FOREST — sage → moss → deep pine
+      label:        "Forest",
+      gradTop:      "oklch(0.86 0.060 155)",   // sage mist
+      gradMid:      "oklch(0.74 0.080 150)",   // moss
+      gradBottom:   "oklch(0.58 0.090 148)",   // pine
+      accent:       "oklch(0.42 0.090 150)",   // deep forest
+      accentDeep:   "oklch(0.30 0.070 150)",
+      tabBg:        "oklch(0.70 0.085 150)",
+      tabBorder:    "oklch(0.34 0.080 150)",
+      tabInk:       "oklch(0.18 0.030 150)",
     },
     {
-      // Deep slate — rich, magazine-like
-      fill:      "oklch(0.36 0.055 250)",   // deep slate-navy
-      fillDeep:  "oklch(0.24 0.045 252)",
-      tabBg:     "oklch(0.36 0.055 250)",
-      tabBorder: "oklch(0.18 0.040 252)",
-      ink:       "oklch(0.99 0.012 250)",
-      inkSoft:   "oklch(0.99 0.012 250 / 0.85)",
+      // TWILIGHT — lilac → indigo → deep plum
+      label:        "Twilight",
+      gradTop:      "oklch(0.84 0.075 295)",   // lilac
+      gradMid:      "oklch(0.66 0.105 285)",   // periwinkle
+      gradBottom:   "oklch(0.46 0.110 290)",   // indigo plum
+      accent:       "oklch(0.40 0.130 295)",   // deep plum
+      accentDeep:   "oklch(0.28 0.110 295)",
+      tabBg:        "oklch(0.62 0.100 290)",
+      tabBorder:    "oklch(0.32 0.115 295)",
+      tabInk:       "oklch(0.99 0.012 290)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
+
+  // Compatibility shim — older JSX below references `ink/inkSoft/fill/fillDeep`.
+  // Map them to the new parchment + ink scheme so the body stays readable
+  // and per-variant accents come through the `accent` field.
+  const ink = INK;
+  const inkSoft = INK_SOFT;
 
   // Open / close phase machine.
   useEffect(() => {
