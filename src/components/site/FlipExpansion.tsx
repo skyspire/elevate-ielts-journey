@@ -568,17 +568,16 @@ function CueCardReader({
             boxShadow: "0 6px 18px -10px oklch(0.20 0.010 250 / 0.20)",
           }}
         >
-          <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex min-w-0 flex-col gap-0.5">
             <span
-              className="font-display text-[18px] font-black tabular-nums leading-none"
-              style={{ color: activePalette.ink, letterSpacing: "-0.02em" }}
+              className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em]"
+              style={{ color: activePalette.ink, opacity: 0.72 }}
             >
-              {topicNumber}
+              Cue Card {topicIndex || 1}
             </span>
-            <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}30` }} />
             <h2
               className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight"
-              style={{ color: activePalette.ink }}
+              style={{ color: "oklch(0.42 0.10 165)" }}
             >
               {topic.label}
             </h2>
@@ -600,19 +599,78 @@ function CueCardReader({
         </div>
       </div>
 
-      {/* Sticky LEFT column — desktop only (≥md). Tinted cream/ivory tone
-          separates it from the pure-white right column without a divider. */}
+      {/* Sticky LEFT column — desktop only (≥md). Designed as a scaled-up
+          version of the TopicCard from the Speaking Samples index page:
+          a vertical tinted strip on the LEFT EDGE holds the big numeral
+          (tinted with the active variant accent so it shifts when the
+          reader switches Answer 1/2/3), and the main area carries the
+          'Cue Card 14' label + topic title in sage. Brand logo sits at
+          the very bottom; the close pill floats top-right. */}
       <aside
-        className="pointer-events-auto absolute inset-y-0 left-0 z-20 hidden w-[36%] max-w-[420px] flex-col justify-between px-8 py-10 md:flex lg:w-[32%]"
+        className="pointer-events-auto absolute inset-y-0 left-0 z-20 hidden w-[36%] max-w-[440px] flex-row md:flex lg:w-[34%]"
         style={{
-          backgroundColor: LEFT_TINT,
+          backgroundColor: PURE_WHITE,
           borderRight: `1px solid ${LEFT_BORDER}`,
         }}
       >
-        {/* Top: close + part eyebrow */}
-        <div className="flex items-center justify-between">
+        {/* ── Variant-tinted numeral strip (LEFT EDGE of the left column).
+            Soft-tinted background with the active palette accent + a thick
+            colored side rule. The "14" itself uses the deep accent so it
+            reads as the visual anchor of the page. */}
+        <div
+          className="relative flex w-[88px] shrink-0 flex-col items-center justify-start pt-10 lg:w-[104px]"
+          style={{
+            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 8%, ${LEFT_TINT})`,
+            borderRight: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 18%, transparent)`,
+            transition: "background-color 380ms ease, border-color 380ms ease",
+          }}
+        >
           <span
-            className="inline-flex items-center gap-1.5"
+            className="font-display font-black tabular-nums leading-none"
+            style={{
+              color: activePalette.tabBorder,
+              fontSize: "clamp(2.75rem, 5.6vw, 4rem)",
+              letterSpacing: "-0.04em",
+              transition: "color 380ms ease",
+            }}
+          >
+            {topicNumber}
+          </span>
+          <span
+            aria-hidden
+            className="mt-3 h-[3px] w-[36px] rounded-full"
+            style={{
+              backgroundColor: activePalette.tabBorder,
+              opacity: 0.55,
+              transition: "background-color 380ms ease",
+            }}
+          />
+        </div>
+
+        {/* ── Main area of the topic card: eyebrow → title → spacer → brand. */}
+        <div
+          className="relative flex min-w-0 flex-1 flex-col px-7 py-10"
+          style={{ backgroundColor: LEFT_TINT }}
+        >
+          {/* Floating close pill — top-right of the card body. */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-5 top-5 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+            style={{
+              color: activePalette.ink,
+              backgroundColor: `${activePalette.ink}10`,
+              border: `1px solid ${activePalette.ink}30`,
+            }}
+            aria-label="Close sample answer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Back
+          </button>
+
+          {/* Part Two handwritten eyebrow */}
+          <span
+            className="inline-flex items-center gap-1.5 self-start"
             style={{ color: activePalette.ink }}
           >
             <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
@@ -635,83 +693,61 @@ function CueCardReader({
               </svg>
             </span>
           </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
-            style={{
-              color: activePalette.ink,
-              backgroundColor: `${activePalette.ink}10`,
-              border: `1px solid ${activePalette.ink}30`,
-            }}
-            aria-label="Close sample answer"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
-          </button>
-        </div>
 
-        {/* Middle: oversized topic numeral + title */}
-        <div ref={headerAnchorRef} className="my-auto">
-          <div
-            className="font-display font-black tabular-nums leading-none"
-            style={{
-              color: activePalette.ink,
-              fontSize: "clamp(4rem, 9vw, 7rem)",
-              letterSpacing: "-0.04em",
-              opacity: 0.92,
-            }}
-          >
-            {topicNumber}
+          {/* Topic body — "Cue Card 14" eyebrow + sage-green title. */}
+          <div ref={headerAnchorRef} className="mt-auto">
+            <p
+              className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+              style={{ color: activePalette.ink, opacity: 0.72 }}
+            >
+              Cue Card {topicIndex || 1}
+            </p>
+            <h2
+              className="mt-3 font-display font-black leading-[1.08] tracking-tight"
+              style={{
+                // Sage-green title matches the TopicCard on the index page
+                color: "oklch(0.42 0.10 165)",
+                fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
+              }}
+            >
+              {topic.label}
+            </h2>
           </div>
-          <div
-            className="mt-4 h-[3px] w-[64px] rounded-full"
-            style={{ backgroundColor: activePalette.ink, opacity: 0.6 }}
-          />
-          <h2
-            className="mt-5 font-display font-black leading-[1.08] tracking-tight"
-            style={{
-              color: activePalette.ink,
-              fontSize: "clamp(1.5rem, 2.4vw, 2rem)",
-            }}
-          >
-            {topic.label}
-          </h2>
-        </div>
 
-        {/* Bottom: brand lockup */}
-        <div className="flex items-center gap-2.5">
-          <span
-            className="flex h-9 w-9 items-center justify-center rounded-xl"
-            style={{
-              backgroundColor: "oklch(0.55 0.135 25)",
-              boxShadow:
-                "0 0 0 1px oklch(0.65 0.150 25 / 0.55), 0 6px 16px oklch(0.55 0.135 25 / 0.35)",
-            }}
-          >
-            <GraduationCap className="h-5 w-5" strokeWidth={2.6} style={{ color: "oklch(0.99 0.005 250)" }} />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="flex items-baseline gap-[1px]">
-              <span
-                className="font-display text-[15px] font-black tracking-tight"
-                style={{ color: activePalette.ink }}
-              >
-                BigIELTS
-              </span>
-              <span
-                className="font-display text-[15px] font-black tracking-tight"
-                style={{ color: "oklch(0.55 0.080 125)" }}
-              >
-                .com
-              </span>
-            </span>
+          {/* Brand lockup — bottom of the card. */}
+          <div className="mt-10 flex items-center gap-2.5">
             <span
-              aria-hidden
-              className="mt-[3px] h-[2px] w-full rounded-full"
-              style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
-            />
-          </span>
+              className="flex h-9 w-9 items-center justify-center rounded-xl"
+              style={{
+                backgroundColor: "oklch(0.55 0.135 25)",
+                boxShadow:
+                  "0 0 0 1px oklch(0.65 0.150 25 / 0.55), 0 6px 16px oklch(0.55 0.135 25 / 0.35)",
+              }}
+            >
+              <GraduationCap className="h-5 w-5" strokeWidth={2.6} style={{ color: "oklch(0.99 0.005 250)" }} />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="flex items-baseline gap-[1px]">
+                <span
+                  className="font-display text-[15px] font-black tracking-tight"
+                  style={{ color: activePalette.ink }}
+                >
+                  BigIELTS
+                </span>
+                <span
+                  className="font-display text-[15px] font-black tracking-tight"
+                  style={{ color: "oklch(0.55 0.080 125)" }}
+                >
+                  .com
+                </span>
+              </span>
+              <span
+                aria-hidden
+                className="mt-[3px] h-[2px] w-full rounded-full"
+                style={{ backgroundColor: "oklch(0.52 0.115 250)" }}
+              />
+            </span>
+          </div>
         </div>
       </aside>
 
