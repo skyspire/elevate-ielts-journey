@@ -16,7 +16,6 @@ import { Route as WritingSamplesIndexRouteImport } from './routes/writing-sample
 import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
-import { Route as SpeakingSamplesCategoryTopicFollowupIndexRouteImport } from './routes/speaking-samples.$category.$topic.followup.$index'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -55,12 +54,6 @@ const SpeakingSamplesCategoryTopicRoute =
     path: '/speaking-samples/$category/$topic',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SpeakingSamplesCategoryTopicFollowupIndexRoute =
-  SpeakingSamplesCategoryTopicFollowupIndexRouteImport.update({
-    id: '/followup/$index',
-    path: '/followup/$index',
-    getParentRoute: () => SpeakingSamplesCategoryTopicRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -69,8 +62,7 @@ export interface FileRoutesByFullPath {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRouteWithChildren
-  '/speaking-samples/$category/$topic/followup/$index': typeof SpeakingSamplesCategoryTopicFollowupIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -79,8 +71,7 @@ export interface FileRoutesByTo {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRouteWithChildren
-  '/speaking-samples/$category/$topic/followup/$index': typeof SpeakingSamplesCategoryTopicFollowupIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -90,8 +81,7 @@ export interface FileRoutesById {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRouteWithChildren
-  '/speaking-samples/$category/$topic/followup/$index': typeof SpeakingSamplesCategoryTopicFollowupIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -103,7 +93,6 @@ export interface FileRouteTypes {
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
-    | '/speaking-samples/$category/$topic/followup/$index'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -113,7 +102,6 @@ export interface FileRouteTypes {
     | '/speaking-samples'
     | '/writing-samples'
     | '/speaking-samples/$category/$topic'
-    | '/speaking-samples/$category/$topic/followup/$index'
   id:
     | '__root__'
     | '/'
@@ -123,7 +111,6 @@ export interface FileRouteTypes {
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
-    | '/speaking-samples/$category/$topic/followup/$index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -133,7 +120,7 @@ export interface RootRouteChildren {
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
-  SpeakingSamplesCategoryTopicRoute: typeof SpeakingSamplesCategoryTopicRouteWithChildren
+  SpeakingSamplesCategoryTopicRoute: typeof SpeakingSamplesCategoryTopicRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,30 +174,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpeakingSamplesCategoryTopicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/speaking-samples/$category/$topic/followup/$index': {
-      id: '/speaking-samples/$category/$topic/followup/$index'
-      path: '/followup/$index'
-      fullPath: '/speaking-samples/$category/$topic/followup/$index'
-      preLoaderRoute: typeof SpeakingSamplesCategoryTopicFollowupIndexRouteImport
-      parentRoute: typeof SpeakingSamplesCategoryTopicRoute
-    }
   }
 }
-
-interface SpeakingSamplesCategoryTopicRouteChildren {
-  SpeakingSamplesCategoryTopicFollowupIndexRoute: typeof SpeakingSamplesCategoryTopicFollowupIndexRoute
-}
-
-const SpeakingSamplesCategoryTopicRouteChildren: SpeakingSamplesCategoryTopicRouteChildren =
-  {
-    SpeakingSamplesCategoryTopicFollowupIndexRoute:
-      SpeakingSamplesCategoryTopicFollowupIndexRoute,
-  }
-
-const SpeakingSamplesCategoryTopicRouteWithChildren =
-  SpeakingSamplesCategoryTopicRoute._addFileChildren(
-    SpeakingSamplesCategoryTopicRouteChildren,
-  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -219,8 +184,7 @@ const rootRouteChildren: RootRouteChildren = {
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
-  SpeakingSamplesCategoryTopicRoute:
-    SpeakingSamplesCategoryTopicRouteWithChildren,
+  SpeakingSamplesCategoryTopicRoute: SpeakingSamplesCategoryTopicRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
