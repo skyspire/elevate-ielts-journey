@@ -374,6 +374,7 @@ function CueCardReader({
   variantIndex,
   goToVariant,
   variantTransitioning,
+  gravityPhase,
   sections,
   revealedSections,
   scrollProgress,
