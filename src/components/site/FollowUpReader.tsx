@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
@@ -532,14 +532,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 }}
               >
                 {question.title}
-                <span
-                  aria-hidden
-                  className="fu-headline-rule absolute left-0 -bottom-3 block h-[2.5px] origin-left rounded-full"
-                  style={{
-                    width: "100%",
-                    backgroundImage: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 25%, ${activePalette.accent} 75%, transparent 100%)`,
-                  }}
-                />
               </h1>
             </aside>
           );
@@ -655,6 +647,32 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             </>
           );
         })()}
+
+        {/* Brand mark — bottom-right above the footer pager, with a soft glow.
+            Uses the same charcoal-tile GraduationCap mark as the site Header. */}
+        <div
+          className="pointer-events-none absolute right-4 z-20 flex items-center gap-2 sm:right-8"
+          style={{
+            bottom: variants.length > 1 ? "calc(72px + 16px)" : "20px",
+          }}
+          aria-hidden
+        >
+          <span
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-white sm:h-10 sm:w-10"
+            style={{
+              backgroundColor: INK,
+              boxShadow: `0 0 0 1px ${activePalette.accent}55, 0 0 28px 6px ${activePalette.accent}66, 0 8px 24px ${activePalette.accentDeep}40`,
+            }}
+          >
+            <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.75} />
+          </span>
+          <span
+            className="hidden font-display text-[14px] font-extrabold tracking-tight sm:inline"
+            style={{ color: INK }}
+          >
+            BigIELTS
+          </span>
+        </div>
 
         {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule. */}
         {variants.length > 1 && (
