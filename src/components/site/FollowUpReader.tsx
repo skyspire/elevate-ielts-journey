@@ -583,20 +583,21 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           </div>
         </div>
 
-        {/* Footer pager — three always-colored tabs, active gets tonal border. */}
+        {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule. */}
         {variants.length > 1 && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
-            <div
-              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-white/[0.06] p-1.5 shadow-[0_22px_50px_-18px_oklch(0_0_0/0.55)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, oklch(0.26 0.015 75) 0%, oklch(0.18 0.015 75) 100%)",
-              }}
-            >
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+            style={{
+              borderTop: `1px solid ${activePalette.ink}26`,
+              background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+              backdropFilter: "blur(6px)",
+            }}
+          >
+            <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex - 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Previous answer"
               >
                 <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
@@ -621,8 +622,8 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                       style={{
                         backgroundColor: tone.tabBg,
                         boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
+                          ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
+                          : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
                       }}
                     >
                       <span
@@ -644,7 +645,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               <button
                 type="button"
                 onClick={() => goToVariant(variantIndex + 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
                 aria-label="Next answer"
               >
                 <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
