@@ -381,8 +381,11 @@ export function WritingAnswerBillboard({
       </div>
 
       {/* ── Footer pager — three sample-answer tabs ───────────────────── */}
+      {/* In full-screen mode we use position:fixed so the pager is pinned
+          to the viewport bottom no matter what scrolls inside the reader.
+          In embedded mode it stays absolutely positioned to the section. */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+        className={`pointer-events-none ${fullScreen ? "fixed" : "absolute"} inset-x-0 bottom-0 z-50`}
         style={{
           borderTop: `1px solid ${activePalette.tabBorder}55`,
           background:
