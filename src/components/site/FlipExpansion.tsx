@@ -46,11 +46,12 @@ export function FlipExpansion({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
   const [variantTransitioning, setVariantTransitioning] = useState(false);
-  // Radial color-wash overlay state for the answer transition
+  // Typographic zoom-through overlay state for the answer transition
   const [wash, setWash] = useState<{
     x: number;
     y: number;
     color: string;
+    numeral: string;
     key: number;
   } | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -174,24 +175,25 @@ export function FlipExpansion({
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
 
-    // Trigger radial color-wash reveal from the tab's position (or screen center).
+    // Trigger typographic zoom-through from the tab's position (or screen center).
     const x = origin?.x ?? window.innerWidth / 2;
     const y = origin?.y ?? window.innerHeight - 80;
     const color = variantWashColors[clamped % variantWashColors.length];
-    setWash({ x, y, color, key: Date.now() });
+    const numeral = String(clamped + 1);
+    setWash({ x, y, color, numeral, key: Date.now() });
 
-    // Switch content under the wash mid-animation, so when the wash fades the
-    // new screen + text are already in place underneath.
+    // Switch content under the overlay mid-animation, so when it shrinks away
+    // the new screen + text are already in place underneath.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
-    }, 360);
+    }, 480);
 
-    // Clear wash + transition lock after the full sweep finishes.
+    // Clear overlay + transition lock after the full sweep finishes.
     window.setTimeout(() => {
       setVariantTransitioning(false);
       setWash(null);
-    }, 920);
+    }, 1100);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
@@ -227,26 +229,51 @@ export function FlipExpansion({
       aria-modal="true"
       aria-label={`${topic.label} — Sample answer`}
     >
-      {/* Radial color-wash overlay — sweeps from the clicked tab outward in
-          the next answer's color, then fades, revealing the new screen+text. */}
+      {/* Typographic zoom-through overlay — a giant numeral inflates from the
+          clicked tab in the next answer's color, holds as a typographic
+          moment, then shrinks into place as the page settles underneath.
+          A soft color veil rides along to bridge the two screens. */}
       {wash && (
         <div
           key={wash.key}
-          className="pointer-events-none absolute inset-0 z-[110]"
-          style={{ animation: "wash-fade 900ms ease-out forwards" }}
+          className="pointer-events-none absolute inset-0 z-[110] overflow-hidden"
+          style={{ animation: "zoom-veil 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards" }}
         >
+          {/* Soft tinted veil that fades the screens together */}
           <div
-            className="absolute rounded-full"
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(60% 60% at ${wash.x}px ${wash.y}px, ${wash.color}, transparent 75%)`,
+              opacity: 0,
+              animation: "zoom-veil-tint 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
+              mixBlendMode: "multiply",
+            }}
+          />
+          {/* The hero numeral */}
+          <div
+            className="absolute"
             style={{
               left: wash.x,
               top: wash.y,
-              width: 10,
-              height: 10,
               transform: "translate(-50%, -50%)",
-              background: `radial-gradient(circle, ${wash.color} 0%, ${wash.color} 55%, transparent 70%)`,
-              animation: "wash-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards",
+              animation: "zoom-numeral 1080ms cubic-bezier(0.65, 0, 0.35, 1) forwards",
+              willChange: "transform, opacity",
             }}
-          />
+          >
+            <span
+              className="font-display block select-none leading-none"
+              style={{
+                fontSize: "clamp(140px, 24vw, 320px)",
+                fontWeight: 900,
+                letterSpacing: "-0.06em",
+                color: wash.color,
+                textShadow: `0 30px 80px ${wash.color}55, 0 8px 24px ${wash.color}33`,
+                WebkitTextStroke: `1px ${wash.color}`,
+              }}
+            >
+              {wash.numeral}
+            </span>
+          </div>
         </div>
       )}
       {/* Backdrop */}
@@ -858,15 +885,21 @@ function CueCardReader({
           0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
           50% { transform: translate3d(-3%, 4%, 0) scale(1.06); }
         }
-        @keyframes wash-grow {
-          0%   { width: 10px; height: 10px; opacity: 0.0; filter: blur(8px); }
-          12%  { opacity: 0.95; }
-          60%  { width: 320vmax; height: 320vmax; opacity: 0.92; filter: blur(2px); }
-          100% { width: 360vmax; height: 360vmax; opacity: 0; filter: blur(20px); }
+        @keyframes zoom-numeral {
+          0%   { transform: translate(-50%, -50%) scale(0.05); opacity: 0; filter: blur(6px); }
+          18%  { opacity: 1; filter: blur(0px); }
+          42%  { transform: translate(-50%, -50%) scale(1.15); opacity: 1; filter: blur(0px); }
+          58%  { transform: translate(-50%, -50%) scale(1.0);  opacity: 1; filter: blur(0px); }
+          100% { transform: translate(-50%, -50%) scale(0.18); opacity: 0; filter: blur(4px); }
         }
-        @keyframes wash-fade {
-          0%, 70% { opacity: 1; }
-          100%    { opacity: 0; }
+        @keyframes zoom-veil-tint {
+          0%   { opacity: 0; }
+          35%  { opacity: 0.85; }
+          65%  { opacity: 0.85; }
+          100% { opacity: 0; }
+        }
+        @keyframes zoom-veil {
+          0%, 100% { opacity: 1; }
         }
       `}</style>
     </div>
