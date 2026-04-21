@@ -810,18 +810,19 @@ function CueCardReader({
                       className="relative block h-full w-full overflow-hidden rounded-2xl p-4 text-left transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
                       style={{
                         backgroundColor: tone.fill,
-                        boxShadow: `0 12px 30px -14px ${activePalette.fillDeep}`,
-                        border: `1px solid ${tone.ink}33`,
+                        boxShadow: `0 12px 30px -14px oklch(0.20 0.010 250 / 0.35)`,
+                        border: `1px solid oklch(0.20 0.010 250 / 0.10)`,
+                        borderTop: `5px solid ${tone.accent}`,
                       }}
                     >
                       {/* Eyebrow — oversized padded numeral with tiny
-                          uppercase label stacked beside it. No icon: pure
-                          typographic hierarchy. */}
+                          uppercase label stacked beside it. Numeral picks
+                          up the accent color; label stays in deep ink. */}
                       <div className="flex items-baseline gap-2">
                         <span
                           className="font-display font-black tabular-nums leading-none tracking-tight"
                           style={{
-                            color: tone.ink,
+                            color: tone.accent,
                             fontSize: "22px",
                             letterSpacing: "-0.02em",
                           }}
@@ -830,7 +831,7 @@ function CueCardReader({
                         </span>
                         <span
                           className="font-display text-[9px] font-extrabold uppercase tracking-[0.32em]"
-                          style={{ color: tone.ink, opacity: 0.78 }}
+                          style={{ color: tone.ink, opacity: 0.65 }}
                         >
                           Follow-up
                         </span>
