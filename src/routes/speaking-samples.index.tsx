@@ -5,16 +5,13 @@ import {
   ArrowLeft,
   MessageCircle,
   ClipboardList,
-  Mic,
-  CheckCircle2,
-  Lock,
   ArrowUpRight,
-  Calendar,
   type LucideProps,
 } from "lucide-react";
 import { z } from "zod";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -70,123 +67,6 @@ const categoriesByMode: Record<Mode, Category[]> = {
   ],
 };
 
-// ───────── Sample prompts ─────────
-type Tone = "blue" | "mint" | "peach" | "lilac";
-type Question = {
-  id: string;
-  title: string;
-  topic: string;
-  difficulty: "Easy" | "Medium" | "Hard";
-  tone: Tone;
-};
-
-const TONES: Tone[] = ["blue", "mint", "peach", "lilac"];
-
-const samplePrompts: Record<string, string[]> = {
-  things: [
-    "Tell me about a gift you received recently. Who gave it to you?",
-    "What is your favourite item of clothing? Why do you like it?",
-    "Is there a piece of technology you use every day? How does it help you?",
-    "What kind of things do you usually buy as souvenirs when you travel?",
-    "Are there any objects from your childhood that you still keep?",
-    "Do you think people today own too many things? Why or why not?",
-  ],
-  activities: [
-    "What do you like to do in your free time?",
-    "Do you prefer indoor or outdoor activities? Why?",
-    "Is there a new activity or hobby you would like to try?",
-    "How often do you do physical exercise or sports?",
-    "Do you think people in your country have enough free time for hobbies?",
-    "Has the way young people spend their free time changed in recent years?",
-  ],
-  places: [
-    "Where is your hometown and what is it best known for?",
-    "What do you like most about the area where you live now?",
-    "Is there a place in your country you would recommend tourists to visit?",
-    "Do you prefer living in a city or in the countryside? Why?",
-    "How has your hometown changed in the last ten years?",
-    "What makes a place feel like 'home' to you?",
-  ],
-  people: [
-    "Who is the person you spend the most time with?",
-    "Tell me about a friend who has influenced you in a positive way.",
-    "Do you prefer spending time with a small group of close friends or a large group?",
-    "Is there someone in your family you particularly admire? Why?",
-    "What qualities do you think make a good role model?",
-    "How important is it to keep in touch with old friends?",
-  ],
-  experiences: [
-    "Tell me about a memorable trip you have taken.",
-    "Describe a time you learned a new skill. How did you feel?",
-    "Have you ever had to make an important decision? What happened?",
-    "Tell me about a celebration that you remember well.",
-    "Describe a challenging situation you managed to overcome.",
-    "What is an experience you would like to have in the future?",
-  ],
-  "future-plans": [
-    "What are your plans for the next few years?",
-    "Is there a country you would like to visit one day? Why?",
-    "What kind of job would you like to have in the future?",
-    "Do you have any goals you would like to achieve in the next five years?",
-    "Would you like to live in a different city in the future? Why or why not?",
-    "How important is it to plan ahead, in your opinion?",
-  ],
-  person: [
-    "Describe a person who has had a strong influence on your life. You should say who they are, how you know them, what they are like, and why they have influenced you.",
-    "Describe a teacher you remember well from your school days.",
-    "Describe a family member you are close to.",
-    "Describe a person you admire who is not a celebrity.",
-    "Describe a friend you would like to travel with.",
-  ],
-  place: [
-    "Describe a place you visited that you found particularly peaceful. You should say where it is, when you went there, who you were with, and why it felt peaceful.",
-    "Describe your favourite room in your home.",
-    "Describe a city you would like to live in.",
-    "Describe a building in your country that is important to you.",
-    "Describe a beautiful natural place you have visited.",
-  ],
-  object: [
-    "Describe a gift you received that was important to you. You should say what it was, who gave it to you, when you received it, and why it was important.",
-    "Describe a piece of technology you find useful.",
-    "Describe a book you have read more than once.",
-    "Describe an item of clothing you wear often.",
-    "Describe an object you would like to own in the future.",
-  ],
-  event: [
-    "Describe a celebration you remember well. You should say what was being celebrated, where it took place, who was there, and why you remember it.",
-    "Describe a time you were surprised by something.",
-    "Describe an important decision you made.",
-    "Describe a public event you attended.",
-    "Describe a journey that did not go as planned.",
-  ],
-  experience: [
-    "Describe a time you learned a new skill. You should say what it was, when and how you learned it, who taught you, and how you felt afterwards.",
-    "Describe a memorable trip you took.",
-    "Describe a time you helped someone.",
-    "Describe an achievement you are proud of.",
-    "Describe a challenging experience you overcame.",
-  ],
-  activity: [
-    "Describe an outdoor activity you enjoy. You should say what it is, where you do it, who you do it with, and why you enjoy it.",
-    "Describe a sport you would like to learn.",
-    "Describe a daily routine you enjoy.",
-    "Describe a creative activity you do in your free time.",
-    "Describe something you do to relax.",
-  ],
-};
-
-const TOPICS = ["Daily life", "Society", "Personal", "Culture", "Future", "Memory", "Work", "Travel"] as const;
-
-const makeQuestions = (categoryId: string): Question[] => {
-  const prompts = samplePrompts[categoryId] ?? [];
-  return prompts.map((statement, i) => ({
-    id: `${categoryId}-${i + 1}`,
-    title: statement,
-    topic: TOPICS[i % TOPICS.length],
-    difficulty: (["Easy", "Medium", "Hard"] as const)[i % 3],
-    tone: TONES[i % TONES.length],
-  }));
-};
 
 function SpeakingSamplesPage() {
   const search = Route.useSearch();
@@ -209,7 +89,7 @@ function SpeakingSamplesPage() {
     "ring-[oklch(0.55_0.10_165)]/45 border-[oklch(0.55_0.10_165)]/45";
 
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
-  const questions = makeQuestions(activeCategory.id);
+  const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
   return (
     <div className="min-h-screen bg-[oklch(0.985_0.014_165)]">
@@ -335,19 +215,27 @@ function SpeakingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Questions list with sage paper-dots background */}
+              {/* Step 3 — Topic cards with sage paper-dots background */}
               <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-sage pb-20 sm:mt-20 sm:pb-28">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
-                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {questions.map((q, i) => (
-                      <SpeakingQuestionCard
-                        key={q.id}
+                  <div className="mb-8 text-center">
+                    <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
+                      {activeCategory.label} · {topics.length} topics
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                      Pick a topic to explore
+                    </h3>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {topics.map((t, i) => (
+                      <TopicCard
+                        key={t.id}
                         index={i + 1}
-                        q={q}
-                        category={activeCategory.label}
+                        topic={t}
+                        categoryId={activeCategory.id}
+                        categoryLabel={activeCategory.label}
                         mode={mode}
                         accentChip={accentChip}
-                        accentRing={accentRing}
                       />
                     ))}
                   </div>
@@ -518,75 +406,57 @@ function FormatTogglePair({
 }
 
 
-// ───────── Question card (mirrors Writing Samples styling, with mic affordance) ─────────
-function SpeakingQuestionCard({
+// ───────── Topic card — numbered tile that links to the topic detail page ─────────
+function TopicCard({
   index,
-  q,
-  category,
+  topic,
+  categoryId,
+  categoryLabel,
   mode,
   accentChip,
-  accentRing,
 }: {
   index: number;
-  q: Question;
-  category: string;
+  topic: { id: string; label: string };
+  categoryId: string;
+  categoryLabel: string;
   mode: Mode;
   accentChip: string;
-  accentRing: string;
 }) {
-  // First card unlocked, rest gated — preserves the "preview/unlock" layered feel
-  const isUnlocked = index === 1;
-  void accentRing;
-
   return (
-    <article
-      className={`group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card ${
-        !isUnlocked ? "opacity-95" : ""
-      }`}
+    <Link
+      to="/speaking-samples/$category/$topic"
+      params={{ category: categoryId, topic: topic.id }}
+      className="group relative flex h-full flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:border-[oklch(0.55_0.10_165)]/45 hover:shadow-card"
     >
-      {/* Top row: index + badges */}
+      {/* Top row: index + part badge */}
       <div className="flex items-start justify-between gap-3">
         <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-          Q{String(index).padStart(2, "0")}
+          T{String(index).padStart(2, "0")}
         </span>
-        <div className="flex flex-wrap items-center justify-end gap-1.5">
-          <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}>
-            <Mic className="h-3 w-3" strokeWidth={2.6} />
-            {mode === "cuecards" ? "Part 2" : "Part 1 / 3"}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-            {q.difficulty}
-          </span>
-        </div>
+        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}>
+          {mode === "cuecards" ? "Part 2" : "Part 1 / 3"}
+        </span>
       </div>
 
-      {/* Question text */}
-      <p className="font-display text-[15px] font-bold leading-snug tracking-tight text-foreground">
-        {q.title}
-      </p>
+      {/* Topic name — the hero of the card */}
+      <h4
+        className="font-display font-black leading-tight tracking-tight text-foreground"
+        style={{ fontSize: "clamp(1.25rem, 3.2vw, 1.6rem)" }}
+      >
+        {topic.label}
+      </h4>
 
       {/* Footer */}
       <div className="mt-1 flex items-center justify-between gap-2 border-t border-foreground/8 pt-3">
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground/55">
-          <Calendar className="h-3.5 w-3.5" />
-          {category}
+        <span className="text-[11px] font-semibold text-foreground/55">
+          {categoryLabel}
         </span>
-
-        {isUnlocked ? (
-          <button
-            type="button"
-            className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            View answer
-            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-          </button>
-        ) : (
-          <span className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-foreground/5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-foreground/55">
-            <Lock className="h-3.5 w-3.5" />
-            Pro
-          </span>
-        )}
+        <span className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform group-hover:-translate-y-0.5">
+          Open
+          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }
+

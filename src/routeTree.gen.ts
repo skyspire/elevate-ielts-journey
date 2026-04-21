@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
 import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
+import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -47,6 +48,12 @@ const WritingSamplesQuestionIdRoute =
     path: '/writing-samples/$questionId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SpeakingSamplesCategoryTopicRoute =
+  SpeakingSamplesCategoryTopicRouteImport.update({
+    id: '/speaking-samples/$category/$topic',
+    path: '/speaking-samples/$category/$topic',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -55,6 +62,7 @@ export interface FileRoutesByFullPath {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -63,6 +71,7 @@ export interface FileRoutesByTo {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -72,6 +81,7 @@ export interface FileRoutesById {
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
+  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -82,6 +92,7 @@ export interface FileRouteTypes {
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
+    | '/speaking-samples/$category/$topic'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -90,6 +101,7 @@ export interface FileRouteTypes {
     | '/writing-samples/$questionId'
     | '/speaking-samples'
     | '/writing-samples'
+    | '/speaking-samples/$category/$topic'
   id:
     | '__root__'
     | '/'
@@ -98,6 +110,7 @@ export interface FileRouteTypes {
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
+    | '/speaking-samples/$category/$topic'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +120,7 @@ export interface RootRouteChildren {
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
+  SpeakingSamplesCategoryTopicRoute: typeof SpeakingSamplesCategoryTopicRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WritingSamplesQuestionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/speaking-samples/$category/$topic': {
+      id: '/speaking-samples/$category/$topic'
+      path: '/speaking-samples/$category/$topic'
+      fullPath: '/speaking-samples/$category/$topic'
+      preLoaderRoute: typeof SpeakingSamplesCategoryTopicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -163,6 +184,7 @@ const rootRouteChildren: RootRouteChildren = {
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
+  SpeakingSamplesCategoryTopicRoute: SpeakingSamplesCategoryTopicRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
