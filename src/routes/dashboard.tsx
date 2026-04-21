@@ -285,7 +285,7 @@ function DashboardPage() {
           </div>
 
           {/* Bold color blocks — equal-size grid */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {features.map((f) => (
               <FeatureCard key={f.key} feature={f} module={module} />
             ))}
