@@ -164,7 +164,7 @@ function WritingSamplesPage() {
         </div>
       </header>
 
-      <main className="relative py-10 sm:py-14">
+      <main className="relative pt-10 sm:pt-14">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
@@ -447,7 +447,7 @@ function WritingSamplesPage() {
               </div>
 
               {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
-              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots sm:mt-20">
+              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-dots pb-20 sm:mt-20 sm:pb-28">
                 <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {questions.map((q, i) => (
@@ -461,10 +461,6 @@ function WritingSamplesPage() {
                       />
                     ))}
                   </div>
-
-                  <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/50">
-                    Sample questions · Model answers coming soon
-                  </p>
                 </div>
               </div>
             </>
