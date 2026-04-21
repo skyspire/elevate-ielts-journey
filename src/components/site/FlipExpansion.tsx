@@ -435,8 +435,9 @@ function CueCardReader({
   onOpenFollowUp,
 }: CueReaderProps) {
   // Edge softening intensifies as the reader scrolls — creates the focus tunnel.
+  // Kept for backwards compat; opacity fixed to 0 on the billboard treatment.
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
-  const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
+  const _vignetteOpacityUnused = 0.18 + tunnelStrength * 0.32;
 
   // ── Atmospheric mood shift ───────────────────────────────────────────────
   // On every variant switch, the reading lane briefly desaturates and dims
@@ -446,39 +447,52 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // Coordinated palette — drives both the reading-screen tint and the
-  // vibrant footer tabs. Index matches the active variant.
-  // 1. Bold Red · 2. Bold Blue · 3. Olive Green
-  // tabBg is the saturated footer tab color; screen is the soft tint behind
-  // the answer text; glow is the ambient blur orb; heading is the answer
-  // section heading color (watercolor-soft so text stays readable).
+  // ── BILLBOARD palette: INDIGO · FOREST · BURGUNDY ───────────────────────
+  // Premium long-form reading palette — distinct from the follow-up reader's
+  // amber/teal/plum, and from the cue-card's old red/blue/olive.
+  // Each tone is a deep saturated fill that the whole screen takes on, with
+  // a deeper shade for the diagonal gradient + footer band, and cream ink
+  // for headings and body text on top.
   const palette = [
     {
-      // Bold Red
-      tabBg:    "oklch(0.58 0.22 25)",     // strong crimson red
-      tabHover: "oklch(0.64 0.20 25)",
-      tabBorder:"oklch(0.32 0.18 25)",     // deep tonal border (active state)
-      screen:   "oklch(0.965 0.035 25)",   // soft blush tint
-      glow:     "oklch(0.78 0.16 25)",
-      heading:  "oklch(0.42 0.18 25)",     // deep watercolor red
+      // Indigo — deep, focused, intellectual
+      fill:      "oklch(0.42 0.14 270)",
+      fillDeep:  "oklch(0.30 0.13 270)",
+      tabBg:     "oklch(0.42 0.14 270)",
+      tabBorder: "oklch(0.22 0.12 270)",
+      ink:       "oklch(0.99 0.012 270)",
+      inkSoft:   "oklch(0.99 0.012 270 / 0.85)",
+      // Legacy keys retained so other code paths (mobile chip, etc) don't break
+      tabHover:  "oklch(0.48 0.13 270)",
+      screen:    "oklch(0.42 0.14 270)",
+      glow:      "oklch(0.62 0.13 270)",
+      heading:   "oklch(0.99 0.012 270)",
     },
     {
-      // Bold Blue
-      tabBg:    "oklch(0.52 0.20 250)",    // strong sapphire blue
-      tabHover: "oklch(0.58 0.18 250)",
-      tabBorder:"oklch(0.28 0.16 250)",
-      screen:   "oklch(0.965 0.030 245)",  // soft sky tint
-      glow:     "oklch(0.75 0.14 250)",
-      heading:  "oklch(0.40 0.16 250)",    // deep watercolor blue
+      // Forest — grounded, calm, considered
+      fill:      "oklch(0.40 0.10 155)",
+      fillDeep:  "oklch(0.28 0.09 155)",
+      tabBg:     "oklch(0.40 0.10 155)",
+      tabBorder: "oklch(0.20 0.08 155)",
+      ink:       "oklch(0.99 0.012 155)",
+      inkSoft:   "oklch(0.99 0.012 155 / 0.85)",
+      tabHover:  "oklch(0.46 0.10 155)",
+      screen:    "oklch(0.40 0.10 155)",
+      glow:      "oklch(0.60 0.10 155)",
+      heading:   "oklch(0.99 0.012 155)",
     },
     {
-      // Olive Green
-      tabBg:    "oklch(0.55 0.13 115)",    // rich olive
-      tabHover: "oklch(0.61 0.12 115)",
-      tabBorder:"oklch(0.30 0.10 115)",
-      screen:   "oklch(0.965 0.035 110)",  // soft sage tint
-      glow:     "oklch(0.76 0.12 115)",
-      heading:  "oklch(0.40 0.11 115)",    // deep watercolor olive
+      // Burgundy — rich, warm, premium
+      fill:      "oklch(0.40 0.13 18)",
+      fillDeep:  "oklch(0.28 0.12 18)",
+      tabBg:     "oklch(0.40 0.13 18)",
+      tabBorder: "oklch(0.20 0.11 18)",
+      ink:       "oklch(0.99 0.014 18)",
+      inkSoft:   "oklch(0.99 0.014 18 / 0.85)",
+      tabHover:  "oklch(0.46 0.13 18)",
+      screen:    "oklch(0.40 0.13 18)",
+      glow:      "oklch(0.60 0.13 18)",
+      heading:   "oklch(0.99 0.014 18)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
@@ -508,120 +522,75 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* Atmospheric background — base color shifts to a tint of the active answer's palette.
-          Uses a single, explicit background-color transition aligned with the
-          640ms slide window. The decorative gradient orbs intentionally have
-          no transition: a radial-gradient cannot be smoothly interpolated, so
-          a transition there causes a visible snap-flicker. The orbs simply
-          re-render with the new color while the mood veil masks the change. */}
+      {/* ── BILLBOARD background: bold solid palette fill + diagonal gradient + film grain.
+          Mirrors the FollowUpReader treatment. No vignettes — explicit user request. */}
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
         style={{
-          backgroundColor: activePalette.screen,
-          transition: "background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundImage: `linear-gradient(135deg, ${activePalette.fillDeep} 0%, ${activePalette.fill} 55%, ${activePalette.fill} 100%)`,
+          transition: "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), background-color 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backgroundColor: activePalette.fill,
         }}
       >
+        {/* Film grain — fine SVG-noise via radial dots, blended */}
         <div
-          className="absolute -left-[20%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-[0.14] blur-3xl"
+          className="absolute inset-0 mix-blend-overlay opacity-[0.12]"
           style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-a 26s ease-in-out infinite",
-          }}
-        />
-        <div
-          className="absolute -right-[15%] top-[40%] h-[48vh] w-[48vh] rounded-full opacity-[0.12] blur-3xl"
-          style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-b 32s ease-in-out infinite",
-          }}
-        />
-        <div
-          className="absolute left-[30%] -bottom-[15%] h-[40vh] w-[40vh] rounded-full opacity-[0.10] blur-3xl"
-          style={{
-            background: `radial-gradient(circle, ${activePalette.glow} 0%, transparent 65%)`,
-            animation: "drift-a 38s ease-in-out infinite reverse",
-          }}
-        />
-        {/* Letterpress paper grain — whisper-intensity (~3-5%).
-            Layer 1: fine fiber speckle (two offset dot fields at different
-            scales) for cold-pressed paper tooth.
-            Layer 2: short directional fibers for handmade-paper feel.
-            Layer 3: soft inner debossed vignette so the screen feels pressed
-            into the page edge — premium printed-journal quality. */}
-        <div
-          className="absolute inset-0 mix-blend-multiply opacity-[0.045]"
-          style={{
-            backgroundImage: [
-              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.6px, transparent 1.2px)",
-              "radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.5px, transparent 1px)",
-              "radial-gradient(circle at 4px 1px, oklch(0.20 0.02 60) 0.4px, transparent 0.9px)",
-            ].join(", "),
-            backgroundSize: "7px 7px, 13px 11px, 19px 17px",
-            backgroundPosition: "0 0, 3px 5px, 7px 2px",
-          }}
-        />
-        <div
-          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
-          style={{
-            backgroundImage: [
-              "repeating-linear-gradient(102deg, transparent 0 3px, oklch(0.28 0.02 60 / 0.55) 3px 3.4px, transparent 3.4px 9px)",
-              "repeating-linear-gradient(14deg, transparent 0 5px, oklch(0.30 0.02 60 / 0.4) 5px 5.3px, transparent 5.3px 14px)",
-            ].join(", "),
-          }}
-        />
-        {/* Soft inner debossed vignette — letterpress press-edge */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            boxShadow:
-              "inset 0 0 80px oklch(0.30 0.04 60 / 0.08), inset 0 0 200px oklch(0.30 0.04 60 / 0.05)",
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, oklch(1 0 0) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0 0 0) 0.4px, transparent 1px)",
+            backgroundSize: "4px 4px, 7px 7px",
           }}
         />
       </div>
 
-      {/* Brand seal watermark — permanently anchored to the bottom-right corner. */}
+      {/* Brand seal watermark — cream ink so it reads against the bold palette fill. */}
       <div
         className="pointer-events-none absolute z-[1]"
-        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.09 }}
+        style={{ right: "max(24px, 4vmin)", bottom: "calc(96px + max(16px, 2vmin))", opacity: 0.18 }}
       >
-        <div className="flex items-center gap-2.5 rounded-2xl border-[3px] border-foreground/80 px-3.5 py-2.5">
-          <GraduationCap className="h-7 w-7 text-foreground" strokeWidth={2.5} />
+        <div
+          className="flex items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
+          style={{ border: `3px solid ${activePalette.ink}` }}
+        >
+          <GraduationCap className="h-7 w-7" strokeWidth={2.5} style={{ color: activePalette.ink }} />
           <div className="flex flex-col leading-none">
-            <span className="font-display text-[15px] font-black tracking-tight text-foreground">
+            <span
+              className="font-display text-[15px] font-black tracking-tight"
+              style={{ color: activePalette.ink }}
+            >
               BigIELTS
             </span>
-            <span className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em] text-foreground">
+            <span
+              className="mt-1 font-display text-[8px] font-extrabold tracking-[0.4em]"
+              style={{ color: activePalette.ink }}
+            >
               .COM
             </span>
           </div>
         </div>
       </div>
 
-      {/* Focus-tunnel vignette — sharpens as user scrolls */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-500"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 45%, oklch(0.15 0.02 165) 130%)",
-          opacity: vignetteOpacity,
-        }}
-      />
-
-      {/* Stable, isolated topic header — single clean heading line.
-          Intentionally contains NO prompt text and stays fixed in its own
-          space so it never visually merges with the scrolling answer. */}
+      {/* Stable, isolated topic header — minimal, transparent, cream-on-palette. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
         style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
       >
-        <div ref={headerAnchorRef} className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
+        <div
+          ref={headerAnchorRef}
+          className="pointer-events-auto w-full max-w-[680px] rounded-2xl px-5 py-3.5 backdrop-blur-md sm:px-7 sm:py-4"
+          style={{
+            backgroundColor: "oklch(1 0 0 / 0.08)",
+            border: `1px solid ${activePalette.ink}26`,
+          }}
+        >
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2.5">
               <span
-                className="inline-flex shrink-0 items-center gap-1.5 pr-1 text-[oklch(0.38_0.10_165)]"
+                className="inline-flex shrink-0 items-center gap-1.5 pr-1"
+                style={{ color: activePalette.ink }}
                 aria-label="Speaking Part Two"
               >
-                <Mic className="h-3.5 w-3.5 opacity-80" strokeWidth={2.4} />
+                <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
                 <span className="relative font-handwriting text-[20px] leading-none tracking-tight sm:text-[22px]">
                   Part Two
                   <svg
@@ -636,20 +605,28 @@ function CueCardReader({
                       stroke="currentColor"
                       strokeWidth="1.4"
                       strokeLinecap="round"
-                      opacity="0.55"
+                      opacity="0.8"
                     />
                   </svg>
                 </span>
               </span>
-              <span aria-hidden className="h-4 w-px shrink-0 bg-foreground/15" />
-              <h2 className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[19px]">
+              <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}40` }} />
+              <h2
+                className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight sm:text-[19px]"
+                style={{ color: activePalette.ink }}
+              >
                 {topic.label}
               </h2>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-foreground/10 bg-white/70 px-3 py-1.5 text-[12px] font-semibold text-foreground/70 shadow-soft transition-colors hover:text-foreground"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
+              style={{
+                color: activePalette.ink,
+                backgroundColor: "oklch(1 0 0 / 0.10)",
+                border: `1px solid ${activePalette.ink}40`,
+              }}
               aria-label="Close sample answer"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
@@ -659,28 +636,15 @@ function CueCardReader({
         </div>
       </div>
 
-      {/* Hairline separator between header and reading lane — keeps the
-          two regions visually independent while scrolling. */}
-      <div
-        className="pointer-events-none absolute inset-x-0 z-10 h-px bg-foreground/10"
-        style={{ top: "92px" }}
-        aria-hidden
-      />
 
       {/* Scrollable reading lane.
           NOTE: Bottom padding intentionally large so the answer text never
           crashes into the colorful footer pager that floats above it. */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[220px] sm:pt-[140px] sm:pb-[240px]"
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
-          maskImage:
-            "linear-gradient(to bottom, black 0, black calc(100% - 140px), transparent 100%)",
-        }}
+        className="absolute inset-0 overflow-y-auto pt-[120px] pb-[180px] sm:pt-[140px] sm:pb-[200px]"
       >
-        <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
+        <article className="mx-auto w-full max-w-[820px] px-6 sm:px-10">
           {(() => {
             // Lateral slide choreography (sequential out → in):
             //   out  → current text translates by  -switchDir * 36px and
@@ -716,47 +680,73 @@ function CueCardReader({
                 // Re-key on variant change so the incoming element mounts
                 // fresh and runs the enter keyframe cleanly.
                 key={`lane-${variantIndex}`}
-                className="space-y-12 pt-4"
+                className="pt-4"
                 style={isOut ? outStyle : inOrIdleStyle}
                 data-lane-phase={gravityPhase}
               >
-                {sections.map((s, i) => {
-                  const visible = i < revealedSections;
-                  return (
-                    <section
-                      key={`${variantIndex}-${s.heading}`}
-                      style={{
-                        visibility: visible ? "visible" : "hidden",
-                      }}
-                    >
-                      <h3
-                        className="-mx-6 rounded-2xl px-6 py-3 font-display text-[20px] font-extrabold leading-tight tracking-tight sm:-mx-10 sm:px-10 sm:py-3.5 sm:text-[22px]"
+                {/* Billboard topic headline — oversized, cream-on-palette,
+                    with a thick palette-toned underline swash beneath. */}
+                <header className="mb-10">
+                  <span
+                    className="font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
+                    style={{ color: activePalette.ink, opacity: 0.8 }}
+                  >
+                    Sample answer · Band {currentVariant.bandScore}
+                  </span>
+                  <h1
+                    className="mt-3 font-display font-black leading-[1.05] tracking-tight"
+                    style={{
+                      color: activePalette.ink,
+                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
+                      textShadow: `0 2px 28px ${activePalette.fillDeep}`,
+                    }}
+                  >
+                    {topic.label}
+                  </h1>
+                  <div
+                    className="mt-5 h-[6px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    style={{
+                      background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
+                      opacity: 0.92,
+                      boxShadow: `0 2px 14px ${activePalette.fillDeep}`,
+                    }}
+                  />
+                </header>
+
+                {/* Sections rendered as inline anchors inside one continuous
+                    flowing answer. Each section's heading becomes a small
+                    uppercase eyebrow above its body. */}
+                <div className="space-y-9">
+                  {sections.map((s, i) => {
+                    const visible = i < revealedSections;
+                    return (
+                      <section
+                        key={`${variantIndex}-${s.heading}`}
                         style={{
-                          color: activePalette.heading,
-                          // Soft tinted band — derived from the active heading
-                          // color, mixed with the screen tint so it sits
-                          // gently on the already-tinted reading lane.
-                          backgroundColor: `color-mix(in oklab, ${activePalette.heading} 14%, ${activePalette.screen} 86%)`,
-                          // Hairline tonal border for a refined edge.
-                          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${activePalette.heading} 18%, transparent)`,
-                          // No transition: the lane re-mounts on variant
-                          // switch (key={lane-${variantIndex}}) so there's no
-                          // "from" state to interpolate. Adding a transition
-                          // here causes a visible snap-flicker because
-                          // color-mix() values cannot be tweened by browsers.
+                          visibility: visible ? "visible" : "hidden",
                         }}
                       >
-                        {s.heading}
-                      </h3>
-                      <p className="mt-4 text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]">
-                        {s.body}
-                      </p>
-                      {i < sections.length - 1 && (
-                        <div className="mx-auto mt-12 h-px w-16 bg-foreground/10" />
-                      )}
-                    </section>
-                  );
-                })}
+                        <h3
+                          className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
+                          style={{ color: activePalette.ink, opacity: 0.85 }}
+                        >
+                          {s.heading}
+                        </h3>
+                        <p
+                          className="mt-3 font-display"
+                          style={{
+                            color: activePalette.inkSoft,
+                            fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
+                            lineHeight: 1.72,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {s.body}
+                        </p>
+                      </section>
+                    );
+                  })}
+                </div>
               </div>
             );
           })()}
@@ -811,20 +801,30 @@ function CueCardReader({
                       followUps.length,
                     );
                   }}
-                  className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/70 p-4 text-left shadow-card backdrop-blur-md transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                  className="block w-full rounded-2xl p-4 text-left backdrop-blur-md transition-transform hover:-translate-y-0.5"
+                  style={{
+                    backgroundColor: "oklch(1 0 0 / 0.10)",
+                    border: `1px solid ${activePalette.ink}33`,
+                    boxShadow: `0 10px 30px -12px ${activePalette.fillDeep}`,
+                  }}
                 >
                   <div className="flex items-center gap-1.5">
                     <MessageCircleQuestion
-                      className={`h-3.5 w-3.5 ${accentText}`}
+                      className="h-3.5 w-3.5"
                       strokeWidth={2.6}
+                      style={{ color: activePalette.ink, opacity: 0.9 }}
                     />
                     <span
-                      className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                      className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
+                      style={{ color: activePalette.ink, opacity: 0.9 }}
                     >
                       Follow-up {i + 1}
                     </span>
                   </div>
-                  <p className="mt-2 text-[13px] font-semibold leading-snug text-foreground/80">
+                  <p
+                    className="mt-2 text-[13px] font-semibold leading-snug"
+                    style={{ color: activePalette.ink }}
+                  >
                     {q.title}
                   </p>
                 </button>
@@ -875,20 +875,30 @@ function CueCardReader({
                         followUps.length,
                       );
                     }}
-                    className="block w-full rounded-2xl border border-[oklch(0.55_0.10_165)]/20 bg-white/85 p-3.5 text-left shadow-card backdrop-blur-md transition-transform active:scale-[0.98]"
+                    className="block w-full rounded-2xl p-3.5 text-left backdrop-blur-md transition-transform active:scale-[0.98]"
+                    style={{
+                      backgroundColor: "oklch(1 0 0 / 0.12)",
+                      border: `1px solid ${activePalette.ink}33`,
+                      boxShadow: `0 10px 30px -12px ${activePalette.fillDeep}`,
+                    }}
                   >
                     <div className="flex items-center gap-1.5">
                       <MessageCircleQuestion
-                        className={`h-3.5 w-3.5 ${accentText}`}
+                        className="h-3.5 w-3.5"
                         strokeWidth={2.6}
+                        style={{ color: activePalette.ink, opacity: 0.9 }}
                       />
                       <span
-                        className={`font-display text-[10px] font-extrabold uppercase tracking-[0.22em] ${accentText}`}
+                        className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
+                        style={{ color: activePalette.ink, opacity: 0.9 }}
                       >
                         Follow-up {i + 1}
                       </span>
                     </div>
-                    <p className="mt-1.5 text-[12.5px] font-semibold leading-snug text-foreground/85">
+                    <p
+                      className="mt-1.5 text-[12.5px] font-semibold leading-snug"
+                      style={{ color: activePalette.ink }}
+                    >
                       {q.title}
                     </p>
                   </button>
@@ -899,94 +909,82 @@ function CueCardReader({
         </div>
       )}
 
-      {/* Footer pager — warm graphite ink bar housing three vibrant tabs.
-          Tabs use the same coordinated palette as the reading-screen tint,
-          so switching answers lights up both the tab and the screen behind it. */}
-      {variants.length > 1 && (() => {
-        return (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 pb-5 sm:px-6 sm:pb-7">
-            <div
-              className="pointer-events-auto flex w-full max-w-[640px] items-stretch gap-1.5 rounded-2xl border border-white/[0.06] p-1.5 shadow-[0_22px_50px_-18px_oklch(0_0_0/0.55)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, oklch(0.26 0.015 75) 0%, oklch(0.18 0.015 75) 100%)",
+      {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule.
+          Mirrors the FollowUpReader footer treatment. */}
+      {variants.length > 1 && (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+          style={{
+            borderTop: `1px solid ${activePalette.ink}26`,
+            background: `linear-gradient(180deg, ${activePalette.fillDeep}cc 0%, ${activePalette.fillDeep} 100%)`,
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
+            <button
+              type="button"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
               }}
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              aria-label="Previous sample answer"
             >
-              {/* Prev */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  goToVariant(variantIndex - 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                }}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
-                aria-label="Previous sample answer"
-              >
-                <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
-              </button>
+              <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" strokeWidth={2.6} />
+            </button>
 
-              {/* Tabs */}
-              <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
-                {variants.map((_, i) => {
-                  const active = i === variantIndex;
-                  const tone = palette[i % palette.length];
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={(e) => {
-                        const r = e.currentTarget.getBoundingClientRect();
-                        goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                      }}
-                      className="group relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
+            <div className="flex flex-1 items-stretch gap-1.5" role="tablist" aria-label="Sample answers">
+              {variants.map((_, i) => {
+                const active = i === variantIndex;
+                const tone = palette[i % palette.length];
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+                    }}
+                    className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
+                    style={{
+                      backgroundColor: tone.tabBg,
+                      boxShadow: active
+                        ? `inset 0 0 0 2px ${tone.tabBorder}, 0 6px 18px ${tone.tabBorder}`
+                        : "inset 0 0 0 1px oklch(0 0 0 / 0.06)",
+                    }}
+                  >
+                    <span
+                      className="font-display tracking-tight transition-all duration-300"
                       style={{
-                        // All tabs always show their full color — no dim state.
-                        backgroundColor: tone.tabBg,
-                        // Active tab gets a 2px tonal dark border in its own
-                        // color family. Inactive tabs use a near-invisible
-                        // hairline so layout stays perfectly aligned.
-                        boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.tabBorder}`
-                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
+                        color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                        fontWeight: active ? 800 : 600,
+                        fontSize: "13px",
+                        letterSpacing: active ? "-0.01em" : "0",
                       }}
                     >
-                      <span
-                        className="font-display tracking-tight transition-all duration-300"
-                        style={{
-                          // Active label: bolder weight, full white.
-                          // Inactive: slightly lighter weight, soft white so
-                          // the colored bg still reads, with clear hierarchy.
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
-                          fontWeight: active ? 800 : 600,
-                          fontSize: "13px",
-                          letterSpacing: active ? "-0.01em" : "0",
-                        }}
-                      >
-                        Answer {i + 1}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Next */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  const r = e.currentTarget.getBoundingClientRect();
-                  goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
-                }}
-                className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/70 transition-all duration-200 hover:bg-white/5 hover:text-white sm:h-12 sm:w-12"
-                aria-label="Next sample answer"
-              >
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-              </button>
+                      Answer {i + 1}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                goToVariant(variantIndex + 1, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+              }}
+              className="group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white sm:h-12 sm:w-12"
+              aria-label="Next sample answer"
+            >
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+            </button>
           </div>
-        );
-      })()}
+        </div>
+      )}
 
       {/* Atmospheric mood veil — a single solid layer that fades in then out
           during a variant switch. Uses opacity (cheap, GPU-friendly, no
