@@ -414,6 +414,7 @@ export function FlipExpansion({
               })}
             </div>
           </div>
+          </>
         )}
       </div>
     </div>,
