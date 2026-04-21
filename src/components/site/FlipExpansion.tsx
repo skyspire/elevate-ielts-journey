@@ -463,42 +463,42 @@ function CueCardReader({
   const SIGNATURE_INK_SOFT = "oklch(0.36 0.030 250 / 0.92)";   // softened slate
   const palette = [
     {
-      // MUTED RED — dusty terracotta, refined on graphite
+      // SAFFRON AMBER — warm, confident, magazine-cover gold
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.48 0.110 25)",
-      tabBorder: "oklch(0.62 0.130 25)",
+      tabBg:     "oklch(0.62 0.135 70)",
+      tabBorder: "oklch(0.72 0.150 70)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.52 0.105 25)",
+      tabHover:  "oklch(0.66 0.140 70)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.62 0.130 25)",
+      glow:      "oklch(0.72 0.150 70)",
       heading:   SIGNATURE_INK,
     },
     {
-      // MUTED BLUE — dusty cobalt, considered
+      // OXFORD NAVY — deep, authoritative, scholarly
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.45 0.095 250)",
-      tabBorder: "oklch(0.62 0.115 250)",
+      tabBg:     "oklch(0.32 0.080 255)",
+      tabBorder: "oklch(0.46 0.115 255)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.49 0.090 250)",
+      tabHover:  "oklch(0.36 0.085 255)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.62 0.115 250)",
+      glow:      "oklch(0.46 0.115 255)",
       heading:   SIGNATURE_INK,
     },
     {
-      // MUTED OLIVE — dusty sage-olive, grounded
+      // FOREST GREEN — grounded, deep, premium emerald
       fill:      PURE_WHITE,
       fillDeep:  PURE_WHITE,
-      tabBg:     "oklch(0.48 0.060 125)",
-      tabBorder: "oklch(0.64 0.080 125)",
+      tabBg:     "oklch(0.40 0.080 155)",
+      tabBorder: "oklch(0.52 0.105 155)",
       ink:       SIGNATURE_INK,
       inkSoft:   SIGNATURE_INK_SOFT,
-      tabHover:  "oklch(0.52 0.058 125)",
+      tabHover:  "oklch(0.44 0.082 155)",
       screen:    PURE_WHITE,
-      glow:      "oklch(0.64 0.080 125)",
+      glow:      "oklch(0.52 0.105 155)",
       heading:   SIGNATURE_INK,
     },
   ];
