@@ -411,38 +411,36 @@ function CueCardReader({
   const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
-  // Coordinated palette — drives both the reading-screen warm tint and the
+  // Coordinated palette — drives both the reading-screen tint and the
   // vibrant footer tabs. Index matches the active variant.
-  // 1. Coral · 2. Marigold · 3. Emerald
-  // (Defined early so the plane-launch effect below can reference it.)
-
-  // Coordinated palette — drives both the reading-screen warm tint and the
-  // vibrant footer tabs. Index matches the active variant.
-  // 1. Coral · 2. Marigold · 3. Emerald
+  // 1. Bold Red · 2. Bold Blue · 3. Olive Green
+  // tabBg is the saturated footer tab color; screen is the soft tint behind
+  // the answer text; glow is the ambient blur orb; heading is the answer
+  // section heading color (watercolor-soft so text stays readable).
   const palette = [
     {
-      // Coral
-      tabBg:    "oklch(0.68 0.20 25)",
-      tabHover: "oklch(0.74 0.18 25)",
-      screen:   "oklch(0.965 0.035 35)",   // warm blush peach
-      glow:     "oklch(0.85 0.12 30)",
-      heading:  "oklch(0.42 0.13 25)",     // deep-but-soft watercolor coral
+      // Bold Red
+      tabBg:    "oklch(0.58 0.22 25)",     // strong crimson red
+      tabHover: "oklch(0.64 0.20 25)",
+      screen:   "oklch(0.965 0.035 25)",   // soft blush tint
+      glow:     "oklch(0.78 0.16 25)",
+      heading:  "oklch(0.42 0.18 25)",     // deep watercolor red
     },
     {
-      // Marigold
-      tabBg:    "oklch(0.78 0.17 80)",
-      tabHover: "oklch(0.83 0.15 80)",
-      screen:   "oklch(0.975 0.04 92)",    // cream butter
-      glow:     "oklch(0.88 0.13 88)",
-      heading:  "oklch(0.45 0.12 75)",     // toasted-amber marigold
+      // Bold Blue
+      tabBg:    "oklch(0.52 0.20 250)",    // strong sapphire blue
+      tabHover: "oklch(0.58 0.18 250)",
+      screen:   "oklch(0.965 0.030 245)",  // soft sky tint
+      glow:     "oklch(0.75 0.14 250)",
+      heading:  "oklch(0.40 0.16 250)",    // deep watercolor blue
     },
     {
-      // Emerald
-      tabBg:    "oklch(0.62 0.16 155)",
-      tabHover: "oklch(0.68 0.15 155)",
-      screen:   "oklch(0.97 0.035 145)",   // soft pistachio
-      glow:     "oklch(0.82 0.12 150)",
-      heading:  "oklch(0.40 0.10 155)",    // forest-emerald watercolor
+      // Olive Green
+      tabBg:    "oklch(0.55 0.13 115)",    // rich olive
+      tabHover: "oklch(0.61 0.12 115)",
+      screen:   "oklch(0.965 0.035 110)",  // soft sage tint
+      glow:     "oklch(0.76 0.12 115)",
+      heading:  "oklch(0.40 0.11 115)",    // deep watercolor olive
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
