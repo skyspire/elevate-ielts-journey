@@ -367,51 +367,54 @@ export function WritingAnswerBillboard({
           style={{ paddingBottom: "96px" }}
         >
           {/* ── Word-count "ink stamp" ──────────────────────────────────
-              Sticky inside the right column so it stays glued to the
-              top-right corner even while the essay scrolls. Styled like a
-              classic examiner's red-ink rubber stamp: faded vermillion
-              double border, slight rotation, distressed letter-spacing. */}
+              Round, clean rubber-stamp using the site's display typography.
+              Sticky inside the right column so it stays visible while the
+              essay scrolls. Padded away from the edge so it never hugs the
+              corner. */}
           <div
             aria-hidden
-            className="pointer-events-none sticky top-0 z-30 flex justify-end px-3 pt-3 sm:px-5 sm:pt-5"
+            className="pointer-events-none sticky top-0 z-30 flex justify-end pr-6 pt-6 sm:pr-10 sm:pt-8"
             style={{ height: 0 }}
           >
             <div
-              className="flex flex-col items-center justify-center"
+              className="font-display flex flex-col items-center justify-center rounded-full"
               style={{
-                transform: "rotate(-9deg)",
-                color: "oklch(0.52 0.18 28 / 0.78)",
-                border: "2.5px solid oklch(0.52 0.18 28 / 0.6)",
-                outline: "1px solid oklch(0.52 0.18 28 / 0.45)",
+                width: "92px",
+                height: "92px",
+                transform: "rotate(-8deg)",
+                color: "oklch(0.52 0.18 28 / 0.85)",
+                border: "2.5px solid oklch(0.52 0.18 28 / 0.65)",
+                outline: "1.5px solid oklch(0.52 0.18 28 / 0.45)",
                 outlineOffset: "3px",
-                padding: "6px 14px 5px",
-                borderRadius: "4px",
-                fontFamily: "var(--font-display, inherit)",
-                fontWeight: 900,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                background:
-                  "radial-gradient(ellipse at 30% 40%, oklch(1 0 0 / 0.4) 0%, transparent 60%), oklch(0.99 0.01 60 / 0.55)",
+                background: "oklch(1 0 0 / 0.6)",
                 boxShadow:
-                  "inset 0 0 6px oklch(0.52 0.18 28 / 0.12), 0 1px 2px oklch(0.20 0.010 250 / 0.06)",
-                filter: "contrast(1.05)",
+                  "inset 0 0 8px oklch(0.52 0.18 28 / 0.08), 0 2px 6px oklch(0.20 0.010 250 / 0.06)",
                 lineHeight: 1,
+                textTransform: "uppercase",
+                fontWeight: 900,
               }}
             >
-              <span style={{ fontSize: "9px", letterSpacing: "0.32em", opacity: 0.85 }}>
+              <span style={{ fontSize: "9px", letterSpacing: "0.28em", opacity: 0.9 }}>
                 Total
               </span>
               <span
                 style={{
-                  fontSize: "20px",
-                  letterSpacing: "0.04em",
-                  marginTop: "2px",
+                  fontSize: "22px",
+                  letterSpacing: "0.02em",
+                  marginTop: "3px",
                   fontVariantNumeric: "tabular-nums",
                 }}
               >
                 {answer.wordCount}
               </span>
-              <span style={{ fontSize: "9px", letterSpacing: "0.32em", opacity: 0.85, marginTop: "1px" }}>
+              <span
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "0.28em",
+                  opacity: 0.9,
+                  marginTop: "2px",
+                }}
+              >
                 Words
               </span>
             </div>
