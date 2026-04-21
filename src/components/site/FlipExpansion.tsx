@@ -568,17 +568,16 @@ function CueCardReader({
             boxShadow: "0 6px 18px -10px oklch(0.20 0.010 250 / 0.20)",
           }}
         >
-          <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex min-w-0 flex-col gap-0.5">
             <span
-              className="font-display text-[18px] font-black tabular-nums leading-none"
-              style={{ color: activePalette.ink, letterSpacing: "-0.02em" }}
+              className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em]"
+              style={{ color: activePalette.ink, opacity: 0.72 }}
             >
-              {topicNumber}
+              Cue Card {topicIndex || 1}
             </span>
-            <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}30` }} />
             <h2
               className="truncate font-display text-[15px] font-extrabold leading-tight tracking-tight"
-              style={{ color: activePalette.ink }}
+              style={{ color: "oklch(0.42 0.10 165)" }}
             >
               {topic.label}
             </h2>
