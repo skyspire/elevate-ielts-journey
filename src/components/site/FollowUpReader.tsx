@@ -414,7 +414,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               return (
                 <article
                   key={`fu-billboard-${variantIndex}`}
-                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[3fr_2fr] lg:gap-14 lg:py-10"
+                  className="grid w-full grid-cols-1 gap-10 py-6 lg:grid-cols-[2fr_3fr] lg:gap-14 lg:py-10"
                   style={{
                     visibility: visible ? "visible" : "hidden",
                     ...(isOut ? outStyle : inOrIdleStyle),
