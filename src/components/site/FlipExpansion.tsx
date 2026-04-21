@@ -172,30 +172,36 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Atmospheric mood-shift — silent, premium answer swap.
-  // The CueCardReader handles its own desaturate/resaturate veil keyed on
-  // `variantIndex`; here we just flip the index at the right moment so the
-  // new text appears at the trough of the dip (~325ms in), perfectly synced
-  // with the reading lane's mood change. Total transition ≈ 650ms.
+  // Lateral slide — sequential, professional answer swap.
+  // 1. Out (0 → 260ms): current answer slides off in the switch direction.
+  // 2. Swap (at 260ms): variantIndex flips, scroll resets, new answer is
+  //    pre-positioned off-screen on the opposite side.
+  // 3. In  (260 → 640ms): new answer slides into place with a soft fade.
+  // Headings cross-fade their color over the full duration in parallel.
   function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
+    // Direction: forward (+1) when moving to a higher index (with wrap),
+    // backward (-1) otherwise. Used to choose slide-out/in directions.
+    const forward =
+      (clamped - variantIndex + variants.length) % variants.length === 1;
+    setSwitchDir(forward ? 1 : -1);
     setVariantTransitioning(true);
-    setGravityPhase("out"); // signals the reveal effect to swap instantly
+    setGravityPhase("out");
 
-    // Mid-trough swap: at ~325ms the lane is at its dimmest/most-desaturated.
+    // Mid-transition swap — old has fully slid out by now.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
       setGravityPhase("in");
-    }, 325);
+    }, 260);
 
-    // Release the transition lock once the resaturate has settled.
+    // Release transition lock once the slide-in has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
       setGravityPhase("idle");
-    }, 700);
+    }, 660);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
