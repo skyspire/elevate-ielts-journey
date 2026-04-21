@@ -550,11 +550,30 @@ function CueCardReader({
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2.5">
               <span
-                className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}
+                className="inline-flex shrink-0 items-center gap-1.5 pr-1 text-[oklch(0.38_0.10_165)]"
+                aria-label="Speaking Part Two"
               >
-                <Mic className="h-3 w-3" strokeWidth={2.6} />
-                Part 2
+                <Mic className="h-3.5 w-3.5 opacity-80" strokeWidth={2.4} />
+                <span className="relative font-handwriting text-[20px] leading-none tracking-tight sm:text-[22px]">
+                  Part Two
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 80 6"
+                    className="pointer-events-none absolute -bottom-1 left-0 h-[5px] w-full"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 4 Q 20 1, 40 3 T 78 2.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      opacity="0.55"
+                    />
+                  </svg>
+                </span>
               </span>
+              <span aria-hidden className="h-4 w-px shrink-0 bg-foreground/15" />
               <h2 className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[19px]">
                 {topic.label}
               </h2>
