@@ -763,26 +763,18 @@ function CueCardReader({
                 style={isOut ? outStyle : inOrIdleStyle}
                 data-lane-phase={gravityPhase}
               >
-                {/* Billboard topic headline — oversized, cream-on-palette,
-                    with a thick palette-toned underline swash beneath. */}
-                <header className="mb-10">
+                {/* Answer header — eyebrow + thin accent rule. The topic
+                    title now lives in the sticky left column, so the right
+                    column opens straight into the answer prose. */}
+                <header className="mb-8">
                   <span
                     className="font-display text-[11px] font-extrabold uppercase tracking-[0.32em]"
                     style={{ color: activePalette.ink, opacity: 0.8 }}
                   >
                     Sample answer · Band {currentVariant.bandScore}
                   </span>
-                  <h1
-                    className="mt-3 font-display font-black leading-[1.05] tracking-tight"
-                    style={{
-                      color: activePalette.ink,
-                      fontSize: "clamp(2rem, 5.4vw, 3.25rem)",
-                    }}
-                  >
-                    {topic.label}
-                  </h1>
                   <div
-                    className="mt-5 h-[3px] w-[clamp(80px,18vw,160px)] rounded-full"
+                    className="mt-4 h-[2px] w-[clamp(60px,14vw,120px)] rounded-full"
                     style={{
                       background: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.ink} 60%, transparent 100%)`,
                       opacity: 0.55,
