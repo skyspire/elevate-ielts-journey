@@ -646,7 +646,7 @@ function CueCardReader({
               className="pointer-events-auto flex w-full max-w-[680px] items-stretch overflow-hidden rounded-2xl border border-white/8 shadow-[0_20px_50px_-15px_oklch(0.1_0.02_165/0.6)]"
               style={{
                 background:
-                  "linear-gradient(180deg, oklch(0.22 0.02 240) 0%, oklch(0.16 0.02 240) 100%)",
+                  "linear-gradient(180deg, oklch(0.28 0.015 75) 0%, oklch(0.20 0.015 75) 100%)",
               }}
             >
               <button
