@@ -460,9 +460,9 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           //     thin rule expands left→right under the question, then settles
           //     as a permanent accent.
           const QuestionStack = (
-            <aside className="flex w-full flex-col items-start text-left">
+            <aside className="flex w-full flex-col items-center text-center">
               {/* Editorial numeral block */}
-              <div className="relative flex items-baseline gap-3" aria-hidden>
+              <div className="relative flex items-baseline justify-center" aria-hidden>
                 <span
                   className="font-display font-black leading-[0.85] tabular-nums"
                   style={{
@@ -470,14 +470,13 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                     fontSize: "clamp(5rem, 9vw, 8.5rem)",
                     letterSpacing: "-0.055em",
                     fontFeatureSettings: '"ss01", "cv11", "lnum"',
-                    textShadow: `0 6px 32px ${activePalette.fillDeep}`,
                   }}
                 >
                   {String(index).padStart(2, "0")}
                 </span>
               </div>
               {/* Hairline rule + counter */}
-              <div className="mt-3 flex w-full items-center gap-3">
+              <div className="mt-3 flex w-full max-w-[260px] items-center gap-3">
                 <span
                   className="block h-px flex-1"
                   style={{ backgroundColor: `${activePalette.ink}66` }}
@@ -494,10 +493,15 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 >
                   / {String(total).padStart(2, "0")} Follow-ups
                 </span>
+                <span
+                  className="block h-px flex-1"
+                  style={{ backgroundColor: `${activePalette.ink}66` }}
+                  aria-hidden
+                />
               </div>
 
               {/* "Follow-up" label — bold display + accent underline */}
-              <div className="mt-9 inline-flex flex-col items-start">
+              <div className="mt-9 inline-flex flex-col items-center">
                 <span
                   className="font-display font-black leading-none"
                   style={{
@@ -513,7 +517,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                   style={{
                     width: "clamp(36px, 4.5vw, 56px)",
                     backgroundColor: activePalette.accent,
-                    boxShadow: `0 1px 8px ${activePalette.fillDeep}`,
                   }}
                   aria-hidden
                 />
@@ -521,12 +524,11 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
 
               {/* Headline + ink-bleed underline sweep */}
               <h1
-                className="fu-headline relative mt-4 font-display font-black leading-[1.05] tracking-tight"
+                className="fu-headline relative mt-4 inline-block font-display font-black leading-[1.05] tracking-tight"
                 style={{
                   color: activePalette.ink,
                   fontSize: "clamp(1.7rem, 3.4vw, 2.65rem)",
                   letterSpacing: "-0.012em",
-                  textShadow: `0 2px 28px ${activePalette.fillDeep}`,
                 }}
               >
                 {question.title}
@@ -535,8 +537,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                   className="fu-headline-rule absolute left-0 -bottom-3 block h-[2.5px] origin-left rounded-full"
                   style={{
                     width: "100%",
-                    backgroundImage: `linear-gradient(90deg, ${activePalette.ink} 0%, ${activePalette.accent} 75%, transparent 100%)`,
-                    boxShadow: `0 1px 10px ${activePalette.fillDeep}`,
+                    backgroundImage: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 25%, ${activePalette.accent} 75%, transparent 100%)`,
                   }}
                 />
               </h1>
@@ -625,7 +626,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               >
                 <div className="mx-auto grid h-full w-full max-w-[1280px] grid-cols-[2fr_3fr] gap-14 px-10">
                   {/* Fixed (non-scrolling) question column — left-aligned editorial */}
-                  <div className="flex h-full items-center justify-start pr-8">
+                  <div className="flex h-full items-center justify-center pr-8">
                     {QuestionStack}
                   </div>
                   {/* Scrollable answer column */}
