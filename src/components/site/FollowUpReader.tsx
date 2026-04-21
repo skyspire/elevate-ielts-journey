@@ -130,37 +130,37 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     };
   }, [fullBody]);
 
-  // ── BILLBOARD palette: AMBER · TEAL · PLUM ─────────────────────────────
-  // For follow-ups we go BOLD: the full screen fills with the active
-  // palette's saturated color, text is white/cream, and the footer tabs
-  // each carry their own signature color.
+  // ── BILLBOARD palette: DUSTY BLUE · STEEL BLUE · DEEP SLATE ─────────────
+  // Confident muted blues that match the cue-card footer band. The full
+  // screen fills with the active variant's slate tone, text is a luminous
+  // cream so it reads with magazine-band weight against the rich background.
   const palette = [
     {
-      // Amber — warm, energetic
-      fill:      "oklch(0.62 0.18 65)",   // bold saturated amber-orange
-      fillDeep:  "oklch(0.48 0.16 60)",   // for shadows / accents
-      tabBg:     "oklch(0.62 0.18 65)",
-      tabBorder: "oklch(0.30 0.14 60)",
-      ink:       "oklch(0.99 0.015 80)",  // warm cream text
-      inkSoft:   "oklch(0.99 0.015 80 / 0.85)",
+      // Dusty blue — light, airy, editorial
+      fill:      "oklch(0.62 0.060 240)",   // muted dusty blue
+      fillDeep:  "oklch(0.46 0.055 240)",   // for shadows / accents
+      tabBg:     "oklch(0.62 0.060 240)",
+      tabBorder: "oklch(0.30 0.050 240)",
+      ink:       "oklch(0.99 0.012 240)",   // luminous cream-white
+      inkSoft:   "oklch(0.99 0.012 240 / 0.85)",
     },
     {
-      // Teal — cool, considered
-      fill:      "oklch(0.50 0.13 200)",  // deep teal
-      fillDeep:  "oklch(0.36 0.11 200)",
-      tabBg:     "oklch(0.50 0.13 200)",
-      tabBorder: "oklch(0.26 0.10 200)",
-      ink:       "oklch(0.99 0.012 200)",
-      inkSoft:   "oklch(0.99 0.012 200 / 0.85)",
+      // Steel blue — mid-tone, considered
+      fill:      "oklch(0.50 0.065 245)",   // confident steel blue
+      fillDeep:  "oklch(0.36 0.055 245)",
+      tabBg:     "oklch(0.50 0.065 245)",
+      tabBorder: "oklch(0.26 0.050 245)",
+      ink:       "oklch(0.99 0.012 245)",
+      inkSoft:   "oklch(0.99 0.012 245 / 0.85)",
     },
     {
-      // Plum — rich, sophisticated
-      fill:      "oklch(0.46 0.16 330)",  // deep plum
-      fillDeep:  "oklch(0.32 0.14 330)",
-      tabBg:     "oklch(0.46 0.16 330)",
-      tabBorder: "oklch(0.24 0.13 330)",
-      ink:       "oklch(0.99 0.015 330)",
-      inkSoft:   "oklch(0.99 0.015 330 / 0.85)",
+      // Deep slate — rich, magazine-like
+      fill:      "oklch(0.36 0.055 250)",   // deep slate-navy
+      fillDeep:  "oklch(0.24 0.045 252)",
+      tabBg:     "oklch(0.36 0.055 250)",
+      tabBorder: "oklch(0.18 0.040 252)",
+      ink:       "oklch(0.99 0.012 250)",
+      inkSoft:   "oklch(0.99 0.012 250 / 0.85)",
     },
   ];
   const activePalette = palette[variantIndex % palette.length];
