@@ -949,8 +949,8 @@ function CueCardReader({
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <span
-                          className="font-display text-[9px] font-extrabold uppercase tracking-[0.32em]"
-                          style={{ color: tone.ink, opacity: 0.65 }}
+                          className="font-handwriting text-[15px] leading-none"
+                          style={{ color: tone.ink, opacity: 0.75 }}
                         >
                           Follow-up
                         </span>
