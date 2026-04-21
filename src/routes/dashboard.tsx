@@ -204,29 +204,7 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-paper-cream">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-foreground/8 bg-paper-cream/85 backdrop-blur-xl">
-        <div className="container-page flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
-              <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">
-              BandPath
-            </span>
-          </Link>
 
-          <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-2 rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-[11px] font-semibold text-foreground/70 sm:inline-flex">
-              <CheckCircle2 className="h-3.5 w-3.5 text-brand" />
-              Active subscription
-            </span>
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-[13px] font-bold text-background">
-              U
-            </span>
-          </div>
-        </div>
-      </header>
 
       <main className="relative py-12 sm:py-16">
         {/* Subtle ruled-paper accent in the background, only behind the hero */}
