@@ -432,7 +432,7 @@ function TopicCard({
       <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
         <p
           className="font-display font-black leading-tight tracking-tight"
-          style={{ color: "oklch(0.42 0.10 165)", fontSize: "clamp(1.5rem, 3.2vw, 1.875rem)" }}
+          style={{ color: "oklch(0.42 0.10 165)", fontSize: "clamp(1.2rem, 2.56vw, 1.5rem)" }}
         >
           {topic.label}
         </p>
