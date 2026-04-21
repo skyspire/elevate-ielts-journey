@@ -343,10 +343,6 @@ function WritingSamplesPage() {
                 </span>
               </button>
             </div>
-
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/45">
-              Turn the dial · Choose your module
-            </p>
           </div>
 
           {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
