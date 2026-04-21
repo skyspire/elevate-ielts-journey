@@ -865,13 +865,14 @@ function CueCardReader({
             ? 0
             : Math.min(1, (scrollProgress - REVEAL_AT) / 0.25);
 
-        // White tile bodies with a thick colored top border. Each tile
-        // carries one of the muted red / blue / olive accent tones so the
-        // rail mirrors the footer pager palette while staying clean & light.
+        // Vibrant pastel tile bodies — soft tinted fill + saturated top
+        // border + matching accent ink for the numeral. Peach · Mint · Lilac
+        // give the rail a playful, confident pop while staying easy on the
+        // eyes against the pure-white reading lane above.
         const followUpPalette = [
-          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.135 25)" },  // Red
-          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.52 0.115 250)" }, // Blue
-          { fill: "oklch(1 0 0)", ink: "oklch(0.28 0.030 250)", accent: "oklch(0.55 0.080 125)" }, // Olive
+          { fill: "oklch(0.965 0.040 55)",  ink: "oklch(0.30 0.060 40)",  accent: "oklch(0.70 0.150 45)"  }, // Peach
+          { fill: "oklch(0.960 0.045 175)", ink: "oklch(0.28 0.050 190)", accent: "oklch(0.65 0.130 180)" }, // Mint
+          { fill: "oklch(0.955 0.045 295)", ink: "oklch(0.30 0.060 295)", accent: "oklch(0.65 0.155 300)" }, // Lilac
         ];
 
         return (
