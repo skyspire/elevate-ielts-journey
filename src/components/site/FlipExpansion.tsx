@@ -474,13 +474,39 @@ function CueCardReader({
             animation: "drift-a 38s ease-in-out infinite reverse",
           }}
         />
-        {/* Faint paper grain overlay */}
+        {/* Letterpress paper grain — whisper-intensity (~3-5%).
+            Layer 1: fine fiber speckle (two offset dot fields at different
+            scales) for cold-pressed paper tooth.
+            Layer 2: short directional fibers for handmade-paper feel.
+            Layer 3: soft inner debossed vignette so the screen feels pressed
+            into the page edge — premium printed-journal quality. */}
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0 mix-blend-multiply opacity-[0.045]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, oklch(0.2 0 0) 1px, transparent 0)",
-            backgroundSize: "22px 22px",
+            backgroundImage: [
+              "radial-gradient(circle at 1px 1px, oklch(0.25 0.02 60) 0.6px, transparent 1.2px)",
+              "radial-gradient(circle at 2px 3px, oklch(0.30 0.02 60) 0.5px, transparent 1px)",
+              "radial-gradient(circle at 4px 1px, oklch(0.20 0.02 60) 0.4px, transparent 0.9px)",
+            ].join(", "),
+            backgroundSize: "7px 7px, 13px 11px, 19px 17px",
+            backgroundPosition: "0 0, 3px 5px, 7px 2px",
+          }}
+        />
+        <div
+          className="absolute inset-0 mix-blend-multiply opacity-[0.035]"
+          style={{
+            backgroundImage: [
+              "repeating-linear-gradient(102deg, transparent 0 3px, oklch(0.28 0.02 60 / 0.55) 3px 3.4px, transparent 3.4px 9px)",
+              "repeating-linear-gradient(14deg, transparent 0 5px, oklch(0.30 0.02 60 / 0.4) 5px 5.3px, transparent 5.3px 14px)",
+            ].join(", "),
+          }}
+        />
+        {/* Soft inner debossed vignette — letterpress press-edge */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            boxShadow:
+              "inset 0 0 80px oklch(0.30 0.04 60 / 0.08), inset 0 0 200px oklch(0.30 0.04 60 / 0.05)",
           }}
         />
       </div>
