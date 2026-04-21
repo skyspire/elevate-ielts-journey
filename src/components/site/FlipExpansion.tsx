@@ -169,30 +169,30 @@ export function FlipExpansion({
     if (phase !== "expanded") setScrollProgress(0);
   }, [phase]);
 
-  // Gravity drop & settle — silent, organic, ultra-smooth.
-  // Phase "out" (380ms): paragraphs lift 6px then drop & dissolve under gravity.
-  // Mid-flight: swap variant so the new content is in place underneath.
-  // Phase "in" (~700ms total): each section falls in with bounce-settle,
-  // staggered 80ms apart (handled by the existing per-section reveal effect).
+  // Atmospheric mood-shift — silent, premium answer swap.
+  // The CueCardReader handles its own desaturate/resaturate veil keyed on
+  // `variantIndex`; here we just flip the index at the right moment so the
+  // new text appears at the trough of the dip (~325ms in), perfectly synced
+  // with the reading lane's mood change. Total transition ≈ 650ms.
   function goToVariant(next: number, _origin?: { x: number; y: number }) {
     if (variants.length <= 1) return;
     const clamped = (next + variants.length) % variants.length;
     if (clamped === variantIndex) return;
     setVariantTransitioning(true);
-    setGravityPhase("out");
+    setGravityPhase("out"); // signals the reveal effect to swap instantly
 
-    // Mid-air swap: by 380ms the old text has dropped & faded.
+    // Mid-trough swap: at ~325ms the lane is at its dimmest/most-desaturated.
     window.setTimeout(() => {
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
       setGravityPhase("in");
-    }, 380);
+    }, 325);
 
-    // Release the lock once the falling-in stagger has settled.
+    // Release the transition lock once the resaturate has settled.
     window.setTimeout(() => {
       setVariantTransitioning(false);
       setGravityPhase("idle");
-    }, 1100);
+    }, 700);
   }
 
   if (phase === "closed" || typeof document === "undefined") return null;
@@ -395,22 +395,12 @@ function CueCardReader({
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
-  // ── Paper plane flight ───────────────────────────────────────────────────
-  // On every variant switch, launch a paper plane from the newly active tab.
-  // The plane wanders across the entire viewport along a randomized 5-waypoint
-  // path (different every launch), banks into turns via offset-rotate: auto,
-  // pitches with each climb/dive, and occasionally hits soft "air pockets"
-  // that drop it a few pixels before recovering. Finally docks into the header.
+  // ── Atmospheric mood shift ───────────────────────────────────────────────
+  // On every variant switch, the reading lane briefly desaturates and dims
+  // (~325ms), text/colors swap silently at the trough, then the new palette
+  // resaturates over ~325ms. Total ~650ms — silent, premium, gallery-quality.
   const headerAnchorRef = useRef<HTMLDivElement | null>(null);
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [planeFlights, setPlaneFlights] = useState<
-    Array<{
-      id: number;
-      path: string;
-      tone: string;
-    }>
-  >([]);
-  const flightIdRef = useRef(0);
+  const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
   // Coordinated palette — drives both the reading-screen warm tint and the
@@ -449,70 +439,21 @@ function CueCardReader({
   ];
   const activePalette = palette[variantIndex % palette.length];
 
-  // Launch a paper plane whenever the active answer changes.
+  // Drive the atmospheric mood-shift on every variant change.
   useEffect(() => {
     if (!isExpanded) return;
     if (prevVariantRef.current === variantIndex) return;
     prevVariantRef.current = variantIndex;
 
-    const tabEl = tabRefs.current[variantIndex];
-    const headerEl = headerAnchorRef.current;
-    if (!tabEl || !headerEl) return;
-    const tabRect = tabEl.getBoundingClientRect();
-    const headerRect = headerEl.getBoundingClientRect();
-    const from = {
-      x: tabRect.left + tabRect.width / 2,
-      y: tabRect.top + tabRect.height / 2,
+    setMoodPhase("out");
+    // Halfway through (~325ms), the lane is at its dimmest/most-desaturated.
+    // Flip to "in" so the new palette resaturates and rises back to full.
+    const tIn = window.setTimeout(() => setMoodPhase("in"), 325);
+    const tEnd = window.setTimeout(() => setMoodPhase("idle"), 700);
+    return () => {
+      clearTimeout(tIn);
+      clearTimeout(tEnd);
     };
-    const to = {
-      x: headerRect.left + headerRect.width / 2,
-      y: headerRect.top + headerRect.height / 2,
-    };
-
-    // Build a randomized "wandering breeze" path that roams the whole viewport.
-    // 5 waypoints scattered into different regions, biased to start near `from`
-    // and finish at `to`. Each launch produces a unique route.
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const margin = 90; // keep plane safely on-screen
-    const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    // Pick four broad regions in random order so we visit different quadrants.
-    const regions = [
-      { x: [margin, vw * 0.45], y: [margin, vh * 0.45] },           // top-left
-      { x: [vw * 0.55, vw - margin], y: [margin, vh * 0.45] },      // top-right
-      { x: [margin, vw * 0.45], y: [vh * 0.55, vh - margin] },      // bottom-left
-      { x: [vw * 0.55, vw - margin], y: [vh * 0.55, vh - margin] }, // bottom-right
-    ].sort(() => Math.random() - 0.5);
-    // Use 4 randomized intermediate waypoints, plus a slight overshoot near
-    // the header for a graceful "swoop in" feel.
-    const wps = regions.map((r) => ({
-      x: rand(r.x[0], r.x[1]),
-      y: rand(r.y[0], r.y[1]),
-    }));
-    // Soft "air pocket" jitter: drop each waypoint a few px to mimic dips.
-    wps.forEach((p) => { p.y += rand(-12, 18); });
-
-    // Build a smooth poly-bezier through: from → wp1 → wp2 → wp3 → wp4 → to.
-    // Quadratic Bézier through midpoints gives a flowing, curvy line with no
-    // sharp corners — perfect for paper-plane glide.
-    const all = [from, ...wps, to];
-    let d = `M ${all[0].x} ${all[0].y}`;
-    for (let i = 1; i < all.length - 1; i++) {
-      const midX = (all[i].x + all[i + 1].x) / 2;
-      const midY = (all[i].y + all[i + 1].y) / 2;
-      d += ` Q ${all[i].x} ${all[i].y} ${midX} ${midY}`;
-    }
-    d += ` T ${all[all.length - 1].x} ${all[all.length - 1].y}`;
-
-    const id = ++flightIdRef.current;
-    const tone = palette[variantIndex % palette.length].tabBg;
-    setPlaneFlights((flights) => [...flights, { id, path: d, tone }]);
-    // Auto-cleanup after the animation finishes (flight 2.8s + fade tail)
-    const t = window.setTimeout(() => {
-      setPlaneFlights((flights) => flights.filter((f) => f.id !== id));
-    }, 3200);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variantIndex, isExpanded]);
 
   return (
@@ -704,7 +645,7 @@ function CueCardReader({
                 >
                   <h3
                     className="font-display text-[20px] font-extrabold leading-tight tracking-tight sm:text-[22px]"
-                    style={{ color: activePalette.heading }}
+                    style={{ color: activePalette.heading, transition: "color 650ms cubic-bezier(0.4, 0, 0.2, 1)" }}
                   >
                     {s.heading}
                   </h3>
@@ -869,7 +810,6 @@ function CueCardReader({
                   return (
                     <button
                       key={i}
-                      ref={(el) => { tabRefs.current[i] = el; }}
                       type="button"
                       role="tab"
                       aria-selected={active}
@@ -922,164 +862,35 @@ function CueCardReader({
         );
       })()}
 
-      {/* Paper-plane flights — playful zig-zag with wobble + whisper trail.
-          Each flight is a fixed-positioned overlay tied to a launch event.
-          The plane uses CSS `offset-path` to follow a 3-segment zig-zag
-          composed from the live launch/target coordinates, while a sibling
-          dot trail fades behind along the same path. */}
-      {planeFlights.length > 0 && (
-        <div className="pointer-events-none fixed inset-0 z-[60]" aria-hidden>
-          {planeFlights.map((f) => {
-            const path = f.path;
-            // Sample dots along the path for the whisper trail.
-            const dots = Array.from({ length: 14 }, (_, i) => i);
-            return (
-              <div key={f.id} className="absolute inset-0">
-                {/* Whisper dotted trail — each dot fades in slightly delayed,
-                    then fades out with the plane. */}
-                {dots.map((i) => {
-                  const t = (i + 1) / (dots.length + 1);
-                  // Same path sampling as the plane for perfect alignment.
-                  const offsetDelay = t * 1900;
-                  return (
-                    <span
-                      key={i}
-                      className="paper-trail-dot"
-                      style={{
-                        offsetPath: `path("${path}")`,
-                        WebkitOffsetPath: `path("${path}")` as string,
-                        animationDelay: `${offsetDelay}ms`,
-                        backgroundColor: f.tone,
-                      } as React.CSSProperties}
-                    />
-                  );
-                })}
-                {/* The paper plane itself. */}
-                <div
-                  className="paper-plane-flight"
-                  style={{
-                    offsetPath: `path("${path}")`,
-                    WebkitOffsetPath: `path("${path}")` as string,
-                  } as React.CSSProperties}
-                >
-                  <div className="paper-plane-wobble">
-                    <svg
-                      width="140"
-                      height="140"
-                      viewBox="0 0 100 100"
-                      fill="none"
-                      style={{ display: "block", overflow: "visible" }}
-                    >
-                      <defs>
-                        {/* Warm cream paper gradient — slightly darker on the
-                            underside fold so the plane reads as folded paper
-                            with two visible faces, like a Ghibli watercolor. */}
-                        <linearGradient id={`ghibliPaper-${f.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%"  stopColor="oklch(0.985 0.018 85)" />
-                          <stop offset="60%" stopColor="oklch(0.96 0.025 80)" />
-                          <stop offset="100%" stopColor="oklch(0.92 0.04 75)" />
-                        </linearGradient>
-                        <linearGradient id={`ghibliShadow-${f.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%"  stopColor="oklch(0.86 0.04 75)" />
-                          <stop offset="100%" stopColor="oklch(0.78 0.05 70)" />
-                        </linearGradient>
-                        {/* Soft paper-grain noise — gives the plane that
-                            hand-painted Studio Ghibli watercolor feel. */}
-                        <filter id={`paperGrain-${f.id}`} x="-10%" y="-10%" width="120%" height="120%">
-                          <feTurbulence type="fractalNoise" baseFrequency="2.2" numOctaves="2" seed={f.id} />
-                          <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.12 0" />
-                          <feComposite in2="SourceGraphic" operator="in" />
-                        </filter>
-                      </defs>
-
-                      {/* ── Folded paper plane in 3 visible facets ────────
-                         Designed to feel hand-folded: the top wing catches
-                         light (cream gradient), the underside is in soft
-                         shadow, and the body crease runs down the middle.
-                         All edges are hand-drawn with a warm sepia ink
-                         stroke — a hallmark of Ghibli line art. */}
-
-                      {/* Underside / shadow wing (drawn first, sits behind) */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 64 Z"
-                        fill={`url(#ghibliShadow-${f.id})`}
-                        stroke="oklch(0.32 0.06 50)"
-                        strokeWidth="1.4"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                        opacity="0.95"
-                      />
-
-                      {/* Tail flap — the small triangular fold at the back */}
-                      <path
-                        d="M 50 64 L 64 80 L 50 70 Z"
-                        fill={`url(#ghibliShadow-${f.id})`}
-                        stroke="oklch(0.32 0.06 50)"
-                        strokeWidth="1.3"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Top wing (catches the light) — main visible facet,
-                         tinted with the active answer's palette tone for
-                         a hint of color while staying paper-like. */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill={`url(#ghibliPaper-${f.id})`}
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="1.6"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                      />
-
-                      {/* Subtle palette tint wash — only on the top wing,
-                         like a watercolor stain. Multiply blend keeps the
-                         paper texture readable underneath. */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill={f.tone}
-                        opacity="0.18"
-                        style={{ mixBlendMode: "multiply" }}
-                      />
-
-                      {/* Center crease — the fold line down the spine */}
-                      <path
-                        d="M 92 18 L 50 70"
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        opacity="0.85"
-                      />
-
-                      {/* Wing crease — short fold mark on the top wing */}
-                      <path
-                        d="M 92 18 L 70 38"
-                        stroke="oklch(0.30 0.06 50)"
-                        strokeWidth="0.9"
-                        strokeLinecap="round"
-                        opacity="0.55"
-                      />
-
-                      {/* Hand-drawn paper-grain overlay — speckled wash */}
-                      <path
-                        d="M 8 52 L 92 18 L 50 70 Z"
-                        fill="oklch(0.4 0.05 60)"
-                        opacity="0.06"
-                        filter={`url(#paperGrain-${f.id})`}
-                      />
-
-                      {/* Tiny ink dots — Ghibli storyboard texture */}
-                      <circle cx="65" cy="32" r="0.6" fill="oklch(0.30 0.06 50)" opacity="0.4" />
-                      <circle cx="78" cy="24" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.35" />
-                      <circle cx="40" cy="56" r="0.5" fill="oklch(0.30 0.06 50)" opacity="0.3" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {/* Atmospheric mood-shift veil — a soft palette-tinted wash that
+          briefly desaturates and dims the reading lane during a variant
+          switch, then resaturates into the new palette. Silent, premium. */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[15]"
+        style={{
+          backgroundColor:
+            moodPhase === "out"
+              ? "oklch(0.18 0.005 80 / 0.18)"
+              : moodPhase === "in"
+                ? `color-mix(in oklch, ${activePalette.glow} 18%, transparent)`
+                : "transparent",
+          backdropFilter:
+            moodPhase === "out"
+              ? "saturate(0.55) brightness(0.96)"
+              : moodPhase === "in"
+                ? "saturate(1.05) brightness(1.01)"
+                : "none",
+          WebkitBackdropFilter:
+            moodPhase === "out"
+              ? "saturate(0.55) brightness(0.96)"
+              : moodPhase === "in"
+                ? "saturate(1.05) brightness(1.01)"
+                : "none",
+          transition:
+            "background-color 325ms cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 325ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+        aria-hidden
+      />
 
       {/* Drift + answer-transition keyframes */}
       <style>{`
@@ -1106,76 +917,6 @@ function CueCardReader({
         }
         @keyframes zoom-veil {
           0%, 100% { opacity: 1; }
-        }
-
-        /* Paper-plane flight along an SVG offset-path.
-           offset-rotate: auto keeps the nose tangent to the curve, so the
-           plane naturally banks into each turn. A nested wobble layer adds
-           a tiny pitch/roll oscillation for the "hand-thrown" feel. */
-        .paper-plane-flight {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 140px;
-          height: 140px;
-          margin-left: -70px;
-          margin-top: -70px;
-          offset-rotate: auto;
-          -webkit-offset-rotate: auto;
-          offset-distance: 0%;
-          -webkit-offset-distance: 0%;
-          animation: paper-plane-fly 2800ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
-          filter: drop-shadow(0 14px 22px oklch(0.2 0.05 60 / 0.28)) drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
-          will-change: offset-distance, opacity;
-        }
-        .paper-plane-wobble {
-          width: 100%;
-          height: 100%;
-          transform-origin: 50% 50%;
-          /* Combined air-pocket dip + slight roll oscillation gives a
-             physical, hand-thrown feel. The plane gently lifts and drops
-             a few px while subtly rolling, like fighting indoor air. */
-          animation: paper-plane-wobble 1300ms ease-in-out infinite;
-        }
-        @keyframes paper-plane-fly {
-          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.5); }
-          6%   { opacity: 1; transform: scale(1); }
-          90%  { offset-distance: 100%; opacity: 1; transform: scale(0.9); }
-          100% { offset-distance: 100%; opacity: 0; transform: scale(0.6); }
-        }
-        @keyframes paper-plane-wobble {
-          0%   { transform: rotate(-4deg) translateY(0); }
-          25%  { transform: rotate(2deg)  translateY(-3px); }
-          50%  { transform: rotate(5deg)  translateY(2px); }
-          75%  { transform: rotate(-2deg) translateY(4px); }
-          100% { transform: rotate(-4deg) translateY(0); }
-        }
-
-        /* Whisper dotted trail — tiny dots that fade in along the path
-           and dissolve, leaving a faint flight-map line behind the plane. */
-        .paper-trail-dot {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 6px;
-          height: 6px;
-          margin-left: -3px;
-          margin-top: -3px;
-          border-radius: 9999px;
-          opacity: 0;
-          offset-rotate: 0deg;
-          -webkit-offset-rotate: 0deg;
-          offset-distance: 0%;
-          -webkit-offset-distance: 0%;
-          animation: paper-trail-fade 2800ms ease-out forwards;
-          filter: blur(0.4px);
-          will-change: offset-distance, opacity;
-        }
-        @keyframes paper-trail-fade {
-          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.4); }
-          15%  { opacity: 0.55; transform: scale(1); }
-          70%  { offset-distance: 100%; opacity: 0.35; }
-          100% { offset-distance: 100%; opacity: 0; transform: scale(0.6); }
         }
       `}</style>
     </div>
