@@ -832,22 +832,30 @@ function CueCardReader({
                         border: `1px solid ${tone.ink}33`,
                       }}
                     >
-                      <div className="flex items-center gap-1.5">
-                        <MessageCircleQuestion
-                          className="h-3.5 w-3.5"
-                          strokeWidth={2.6}
-                          style={{ color: tone.ink, opacity: 0.95 }}
-                        />
+                      {/* Eyebrow — oversized padded numeral with tiny
+                          uppercase label stacked beside it. No icon: pure
+                          typographic hierarchy. */}
+                      <div className="flex items-baseline gap-2">
                         <span
-                          className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em]"
-                          style={{ color: tone.ink, opacity: 0.95 }}
+                          className="font-display font-black tabular-nums leading-none tracking-tight"
+                          style={{
+                            color: tone.ink,
+                            fontSize: "22px",
+                            letterSpacing: "-0.02em",
+                          }}
                         >
-                          Follow-up {String(i + 1).padStart(2, "0")}
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span
+                          className="font-display text-[9px] font-extrabold uppercase tracking-[0.32em]"
+                          style={{ color: tone.ink, opacity: 0.78 }}
+                        >
+                          Follow-up
                         </span>
                       </div>
                       <p
-                        className="mt-2 text-[13px] font-semibold leading-snug"
-                        style={{ color: tone.ink }}
+                        className="mt-2.5 font-display text-[14px] font-extrabold tracking-tight"
+                        style={{ color: tone.ink, lineHeight: 1.25 }}
                       >
                         {q.title}
                       </p>
