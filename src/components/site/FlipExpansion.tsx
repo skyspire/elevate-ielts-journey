@@ -629,13 +629,22 @@ function CueCardReader({
         }}
       >
         <article className="mx-auto w-full max-w-[640px] px-6 sm:px-10">
-          <div className="space-y-12 pt-4">
+          <div
+            className="space-y-12 pt-4 ink-bleed-reveal"
+            // Re-key the entire lane on variant switch so the ink-bleed mask
+            // animation replays cleanly from the top each time.
+            key={`ink-${variantIndex}`}
+            style={{
+              // Ink bleed reveal — a soft downward mask wipes from top to
+              // bottom (~650ms), as if ink is bleeding into paper. Paired
+              // with a whisper blur-to-sharp focus for a premium, editorial
+              // arrival. After settling, a gentle breathing glow pulses
+              // behind the text every ~6s.
+              ["--ink-tint" as string]: activePalette.glow,
+            }}
+          >
             {sections.map((s, i) => {
               const visible = i < revealedSections;
-              // Instant swap mid-flight — no fade, no transform, no transition.
-              // The paper plane animation carries the visual story; the text
-              // simply appears or disappears with the swap. This keeps the
-              // reading lane perfectly calm while the plane is in motion.
               return (
                 <section
                   key={`${variantIndex}-${s.heading}`}
