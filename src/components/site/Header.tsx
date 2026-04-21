@@ -38,7 +38,7 @@ export function Header() {
             className="font-display text-[20px] font-extrabold tracking-tight"
             style={{ color: INK }}
           >
-            BandPath
+            BigIELTS.com
           </span>
         </Link>
 

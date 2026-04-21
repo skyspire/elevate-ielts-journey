@@ -56,7 +56,7 @@ export const Route = createFileRoute("/writing-samples/$questionId")({
   validateSearch: searchSchema,
   head: ({ match }) => ({
     meta: [
-      { title: `${match.search.title || "Sample Question"} — BandPath` },
+      { title: `${match.search.title || "Sample Question"} — BigIELTS.com` },
       {
         name: "description",
         content:
@@ -116,7 +116,7 @@ function QuestionDetailPage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
               <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">BandPath</span>
+            <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
           </Link>
 
           <Link

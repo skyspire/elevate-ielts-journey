@@ -30,13 +30,13 @@ export const Route = createFileRoute("/writing-samples/")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Writing Samples — BandPath" },
+      { title: "Writing Samples — BigIELTS.com" },
       {
         name: "description",
         content:
           "Browse Band 8+ IELTS Writing samples. Choose Task 1 or Task 2, drill down by category, and explore model questions for Academic and General Training.",
       },
-      { property: "og:title", content: "Writing Samples — BandPath" },
+      { property: "og:title", content: "Writing Samples — BigIELTS.com" },
       {
         property: "og:description",
         content:
@@ -150,7 +150,7 @@ function WritingSamplesPage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
               <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">BandPath</span>
+            <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
           </Link>
 
           <Link
