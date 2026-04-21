@@ -897,6 +897,89 @@ function CueCardReader({
         );
       })()}
 
+      {/* Paper-plane flights — playful zig-zag with wobble + whisper trail.
+          Each flight is a fixed-positioned overlay tied to a launch event.
+          The plane uses CSS `offset-path` to follow a 3-segment zig-zag
+          composed from the live launch/target coordinates, while a sibling
+          dot trail fades behind along the same path. */}
+      {planeFlights.length > 0 && (
+        <div className="pointer-events-none fixed inset-0 z-[60]" aria-hidden>
+          {planeFlights.map((f) => {
+            const dx = f.to.x - f.from.x;
+            const dy = f.to.y - f.from.y;
+            // Perpendicular unit vector for lateral zig-zag offsets.
+            const len = Math.max(1, Math.hypot(dx, dy));
+            const nx = -dy / len;
+            const ny = dx / len;
+            // Zig-zag amplitude scales with horizontal travel + flight height.
+            const amp = Math.min(110, Math.max(50, len * 0.18));
+            // Three waypoints at 25% / 55% / 80% along the trip, alternating sides.
+            const wp = (t: number, side: number) => ({
+              x: f.from.x + dx * t + nx * amp * side,
+              y: f.from.y + dy * t + ny * amp * side,
+            });
+            const p1 = wp(0.25, +1);
+            const p2 = wp(0.55, -1);
+            const p3 = wp(0.80, +0.6);
+            // Smooth cubic bezier-ish path with quadratic segments for a
+            // natural flowing zig-zag (rather than sharp corners).
+            const path = `M ${f.from.x} ${f.from.y} Q ${p1.x} ${p1.y} ${(p1.x + p2.x) / 2} ${(p1.y + p2.y) / 2} T ${p2.x} ${p2.y} Q ${p3.x} ${p3.y} ${f.to.x} ${f.to.y}`;
+            // Sample dots along the path for the whisper trail.
+            const dots = Array.from({ length: 9 }, (_, i) => i);
+            return (
+              <div key={f.id} className="absolute inset-0">
+                {/* Whisper dotted trail — each dot fades in slightly delayed,
+                    then fades out with the plane. */}
+                {dots.map((i) => {
+                  const t = (i + 1) / (dots.length + 1);
+                  // Same path sampling as the plane for perfect alignment.
+                  const offsetDelay = t * 950;
+                  return (
+                    <span
+                      key={i}
+                      className="paper-trail-dot"
+                      style={{
+                        offsetPath: `path("${path}")`,
+                        WebkitOffsetPath: `path("${path}")` as string,
+                        animationDelay: `${offsetDelay}ms`,
+                        backgroundColor: f.tone,
+                      } as React.CSSProperties}
+                    />
+                  );
+                })}
+                {/* The paper plane itself. */}
+                <div
+                  className="paper-plane-flight"
+                  style={{
+                    offsetPath: `path("${path}")`,
+                    WebkitOffsetPath: `path("${path}")` as string,
+                  } as React.CSSProperties}
+                >
+                  <div className="paper-plane-wobble">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ display: "block" }}>
+                      {/* Paper plane silhouette */}
+                      <path
+                        d="M2.5 12 L21.5 3.5 L14 21 L11 13.5 L2.5 12 Z"
+                        fill={f.tone}
+                        stroke="oklch(0.18 0.02 60 / 0.55)"
+                        strokeWidth="0.6"
+                        strokeLinejoin="round"
+                      />
+                      {/* Inner crease for paper feel */}
+                      <path
+                        d="M21.5 3.5 L11 13.5"
+                        stroke="oklch(0.18 0.02 60 / 0.35)"
+                        strokeWidth="0.5"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* Drift + answer-transition keyframes */}
       <style>{`
         @keyframes drift-a {
@@ -922,6 +1005,71 @@ function CueCardReader({
         }
         @keyframes zoom-veil {
           0%, 100% { opacity: 1; }
+        }
+
+        /* Paper-plane flight along an SVG offset-path.
+           offset-rotate: auto keeps the nose tangent to the curve, so the
+           plane naturally banks into each turn. A nested wobble layer adds
+           a tiny pitch/roll oscillation for the "hand-thrown" feel. */
+        .paper-plane-flight {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 22px;
+          height: 22px;
+          margin-left: -11px;
+          margin-top: -11px;
+          offset-rotate: auto;
+          -webkit-offset-rotate: auto;
+          offset-distance: 0%;
+          -webkit-offset-distance: 0%;
+          animation: paper-plane-fly 1500ms cubic-bezier(0.42, 0.0, 0.20, 1) forwards;
+          filter: drop-shadow(0 4px 8px oklch(0.2 0.05 60 / 0.18));
+          will-change: offset-distance, opacity;
+        }
+        .paper-plane-wobble {
+          width: 100%;
+          height: 100%;
+          /* Compensate the SVG art so its nose points along the path direction. */
+          transform-origin: 50% 50%;
+          animation: paper-plane-wobble 460ms ease-in-out infinite;
+        }
+        @keyframes paper-plane-fly {
+          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.6); }
+          8%   { opacity: 1; transform: scale(1); }
+          85%  { offset-distance: 100%; opacity: 1; transform: scale(0.85); }
+          100% { offset-distance: 100%; opacity: 0; transform: scale(0.55); }
+        }
+        @keyframes paper-plane-wobble {
+          0%, 100% { transform: rotate(-6deg) translateY(0); }
+          50%      { transform: rotate(6deg)  translateY(-1.5px); }
+        }
+
+        /* Whisper dotted trail — tiny dots that fade in along the path
+           and dissolve, leaving a faint flight-map line behind the plane. */
+        .paper-trail-dot {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 4px;
+          margin-left: -2px;
+          margin-top: -2px;
+          border-radius: 9999px;
+          opacity: 0;
+          offset-rotate: 0deg;
+          -webkit-offset-rotate: 0deg;
+          offset-distance: 0%;
+          -webkit-offset-distance: 0%;
+          animation: paper-trail-fade 1500ms ease-out forwards;
+          filter: blur(0.3px);
+          will-change: offset-distance, opacity;
+        }
+        @keyframes paper-trail-fade {
+          0%   { offset-distance: 0%;   opacity: 0; transform: scale(0.4); }
+          15%  { opacity: 0.55; transform: scale(1); }
+          70%  { offset-distance: 100%; opacity: 0.35; }
+          100% { offset-distance: 100%; opacity: 0; transform: scale(0.6); }
         }
       `}</style>
     </div>
