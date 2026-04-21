@@ -428,8 +428,7 @@ function WritingSamplesPage() {
           {/* Steps 2 & 3 — gated until a task is selected */}
           {task && (
             <>
-              {/* Step 2 — Soft colored chips */}
-              <StepLabel index={2} label="Select Category" />
+              {/* Step 2 — Category chips */}
               <div className="flex flex-wrap justify-center gap-2.5">
                 {categories.map((c, i) => {
                   const active = categoryId === c.id;
