@@ -532,14 +532,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 }}
               >
                 {question.title}
-                <span
-                  aria-hidden
-                  className="fu-headline-rule absolute left-0 -bottom-3 block h-[2.5px] origin-left rounded-full"
-                  style={{
-                    width: "100%",
-                    backgroundImage: `linear-gradient(90deg, transparent 0%, ${activePalette.ink} 25%, ${activePalette.accent} 75%, transparent 100%)`,
-                  }}
-                />
               </h1>
             </aside>
           );
