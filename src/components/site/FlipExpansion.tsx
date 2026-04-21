@@ -684,12 +684,6 @@ function CueCardReader({
               transition: "background-color 380ms ease",
             }}
           />
-          <p
-            className="mt-5 font-display text-[11px] font-extrabold uppercase tracking-[0.28em]"
-            style={{ color: activePalette.ink, opacity: 0.72 }}
-          >
-            Cue Card {topicIndex || 1}
-          </p>
           <h2
             className="mt-3 font-display font-black leading-[1.08] tracking-tight"
             style={{
