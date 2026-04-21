@@ -523,75 +523,57 @@ function FormatTogglePair({
 }
 
 
-// ───────── Question card (mirrors Writing Samples styling, with mic affordance) ─────────
-function SpeakingQuestionCard({
+// ───────── Topic card — numbered tile that links to the topic detail page ─────────
+function TopicCard({
   index,
-  q,
-  category,
+  topic,
+  categoryId,
+  categoryLabel,
   mode,
   accentChip,
-  accentRing,
 }: {
   index: number;
-  q: Question;
-  category: string;
+  topic: { id: string; label: string };
+  categoryId: string;
+  categoryLabel: string;
   mode: Mode;
   accentChip: string;
-  accentRing: string;
 }) {
-  // First card unlocked, rest gated — preserves the "preview/unlock" layered feel
-  const isUnlocked = index === 1;
-  void accentRing;
-
   return (
-    <article
-      className={`group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card ${
-        !isUnlocked ? "opacity-95" : ""
-      }`}
+    <Link
+      to="/speaking-samples/$category/$topic"
+      params={{ category: categoryId, topic: topic.id }}
+      className="group relative flex h-full flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:border-[oklch(0.55_0.10_165)]/45 hover:shadow-card"
     >
-      {/* Top row: index + badges */}
+      {/* Top row: index + part badge */}
       <div className="flex items-start justify-between gap-3">
         <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-          Q{String(index).padStart(2, "0")}
+          T{String(index).padStart(2, "0")}
         </span>
-        <div className="flex flex-wrap items-center justify-end gap-1.5">
-          <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}>
-            <Mic className="h-3 w-3" strokeWidth={2.6} />
-            {mode === "cuecards" ? "Part 2" : "Part 1 / 3"}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-foreground/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-            {q.difficulty}
-          </span>
-        </div>
+        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${accentChip}`}>
+          {mode === "cuecards" ? "Part 2" : "Part 1 / 3"}
+        </span>
       </div>
 
-      {/* Question text */}
-      <p className="font-display text-[15px] font-bold leading-snug tracking-tight text-foreground">
-        {q.title}
-      </p>
+      {/* Topic name — the hero of the card */}
+      <h4
+        className="font-display font-black leading-tight tracking-tight text-foreground"
+        style={{ fontSize: "clamp(1.25rem, 3.2vw, 1.6rem)" }}
+      >
+        {topic.label}
+      </h4>
 
       {/* Footer */}
       <div className="mt-1 flex items-center justify-between gap-2 border-t border-foreground/8 pt-3">
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground/55">
-          <Calendar className="h-3.5 w-3.5" />
-          {category}
+        <span className="text-[11px] font-semibold text-foreground/55">
+          {categoryLabel}
         </span>
-
-        {isUnlocked ? (
-          <button
-            type="button"
-            className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
-          >
-            View answer
-            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-          </button>
-        ) : (
-          <span className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-foreground/5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-foreground/55">
-            <Lock className="h-3.5 w-3.5" />
-            Pro
-          </span>
-        )}
+        <span className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform group-hover:-translate-y-0.5">
+          Open
+          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }
+
