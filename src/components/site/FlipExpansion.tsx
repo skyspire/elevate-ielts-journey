@@ -395,22 +395,12 @@ function CueCardReader({
   const tunnelStrength = Math.min(1, scrollProgress * 1.4);
   const vignetteOpacity = 0.18 + tunnelStrength * 0.32;
 
-  // ── Paper plane flight ───────────────────────────────────────────────────
-  // On every variant switch, launch a paper plane from the newly active tab.
-  // The plane wanders across the entire viewport along a randomized 5-waypoint
-  // path (different every launch), banks into turns via offset-rotate: auto,
-  // pitches with each climb/dive, and occasionally hits soft "air pockets"
-  // that drop it a few pixels before recovering. Finally docks into the header.
+  // ── Atmospheric mood shift ───────────────────────────────────────────────
+  // On every variant switch, the reading lane briefly desaturates and dims
+  // (~325ms), text/colors swap silently at the trough, then the new palette
+  // resaturates over ~325ms. Total ~650ms — silent, premium, gallery-quality.
   const headerAnchorRef = useRef<HTMLDivElement | null>(null);
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [planeFlights, setPlaneFlights] = useState<
-    Array<{
-      id: number;
-      path: string;
-      tone: string;
-    }>
-  >([]);
-  const flightIdRef = useRef(0);
+  const [moodPhase, setMoodPhase] = useState<"idle" | "out" | "in">("idle");
   const prevVariantRef = useRef(variantIndex);
 
   // Coordinated palette — drives both the reading-screen warm tint and the
