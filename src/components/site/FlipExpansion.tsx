@@ -838,17 +838,19 @@ function CueCardReader({
                       >
                         {/* Magazine masthead band — full-width tinted
                             heading bar that spans edge-to-edge across the
-                            answer column. Variant-accent background, deep
-                            accent text, a thin top + bottom hairline rule
-                            for that printed-section feel. Color tracks the
-                            active answer variant. */}
+                            answer column. Typography mirrors the homepage
+                            SectionHeader: font-display, extrabold, tight
+                            tracking, sentence-case (NOT uppercase). The
+                            band itself stays variant-tinted with hairline
+                            top/bottom rules for that printed-section feel. */}
                         <h3
-                          className="-mx-6 mb-4 flex items-center px-6 py-2.5 font-display text-[13px] font-bold uppercase tracking-[0.22em] sm:-mx-10 sm:px-10 sm:text-[14px]"
+                          className="-mx-6 mb-4 flex items-center px-6 py-3 font-display text-xl font-extrabold tracking-tight sm:-mx-10 sm:px-10 sm:text-2xl"
                           style={{
                             color: activePalette.tabBorder,
                             backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(1 0 0))`,
                             borderTop: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             borderBottom: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
+                            letterSpacing: "-0.005em",
                             transition:
                               "color 380ms ease, background-color 380ms ease, border-color 380ms ease",
                           }}
