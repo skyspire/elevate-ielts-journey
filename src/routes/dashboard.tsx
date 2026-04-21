@@ -327,46 +327,35 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
-          {/* Hero — teacher's tick marks above + sketchy hand-drawn underline below */}
+          {/* Hero — handwriting headline with sketchy pencil underline */}
           <div className="text-center">
             <div className="relative inline-block">
-              {/* Teacher's tick marks above */}
-              <svg
-                aria-hidden
-                viewBox="0 0 200 14"
-                preserveAspectRatio="none"
-                className="absolute -top-3 left-1/2 h-3 w-[78%] -translate-x-1/2 text-foreground/55 sm:-top-4 sm:h-3.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
+              <h1
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground sm:text-6xl md:text-7xl"
+                style={{ transform: "rotate(-2deg)" }}
               >
-                <path d="M 18 12 L 24 2" />
-                <path d="M 50 12 L 56 2" />
-                <path d="M 82 12 L 88 2" />
-                <path d="M 114 12 L 120 2" />
-                <path d="M 146 12 L 152 2" />
-                <path d="M 178 12 L 184 2" />
-              </svg>
-
-              <h1 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
-                Pick Your IELTS
+                Pick your IELTS
               </h1>
 
-              {/* Sketchy hand-drawn underline */}
+              {/* Sketchy hand-drawn underline (double pass for pencil feel) */}
               <svg
                 aria-hidden
                 viewBox="0 0 300 14"
                 preserveAspectRatio="none"
-                className="absolute -bottom-2 left-0 h-2.5 w-full text-foreground/45 sm:-bottom-3 sm:h-3"
+                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                style={{ transform: "rotate(-2deg)" }}
               >
                 <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
-                <path d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11" opacity="0.45" />
+                <path
+                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
+                  opacity="0.4"
+                  strokeWidth="1.4"
+                />
               </svg>
             </div>
           </div>
