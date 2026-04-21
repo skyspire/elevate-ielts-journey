@@ -803,7 +803,7 @@ function CueCardReader({
         );
       })()}
 
-      {/* Drift keyframes */}
+      {/* Drift + answer-transition keyframes */}
       <style>{`
         @keyframes drift-a {
           0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
@@ -812,6 +812,16 @@ function CueCardReader({
         @keyframes drift-b {
           0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
           50% { transform: translate3d(-3%, 4%, 0) scale(1.06); }
+        }
+        @keyframes wash-grow {
+          0%   { width: 10px; height: 10px; opacity: 0.0; filter: blur(8px); }
+          12%  { opacity: 0.95; }
+          60%  { width: 320vmax; height: 320vmax; opacity: 0.92; filter: blur(2px); }
+          100% { width: 360vmax; height: 360vmax; opacity: 0; filter: blur(20px); }
+        }
+        @keyframes wash-fade {
+          0%, 70% { opacity: 1; }
+          100%    { opacity: 0; }
         }
       `}</style>
     </div>
