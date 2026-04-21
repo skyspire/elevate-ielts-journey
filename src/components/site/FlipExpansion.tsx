@@ -570,21 +570,27 @@ function CueCardReader({
         </div>
       </div>
 
-      {/* Stable, isolated topic header — single clean heading line.
-          Intentionally contains NO prompt text and stays fixed in its own
-          space so it never visually merges with the scrolling answer. */}
+      {/* Stable, isolated topic header — minimal, transparent, cream-on-palette. */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-4 sm:pt-6"
         style={{ transform: `scale(${headerScale})`, opacity: headerOpacity, transformOrigin: "top center", transition: "transform 240ms ease, opacity 240ms ease" }}
       >
-        <div ref={headerAnchorRef} className="pointer-events-auto w-full max-w-[680px] rounded-2xl border border-foreground/8 bg-white/60 px-5 py-3.5 shadow-[0_8px_30px_-12px_oklch(0.2_0.05_165/0.18)] backdrop-blur-xl sm:px-7 sm:py-4">
+        <div
+          ref={headerAnchorRef}
+          className="pointer-events-auto w-full max-w-[680px] rounded-2xl px-5 py-3.5 backdrop-blur-md sm:px-7 sm:py-4"
+          style={{
+            backgroundColor: "oklch(1 0 0 / 0.08)",
+            border: `1px solid ${activePalette.ink}26`,
+          }}
+        >
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2.5">
               <span
-                className="inline-flex shrink-0 items-center gap-1.5 pr-1 text-[oklch(0.38_0.10_165)]"
+                className="inline-flex shrink-0 items-center gap-1.5 pr-1"
+                style={{ color: activePalette.ink }}
                 aria-label="Speaking Part Two"
               >
-                <Mic className="h-3.5 w-3.5 opacity-80" strokeWidth={2.4} />
+                <Mic className="h-3.5 w-3.5 opacity-90" strokeWidth={2.4} />
                 <span className="relative font-handwriting text-[20px] leading-none tracking-tight sm:text-[22px]">
                   Part Two
                   <svg
@@ -599,20 +605,28 @@ function CueCardReader({
                       stroke="currentColor"
                       strokeWidth="1.4"
                       strokeLinecap="round"
-                      opacity="0.55"
+                      opacity="0.8"
                     />
                   </svg>
                 </span>
               </span>
-              <span aria-hidden className="h-4 w-px shrink-0 bg-foreground/15" />
-              <h2 className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[19px]">
+              <span aria-hidden className="h-4 w-px shrink-0" style={{ backgroundColor: `${activePalette.ink}40` }} />
+              <h2
+                className="truncate font-display text-[17px] font-extrabold leading-tight tracking-tight sm:text-[19px]"
+                style={{ color: activePalette.ink }}
+              >
                 {topic.label}
               </h2>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-foreground/10 bg-white/70 px-3 py-1.5 text-[12px] font-semibold text-foreground/70 shadow-soft transition-colors hover:text-foreground"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors hover:bg-white/20"
+              style={{
+                color: activePalette.ink,
+                backgroundColor: "oklch(1 0 0 / 0.10)",
+                border: `1px solid ${activePalette.ink}40`,
+              }}
               aria-label="Close sample answer"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
