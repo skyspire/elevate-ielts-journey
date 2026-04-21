@@ -327,10 +327,10 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-3xl px-5 sm:px-6">
-          {/* Hero — quiet editorial line, lets the owl be the hero */}
+          {/* Hero — bold but compact, lets the owl be the hero */}
           <div className="text-center">
-            <h1 className="font-display text-2xl font-medium italic leading-snug tracking-tight text-foreground/60 sm:text-3xl">
-              Pick Your IELTS
+            <h1 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+              Pick Your <span className="text-foreground/55">IELTS</span>
             </h1>
           </div>
 
