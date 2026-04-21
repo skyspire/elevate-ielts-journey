@@ -422,6 +422,7 @@ function CueCardReader({
       // Bold Red
       tabBg:    "oklch(0.58 0.22 25)",     // strong crimson red
       tabHover: "oklch(0.64 0.20 25)",
+      tabBorder:"oklch(0.32 0.18 25)",     // deep tonal border (active state)
       screen:   "oklch(0.965 0.035 25)",   // soft blush tint
       glow:     "oklch(0.78 0.16 25)",
       heading:  "oklch(0.42 0.18 25)",     // deep watercolor red
@@ -430,6 +431,7 @@ function CueCardReader({
       // Bold Blue
       tabBg:    "oklch(0.52 0.20 250)",    // strong sapphire blue
       tabHover: "oklch(0.58 0.18 250)",
+      tabBorder:"oklch(0.28 0.16 250)",
       screen:   "oklch(0.965 0.030 245)",  // soft sky tint
       glow:     "oklch(0.75 0.14 250)",
       heading:  "oklch(0.40 0.16 250)",    // deep watercolor blue
@@ -438,6 +440,7 @@ function CueCardReader({
       // Olive Green
       tabBg:    "oklch(0.55 0.13 115)",    // rich olive
       tabHover: "oklch(0.61 0.12 115)",
+      tabBorder:"oklch(0.30 0.10 115)",
       screen:   "oklch(0.965 0.035 110)",  // soft sage tint
       glow:     "oklch(0.76 0.12 115)",
       heading:  "oklch(0.40 0.11 115)",    // deep watercolor olive
@@ -860,25 +863,28 @@ function CueCardReader({
                         const r = e.currentTarget.getBoundingClientRect();
                         goToVariant(i, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
                       }}
-                      className="group relative flex flex-1 items-center justify-center gap-2 rounded-xl px-2 py-2.5 transition-all duration-300 ease-out hover:-translate-y-[1px] sm:py-3"
+                      className="group relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
                       style={{
-                        backgroundColor: active ? tone.tabBg : "oklch(1 0 0 / 0.04)",
+                        // All tabs always show their full color — no dim state.
+                        backgroundColor: tone.tabBg,
+                        // Active tab gets a 2px tonal dark border in its own
+                        // color family. Inactive tabs use a near-invisible
+                        // hairline so layout stays perfectly aligned.
                         boxShadow: active
-                          ? `inset 0 1px 0 oklch(1 0 0 / 0.25), 0 6px 18px -6px ${tone.tabBg}`
-                          : "inset 0 0 0 1px oklch(1 0 0 / 0.05)",
+                          ? `inset 0 0 0 2px ${tone.tabBorder}`
+                          : "inset 0 0 0 1px oklch(0 0 0 / 0.04)",
                       }}
                     >
                       <span
-                        className="block h-[7px] w-[7px] rounded-full transition-all duration-300"
+                        className="font-display tracking-tight transition-all duration-300"
                         style={{
-                          backgroundColor: active ? "oklch(1 0 0 / 0.95)" : tone.tabBg,
-                          boxShadow: active ? "0 0 0 3px oklch(1 0 0 / 0.18)" : "none",
-                        }}
-                      />
-                      <span
-                        className="font-display text-[13px] font-bold tracking-tight transition-colors sm:text-[14px]"
-                        style={{
-                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.62)",
+                          // Active label: bolder weight, full white.
+                          // Inactive: slightly lighter weight, soft white so
+                          // the colored bg still reads, with clear hierarchy.
+                          color: active ? "oklch(1 0 0 / 0.98)" : "oklch(1 0 0 / 0.78)",
+                          fontWeight: active ? 800 : 600,
+                          fontSize: "13px",
+                          letterSpacing: active ? "-0.01em" : "0",
                         }}
                       >
                         Answer {i + 1}
