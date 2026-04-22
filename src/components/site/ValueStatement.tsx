@@ -1,4 +1,4 @@
-import { Check, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const plans = [
@@ -134,37 +134,13 @@ export function ValueStatement() {
           ))}
         </div>
 
-        {/* === FEATURES — eye-catching === */}
+        {/* === FEATURES — clean & professional === */}
         <div className="mx-auto mt-16 max-w-4xl">
-          {/* Heading — big, with highlighter swipe + sparkles */}
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-3">
-              <Sparkles
-                className="h-6 w-6 text-[oklch(0.55_0.18_30)] sm:h-7 sm:w-7"
-                strokeWidth={2.5}
-              />
-              <h3 className="font-display text-3xl font-black uppercase tracking-tight text-foreground sm:text-5xl">
-                All plans{" "}
-                <span className="relative inline-block">
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-[-4px] bottom-1 -z-0 h-[55%] -rotate-1 rounded-sm"
-                    style={{
-                      background:
-                        "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
-                    }}
-                  />
-                  <span className="relative z-10">include</span>
-                </span>
-              </h3>
-              <Sparkles
-                className="h-6 w-6 text-[oklch(0.45_0.18_265)] sm:h-7 sm:w-7"
-                strokeWidth={2.5}
-              />
-            </div>
-            <p className="mt-3 font-handwriting text-xl text-foreground/65 sm:text-2xl">
-              every single feature, on every plan
-            </p>
+            <h3 className="font-display text-2xl font-black uppercase tracking-[0.04em] text-[oklch(0.32_0.01_270)] sm:text-4xl">
+              All plans include
+            </h3>
+            <span className="mt-3 h-px w-16 bg-[oklch(0.32_0.01_270)]/30" />
           </div>
 
           {/* Features — clean, professional, dark grey */}
