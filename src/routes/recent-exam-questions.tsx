@@ -513,7 +513,7 @@ function SectionTabs({
 }
 
 /* ------------------------------------------------------------------ */
-/* Sub-toggle (Task 1 / Task 2 or General Q / Cue Cards)               */
+/* Sub-toggle — Vintage brass compass (matches Writing/Speaking Samples) */
 /* ------------------------------------------------------------------ */
 
 function SubToggle<T extends string>({
@@ -529,147 +529,144 @@ function SubToggle<T extends string>({
 }) {
   const [left, right] = options;
   const isLeft = value === left.key;
-  // Needle swings from -55deg (left) to +55deg (right)
-  const angle = isLeft ? -55 : 55;
+  const needleDeg = isLeft ? -90 : 90;
+  void accent;
+
+  const renderItem = (
+    active: boolean,
+    onClick: () => void,
+    name: string,
+    sub: string | undefined,
+    align: "left" | "right",
+  ) => (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`group block bg-transparent p-2 sm:p-4 ${
+        align === "left" ? "text-left" : "text-right"
+      } transition-opacity duration-300 ${
+        active ? "opacity-100" : "opacity-50 hover:opacity-80"
+      }`}
+    >
+      <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-2`}>
+        <h3
+          className={`font-display font-bold leading-tight tracking-tight ${
+            active ? "text-foreground" : "text-foreground/70"
+          }`}
+          style={{ fontSize: "clamp(1.25rem, 3.4vw, 1.875rem)" }}
+        >
+          {name}
+        </h3>
+        {sub && (
+          <span
+            className={`block text-[10px] font-semibold uppercase tracking-[0.18em] ${
+              active ? "text-foreground/55" : "text-foreground/40"
+            }`}
+          >
+            {sub}
+          </span>
+        )}
+        <span
+          aria-hidden
+          className={`block h-px transition-all duration-500 ${
+            active ? "w-12 bg-foreground/40 sm:w-16" : "w-6 bg-foreground/15"
+          }`}
+        />
+      </div>
+    </button>
+  );
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-      {/* Left label */}
-      <button
-        type="button"
-        onClick={() => onChange(left.key)}
-        aria-pressed={isLeft}
-        className={`order-2 text-center transition-all duration-300 sm:order-1 sm:text-right ${
-          isLeft ? "scale-105" : "scale-95 opacity-50 hover:opacity-80"
-        }`}
-      >
-        <span
-          className={`block font-display text-base font-black uppercase tracking-[0.14em] sm:text-lg ${
-            isLeft ? "text-foreground" : "text-foreground/55"
-          }`}
-        >
-          {left.label}
-        </span>
-        {left.sub && (
-          <span className="mt-0.5 block text-[10px] font-semibold tracking-wide text-foreground/45">
-            {left.sub}
-          </span>
-        )}
-      </button>
+    <div className="relative mx-auto max-w-3xl">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 sm:gap-10">
+        <div className="flex justify-end">
+          {renderItem(isLeft, () => onChange(left.key), left.label, left.sub, "right")}
+        </div>
 
-      {/* Compass dial */}
-      <div className="order-1 relative shrink-0 sm:order-2">
-        <svg
-          viewBox="0 0 140 140"
-          className="h-24 w-24 sm:h-28 sm:w-28"
-          aria-label="Compass selector"
+        {/* Vintage brass compass */}
+        <div
+          className="relative flex flex-col items-center justify-center"
+          style={{ width: "clamp(72px, 11vw, 96px)" }}
         >
-          {/* Outer ring */}
-          <circle
-            cx="70"
-            cy="70"
-            r="62"
-            fill="oklch(0.99 0.005 90)"
-            stroke="oklch(0.45 0.06 60)"
-            strokeWidth="3"
-          />
-          {/* Inner bezel */}
-          <circle
-            cx="70"
-            cy="70"
-            r="54"
-            fill="none"
-            stroke="oklch(0.45 0.06 60)"
-            strokeWidth="1"
-            strokeDasharray="2 4"
-            opacity="0.5"
-          />
-          {/* Cardinal ticks */}
-          {[0, 90, 180, 270].map((deg) => (
-            <line
-              key={deg}
-              x1="70"
-              y1="14"
-              x2="70"
-              y2="22"
-              stroke="oklch(0.45 0.06 60)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              transform={`rotate(${deg} 70 70)`}
-            />
-          ))}
-          {/* W / E hint letters */}
-          <text
-            x="22"
-            y="74"
-            textAnchor="middle"
-            className="font-display"
-            fontSize="9"
-            fontWeight="900"
-            fill="oklch(0.45 0.06 60)"
-            opacity="0.6"
+          <svg
+            viewBox="0 0 100 100"
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            aria-label="Compass selector"
           >
-            W
-          </text>
-          <text
-            x="118"
-            y="74"
-            textAnchor="middle"
-            className="font-display"
-            fontSize="9"
-            fontWeight="900"
-            fill="oklch(0.45 0.06 60)"
-            opacity="0.6"
-          >
-            E
-          </text>
+            <defs>
+              <radialGradient id="brassRimRecent" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="oklch(0.88 0.12 80)" />
+                <stop offset="45%" stopColor="oklch(0.72 0.13 70)" />
+                <stop offset="80%" stopColor="oklch(0.52 0.11 55)" />
+                <stop offset="100%" stopColor="oklch(0.38 0.08 45)" />
+              </radialGradient>
+              <radialGradient id="compassFaceRecent" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.96 0.03 85)" />
+                <stop offset="70%" stopColor="oklch(0.90 0.05 80)" />
+                <stop offset="100%" stopColor="oklch(0.80 0.07 70)" />
+              </radialGradient>
+              <linearGradient id="needleNRecent" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.55 0.20 30)" />
+                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
+              </linearGradient>
+              <linearGradient id="needleSRecent" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.45 0.04 60)" />
+                <stop offset="100%" stopColor="oklch(0.30 0.03 55)" />
+              </linearGradient>
+            </defs>
 
-          {/* Needle group */}
-          <g
-            style={{
-              transformOrigin: "70px 70px",
-              transform: `rotate(${angle}deg)`,
-              transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            {/* Active needle */}
-            <polygon points="70,18 76,72 64,72" fill={accent} />
-            {/* Tail */}
-            <polygon
-              points="70,122 76,72 64,72"
-              fill="oklch(0.85 0.02 60)"
-              stroke="oklch(0.45 0.06 60)"
-              strokeWidth="0.8"
-            />
-          </g>
-          {/* Center hub */}
-          <circle cx="70" cy="70" r="6" fill="oklch(0.20 0.02 250)" />
-          <circle cx="70" cy="70" r="2.5" fill="oklch(0.95 0 0)" />
-        </svg>
+            <circle cx="50" cy="50" r="48" fill="url(#brassRimRecent)" />
+            <circle cx="50" cy="50" r="48" fill="none" stroke="oklch(0.32 0.06 40)" strokeWidth="0.6" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="oklch(0.38 0.08 45)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="40" fill="url(#compassFaceRecent)" />
+
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.sin(a) * 36;
+              const y1 = 50 - Math.cos(a) * 36;
+              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
+              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="oklch(0.30 0.05 45)"
+                  strokeWidth={i % 3 === 0 ? 1.2 : 0.6}
+                  strokeLinecap="round"
+                />
+              );
+            })}
+
+            <text x="50" y="18" textAnchor="middle" fontSize="7" fontWeight="800" fill="oklch(0.30 0.05 45)" fontFamily="serif">N</text>
+            <text x="84" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">E</text>
+            <text x="50" y="88" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">S</text>
+            <text x="16" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">W</text>
+
+            <g
+              style={{
+                transformOrigin: "50px 50px",
+                transform: `rotate(${needleDeg}deg)`,
+                transition: "transform 850ms cubic-bezier(0.34, 1.3, 0.64, 1)",
+              }}
+            >
+              <polygon points="50,12 46,50 54,50" fill="url(#needleNRecent)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.4" />
+              <polygon points="50,88 46,50 54,50" fill="url(#needleSRecent)" stroke="oklch(0.22 0.02 55)" strokeWidth="0.4" />
+            </g>
+
+            <circle cx="50" cy="50" r="3.2" fill="oklch(0.75 0.13 75)" stroke="oklch(0.38 0.08 45)" strokeWidth="0.6" />
+            <circle cx="49.2" cy="49.2" r="1" fill="oklch(0.95 0.06 85)" opacity="0.85" />
+          </svg>
+        </div>
+
+        <div className="flex justify-start">
+          {renderItem(!isLeft, () => onChange(right.key), right.label, right.sub, "left")}
+        </div>
       </div>
-
-      {/* Right label */}
-      <button
-        type="button"
-        onClick={() => onChange(right.key)}
-        aria-pressed={!isLeft}
-        className={`order-3 text-center transition-all duration-300 sm:text-left ${
-          !isLeft ? "scale-105" : "scale-95 opacity-50 hover:opacity-80"
-        }`}
-      >
-        <span
-          className={`block font-display text-base font-black uppercase tracking-[0.14em] sm:text-lg ${
-            !isLeft ? "text-foreground" : "text-foreground/55"
-          }`}
-        >
-          {right.label}
-        </span>
-        {right.sub && (
-          <span className="mt-0.5 block text-[10px] font-semibold tracking-wide text-foreground/45">
-            {right.sub}
-          </span>
-        )}
-      </button>
     </div>
   );
 }
