@@ -912,7 +912,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         value={part}
         onChange={(v) => {
           setPart(v);
-          setMonth("all");
+          setMonth("April 2026");
         }}
         accent={accent}
         options={[
