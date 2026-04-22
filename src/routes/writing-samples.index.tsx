@@ -146,19 +146,33 @@ function WritingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
 
-  // Module-tinted page + hero gradient — swaps with Academic ⇄ General
-  // (mirrors Dashboard and Recent Exam Questions)
+  // Module-tinted page + ambient gradient — swaps with Academic ⇄ General.
+  // Gradient covers the entire page (not just the hero).
   const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
-  const heroGradient = isAcademic
-    ? `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.90 0.08 235 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.92 0.07 280 / 0.45) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.02 235 / 0.55) 0%, transparent 100%)`
-    : `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.93 0.08 55 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.93 0.09 30 / 0.45) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.03 50 / 0.55) 0%, transparent 100%)`;
+  const pageGradient = isAcademic
+    ? `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.90 0.08 235 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.92 0.07 280 / 0.45) 0%, transparent 65%),
+       radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.93 0.06 200 / 0.35) 0%, transparent 65%),
+       radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.92 0.06 270 / 0.35) 0%, transparent 65%),
+       radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.93 0.05 220 / 0.30) 0%, transparent 70%)`
+    : `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.93 0.08 55 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.93 0.09 30 / 0.45) 0%, transparent 65%),
+       radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.94 0.07 65 / 0.35) 0%, transparent 65%),
+       radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.93 0.08 20 / 0.35) 0%, transparent 65%),
+       radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.94 0.06 50 / 0.30) 0%, transparent 70%)`;
 
   return (
-    <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg }}>
+    <div
+      className="relative min-h-screen transition-colors duration-700"
+      style={{ backgroundColor: pageBg }}
+    >
+      {/* Ambient gradient wash — covers the entire page, swaps with the toggle */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 transition-[background] duration-700 ease-out"
+        style={{ background: pageGradient }}
+      />
+
       {/* Top bar */}
       <header
         className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl transition-colors duration-700"
@@ -180,14 +194,7 @@ function WritingSamplesPage() {
         </div>
       </header>
 
-      <main className="relative pt-10 sm:pt-14">
-        {/* Soft tinted gradient wash behind the hero — swaps with the toggle */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[460px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
-          style={{ background: heroGradient }}
-        />
-
+      <main className="relative z-[1] pt-10 sm:pt-14">
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* MASSIVE EYEBROW — IELTS TYPE as the dominant element */}
           <div className="mt-4 text-center">
