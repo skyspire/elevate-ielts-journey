@@ -996,12 +996,7 @@ function SubSection({
 }) {
   return (
     <section>
-      <div className="mb-5 flex items-end justify-between gap-4">
-        <div>
-          <h2 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
-            {title}
-          </h2>
-        </div>
+      <div className="mb-5 flex items-center justify-end">
         <span
           className="hidden font-mono text-[11px] font-semibold tabular-nums sm:inline"
           style={{ color: accent }}
