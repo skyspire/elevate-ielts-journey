@@ -425,16 +425,15 @@ function WordEntry({
   const indexLabel = String(index).padStart(2, "0");
 
   return (
-    <li className="flex gap-4 px-5 py-5 sm:gap-5 sm:px-7">
-      {/* Tiny mono index number */}
-      <span
-        className="shrink-0 pt-[3px] font-mono text-[11px] font-medium tabular-nums text-foreground/35"
-        aria-hidden
-      >
-        {indexLabel}
-      </span>
+    <li className="flex items-stretch">
+      {/* Bold display index — matches writing-samples QuestionRowCard */}
+      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-5 sm:w-20 sm:pt-6">
+        <span className="font-display text-2xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-3xl">
+          {indexLabel}
+        </span>
+      </div>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 px-5 py-5 sm:px-7">
         {/* Headword line */}
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <h3
