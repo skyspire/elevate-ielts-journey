@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
+  Lightbulb,
   type LucideProps,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -205,63 +206,62 @@ function CategoryPage() {
           </header>
 
           {/* Sidebar + Detail layout */}
-          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[280px_1fr]">
-            {/* SIDEBAR — topic lists */}
+          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
+            {/* SIDEBAR — minimal list with color dots */}
             <aside className="lg:sticky lg:top-6 lg:self-start">
-              <div className="rounded-2xl border border-foreground/10 bg-white/80 p-3 shadow-soft backdrop-blur-sm">
-                <div className="px-2 pt-1 pb-2">
-                  <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
-                    Topic Lists
-                  </span>
-                </div>
-                <nav className="flex flex-col gap-1">
-                  {category.lists.map((l) => {
-                    const isActive = l.slug === activeList?.slug;
-                    return (
-                      <button
-                        key={l.slug}
-                        type="button"
-                        onClick={() => goToList(l.slug)}
-                        className="group flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left transition-colors"
-                        style={
-                          isActive
-                            ? { background: tone.pill }
-                            : undefined
-                        }
-                      >
-                        <div className="min-w-0">
-                          <div
-                            className="truncate font-display text-[14px] font-bold leading-tight"
-                            style={{
-                              color: isActive ? tone.ink : "oklch(0.25 0.03 260)",
-                            }}
-                          >
-                            {l.title}
-                          </div>
-                          <div className="mt-0.5 truncate text-[11px] font-medium text-foreground/55">
-                            {l.blurb}
-                          </div>
-                        </div>
+              <div className="px-1 pb-2">
+                <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
+                  Topic Lists
+                </span>
+              </div>
+              <nav className="flex flex-col">
+                {category.lists.map((l) => {
+                  const isActive = l.slug === activeList?.slug;
+                  return (
+                    <button
+                      key={l.slug}
+                      type="button"
+                      onClick={() => goToList(l.slug)}
+                      className="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-foreground/[0.04]"
+                    >
+                      {isActive && (
                         <span
-                          className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold tabular-nums"
+                          aria-hidden
+                          className="absolute inset-y-1.5 left-0 w-[3px] rounded-full"
+                          style={{ background: tone.ink }}
+                        />
+                      )}
+                      <span
+                        className="h-2 w-2 shrink-0 rounded-full"
+                        style={{
+                          background: tone.ink,
+                          opacity: isActive ? 1 : 0.4,
+                        }}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span
+                          className="block truncate text-[13.5px] leading-tight transition-colors"
                           style={{
-                            background: isActive ? "white" : "oklch(0.96 0.01 250)",
-                            color: isActive ? tone.ink : "oklch(0.4 0.02 260)",
+                            color: isActive ? tone.ink : "oklch(0.32 0.03 260)",
+                            fontWeight: isActive ? 700 : 500,
                           }}
                         >
-                          {l.words.length}
+                          {l.title}
                         </span>
-                      </button>
-                    );
-                  })}
-                </nav>
-              </div>
+                      </span>
+                      <span className="shrink-0 text-[11px] font-semibold tabular-nums text-foreground/40">
+                        {l.words.length}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
             </aside>
 
-            {/* DETAIL — notebook page */}
+            {/* DETAIL — clean dictionary page */}
             <section className="min-w-0">
               {activeList ? (
-                <NotebookPage
+                <DictionaryPage
                   list={activeList}
                   words={pageWords}
                   totalCount={filteredWords.length}
@@ -290,10 +290,10 @@ function CategoryPage() {
 }
 
 /* ------------------------------------------------------------------ */
-/* NotebookPage — paginated, ruled "page" of words.                   */
+/* DictionaryPage — clean two-column dictionary list (no expand).     */
 /* ------------------------------------------------------------------ */
 
-function NotebookPage({
+function DictionaryPage({
   list,
   words,
   totalCount,
@@ -324,52 +324,31 @@ function NotebookPage({
   const endIndex = startIndex + words.length - 1;
 
   return (
-    <article
-      className="relative overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-card"
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(0deg, transparent 0, transparent 47px, oklch(0.55 0.05 60 / 0.10) 47px, oklch(0.55 0.05 60 / 0.10) 48px)",
-      }}
-    >
-      {/* Red margin line — like a real notebook */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-12 w-px sm:left-16"
-        style={{ background: "oklch(0.65 0.18 25 / 0.35)" }}
-      />
-      {/* Punched holes */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-12 flex-col items-center justify-around py-10 sm:flex sm:w-16">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <span
-            key={i}
-            className="block h-3 w-3 rounded-full bg-foreground/10 ring-1 ring-foreground/15"
-          />
-        ))}
-      </div>
-
-      {/* HEADER ROW — list title + search + pagination */}
-      <header className="relative flex flex-col gap-3 border-b border-foreground/10 bg-white/70 px-5 py-4 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:pl-20 sm:pr-6">
+    <article className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
+      {/* HEADER — list title + search */}
+      <header className="flex flex-col gap-3 border-b border-foreground/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
         <div className="min-w-0">
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-center gap-2">
+            <span
+              aria-hidden
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ background: ink }}
+            />
             <h2
-              className="font-display text-xl font-black tracking-tight"
+              className="font-display text-[20px] font-black tracking-tight"
               style={{ color: ink }}
             >
               {list.title}
             </h2>
-            <span
-              className="rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em]"
-              style={{ background: pill, color: ink }}
-            >
-              {totalCount} words
-            </span>
           </div>
-          <p className="mt-0.5 text-[12px] font-medium text-foreground/55">{list.blurb}</p>
+          <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
+            {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
           {searchOpen ? (
-            <div className="flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5 shadow-soft">
+            <div className="flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
               <Search className="h-3.5 w-3.5 text-foreground/45" strokeWidth={2.4} />
               <input
                 autoFocus
@@ -390,7 +369,7 @@ function NotebookPage({
             <button
               type="button"
               onClick={onToggleSearch}
-              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/65 shadow-soft transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/65 transition-colors hover:text-foreground"
             >
               <Search className="h-3.5 w-3.5" strokeWidth={2.4} />
               Search
@@ -399,18 +378,18 @@ function NotebookPage({
         </div>
       </header>
 
-      {/* WORDS — list rows */}
+      {/* WORDS — two-column dictionary entries */}
       {words.length === 0 ? (
-        <div className="px-6 py-16 text-center sm:pl-20">
+        <div className="px-6 py-16 text-center">
           <p className="font-handwriting text-3xl text-foreground/55">No matches</p>
           <p className="mt-2 text-[13px] text-foreground/55">
             Try a different word or clear the search.
           </p>
         </div>
       ) : (
-        <ol className="relative px-5 py-3 sm:pl-20 sm:pr-6">
+        <ol className="divide-y divide-foreground/5">
           {words.map((word, i) => (
-            <WordRow
+            <WordEntry
               key={word.id}
               word={word}
               index={startIndex + i}
@@ -422,7 +401,7 @@ function NotebookPage({
       )}
 
       {/* FOOTER — pagination */}
-      <footer className="relative flex flex-col items-center justify-between gap-3 border-t border-foreground/10 bg-white/70 px-5 py-4 backdrop-blur-sm sm:flex-row sm:pl-20 sm:pr-6">
+      <footer className="flex flex-col items-center justify-between gap-3 border-t border-foreground/10 px-5 py-4 sm:flex-row sm:px-7">
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/45">
           {totalCount === 0
             ? "No words"
@@ -457,10 +436,10 @@ function NotebookPage({
 }
 
 /* ------------------------------------------------------------------ */
-/* WordRow — collapsible word entry on a notebook line.               */
+/* WordEntry — fully visible two-column dictionary entry.             */
 /* ------------------------------------------------------------------ */
 
-function WordRow({
+function WordEntry({
   word,
   index,
   ink,
@@ -471,94 +450,63 @@ function WordRow({
   ink: string;
   pill: string;
 }) {
-  const [open, setOpen] = useState(false);
-
   return (
-    <li className="group border-b border-foreground/5 last:border-b-0">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-4 py-3 text-left transition-colors hover:bg-foreground/[0.025]"
-        aria-expanded={open}
-      >
-        <span className="w-8 shrink-0 text-right font-display text-[11px] font-bold tabular-nums text-foreground/35">
-          {String(index).padStart(2, "0")}
-        </span>
-        <span className="flex-1 min-w-0">
-          <span className="flex flex-wrap items-baseline gap-2">
-            <span
-              className="font-display text-[16px] font-extrabold leading-tight"
-              style={{ color: "oklch(0.20 0.03 260)" }}
-            >
-              {word.term}
-            </span>
-            {word.pos && (
-              <span className="text-[11px] font-bold italic text-foreground/45">
-                {word.pos}
-              </span>
-            )}
-            {word.ipa && (
-              <span className="text-[11px] font-medium text-foreground/45">
-                /{word.ipa}/
-              </span>
-            )}
+    <li className="grid grid-cols-1 gap-4 px-5 py-5 sm:grid-cols-[1fr_1fr] sm:gap-8 sm:px-7">
+      {/* LEFT COLUMN — headword + meaning */}
+      <div className="min-w-0">
+        <div className="flex items-baseline gap-2">
+          <span className="font-display text-[11px] font-bold tabular-nums text-foreground/35">
+            {String(index).padStart(2, "0")}
           </span>
-          {!open && (
-            <span className="mt-0.5 line-clamp-1 block text-[13px] text-foreground/60">
-              {word.meaning}
+          <h3
+            className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
+            style={{ color: "oklch(0.20 0.03 260)" }}
+          >
+            {word.term}
+          </h3>
+          {word.pos && (
+            <span className="text-[11px] font-semibold italic text-foreground/45">
+              {word.pos}
             </span>
-          )}
-        </span>
-        <span
-          className="shrink-0 rounded-full px-2 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.16em] transition-colors"
-          style={{
-            background: open ? ink : pill,
-            color: open ? "white" : ink,
-          }}
-        >
-          {open ? "Close" : "Open"}
-        </span>
-      </button>
-
-      {open && (
-        <div className="ml-12 mr-2 mb-3 rounded-xl bg-foreground/[0.03] p-4">
-          <div>
-            <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground/45">
-              Meaning
-            </div>
-            <p className="mt-1 text-[14px] leading-relaxed text-foreground/85">
-              {word.meaning}
-            </p>
-          </div>
-          <div className="mt-3">
-            <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground/45">
-              Example
-            </div>
-            <p
-              className="mt-1 font-handwriting text-[18px] leading-snug text-foreground/80"
-              style={{ transform: "rotate(-0.4deg)", transformOrigin: "left" }}
-            >
-              “{word.example}”
-            </p>
-          </div>
-          {word.tip && (
-            <div
-              className="mt-3 rounded-lg border-l-2 px-3 py-2"
-              style={{ borderColor: ink, background: pill }}
-            >
-              <div
-                className="text-[10px] font-extrabold uppercase tracking-[0.2em]"
-                style={{ color: ink }}
-              >
-                Examiner Tip
-              </div>
-              <p className="mt-0.5 text-[13px] font-medium text-foreground/80">
-                {word.tip}
-              </p>
-            </div>
           )}
         </div>
-      )}
+        {word.ipa && (
+          <p className="mt-0.5 pl-7 text-[11.5px] font-medium text-foreground/45">
+            /{word.ipa}/
+          </p>
+        )}
+        <p className="mt-1.5 pl-7 text-[14px] leading-relaxed text-foreground/80">
+          {word.meaning}
+        </p>
+      </div>
+
+      {/* RIGHT COLUMN — example + tip */}
+      <div className="min-w-0 sm:border-l sm:border-foreground/5 sm:pl-8">
+        <div className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
+          Example
+        </div>
+        <p className="mt-1 text-[14px] italic leading-relaxed text-foreground/75">
+          “{word.example}”
+        </p>
+        {word.tip && (
+          <div
+            className="mt-3 inline-flex items-start gap-1.5 rounded-md px-2.5 py-1.5"
+            style={{ background: pill }}
+          >
+            <Lightbulb
+              className="mt-[2px] h-3 w-3 shrink-0"
+              strokeWidth={2.6}
+              style={{ color: ink }}
+            />
+            <p
+              className="text-[12px] font-semibold leading-snug"
+              style={{ color: ink }}
+            >
+              {word.tip}
+            </p>
+          </div>
+        )}
+      </div>
     </li>
   );
 }
