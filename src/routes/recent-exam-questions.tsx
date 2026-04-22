@@ -692,7 +692,16 @@ function MonthGrid({
   counts: Record<string, number>;
   accent: string;
 }) {
+  void counts;
+  void accent;
   const allActive = selected === "all";
+
+  // Abbreviate "March 2026" → "Mar 2026"
+  const abbreviate = (m: string) => {
+    const [mon, yr] = m.split(" ");
+    return `${mon.slice(0, 3)} ${yr}`;
+  };
+
   return (
     <div>
       <div className="mb-3 flex items-end justify-center">
@@ -700,91 +709,37 @@ function MonthGrid({
           Browse by month
         </p>
       </div>
-      <div className="relative -mx-5 px-5 sm:mx-0 sm:px-0">
-        {/* Edge fades */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-paper-cream to-transparent"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-paper-cream to-transparent"
-        />
-        <div
-          className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      <div className="mx-auto grid max-w-3xl grid-cols-3 justify-center gap-2.5 sm:grid-cols-5">
+        {/* All months chip */}
+        <button
+          type="button"
+          onClick={() => onSelect("all")}
+          className={`rounded-xl border px-3 py-2.5 text-center font-display text-sm font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
+            allActive
+              ? "border-foreground/30 bg-foreground/15 text-foreground shadow-soft"
+              : "border-foreground/10 bg-white text-foreground/55 hover:border-foreground/20 hover:text-foreground"
+          }`}
         >
-          {/* All months chip */}
-          <button
-            type="button"
-            onClick={() => onSelect("all")}
-            className={`group relative flex shrink-0 snap-start flex-col items-start overflow-hidden rounded-xl border px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
-              allActive
-                ? "border-transparent text-white shadow-card"
-                : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
-            }`}
-            style={allActive ? { background: accent } : undefined}
-          >
-            <span
-              className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
-                allActive ? "text-white/80" : "text-foreground/50"
-              }`}
-            >
-              View
-            </span>
-            <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
-              All
-            </span>
-            <span
-              className={`mt-1 font-mono text-[10px] font-semibold tabular-nums ${
-                allActive ? "text-white/85" : "text-foreground/45"
-              }`}
-            >
-              {Object.values(counts).reduce((a, b) => a + b, 0)} total
-            </span>
-          </button>
+          All
+        </button>
 
-          {months.map((m) => {
-            const [mon, yr] = m.split(" ");
-            const active = selected === m;
-            const count = counts[m] ?? 0;
-            return (
-              <button
-                key={m}
-                type="button"
-                onClick={() => onSelect(m)}
-                className={`group relative flex shrink-0 snap-start flex-col items-start overflow-hidden rounded-xl border px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
-                  active
-                    ? "border-transparent text-white shadow-card"
-                    : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
-                }`}
-                style={active ? { background: accent } : undefined}
-              >
-                <span
-                  className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
-                    active ? "text-white/80" : "text-foreground/50"
-                  }`}
-                >
-                  {yr}
-                </span>
-                <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
-                  {mon}
-                </span>
-                <span
-                  className={`mt-1 inline-flex items-center gap-1 font-mono text-[10px] font-semibold tabular-nums ${
-                    active ? "text-white/85" : "text-foreground/45"
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-1 w-1 rounded-full ${
-                      active ? "bg-white/80" : "bg-foreground/40"
-                    }`}
-                  />
-                  {count} new
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        {months.map((m) => {
+          const active = selected === m;
+          return (
+            <button
+              key={m}
+              type="button"
+              onClick={() => onSelect(m)}
+              className={`rounded-xl border px-3 py-2.5 text-center font-display text-sm font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
+                active
+                  ? "border-foreground/30 bg-foreground/15 text-foreground shadow-soft"
+                  : "border-foreground/10 bg-white text-foreground/55 hover:border-foreground/20 hover:text-foreground"
+              }`}
+            >
+              {abbreviate(m)}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
