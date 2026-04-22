@@ -297,10 +297,9 @@ function WritingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Questions list (full-bleed dotted-paper bg, matches homepage Latest Questions) */}
-              {/* Step 3 — Questions list — full-bleed peach paper-dots, mirrors Speaking Samples sage */}
-              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-rose pb-20 sm:mt-20 sm:pb-28">
-                <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
+              {/* Step 3 — Questions list — sits over the page-wide ambient gradient */}
+              <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
+                <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {questions.map((q, i) => (
                       <QuestionRowCard
