@@ -112,17 +112,7 @@ export function EverythingYouNeed() {
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <span
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
-            style={{
-              background: "oklch(0.95 0.04 290)",
-              color: "oklch(0.4 0.15 290)",
-            }}
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            Everything in one place
-          </span>
-          <h2 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+          <h2 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-foreground sm:text-6xl">
             Everything you need to hit{" "}
             <span
               className="relative inline-block"
@@ -138,7 +128,7 @@ export function EverythingYouNeed() {
             </span>{" "}
             in your next exam
           </h2>
-          <p className="mt-5 text-base font-medium text-muted-foreground sm:text-lg">
+          <p className="mt-6 text-lg font-bold text-foreground/80 sm:text-xl">
             Six focused resources, built by Band 9 examiners. No fluff, no
             recycled content — just what actually moves your score.
           </p>
@@ -169,21 +159,10 @@ function FeatureRow({ feature, index }: { feature: Feature; index: number }) {
 
       {/* Text */}
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-display text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
-            {feature.label}
-          </h3>
-          <span
-            className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={{
-              background: `${feature.accent}15`,
-              color: feature.accentDeep,
-            }}
-          >
-            {feature.badge}
-          </span>
-        </div>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          {feature.label}
+        </h3>
+        <p className="mt-2 text-base font-semibold leading-relaxed text-foreground/75 sm:text-lg">
           {feature.description}
         </p>
       </div>
