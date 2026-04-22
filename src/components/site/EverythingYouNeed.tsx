@@ -112,17 +112,7 @@ export function EverythingYouNeed() {
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <span
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
-            style={{
-              background: "oklch(0.95 0.04 290)",
-              color: "oklch(0.4 0.15 290)",
-            }}
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            Everything in one place
-          </span>
-          <h2 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+          <h2 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-foreground sm:text-6xl">
             Everything you need to hit{" "}
             <span
               className="relative inline-block"
@@ -138,7 +128,7 @@ export function EverythingYouNeed() {
             </span>{" "}
             in your next exam
           </h2>
-          <p className="mt-5 text-base font-medium text-muted-foreground sm:text-lg">
+          <p className="mt-6 text-lg font-bold text-foreground/80 sm:text-xl">
             Six focused resources, built by Band 9 examiners. No fluff, no
             recycled content — just what actually moves your score.
           </p>
@@ -169,21 +159,10 @@ function FeatureRow({ feature, index }: { feature: Feature; index: number }) {
 
       {/* Text */}
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-display text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
-            {feature.label}
-          </h3>
-          <span
-            className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={{
-              background: `${feature.accent}15`,
-              color: feature.accentDeep,
-            }}
-          >
-            {feature.badge}
-          </span>
-        </div>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          {feature.label}
+        </h3>
+        <p className="mt-2 text-base font-semibold leading-relaxed text-foreground/75 sm:text-lg">
           {feature.description}
         </p>
       </div>
@@ -253,7 +232,7 @@ function FeatureIllustration({ featureKey }: { featureKey: string }) {
   }
 }
 
-// 1. Recent Exam Questions — globe with question marks
+// 1. Recent Exam Questions — globe with location pin
 function RecentIllustration() {
   return (
     <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
@@ -262,9 +241,9 @@ function RecentIllustration() {
       <line x1="12" y1="32" x2="52" y2="32" stroke="white" strokeWidth="1.8" opacity="0.7" />
       <path d="M14 24 Q32 18 50 24" stroke="white" strokeWidth="1.5" opacity="0.5" />
       <path d="M14 40 Q32 46 50 40" stroke="white" strokeWidth="1.5" opacity="0.5" />
-      {/* question marker pin */}
-      <circle cx="46" cy="18" r="6" fill="white" />
-      <text x="46" y="21" textAnchor="middle" fontSize="9" fontWeight="900" fill="oklch(0.45 0.18 260)">?</text>
+      {/* location pin */}
+      <path d="M46 12 C42 12 39 15 39 19 C39 23 46 30 46 30 C46 30 53 23 53 19 C53 15 50 12 46 12 Z" fill="white" />
+      <circle cx="46" cy="19" r="2.5" fill="oklch(0.45 0.18 260)" />
     </svg>
   );
 }
@@ -329,24 +308,27 @@ function SamplesIllustration() {
   );
 }
 
-// 5. Vocabulary — stacked word tiles
+// 5. Vocabulary — stacked word tiles (no letters, just lines)
 function VocabularyIllustration() {
   return (
     <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
-      {/* 4 tiles fanned */}
+      {/* 3 tiles fanned with abstract word lines */}
       <g transform="translate(10 14) rotate(-8)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">A</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="8" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
       <g transform="translate(24 12) rotate(-2)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">B</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="9" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
       <g transform="translate(38 14) rotate(6)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">C</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="7" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
-      {/* underline + word */}
+      {/* underline rows */}
       <rect x="14" y="40" width="36" height="3" rx="1.5" fill="white" opacity="0.85" />
       <rect x="14" y="46" width="26" height="3" rx="1.5" fill="white" opacity="0.6" />
     </svg>
