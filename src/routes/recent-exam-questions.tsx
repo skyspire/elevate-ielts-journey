@@ -1023,9 +1023,23 @@ function ReadingSection() {
 }
 
 /* Full-bleed dotted background panel for question results area */
-function DottedResultsPanel({ children }: { children: ReactNode }) {
+function DottedResultsPanel({
+  children,
+  tint,
+}: {
+  children: ReactNode;
+  tint?: string | null;
+}) {
   return (
     <div className="relative">
+      {/* Tinted wash that matches the active month color */}
+      {tint && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 transition-colors duration-500"
+          style={{ background: tint }}
+        />
+      )}
       {/* Full-bleed dotted background extending beyond the content container */}
       <div
         aria-hidden
