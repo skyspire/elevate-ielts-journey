@@ -472,13 +472,45 @@ function SectionTabs({
   section: ExamSection;
   setSection: (s: ExamSection) => void;
 }) {
-  const tabs: { key: ExamSection; label: string; icon: typeof PenLine }[] = [
-    { key: "writing", label: "Writing", icon: PenLine },
-    { key: "speaking", label: "Speaking", icon: Mic },
-    { key: "reading", label: "Reading", icon: BookOpen },
+  const tabs: {
+    key: ExamSection;
+    label: string;
+    num: string;
+    icon: typeof PenLine;
+    fill: string;
+    deep: string;
+    ink: string;
+  }[] = [
+    {
+      key: "writing",
+      label: "Writing",
+      num: "01",
+      icon: PenLine,
+      fill: "oklch(0.68 0.17 255)",
+      deep: "oklch(0.32 0.14 260)",
+      ink: "oklch(0.99 0 0)",
+    },
+    {
+      key: "speaking",
+      label: "Speaking",
+      num: "02",
+      icon: Mic,
+      fill: "oklch(0.70 0.20 350)",
+      deep: "oklch(0.34 0.16 350)",
+      ink: "oklch(0.99 0 0)",
+    },
+    {
+      key: "reading",
+      label: "Reading",
+      num: "03",
+      icon: BookOpen,
+      fill: "oklch(0.78 0.17 75)",
+      deep: "oklch(0.36 0.14 65)",
+      ink: "oklch(0.20 0.04 60)",
+    },
   ];
   return (
-    <div className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
+    <div className="flex flex-wrap items-stretch justify-center gap-2.5 sm:gap-3.5">
       {tabs.map((t) => {
         const active = section === t.key;
         const Icon = t.icon;
@@ -487,14 +519,44 @@ function SectionTabs({
             key={t.key}
             type="button"
             onClick={() => setSection(t.key)}
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-display text-[12px] font-extrabold uppercase tracking-[0.16em] transition-all sm:px-5 ${
-              active
-                ? "bg-foreground text-background shadow-soft"
-                : "text-foreground/55 hover:text-foreground"
-            }`}
+            aria-pressed={active}
+            className="group relative outline-none"
+            style={{ perspective: "600px" }}
           >
-            <Icon className="h-3.5 w-3.5" strokeWidth={2.6} />
-            {t.label}
+            {/* Hard drop shadow plate */}
+            <span
+              aria-hidden
+              className="absolute inset-0 rounded-xl transition-transform duration-200"
+              style={{
+                background: t.deep,
+                transform: active ? "translate(4px, 4px)" : "translate(3px, 3px)",
+              }}
+            />
+            {/* Main slab */}
+            <span
+              className="relative flex items-center gap-2.5 rounded-xl border-[2.5px] px-3.5 py-2.5 font-display text-[12px] font-black uppercase tracking-[0.18em] transition-all duration-200 sm:gap-3 sm:px-5 sm:py-3 sm:text-[13px]"
+              style={{
+                background: active ? t.fill : "oklch(0.99 0 0)",
+                borderColor: t.deep,
+                color: active ? t.ink : t.deep,
+                transform: active ? "translate(-1px, -1px)" : "translate(0, 0)",
+                boxShadow: active
+                  ? `inset 0 0 0 2px ${t.ink}, inset 0 -3px 0 0 ${t.deep}`
+                  : "none",
+              }}
+            >
+              <span
+                className="flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-black sm:h-7 sm:w-7 sm:text-[11px]"
+                style={{
+                  background: active ? t.deep : t.fill,
+                  color: active ? t.fill : t.ink,
+                }}
+              >
+                {t.num}
+              </span>
+              <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2.8} />
+              <span>{t.label}</span>
+            </span>
           </button>
         );
       })}
