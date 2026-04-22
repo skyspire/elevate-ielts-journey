@@ -172,31 +172,46 @@ const features: Feature[] = [
   },
 ];
 
-// Vibrant gradient palette — each tone provides:
-//   front: bright tinted base for the card surface
-//   mid: secondary stop for the gradient (richer)
-//   deep: darkest accent (icon tile, title text, glow)
-//   glow: soft halo color used for hover bloom
+// Noddy storybook palette — pure, saturated, flat primary-leaning colors.
+// Each card is a solid bright color with a slightly darker rim/text and a
+// matching bright halo. front == mid keeps the surface essentially flat
+// (sticker-like) so the cartoon palette reads as pure color.
 type ToneShades = { front: string; mid: string; deep: string; glow: string };
 
+// Academic = the classic 7-color Noddy primary set
 const tonesAcademic: Record<Feature["tone"], ToneShades> = {
-  navy:     { front: "oklch(0.93 0.07 260)", mid: "oklch(0.78 0.14 260)", deep: "oklch(0.42 0.20 260)", glow: "oklch(0.65 0.22 260)" },
-  rust:     { front: "oklch(0.93 0.07 25)",  mid: "oklch(0.78 0.16 25)",  deep: "oklch(0.50 0.22 25)",  glow: "oklch(0.68 0.22 25)"  },
-  forest:   { front: "oklch(0.93 0.08 165)", mid: "oklch(0.76 0.14 165)", deep: "oklch(0.45 0.16 165)", glow: "oklch(0.65 0.18 165)" },
-  plum:     { front: "oklch(0.93 0.08 310)", mid: "oklch(0.76 0.16 310)", deep: "oklch(0.45 0.22 310)", glow: "oklch(0.65 0.22 310)" },
-  ochre:    { front: "oklch(0.95 0.10 80)",  mid: "oklch(0.82 0.16 70)",  deep: "oklch(0.55 0.18 60)",  glow: "oklch(0.78 0.18 70)"  },
-  teal:     { front: "oklch(0.93 0.08 195)", mid: "oklch(0.76 0.13 195)", deep: "oklch(0.48 0.14 200)", glow: "oklch(0.68 0.16 195)" },
-  espresso: { front: "oklch(0.93 0.04 50)",  mid: "oklch(0.72 0.08 50)",  deep: "oklch(0.34 0.07 50)",  glow: "oklch(0.60 0.10 50)"  },
+  // Sky blue (Noddy's hat / car)
+  navy:     { front: "oklch(0.74 0.18 235)", mid: "oklch(0.74 0.18 235)", deep: "oklch(0.38 0.18 250)", glow: "oklch(0.78 0.20 235)" },
+  // Pillar-box red (Noddy's shirt)
+  rust:     { front: "oklch(0.66 0.24 27)",  mid: "oklch(0.66 0.24 27)",  deep: "oklch(0.38 0.20 27)",  glow: "oklch(0.72 0.24 27)"  },
+  // Grass green
+  forest:   { front: "oklch(0.74 0.20 145)", mid: "oklch(0.74 0.20 145)", deep: "oklch(0.40 0.16 145)", glow: "oklch(0.80 0.20 145)" },
+  // Hot pink (storybook bow)
+  plum:     { front: "oklch(0.74 0.21 350)", mid: "oklch(0.74 0.21 350)", deep: "oklch(0.42 0.20 350)", glow: "oklch(0.80 0.22 350)" },
+  // Sunny yellow
+  ochre:    { front: "oklch(0.90 0.18 95)",  mid: "oklch(0.90 0.18 95)",  deep: "oklch(0.55 0.16 75)",  glow: "oklch(0.92 0.18 95)"  },
+  // Turquoise / teal
+  teal:     { front: "oklch(0.78 0.16 195)", mid: "oklch(0.78 0.16 195)", deep: "oklch(0.42 0.14 200)", glow: "oklch(0.82 0.16 195)" },
+  // Cartoon purple
+  espresso: { front: "oklch(0.66 0.22 305)", mid: "oklch(0.66 0.22 305)", deep: "oklch(0.38 0.20 305)", glow: "oklch(0.74 0.22 305)" },
 };
 
+// General = same Noddy energy, shifted toward warm orange/coral side
 const tonesGeneral: Record<Feature["tone"], ToneShades> = {
-  navy:     { front: "oklch(0.94 0.08 35)",  mid: "oklch(0.80 0.15 35)",  deep: "oklch(0.52 0.20 35)",  glow: "oklch(0.72 0.20 35)"  },
-  rust:     { front: "oklch(0.94 0.09 20)",  mid: "oklch(0.80 0.18 20)",  deep: "oklch(0.55 0.22 20)",  glow: "oklch(0.72 0.22 20)"  },
-  forest:   { front: "oklch(0.95 0.10 70)",  mid: "oklch(0.82 0.15 65)",  deep: "oklch(0.55 0.16 60)",  glow: "oklch(0.75 0.18 70)"  },
-  plum:     { front: "oklch(0.94 0.09 10)",  mid: "oklch(0.80 0.16 10)",  deep: "oklch(0.50 0.20 10)",  glow: "oklch(0.70 0.20 10)"  },
-  ochre:    { front: "oklch(0.96 0.11 90)",  mid: "oklch(0.86 0.16 80)",  deep: "oklch(0.60 0.17 70)",  glow: "oklch(0.82 0.18 85)"  },
-  teal:     { front: "oklch(0.94 0.09 50)",  mid: "oklch(0.80 0.14 50)",  deep: "oklch(0.50 0.16 45)",  glow: "oklch(0.70 0.17 50)"  },
-  espresso: { front: "oklch(0.94 0.05 45)",  mid: "oklch(0.74 0.08 45)",  deep: "oklch(0.38 0.10 45)",  glow: "oklch(0.62 0.10 45)"  },
+  // Tangerine orange
+  navy:     { front: "oklch(0.78 0.20 55)",  mid: "oklch(0.78 0.20 55)",  deep: "oklch(0.48 0.20 45)",  glow: "oklch(0.84 0.20 55)"  },
+  // Coral red
+  rust:     { front: "oklch(0.70 0.23 22)",  mid: "oklch(0.70 0.23 22)",  deep: "oklch(0.42 0.21 22)",  glow: "oklch(0.76 0.23 22)"  },
+  // Lime green
+  forest:   { front: "oklch(0.84 0.20 130)", mid: "oklch(0.84 0.20 130)", deep: "oklch(0.48 0.18 135)", glow: "oklch(0.88 0.20 130)" },
+  // Bubblegum pink
+  plum:     { front: "oklch(0.78 0.20 10)",  mid: "oklch(0.78 0.20 10)",  deep: "oklch(0.46 0.20 10)",  glow: "oklch(0.84 0.20 10)"  },
+  // Buttercup yellow
+  ochre:    { front: "oklch(0.92 0.18 90)",  mid: "oklch(0.92 0.18 90)",  deep: "oklch(0.58 0.16 75)",  glow: "oklch(0.94 0.18 90)"  },
+  // Aqua blue
+  teal:     { front: "oklch(0.80 0.16 220)", mid: "oklch(0.80 0.16 220)", deep: "oklch(0.45 0.16 230)", glow: "oklch(0.85 0.16 220)" },
+  // Storybook violet
+  espresso: { front: "oklch(0.70 0.20 295)", mid: "oklch(0.70 0.20 295)", deep: "oklch(0.42 0.20 295)", glow: "oklch(0.78 0.20 295)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
@@ -541,13 +556,13 @@ function FeatureCard({
           background: `linear-gradient(140deg, ${tone.front} 0%, ${tone.mid} 100%)`,
         }}
       >
-        {/* Glossy top highlight */}
+        {/* Subtle top highlight — keeps a hint of dimension on flat color */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[22px]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1/3 rounded-t-[22px]"
           style={{
             background:
-              "linear-gradient(180deg, oklch(1 0 0 / 0.45) 0%, oklch(1 0 0 / 0) 100%)",
+              "linear-gradient(180deg, oklch(1 0 0 / 0.22) 0%, oklch(1 0 0 / 0) 100%)",
           }}
         />
 
