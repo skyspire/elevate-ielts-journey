@@ -172,26 +172,30 @@ const features: Feature[] = [
   },
 ];
 
-// Bold solid color blocks — each card is one confident color.
-// Two palettes: cool/blue family for Academic, warm family for General.
-const tonesAcademic: Record<Feature["tone"], { bg: string; bgHover: string }> = {
-  navy: { bg: "oklch(0.42 0.18 260)", bgHover: "oklch(0.46 0.18 260)" },
-  rust: { bg: "oklch(0.48 0.16 230)", bgHover: "oklch(0.52 0.16 230)" },
-  forest: { bg: "oklch(0.50 0.15 200)", bgHover: "oklch(0.54 0.15 200)" },
-  plum: { bg: "oklch(0.45 0.18 290)", bgHover: "oklch(0.49 0.18 290)" },
-  ochre: { bg: "oklch(0.55 0.16 250)", bgHover: "oklch(0.59 0.16 250)" },
-  teal: { bg: "oklch(0.52 0.14 215)", bgHover: "oklch(0.56 0.14 215)" },
-  espresso: { bg: "oklch(0.32 0.06 260)", bgHover: "oklch(0.36 0.06 260)" },
+// Layered paper-stack palette — each tone provides:
+//   front: light tinted "page" the content sits on
+//   mid: middle sheet visible behind/right
+//   deep: deepest back sheet (also used for icon + accent text)
+type ToneShades = { front: string; mid: string; deep: string };
+
+const tonesAcademic: Record<Feature["tone"], ToneShades> = {
+  navy:     { front: "oklch(0.97 0.025 260)", mid: "oklch(0.78 0.10 260)", deep: "oklch(0.42 0.18 260)" },
+  rust:     { front: "oklch(0.97 0.025 230)", mid: "oklch(0.78 0.10 230)", deep: "oklch(0.48 0.16 230)" },
+  forest:   { front: "oklch(0.97 0.025 200)", mid: "oklch(0.78 0.10 200)", deep: "oklch(0.50 0.15 200)" },
+  plum:     { front: "oklch(0.97 0.025 290)", mid: "oklch(0.78 0.11 290)", deep: "oklch(0.45 0.18 290)" },
+  ochre:    { front: "oklch(0.97 0.025 250)", mid: "oklch(0.80 0.10 250)", deep: "oklch(0.55 0.16 250)" },
+  teal:     { front: "oklch(0.97 0.025 215)", mid: "oklch(0.80 0.10 215)", deep: "oklch(0.52 0.14 215)" },
+  espresso: { front: "oklch(0.96 0.018 260)", mid: "oklch(0.72 0.05 260)", deep: "oklch(0.32 0.06 260)" },
 };
 
-const tonesGeneral: Record<Feature["tone"], { bg: string; bgHover: string }> = {
-  navy: { bg: "oklch(0.55 0.18 35)", bgHover: "oklch(0.59 0.18 35)" },
-  rust: { bg: "oklch(0.58 0.20 25)", bgHover: "oklch(0.62 0.20 25)" },
-  forest: { bg: "oklch(0.55 0.16 60)", bgHover: "oklch(0.59 0.16 60)" },
-  plum: { bg: "oklch(0.50 0.18 15)", bgHover: "oklch(0.54 0.18 15)" },
-  ochre: { bg: "oklch(0.65 0.17 70)", bgHover: "oklch(0.69 0.17 70)" },
-  teal: { bg: "oklch(0.52 0.16 45)", bgHover: "oklch(0.56 0.16 45)" },
-  espresso: { bg: "oklch(0.38 0.10 40)", bgHover: "oklch(0.42 0.10 40)" },
+const tonesGeneral: Record<Feature["tone"], ToneShades> = {
+  navy:     { front: "oklch(0.97 0.03 35)", mid: "oklch(0.82 0.11 35)", deep: "oklch(0.55 0.18 35)" },
+  rust:     { front: "oklch(0.97 0.03 25)", mid: "oklch(0.82 0.13 25)", deep: "oklch(0.58 0.20 25)" },
+  forest:   { front: "oklch(0.97 0.03 60)", mid: "oklch(0.82 0.11 60)", deep: "oklch(0.55 0.16 60)" },
+  plum:     { front: "oklch(0.97 0.03 15)", mid: "oklch(0.82 0.12 15)", deep: "oklch(0.50 0.18 15)" },
+  ochre:    { front: "oklch(0.97 0.03 70)", mid: "oklch(0.85 0.12 70)", deep: "oklch(0.65 0.17 70)" },
+  teal:     { front: "oklch(0.97 0.03 45)", mid: "oklch(0.82 0.11 45)", deep: "oklch(0.52 0.16 45)" },
+  espresso: { front: "oklch(0.96 0.02 40)", mid: "oklch(0.74 0.07 40)", deep: "oklch(0.38 0.10 40)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
