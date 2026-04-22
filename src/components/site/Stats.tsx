@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { PenLine, Mic, BookOpen, Users } from "lucide-react";
 
 const stats = [
-  { target: 1300, suffix: "+", label: "Writing Questions", icon: PenLine },
-  { target: 4500, suffix: "+", label: "Speaking Questions", icon: Mic },
-  { target: 170, suffix: "+", label: "Cue Cards", icon: BookOpen },
-  { target: 4000, suffix: "+", label: "Active Users", icon: Users },
+  { target: 1300, suffix: "+", label: "Writing Questions", hue: 285 },
+  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 195 },
+  { target: 170, suffix: "+", label: "Cue Cards", hue: 70 },
+  { target: 4000, suffix: "+", label: "Active Users", hue: 15 },
 ];
 
 /* easeOutCubic — fast at start, gently decelerates */
