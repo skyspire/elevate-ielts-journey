@@ -129,11 +129,13 @@ const rainConfig = RAIN_FLAGS.map((flag, i) => {
     return x - Math.floor(x);
   };
   const startX = 4 + rand(i + 1) * 92;
-  const restY = 62 + rand(i + 7) * 30;
+  // Settle near the bottom half so they sit BEHIND the big number
+  const restY = 48 + rand(i + 7) * 48; // 48–96%
   const rotate = (rand(i + 13) - 0.5) * 50;
   const delay = rand(i + 21) * 1.6;
   const duration = 1.6 + rand(i + 31) * 1.2;
-  const size = 1.6 + rand(i + 41) * 1.4;
+  // Much bigger flags
+  const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
   return { flag, startX, restY, rotate, delay, duration, size };
 });
 
@@ -163,8 +165,13 @@ function CounterStage({ active }: { active: boolean }) {
 
   const formatted = count.toLocaleString("en-US");
 
+  // Rich dark blue — adds life without going pure black
+  const INK_BLUE = "oklch(0.28 0.09 255)";
+  const INK_BLUE_SOFT = "oklch(0.45 0.08 255)";
+
   return (
-    <div className="relative mx-auto mt-12 h-[420px] w-full max-w-5xl sm:h-[480px]">
+    <div className="relative mx-auto mt-12 h-[460px] w-full max-w-5xl sm:h-[540px]">
+      {/* Falling flags — bigger, dulled, behind */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -177,13 +184,15 @@ function CounterStage({ active }: { active: boolean }) {
               left: `${f.startX}%`,
               top: 0,
               fontSize: `${f.size}rem`,
-              filter: "drop-shadow(0 4px 10px rgba(15,23,42,0.18))",
+              // Dulled so the number can shine
+              opacity: active ? 0.55 : 0,
+              filter:
+                "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
               animation: active
                 ? `lw-fall ${f.duration}s cubic-bezier(0.34, 1.2, 0.64, 1) ${f.delay}s both`
                 : "none",
               ["--rest-y" as string]: `${f.restY}%`,
               ["--rotate" as string]: `${f.rotate}deg`,
-              opacity: active ? 1 : 0,
             }}
           >
             {f.flag}
@@ -191,29 +200,46 @@ function CounterStage({ active }: { active: boolean }) {
         ))}
       </div>
 
-      <div className="absolute inset-x-0 top-6 z-10 flex flex-col items-center sm:top-10">
+      {/* Soft halo behind the number to lift it from the flags */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 z-[5] h-[70%] w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, oklch(0.97 0.015 85 / 0.85), oklch(0.97 0.015 85 / 0.4) 50%, transparent 75%)",
+        }}
+      />
+
+      {/* Big ticking counter — dark blue */}
+      <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 flex-col items-center px-4">
         <div
-          className="font-display font-black tabular-nums tracking-tight text-foreground"
+          className="font-display font-black tabular-nums tracking-tight"
           style={{
-            fontSize: "clamp(4.5rem, 14vw, 10rem)",
-            lineHeight: 0.95,
-            textShadow: "0 2px 20px oklch(0.97 0.015 85 / 0.8)",
+            color: INK_BLUE,
+            fontSize: "clamp(5rem, 16vw, 12rem)",
+            lineHeight: 0.92,
+            textShadow:
+              "0 1px 0 oklch(0.99 0.005 85), 0 4px 30px oklch(0.97 0.015 85 / 0.9)",
           }}
         >
           {formatted}
-          <span className="text-foreground/60">+</span>
+          <span style={{ color: INK_BLUE_SOFT }}>+</span>
         </div>
-        <p className="mt-3 font-handwriting text-2xl text-foreground/55 sm:text-3xl">
+        <p
+          className="mt-4 font-handwriting text-2xl sm:text-3xl"
+          style={{ color: INK_BLUE_SOFT, opacity: 0.8 }}
+        >
           learners across 47 countries
         </p>
       </div>
 
+      {/* Soft floor */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-24"
+        className="absolute inset-x-0 bottom-0 h-28"
         style={{
           background:
-            "linear-gradient(to top, oklch(0.93 0.03 75 / 0.6), transparent)",
+            "linear-gradient(to top, oklch(0.93 0.03 75 / 0.55), transparent)",
         }}
       />
     </div>
