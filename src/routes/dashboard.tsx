@@ -267,7 +267,7 @@ function DashboardPage() {
     <div className="relative min-h-screen" style={{ backgroundColor: "oklch(0.992 0.005 85)" }}>
       <main className="relative overflow-hidden py-12 sm:py-16">
         {/* Ivory whisper background — soft pastel halos breathing in the corners */}
-        <StudyNotesBackground />
+        <StudyNotesBackground module={module} />
 
         {/* Centered content column */}
         <div className="relative z-[1] mx-auto w-full max-w-5xl px-5 sm:px-6">
