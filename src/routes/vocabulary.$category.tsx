@@ -503,8 +503,8 @@ function WordEntry({
         </span>
       </div>
 
-      {/* Example — italic, no label */}
-      <p className="mt-1.5 text-[13.5px] italic leading-relaxed text-foreground/55">
+      {/* Example — plain, no label */}
+      <p className="mt-1.5 text-[13.5px] leading-relaxed text-foreground/55">
         “{word.example}”
       </p>
 
