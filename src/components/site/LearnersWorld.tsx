@@ -117,6 +117,109 @@ function MarqueeRow({
   );
 }
 
+/* ===========================================================
+ * CounterStage — Dramatic moment: flag rain + ticking 70,000+
+ * =========================================================== */
+
+const RAIN_FLAGS = countries.slice(0, 36).map((c) => c.flag);
+
+const rainConfig = RAIN_FLAGS.map((flag, i) => {
+  const rand = (seed: number) => {
+    const x = Math.sin(seed * 9301 + 49297) * 233280;
+    return x - Math.floor(x);
+  };
+  const startX = 4 + rand(i + 1) * 92;
+  const restY = 62 + rand(i + 7) * 30;
+  const rotate = (rand(i + 13) - 0.5) * 50;
+  const delay = rand(i + 21) * 1.6;
+  const duration = 1.6 + rand(i + 31) * 1.2;
+  const size = 1.6 + rand(i + 41) * 1.4;
+  return { flag, startX, restY, rotate, delay, duration, size };
+});
+
+function CounterStage({ active }: { active: boolean }) {
+  const [count, setCount] = useState(0);
+  const TARGET = 70000;
+  const DURATION = 2200;
+
+  useEffect(() => {
+    if (!active) return;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / DURATION);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setCount(Math.floor(eased * TARGET));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    const timeout = window.setTimeout(() => {
+      raf = requestAnimationFrame(tick);
+    }, 400);
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
+    };
+  }, [active]);
+
+  const formatted = count.toLocaleString("en-US");
+
+  return (
+    <div className="relative mx-auto mt-12 h-[420px] w-full max-w-5xl sm:h-[480px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {rainConfig.map((f, i) => (
+          <span
+            key={i}
+            className="absolute leading-none"
+            style={{
+              left: `${f.startX}%`,
+              top: 0,
+              fontSize: `${f.size}rem`,
+              filter: "drop-shadow(0 4px 10px rgba(15,23,42,0.18))",
+              animation: active
+                ? `lw-fall ${f.duration}s cubic-bezier(0.34, 1.2, 0.64, 1) ${f.delay}s both`
+                : "none",
+              ["--rest-y" as string]: `${f.restY}%`,
+              ["--rotate" as string]: `${f.rotate}deg`,
+              opacity: active ? 1 : 0,
+            }}
+          >
+            {f.flag}
+          </span>
+        ))}
+      </div>
+
+      <div className="absolute inset-x-0 top-6 z-10 flex flex-col items-center sm:top-10">
+        <div
+          className="font-display font-black tabular-nums tracking-tight text-foreground"
+          style={{
+            fontSize: "clamp(4.5rem, 14vw, 10rem)",
+            lineHeight: 0.95,
+            textShadow: "0 2px 20px oklch(0.97 0.015 85 / 0.8)",
+          }}
+        >
+          {formatted}
+          <span className="text-foreground/60">+</span>
+        </div>
+        <p className="mt-3 font-handwriting text-2xl text-foreground/55 sm:text-3xl">
+          learners across 47 countries
+        </p>
+      </div>
+
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-24"
+        style={{
+          background:
+            "linear-gradient(to top, oklch(0.93 0.03 75 / 0.6), transparent)",
+        }}
+      />
+    </div>
+  );
+}
+
 export function LearnersWorld() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
