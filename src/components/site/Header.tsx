@@ -70,10 +70,7 @@ const resourceItems: ResourceItem[] = [
   },
 ];
 
-const flatNavItems = [
-  { label: "Pricing", to: "/pricing" as const },
-  { label: "FAQ", to: "/faq" as const },
-];
+// Pricing lives on the homepage as #pricing; FAQ is its own route.
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -188,29 +185,42 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Pricing + FAQ */}
-          {flatNavItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
-              style={{ color: INK_SOFT }}
-              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = INK;
-                if (e.currentTarget.getAttribute("data-status") !== "active") {
-                  e.currentTarget.style.backgroundColor = HOVER_BG;
-                }
-              }}
-              onMouseLeave={(e) => {
-                const isActive = e.currentTarget.getAttribute("data-status") === "active";
-                e.currentTarget.style.color = isActive ? INK : INK_SOFT;
-                if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
-              }}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {/* Pricing (homepage anchor) + FAQ */}
+          <Link
+            to="/"
+            hash="pricing"
+            className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
+            style={{ color: INK_SOFT }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = INK;
+              e.currentTarget.style.backgroundColor = HOVER_BG;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = INK_SOFT;
+              e.currentTarget.style.backgroundColor = "transparent";
+            }}
+          >
+            Pricing
+          </Link>
+          <Link
+            to="/faq"
+            className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
+            style={{ color: INK_SOFT }}
+            activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = INK;
+              if (e.currentTarget.getAttribute("data-status") !== "active") {
+                e.currentTarget.style.backgroundColor = HOVER_BG;
+              }
+            }}
+            onMouseLeave={(e) => {
+              const isActive = e.currentTarget.getAttribute("data-status") === "active";
+              e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+              if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+            }}
+          >
+            FAQ
+          </Link>
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
@@ -297,18 +307,24 @@ export function Header() {
               </div>
             )}
 
-            {flatNavItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-4 py-3 text-[15px] font-semibold"
-                style={{ color: INK_SOFT }}
-                activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link
+              to="/"
+              hash="pricing"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+            >
+              Pricing
+            </Link>
+            <Link
+              to="/faq"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              FAQ
+            </Link>
 
             <div className="mt-2 grid grid-cols-2 gap-2 pt-2">
               <Button

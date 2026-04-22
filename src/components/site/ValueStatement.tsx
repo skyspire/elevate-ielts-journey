@@ -36,7 +36,7 @@ const features = [
 
 export function ValueStatement() {
   return (
-    <section className="bg-white pt-24 pb-12 sm:pt-32 sm:pb-16">
+    <section id="pricing" className="scroll-mt-24 bg-white pt-24 pb-12 sm:pt-32 sm:pb-16">
       <div className="container-page">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl">

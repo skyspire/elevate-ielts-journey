@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
@@ -32,11 +31,6 @@ const VocabularyRoute = VocabularyRouteImport.update({
 const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
   id: '/recent-exam-questions',
   path: '/recent-exam-questions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PredictionsRoute = PredictionsRouteImport.update({
@@ -104,7 +98,6 @@ export interface FileRoutesByFullPath {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
-  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -120,7 +113,6 @@ export interface FileRoutesByTo {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
-  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -137,7 +129,6 @@ export interface FileRoutesById {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
-  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
-    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -171,7 +161,6 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
-    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -187,7 +176,6 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
-    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -204,7 +192,6 @@ export interface RootRouteChildren {
   EbooksRoute: typeof EbooksRoute
   FaqRoute: typeof FaqRoute
   PredictionsRoute: typeof PredictionsRoute
-  PricingRoute: typeof PricingRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
@@ -227,13 +214,6 @@ declare module '@tanstack/react-router' {
       path: '/recent-exam-questions'
       fullPath: '/recent-exam-questions'
       preLoaderRoute: typeof RecentExamQuestionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/predictions': {
@@ -335,7 +315,6 @@ const rootRouteChildren: RootRouteChildren = {
   EbooksRoute: EbooksRoute,
   FaqRoute: FaqRoute,
   PredictionsRoute: PredictionsRoute,
-  PricingRoute: PricingRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
