@@ -181,11 +181,11 @@
 @utility text-gradient-shimmer {
   background: linear-gradient(
     100deg,
-    oklch(0.55 0.22 265) 0%,
-    oklch(0.65 0.2 320) 25%,
-    oklch(0.7 0.18 200) 50%,
-    oklch(0.72 0.18 150) 75%,
-    oklch(0.55 0.22 265) 100%
+    oklch(0.5 0.18 25) 0%,
+    oklch(0.6 0.2 35) 30%,
+    oklch(0.68 0.18 55) 55%,
+    oklch(0.6 0.2 35) 80%,
+    oklch(0.5 0.18 25) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
