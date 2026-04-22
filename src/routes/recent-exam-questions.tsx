@@ -825,7 +825,7 @@ function monthCounts(qs: Question[]): Record<string, number> {
 
 function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: boolean }) {
   const [task, setTask] = useState<WritingTask>("task1");
-  const [month, setMonth] = useState<string | "all">("all");
+  const [month, setMonth] = useState<string | "all">("April 2026");
   const accent = task === "task1" ? "oklch(0.48 0.16 230)" : "oklch(0.42 0.18 260)";
   const questions = data[task];
   const months = uniqueMonths(questions);
