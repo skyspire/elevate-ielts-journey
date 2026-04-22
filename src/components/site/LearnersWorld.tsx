@@ -140,9 +140,58 @@ export function LearnersWorld() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-paper-cream py-24 sm:py-32"
+      className="relative overflow-hidden py-24 sm:py-32"
+      style={{
+        background:
+          "linear-gradient(180deg, oklch(0.985 0.012 85) 0%, oklch(0.965 0.022 80) 50%, oklch(0.945 0.028 70) 100%)",
+      }}
     >
+      {/* Premium layered background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute -left-32 -top-32 h-[520px] w-[520px] rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.88 0.14 65 / 0.45), transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-40 -right-32 h-[600px] w-[600px] rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.82 0.12 250 / 0.32), transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "radial-gradient(oklch(0.3 0.04 80 / 0.5) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+            maskImage:
+              "radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 90%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 90%)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 top-0 h-32"
+          style={{
+            background:
+              "linear-gradient(to bottom, oklch(0.97 0.015 85), transparent)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-32"
+          style={{
+            background:
+              "linear-gradient(to top, oklch(0.97 0.015 85), transparent)",
+          }}
+        />
+      </div>
+
       <div className="container-page relative">
+
         {/* Editorial header */}
         <div className="mx-auto max-w-4xl text-center">
           <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
