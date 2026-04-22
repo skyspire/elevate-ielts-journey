@@ -11,6 +11,7 @@ import {
   Sparkles,
   AlertTriangle,
   CalendarDays,
+  Flame,
   type LucideProps,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
