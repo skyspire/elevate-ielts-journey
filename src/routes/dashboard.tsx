@@ -172,46 +172,46 @@ const features: Feature[] = [
   },
 ];
 
-// Noddy storybook palette — pure, saturated, flat primary-leaning colors.
-// Each card is a solid bright color with a slightly darker rim/text and a
-// matching bright halo. front == mid keeps the surface essentially flat
-// (sticker-like) so the cartoon palette reads as pure color.
+// Macaron candy palette — soft pastels with bakery-window appeal.
+// Pistachio, raspberry, lemon, lavender, rose, sky, peach.
+// front == mid keeps surfaces clean and flat; deep gives ink-on-pastel
+// title contrast; glow is a brighter wash for halos.
 type ToneShades = { front: string; mid: string; deep: string; glow: string };
 
-// Academic = the classic 7-color Noddy primary set
+// Academic = the classic 7 macaron tones
 const tonesAcademic: Record<Feature["tone"], ToneShades> = {
-  // Sky blue (Noddy's hat / car)
-  navy:     { front: "oklch(0.74 0.18 235)", mid: "oklch(0.74 0.18 235)", deep: "oklch(0.38 0.18 250)", glow: "oklch(0.78 0.20 235)" },
-  // Pillar-box red (Noddy's shirt)
-  rust:     { front: "oklch(0.66 0.24 27)",  mid: "oklch(0.66 0.24 27)",  deep: "oklch(0.38 0.20 27)",  glow: "oklch(0.72 0.24 27)"  },
-  // Grass green
-  forest:   { front: "oklch(0.74 0.20 145)", mid: "oklch(0.74 0.20 145)", deep: "oklch(0.40 0.16 145)", glow: "oklch(0.80 0.20 145)" },
-  // Hot pink (storybook bow)
-  plum:     { front: "oklch(0.74 0.21 350)", mid: "oklch(0.74 0.21 350)", deep: "oklch(0.42 0.20 350)", glow: "oklch(0.80 0.22 350)" },
-  // Sunny yellow
-  ochre:    { front: "oklch(0.90 0.18 95)",  mid: "oklch(0.90 0.18 95)",  deep: "oklch(0.55 0.16 75)",  glow: "oklch(0.92 0.18 95)"  },
-  // Turquoise / teal
-  teal:     { front: "oklch(0.78 0.16 195)", mid: "oklch(0.78 0.16 195)", deep: "oklch(0.42 0.14 200)", glow: "oklch(0.82 0.16 195)" },
-  // Cartoon purple
-  espresso: { front: "oklch(0.66 0.22 305)", mid: "oklch(0.66 0.22 305)", deep: "oklch(0.38 0.20 305)", glow: "oklch(0.74 0.22 305)" },
+  // Sky blue macaron
+  navy:     { front: "oklch(0.88 0.07 235)", mid: "oklch(0.88 0.07 235)", deep: "oklch(0.42 0.16 245)", glow: "oklch(0.92 0.07 235)" },
+  // Raspberry macaron
+  rust:     { front: "oklch(0.86 0.09 18)",  mid: "oklch(0.86 0.09 18)",  deep: "oklch(0.46 0.18 22)",  glow: "oklch(0.90 0.09 18)"  },
+  // Pistachio macaron
+  forest:   { front: "oklch(0.89 0.08 145)", mid: "oklch(0.89 0.08 145)", deep: "oklch(0.42 0.14 150)", glow: "oklch(0.92 0.08 145)" },
+  // Rose macaron
+  plum:     { front: "oklch(0.88 0.08 350)", mid: "oklch(0.88 0.08 350)", deep: "oklch(0.46 0.18 350)", glow: "oklch(0.92 0.08 350)" },
+  // Lemon macaron
+  ochre:    { front: "oklch(0.93 0.10 95)",  mid: "oklch(0.93 0.10 95)",  deep: "oklch(0.50 0.14 80)",  glow: "oklch(0.95 0.10 95)"  },
+  // Mint / aqua macaron
+  teal:     { front: "oklch(0.89 0.07 195)", mid: "oklch(0.89 0.07 195)", deep: "oklch(0.44 0.13 200)", glow: "oklch(0.92 0.07 195)" },
+  // Lavender macaron
+  espresso: { front: "oklch(0.86 0.08 305)", mid: "oklch(0.86 0.08 305)", deep: "oklch(0.44 0.18 305)", glow: "oklch(0.90 0.08 305)" },
 };
 
-// General = same Noddy energy, shifted toward warm orange/coral side
+// General = warmer macaron set (peach, coral, butter, etc.)
 const tonesGeneral: Record<Feature["tone"], ToneShades> = {
-  // Tangerine orange
-  navy:     { front: "oklch(0.78 0.20 55)",  mid: "oklch(0.78 0.20 55)",  deep: "oklch(0.48 0.20 45)",  glow: "oklch(0.84 0.20 55)"  },
-  // Coral red
-  rust:     { front: "oklch(0.70 0.23 22)",  mid: "oklch(0.70 0.23 22)",  deep: "oklch(0.42 0.21 22)",  glow: "oklch(0.76 0.23 22)"  },
-  // Lime green
-  forest:   { front: "oklch(0.84 0.20 130)", mid: "oklch(0.84 0.20 130)", deep: "oklch(0.48 0.18 135)", glow: "oklch(0.88 0.20 130)" },
-  // Bubblegum pink
-  plum:     { front: "oklch(0.78 0.20 10)",  mid: "oklch(0.78 0.20 10)",  deep: "oklch(0.46 0.20 10)",  glow: "oklch(0.84 0.20 10)"  },
-  // Buttercup yellow
-  ochre:    { front: "oklch(0.92 0.18 90)",  mid: "oklch(0.92 0.18 90)",  deep: "oklch(0.58 0.16 75)",  glow: "oklch(0.94 0.18 90)"  },
-  // Aqua blue
-  teal:     { front: "oklch(0.80 0.16 220)", mid: "oklch(0.80 0.16 220)", deep: "oklch(0.45 0.16 230)", glow: "oklch(0.85 0.16 220)" },
-  // Storybook violet
-  espresso: { front: "oklch(0.70 0.20 295)", mid: "oklch(0.70 0.20 295)", deep: "oklch(0.42 0.20 295)", glow: "oklch(0.78 0.20 295)" },
+  // Peach macaron
+  navy:     { front: "oklch(0.89 0.08 55)",  mid: "oklch(0.89 0.08 55)",  deep: "oklch(0.50 0.18 50)",  glow: "oklch(0.93 0.08 55)"  },
+  // Coral macaron
+  rust:     { front: "oklch(0.86 0.09 22)",  mid: "oklch(0.86 0.09 22)",  deep: "oklch(0.48 0.20 22)",  glow: "oklch(0.90 0.09 22)"  },
+  // Matcha macaron
+  forest:   { front: "oklch(0.91 0.09 130)", mid: "oklch(0.91 0.09 130)", deep: "oklch(0.48 0.16 135)", glow: "oklch(0.93 0.09 130)" },
+  // Strawberry macaron
+  plum:     { front: "oklch(0.87 0.08 10)",  mid: "oklch(0.87 0.08 10)",  deep: "oklch(0.48 0.18 10)",  glow: "oklch(0.91 0.08 10)"  },
+  // Butter macaron
+  ochre:    { front: "oklch(0.94 0.10 90)",  mid: "oklch(0.94 0.10 90)",  deep: "oklch(0.54 0.14 80)",  glow: "oklch(0.96 0.10 90)"  },
+  // Powder blue macaron
+  teal:     { front: "oklch(0.89 0.07 220)", mid: "oklch(0.89 0.07 220)", deep: "oklch(0.46 0.14 230)", glow: "oklch(0.92 0.07 220)" },
+  // Violet macaron
+  espresso: { front: "oklch(0.86 0.08 295)", mid: "oklch(0.86 0.08 295)", deep: "oklch(0.46 0.18 295)", glow: "oklch(0.90 0.08 295)" },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
