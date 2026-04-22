@@ -913,7 +913,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         title={title}
         questions={filtered}
         accent={accent}
-        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2 & 3"}
+        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2"}
       />
     </div>
   );
@@ -959,6 +959,13 @@ function ReadingSection() {
 /* ------------------------------------------------------------------ */
 /* Sub-section + question card                                         */
 /* ------------------------------------------------------------------ */
+
+type QuestionType =
+  | "Writing Task 1"
+  | "Writing Task 2"
+  | "Speaking Part 1"
+  | "Speaking Part 2"
+  | "Speaking Part 3";
 
 function SubSection({
   eyebrow,
