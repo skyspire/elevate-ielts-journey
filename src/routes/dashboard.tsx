@@ -514,48 +514,21 @@ function FeatureCard({
 
   const inner = (
     <div className="relative h-full w-full">
-      {/* Glow halo — blooms on hover */}
+      {/* Crisp flat box — solid pastel fill, tight corners, thin dark border, no shadow */}
       <span
-        aria-hidden
-        className="pointer-events-none absolute -inset-2 rounded-[28px] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
-        style={{ background: tone.glow }}
-      />
-
-      {/* Tilted shadow plate behind the card (peeks on hover) */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[22px] transition-all duration-500 ease-out group-hover:rotate-[-3deg] group-hover:translate-x-[-4px] group-hover:translate-y-[6px]"
-        style={{
-          background: tone.deep,
-          transform: "rotate(-1.5deg)",
-          opacity: 0.85,
-        }}
-      />
-
-      {/* Front card — vibrant gradient surface */}
-      <span
-        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[22px] border border-white/40 shadow-[0_6px_14px_oklch(0.20_0.04_60/0.12),0_22px_50px_-22px_oklch(0.20_0.04_60/0.40)] transition-all duration-500 ease-out group-hover:-translate-y-1.5 group-hover:rotate-[1deg] group-hover:shadow-[0_12px_28px_oklch(0.20_0.04_60/0.18),0_34px_70px_-22px_oklch(0.20_0.04_60/0.45)] ${
+        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[6px] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 ${
           isHighlighted ? "p-4 sm:p-5" : "p-3.5 sm:p-4"
         }`}
         style={{
-          background: `linear-gradient(140deg, ${tone.front} 0%, ${tone.mid} 100%)`,
+          background: tone.front,
+          border: `1px solid ${tone.deep}`,
         }}
       >
-        {/* Subtle top highlight — keeps a hint of dimension on flat color */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/3 rounded-t-[22px]"
-          style={{
-            background:
-              "linear-gradient(180deg, oklch(1 0 0 / 0.22) 0%, oklch(1 0 0 / 0) 100%)",
-          }}
-        />
-
-        {/* Animated motif loop — centered scene, the visual focus */}
+        {/* Animated motif loop — the Lottie-style scene, kept intact */}
         <CardMotif
           kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
           color={tone.deep}
-          className="opacity-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+          className="opacity-95 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
         />
 
         {/* Title — centered chip pinned to the bottom */}
