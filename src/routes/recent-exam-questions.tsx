@@ -280,9 +280,20 @@ function RecentExamQuestionsPage() {
                 />
               </svg>
             </div>
-            <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/60 sm:text-base">
-              Verified Writing & Speaking questions reported by real test-takers — updated each
-              month.
+            <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/65 sm:text-base">
+              Verified Writing &amp; Speaking questions reported by{" "}
+              <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-2px] bottom-[2px] -z-0 h-[55%] -rotate-[1.5deg] rounded-[2px]"
+                  style={{
+                    background:
+                      "linear-gradient(100deg, oklch(0.92 0.16 95 / 0.85) 0%, oklch(0.88 0.18 90 / 0.85) 60%, oklch(0.92 0.16 95 / 0.7) 100%)",
+                  }}
+                />
+                <span className="relative">real test-takers</span>
+              </span>{" "}
+              — updated each month.
             </p>
           </div>
 
