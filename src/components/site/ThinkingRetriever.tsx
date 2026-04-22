@@ -1,64 +1,52 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import sittingImg from "@/assets/retriever-body.png";
-import runVideo from "@/assets/retriever-run.mp4.asset.json";
+import runningImg from "@/assets/retriever-running.png";
 
 type Phase = "idle" | "perk" | "run" | "gone";
 
 export function ThinkingRetriever({ taskSelected }: { taskSelected: boolean }) {
   const [phase, setPhase] = useState<Phase>("idle");
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (!taskSelected) {
       setPhase("idle");
       return;
     }
-    // tiny perk reaction → play running video → fade out → gone
     setPhase("perk");
     const t1 = window.setTimeout(() => setPhase("run"), 280);
-    // Total visible run window before dash-off completes
-    const t2 = window.setTimeout(() => setPhase("gone"), 280 + 2200);
+    const t2 = window.setTimeout(() => setPhase("gone"), 280 + 1600);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
   }, [taskSelected]);
 
-  // Try to start playback as soon as the video appears
-  useEffect(() => {
-    if (phase === "run" && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      const playPromise = videoRef.current.play();
-      if (playPromise && typeof playPromise.catch === "function") {
-        playPromise.catch(() => {/* ignored — autoplay may be restricted */});
-      }
-    }
-  }, [phase]);
-
   if (phase === "gone") return null;
 
   return (
     <div
       aria-hidden
-      className="pointer-events-none relative mx-auto mt-4 flex h-[200px] w-full items-end justify-center overflow-hidden sm:h-[240px]"
+      className="pointer-events-none relative mx-auto mt-4 flex h-[200px] w-full items-end justify-center sm:h-[240px]"
     >
       <style>{`
+        /* Sitting body breathing */
         @keyframes ret-breathe {
           0%, 100% { transform: translateY(0) scale(1); }
           50%      { transform: translateY(-3px) scale(1.012); }
         }
+        /* Head thinking — slow tilt left/right */
         @keyframes ret-head-think {
-          0%   { transform: rotate(0deg) translateY(0); }
-          18%  { transform: rotate(-9deg) translateY(-1px); }
-          34%  { transform: rotate(-9deg) translateY(-1px); }
-          50%  { transform: rotate(2deg) translateY(0); }
-          66%  { transform: rotate(10deg) translateY(-1px); }
-          82%  { transform: rotate(10deg) translateY(-1px); }
-          100% { transform: rotate(0deg) translateY(0); }
+          0%   { transform: rotate(0deg); }
+          18%  { transform: rotate(-9deg); }
+          34%  { transform: rotate(-9deg); }
+          50%  { transform: rotate(2deg); }
+          66%  { transform: rotate(10deg); }
+          82%  { transform: rotate(10deg); }
+          100% { transform: rotate(0deg); }
         }
         @keyframes ret-perk {
           0%, 100% { transform: translateY(0) scale(1); }
-          50%      { transform: translateY(-6px) scale(1.04); }
+          50%      { transform: translateY(-8px) scale(1.06); }
         }
         @keyframes qmark-pop {
           0%   { transform: translateY(8px) scale(0.4); opacity: 0; }
@@ -66,36 +54,48 @@ export function ThinkingRetriever({ taskSelected }: { taskSelected: boolean }) {
           70%  { transform: translateY(-4px) scale(1); opacity: 1; }
           100% { transform: translateY(-12px) scale(0.85); opacity: 0; }
         }
-        @keyframes ret-dash-off {
-          0%   { transform: translateX(0); opacity: 1; }
-          60%  { transform: translateX(40vw); opacity: 1; }
-          100% { transform: translateX(120vw); opacity: 0; }
+        /* Combined gallop: bouncing up/down while sliding right off-screen */
+        @keyframes ret-run-across {
+          0%   { transform: translate(0, 0) rotate(-2deg); opacity: 1; }
+          10%  { transform: translate(8vw, -12px) rotate(2deg); opacity: 1; }
+          20%  { transform: translate(18vw, 0) rotate(-2deg); opacity: 1; }
+          30%  { transform: translate(28vw, -14px) rotate(2deg); opacity: 1; }
+          40%  { transform: translate(38vw, 0) rotate(-2deg); opacity: 1; }
+          55%  { transform: translate(55vw, -12px) rotate(2deg); opacity: 1; }
+          75%  { transform: translate(80vw, -8px) rotate(-1deg); opacity: 1; }
+          100% { transform: translate(140vw, 0) rotate(0deg); opacity: 0; }
+        }
+        @keyframes dust-puff {
+          0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+          25%  { opacity: 0.55; }
+          100% { transform: translate(-50px, -4px) scale(1.6); opacity: 0; }
         }
       `}</style>
 
       {/* Soft ground shadow under the dog (only while sitting) */}
-      <div
-        className="absolute bottom-3 left-1/2 h-3 w-36 -translate-x-1/2 rounded-[50%] bg-foreground/20 blur-md transition-opacity duration-300"
-        style={{ opacity: phase === "run" ? 0 : 0.55 }}
-      />
+      {phase !== "run" && (
+        <div
+          className="absolute bottom-3 left-1/2 h-3 w-36 -translate-x-1/2 rounded-[50%] bg-foreground/20 blur-md"
+          style={{ opacity: 0.55 }}
+        />
+      )}
 
       {phase === "run" ? (
-        // Animated running clip — slides off to the right while playing
+        // Running across the screen using the transparent running PNG
         <div
-          className="relative"
+          className="absolute bottom-2 left-1/2 -ml-[100px] sm:-ml-[120px]"
           style={{
-            animation: "ret-dash-off 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards",
+            animation: "ret-run-across 1.6s cubic-bezier(0.4, 0, 0.6, 1) forwards",
             willChange: "transform, opacity",
           }}
         >
-          <video
-            ref={videoRef}
-            src={runVideo.url}
-            autoPlay
-            muted
-            playsInline
-            loop
-            className="h-[180px] w-auto object-contain drop-shadow-[0_10px_14px_oklch(0.30_0.06_45_/_0.25)] sm:h-[220px]"
+          <img
+            src={runningImg}
+            alt=""
+            loading="lazy"
+            width={1024}
+            height={1024}
+            className="h-[170px] w-auto object-contain drop-shadow-[0_10px_14px_oklch(0.30_0.06_45_/_0.25)] sm:h-[210px]"
           />
         </div>
       ) : (
@@ -107,7 +107,6 @@ export function ThinkingRetriever({ taskSelected }: { taskSelected: boolean }) {
             willChange: "transform",
           }}
         >
-          {/* Question marks above head */}
           {phase === "idle" && (
             <div
               className="absolute -top-12 left-1/2 -translate-x-1/2 sm:-top-14"
