@@ -241,7 +241,7 @@ function CounterStage({ active }: { active: boolean }) {
 
   return (
     <div className="relative mx-auto mt-12 h-[460px] w-full max-w-5xl sm:h-[540px]">
-      {/* Falling flags — bigger, dulled, behind */}
+      {/* Floating learner avatars — drift continuously, behind the number */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -249,7 +249,7 @@ function CounterStage({ active }: { active: boolean }) {
         {rainConfig.map((f, i) => (
           <span
             key={i}
-            className="absolute leading-none"
+            className="absolute"
             style={{
               left: `${f.startX}%`,
               top: 0,
@@ -261,7 +261,6 @@ function CounterStage({ active }: { active: boolean }) {
               ["--rotate" as string]: `${f.rotate}deg`,
             }}
           >
-            {/* Continuous horizontal drift */}
             <span
               className="block"
               style={{
@@ -269,20 +268,44 @@ function CounterStage({ active }: { active: boolean }) {
                 ["--drift-amp" as string]: `${f.driftAmp}px`,
               }}
             >
-              {/* Continuous vertical bob + sway */}
               <span
-                className="block"
+                className="relative block"
                 style={{
-                  fontSize: `${f.size}rem`,
-                  opacity: 0.55,
-                  filter:
-                    "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+                  width: `${f.size}px`,
+                  height: `${f.size}px`,
                   animation: `lw-bob ${f.bobDur}s ease-in-out ${f.bobDelay}s infinite`,
                   ["--bob-amp" as string]: `${f.bobAmp}px`,
                   ["--sway-deg" as string]: `${f.swayDeg}deg`,
+                  filter:
+                    "drop-shadow(0 8px 20px rgba(15,23,42,0.18)) saturate(0.9)",
                 }}
               >
-                {f.flag}
+                <img
+                  src={f.img}
+                  alt=""
+                  loading="lazy"
+                  width={f.size}
+                  height={f.size}
+                  className="h-full w-full rounded-full object-cover"
+                  style={{
+                    border: "3px solid oklch(0.99 0.008 85)",
+                    opacity: 0.92,
+                  }}
+                />
+                {/* Tiny flag pin */}
+                <span
+                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full"
+                  style={{
+                    width: `${Math.max(20, f.size * 0.36)}px`,
+                    height: `${Math.max(20, f.size * 0.36)}px`,
+                    fontSize: `${Math.max(11, f.size * 0.22)}px`,
+                    background: "oklch(0.99 0.008 85)",
+                    boxShadow: "0 2px 6px rgba(15,23,42,0.18)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {f.flag}
+                </span>
               </span>
             </span>
           </span>
