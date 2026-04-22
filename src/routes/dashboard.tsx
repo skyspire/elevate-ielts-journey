@@ -531,6 +531,13 @@ function FeatureCard({
         }`}
         style={{ background: tone.front }}
       >
+        {/* Animated motif loop — unique per card */}
+        <CardMotif
+          kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
+          color={tone.deep}
+          className="opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+        />
+
         {/* Subtle paper grain */}
         <span
           aria-hidden
