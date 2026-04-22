@@ -950,30 +950,35 @@ function ReadingSection() {
 
 function SubSection({
   eyebrow,
+  emoji,
   title,
   questions,
   accent,
+  sectionLabel,
 }: {
   eyebrow: string;
+  emoji: string;
   title: string;
   questions: Question[];
   accent: string;
+  sectionLabel: string;
 }) {
   return (
     <section>
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <p
-            className="font-display text-[10px] font-black uppercase tracking-[0.24em]"
-            style={{ color: accent }}
-          >
+          <p className="font-display text-xs font-black uppercase tracking-[0.22em] text-foreground/65 sm:text-sm">
+            <span className="mr-1.5">{emoji}</span>
             {eyebrow}
           </p>
-          <h2 className="mt-1 font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          <h2 className="mt-2 font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
             {title}
           </h2>
         </div>
-        <span className="hidden font-mono text-[11px] font-semibold tabular-nums text-foreground/45 sm:inline">
+        <span
+          className="hidden font-mono text-[11px] font-semibold tabular-nums sm:inline"
+          style={{ color: accent }}
+        >
           {String(questions.length).padStart(2, "0")} questions
         </span>
       </div>
@@ -984,9 +989,9 @@ function SubSection({
           </p>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
           {questions.map((q) => (
-            <ExamQuestionCard key={q.title} q={q} accent={accent} />
+            <ExamQuestionCard key={q.title} q={q} sectionLabel={sectionLabel} />
           ))}
         </div>
       )}
@@ -994,62 +999,93 @@ function SubSection({
   );
 }
 
-function ExamQuestionCard({ q, accent }: { q: Question; accent: string }) {
+/* Tag → pastel palette mapping (band background + category text color) */
+const TAG_PALETTE: Record<string, { band: string; text: string }> = {
+  // greens
+  Environment: { band: "oklch(0.92 0.07 165)", text: "oklch(0.30 0.10 175)" },
+  Health: { band: "oklch(0.93 0.06 160)", text: "oklch(0.32 0.10 170)" },
+  // blues
+  Education: { band: "oklch(0.92 0.05 235)", text: "oklch(0.40 0.16 245)" },
+  Technology: { band: "oklch(0.92 0.05 240)", text: "oklch(0.38 0.18 250)" },
+  Society: { band: "oklch(0.93 0.05 235)", text: "oklch(0.40 0.16 240)" },
+  // peach / orange
+  "Bar Chart": { band: "oklch(0.93 0.05 65)", text: "oklch(0.42 0.12 50)" },
+  "Line Graph": { band: "oklch(0.93 0.05 70)", text: "oklch(0.42 0.13 55)" },
+  Process: { band: "oklch(0.93 0.06 75)", text: "oklch(0.42 0.13 60)" },
+  Map: { band: "oklch(0.93 0.05 60)", text: "oklch(0.42 0.13 50)" },
+  // letters / formal
+  Formal: { band: "oklch(0.92 0.05 280)", text: "oklch(0.40 0.15 285)" },
+  "Semi-formal": { band: "oklch(0.92 0.05 290)", text: "oklch(0.40 0.15 290)" },
+  Informal: { band: "oklch(0.93 0.05 320)", text: "oklch(0.42 0.16 330)" },
+  // speaking
+  "Part 1": { band: "oklch(0.93 0.05 220)", text: "oklch(0.40 0.15 230)" },
+  "Part 2": { band: "oklch(0.92 0.05 200)", text: "oklch(0.38 0.14 205)" },
+  "Part 3": { band: "oklch(0.92 0.05 190)", text: "oklch(0.38 0.14 195)" },
+};
+
+const FALLBACK_PALETTE = { band: "oklch(0.93 0.04 80)", text: "oklch(0.40 0.10 70)" };
+
+function ExamQuestionCard({ q, sectionLabel }: { q: Question; sectionLabel: string }) {
   const locked = q.locked ?? true;
   const band = q.band ?? "Band 8.5";
+  const palette = TAG_PALETTE[q.tag] ?? FALLBACK_PALETTE;
+
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
-      {/* Accent rail */}
-      <span
-        aria-hidden
-        className="absolute left-0 top-0 h-full w-1"
-        style={{ background: accent }}
-      />
-      <div className="flex flex-1 flex-col gap-4 p-5 pl-6 sm:p-6 sm:pl-7">
-        {/* Tag */}
-        <div className="flex items-center justify-between gap-3">
+    <div className="flex flex-col gap-3">
+      <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
+        {/* Pastel header band */}
+        <div
+          className="flex items-center justify-between gap-3 px-5 py-4 sm:px-6 sm:py-5"
+          style={{ background: palette.band }}
+        >
           <span
-            className="inline-flex rounded-full px-2.5 py-1 font-display text-[10px] font-black uppercase tracking-[0.18em]"
-            style={{ background: `color-mix(in oklab, ${accent} 12%, white)`, color: accent }}
+            className="font-display text-sm font-black uppercase tracking-[0.18em] sm:text-base"
+            style={{ color: palette.text }}
           >
             {q.tag}
           </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-foreground/50">
-            <Calendar className="h-3 w-3" strokeWidth={2.6} />
-            {q.date}
-          </span>
-        </div>
-
-        {/* Question */}
-        <h3 className="font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground sm:text-base">
-          {q.title}
-        </h3>
-
-        {/* Footer */}
-        <div className="mt-auto flex items-center justify-between border-t border-foreground/10 pt-4">
-          <span className="rounded-full bg-secondary px-2 py-0.5 font-display text-[10px] font-black uppercase tracking-[0.18em] text-secondary-foreground">
-            {band}
-          </span>
           <span
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:text-white"
-            style={{
-              backgroundColor: locked ? undefined : accent,
-            }}
+            className="inline-flex shrink-0 rounded-full bg-white/90 px-3 py-1.5 font-display text-[10px] font-black uppercase tracking-[0.16em] sm:text-[11px]"
+            style={{ color: palette.text }}
           >
-            {locked ? (
-              <Lock className="h-3.5 w-3.5" strokeWidth={2.6} />
-            ) : (
-              <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
-            )}
+            {sectionLabel}
           </span>
         </div>
 
-        {locked && (
-          <p className="-mt-1 text-[11px] font-semibold text-foreground/55">
-            Sign up to read · free sample available
-          </p>
-        )}
-      </div>
-    </article>
+        {/* Body */}
+        <div className="flex flex-1 flex-col gap-5 p-5 sm:p-6">
+          <h3 className="font-display text-lg font-black leading-snug tracking-tight text-foreground sm:text-xl">
+            {q.title}
+          </h3>
+
+          {/* Footer */}
+          <div className="mt-auto flex items-center justify-between border-t border-foreground/10 pt-4">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-foreground/55 sm:text-sm">
+                <Calendar className="h-3.5 w-3.5" strokeWidth={2.6} />
+                {q.date}
+              </span>
+              <span className="rounded-full bg-foreground/[0.08] px-2.5 py-0.5 font-display text-[10px] font-black uppercase tracking-[0.18em] text-foreground/70">
+                {band}
+              </span>
+            </div>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.08] text-foreground/60">
+              {locked ? (
+                <Lock className="h-3.5 w-3.5" strokeWidth={2.6} />
+              ) : (
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
+              )}
+            </span>
+          </div>
+        </div>
+      </article>
+
+      {/* Below-card caption */}
+      {locked && (
+        <p className="px-1 text-[12px] font-semibold text-foreground/55">
+          Sign up to read · free sample
+        </p>
+      )}
+    </div>
   );
 }
