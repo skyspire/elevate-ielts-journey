@@ -48,6 +48,7 @@ type Feature = {
   tone: "espresso" | "navy" | "forest" | "plum" | "rust" | "teal" | "ochre";
   icon: ComponentType<LucideProps>;
   to?: string;
+  highlighted?: boolean;
 };
 
 const features: Feature[] = [
