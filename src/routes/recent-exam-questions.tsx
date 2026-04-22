@@ -14,7 +14,7 @@ import { Footer } from "@/components/site/Footer";
 
 type Module = "academic" | "general";
 type WritingTask = "task1" | "task2";
-type SpeakingPart = "part1" | "part2" | "part3";
+type SpeakingPart = "part1" | "part2";
 type ExamSection = "writing" | "speaking";
 
 const searchSchema = z.object({
