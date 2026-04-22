@@ -204,11 +204,7 @@ function CounterStage({ active }: { active: boolean }) {
             style={{
               left: `${f.startX}%`,
               top: 0,
-              fontSize: `${f.size}rem`,
-              // Dulled so the number can shine
-              opacity: active ? 0.55 : 0,
-              filter:
-                "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+              opacity: active ? 1 : 0,
               animation: active
                 ? `lw-fall ${f.duration}s cubic-bezier(0.34, 1.2, 0.64, 1) ${f.delay}s both`
                 : "none",
@@ -216,7 +212,30 @@ function CounterStage({ active }: { active: boolean }) {
               ["--rotate" as string]: `${f.rotate}deg`,
             }}
           >
-            {f.flag}
+            {/* Continuous horizontal drift */}
+            <span
+              className="block"
+              style={{
+                animation: `lw-drift ${f.driftDur}s ease-in-out ${f.driftDelay}s infinite`,
+                ["--drift-amp" as string]: `${f.driftAmp}px`,
+              }}
+            >
+              {/* Continuous vertical bob + sway */}
+              <span
+                className="block"
+                style={{
+                  fontSize: `${f.size}rem`,
+                  opacity: 0.55,
+                  filter:
+                    "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+                  animation: `lw-bob ${f.bobDur}s ease-in-out ${f.bobDelay}s infinite`,
+                  ["--bob-amp" as string]: `${f.bobAmp}px`,
+                  ["--sway-deg" as string]: `${f.swayDeg}deg`,
+                }}
+              >
+                {f.flag}
+              </span>
+            </span>
           </span>
         ))}
       </div>
