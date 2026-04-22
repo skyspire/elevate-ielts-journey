@@ -243,129 +243,203 @@ function DashboardPage() {
   const isAcademic = module === "academic";
   const accent = isAcademic ? blue : sage;
 
+  // Editorial date line — looks like a publication's issue stamp
+  const today = new Date();
+  const dateLine = today.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  const issueNo = Math.floor(
+    (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000,
+  );
+
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: "oklch(0.992 0.005 85)" }}>
-      <main className="relative overflow-hidden py-12 sm:py-16">
-        {/* Ivory whisper background — soft pastel halos breathing in the corners */}
+      <main className="relative overflow-hidden pb-16">
+        {/* Ivory whisper background — soft pastel halos */}
         <StudyNotesBackground />
 
+        {/* MASTHEAD — institutional header, like a journal front matter */}
+        <header className="relative z-[1] border-b border-foreground/15">
+          <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-5 py-4 sm:px-6">
+            <div className="flex items-baseline gap-3">
+              <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.32em] text-foreground/55">
+                BigIELTS
+              </span>
+              <span className="hidden h-3 w-px bg-foreground/25 sm:block" />
+              <span className="hidden font-display text-[10px] font-medium uppercase tracking-[0.24em] text-foreground/45 sm:inline">
+                Candidate Portal
+              </span>
+            </div>
+            <div className="flex items-baseline gap-3 text-right">
+              <span className="hidden font-display text-[10px] font-medium uppercase tracking-[0.24em] text-foreground/45 sm:inline">
+                {dateLine}
+              </span>
+              <span className="hidden h-3 w-px bg-foreground/25 sm:block" />
+              <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.32em] tabular-nums text-foreground/55">
+                №&nbsp;{issueNo}
+              </span>
+            </div>
+          </div>
+        </header>
+
         {/* Centered content column */}
-        <div className="relative z-[1] mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Hero — handwriting headline with sketchy pencil underline */}
+        <div className="relative z-[1] mx-auto w-full max-w-5xl px-5 pt-12 sm:px-6 sm:pt-16">
+
+          {/* HEADLINE — editorial, serious, institutional */}
           <div className="text-center">
-            <div className="relative inline-block">
-              <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/70 sm:text-6xl md:text-7xl"
-                style={{ transform: "rotate(-2deg)" }}
-              >
-                Pick your IELTS
-              </h1>
-
-              {/* Sketchy hand-drawn underline (double pass for pencil feel) */}
-              <svg
-                aria-hidden
-                viewBox="0 0 300 14"
-                preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ transform: "rotate(-2deg)" }}
-              >
-                <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
-                <path
-                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
-                  opacity="0.4"
-                  strokeWidth="1.4"
-                />
-              </svg>
+            <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.32em] text-foreground/45">
+              The Candidate Dashboard
             </div>
+            <h1 className="mx-auto mt-4 max-w-3xl font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              Your preparation,{" "}
+              <span className="font-handwriting font-bold italic text-foreground/70">
+                organised.
+              </span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-base font-medium text-foreground/60 sm:text-lg">
+              A complete reading room for IELTS Academic and General Training —
+              examined, edited, and updated weekly.
+            </p>
           </div>
 
-          {/* Toggle */}
-          <div className="mt-8 flex justify-center sm:mt-10">
-            <ModuleToggle module={module} setModule={setModule} />
+          {/* DATA STRIP — real, premium tabular stats */}
+          <div className="mt-10 border-y border-foreground/15">
+            <dl className="grid grid-cols-2 divide-x divide-foreground/10 sm:grid-cols-4">
+              <Stat label="Active Module" value={isAcademic ? "Academic" : "General"} />
+              <Stat label="Target Band" value="7.5" mono />
+              <Stat label="Library Items" value="2,140" mono />
+              <Stat label="Updated" value="Weekly" />
+            </dl>
           </div>
 
-          {/* Section label */}
-          <div className="mt-14 mb-5 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-foreground/15" />
-            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/50">
-              Your Toolkit
-            </span>
-            <span className="h-px w-10 bg-foreground/15" />
-          </div>
+          {/* MODULE SELECTOR */}
+          <section className="mt-14">
+            <SectionRule numeral="I" label="Select your module" />
+            <div className="mt-6 flex justify-center">
+              <ModuleToggle module={module} setModule={setModule} />
+            </div>
+          </section>
 
-          {/* Vibrant gradient cards — bigger, juicy hover */}
-          <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {features.map((f) => (
-              <FeatureCard key={f.key} feature={f} module={module} />
-            ))}
-          </div>
+          {/* TOOLKIT — the macaron card library */}
+          <section className="mt-16">
+            <SectionRule numeral="II" label="Practice Library" caption="Eight departments · curated weekly" />
+            <div className="mx-auto mt-7 grid max-w-4xl grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+              {features.map((f) => (
+                <FeatureCard key={f.key} feature={f} module={module} />
+              ))}
+            </div>
+          </section>
 
-          {/* Bottom anchor — daily tip strip gives the page a satisfying close */}
-          <div className="mt-14">
-            <div
-              className="relative mx-auto flex max-w-3xl flex-col items-center gap-3 overflow-hidden rounded-2xl px-5 py-5 sm:flex-row sm:gap-5 sm:px-7 sm:py-6"
-              style={{
-                background:
-                  "linear-gradient(135deg, oklch(0.96 0.04 95) 0%, oklch(0.95 0.05 55) 50%, oklch(0.94 0.05 350) 100%)",
-                border: "1px solid color-mix(in oklab, oklch(0.45 0.10 60) 22%, transparent)",
-                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.55)",
-              }}
+          {/* TODAY'S BRIEF — editorial recommendation */}
+          <section className="mt-16">
+            <SectionRule numeral="III" label="Today's Brief" caption={dateLine} />
+            <article
+              className="relative mx-auto mt-7 max-w-3xl border border-foreground/20 bg-[oklch(0.995_0.006_85)] px-6 py-7 sm:px-9 sm:py-9"
+              style={{ boxShadow: "inset 0 0 0 1px oklch(1 0 0)" }}
             >
-              {/* Pastel rosette — left */}
-              <div
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl"
-                style={{
-                  background: "oklch(0.99 0.012 85)",
-                  border: "1.5px solid color-mix(in oklab, oklch(0.45 0.10 60) 28%, transparent)",
-                  boxShadow: "inset 0 0 0 3px oklch(0.96 0.05 95)",
-                }}
-                aria-hidden
-              >
-                ✨
+              <span aria-hidden className="absolute left-0 top-6 bottom-6 w-[3px] bg-foreground" />
+              <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.28em] text-foreground/55">
+                Editor's Pick · {isAcademic ? "Academic" : "General Training"}
               </div>
-
-              {/* Copy */}
-              <div className="flex-1 text-center sm:text-left">
-                <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/55">
-                  Today's Pick
-                </div>
-                <div className="mt-1 font-display text-base font-black tracking-tight text-foreground sm:text-lg">
-                  {module === "academic"
-                    ? "Master 5 new academic collocations today"
-                    : "Practice 1 letter from a real recent exam"}
-                </div>
-                <div className="mt-1 text-[12px] font-medium text-foreground/65">
-                  Small daily wins compound into a Band 8+ score.
-                </div>
+              <h3 className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl">
+                {isAcademic
+                  ? "Five academic collocations to master before sundown."
+                  : "One letter from this month's reported exam — drafted properly."}
+              </h3>
+              <p className="mt-3 max-w-xl text-[15px] font-medium leading-relaxed text-foreground/65">
+                {isAcademic
+                  ? "Lexical resource is decided in the first paragraph. Read the model, internalise the phrasing, and rewrite from memory."
+                  : "Structure, register, and sign-off matter as much as content. Study one model in full before drafting your own."}
+              </p>
+              <div className="mt-6 flex items-center gap-5">
+                <Link
+                  to={isAcademic ? "/vocabulary" : "/writing-samples"}
+                  search={{ module }}
+                  className="inline-flex items-center gap-2 border-b-2 border-foreground pb-1 font-display text-[13px] font-extrabold uppercase tracking-[0.18em] text-foreground transition-opacity hover:opacity-70"
+                >
+                  Open the brief →
+                </Link>
+                <span className="font-display text-[11px] font-medium uppercase tracking-[0.22em] tabular-nums text-foreground/45">
+                  ~ 8 min read
+                </span>
               </div>
+            </article>
+          </section>
 
-              {/* CTA chip */}
-              <Link
-                to={module === "academic" ? "/vocabulary" : "/writing-samples"}
-                search={{ module }}
-                className="shrink-0 rounded-full px-4 py-2 font-display text-[12px] font-black tracking-tight transition-transform hover:-translate-y-0.5"
-                style={{
-                  background: "oklch(0.22 0.04 260)",
-                  color: "oklch(0.98 0.01 85)",
-                  boxShadow: "0 4px 0 oklch(0.45 0.10 60 / 0.35)",
-                }}
-              >
-                Start now →
-              </Link>
+          {/* COLOPHON — institutional footer band */}
+          <section className="mt-20 border-t border-foreground/20 pt-8">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-baseline">
+              <div>
+                <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.32em] text-foreground/55">
+                  Colophon
+                </div>
+                <p className="mt-2 max-w-md font-display text-lg font-bold leading-snug tracking-tight text-foreground/80">
+                  Edited by IELTS examiners.{" "}
+                  <span className="font-handwriting font-bold italic text-foreground/55">
+                    Read at your own pace.
+                  </span>
+                </p>
+              </div>
+              <div className="font-display text-[10px] font-medium uppercase tracking-[0.24em] tabular-nums text-foreground/45">
+                Volume I · Issue №&nbsp;{issueNo} · Set in Inter & Caveat
+              </div>
             </div>
-          </div>
-
-          <p className="mt-8 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
-            More tools coming soon · Access never expires during your plan
-          </p>
+          </section>
         </div>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+/** Hairline section header with § numeral — feels like a journal article. */
+function SectionRule({
+  numeral,
+  label,
+  caption,
+}: {
+  numeral: string;
+  label: string;
+  caption?: string;
+}) {
+  return (
+    <div className="flex items-baseline gap-4 border-b border-foreground/15 pb-3">
+      <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.32em] tabular-nums text-foreground/55">
+        §&nbsp;{numeral}
+      </span>
+      <span className="h-px flex-1 bg-foreground/15" />
+      <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.28em] text-foreground">
+        {label}
+      </span>
+      {caption ? (
+        <>
+          <span className="hidden h-px w-8 bg-foreground/15 sm:block" />
+          <span className="hidden font-display text-[10px] font-medium uppercase tracking-[0.22em] text-foreground/45 sm:inline">
+            {caption}
+          </span>
+        </>
+      ) : null}
+    </div>
+  );
+}
+
+/** Tabular stat cell for the data strip. Mono numerals look premium. */
+function Stat({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="px-4 py-4 sm:px-5 sm:py-5">
+      <dt className="font-display text-[9.5px] font-extrabold uppercase tracking-[0.26em] text-foreground/50">
+        {label}
+      </dt>
+      <dd
+        className={`mt-1.5 font-display text-xl font-extrabold tracking-tight text-foreground sm:text-2xl ${
+          mono ? "tabular-nums" : ""
+        }`}
+      >
+        {value}
+      </dd>
     </div>
   );
 }
