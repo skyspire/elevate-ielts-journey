@@ -131,17 +131,17 @@ function StatCard({
       className="group relative flex flex-col items-center rounded-2xl px-5 py-8 text-center sm:px-6 sm:py-10"
       style={{
         background:
-          "linear-gradient(180deg, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0.35) 100%)",
-        backdropFilter: "blur(14px) saturate(140%)",
-        WebkitBackdropFilter: "blur(14px) saturate(140%)",
+          "linear-gradient(180deg, oklch(1 0 0 / 0.12) 0%, oklch(1 0 0 / 0.05) 100%)",
+        backdropFilter: "blur(20px) saturate(160%)",
+        WebkitBackdropFilter: "blur(20px) saturate(160%)",
         boxShadow:
-          "inset 0 1px 0 oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.3 0.04 60 / 0.06), 0 18px 40px -12px oklch(0.3 0.04 60 / 0.18)",
-        border: "1px solid oklch(1 0 0 / 0.5)",
+          "inset 0 1px 0 oklch(1 0 0 / 0.25), 0 1px 2px oklch(0 0 0 / 0.2), 0 20px 50px -12px oklch(0.1 0.06 280 / 0.6)",
+        border: "1px solid oklch(1 0 0 / 0.18)",
       }}
     >
-      <div className="font-display text-5xl font-black tabular-nums tracking-tight text-[oklch(0.16_0.03_60)] sm:text-6xl md:text-[64px]">
+      <div className="font-display text-5xl font-black tabular-nums tracking-tight text-[oklch(0.98_0.01_270)] sm:text-6xl md:text-[64px]">
         {value.toLocaleString()}
-        <span className="text-[oklch(0.55_0.18_30)]">{stat.suffix}</span>
+        <span className="text-[oklch(0.82_0.16_55)]">{stat.suffix}</span>
       </div>
 
       {/* Hand-drawn underline that draws as the counter runs */}
@@ -154,7 +154,7 @@ function StatCard({
         <path
           d="M4 8 C 40 2, 90 12, 130 6 S 190 4, 196 9"
           fill="none"
-          stroke="oklch(0.55 0.18 30)"
+          stroke="oklch(0.82 0.16 55)"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeDasharray="220"
@@ -163,7 +163,7 @@ function StatCard({
         />
       </svg>
 
-      <div className="mt-4 font-display text-sm font-bold uppercase tracking-[0.18em] text-[oklch(0.32_0.04_60)] sm:text-[15px]">
+      <div className="mt-4 font-display text-sm font-bold uppercase tracking-[0.18em] text-[oklch(0.85_0.03_270)] sm:text-[15px]">
         {stat.label}
       </div>
     </div>
