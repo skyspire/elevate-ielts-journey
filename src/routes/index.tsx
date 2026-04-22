@@ -6,10 +6,7 @@ import { ValueStatement } from "@/components/site/ValueStatement";
 import { TrustCompare } from "@/components/site/TrustCompare";
 import { TryFreeSection } from "@/components/site/TryFreeSection";
 import { LatestQuestions } from "@/components/site/LatestQuestions";
-import { SamplePreview } from "@/components/site/SamplePreview";
 import { CategorySections } from "@/components/site/CategorySections";
-import { Ebooks } from "@/components/site/Ebooks";
-import { WhyChooseUs } from "@/components/site/WhyChooseUs";
 import { HowItWorks } from "@/components/site/HowItWorks";
 
 import { CtaBanner } from "@/components/site/CtaBanner";
@@ -30,10 +27,7 @@ function Index() {
         <TrustCompare />
         <TryFreeSection />
         <LatestQuestions />
-        <SamplePreview />
         <CategorySections />
-        <Ebooks />
-        <WhyChooseUs />
         <HowItWorks />
         <CtaBanner />
       </main>
