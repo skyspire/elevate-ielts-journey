@@ -355,8 +355,26 @@ export function LearnersWorld() {
           from { transform: translateX(0); }
           to   { transform: translateX(-50%); }
         }
+        @keyframes lw-fall {
+          0% {
+            transform: translate3d(0, -120%, 0) rotate(0deg);
+            opacity: 0;
+          }
+          15% { opacity: 1; }
+          70% {
+            transform: translate3d(0, var(--rest-y, 80%), 0) rotate(var(--rotate, 0deg));
+            opacity: 1;
+          }
+          85% {
+            transform: translate3d(0, calc(var(--rest-y, 80%) - 18px), 0) rotate(var(--rotate, 0deg));
+          }
+          100% {
+            transform: translate3d(0, var(--rest-y, 80%), 0) rotate(var(--rotate, 0deg));
+            opacity: 1;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [style*="lw-marquee"] { animation: none !important; }
+          [style*="lw-marquee"], [style*="lw-fall"] { animation: none !important; }
         }
       `}</style>
     </section>
