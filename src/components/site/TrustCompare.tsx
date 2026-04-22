@@ -211,9 +211,6 @@ export function TrustCompare() {
               </span>
               .
             </p>
-            <span className="font-handwriting text-lg text-foreground/55 sm:text-xl">
-              — straight from 30+ verified students
-            </span>
           </div>
         </div>
       </div>
