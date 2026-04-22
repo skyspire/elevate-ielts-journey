@@ -7,9 +7,9 @@ import {
   Link2,
   MessageCircle,
   ArrowUpRight,
-  ArrowLeft,
   type LucideProps,
 } from "lucide-react";
+import { BackButton } from "@/components/site/BackButton";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
 
