@@ -909,14 +909,16 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         accent={accent}
       />
 
-      <SubSection
-        eyebrow={eyebrow}
-        emoji="🎙️"
-        title={title}
-        questions={filtered}
-        accent={accent}
-        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2"}
-      />
+      <DottedResultsPanel>
+        <SubSection
+          eyebrow={eyebrow}
+          emoji="🎙️"
+          title={title}
+          questions={filtered}
+          accent={accent}
+          sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2"}
+        />
+      </DottedResultsPanel>
     </div>
   );
 }
@@ -928,7 +930,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
 function ReadingSection() {
   const accent = "oklch(0.55 0.13 155)";
   return (
-    <div className="space-y-6">
+    <DottedResultsPanel>
       <section>
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
@@ -954,6 +956,25 @@ function ReadingSection() {
           </p>
         </div>
       </section>
+    </DottedResultsPanel>
+  );
+}
+
+/* Full-bleed dotted background panel for question results area */
+function DottedResultsPanel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      {/* Full-bleed dotted background extending beyond the content container */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-full w-screen -translate-x-1/2 bg-paper-dots"
+      />
+      {/* Soft top border to separate from cream area */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-px w-screen -translate-x-1/2 bg-foreground/10"
+      />
+      <div className="py-10 sm:py-12">{children}</div>
     </div>
   );
 }
