@@ -1017,21 +1017,22 @@ function SubSection({
         </div>
       ) : (
         <>
-          <div
-            className="mb-6 flex items-start gap-3 rounded-2xl border-2 border-foreground/85 bg-white px-4 py-3 shadow-[3px_3px_0_0_hsl(var(--foreground)/0.85)] sm:items-center"
-          >
-            <span
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base"
-              style={{ backgroundColor: `color-mix(in oklab, ${accent} 18%, white)`, color: accent }}
-              aria-hidden
+          <div className="mb-7 text-center">
+            <div
+              className="mx-auto mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em]"
+              style={{
+                backgroundColor: `color-mix(in oklab, ${accent} 14%, white)`,
+                color: accent,
+              }}
             >
-              ↻
-            </span>
-            <p className="font-display text-[13px] font-bold leading-snug text-foreground sm:text-sm">
-              IELTS repeats questions year after year —{" "}
-              <span className="text-foreground/70 font-semibold">
-                every question below is worth practising.
-              </span>
+              <span aria-hidden>↻</span> Repeat alert
+            </div>
+            <h3 className="font-display text-xl font-black leading-tight tracking-tight sm:text-2xl">
+              <span style={{ color: accent }}>IELTS repeats questions</span>{" "}
+              <span className="text-foreground">year after year</span>
+            </h3>
+            <p className="mt-1.5 font-display text-sm font-bold text-foreground/65 sm:text-[15px]">
+              Every question below is worth practising.
             </p>
           </div>
           <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
