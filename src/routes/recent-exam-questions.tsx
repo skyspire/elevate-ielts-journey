@@ -475,42 +475,34 @@ function SectionTabs({
   const tabs: {
     key: ExamSection;
     label: string;
-    num: string;
     icon: typeof PenLine;
     accent: string;
     deep: string;
-    soft: string;
   }[] = [
     {
       key: "writing",
       label: "Writing",
-      num: "01",
       icon: PenLine,
-      accent: "oklch(0.55 0.18 258)",
-      deep: "oklch(0.34 0.13 260)",
-      soft: "oklch(0.96 0.03 258)",
+      accent: "oklch(0.52 0.16 258)",
+      deep: "oklch(0.32 0.10 260)",
     },
     {
       key: "speaking",
       label: "Speaking",
-      num: "02",
       icon: Mic,
-      accent: "oklch(0.58 0.20 350)",
-      deep: "oklch(0.36 0.15 350)",
-      soft: "oklch(0.96 0.03 350)",
+      accent: "oklch(0.52 0.11 195)",
+      deep: "oklch(0.30 0.08 200)",
     },
     {
       key: "reading",
       label: "Reading",
-      num: "03",
       icon: BookOpen,
-      accent: "oklch(0.62 0.16 55)",
-      deep: "oklch(0.38 0.13 55)",
-      soft: "oklch(0.96 0.04 75)",
+      accent: "oklch(0.55 0.13 45)",
+      deep: "oklch(0.34 0.09 45)",
     },
   ];
   return (
-    <div className="flex flex-wrap items-stretch justify-center gap-2 sm:gap-3">
+    <div className="inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-foreground/10 bg-white p-1.5 shadow-soft">
       {tabs.map((t) => {
         const active = section === t.key;
         const Icon = t.icon;
@@ -520,48 +512,21 @@ function SectionTabs({
             type="button"
             onClick={() => setSection(t.key)}
             aria-pressed={active}
-            className="group relative outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ ["--accent" as string]: t.accent }}
+            className="group relative inline-flex items-center gap-2 rounded-full px-4 py-2 font-display text-[13px] font-semibold tracking-tight transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-sm"
+            style={{
+              background: active ? t.accent : "transparent",
+              color: active ? "oklch(0.99 0 0)" : t.deep,
+              boxShadow: active
+                ? `0 6px 18px -8px ${t.accent}, inset 0 -1px 0 0 ${t.deep}`
+                : "none",
+            }}
           >
-            <span
-              className="relative flex items-center gap-2.5 rounded-md px-4 py-2.5 font-display text-[11px] font-bold uppercase tracking-[0.22em] transition-all duration-300 sm:gap-3 sm:px-5 sm:py-3 sm:text-[12px]"
-              style={{
-                background: active ? t.accent : "oklch(1 0 0)",
-                color: active ? "oklch(0.99 0 0)" : t.deep,
-                border: `1px solid ${active ? t.accent : "oklch(0.88 0.01 250)"}`,
-                boxShadow: active
-                  ? `0 8px 20px -8px ${t.accent}, 0 1px 0 0 ${t.deep} inset`
-                  : "0 1px 2px oklch(0 0 0 / 0.04)",
-              }}
-            >
-              <span
-                className="font-mono text-[9px] font-semibold tracking-[0.1em] tabular-nums sm:text-[10px]"
-                style={{
-                  color: active ? "oklch(0.99 0 0 / 0.65)" : t.accent,
-                }}
-              >
-                {t.num}
-              </span>
-              <span
-                className="h-3 w-px"
-                style={{
-                  background: active ? "oklch(0.99 0 0 / 0.35)" : "oklch(0.85 0.01 250)",
-                }}
-              />
-              <Icon
-                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
-                strokeWidth={active ? 2.4 : 2}
-              />
-              <span>{t.label}</span>
-            </span>
-            {/* underline accent for inactive (subtle color hint) */}
-            {!active && (
-              <span
-                aria-hidden
-                className="absolute inset-x-3 -bottom-px h-[2px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ background: t.accent }}
-              />
-            )}
+            <Icon
+              className="h-4 w-4"
+              strokeWidth={active ? 2.4 : 2}
+              style={{ color: active ? "oklch(0.99 0 0)" : t.accent }}
+            />
+            <span>{t.label}</span>
           </button>
         );
       })}
