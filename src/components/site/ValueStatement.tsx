@@ -11,20 +11,19 @@ export function ValueStatement() {
             <span className="text-foreground">Access.</span>
           </h2>
 
-          {/* Tagline pill */}
-          <div className="mt-8 flex justify-center">
-            <div
-              className="inline-flex items-center gap-2 rounded-full border px-5 py-2 font-display text-sm font-bold tracking-wide sm:text-base"
-              style={{
-                background:
-                  "linear-gradient(90deg, oklch(0.97 0.04 30 / 0.6) 0%, oklch(0.96 0.04 265 / 0.6) 100%)",
-                borderColor: "oklch(0.85 0.06 45)",
-              }}
-            >
-              <span className="text-[oklch(0.55_0.18_30)]">IELTS Academic</span>
-              <span className="text-foreground/40">+</span>
-              <span className="text-[oklch(0.45_0.18_265)]">IELTS General</span>
-              <span className="text-foreground/60">— full access, one plan</span>
+          {/* Tagline — editorial line with handwritten accent */}
+          <div className="mt-10 flex flex-col items-center gap-3">
+            <p className="font-display text-lg font-extrabold uppercase tracking-[0.22em] text-foreground sm:text-2xl">
+              <span className="text-[oklch(0.55_0.18_30)]">Academic</span>
+              <span className="mx-3 text-foreground/25">/</span>
+              <span className="text-[oklch(0.45_0.18_265)]">General</span>
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-12 bg-foreground/20" />
+              <span className="font-handwriting text-xl text-foreground/70 sm:text-2xl">
+                one plan unlocks both
+              </span>
+              <span className="h-px w-12 bg-foreground/20" />
             </div>
           </div>
 
