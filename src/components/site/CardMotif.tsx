@@ -37,7 +37,7 @@ export function CardMotif({
       aria-hidden
       viewBox="0 0 100 100"
       preserveAspectRatio="xMidYMid meet"
-      className={`pointer-events-none absolute inset-0 m-auto h-[68%] w-[68%] ${className ?? ""}`}
+      className={`pointer-events-none absolute inset-x-0 top-[6%] mx-auto h-[82%] w-[82%] ${className ?? ""}`}
     >
       {kind === "writing" && (
         <g className="motif-pencil">
