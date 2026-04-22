@@ -497,94 +497,120 @@ function FeatureCard({
   const Icon = feature.icon;
   const isHighlighted = feature.highlighted;
 
-  // Wrapper holds the stacked sheets. Wider stack for the highlighted card.
+  // Wrapper holds the whole card. Wider stack for the highlighted card.
   const wrapperClass = isHighlighted
     ? "group relative col-span-2 row-span-1 block aspect-[2/1] w-full focus-visible:outline-none"
     : "group relative block aspect-square w-full focus-visible:outline-none";
 
   const inner = (
-    <div className="relative h-full w-full" style={{ perspective: "800px" }}>
-      {/* Back sheet — deepest, peeking out top-right */}
+    <div className="relative h-full w-full">
+      {/* Glow halo — blooms on hover */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl shadow-[0_2px_4px_oklch(0.20_0.04_60/0.10)] transition-transform duration-300 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[-4px] group-hover:rotate-[2.5deg]"
+        className="pointer-events-none absolute -inset-2 rounded-[28px] opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+        style={{ background: tone.glow }}
+      />
+
+      {/* Tilted shadow plate behind the card (peeks on hover) */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[22px] transition-all duration-500 ease-out group-hover:rotate-[-3deg] group-hover:translate-x-[-4px] group-hover:translate-y-[6px]"
         style={{
           background: tone.deep,
-          transform: "translate(3px, -2px) rotate(1.4deg)",
-          transformOrigin: "bottom left",
-        }}
-      />
-      {/* Mid sheet — bottom-left peek */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl shadow-[0_2px_4px_oklch(0.20_0.04_60/0.08)] transition-transform duration-300 ease-out group-hover:translate-x-[-5px] group-hover:translate-y-[5px] group-hover:rotate-[-2.5deg]"
-        style={{
-          background: tone.mid,
-          transform: "translate(-2px, 3px) rotate(-1.2deg)",
-          transformOrigin: "top right",
+          transform: "rotate(-1.5deg)",
+          opacity: 0.85,
         }}
       />
 
-      {/* Front sheet — the real content card */}
+      {/* Front card — vibrant gradient surface */}
       <span
-        className={`relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-foreground/5 shadow-[0_4px_10px_oklch(0.20_0.04_60/0.08),0_18px_36px_-18px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_8px_18px_oklch(0.20_0.04_60/0.12),0_28px_56px_-20px_oklch(0.20_0.04_60/0.35)] ${
-          isHighlighted ? "p-4 sm:p-5" : "p-3 sm:p-3.5"
+        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[22px] border border-white/40 shadow-[0_6px_14px_oklch(0.20_0.04_60/0.12),0_22px_50px_-22px_oklch(0.20_0.04_60/0.40)] transition-all duration-500 ease-out group-hover:-translate-y-1.5 group-hover:rotate-[1deg] group-hover:shadow-[0_12px_28px_oklch(0.20_0.04_60/0.18),0_34px_70px_-22px_oklch(0.20_0.04_60/0.45)] ${
+          isHighlighted ? "p-4 sm:p-5" : "p-3.5 sm:p-4"
         }`}
-        style={{ background: tone.front }}
+        style={{
+          background: `linear-gradient(140deg, ${tone.front} 0%, ${tone.mid} 100%)`,
+        }}
       >
-        {/* Animated motif loop — unique per card */}
-        <CardMotif
-          kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
-          color={tone.deep}
-          className="opacity-70 transition-opacity duration-300 group-hover:opacity-100"
-        />
-
-        {/* Subtle paper grain */}
+        {/* Glossy top highlight */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-multiply"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[22px]"
           style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-            backgroundSize: "160px 160px",
+            background:
+              "linear-gradient(180deg, oklch(1 0 0 / 0.45) 0%, oklch(1 0 0 / 0) 100%)",
           }}
         />
 
+        {/* Animated motif loop — unique per card, brighter now */}
+        <CardMotif
+          kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
+          color={tone.deep}
+          className="opacity-90 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
+        />
+
+        {/* Sparkle accents — pop on hover */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-4 bottom-10 h-1.5 w-1.5 rounded-full opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-150"
+          style={{ background: "oklch(1 0 0)", boxShadow: `0 0 8px ${tone.glow}` }}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-6 top-14 h-1 w-1 rounded-full opacity-0 transition-all delay-100 duration-500 group-hover:opacity-90 group-hover:scale-150"
+          style={{ background: "oklch(1 0 0)", boxShadow: `0 0 6px ${tone.glow}` }}
+        />
+
+        {/* "New" pill for highlighted */}
         {isHighlighted && (
           <span
-            className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-[0.18em] shadow-soft"
-            style={{ background: tone.deep, color: "oklch(0.99 0 0)" }}
+            className="absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-display text-[9px] font-black uppercase tracking-[0.2em] shadow-[0_4px_12px_oklch(0.20_0.04_60/0.25)]"
+            style={{ background: "oklch(1 0 0)", color: tone.deep }}
           >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: tone.deep }} />
             New
           </span>
         )}
 
-        {/* Header row: icon tile */}
-        <span className="relative flex items-start justify-between">
+        {/* Header row: floating sticker icon */}
+        <span className="relative z-[1] flex items-start justify-between">
           <span
-            className={`flex items-center justify-center rounded-xl shadow-[0_2px_6px_oklch(0.20_0.04_60/0.18)] transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-110 ${
-              isHighlighted ? "h-11 w-11 sm:h-12 sm:w-12" : "h-9 w-9 sm:h-10 sm:w-10"
+            className={`relative flex items-center justify-center rounded-2xl ring-2 ring-white/80 shadow-[0_6px_14px_oklch(0.20_0.04_60/0.25)] transition-all duration-500 ease-out group-hover:rotate-[-8deg] group-hover:scale-110 ${
+              isHighlighted ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11"
             }`}
-            style={{ background: tone.deep }}
+            style={{
+              background: `linear-gradient(135deg, ${tone.deep} 0%, ${tone.glow} 100%)`,
+            }}
           >
             <Icon
-              className={isHighlighted ? "h-5 w-5 sm:h-6 sm:w-6 text-white" : "h-4 w-4 sm:h-5 sm:w-5 text-white"}
-              strokeWidth={2.4}
+              className={isHighlighted ? "h-6 w-6 sm:h-7 sm:w-7 text-white" : "h-5 w-5 sm:h-6 sm:w-6 text-white"}
+              strokeWidth={2.6}
+            />
+            {/* Inner glint */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-2xl"
+              style={{
+                background:
+                  "linear-gradient(160deg, oklch(1 0 0 / 0.35) 0%, oklch(1 0 0 / 0) 45%)",
+              }}
             />
           </span>
-          <ArrowUpRight
-            className="h-4 w-4 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-80"
+
+          {/* CTA pill — slides in on hover */}
+          <span
+            className="flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 font-display text-[9px] font-black uppercase tracking-[0.18em] opacity-0 shadow-soft backdrop-blur-sm transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2"
             style={{ color: tone.deep }}
-            strokeWidth={2.4}
-          />
+          >
+            Open
+            <ArrowUpRight className="h-3 w-3" strokeWidth={3} />
+          </span>
         </span>
 
         {/* Title + (highlighted only) description, anchored to bottom */}
-        <span className="relative mt-auto block">
+        <span className="relative z-[1] mt-auto block">
           <h3
-            className={`font-display font-black leading-tight tracking-tight ${
-              isHighlighted ? "text-[15px] sm:text-base" : "text-[12.5px] sm:text-sm"
+            className={`font-display font-black leading-tight tracking-tight drop-shadow-[0_1px_0_oklch(1_0_0/0.4)] ${
+              isHighlighted ? "text-base sm:text-lg" : "text-[13px] sm:text-[15px]"
             }`}
             style={{ color: tone.deep }}
           >
@@ -592,8 +618,8 @@ function FeatureCard({
           </h3>
           {isHighlighted && (
             <p
-              className="mt-1 max-w-[260px] text-[11px] font-medium leading-snug sm:text-xs"
-              style={{ color: tone.deep, opacity: 0.78 }}
+              className="mt-1 max-w-[280px] text-[11px] font-semibold leading-snug sm:text-xs"
+              style={{ color: tone.deep, opacity: 0.82 }}
             >
               {feature.description[module]}
             </p>
