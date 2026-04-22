@@ -174,43 +174,14 @@ function CategoryPage() {
             </Link>
           </div>
 
-          {/* Header — clean "card title as hero" with list subhead */}
-          <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <Icon
-                  className="h-4 w-4"
-                  strokeWidth={2.6}
-                  style={{ color: tone.ink }}
-                />
-                <span
-                  className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em]"
-                  style={{ color: tone.ink, opacity: 0.75 }}
-                >
-                  Vocabulary · {category.lists.length} lists ·{" "}
-                  {totalWords(category).toLocaleString()} words
-                </span>
-              </div>
-              <h1
-                className="mt-2 font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[52px]"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                {category.title}
-              </h1>
-              {activeList && (
-                <p className="mt-3 font-display text-[17px] font-semibold text-foreground/55">
-                  {activeList.title}
-                </p>
-              )}
-            </div>
-
-            {/* Module pill */}
-            <div className="inline-flex items-center gap-2 self-start rounded-full border border-foreground/10 bg-white px-3 py-1.5 shadow-soft sm:self-end">
-              <span className="h-2 w-2 rounded-full" style={{ background: tone.ink }} />
-              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/70">
-                IELTS {search.module === "academic" ? "Academic" : "General"}
-              </span>
-            </div>
+          {/* Header — centered title only */}
+          <header className="text-center">
+            <h1
+              className="font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[56px]"
+              style={{ letterSpacing: "-0.02em" }}
+            >
+              {category.title}
+            </h1>
           </header>
 
           {/* Sidebar + Detail layout */}
@@ -359,57 +330,24 @@ function DictionaryPage({
 
   return (
     <article className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-      {/* HEADER — list title + search */}
-      <header className="flex flex-col gap-3 border-b border-foreground/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className="h-2.5 w-2.5 rounded-full"
-              style={{ background: ink }}
-            />
-            <h2
-              className="font-display text-[20px] font-black tracking-tight"
-              style={{ color: ink }}
-            >
-              {list.title}
-            </h2>
-          </div>
-          <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
-            {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
-          </p>
-        </div>
-
+      {/* HEADER — list title only, no search */}
+      <header className="border-b border-foreground/10 px-5 py-4 sm:px-7">
         <div className="flex items-center gap-2">
-          {searchOpen ? (
-            <div className="flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
-              <Search className="h-3.5 w-3.5 text-foreground/45" strokeWidth={2.4} />
-              <input
-                autoFocus
-                value={query}
-                onChange={(e) => onQueryChange(e.target.value)}
-                placeholder="Search this list…"
-                className="w-44 bg-transparent text-[13px] font-medium text-foreground placeholder:text-foreground/40 focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={onToggleSearch}
-                className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/50 hover:text-foreground"
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={onToggleSearch}
-              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/65 transition-colors hover:text-foreground"
-            >
-              <Search className="h-3.5 w-3.5" strokeWidth={2.4} />
-              Search
-            </button>
-          )}
+          <span
+            aria-hidden
+            className="h-2.5 w-2.5 rounded-full"
+            style={{ background: ink }}
+          />
+          <h2
+            className="font-display text-[20px] font-black tracking-tight"
+            style={{ color: ink }}
+          >
+            {list.title}
+          </h2>
         </div>
+        <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
+          {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
+        </p>
       </header>
 
       {/* WORDS — two-column dictionary entries */}
