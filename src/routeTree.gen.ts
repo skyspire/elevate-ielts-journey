@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
 import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
+import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 
 const VocabularyRoute = VocabularyRouteImport.update({
@@ -54,6 +55,11 @@ const WritingSamplesQuestionIdRoute =
     path: '/writing-samples/$questionId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const VocabularyCategoryRoute = VocabularyCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => VocabularyRoute,
+} as any)
 const SpeakingSamplesCategoryTopicRoute =
   SpeakingSamplesCategoryTopicRouteImport.update({
     id: '/speaking-samples/$category/$topic',
@@ -65,7 +71,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/vocabulary': typeof VocabularyRoute
+  '/vocabulary': typeof VocabularyRouteWithChildren
+  '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
@@ -75,7 +82,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/vocabulary': typeof VocabularyRoute
+  '/vocabulary': typeof VocabularyRouteWithChildren
+  '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
@@ -86,7 +94,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
-  '/vocabulary': typeof VocabularyRoute
+  '/vocabulary': typeof VocabularyRouteWithChildren
+  '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/vocabulary'
+    | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/vocabulary'
+    | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/speaking-samples'
     | '/writing-samples'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/bg-options'
     | '/dashboard'
     | '/vocabulary'
+    | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/speaking-samples/'
     | '/writing-samples/'
@@ -129,7 +141,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
-  VocabularyRoute: typeof VocabularyRoute
+  VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
@@ -187,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WritingSamplesQuestionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vocabulary/$category': {
+      id: '/vocabulary/$category'
+      path: '/$category'
+      fullPath: '/vocabulary/$category'
+      preLoaderRoute: typeof VocabularyCategoryRouteImport
+      parentRoute: typeof VocabularyRoute
+    }
     '/speaking-samples/$category/$topic': {
       id: '/speaking-samples/$category/$topic'
       path: '/speaking-samples/$category/$topic'
@@ -197,11 +216,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface VocabularyRouteChildren {
+  VocabularyCategoryRoute: typeof VocabularyCategoryRoute
+}
+
+const VocabularyRouteChildren: VocabularyRouteChildren = {
+  VocabularyCategoryRoute: VocabularyCategoryRoute,
+}
+
+const VocabularyRouteWithChildren = VocabularyRoute._addFileChildren(
+  VocabularyRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
-  VocabularyRoute: VocabularyRoute,
+  VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
