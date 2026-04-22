@@ -317,7 +317,7 @@ function CategoryPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer variant="light" />
     </div>
   );
 }
