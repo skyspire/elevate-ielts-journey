@@ -170,12 +170,18 @@ function StatCard({
   return (
     <div className="group relative flex flex-col items-center text-center">
       {/* Animated arc — draws as the counter runs */}
-      <div className="relative h-28 w-28 sm:h-32 sm:w-32">
-        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-[126deg]">
+      <div className="relative h-44 w-44 sm:h-52 sm:w-52 lg:h-56 lg:w-56">
+        {/* outer soft halo */}
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-full blur-2xl"
+          style={{ background: `radial-gradient(circle, oklch(0.7 0.22 ${stat.hue} / 0.28), transparent 65%)` }}
+        />
+        <svg viewBox="0 0 100 100" className="relative h-full w-full -rotate-[126deg]">
           <defs>
             <linearGradient id={`arc-${stat.hue}`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor={`oklch(0.85 0.16 ${stat.hue})`} />
-              <stop offset="100%" stopColor={`oklch(0.7 0.2 ${(stat.hue + 60) % 360})`} />
+              <stop offset="0%" stopColor={`oklch(0.88 0.16 ${stat.hue})`} />
+              <stop offset="100%" stopColor={`oklch(0.7 0.22 ${(stat.hue + 60) % 360})`} />
             </linearGradient>
           </defs>
           {/* track */}
@@ -184,8 +190,8 @@ function StatCard({
             cy="50"
             r={r}
             fill="none"
-            stroke="oklch(1 0 0 / 0.08)"
-            strokeWidth="3"
+            stroke="oklch(1 0 0 / 0.1)"
+            strokeWidth="5"
             strokeDasharray={`${arcLen} ${C}`}
             strokeLinecap="round"
           />
@@ -196,13 +202,13 @@ function StatCard({
             r={r}
             fill="none"
             stroke={`url(#arc-${stat.hue})`}
-            strokeWidth="3"
+            strokeWidth="5"
             strokeDasharray={`${arcLen} ${C}`}
             strokeDashoffset={dashOffset}
             strokeLinecap="round"
             style={{
               transition: "stroke-dashoffset 60ms linear",
-              filter: `drop-shadow(0 0 6px oklch(0.8 0.18 ${stat.hue} / 0.6))`,
+              filter: `drop-shadow(0 0 10px oklch(0.8 0.2 ${stat.hue} / 0.7))`,
             }}
           />
           {/* glowing endpoint dot */}
@@ -210,9 +216,9 @@ function StatCard({
             <circle
               cx={50 + r * Math.cos((progress * 0.8 * 2 * Math.PI))}
               cy={50 + r * Math.sin((progress * 0.8 * 2 * Math.PI))}
-              r="3"
-              fill={`oklch(0.95 0.16 ${stat.hue})`}
-              style={{ filter: `drop-shadow(0 0 8px oklch(0.9 0.2 ${stat.hue}))` }}
+              r="4"
+              fill={`oklch(0.96 0.16 ${stat.hue})`}
+              style={{ filter: `drop-shadow(0 0 12px oklch(0.9 0.22 ${stat.hue}))` }}
             />
           )}
         </svg>
@@ -220,11 +226,11 @@ function StatCard({
         {/* Number centered inside the arc */}
         <div className="absolute inset-0 flex items-center justify-center px-4">
           <span
-            className="font-display text-2xl font-black tabular-nums tracking-tight text-white sm:text-[28px]"
-            style={{ textShadow: `0 2px 24px oklch(0.7 0.22 ${stat.hue} / 0.55), 0 0 1px oklch(1 0 0 / 0.4)` }}
+            className="font-display text-4xl font-black tabular-nums tracking-tight text-white sm:text-5xl lg:text-[56px]"
+            style={{ textShadow: `0 2px 30px oklch(0.7 0.22 ${stat.hue} / 0.6), 0 0 1px oklch(1 0 0 / 0.4)` }}
           >
             {value.toLocaleString()}
-            <span style={{ color: `oklch(0.88 0.18 ${stat.hue})` }}>{stat.suffix}</span>
+            <span style={{ color: `oklch(0.9 0.18 ${stat.hue})` }}>{stat.suffix}</span>
           </span>
         </div>
       </div>
