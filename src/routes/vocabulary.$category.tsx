@@ -1,23 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   ArrowLeft,
-  BookA,
-  Combine,
-  Quote,
-  Link2,
-  MessageCircle,
   ChevronLeft,
   ChevronRight,
-  Search,
-  type LucideProps,
 } from "lucide-react";
-import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
 import {
   getCategory,
-  totalWords,
   type CategoryKey,
   type TopicList,
   type Word,
@@ -31,14 +22,6 @@ const searchSchema = z.object({
 });
 
 const WORDS_PER_PAGE = 20;
-
-const categoryIcon: Record<CategoryKey, ComponentType<LucideProps>> = {
-  dictionary: BookA,
-  phrasal: Combine,
-  idioms: Quote,
-  collocations: Link2,
-  slangs: MessageCircle,
-};
 
 const categoryTone: Record<CategoryKey, { ink: string; pill: string }> = {
   dictionary: { ink: "oklch(0.42 0.18 260)", pill: "oklch(0.95 0.05 260)" },
@@ -121,7 +104,6 @@ function CategoryPage() {
   const activeList: TopicList | undefined =
     category.lists.find((l) => l.slug === activeListSlug) ?? category.lists[0];
 
-  const Icon = categoryIcon[category.key];
   const tone = categoryTone[category.key];
 
   // All words in the active list (no search filter — search bar removed).
