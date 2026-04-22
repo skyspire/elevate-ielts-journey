@@ -66,6 +66,15 @@ const paidTools = [
 export function TryFreeSection() {
   return (
     <section className="relative overflow-hidden bg-background py-20 sm:py-28">
+      <style>{`
+        @keyframes tfs-wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-15deg)} 75%{transform:rotate(15deg)} }
+        @keyframes tfs-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+        @keyframes tfs-flip { 0%{transform:rotateY(0)} 100%{transform:rotateY(360deg)} }
+        @keyframes tfs-bounce { 0%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} 60%{transform:translateY(2px)} }
+        @keyframes tfs-spin { 0%{transform:rotate(0) scale(1)} 50%{transform:rotate(180deg) scale(1.15)} 100%{transform:rotate(360deg) scale(1)} }
+        @keyframes tfs-tick { 0%,100%{transform:rotate(0)} 25%{transform:rotate(20deg)} 50%{transform:rotate(0)} 75%{transform:rotate(-20deg)} }
+        @keyframes tfs-rise { 0%{transform:translateY(0)} 50%{transform:translateY(-5px) scale(1.1)} 100%{transform:translateY(0)} }
+      `}</style>
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
