@@ -237,8 +237,10 @@ function VocabularyCard({
   const isAcademic = module === "academic";
 
   return (
-    <button
-      type="button"
+    <Link
+      to="/vocabulary/$category"
+      params={{ category: card.key }}
+      search={{ module, page: 1 }}
       className="group relative flex min-h-[220px] w-full flex-col justify-between overflow-hidden rounded-2xl p-5 text-left text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_10px_24px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_20px_40px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2"
     >
       {/* Solid color background */}
