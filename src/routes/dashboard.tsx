@@ -179,40 +179,41 @@ const features: Feature[] = [
 // title contrast; glow is a brighter wash for halos.
 type ToneShades = { front: string; mid: string; deep: string; glow: string };
 
-// Academic = bold jewel tones (deep, saturated, formal)
+// Academic = soft scholarly palette (quiet library tones)
+// front = soft muted fill; deep = quiet ink for title/motif.
 const tonesAcademic: Record<Feature["tone"], ToneShades> = {
-  // Ink navy
-  navy:     { front: "oklch(0.34 0.13 255)", mid: "oklch(0.34 0.13 255)", deep: "oklch(0.96 0.02 250)", glow: "oklch(0.42 0.14 255)" },
-  // Burgundy / oxblood
-  rust:     { front: "oklch(0.36 0.15 22)",  mid: "oklch(0.36 0.15 22)",  deep: "oklch(0.96 0.02 30)",  glow: "oklch(0.44 0.17 22)"  },
-  // Hunter green
-  forest:   { front: "oklch(0.36 0.10 150)", mid: "oklch(0.36 0.10 150)", deep: "oklch(0.96 0.02 150)", glow: "oklch(0.44 0.12 150)" },
-  // Royal plum
-  plum:     { front: "oklch(0.36 0.13 350)", mid: "oklch(0.36 0.13 350)", deep: "oklch(0.96 0.02 350)", glow: "oklch(0.44 0.15 350)" },
-  // Mustard / antique gold
-  ochre:    { front: "oklch(0.50 0.13 75)",  mid: "oklch(0.50 0.13 75)",  deep: "oklch(0.98 0.02 90)",  glow: "oklch(0.58 0.15 80)"  },
-  // Deep teal
-  teal:     { front: "oklch(0.40 0.10 200)", mid: "oklch(0.40 0.10 200)", deep: "oklch(0.96 0.02 200)", glow: "oklch(0.48 0.12 200)" },
-  // Deep aubergine / espresso plum
-  espresso: { front: "oklch(0.32 0.10 305)", mid: "oklch(0.32 0.10 305)", deep: "oklch(0.96 0.02 305)", glow: "oklch(0.40 0.13 305)" },
+  // Dusty navy
+  navy:     { front: "oklch(0.84 0.035 245)", mid: "oklch(0.84 0.035 245)", deep: "oklch(0.32 0.08 250)",  glow: "oklch(0.88 0.04 245)" },
+  // Antique rose
+  rust:     { front: "oklch(0.86 0.035 18)",  mid: "oklch(0.86 0.035 18)",  deep: "oklch(0.36 0.09 20)",   glow: "oklch(0.90 0.04 18)"  },
+  // Sage
+  forest:   { front: "oklch(0.86 0.035 150)", mid: "oklch(0.86 0.035 150)", deep: "oklch(0.34 0.07 150)",  glow: "oklch(0.90 0.04 150)" },
+  // Dusty plum
+  plum:     { front: "oklch(0.84 0.04 320)",  mid: "oklch(0.84 0.04 320)",  deep: "oklch(0.34 0.08 320)",  glow: "oklch(0.88 0.045 320)"},
+  // Parchment / antique cream
+  ochre:    { front: "oklch(0.91 0.045 85)",  mid: "oklch(0.91 0.045 85)",  deep: "oklch(0.42 0.09 70)",   glow: "oklch(0.94 0.05 85)"  },
+  // Dove blue / soft pewter blue
+  teal:     { front: "oklch(0.86 0.03 210)",  mid: "oklch(0.86 0.03 210)",  deep: "oklch(0.34 0.07 220)",  glow: "oklch(0.90 0.035 210)"},
+  // Heather / muted lavender
+  espresso: { front: "oklch(0.84 0.035 295)", mid: "oklch(0.84 0.035 295)", deep: "oklch(0.34 0.08 295)",  glow: "oklch(0.88 0.04 295)" },
 };
 
-// General = warmer jewel set (rust, terracotta, ochre, brick)
+// General = warm scholarly variant (taupe, sand, dusty rose, etc.)
 const tonesGeneral: Record<Feature["tone"], ToneShades> = {
-  // Terracotta
-  navy:     { front: "oklch(0.46 0.14 50)",  mid: "oklch(0.46 0.14 50)",  deep: "oklch(0.97 0.02 60)",  glow: "oklch(0.54 0.16 50)"  },
-  // Brick / coral red
-  rust:     { front: "oklch(0.40 0.16 22)",  mid: "oklch(0.40 0.16 22)",  deep: "oklch(0.96 0.02 30)",  glow: "oklch(0.48 0.18 22)"  },
-  // Olive / matcha-deep
-  forest:   { front: "oklch(0.42 0.12 130)", mid: "oklch(0.42 0.12 130)", deep: "oklch(0.96 0.02 130)", glow: "oklch(0.50 0.14 130)" },
-  // Ruby
-  plum:     { front: "oklch(0.36 0.16 10)",  mid: "oklch(0.36 0.16 10)",  deep: "oklch(0.96 0.02 10)",  glow: "oklch(0.44 0.18 10)"  },
-  // Antique gold
-  ochre:    { front: "oklch(0.54 0.13 80)",  mid: "oklch(0.54 0.13 80)",  deep: "oklch(0.98 0.02 90)",  glow: "oklch(0.62 0.15 80)"  },
-  // Slate blue
-  teal:     { front: "oklch(0.40 0.10 230)", mid: "oklch(0.40 0.10 230)", deep: "oklch(0.96 0.02 230)", glow: "oklch(0.48 0.12 230)" },
-  // Royal violet
-  espresso: { front: "oklch(0.36 0.14 295)", mid: "oklch(0.36 0.14 295)", deep: "oklch(0.96 0.02 295)", glow: "oklch(0.44 0.16 295)" },
+  // Sand / warm taupe
+  navy:     { front: "oklch(0.86 0.04 60)",   mid: "oklch(0.86 0.04 60)",   deep: "oklch(0.38 0.09 55)",   glow: "oklch(0.90 0.045 60)" },
+  // Dusty terracotta
+  rust:     { front: "oklch(0.84 0.045 30)",  mid: "oklch(0.84 0.045 30)",  deep: "oklch(0.38 0.10 25)",   glow: "oklch(0.88 0.05 30)"  },
+  // Soft moss
+  forest:   { front: "oklch(0.86 0.04 130)",  mid: "oklch(0.86 0.04 130)",  deep: "oklch(0.36 0.08 135)",  glow: "oklch(0.90 0.045 130)"},
+  // Dusty rose
+  plum:     { front: "oklch(0.86 0.04 10)",   mid: "oklch(0.86 0.04 10)",   deep: "oklch(0.38 0.10 12)",   glow: "oklch(0.90 0.045 10)" },
+  // Honey cream
+  ochre:    { front: "oklch(0.91 0.05 90)",   mid: "oklch(0.91 0.05 90)",   deep: "oklch(0.44 0.10 75)",   glow: "oklch(0.94 0.055 90)" },
+  // Smoky blue
+  teal:     { front: "oklch(0.84 0.035 225)", mid: "oklch(0.84 0.035 225)", deep: "oklch(0.36 0.08 230)",  glow: "oklch(0.88 0.04 225)" },
+  // Mauve
+  espresso: { front: "oklch(0.84 0.04 305)",  mid: "oklch(0.84 0.04 305)",  deep: "oklch(0.36 0.09 305)",  glow: "oklch(0.88 0.045 305)"},
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
