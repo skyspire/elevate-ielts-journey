@@ -129,21 +129,19 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="flex items-center gap-1 rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors data-[state=open]:bg-[oklch(0.97_0.003_250)] data-[state=open]:text-[oklch(0.20_0.01_250)]"
-                style={{ color: INK_SOFT }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = INK;
-                  e.currentTarget.style.backgroundColor = HOVER_BG;
-                }}
-                onMouseLeave={(e) => {
-                  if (e.currentTarget.getAttribute("data-state") !== "open") {
-                    e.currentTarget.style.color = INK_SOFT;
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }
-                }}
+                type="button"
+                className="group flex items-center gap-1 rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors outline-none hover:bg-[var(--header-hover)] focus-visible:bg-[var(--header-hover)] data-[state=open]:bg-[var(--header-hover)]"
+                style={
+                  {
+                    color: INK_SOFT,
+                    ["--header-hover" as string]: HOVER_BG,
+                  } as React.CSSProperties
+                }
               >
-                Resources
-                <ChevronDown className="h-3.5 w-3.5" />
+                <span className="transition-colors group-hover:text-[color:var(--header-ink)] group-data-[state=open]:text-[color:var(--header-ink)]" style={{ ["--header-ink" as string]: INK } as React.CSSProperties}>
+                  Resources
+                </span>
+                <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
