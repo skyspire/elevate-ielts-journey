@@ -54,25 +54,45 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-24 sm:py-32"
     >
-      {/* Muted sage / olive wash with subtle organic texture */}
+      {/* Midnight aurora — deep navy base with violet & indigo light blooms */}
       <div
         aria-hidden
         className="absolute inset-0 -z-30"
         style={{
           background:
-            "radial-gradient(ellipse 70% 60% at 18% 15%, oklch(0.92 0.04 145 / 0.7) 0%, transparent 65%)," +
-            "radial-gradient(ellipse 65% 55% at 88% 85%, oklch(0.88 0.05 130 / 0.65) 0%, transparent 65%)," +
-            "linear-gradient(180deg, oklch(0.93 0.03 140) 0%, oklch(0.9 0.04 135) 100%)",
+            "linear-gradient(180deg, oklch(0.18 0.06 270) 0%, oklch(0.14 0.07 280) 50%, oklch(0.12 0.06 285) 100%)",
         }}
       />
-      {/* Faint grain for realism */}
+      {/* Soft blurred aurora blooms */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-20 opacity-[0.35] mix-blend-multiply"
+        className="absolute inset-0 -z-25"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 45% at 15% 20%, oklch(0.55 0.22 295 / 0.55) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 50% 40% at 85% 30%, oklch(0.6 0.2 250 / 0.5) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 60% 50% at 50% 90%, oklch(0.5 0.24 320 / 0.45) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 40% 35% at 90% 80%, oklch(0.58 0.18 220 / 0.4) 0%, transparent 60%)",
+          filter: "blur(40px)",
+        }}
+      />
+      {/* Subtle star/noise grain for depth */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 opacity-[0.25] mix-blend-screen"
         style={{
           backgroundImage:
-            "radial-gradient(oklch(0.4 0.05 130 / 0.18) 1px, transparent 1.2px)",
-          backgroundSize: "3px 3px",
+            "radial-gradient(oklch(0.95 0.02 270 / 0.6) 0.5px, transparent 1px)",
+          backgroundSize: "4px 4px",
+        }}
+      />
+      {/* Top & bottom edge vignette for cinematic finish */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-15 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, oklch(0.1 0.05 280 / 0.6) 0%, transparent 15%, transparent 85%, oklch(0.1 0.05 280 / 0.6) 100%)",
         }}
       />
 
