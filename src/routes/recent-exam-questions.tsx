@@ -961,7 +961,7 @@ function ReadingSection() {
 }
 
 /* Full-bleed dotted background panel for question results area */
-function DottedResultsPanel({ children }: { children: React.ReactNode }) {
+function DottedResultsPanel({ children }: { children: ReactNode }) {
   return (
     <div className="relative">
       {/* Full-bleed dotted background extending beyond the content container */}
