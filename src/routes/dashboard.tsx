@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from "react";
+import { useState, useEffect, type ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   GraduationCap,
@@ -245,23 +245,30 @@ function DashboardPage() {
   // Sample user — replace with real auth data later
   const userName = "Riya";
 
-  // Time-aware greeting (4 blocks)
-  const hour = new Date().getHours();
-  const greeting =
-    hour >= 5 && hour < 12
-      ? "Good morning"
-      : hour >= 12 && hour < 17
-        ? "Good afternoon"
-        : hour >= 17 && hour < 21
-          ? "Good evening"
-          : "Good night";
+  // Time-aware greeting + date stamp — computed on the client only to keep
+  // SSR and first client render identical (avoids hydration mismatch)
+  const [greeting, setGreeting] = useState<string>("Welcome back");
+  const [dateStamp, setDateStamp] = useState<string>("");
 
-  // Editorial date stamp
-  const dateStamp = new Date().toLocaleDateString("en-GB", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setGreeting(
+      hour >= 5 && hour < 12
+        ? "Good morning"
+        : hour >= 12 && hour < 17
+          ? "Good afternoon"
+          : hour >= 17 && hour < 21
+            ? "Good evening"
+            : "Good night",
+    );
+    setDateStamp(
+      new Date().toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+      }),
+    );
+  }, []);
 
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: "oklch(0.992 0.005 85)" }}>
@@ -425,9 +432,12 @@ function ModuleToggle({
         }`}
       >
         <span
-          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
-            isAcademic ? "text-foreground" : "text-foreground/55"
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl transition-colors duration-500 ${
+            isAcademic ? "" : "opacity-80"
           }`}
+          style={{
+            color: isAcademic ? "oklch(0.45 0.14 265)" : "oklch(0.55 0.06 265 / 0.55)",
+          }}
         >
           Academic
         </span>
@@ -574,9 +584,12 @@ function ModuleToggle({
         }`}
       >
         <span
-          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
-            !isAcademic ? "text-foreground" : "text-foreground/55"
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl transition-colors duration-500 ${
+            !isAcademic ? "" : "opacity-80"
           }`}
+          style={{
+            color: !isAcademic ? "oklch(0.52 0.16 28)" : "oklch(0.55 0.06 28 / 0.55)",
+          }}
         >
           General
         </span>
