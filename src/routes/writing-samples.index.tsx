@@ -146,14 +146,24 @@ function WritingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
 
-  // Writing samples uses a warm peach/rose tint to feel distinct from Speaking Samples (sage)
-  const pageBg = "bg-[oklch(0.985_0.018_30)]";
-  const pageBgTranslucent = "bg-[oklch(0.985_0.018_30)]/85";
+  // Module-tinted page + hero gradient — swaps with Academic ⇄ General
+  // (mirrors Dashboard and Recent Exam Questions)
+  const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
+  const heroGradient = isAcademic
+    ? `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.90 0.08 235 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.92 0.07 280 / 0.45) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.02 235 / 0.55) 0%, transparent 100%)`
+    : `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.93 0.08 55 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.93 0.09 30 / 0.45) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.03 50 / 0.55) 0%, transparent 100%)`;
 
   return (
-    <div className={`min-h-screen ${pageBg}`}>
+    <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg }}>
       {/* Top bar */}
-      <header className={`sticky top-0 z-40 border-b border-foreground/8 ${pageBgTranslucent} backdrop-blur-xl`}>
+      <header
+        className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl transition-colors duration-700"
+        style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+      >
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
@@ -171,14 +181,11 @@ function WritingSamplesPage() {
       </header>
 
       <main className="relative pt-10 sm:pt-14">
-        {/* Soft peach ruled overlay for the hero zone — mirrors Speaking Samples */}
+        {/* Soft tinted gradient wash behind the hero — swaps with the toggle */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent 0, transparent 39px, oklch(0.55 0.14 30 / 0.10) 39px, oklch(0.55 0.14 30 / 0.10) 40px)",
-          }}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[460px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+          style={{ background: heroGradient }}
         />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
