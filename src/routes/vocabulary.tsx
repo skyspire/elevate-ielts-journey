@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { z } from "zod";
 import {
   BookA,
@@ -134,9 +134,19 @@ function VocabularyPage() {
   const isAcademic = module === "academic";
   const tones = isAcademic ? tonesAcademic : tonesGeneral;
 
+  // When a child route like /vocabulary/$category is active,
+  // render the child instead of the cards landing page.
+  const matches = useMatches();
+  const hasChildMatch = matches.some(
+    (m) => m.routeId !== "/vocabulary" && m.routeId.startsWith("/vocabulary/"),
+  );
+  if (hasChildMatch) {
+    return <Outlet />;
+  }
   return (
     <div className="min-h-screen bg-paper-cream">
       <main className="relative py-12 sm:py-16">
+
         {/* Subtle ruled-paper accent in the background */}
         <div
           aria-hidden
