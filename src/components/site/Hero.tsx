@@ -16,26 +16,21 @@ export function Hero() {
         className="absolute inset-0 -z-20"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 20% 15%, oklch(0.94 0.07 60 / 0.55) 0%, transparent 60%)," +
-            "radial-gradient(ellipse 55% 45% at 85% 20%, oklch(0.92 0.08 30 / 0.45) 0%, transparent 60%)," +
-            "radial-gradient(ellipse 70% 50% at 50% 100%, oklch(0.93 0.06 80 / 0.5) 0%, transparent 65%)," +
-            "linear-gradient(180deg, oklch(0.985 0.015 75) 0%, oklch(0.97 0.025 65) 100%)",
+            "radial-gradient(ellipse 70% 55% at 18% 12%, oklch(0.95 0.05 55 / 0.7) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 60% 50% at 88% 18%, oklch(0.93 0.07 25 / 0.5) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 75% 55% at 50% 100%, oklch(0.94 0.05 75 / 0.55) 0%, transparent 65%)," +
+            "linear-gradient(180deg, oklch(0.99 0.008 75) 0%, oklch(0.975 0.018 60) 100%)",
         }}
       />
-      {/* Faint ruled-paper lines */}
+      {/* Subtle grain for premium depth */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 opacity-[0.18]"
+        className="absolute inset-0 -z-10 opacity-[0.35] mix-blend-soft-light"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(0deg, transparent 0, transparent 47px, oklch(0.55 0.05 60 / 0.45) 47px, oklch(0.55 0.05 60 / 0.45) 48px)",
+            "radial-gradient(oklch(0.4 0.05 60 / 0.18) 1px, transparent 1.2px)",
+          backgroundSize: "3px 3px",
         }}
-      />
-      {/* Margin red line (notebook style) */}
-      <div
-        aria-hidden
-        className="absolute inset-y-0 left-[7%] -z-10 hidden w-px opacity-30 md:block"
-        style={{ background: "oklch(0.6 0.18 25 / 0.6)" }}
       />
 
       {/* === Floating hand-drawn doodles === */}
