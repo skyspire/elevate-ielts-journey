@@ -11,7 +11,7 @@ import { CategorySections } from "@/components/site/CategorySections";
 import { Ebooks } from "@/components/site/Ebooks";
 import { WhyChooseUs } from "@/components/site/WhyChooseUs";
 import { HowItWorks } from "@/components/site/HowItWorks";
-import { Pricing } from "@/components/site/Pricing";
+
 import { CtaBanner } from "@/components/site/CtaBanner";
 import { Footer } from "@/components/site/Footer";
 
@@ -26,7 +26,6 @@ function Index() {
         <Hero />
         <Stats />
         <ValueStatement />
-        <Pricing />
         <ModuleFeatures />
         <TrustCompare />
         <FreeVsPaid />
