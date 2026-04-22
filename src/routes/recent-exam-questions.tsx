@@ -12,13 +12,13 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 
-type Module = "academic" | "general";
+type Module = "academic" | "general" | "reading";
 type WritingTask = "task1" | "task2";
 type SpeakingPart = "part1" | "part2";
 type ExamSection = "writing" | "speaking";
 
 const searchSchema = z.object({
-  module: z.enum(["academic", "general"]).catch("academic"),
+  module: z.enum(["academic", "general", "reading"]).catch("academic"),
   section: z.enum(["writing", "speaking"]).catch("writing"),
 });
 
