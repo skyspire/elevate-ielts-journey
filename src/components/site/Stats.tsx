@@ -54,23 +54,25 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-24 sm:py-32"
     >
-      {/* Real marble photograph */}
-      <img
-        src={marbleBg}
-        alt=""
-        aria-hidden
-        loading="lazy"
-        width={1920}
-        height={1080}
-        className="absolute inset-0 -z-30 h-full w-full object-cover"
-      />
-      {/* Soft warm wash so cards lift off the marble */}
+      {/* Muted sage / olive wash with subtle organic texture */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-20"
+        className="absolute inset-0 -z-30"
         style={{
           background:
-            "radial-gradient(ellipse 80% 70% at 50% 50%, oklch(0.99 0.01 70 / 0.35) 0%, oklch(0.95 0.02 60 / 0.55) 100%)",
+            "radial-gradient(ellipse 70% 60% at 18% 15%, oklch(0.92 0.04 145 / 0.7) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 65% 55% at 88% 85%, oklch(0.88 0.05 130 / 0.65) 0%, transparent 65%)," +
+            "linear-gradient(180deg, oklch(0.93 0.03 140) 0%, oklch(0.9 0.04 135) 100%)",
+        }}
+      />
+      {/* Faint grain for realism */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 opacity-[0.35] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "radial-gradient(oklch(0.4 0.05 130 / 0.18) 1px, transparent 1.2px)",
+          backgroundSize: "3px 3px",
         }}
       />
 
