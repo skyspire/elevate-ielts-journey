@@ -973,7 +973,7 @@ function SubSection({
   title: string;
   questions: Question[];
   accent: string;
-  sectionLabel: string;
+  sectionLabel: QuestionType;
 }) {
   return (
     <section>
