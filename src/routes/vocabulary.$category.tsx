@@ -134,18 +134,13 @@ function CategoryPage() {
   return (
     <div className="min-h-screen bg-white">
       <main className="relative">
+        <BackButton
+          to="/vocabulary"
+          search={{ module: search.module }}
+          ariaLabel="Back to Vocabulary"
+        />
+
         <div className="mx-auto w-full max-w-7xl px-5 pt-8 sm:px-6 sm:pt-10">
-          {/* Back link */}
-          <div className="mb-5">
-            <Link
-              to="/vocabulary"
-              search={{ module: search.module }}
-              className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.2em] text-foreground/55 transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={2.6} />
-              Vocabulary
-            </Link>
-          </div>
 
           {/* Page title */}
           <header className="text-center">
