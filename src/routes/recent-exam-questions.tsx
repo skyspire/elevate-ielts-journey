@@ -1,8 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { useState, type ReactNode } from "react";
 import {
-  ArrowLeft,
   PenLine,
   Mic,
   BookOpen,
@@ -10,6 +9,8 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
+import { BackButton } from "@/components/site/BackButton";
+
 
 type Module = "academic" | "general";
 type WritingTask = "task1" | "task2";
@@ -246,18 +247,9 @@ function RecentExamQuestionsPage() {
   return (
     <div className="min-h-screen bg-paper-white">
       <main className="relative py-10 sm:py-14">
+        <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Back link */}
-          <div className="mb-6">
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.2em] text-foreground/55 transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={2.6} />
-              Dashboard
-            </Link>
-          </div>
 
           {/* Hero */}
           <div className="text-center">

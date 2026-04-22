@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Sparkles } from "lucide-react";
 import { z } from "zod";
 import { sampleAnswers } from "@/data/sample-answers";
 import { parseQuestionId } from "@/data/question-helpers";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
+import { BackButton } from "@/components/site/BackButton";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -52,16 +53,12 @@ function QuestionDetailPage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-paper-cream">
-      {/* Floating back button — only chrome on the page */}
-      <Link
+      {/* Floating back button — circular, top-right */}
+      <BackButton
         to="/writing-samples"
         search={{ module }}
-        className="absolute left-4 top-4 z-50 inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-white/90 px-3 py-1.5 text-[12px] font-semibold text-foreground/70 shadow-soft backdrop-blur-md transition-colors hover:text-foreground sm:left-6 sm:top-6"
-        aria-label="Back to Writing Samples"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        Back
-      </Link>
+        ariaLabel="Back to Writing Samples"
+      />
 
       {answer ? (
         <WritingAnswerBillboard

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   GraduationCap,
-  ArrowLeft,
   PenLine,
   FileText,
   Mail,
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
+import { BackButton } from "@/components/site/BackButton";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -158,13 +158,11 @@ function WritingSamplesPage() {
             <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
           </Link>
 
-          <Link
+          <BackButton
             to="/dashboard"
-            className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-white px-3 py-1.5 text-[12px] font-semibold text-foreground/70 shadow-soft transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Dashboard
-          </Link>
+            ariaLabel="Back to Dashboard"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/10 bg-white text-foreground/70 shadow-soft transition-colors hover:text-foreground"
+          />
         </div>
       </header>
 
