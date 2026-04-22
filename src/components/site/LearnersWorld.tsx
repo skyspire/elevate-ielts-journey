@@ -129,14 +129,35 @@ const rainConfig = RAIN_FLAGS.map((flag, i) => {
     return x - Math.floor(x);
   };
   const startX = 4 + rand(i + 1) * 92;
-  // Settle near the bottom half so they sit BEHIND the big number
   const restY = 48 + rand(i + 7) * 48; // 48–96%
   const rotate = (rand(i + 13) - 0.5) * 50;
   const delay = rand(i + 21) * 1.6;
   const duration = 1.6 + rand(i + 31) * 1.2;
-  // Much bigger flags
   const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
-  return { flag, startX, restY, rotate, delay, duration, size };
+  // Continuous drift parameters — each flag gets its own rhythm
+  const driftDur = 6 + rand(i + 51) * 6; // 6–12s drift loop
+  const driftDelay = -rand(i + 61) * driftDur; // negative so they're already mid-loop
+  const bobDur = 3 + rand(i + 71) * 2.5; // 3–5.5s bob loop
+  const bobDelay = -rand(i + 81) * bobDur;
+  const driftAmp = 8 + rand(i + 91) * 14; // 8–22px horizontal drift
+  const bobAmp = 6 + rand(i + 101) * 10; // 6–16px vertical bob
+  const swayDeg = 2 + rand(i + 111) * 4; // 2–6deg gentle sway
+  return {
+    flag,
+    startX,
+    restY,
+    rotate,
+    delay,
+    duration,
+    size,
+    driftDur,
+    driftDelay,
+    bobDur,
+    bobDelay,
+    driftAmp,
+    bobAmp,
+    swayDeg,
+  };
 });
 
 function CounterStage({ active }: { active: boolean }) {
@@ -183,11 +204,7 @@ function CounterStage({ active }: { active: boolean }) {
             style={{
               left: `${f.startX}%`,
               top: 0,
-              fontSize: `${f.size}rem`,
-              // Dulled so the number can shine
-              opacity: active ? 0.55 : 0,
-              filter:
-                "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+              opacity: active ? 1 : 0,
               animation: active
                 ? `lw-fall ${f.duration}s cubic-bezier(0.34, 1.2, 0.64, 1) ${f.delay}s both`
                 : "none",
@@ -195,7 +212,30 @@ function CounterStage({ active }: { active: boolean }) {
               ["--rotate" as string]: `${f.rotate}deg`,
             }}
           >
-            {f.flag}
+            {/* Continuous horizontal drift */}
+            <span
+              className="block"
+              style={{
+                animation: `lw-drift ${f.driftDur}s ease-in-out ${f.driftDelay}s infinite`,
+                ["--drift-amp" as string]: `${f.driftAmp}px`,
+              }}
+            >
+              {/* Continuous vertical bob + sway */}
+              <span
+                className="block"
+                style={{
+                  fontSize: `${f.size}rem`,
+                  opacity: 0.55,
+                  filter:
+                    "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+                  animation: `lw-bob ${f.bobDur}s ease-in-out ${f.bobDelay}s infinite`,
+                  ["--bob-amp" as string]: `${f.bobAmp}px`,
+                  ["--sway-deg" as string]: `${f.swayDeg}deg`,
+                }}
+              >
+                {f.flag}
+              </span>
+            </span>
           </span>
         ))}
       </div>
@@ -399,8 +439,22 @@ export function LearnersWorld() {
             opacity: 1;
           }
         }
+        @keyframes lw-drift {
+          0%, 100% { transform: translateX(calc(var(--drift-amp, 12px) * -1)); }
+          50%      { transform: translateX(var(--drift-amp, 12px)); }
+        }
+        @keyframes lw-bob {
+          0%, 100% {
+            transform: translateY(calc(var(--bob-amp, 10px) * -1)) rotate(calc(var(--sway-deg, 3deg) * -1));
+          }
+          50% {
+            transform: translateY(var(--bob-amp, 10px)) rotate(var(--sway-deg, 3deg));
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [style*="lw-marquee"], [style*="lw-fall"] { animation: none !important; }
+          [style*="lw-marquee"], [style*="lw-fall"], [style*="lw-drift"], [style*="lw-bob"] {
+            animation: none !important;
+          }
         }
       `}</style>
     </section>
