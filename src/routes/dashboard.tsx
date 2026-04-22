@@ -228,15 +228,20 @@ function DashboardPage() {
   const accent = isAcademic ? blue : sage;
 
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="relative min-h-screen overflow-hidden bg-paper-cream">
+      {/* Aurora mesh — drifting blobs of color */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <span className="aurora-blob aurora-blob-a" />
+        <span className="aurora-blob aurora-blob-b" />
+        <span className="aurora-blob aurora-blob-c" />
+        <span className="aurora-blob aurora-blob-d" />
+        {/* Soft cream wash on top to keep cards legible */}
+        <span className="absolute inset-0 bg-[oklch(0.99_0.01_80/0.55)]" />
+        {/* Subtle grain for tactile finish */}
+        <span className="absolute inset-0 aurora-grain opacity-[0.10] mix-blend-multiply" />
+      </div>
 
-
-      <main className="relative py-12 sm:py-16">
-        {/* Subtle ruled-paper accent in the background, only behind the hero */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-        />
+      <main className="relative z-[1] py-12 sm:py-16">
 
         {/* Centered content column */}
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
