@@ -555,7 +555,7 @@ function SubToggle<T extends string>({
     >
       <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-2`}>
         <h3
-          className={`font-display font-bold leading-tight tracking-tight ${
+          className={`font-display font-black leading-tight tracking-tight ${
             active ? "text-foreground" : "text-foreground/70"
           }`}
           style={{ fontSize: "clamp(1.25rem, 3.4vw, 1.875rem)" }}
@@ -564,7 +564,7 @@ function SubToggle<T extends string>({
         </h3>
         {sub && (
           <span
-            className={`block text-[10px] font-semibold uppercase tracking-[0.18em] ${
+            className={`block text-[10px] font-black uppercase tracking-[0.18em] ${
               active ? "text-foreground/55" : "text-foreground/40"
             }`}
           >
