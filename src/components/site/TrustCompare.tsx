@@ -192,16 +192,29 @@ export function TrustCompare() {
       <div className="container-page">
         {/* Testimonials */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-semibold tracking-wide text-foreground/60">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Trusted by 30+ verified students worldwide
-          </div>
           <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">
             What Students Say
           </h2>
-          <p className="mt-4 text-base font-medium text-foreground/65 sm:text-lg">
-            Real results from learners who walked into the exam already prepared.
-          </p>
+          <div className="mt-5 flex flex-col items-center gap-2.5">
+            <p className="text-base font-medium text-foreground/70 sm:text-lg">
+              Real results from learners who walked into the exam{" "}
+              <span className="relative inline-block font-bold text-foreground">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-3px] bottom-0.5 -z-0 h-[45%] -rotate-1 rounded-sm"
+                  style={{
+                    background:
+                      "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
+                  }}
+                />
+                <span className="relative z-10">already prepared</span>
+              </span>
+              .
+            </p>
+            <span className="font-handwriting text-lg text-foreground/55 sm:text-xl">
+              — straight from 30+ verified students
+            </span>
+          </div>
         </div>
       </div>
 
