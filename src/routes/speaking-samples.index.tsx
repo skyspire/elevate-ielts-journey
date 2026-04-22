@@ -261,9 +261,9 @@ function SpeakingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Topic cards with sage paper-dots background */}
-              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-sage pb-20 sm:mt-20 sm:pb-28">
-                <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
+              {/* Step 3 — Topic cards — sit over the page-wide ambient gradient */}
+              <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
+                <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
                   <div className="mb-8 text-center">
                     <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
                       {activeCategory.label} · {topics.length} topics
