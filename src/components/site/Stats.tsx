@@ -220,16 +220,19 @@ function StatCard({
         {/* Number centered inside the arc */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="font-display text-2xl font-extrabold tabular-nums tracking-tight text-white sm:text-3xl"
-            style={{ textShadow: `0 0 18px oklch(0.7 0.2 ${stat.hue} / 0.45)` }}
+            className="font-display text-3xl font-black tabular-nums tracking-tight text-white sm:text-4xl"
+            style={{ textShadow: `0 2px 24px oklch(0.7 0.22 ${stat.hue} / 0.55), 0 0 1px oklch(1 0 0 / 0.4)` }}
           >
             {value.toLocaleString()}
-            <span style={{ color: `oklch(0.85 0.16 ${stat.hue})` }}>{stat.suffix}</span>
+            <span style={{ color: `oklch(0.88 0.18 ${stat.hue})` }}>{stat.suffix}</span>
           </span>
         </div>
       </div>
 
-      <div className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70 sm:text-xs">
+      <div
+        className="mt-5 font-display text-sm font-bold uppercase tracking-[0.22em] text-white sm:text-[15px]"
+        style={{ textShadow: "0 1px 12px oklch(0.2 0.05 280 / 0.6)" }}
+      >
         {stat.label}
       </div>
     </div>
