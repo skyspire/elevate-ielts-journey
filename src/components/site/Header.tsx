@@ -255,6 +255,208 @@ export function Header() {
         </button>
       </div>
 
+      {/* === Full-width Resources mega menu (desktop) === */}
+      <AnimatePresence>
+        {megaOpen && (
+          <>
+            {/* Backdrop blur */}
+            <motion.div
+              key="mega-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="fixed inset-0 top-[68px] z-40 hidden bg-black/30 backdrop-blur-sm lg:block"
+              onClick={() => setMegaOpen(false)}
+            />
+
+            {/* Panel */}
+            <motion.div
+              key="mega-panel"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              onMouseEnter={cancelClose}
+              onMouseLeave={scheduleClose}
+              className="absolute inset-x-0 top-full z-50 hidden border-b bg-white shadow-2xl lg:block"
+              style={{ borderColor: HAIRLINE }}
+            >
+              <div className="container-page py-10">
+                <div className="grid grid-cols-12 gap-8">
+                  {/* Left: heading + intro */}
+                  <div className="col-span-3">
+                    <span
+                      className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+                      style={{
+                        background: "oklch(0.95 0.04 290)",
+                        color: "oklch(0.4 0.15 290)",
+                      }}
+                    >
+                      <Sparkles className="h-3 w-3" />
+                      Everything for Band 8+
+                    </span>
+                    <h3
+                      className="mt-4 font-display text-2xl font-black leading-tight tracking-tight"
+                      style={{ color: INK }}
+                    >
+                      Five focused resources, one subscription.
+                    </h3>
+                    <p
+                      className="mt-3 text-sm font-semibold leading-relaxed"
+                      style={{ color: INK_SOFT }}
+                    >
+                      Built by certified Band 9 examiners. No fluff, no recycled
+                      content — just what moves your score.
+                    </p>
+
+                    {/* Trust strip */}
+                    <div className="mt-6 space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
+                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                        <span className="font-black">4.9/5</span>
+                        <span style={{ color: INK_SOFT }}>· 2,400+ learners</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
+                        <Globe2 className="h-3.5 w-3.5" style={{ color: "oklch(0.55 0.16 255)" }} />
+                        <span className="font-black">40+</span>
+                        <span style={{ color: INK_SOFT }}>countries</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
+                        <TrendingUp className="h-3.5 w-3.5" style={{ color: "oklch(0.55 0.14 165)" }} />
+                        <span className="font-black">+1.2 bands</span>
+                        <span style={{ color: INK_SOFT }}>average uplift</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Middle: resource grid */}
+                  <div className="col-span-6">
+                    <div
+                      className="mb-3 text-[11px] font-black uppercase tracking-widest"
+                      style={{ color: INK_SOFT }}
+                    >
+                      Resources
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {resourceItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.label}
+                            to={item.to}
+                            onClick={() => setMegaOpen(false)}
+                            className="group/item relative flex items-start gap-3 overflow-hidden rounded-xl border border-transparent p-3.5 transition-all hover:bg-[var(--mega-hover)]"
+                            style={
+                              {
+                                ["--mega-hover" as string]: HOVER_BG,
+                              } as React.CSSProperties
+                            }
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = `${item.accent}30`;
+                              e.currentTarget.style.boxShadow = `0 8px 24px -12px ${item.accent}40`;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = "transparent";
+                              e.currentTarget.style.boxShadow = "none";
+                            }}
+                          >
+                            <span
+                              className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110"
+                              style={{
+                                background: `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
+                                boxShadow: `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                              }}
+                            >
+                              <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="font-display text-[14px] font-black leading-tight"
+                                  style={{ color: INK }}
+                                >
+                                  {item.label}
+                                </span>
+                                <ArrowRight
+                                  className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
+                                  style={{ color: item.accent }}
+                                />
+                              </div>
+                              <p
+                                className="mt-1 text-[12px] font-medium leading-snug"
+                                style={{ color: INK_SOFT }}
+                              >
+                                {item.description}
+                              </p>
+                              <div
+                                className="mt-1.5 inline-flex items-center text-[10px] font-bold uppercase tracking-wider"
+                                style={{ color: item.accent }}
+                              >
+                                {item.meta}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Right: featured promo card */}
+                  <div className="col-span-3">
+                    <div
+                      className="relative h-full overflow-hidden rounded-2xl p-5 text-white"
+                      style={{
+                        background:
+                          "linear-gradient(160deg, oklch(0.32 0.13 295) 0%, oklch(0.22 0.1 285) 60%, oklch(0.18 0.08 280) 100%)",
+                      }}
+                    >
+                      {/* Gold halo */}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full blur-3xl"
+                        style={{ background: "oklch(0.85 0.12 80 / 0.35)" }}
+                      />
+                      <div className="relative">
+                        <span
+                          className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider"
+                          style={{
+                            background: "oklch(0.85 0.12 80 / 0.2)",
+                            color: "oklch(0.9 0.12 85)",
+                          }}
+                        >
+                          <Sparkles className="h-3 w-3" />
+                          New this week
+                        </span>
+                        <h4 className="mt-4 font-display text-xl font-black leading-tight">
+                          April 2026 Predictions
+                        </h4>
+                        <p className="mt-2 text-[12px] font-semibold leading-relaxed text-white/75">
+                          12 new high-likelihood Writing Task 2 topics, ranked by
+                          our prediction engine.
+                        </p>
+                        <Link
+                          to="/predictions"
+                          onClick={() => setMegaOpen(false)}
+                          className="mt-5 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[12px] font-black"
+                          style={{
+                            background: "oklch(0.9 0.12 85)",
+                            color: "oklch(0.22 0.1 285)",
+                          }}
+                        >
+                          See predictions
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Mobile menu */}
       {open && (
         <div className="bg-white lg:hidden" style={{ borderTop: `1px solid ${HAIRLINE}` }}>
