@@ -855,14 +855,13 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
       />
 
       <SubSection
-        eyebrow={task === "task1" ? "Writing — Task 1" : "Writing — Task 2"}
+        eyebrow={eyebrow}
         emoji="✍️"
         title={title}
         questions={filtered}
         accent={accent}
         sectionLabel={task === "task1" ? "Writing Task 1" : "Writing Task 2"}
       />
-      <p className="sr-only">{eyebrow}</p>
     </div>
   );
 }
