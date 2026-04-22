@@ -156,68 +156,32 @@ export function Header() {
             Home
           </Link>
 
-          {/* Resources dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="group flex items-center gap-1 rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors outline-none hover:bg-[var(--header-hover)] focus-visible:bg-[var(--header-hover)] data-[state=open]:bg-[var(--header-hover)]"
-                style={
-                  {
-                    color: INK_SOFT,
-                    ["--header-hover" as string]: HOVER_BG,
-                  } as React.CSSProperties
-                }
-              >
-                <span className="transition-colors group-hover:text-[color:var(--header-ink)] group-data-[state=open]:text-[color:var(--header-ink)]" style={{ ["--header-ink" as string]: INK } as React.CSSProperties}>
-                  Resources
-                </span>
-                <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              sideOffset={10}
-              className="w-[340px] rounded-xl border p-2"
-              style={{ borderColor: HAIRLINE }}
+          {/* Resources mega menu trigger */}
+          <button
+            type="button"
+            data-state={megaOpen ? "open" : "closed"}
+            onClick={() => setMegaOpen((v) => !v)}
+            onMouseEnter={() => {
+              cancelClose();
+              setMegaOpen(true);
+            }}
+            onMouseLeave={scheduleClose}
+            className="group flex items-center gap-1 rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors outline-none data-[state=open]:bg-[var(--header-hover)]"
+            style={
+              {
+                color: INK_SOFT,
+                ["--header-hover" as string]: HOVER_BG,
+              } as React.CSSProperties
+            }
+          >
+            <span
+              className="transition-colors group-hover:text-[color:var(--header-ink)] group-data-[state=open]:text-[color:var(--header-ink)]"
+              style={{ ["--header-ink" as string]: INK } as React.CSSProperties}
             >
-              {resourceItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <DropdownMenuItem key={item.label} asChild className="p-0 focus:bg-transparent">
-                    <Link
-                      to={item.to}
-                      className="flex cursor-pointer items-start gap-3 rounded-lg p-3 transition-colors hover:bg-[oklch(0.97_0.003_250)]"
-                    >
-                      <span
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                        style={{
-                          background: `${item.accent}15`,
-                          color: item.accent,
-                        }}
-                      >
-                        <Icon className="h-4 w-4" strokeWidth={2.4} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div
-                          className="font-display text-sm font-extrabold leading-tight"
-                          style={{ color: INK }}
-                        >
-                          {item.label}
-                        </div>
-                        <div
-                          className="mt-0.5 text-xs font-medium"
-                          style={{ color: INK_SOFT }}
-                        >
-                          {item.description}
-                        </div>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              Resources
+            </span>
+            <ChevronDown className="h-3.5 w-3.5 transition-transform group-data-[state=open]:rotate-180" />
+          </button>
 
           {/* Pricing (homepage anchor) + FAQ */}
           <Link
