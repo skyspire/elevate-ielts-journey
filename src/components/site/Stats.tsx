@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { PenLine, Mic, BookOpen, Users } from "lucide-react";
 
 const stats = [
-  { target: 1300, suffix: "+", label: "Writing Questions", icon: PenLine },
-  { target: 4500, suffix: "+", label: "Speaking Questions", icon: Mic },
-  { target: 170, suffix: "+", label: "Cue Cards", icon: BookOpen },
-  { target: 4000, suffix: "+", label: "Active Users", icon: Users },
+  { target: 1300, suffix: "+", label: "Writing Questions", hue: 285 },
+  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 195 },
+  { target: 170, suffix: "+", label: "Cue Cards", hue: 70 },
+  { target: 4000, suffix: "+", label: "Active Users", hue: 15 },
 ];
 
 /* easeOutCubic — fast at start, gently decelerates */
@@ -161,22 +160,76 @@ function StatCard({
   run: boolean;
 }) {
   const value = useCountUp(stat.target, run);
-  const Icon = stat.icon;
+  const progress = stat.target === 0 ? 1 : value / stat.target;
+  // Arc geometry: 80% of a circle (open at the bottom), r=44
+  const r = 44;
+  const C = 2 * Math.PI * r;
+  const arcLen = C * 0.8;
+  const dashOffset = arcLen * (1 - progress);
+
   return (
-    <div className="group relative flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-center backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/[0.07]">
-      <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-[oklch(0.85_0.14_70)] ring-1 ring-white/15">
-        <Icon className="h-5 w-5" />
-      </span>
-      <div
-        className="font-display text-4xl font-extrabold tracking-tight tabular-nums text-white sm:text-5xl md:text-6xl"
-        style={{
-          textShadow: "0 0 24px oklch(0.7 0.18 255 / 0.25)",
-        }}
-      >
-        {value.toLocaleString()}
-        <span className="text-[oklch(0.85_0.14_70)]">{stat.suffix}</span>
+    <div className="group relative flex flex-col items-center text-center">
+      {/* Animated arc — draws as the counter runs */}
+      <div className="relative h-28 w-28 sm:h-32 sm:w-32">
+        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-[126deg]">
+          <defs>
+            <linearGradient id={`arc-${stat.hue}`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={`oklch(0.85 0.16 ${stat.hue})`} />
+              <stop offset="100%" stopColor={`oklch(0.7 0.2 ${(stat.hue + 60) % 360})`} />
+            </linearGradient>
+          </defs>
+          {/* track */}
+          <circle
+            cx="50"
+            cy="50"
+            r={r}
+            fill="none"
+            stroke="oklch(1 0 0 / 0.08)"
+            strokeWidth="3"
+            strokeDasharray={`${arcLen} ${C}`}
+            strokeLinecap="round"
+          />
+          {/* progress */}
+          <circle
+            cx="50"
+            cy="50"
+            r={r}
+            fill="none"
+            stroke={`url(#arc-${stat.hue})`}
+            strokeWidth="3"
+            strokeDasharray={`${arcLen} ${C}`}
+            strokeDashoffset={dashOffset}
+            strokeLinecap="round"
+            style={{
+              transition: "stroke-dashoffset 60ms linear",
+              filter: `drop-shadow(0 0 6px oklch(0.8 0.18 ${stat.hue} / 0.6))`,
+            }}
+          />
+          {/* glowing endpoint dot */}
+          {progress > 0.02 && (
+            <circle
+              cx={50 + r * Math.cos((progress * 0.8 * 2 * Math.PI))}
+              cy={50 + r * Math.sin((progress * 0.8 * 2 * Math.PI))}
+              r="3"
+              fill={`oklch(0.95 0.16 ${stat.hue})`}
+              style={{ filter: `drop-shadow(0 0 8px oklch(0.9 0.2 ${stat.hue}))` }}
+            />
+          )}
+        </svg>
+
+        {/* Number centered inside the arc */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span
+            className="font-display text-2xl font-extrabold tabular-nums tracking-tight text-white sm:text-3xl"
+            style={{ textShadow: `0 0 18px oklch(0.7 0.2 ${stat.hue} / 0.45)` }}
+          >
+            {value.toLocaleString()}
+            <span style={{ color: `oklch(0.85 0.16 ${stat.hue})` }}>{stat.suffix}</span>
+          </span>
+        </div>
       </div>
-      <div className="mt-2 text-sm font-medium uppercase tracking-wider text-white/60 sm:text-[13px]">
+
+      <div className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70 sm:text-xs">
         {stat.label}
       </div>
     </div>
