@@ -142,32 +142,57 @@ function MarqueeRow({
 }
 
 /* ===========================================================
- * CounterStage — Dramatic moment: flag rain + ticking 70,000+
+ * CounterStage — Floating learner avatars + ticking 70,000+
  * =========================================================== */
 
-const RAIN_FLAGS = countries.slice(0, 36).map((c) => c.flag);
+// 24 diverse smiling learner avatars paired with their country flag
+const LEARNERS: { img: string; flag: string }[] = [
+  { img: learner01, flag: "🇮🇳" },
+  { img: learner02, flag: "🇵🇰" },
+  { img: learner03, flag: "🇧🇩" },
+  { img: learner04, flag: "🇨🇳" },
+  { img: learner05, flag: "🇵🇭" },
+  { img: learner06, flag: "🇳🇬" },
+  { img: learner07, flag: "🇮🇩" },
+  { img: learner08, flag: "🇻🇳" },
+  { img: learner09, flag: "🇧🇷" },
+  { img: learner10, flag: "🇬🇧" },
+  { img: learner11, flag: "🇨🇦" },
+  { img: learner12, flag: "🇦🇺" },
+  { img: learner13, flag: "🇺🇸" },
+  { img: learner14, flag: "🇩🇪" },
+  { img: learner15, flag: "🇦🇪" },
+  { img: learner16, flag: "🇹🇷" },
+  { img: learner17, flag: "🇲🇾" },
+  { img: learner18, flag: "🇪🇬" },
+  { img: learner19, flag: "🇱🇰" },
+  { img: learner20, flag: "🇳🇵" },
+  { img: learner21, flag: "🇰🇷" },
+  { img: learner22, flag: "🇲🇽" },
+  { img: learner23, flag: "🇰🇪" },
+  { img: learner24, flag: "🇫🇷" },
+];
 
-const rainConfig = RAIN_FLAGS.map((flag, i) => {
+const rainConfig = LEARNERS.map((learner, i) => {
   const rand = (seed: number) => {
     const x = Math.sin(seed * 9301 + 49297) * 233280;
     return x - Math.floor(x);
   };
-  const startX = 4 + rand(i + 1) * 92;
-  const restY = 48 + rand(i + 7) * 48; // 48–96%
-  const rotate = (rand(i + 13) - 0.5) * 50;
+  const startX = 4 + rand(i + 1) * 90;
+  const restY = 8 + rand(i + 7) * 84; // 8–92% — distributed across full stage
+  const rotate = (rand(i + 13) - 0.5) * 30;
   const delay = rand(i + 21) * 1.6;
-  const duration = 1.6 + rand(i + 31) * 1.2;
-  const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
-  // Continuous drift parameters — each flag gets its own rhythm
-  const driftDur = 6 + rand(i + 51) * 6; // 6–12s drift loop
-  const driftDelay = -rand(i + 61) * driftDur; // negative so they're already mid-loop
-  const bobDur = 3 + rand(i + 71) * 2.5; // 3–5.5s bob loop
+  const duration = 1.8 + rand(i + 31) * 1.2;
+  const size = 56 + Math.floor(rand(i + 41) * 44); // 56–100px avatars
+  const driftDur = 7 + rand(i + 51) * 6;
+  const driftDelay = -rand(i + 61) * driftDur;
+  const bobDur = 3.2 + rand(i + 71) * 2.6;
   const bobDelay = -rand(i + 81) * bobDur;
-  const driftAmp = 8 + rand(i + 91) * 14; // 8–22px horizontal drift
-  const bobAmp = 6 + rand(i + 101) * 10; // 6–16px vertical bob
-  const swayDeg = 2 + rand(i + 111) * 4; // 2–6deg gentle sway
+  const driftAmp = 8 + rand(i + 91) * 14;
+  const bobAmp = 6 + rand(i + 101) * 10;
+  const swayDeg = 1.5 + rand(i + 111) * 3;
   return {
-    flag,
+    ...learner,
     startX,
     restY,
     rotate,
