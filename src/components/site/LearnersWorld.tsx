@@ -117,6 +117,109 @@ function MarqueeRow({
   );
 }
 
+/* ===========================================================
+ * CounterStage — Dramatic moment: flag rain + ticking 70,000+
+ * =========================================================== */
+
+const RAIN_FLAGS = countries.slice(0, 36).map((c) => c.flag);
+
+const rainConfig = RAIN_FLAGS.map((flag, i) => {
+  const rand = (seed: number) => {
+    const x = Math.sin(seed * 9301 + 49297) * 233280;
+    return x - Math.floor(x);
+  };
+  const startX = 4 + rand(i + 1) * 92;
+  const restY = 62 + rand(i + 7) * 30;
+  const rotate = (rand(i + 13) - 0.5) * 50;
+  const delay = rand(i + 21) * 1.6;
+  const duration = 1.6 + rand(i + 31) * 1.2;
+  const size = 1.6 + rand(i + 41) * 1.4;
+  return { flag, startX, restY, rotate, delay, duration, size };
+});
+
+function CounterStage({ active }: { active: boolean }) {
+  const [count, setCount] = useState(0);
+  const TARGET = 70000;
+  const DURATION = 2200;
+
+  useEffect(() => {
+    if (!active) return;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / DURATION);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setCount(Math.floor(eased * TARGET));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    const timeout = window.setTimeout(() => {
+      raf = requestAnimationFrame(tick);
+    }, 400);
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
+    };
+  }, [active]);
+
+  const formatted = count.toLocaleString("en-US");
+
+  return (
+    <div className="relative mx-auto mt-12 h-[420px] w-full max-w-5xl sm:h-[480px]">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {rainConfig.map((f, i) => (
+          <span
+            key={i}
+            className="absolute leading-none"
+            style={{
+              left: `${f.startX}%`,
+              top: 0,
+              fontSize: `${f.size}rem`,
+              filter: "drop-shadow(0 4px 10px rgba(15,23,42,0.18))",
+              animation: active
+                ? `lw-fall ${f.duration}s cubic-bezier(0.34, 1.2, 0.64, 1) ${f.delay}s both`
+                : "none",
+              ["--rest-y" as string]: `${f.restY}%`,
+              ["--rotate" as string]: `${f.rotate}deg`,
+              opacity: active ? 1 : 0,
+            }}
+          >
+            {f.flag}
+          </span>
+        ))}
+      </div>
+
+      <div className="absolute inset-x-0 top-6 z-10 flex flex-col items-center sm:top-10">
+        <div
+          className="font-display font-black tabular-nums tracking-tight text-foreground"
+          style={{
+            fontSize: "clamp(4.5rem, 14vw, 10rem)",
+            lineHeight: 0.95,
+            textShadow: "0 2px 20px oklch(0.97 0.015 85 / 0.8)",
+          }}
+        >
+          {formatted}
+          <span className="text-foreground/60">+</span>
+        </div>
+        <p className="mt-3 font-handwriting text-2xl text-foreground/55 sm:text-3xl">
+          learners across 47 countries
+        </p>
+      </div>
+
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-24"
+        style={{
+          background:
+            "linear-gradient(to top, oklch(0.93 0.03 75 / 0.6), transparent)",
+        }}
+      />
+    </div>
+  );
+}
+
 export function LearnersWorld() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
@@ -191,32 +294,25 @@ export function LearnersWorld() {
       </div>
 
       <div className="container-page relative">
-
         {/* Editorial header */}
         <div className="mx-auto max-w-4xl text-center">
           <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
             from every corner of the world
           </p>
-          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-foreground sm:text-7xl md:text-[88px]">
-            <span className="relative inline-block">
-              <span
-                aria-hidden
-                className="absolute inset-x-[-10px] bottom-2 -z-0 h-[26%] -rotate-1 rounded-sm"
-                style={{
-                  background:
-                    "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
-                }}
-              />
-              <span className="relative z-10">70,000+ learners.</span>
-            </span>
+          <h2 className="mt-3 font-display text-4xl font-black leading-[1] tracking-tight text-foreground sm:text-5xl">
+            A quiet movement,
             <br />
-            47 countries.
+            <span className="text-foreground/60">growing every day.</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl font-display text-base text-foreground/65 sm:text-lg">
-            A quiet movement of writers, speakers, and readers — preparing for
-            their band, in their own time, from their own city.
-          </p>
         </div>
+
+        {/* The dramatic counter stage */}
+        <CounterStage active={inView} />
+
+        <p className="mx-auto mt-10 max-w-2xl text-center font-display text-base text-foreground/65 sm:text-lg">
+          A quiet movement of writers, speakers, and readers — preparing for
+          their band, in their own time, from their own city.
+        </p>
       </div>
 
       {/* Full-bleed marquee rows */}
@@ -259,8 +355,26 @@ export function LearnersWorld() {
           from { transform: translateX(0); }
           to   { transform: translateX(-50%); }
         }
+        @keyframes lw-fall {
+          0% {
+            transform: translate3d(0, -120%, 0) rotate(0deg);
+            opacity: 0;
+          }
+          15% { opacity: 1; }
+          70% {
+            transform: translate3d(0, var(--rest-y, 80%), 0) rotate(var(--rotate, 0deg));
+            opacity: 1;
+          }
+          85% {
+            transform: translate3d(0, calc(var(--rest-y, 80%) - 18px), 0) rotate(var(--rotate, 0deg));
+          }
+          100% {
+            transform: translate3d(0, var(--rest-y, 80%), 0) rotate(var(--rotate, 0deg));
+            opacity: 1;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [style*="lw-marquee"] { animation: none !important; }
+          [style*="lw-marquee"], [style*="lw-fall"] { animation: none !important; }
         }
       `}</style>
     </section>
