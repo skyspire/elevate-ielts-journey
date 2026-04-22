@@ -19,13 +19,48 @@ const freeSamples = [
 ];
 
 const paidTools = [
-  { icon: PenLine, label: "Unlimited Writing samples" },
-  { icon: Mic, label: "Unlimited Speaking samples" },
-  { icon: BookOpen, label: "Vocabulary Builder" },
-  { icon: FileQuestion, label: "Recent Exam Questions" },
-  { icon: Sparkles, label: "Predictions for upcoming exams" },
-  { icon: CalendarClock, label: "Personalized Study Timetable" },
-  { icon: LineChart, label: "Mistakes Analysis" },
+  {
+    icon: PenLine,
+    label: "Unlimited Writing samples",
+    color: "oklch(0.62 0.20 35)", // warm orange
+    motion: "wiggle",
+  },
+  {
+    icon: Mic,
+    label: "Unlimited Speaking samples",
+    color: "oklch(0.65 0.18 350)", // pink
+    motion: "pulse",
+  },
+  {
+    icon: BookOpen,
+    label: "Vocabulary Builder",
+    color: "oklch(0.62 0.16 200)", // teal-blue
+    motion: "flip",
+  },
+  {
+    icon: FileQuestion,
+    label: "Recent Exam Questions",
+    color: "oklch(0.68 0.17 95)", // golden yellow
+    motion: "bounce",
+  },
+  {
+    icon: Sparkles,
+    label: "Predictions for upcoming exams",
+    color: "oklch(0.65 0.20 300)", // purple
+    motion: "spin",
+  },
+  {
+    icon: CalendarClock,
+    label: "Personalized Study Timetable",
+    color: "oklch(0.65 0.16 155)", // green
+    motion: "tick",
+  },
+  {
+    icon: LineChart,
+    label: "Mistakes Analysis",
+    color: "oklch(0.62 0.17 25)", // red-orange
+    motion: "rise",
+  },
 ];
 
 export function TryFreeSection() {
