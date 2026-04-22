@@ -6,19 +6,15 @@ import {
   PenLine,
   Library,
   AlertTriangle,
-  Globe2,
-  TrendingUp,
-  Star,
-  Flame,
 } from "lucide-react";
 
 type Feature = {
   key: string;
   label: string;
-  title: string;
   description: string;
   icon: typeof FileText;
   accent: string;
+  accentDeep: string;
   accentSoft: string;
   badge: string;
 };
@@ -27,67 +23,67 @@ const FEATURES: Feature[] = [
   {
     key: "recent",
     label: "Recent Exam Questions",
-    title: "Recent exam questions from around the world",
     description:
-      "Verified questions reported by real test-takers across 40+ countries — updated every month.",
+      "Verified questions reported by real test-takers across 40+ countries — refreshed every month.",
     icon: FileText,
-    accent: "oklch(0.55 0.16 255)",
-    accentSoft: "oklch(0.95 0.04 255)",
+    accent: "oklch(0.62 0.17 255)",
+    accentDeep: "oklch(0.45 0.18 260)",
+    accentSoft: "oklch(0.95 0.05 255)",
     badge: "Updated April 2026",
   },
   {
     key: "predictions",
     label: "Prediction Questions",
-    title: "Predictions for your next exam",
     description:
-      "AI-ranked topics most likely to appear, based on the last 12 months of question rotation patterns.",
+      "AI-ranked topics most likely to appear in your sitting, based on 12 months of question rotation.",
     icon: Sparkles,
-    accent: "oklch(0.55 0.18 295)",
-    accentSoft: "oklch(0.95 0.04 295)",
-    badge: "AI-ranked",
+    accent: "oklch(0.6 0.2 295)",
+    accentDeep: "oklch(0.42 0.2 295)",
+    accentSoft: "oklch(0.95 0.05 295)",
+    badge: "AI-ranked weekly",
   },
   {
     key: "ebooks",
-    label: "E-Books",
-    title: "E-books for serious study",
+    label: "E-Books for Serious Study",
     description:
       "Deep-dive guides written by Band 9 examiners — frameworks, vocabulary, pronunciation, grammar.",
     icon: BookOpen,
-    accent: "oklch(0.58 0.15 35)",
-    accentSoft: "oklch(0.95 0.04 35)",
-    badge: "12 titles",
+    accent: "oklch(0.62 0.16 35)",
+    accentDeep: "oklch(0.45 0.17 30)",
+    accentSoft: "oklch(0.95 0.05 35)",
+    badge: "12 titles · PDF",
   },
   {
     key: "samples",
     label: "Writing & Speaking Samples",
-    title: "Hundreds of model answers",
     description:
-      "Band 8 & 9 responses with examiner annotations — see exactly what makes a high-scoring answer.",
+      "Hundreds of Band 8 & 9 model answers with examiner annotations — see what scores really look like.",
     icon: PenLine,
-    accent: "oklch(0.5 0.13 165)",
-    accentSoft: "oklch(0.94 0.04 165)",
+    accent: "oklch(0.55 0.14 165)",
+    accentDeep: "oklch(0.4 0.15 165)",
+    accentSoft: "oklch(0.94 0.05 165)",
     badge: "600+ samples",
   },
   {
     key: "vocabulary",
-    label: "Curated Vocabulary",
-    title: "Curated vocabulary that scores",
+    label: "Curated Vocabulary Lists",
     description:
       "High-yield collocations and lexical chunks examiners reward — grouped by topic with examples.",
     icon: Library,
-    accent: "oklch(0.55 0.16 230)",
-    accentSoft: "oklch(0.95 0.04 230)",
+    accent: "oklch(0.6 0.16 230)",
+    accentDeep: "oklch(0.42 0.17 230)",
+    accentSoft: "oklch(0.95 0.05 230)",
     badge: "30 topics",
   },
   {
     key: "mistakes",
-    label: "Catastrophic Mistakes",
-    title: "The catastrophic mistakes list",
+    label: "Catastrophic Mistakes List",
     description:
-      "The exact errors that drag a 7.5 down to a 6.5 — learn what to never do, with real examples.",
+      "The exact errors that drag a 7.5 down to a 6.5 — what to never do, with real examples.",
     icon: AlertTriangle,
-    accent: "oklch(0.55 0.18 25)",
-    accentSoft: "oklch(0.94 0.05 25)",
+    accent: "oklch(0.6 0.2 25)",
+    accentDeep: "oklch(0.45 0.2 25)",
+    accentSoft: "oklch(0.94 0.06 25)",
     badge: "Avoid these",
   },
 ];
@@ -114,133 +110,80 @@ export function EverythingYouNeed() {
       />
 
       <div className="container-page relative">
-        {/* Two-column header + lead */}
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          {/* LEFT: Sticky title column */}
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-24">
-              <span
-                className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
-                style={{
-                  background: "oklch(0.95 0.04 290)",
-                  color: "oklch(0.4 0.15 290)",
-                }}
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                Everything in one place
-              </span>
-              <h2 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem]">
-                Everything you need to hit{" "}
-                <span
-                  className="relative inline-block"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, oklch(0.5 0.18 290), oklch(0.6 0.16 320))",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    color: "transparent",
-                  }}
-                >
-                  Band 8+
-                </span>{" "}
-                in your next exam
-              </h2>
-              <p className="mt-5 text-base font-medium text-muted-foreground sm:text-lg">
-                Six focused resources, built by Band 9 examiners. No fluff, no
-                recycled content — just what actually moves your score.
-              </p>
+        {/* Header */}
+        <div className="mx-auto max-w-3xl text-center">
+          <span
+            className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
+            style={{
+              background: "oklch(0.95 0.04 290)",
+              color: "oklch(0.4 0.15 290)",
+            }}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Everything in one place
+          </span>
+          <h2 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+            Everything you need to hit{" "}
+            <span
+              className="relative inline-block"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, oklch(0.5 0.18 290), oklch(0.6 0.16 320))",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              Band 8+
+            </span>{" "}
+            in your next exam
+          </h2>
+          <p className="mt-5 text-base font-medium text-muted-foreground sm:text-lg">
+            Six focused resources, built by Band 9 examiners. No fluff, no
+            recycled content — just what actually moves your score.
+          </p>
+        </div>
 
-              {/* Trust strip */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-                <div className="flex items-center gap-2 text-foreground">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  <span className="font-bold">4.9/5</span>
-                  <span className="text-muted-foreground">from 2,400+ learners</span>
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Globe2 className="h-4 w-4" style={{ color: "oklch(0.55 0.16 255)" }} />
-                  <span className="font-bold">40+</span>
-                  <span className="text-muted-foreground">countries</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT: Feature cards */}
-          <div className="lg:col-span-7">
-            <div className="grid gap-5 sm:grid-cols-2">
-              {FEATURES.map((f, idx) => (
-                <FeatureTile key={f.key} feature={f} index={idx} />
-              ))}
-            </div>
-          </div>
+        {/* Feature list — single column */}
+        <div className="mx-auto mt-16 max-w-3xl space-y-6">
+          {FEATURES.map((f, idx) => (
+            <FeatureRow key={f.key} feature={f} index={idx} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------- Feature tile with custom illustrated mock ---------- */
-
-function FeatureTile({ feature, index }: { feature: Feature; index: number }) {
-  const Icon = feature.icon;
+function FeatureRow({ feature, index }: { feature: Feature; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: "easeOut" }}
-      whileHover={{ y: -4 }}
-      className="group relative overflow-hidden rounded-3xl border bg-white p-5 transition-all"
-      style={{
-        borderColor: `${feature.accent}20`,
-        boxShadow: `0 12px 32px -16px ${feature.accent}45`,
-      }}
+      transition={{ duration: 0.5, delay: index * 0.05, ease: "easeOut" }}
+      className="group flex items-center gap-5 rounded-2xl p-3 transition-all hover:bg-white/60 sm:gap-7 sm:p-4"
     >
-      {/* Top accent bar */}
-      <div
-        className="absolute inset-x-0 top-0 h-1"
-        style={{
-          background: `linear-gradient(90deg, ${feature.accent}, ${feature.accent}30)`,
-        }}
-      />
+      {/* Circular medallion */}
+      <FeatureMedallion feature={feature} />
 
-      {/* Visual mock area */}
-      <div
-        className="relative h-44 overflow-hidden rounded-2xl p-4"
-        style={{
-          background: `linear-gradient(135deg, ${feature.accentSoft} 0%, white 100%)`,
-        }}
-      >
-        <FeatureMock feature={feature} />
-      </div>
-
-      {/* Content */}
-      <div className="mt-5">
-        <div className="flex items-center gap-2.5">
+      {/* Text */}
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="font-display text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
+            {feature.label}
+          </h3>
           <span
-            className="flex h-9 w-9 items-center justify-center rounded-xl"
+            className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
             style={{
               background: `${feature.accent}15`,
-              color: feature.accent,
-            }}
-          >
-            <Icon className="h-4.5 w-4.5" strokeWidth={2.2} />
-          </span>
-          <span
-            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={{
-              background: `${feature.accent}12`,
-              color: feature.accent,
+              color: feature.accentDeep,
             }}
           >
             {feature.badge}
           </span>
         </div>
-        <h3 className="mt-3 font-display text-lg font-extrabold leading-tight tracking-tight text-foreground">
-          {feature.title}
-        </h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
           {feature.description}
         </p>
       </div>
@@ -248,237 +191,184 @@ function FeatureTile({ feature, index }: { feature: Feature; index: number }) {
   );
 }
 
-/* ---------- Per-feature visual mocks ---------- */
+/* ---------- Circular illustrated medallion per feature ---------- */
 
-function FeatureMock({ feature }: { feature: Feature }) {
-  switch (feature.key) {
+function FeatureMedallion({ feature }: { feature: Feature }) {
+  return (
+    <div className="relative shrink-0">
+      {/* Outer halo glow */}
+      <div
+        aria-hidden
+        className="absolute inset-0 rounded-full blur-xl transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(circle, ${feature.accent}55, transparent 70%)`,
+          opacity: 0.5,
+          transform: "scale(1.15)",
+        }}
+      />
+
+      {/* The circle */}
+      <div
+        className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 sm:h-24 sm:w-24"
+        style={{
+          background: `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${feature.accent} 0%, ${feature.accentDeep} 100%)`,
+          boxShadow: `0 12px 28px -10px ${feature.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4), inset 0 -8px 18px ${feature.accentDeep}40`,
+        }}
+      >
+        {/* Custom illustration */}
+        <FeatureIllustration featureKey={feature.key} />
+
+        {/* Inner ring highlight */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-1 rounded-full"
+          style={{
+            background:
+              "linear-gradient(180deg, oklch(1 0 0 / 0.22) 0%, transparent 35%)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Per-feature SVG illustrations (white on accent) ---------- */
+
+function FeatureIllustration({ featureKey }: { featureKey: string }) {
+  switch (featureKey) {
     case "recent":
-      return <RecentMock accent={feature.accent} />;
+      return <RecentIllustration />;
     case "predictions":
-      return <PredictionsMock accent={feature.accent} />;
+      return <PredictionsIllustration />;
     case "ebooks":
-      return <EbooksMock accent={feature.accent} />;
+      return <EbooksIllustration />;
     case "samples":
-      return <SamplesMock accent={feature.accent} />;
+      return <SamplesIllustration />;
     case "vocabulary":
-      return <VocabMock accent={feature.accent} />;
+      return <VocabularyIllustration />;
     case "mistakes":
-      return <MistakesMock accent={feature.accent} />;
+      return <MistakesIllustration />;
     default:
       return null;
   }
 }
 
-function RecentMock({ accent }: { accent: string }) {
-  const items = [
-    { flag: "🇦🇺", tag: "Environment", date: "Apr 12" },
-    { flag: "🇬🇧", tag: "Education", date: "Apr 8" },
-    { flag: "🇨🇦", tag: "Technology", date: "Apr 5" },
-  ];
+// 1. Recent Exam Questions — globe with question marks
+function RecentIllustration() {
   return (
-    <div className="flex h-full flex-col gap-2">
-      {items.map((it, i) => (
-        <motion.div
-          key={it.tag}
-          initial={{ opacity: 0, x: -8 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 + i * 0.08 }}
-          className="flex items-center gap-2.5 rounded-lg bg-white px-2.5 py-2 shadow-sm"
-          style={{ border: `1px solid ${accent}15` }}
-        >
-          <span className="text-base leading-none">{it.flag}</span>
-          <span
-            className="rounded-md px-1.5 py-0.5 text-[10px] font-bold"
-            style={{ background: `${accent}15`, color: accent }}
-          >
-            {it.tag}
-          </span>
-          <span className="ml-auto text-[10px] font-medium text-muted-foreground">
-            {it.date}
-          </span>
-        </motion.div>
-      ))}
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      <circle cx="32" cy="32" r="20" stroke="white" strokeWidth="2.5" opacity="0.95" />
+      <ellipse cx="32" cy="32" rx="8" ry="20" stroke="white" strokeWidth="1.8" opacity="0.7" />
+      <line x1="12" y1="32" x2="52" y2="32" stroke="white" strokeWidth="1.8" opacity="0.7" />
+      <path d="M14 24 Q32 18 50 24" stroke="white" strokeWidth="1.5" opacity="0.5" />
+      <path d="M14 40 Q32 46 50 40" stroke="white" strokeWidth="1.5" opacity="0.5" />
+      {/* question marker pin */}
+      <circle cx="46" cy="18" r="6" fill="white" />
+      <text x="46" y="21" textAnchor="middle" fontSize="9" fontWeight="900" fill="oklch(0.45 0.18 260)">?</text>
+    </svg>
   );
 }
 
-function PredictionsMock({ accent }: { accent: string }) {
-  const items = [
-    { topic: "Online learning", chance: 92 },
-    { topic: "Remote work", chance: 85 },
-    { topic: "Plastic pollution", chance: 78 },
-  ];
+// 2. Prediction Questions — crystal ball / chart with sparkle
+function PredictionsIllustration() {
   return (
-    <div className="flex h-full flex-col justify-center gap-2.5">
-      {items.map((it, i) => (
-        <div key={it.topic} className="space-y-1">
-          <div className="flex items-center justify-between text-[11px]">
-            <span className="font-bold text-foreground">{it.topic}</span>
-            <span className="font-display font-extrabold tabular-nums" style={{ color: accent }}>
-              {it.chance}%
-            </span>
-          </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full" style={{ background: `${accent}15` }}>
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${it.chance}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.2 + i * 0.1, ease: "easeOut" }}
-              className="h-full rounded-full"
-              style={{
-                background: `linear-gradient(90deg, ${accent}, oklch(0.7 0.15 320))`,
-              }}
-            />
-          </div>
-        </div>
-      ))}
-      <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold" style={{ color: accent }}>
-        <TrendingUp className="h-3 w-3" />
-        Likelihood for May 2026
-      </div>
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      {/* bars rising */}
+      <rect x="14" y="38" width="7" height="14" rx="1.5" fill="white" opacity="0.85" />
+      <rect x="24" y="30" width="7" height="22" rx="1.5" fill="white" opacity="0.95" />
+      <rect x="34" y="22" width="7" height="30" rx="1.5" fill="white" />
+      {/* trend arrow */}
+      <path d="M14 36 L24 28 L34 20 L46 12" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7" />
+      <path d="M40 12 L46 12 L46 18" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7" />
+      {/* sparkle */}
+      <path d="M50 32 L51.5 35 L54.5 36.5 L51.5 38 L50 41 L48.5 38 L45.5 36.5 L48.5 35 Z" fill="white" />
+    </svg>
   );
 }
 
-function EbooksMock({ accent }: { accent: string }) {
-  const books = [
-    { t: "Task 2 Frameworks", r: -8 },
-    { t: "Graph Vocabulary", r: 0 },
-    { t: "Speaking Part 2", r: 8 },
-  ];
+// 3. E-Books — open book with bookmark
+function EbooksIllustration() {
   return (
-    <div className="flex h-full items-center justify-center gap-2">
-      {books.map((b, i) => (
-        <motion.div
-          key={b.t}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 + i * 0.1 }}
-          className="relative flex h-32 w-20 flex-col justify-between rounded-md p-2 text-white"
-          style={{
-            background: `linear-gradient(160deg, ${accent}, oklch(0.4 0.12 35))`,
-            boxShadow: `0 8px 18px -6px ${accent}60`,
-            transform: `rotate(${b.r}deg)`,
-          }}
-        >
-          <div className="text-[8px] font-bold uppercase tracking-widest opacity-70">
-            E-book
-          </div>
-          <div className="font-display text-[10px] font-extrabold leading-tight">
-            {b.t}
-          </div>
-          <div
-            className="absolute inset-y-1 left-1 w-1 rounded-full opacity-30"
-            style={{ background: "white" }}
-          />
-        </motion.div>
-      ))}
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      {/* book */}
+      <path d="M10 16 Q10 14 12 14 L30 14 Q32 14 32 16 L32 50 Q32 48 30 48 L12 48 Q10 48 10 50 Z" fill="white" opacity="0.95" />
+      <path d="M54 16 Q54 14 52 14 L34 14 Q32 14 32 16 L32 50 Q32 48 34 48 L52 48 Q54 48 54 50 Z" fill="white" opacity="0.95" />
+      <line x1="32" y1="16" x2="32" y2="48" stroke="oklch(0.45 0.17 30)" strokeWidth="1.2" opacity="0.4" />
+      {/* lines on left page */}
+      <line x1="14" y1="22" x2="28" y2="22" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="14" y1="27" x2="26" y2="27" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="14" y1="32" x2="28" y2="32" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      {/* lines on right page */}
+      <line x1="36" y1="22" x2="50" y2="22" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="36" y1="27" x2="48" y2="27" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="36" y1="32" x2="50" y2="32" stroke="oklch(0.45 0.17 30)" strokeWidth="1.5" opacity="0.5" />
+      {/* bookmark */}
+      <path d="M44 14 L44 26 L47 23 L50 26 L50 14 Z" fill="oklch(0.62 0.18 25)" />
+    </svg>
   );
 }
 
-function SamplesMock({ accent }: { accent: string }) {
+// 4. Writing & Speaking Samples — pencil + speech bubble
+function SamplesIllustration() {
   return (
-    <div className="flex h-full flex-col justify-between rounded-lg bg-white p-2.5 shadow-sm" style={{ border: `1px solid ${accent}15` }}>
-      <div className="flex items-center justify-between">
-        <span
-          className="rounded-md px-1.5 py-0.5 text-[9px] font-bold"
-          style={{ background: `${accent}15`, color: accent }}
-        >
-          TASK 2 · BAND 8.5
-        </span>
-        <div className="flex gap-0.5">
-          {[1, 2, 3, 4, 5].map((s) => (
-            <Star key={s} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
-          ))}
-        </div>
-      </div>
-      <div className="space-y-1 text-[10px] leading-snug text-foreground">
-        <p>
-          While some argue that{" "}
-          <span className="rounded px-0.5" style={{ background: `${accent}25` }}>
-            individual actions yield negligible
-          </span>{" "}
-          impact, I would contend that{" "}
-          <span className="rounded px-0.5" style={{ background: `${accent}25` }}>
-            collective behavioural shifts
-          </span>{" "}
-          can drive systemic change...
-        </p>
-      </div>
-      <div className="flex gap-1">
-        {["CC 9", "LR 8", "GR 9"].map((t) => (
-          <span
-            key={t}
-            className="rounded border px-1 py-0.5 text-[8px] font-bold text-muted-foreground"
-            style={{ borderColor: `${accent}30` }}
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      {/* speech bubble */}
+      <path d="M10 14 Q10 10 14 10 L42 10 Q46 10 46 14 L46 30 Q46 34 42 34 L22 34 L16 40 L18 34 L14 34 Q10 34 10 30 Z" fill="white" opacity="0.95" />
+      {/* lines in bubble */}
+      <line x1="16" y1="18" x2="38" y2="18" stroke="oklch(0.4 0.15 165)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="16" y1="23" x2="34" y2="23" stroke="oklch(0.4 0.15 165)" strokeWidth="1.5" opacity="0.5" />
+      <line x1="16" y1="28" x2="40" y2="28" stroke="oklch(0.4 0.15 165)" strokeWidth="1.5" opacity="0.5" />
+      {/* pencil */}
+      <g transform="translate(38 36) rotate(40)">
+        <rect x="0" y="0" width="20" height="6" rx="1" fill="white" />
+        <rect x="0" y="0" width="4" height="6" fill="oklch(0.62 0.18 25)" />
+        <path d="M20 0 L24 3 L20 6 Z" fill="white" />
+        <path d="M22 1.5 L24 3 L22 4.5 Z" fill="oklch(0.2 0.02 60)" />
+      </g>
+    </svg>
   );
 }
 
-function VocabMock({ accent }: { accent: string }) {
-  const words = ["detrimental", "exacerbate", "ubiquitous", "mitigate", "paramount", "negligible"];
+// 5. Vocabulary — stacked word tiles
+function VocabularyIllustration() {
   return (
-    <div className="flex h-full flex-col justify-center">
-      <div className="mb-2 text-[9px] font-bold uppercase tracking-widest text-muted-foreground">
-        Topic · Environment
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        {words.map((w, i) => (
-          <motion.span
-            key={w}
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 + i * 0.05 }}
-            className="rounded-md px-2 py-0.5 font-display text-[10px] font-bold"
-            style={{
-              background: "white",
-              color: accent,
-              border: `1px solid ${accent}30`,
-              boxShadow: `0 2px 6px -2px ${accent}30`,
-            }}
-          >
-            {w}
-          </motion.span>
-        ))}
-      </div>
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      {/* 4 tiles fanned */}
+      <g transform="translate(10 14) rotate(-8)">
+        <rect width="18" height="18" rx="3" fill="white" />
+        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">A</text>
+      </g>
+      <g transform="translate(24 12) rotate(-2)">
+        <rect width="18" height="18" rx="3" fill="white" />
+        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">B</text>
+      </g>
+      <g transform="translate(38 14) rotate(6)">
+        <rect width="18" height="18" rx="3" fill="white" />
+        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">C</text>
+      </g>
+      {/* underline + word */}
+      <rect x="14" y="40" width="36" height="3" rx="1.5" fill="white" opacity="0.85" />
+      <rect x="14" y="46" width="26" height="3" rx="1.5" fill="white" opacity="0.6" />
+    </svg>
   );
 }
 
-function MistakesMock({ accent }: { accent: string }) {
-  const mistakes = [
-    "Memorising entire essays",
-    "Robotic phrases",
-    "Going off-topic",
-    "Repeating the question",
-  ];
+// 6. Catastrophic Mistakes — warning triangle with X
+function MistakesIllustration() {
   return (
-    <div className="flex h-full flex-col justify-center gap-1.5">
-      {mistakes.map((m, i) => (
-        <motion.div
-          key={m}
-          initial={{ opacity: 0, x: -8 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 + i * 0.07 }}
-          className="flex items-center gap-2 rounded-md bg-white px-2 py-1.5 shadow-sm"
-          style={{ border: `1px solid ${accent}20` }}
-        >
-          <Flame className="h-3 w-3 shrink-0" style={{ color: accent }} />
-          <span className="text-[10px] font-medium text-foreground line-through opacity-60">
-            {m}
-          </span>
-        </motion.div>
-      ))}
-    </div>
+    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+      <path
+        d="M32 10 L56 50 L8 50 Z"
+        fill="white"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      {/* X mark in center */}
+      <line x1="26" y1="26" x2="38" y2="38" stroke="oklch(0.45 0.2 25)" strokeWidth="3.2" strokeLinecap="round" />
+      <line x1="38" y1="26" x2="26" y2="38" stroke="oklch(0.45 0.2 25)" strokeWidth="3.2" strokeLinecap="round" />
+      {/* dot at base */}
+      <circle cx="32" cy="44" r="2" fill="oklch(0.45 0.2 25)" />
+    </svg>
   );
 }
