@@ -544,6 +544,15 @@ export function Header() {
             >
               FAQ
             </Link>
+            <Link
+              to="/dashboard"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              Dashboard
+            </Link>
 
             <div className="mt-2 grid grid-cols-2 gap-2 pt-2">
               <Button
