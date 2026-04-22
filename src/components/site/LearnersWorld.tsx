@@ -1,4 +1,28 @@
 import { useEffect, useRef, useState } from "react";
+import learner01 from "@/assets/learners/learner-01.jpg";
+import learner02 from "@/assets/learners/learner-02.jpg";
+import learner03 from "@/assets/learners/learner-03.jpg";
+import learner04 from "@/assets/learners/learner-04.jpg";
+import learner05 from "@/assets/learners/learner-05.jpg";
+import learner06 from "@/assets/learners/learner-06.jpg";
+import learner07 from "@/assets/learners/learner-07.jpg";
+import learner08 from "@/assets/learners/learner-08.jpg";
+import learner09 from "@/assets/learners/learner-09.jpg";
+import learner10 from "@/assets/learners/learner-10.jpg";
+import learner11 from "@/assets/learners/learner-11.jpg";
+import learner12 from "@/assets/learners/learner-12.jpg";
+import learner13 from "@/assets/learners/learner-13.jpg";
+import learner14 from "@/assets/learners/learner-14.jpg";
+import learner15 from "@/assets/learners/learner-15.jpg";
+import learner16 from "@/assets/learners/learner-16.jpg";
+import learner17 from "@/assets/learners/learner-17.jpg";
+import learner18 from "@/assets/learners/learner-18.jpg";
+import learner19 from "@/assets/learners/learner-19.jpg";
+import learner20 from "@/assets/learners/learner-20.jpg";
+import learner21 from "@/assets/learners/learner-21.jpg";
+import learner22 from "@/assets/learners/learner-22.jpg";
+import learner23 from "@/assets/learners/learner-23.jpg";
+import learner24 from "@/assets/learners/learner-24.jpg";
 
 /**
  * LearnersWorld — Editorial marquee of countries with learner counts.
