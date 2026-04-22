@@ -747,13 +747,7 @@ function MonthGrid({
   };
 
   // Professional palette — one accent per month card (deepened, muted, editorial)
-  const palette = [
-    { fill: "oklch(0.42 0.10 258)", soft: "oklch(0.96 0.02 258)" }, // indigo
-    { fill: "oklch(0.45 0.09 195)", soft: "oklch(0.96 0.02 195)" }, // teal
-    { fill: "oklch(0.44 0.10 155)", soft: "oklch(0.96 0.02 155)" }, // forest
-    { fill: "oklch(0.46 0.10 40)",  soft: "oklch(0.96 0.02 50)"  }, // burnt sienna
-    { fill: "oklch(0.40 0.09 320)", soft: "oklch(0.96 0.02 320)" }, // plum
-  ];
+  const palette = MONTH_PALETTE;
 
   return (
     <div>
