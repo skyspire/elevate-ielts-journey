@@ -191,32 +191,25 @@ export function LearnersWorld() {
       </div>
 
       <div className="container-page relative">
-
         {/* Editorial header */}
         <div className="mx-auto max-w-4xl text-center">
           <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
             from every corner of the world
           </p>
-          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-foreground sm:text-7xl md:text-[88px]">
-            <span className="relative inline-block">
-              <span
-                aria-hidden
-                className="absolute inset-x-[-10px] bottom-2 -z-0 h-[26%] -rotate-1 rounded-sm"
-                style={{
-                  background:
-                    "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
-                }}
-              />
-              <span className="relative z-10">70,000+ learners.</span>
-            </span>
+          <h2 className="mt-3 font-display text-4xl font-black leading-[1] tracking-tight text-foreground sm:text-5xl">
+            A quiet movement,
             <br />
-            47 countries.
+            <span className="text-foreground/60">growing every day.</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl font-display text-base text-foreground/65 sm:text-lg">
-            A quiet movement of writers, speakers, and readers — preparing for
-            their band, in their own time, from their own city.
-          </p>
         </div>
+
+        {/* The dramatic counter stage */}
+        <CounterStage active={inView} />
+
+        <p className="mx-auto mt-10 max-w-2xl text-center font-display text-base text-foreground/65 sm:text-lg">
+          A quiet movement of writers, speakers, and readers — preparing for
+          their band, in their own time, from their own city.
+        </p>
       </div>
 
       {/* Full-bleed marquee rows */}
