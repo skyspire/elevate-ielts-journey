@@ -757,10 +757,12 @@ function MonthGrid({
 
   return (
     <div>
-      <div className="mb-3 flex items-end justify-center">
-        <p className="font-display text-[10px] font-black uppercase tracking-[0.24em] text-foreground/55">
+      <div className="mx-auto mb-4 flex max-w-3xl items-center gap-3">
+        <span aria-hidden className="h-px flex-1 bg-foreground/10" />
+        <p className="font-display text-[11px] font-semibold tracking-[0.18em] text-foreground/45 sm:text-xs">
           Browse by month
         </p>
+        <span aria-hidden className="h-px flex-1 bg-foreground/10" />
       </div>
       <div className="mx-auto grid max-w-3xl grid-cols-5 justify-center gap-1.5 sm:gap-2.5">
         {lastFive.map((m, i) => {
