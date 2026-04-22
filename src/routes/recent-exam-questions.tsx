@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   PenLine,
   Mic,
+  BookOpen,
   Calendar,
   Lock,
   Flame,
@@ -488,6 +489,7 @@ function SectionTabs({
   const tabs: { key: ExamSection; label: string; icon: typeof PenLine }[] = [
     { key: "writing", label: "Writing", icon: PenLine },
     { key: "speaking", label: "Speaking", icon: Mic },
+    { key: "reading", label: "Reading", icon: BookOpen },
   ];
   return (
     <div className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
