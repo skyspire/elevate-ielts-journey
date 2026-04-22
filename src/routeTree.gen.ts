@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PredictionsRouteImport } from './routes/predictions'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +32,26 @@ const VocabularyRoute = VocabularyRouteImport.update({
 const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
   id: '/recent-exam-questions',
   path: '/recent-exam-questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictionsRoute = PredictionsRouteImport.update({
+  id: '/predictions',
+  path: '/predictions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EbooksRoute = EbooksRouteImport.update({
+  id: '/ebooks',
+  path: '/ebooks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -77,6 +101,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/ebooks': typeof EbooksRoute
+  '/faq': typeof FaqRoute
+  '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -89,6 +117,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/ebooks': typeof EbooksRoute
+  '/faq': typeof FaqRoute
+  '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -102,6 +134,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/ebooks': typeof EbooksRoute
+  '/faq': typeof FaqRoute
+  '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -116,6 +152,10 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/ebooks'
+    | '/faq'
+    | '/predictions'
+    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -128,6 +168,10 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/ebooks'
+    | '/faq'
+    | '/predictions'
+    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -140,6 +184,10 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/ebooks'
+    | '/faq'
+    | '/predictions'
+    | '/pricing'
     | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
@@ -153,6 +201,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
+  EbooksRoute: typeof EbooksRoute
+  FaqRoute: typeof FaqRoute
+  PredictionsRoute: typeof PredictionsRoute
+  PricingRoute: typeof PricingRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
@@ -175,6 +227,34 @@ declare module '@tanstack/react-router' {
       path: '/recent-exam-questions'
       fullPath: '/recent-exam-questions'
       preLoaderRoute: typeof RecentExamQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/predictions': {
+      id: '/predictions'
+      path: '/predictions'
+      fullPath: '/predictions'
+      preLoaderRoute: typeof PredictionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ebooks': {
+      id: '/ebooks'
+      path: '/ebooks'
+      fullPath: '/ebooks'
+      preLoaderRoute: typeof EbooksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -252,6 +332,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
+  EbooksRoute: EbooksRoute,
+  FaqRoute: FaqRoute,
+  PredictionsRoute: PredictionsRoute,
+  PricingRoute: PricingRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
