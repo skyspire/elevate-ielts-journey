@@ -56,28 +56,28 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-20 sm:py-28"
     >
-      {/* Base deep gradient */}
+      {/* Base — deep indigo → plum → warm rose, bridges to the cream hero */}
       <div
         aria-hidden
         className="absolute inset-0 -z-30"
         style={{
           background:
-            "linear-gradient(180deg, oklch(0.18 0.06 285) 0%, oklch(0.16 0.07 250) 55%, oklch(0.18 0.08 220) 100%)",
+            "linear-gradient(180deg, oklch(0.22 0.07 280) 0%, oklch(0.22 0.09 320) 55%, oklch(0.26 0.1 25) 100%)",
         }}
       />
-      {/* Animated mesh blobs (indigo / teal / rose) */}
+      {/* Animated mesh blobs — brand-aligned hues */}
       <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
         <div
-          className="mesh-blob absolute -left-[10%] -top-[20%] h-[60vh] w-[60vh] rounded-full opacity-70 blur-3xl"
+          className="mesh-blob absolute -left-[10%] -top-[20%] h-[60vh] w-[60vh] rounded-full opacity-65 blur-3xl"
           style={{ background: "radial-gradient(circle, oklch(0.55 0.22 285 / 0.9), transparent 60%)" }}
         />
         <div
-          className="mesh-blob absolute right-[-15%] top-[10%] h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.65 0.18 195 / 0.85), transparent 60%)", animationDelay: "-7s" }}
+          className="mesh-blob absolute right-[-15%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-55 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.62 0.2 340 / 0.85), transparent 60%)", animationDelay: "-7s" }}
         />
         <div
-          className="mesh-blob absolute bottom-[-20%] left-[30%] h-[50vh] w-[50vh] rounded-full opacity-55 blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.6 0.2 15 / 0.8), transparent 60%)", animationDelay: "-14s" }}
+          className="mesh-blob absolute bottom-[-20%] left-[28%] h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.65 0.2 35 / 0.85), transparent 60%)", animationDelay: "-14s" }}
         />
       </div>
       {/* Particle field */}
