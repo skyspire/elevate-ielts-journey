@@ -929,13 +929,7 @@ function ReadingSection() {
       <section>
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <p
-              className="font-display text-[10px] font-black uppercase tracking-[0.24em]"
-              style={{ color: accent }}
-            >
-              Reading — Recent Passages
-            </p>
-            <h2 className="mt-1 font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+            <h2 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
               Latest reading passages & question types
             </h2>
           </div>
