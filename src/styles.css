@@ -638,3 +638,74 @@
     animation: none !important;
   }
 }
+
+/* ============================================================ */
+/* Dark velvet background — plum/charcoal + per-card glow halos  */
+/* ============================================================ */
+.velvet-base {
+  background:
+    radial-gradient(ellipse at 50% 0%,   oklch(0.28 0.08 310) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, oklch(0.22 0.06 280) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.18 0.04 295) 0%, oklch(0.14 0.03 285) 100%);
+  background-attachment: fixed;
+}
+
+.velvet-glow {
+  position: absolute;
+  width: 28vw;
+  height: 28vw;
+  max-width: 360px;
+  max-height: 360px;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform, opacity;
+  animation: velvet-breathe 7s ease-in-out infinite;
+}
+
+/* Halos roughly behind each card position in the 4-col grid.
+   On smaller screens they overlap and create a gorgeous glow field. */
+.velvet-glow-1 { top: 38%; left:  6%; background: radial-gradient(circle, oklch(0.65 0.22 25)  0%, transparent 70%); }
+.velvet-glow-2 { top: 38%; left: 28%; background: radial-gradient(circle, oklch(0.65 0.22 260) 0%, transparent 70%); animation-delay: 0.6s; }
+.velvet-glow-3 { top: 38%; left: 50%; background: radial-gradient(circle, oklch(0.65 0.22 25)  0%, transparent 70%); animation-delay: 1.2s; }
+.velvet-glow-4 { top: 38%; left: 72%; background: radial-gradient(circle, oklch(0.68 0.18 165) 0%, transparent 70%); animation-delay: 1.8s; }
+.velvet-glow-5 { top: 65%; left:  6%; background: radial-gradient(circle, oklch(0.65 0.22 310) 0%, transparent 70%); animation-delay: 2.4s; }
+.velvet-glow-6 { top: 65%; left: 28%; background: radial-gradient(circle, oklch(0.78 0.18 80)  0%, transparent 70%); animation-delay: 3.0s; }
+.velvet-glow-7 { top: 65%; left: 50%; background: radial-gradient(circle, oklch(0.68 0.16 200) 0%, transparent 70%); animation-delay: 3.6s; }
+.velvet-glow-8 { top: 65%; left: 72%; background: radial-gradient(circle, oklch(0.62 0.10 50)  0%, transparent 70%); animation-delay: 4.2s; }
+
+@keyframes velvet-breathe {
+  0%, 100% { transform: scale(1)    translateY(0);   opacity: 0.50; }
+  50%      { transform: scale(1.12) translateY(-8px); opacity: 0.70; }
+}
+
+/* Star dust — tiny twinkling specks */
+.velvet-stars {
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 28% 42%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 47% 12%, oklch(1 0 0 / 0.50), transparent 60%),
+    radial-gradient(1px 1px at 63% 28%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1.2px 1.2px at 78% 8%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 88% 38%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 8% 62%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1.2px 1.2px at 22% 78%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 42% 88%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 58% 72%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1px 1px at 72% 92%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1.2px 1.2px at 92% 70%, oklch(1 0 0 / 0.55), transparent 60%);
+  background-size: 100% 100%;
+  animation: velvet-twinkle 6s ease-in-out infinite;
+}
+
+@keyframes velvet-twinkle {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.75; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .velvet-glow,
+  .velvet-stars {
+    animation: none !important;
+  }
+}
