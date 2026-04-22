@@ -53,12 +53,6 @@ export function QuestionCard({
             {locked ? <Lock className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-4 w-4" />}
           </span>
         </div>
-
-        {locked && (
-          <p className="-mb-1 text-[11px] font-semibold text-muted-foreground/80">
-            Sign up to read · free sample
-          </p>
-        )}
       </div>
     </article>
   );
