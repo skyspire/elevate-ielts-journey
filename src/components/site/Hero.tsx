@@ -68,7 +68,7 @@ export function Hero() {
 
         {/* Handwritten subtitle */}
         <p className="mx-auto mt-3 font-handwriting text-2xl text-brand sm:text-3xl">
-          everything you need, free &amp; fresh ✦
+          everything you need, free &amp; fresh
         </p>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg font-medium text-muted-foreground sm:text-xl">
