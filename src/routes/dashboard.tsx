@@ -556,13 +556,13 @@ function FeatureCard({
           background: `linear-gradient(140deg, ${tone.front} 0%, ${tone.mid} 100%)`,
         }}
       >
-        {/* Glossy top highlight */}
+        {/* Subtle top highlight — keeps a hint of dimension on flat color */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[22px]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1/3 rounded-t-[22px]"
           style={{
             background:
-              "linear-gradient(180deg, oklch(1 0 0 / 0.45) 0%, oklch(1 0 0 / 0) 100%)",
+              "linear-gradient(180deg, oklch(1 0 0 / 0.22) 0%, oklch(1 0 0 / 0) 100%)",
           }}
         />
 
