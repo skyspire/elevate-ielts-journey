@@ -736,6 +736,15 @@ function MonthGrid({
     return `${mon.slice(0, 3)} ${yr}`;
   };
 
+  // Professional palette — one accent per month card (deepened, muted, editorial)
+  const palette = [
+    { fill: "oklch(0.42 0.10 258)", soft: "oklch(0.96 0.02 258)" }, // indigo
+    { fill: "oklch(0.45 0.09 195)", soft: "oklch(0.96 0.02 195)" }, // teal
+    { fill: "oklch(0.44 0.10 155)", soft: "oklch(0.96 0.02 155)" }, // forest
+    { fill: "oklch(0.46 0.10 40)",  soft: "oklch(0.96 0.02 50)"  }, // burnt sienna
+    { fill: "oklch(0.40 0.09 320)", soft: "oklch(0.96 0.02 320)" }, // plum
+  ];
+
   return (
     <div>
       <div className="mb-3 flex items-end justify-center">
@@ -744,18 +753,23 @@ function MonthGrid({
         </p>
       </div>
       <div className="mx-auto grid max-w-3xl grid-cols-5 justify-center gap-1.5 sm:gap-2.5">
-        {lastFive.map((m) => {
+        {lastFive.map((m, i) => {
           const active = selected === m;
+          const c = palette[i % palette.length];
           return (
             <button
               key={m}
               type="button"
               onClick={() => onSelect(active ? "all" : m)}
-              className={`rounded-xl border-2 px-1.5 py-2 text-center font-display text-[11px] font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 sm:px-3 sm:py-2.5 sm:text-sm ${
-                active
-                  ? "border-foreground bg-foreground text-background shadow-[3px_3px_0_0_hsl(var(--foreground))]"
-                  : "border-foreground/80 bg-white text-foreground/75 shadow-[2px_2px_0_0_hsl(var(--foreground)/0.85)] hover:border-foreground hover:text-foreground hover:shadow-[3px_3px_0_0_hsl(var(--foreground))]"
-              }`}
+              className="group rounded-xl border-2 px-1.5 py-2 text-center font-display text-[11px] font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 sm:px-3 sm:py-2.5 sm:text-sm"
+              style={{
+                background: active ? c.fill : c.soft,
+                borderColor: c.fill,
+                color: active ? "oklch(0.99 0 0)" : c.fill,
+                boxShadow: active
+                  ? `3px 3px 0 0 ${c.fill}`
+                  : `2px 2px 0 0 ${c.fill}`,
+              }}
             >
               {abbreviate(m)}
             </button>
