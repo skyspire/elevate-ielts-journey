@@ -173,30 +173,31 @@ const features: Feature[] = [
   },
 ];
 
-// Layered paper-stack palette — each tone provides:
-//   front: light tinted "page" the content sits on
-//   mid: middle sheet visible behind/right
-//   deep: deepest back sheet (also used for icon + accent text)
-type ToneShades = { front: string; mid: string; deep: string };
+// Vibrant gradient palette — each tone provides:
+//   front: bright tinted base for the card surface
+//   mid: secondary stop for the gradient (richer)
+//   deep: darkest accent (icon tile, title text, glow)
+//   glow: soft halo color used for hover bloom
+type ToneShades = { front: string; mid: string; deep: string; glow: string };
 
 const tonesAcademic: Record<Feature["tone"], ToneShades> = {
-  navy:     { front: "oklch(0.97 0.025 260)", mid: "oklch(0.78 0.10 260)", deep: "oklch(0.42 0.18 260)" },
-  rust:     { front: "oklch(0.97 0.025 230)", mid: "oklch(0.78 0.10 230)", deep: "oklch(0.48 0.16 230)" },
-  forest:   { front: "oklch(0.97 0.025 200)", mid: "oklch(0.78 0.10 200)", deep: "oklch(0.50 0.15 200)" },
-  plum:     { front: "oklch(0.97 0.025 290)", mid: "oklch(0.78 0.11 290)", deep: "oklch(0.45 0.18 290)" },
-  ochre:    { front: "oklch(0.97 0.025 250)", mid: "oklch(0.80 0.10 250)", deep: "oklch(0.55 0.16 250)" },
-  teal:     { front: "oklch(0.97 0.025 215)", mid: "oklch(0.80 0.10 215)", deep: "oklch(0.52 0.14 215)" },
-  espresso: { front: "oklch(0.96 0.018 260)", mid: "oklch(0.72 0.05 260)", deep: "oklch(0.32 0.06 260)" },
+  navy:     { front: "oklch(0.93 0.07 260)", mid: "oklch(0.78 0.14 260)", deep: "oklch(0.42 0.20 260)", glow: "oklch(0.65 0.22 260)" },
+  rust:     { front: "oklch(0.93 0.07 25)",  mid: "oklch(0.78 0.16 25)",  deep: "oklch(0.50 0.22 25)",  glow: "oklch(0.68 0.22 25)"  },
+  forest:   { front: "oklch(0.93 0.08 165)", mid: "oklch(0.76 0.14 165)", deep: "oklch(0.45 0.16 165)", glow: "oklch(0.65 0.18 165)" },
+  plum:     { front: "oklch(0.93 0.08 310)", mid: "oklch(0.76 0.16 310)", deep: "oklch(0.45 0.22 310)", glow: "oklch(0.65 0.22 310)" },
+  ochre:    { front: "oklch(0.95 0.10 80)",  mid: "oklch(0.82 0.16 70)",  deep: "oklch(0.55 0.18 60)",  glow: "oklch(0.78 0.18 70)"  },
+  teal:     { front: "oklch(0.93 0.08 195)", mid: "oklch(0.76 0.13 195)", deep: "oklch(0.48 0.14 200)", glow: "oklch(0.68 0.16 195)" },
+  espresso: { front: "oklch(0.93 0.04 50)",  mid: "oklch(0.72 0.08 50)",  deep: "oklch(0.34 0.07 50)",  glow: "oklch(0.60 0.10 50)"  },
 };
 
 const tonesGeneral: Record<Feature["tone"], ToneShades> = {
-  navy:     { front: "oklch(0.97 0.03 35)", mid: "oklch(0.82 0.11 35)", deep: "oklch(0.55 0.18 35)" },
-  rust:     { front: "oklch(0.97 0.03 25)", mid: "oklch(0.82 0.13 25)", deep: "oklch(0.58 0.20 25)" },
-  forest:   { front: "oklch(0.97 0.03 60)", mid: "oklch(0.82 0.11 60)", deep: "oklch(0.55 0.16 60)" },
-  plum:     { front: "oklch(0.97 0.03 15)", mid: "oklch(0.82 0.12 15)", deep: "oklch(0.50 0.18 15)" },
-  ochre:    { front: "oklch(0.97 0.03 70)", mid: "oklch(0.85 0.12 70)", deep: "oklch(0.65 0.17 70)" },
-  teal:     { front: "oklch(0.97 0.03 45)", mid: "oklch(0.82 0.11 45)", deep: "oklch(0.52 0.16 45)" },
-  espresso: { front: "oklch(0.96 0.02 40)", mid: "oklch(0.74 0.07 40)", deep: "oklch(0.38 0.10 40)" },
+  navy:     { front: "oklch(0.94 0.08 35)",  mid: "oklch(0.80 0.15 35)",  deep: "oklch(0.52 0.20 35)",  glow: "oklch(0.72 0.20 35)"  },
+  rust:     { front: "oklch(0.94 0.09 20)",  mid: "oklch(0.80 0.18 20)",  deep: "oklch(0.55 0.22 20)",  glow: "oklch(0.72 0.22 20)"  },
+  forest:   { front: "oklch(0.95 0.10 70)",  mid: "oklch(0.82 0.15 65)",  deep: "oklch(0.55 0.16 60)",  glow: "oklch(0.75 0.18 70)"  },
+  plum:     { front: "oklch(0.94 0.09 10)",  mid: "oklch(0.80 0.16 10)",  deep: "oklch(0.50 0.20 10)",  glow: "oklch(0.70 0.20 10)"  },
+  ochre:    { front: "oklch(0.96 0.11 90)",  mid: "oklch(0.86 0.16 80)",  deep: "oklch(0.60 0.17 70)",  glow: "oklch(0.82 0.18 85)"  },
+  teal:     { front: "oklch(0.94 0.09 50)",  mid: "oklch(0.80 0.14 50)",  deep: "oklch(0.50 0.16 45)",  glow: "oklch(0.70 0.17 50)"  },
+  espresso: { front: "oklch(0.94 0.05 45)",  mid: "oklch(0.74 0.08 45)",  deep: "oklch(0.38 0.10 45)",  glow: "oklch(0.62 0.10 45)"  },
 };
 
 // Sage = oklch(0.62 0.10 160). Softs/tints derived from the same hue.
