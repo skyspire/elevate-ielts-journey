@@ -287,24 +287,14 @@ function DictionaryPage({
 
   return (
     <article className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-      {/* HEADER — list title only, no search */}
-      <header className="border-b border-foreground/10 px-5 py-4 sm:px-7">
-        <div className="flex items-center gap-2">
-          <span
-            aria-hidden
-            className="h-2.5 w-2.5 rounded-full"
-            style={{ background: ink }}
-          />
-          <h2
-            className="font-display text-[20px] font-black tracking-tight"
-            style={{ color: ink }}
-          >
-            {list.title}
-          </h2>
-        </div>
-        <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
-          {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
-        </p>
+      {/* HEADER — centered list title, clean and bold */}
+      <header className="border-b border-foreground/10 px-5 py-6 text-center sm:px-7 sm:py-7">
+        <h2
+          className="font-display text-[26px] font-black leading-[1.05] tracking-tight sm:text-[32px]"
+          style={{ color: ink, letterSpacing: "-0.02em" }}
+        >
+          {list.title}
+        </h2>
       </header>
 
       {/* WORDS — two-column dictionary entries */}
