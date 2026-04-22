@@ -541,89 +541,23 @@ function FeatureCard({
           }}
         />
 
-        {/* Animated motif loop — unique per card, brighter now */}
+        {/* Animated motif loop — centered scene, the visual focus */}
         <CardMotif
           kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
           color={tone.deep}
-          className="opacity-90 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
+          className="opacity-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
         />
 
-        {/* Sparkle accents — pop on hover */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute right-4 bottom-10 h-1.5 w-1.5 rounded-full opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-150"
-          style={{ background: "oklch(1 0 0)", boxShadow: `0 0 8px ${tone.glow}` }}
-        />
-        <span
-          aria-hidden
-          className="pointer-events-none absolute left-6 top-14 h-1 w-1 rounded-full opacity-0 transition-all delay-100 duration-500 group-hover:opacity-90 group-hover:scale-150"
-          style={{ background: "oklch(1 0 0)", boxShadow: `0 0 6px ${tone.glow}` }}
-        />
-
-        {/* "New" pill for highlighted */}
-        {isHighlighted && (
-          <span
-            className="absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-display text-[9px] font-black uppercase tracking-[0.2em] shadow-[0_4px_12px_oklch(0.20_0.04_60/0.25)]"
-            style={{ background: "oklch(1 0 0)", color: tone.deep }}
-          >
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: tone.deep }} />
-            New
-          </span>
-        )}
-
-        {/* Header row: floating sticker icon */}
-        <span className="relative z-[1] flex items-start justify-between">
-          <span
-            className={`relative flex items-center justify-center rounded-2xl ring-2 ring-white/80 shadow-[0_6px_14px_oklch(0.20_0.04_60/0.25)] transition-all duration-500 ease-out group-hover:rotate-[-8deg] group-hover:scale-110 ${
-              isHighlighted ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11"
-            }`}
-            style={{
-              background: `linear-gradient(135deg, ${tone.deep} 0%, ${tone.glow} 100%)`,
-            }}
-          >
-            <Icon
-              className={isHighlighted ? "h-6 w-6 sm:h-7 sm:w-7 text-white" : "h-5 w-5 sm:h-6 sm:w-6 text-white"}
-              strokeWidth={2.6}
-            />
-            {/* Inner glint */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl"
-              style={{
-                background:
-                  "linear-gradient(160deg, oklch(1 0 0 / 0.35) 0%, oklch(1 0 0 / 0) 45%)",
-              }}
-            />
-          </span>
-
-          {/* CTA pill — slides in on hover */}
-          <span
-            className="flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 font-display text-[9px] font-black uppercase tracking-[0.18em] opacity-0 shadow-soft backdrop-blur-sm transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2"
-            style={{ color: tone.deep }}
-          >
-            Open
-            <ArrowUpRight className="h-3 w-3" strokeWidth={3} />
-          </span>
-        </span>
-
-        {/* Title + (highlighted only) description, anchored to bottom */}
-        <span className="relative z-[1] mt-auto block">
+        {/* Title — centered chip pinned to the bottom */}
+        <span className="relative z-[1] mt-auto flex justify-center">
           <h3
-            className={`font-display font-black leading-tight tracking-tight drop-shadow-[0_1px_0_oklch(1_0_0/0.4)] ${
-              isHighlighted ? "text-base sm:text-lg" : "text-[13px] sm:text-[15px]"
+            className={`text-center font-display font-black leading-tight tracking-tight ${
+              isHighlighted ? "text-sm sm:text-base" : "text-[12px] sm:text-[13px]"
             }`}
             style={{ color: tone.deep }}
           >
             {feature.title}
           </h3>
-          {isHighlighted && (
-            <p
-              className="mt-1 max-w-[280px] text-[11px] font-semibold leading-snug sm:text-xs"
-              style={{ color: tone.deep, opacity: 0.82 }}
-            >
-              {feature.description[module]}
-            </p>
-          )}
         </span>
       </span>
     </div>
