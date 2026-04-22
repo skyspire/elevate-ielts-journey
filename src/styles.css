@@ -220,9 +220,9 @@
 @utility bg-paper-dots {
   background-color: oklch(0.995 0.008 230);
   background-image:
-    radial-gradient(oklch(0.55 0.14 240 / 0.32) 1.3px, transparent 1.6px),
-    radial-gradient(oklch(0.5 0.10 240 / 0.06) 1px, transparent 1px);
-  background-size: 22px 22px, 3px 3px;
+    radial-gradient(oklch(0.55 0.12 240 / 0.14) 1px, transparent 1.4px),
+    radial-gradient(oklch(0.5 0.10 240 / 0.03) 0.8px, transparent 1px);
+  background-size: 28px 28px, 4px 4px;
 }
 
 @utility bg-paper-sage {
