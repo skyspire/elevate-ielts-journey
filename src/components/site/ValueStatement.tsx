@@ -167,36 +167,20 @@ export function ValueStatement() {
             </p>
           </div>
 
-          {/* Feature pills — bigger, colorful borders */}
-          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
-            {features.map((f, i) => {
-              const colors = [
-                "oklch(0.55 0.18 30)",
-                "oklch(0.45 0.18 265)",
-                "oklch(0.55 0.14 160)",
-                "oklch(0.6 0.16 50)",
-                "oklch(0.5 0.2 320)",
-                "oklch(0.5 0.18 200)",
-              ];
-              const c = colors[i % colors.length];
-              return (
-                <li
-                  key={f}
-                  className="group inline-flex items-center gap-2.5 rounded-full border-2 bg-card px-4 py-2.5 text-base font-bold text-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:text-lg"
-                  style={{
-                    borderColor: `color-mix(in oklab, ${c} 35%, transparent)`,
-                  }}
-                >
-                  <span
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                    style={{ background: c, color: "white" }}
-                  >
-                    <Check className="h-3.5 w-3.5" strokeWidth={3.5} />
-                  </span>
-                  {f}
-                </li>
-              );
-            })}
+          {/* Features — clean, professional, dark grey */}
+          <ul className="mx-auto mt-9 grid max-w-2xl gap-x-8 gap-y-3 sm:grid-cols-2">
+            {features.map((f) => (
+              <li
+                key={f}
+                className="flex items-start gap-3 text-base font-semibold text-[oklch(0.32_0.01_270)] sm:text-[17px]"
+              >
+                <Check
+                  className="mt-1 h-4 w-4 shrink-0 text-[oklch(0.32_0.01_270)]"
+                  strokeWidth={3}
+                />
+                <span>{f}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
