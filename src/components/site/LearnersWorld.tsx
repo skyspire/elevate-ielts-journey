@@ -1,264 +1,252 @@
-import { useEffect, useRef, useState } from "react";
-
 /**
- * LearnersWorld
- * A paper-style world section showing where learners come from.
- * No pills, no micro-text. Big editorial headline, confident dotted world map.
+ * LearnersWorld — Option 5: Continent grid spread.
+ *
+ * No geographic map. A magazine-style grid where each cell is a region card:
+ *   - paper texture background (rotates through the site's washi/paper palette)
+ *   - oversized region name in display type
+ *   - learner count rendered HUGE (the hero number of the card)
+ *   - avatar cluster of recent learners
+ *   - a sample country list
+ *
+ * Editorial. No pills. No micro-text noise.
  */
 
-// Approximate normalized lat/lng → x/y on a 1000x500 map (equirectangular).
-// We hand-pick a spread of cities so the dot field reads as a real world map.
-const MAP_W = 1000;
-const MAP_H = 500;
-
-// helper: convert lng/lat to svg coords
-const proj = (lng: number, lat: number) => {
-  const x = ((lng + 180) / 360) * MAP_W;
-  const y = ((90 - lat) / 180) * MAP_H;
-  return { x, y };
+type Region = {
+  name: string;
+  count: string; // formatted, e.g. "1,240"
+  countries: string[];
+  /** Initials shown in the avatar cluster */
+  avatars: { initials: string; tone: string }[];
+  /** Background paper utility class from styles.css */
+  paper: string;
+  /** Hand-written caption above the region name */
+  scribble: string;
+  /** Slight tilt for the card */
+  tilt: string;
 };
 
-// Background dot field — sparse continent outlines, not a real geo dataset.
-// Each entry is a coarse cluster of (lng, lat) points across continents.
-const continentClusters: Array<{ lng: number; lat: number }> = [
-  // North America
-  ...spread(-125, 25, -65, 60, 90),
-  // South America
-  ...spread(-82, -55, -35, 12, 55),
-  // Europe
-  ...spread(-10, 36, 40, 65, 70),
-  // Africa
-  ...spread(-18, -34, 52, 35, 80),
-  // Middle East / Central Asia
-  ...spread(35, 18, 75, 50, 55),
-  // South & East Asia
-  ...spread(60, 5, 145, 50, 90),
-  // Oceania
-  ...spread(112, -42, 155, -10, 30),
-  // UK / Ireland
-  ...spread(-10, 50, 2, 58, 12),
+const regions: Region[] = [
+  {
+    name: "South Asia",
+    count: "3,820",
+    countries: ["India", "Pakistan", "Bangladesh", "Sri Lanka", "Nepal"],
+    avatars: [
+      { initials: "AS", tone: "oklch(0.7 0.15 35)" },
+      { initials: "PR", tone: "oklch(0.7 0.14 175)" },
+      { initials: "RK", tone: "oklch(0.7 0.15 290)" },
+      { initials: "AJ", tone: "oklch(0.7 0.14 95)" },
+    ],
+    paper: "bg-paper-cream",
+    scribble: "the powerhouse",
+    tilt: "lg:-rotate-[0.4deg]",
+  },
+  {
+    name: "Europe",
+    count: "1,640",
+    countries: ["UK", "Germany", "Portugal", "Italy", "Ireland", "Czechia"],
+    avatars: [
+      { initials: "SP", tone: "oklch(0.7 0.14 250)" },
+      { initials: "EK", tone: "oklch(0.7 0.15 35)" },
+      { initials: "CM", tone: "oklch(0.7 0.14 165)" },
+      { initials: "PI", tone: "oklch(0.7 0.15 295)" },
+    ],
+    paper: "bg-paper-sage",
+    scribble: "old continent",
+    tilt: "lg:rotate-[0.3deg]",
+  },
+  {
+    name: "North America",
+    count: "1,210",
+    countries: ["Canada", "United States", "Mexico"],
+    avatars: [
+      { initials: "RN", tone: "oklch(0.7 0.14 30)" },
+      { initials: "PM", tone: "oklch(0.7 0.15 250)" },
+      { initials: "CR", tone: "oklch(0.7 0.14 95)" },
+    ],
+    paper: "bg-paper-rose",
+    scribble: "PR & study visas",
+    tilt: "lg:-rotate-[0.3deg]",
+  },
+  {
+    name: "East Asia",
+    count: "980",
+    countries: ["China", "South Korea", "Japan", "Vietnam", "Singapore"],
+    avatars: [
+      { initials: "ML", tone: "oklch(0.7 0.15 30)" },
+      { initials: "DK", tone: "oklch(0.7 0.14 250)" },
+      { initials: "HT", tone: "oklch(0.7 0.15 290)" },
+      { initials: "WZ", tone: "oklch(0.7 0.14 165)" },
+    ],
+    paper: "bg-paper-mint",
+    scribble: "rising fast",
+    tilt: "lg:rotate-[0.4deg]",
+  },
+  {
+    name: "Middle East",
+    count: "740",
+    countries: ["UAE", "Saudi Arabia", "Jordan", "Lebanon", "Egypt"],
+    avatars: [
+      { initials: "AB", tone: "oklch(0.7 0.15 95)" },
+      { initials: "RA", tone: "oklch(0.7 0.14 35)" },
+      { initials: "OH", tone: "oklch(0.7 0.15 250)" },
+      { initials: "LF", tone: "oklch(0.7 0.14 295)" },
+    ],
+    paper: "bg-paper-peach",
+    scribble: "ambitious crowd",
+    tilt: "lg:-rotate-[0.5deg]",
+  },
+  {
+    name: "Africa",
+    count: "560",
+    countries: ["Nigeria", "Ghana", "Morocco", "Kenya", "South Africa"],
+    avatars: [
+      { initials: "NA", tone: "oklch(0.7 0.14 165)" },
+      { initials: "KM", tone: "oklch(0.7 0.15 35)" },
+      { initials: "FZ", tone: "oklch(0.7 0.14 295)" },
+    ],
+    paper: "bg-paper-cream",
+    scribble: "growing daily",
+    tilt: "lg:rotate-[0.2deg]",
+  },
+  {
+    name: "Oceania",
+    count: "310",
+    countries: ["Australia", "New Zealand"],
+    avatars: [
+      { initials: "NG", tone: "oklch(0.7 0.14 250)" },
+      { initials: "EP", tone: "oklch(0.7 0.15 165)" },
+    ],
+    paper: "bg-paper-dots",
+    scribble: "down under",
+    tilt: "lg:-rotate-[0.2deg]",
+  },
+  {
+    name: "Latin America",
+    count: "420",
+    countries: ["Brazil", "Argentina", "Mexico", "Colombia"],
+    avatars: [
+      { initials: "IR", tone: "oklch(0.7 0.14 95)" },
+      { initials: "DF", tone: "oklch(0.7 0.15 290)" },
+      { initials: "BS", tone: "oklch(0.7 0.14 30)" },
+    ],
+    paper: "bg-paper-rose",
+    scribble: "always on the move",
+    tilt: "lg:rotate-[0.5deg]",
+  },
 ];
 
-// Generate a pseudo-random spread of (lng, lat) within a bounding box.
-function spread(
-  lng1: number,
-  lat1: number,
-  lng2: number,
-  lat2: number,
-  count: number,
-) {
-  const out: Array<{ lng: number; lat: number }> = [];
-  // deterministic pseudo-random for consistent SSR rendering
-  let seed = (Math.abs(lng1) + Math.abs(lat1) + count) * 9301 + 49297;
-  const rand = () => {
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
-  };
-  for (let i = 0; i < count; i++) {
-    out.push({
-      lng: lng1 + rand() * (lng2 - lng1),
-      lat: lat1 + rand() * (lat2 - lat1),
-    });
-  }
-  return out;
+function AvatarCluster({ items }: { items: Region["avatars"] }) {
+  return (
+    <div className="flex -space-x-2">
+      {items.map((a, i) => (
+        <div
+          key={i}
+          className="flex h-9 w-9 items-center justify-center rounded-full border-[2.5px] border-background font-display text-[11px] font-extrabold uppercase tracking-wider text-white shadow-sm"
+          style={{ background: a.tone }}
+        >
+          {a.initials}
+        </div>
+      ))}
+    </div>
+  );
 }
 
-// Highlighted learner cities — these glow & pulse.
-const learnerCities = [
-  { city: "Toronto", country: "Canada", lng: -79.38, lat: 43.65 },
-  { city: "Vancouver", country: "Canada", lng: -123.12, lat: 49.28 },
-  { city: "London", country: "UK", lng: -0.13, lat: 51.5 },
-  { city: "Berlin", country: "Germany", lng: 13.4, lat: 52.52 },
-  { city: "Lisbon", country: "Portugal", lng: -9.14, lat: 38.72 },
-  { city: "Dubai", country: "UAE", lng: 55.27, lat: 25.2 },
-  { city: "Mumbai", country: "India", lng: 72.87, lat: 19.07 },
-  { city: "Delhi", country: "India", lng: 77.21, lat: 28.61 },
-  { city: "Singapore", country: "Singapore", lng: 103.82, lat: 1.35 },
-  { city: "Shanghai", country: "China", lng: 121.47, lat: 31.23 },
-  { city: "Seoul", country: "South Korea", lng: 126.98, lat: 37.57 },
-  { city: "Sydney", country: "Australia", lng: 151.21, lat: -33.87 },
-  { city: "Lagos", country: "Nigeria", lng: 3.38, lat: 6.52 },
-  { city: "São Paulo", country: "Brazil", lng: -46.63, lat: -23.55 },
-  { city: "Mexico City", country: "Mexico", lng: -99.13, lat: 19.43 },
-];
+function RegionCard({ r }: { r: Region }) {
+  return (
+    <article
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-foreground/12 p-7 shadow-[0_2px_4px_rgba(15,23,42,0.04),0_18px_40px_-22px_rgba(15,23,42,0.18)] transition-all duration-500 hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_4px_8px_rgba(15,23,42,0.06),0_28px_60px_-20px_rgba(15,23,42,0.25)] sm:p-8 ${r.paper} ${r.tilt}`}
+    >
+      {/* Top row — handwritten caption + avatar cluster */}
+      <div className="relative flex items-start justify-between gap-4">
+        <span className="font-handwriting text-xl text-foreground/55 sm:text-2xl">
+          {r.scribble}
+        </span>
+        <AvatarCluster items={r.avatars} />
+      </div>
 
-const featuredCountries = [
-  "Canada",
-  "United Kingdom",
-  "Germany",
-  "Portugal",
-  "UAE",
-  "India",
-  "Singapore",
-  "China",
-  "South Korea",
-  "Australia",
-  "Nigeria",
-  "Brazil",
-  "Mexico",
-  "Japan",
-  "Vietnam",
-];
+      {/* The hero of the card — count, then name */}
+      <div className="relative mt-10">
+        <div className="flex items-baseline gap-3">
+          <span className="font-display text-6xl font-black leading-none tracking-tight text-foreground sm:text-7xl">
+            {r.count}
+          </span>
+          <span className="font-display text-base font-bold uppercase tracking-[0.18em] text-foreground/55">
+            learners
+          </span>
+        </div>
+        <h3 className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
+          {r.name}
+        </h3>
+      </div>
+
+      {/* Country list — large editorial type, no pills */}
+      <div className="relative mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-foreground/15 pt-5 font-display text-base font-bold tracking-tight text-foreground/70 sm:text-lg">
+        {r.countries.map((c, i) => (
+          <span key={c} className="inline-flex items-center gap-5">
+            <span className="transition-colors group-hover:text-foreground">
+              {c}
+            </span>
+            {i < r.countries.length - 1 && (
+              <span
+                aria-hidden
+                className="h-1 w-1 rounded-full bg-foreground/30"
+              />
+            )}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+}
 
 export function LearnersWorld() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden bg-paper-cream py-24 sm:py-32"
-    >
+    <section className="relative overflow-hidden bg-paper-white py-24 sm:py-32">
+      {/* faint warm wash so the white doesn't feel sterile */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at 0% 0%, oklch(0.97 0.025 75 / 0.55), transparent 55%)," +
+            "radial-gradient(ellipse at 100% 100%, oklch(0.96 0.03 250 / 0.4), transparent 55%)",
+        }}
+      />
+
       <div className="container-page relative">
-        {/* Headline — no pill, no eyebrow chip */}
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-4xl font-black leading-[1.05] tracking-tight text-foreground sm:text-6xl">
-            Learners in{" "}
+        {/* Editorial header — big type, hand-written eyebrow, no pills */}
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
+            from every corner of the world
+          </p>
+          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-foreground sm:text-7xl md:text-[88px]">
             <span className="relative inline-block">
               <span
                 aria-hidden
-                className="absolute inset-x-[-6px] bottom-1 -z-0 h-[36%] -rotate-1 rounded-sm"
+                className="absolute inset-x-[-10px] bottom-2 -z-0 h-[26%] -rotate-1 rounded-sm"
                 style={{
                   background:
                     "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
                 }}
               />
-              <span className="relative z-10">47 countries</span>
+              <span className="relative z-10">9,680+ learners.</span>
             </span>
             <br />
-            study with BigIELTS.
+            One prep platform.
           </h2>
+          <p className="mx-auto mt-8 max-w-2xl font-display text-xl font-medium leading-relaxed text-foreground/65">
+            Students in 47 countries study with BigIELTS — from morning commutes
+            in Mumbai to late-night sessions in Toronto.
+          </p>
         </div>
 
-        {/* Map */}
-        <div className="relative mx-auto mt-16 max-w-5xl">
-          <svg
-            viewBox={`0 0 ${MAP_W} ${MAP_H}`}
-            className="h-auto w-full"
-            aria-hidden
-          >
-            {/* Background dot field — sparse, continent-shaped */}
-            {continentClusters.map((p, i) => {
-              const { x, y } = proj(p.lng, p.lat);
-              return (
-                <circle
-                  key={`bg-${i}`}
-                  cx={x}
-                  cy={y}
-                  r={2.4}
-                  fill="oklch(0.55 0.04 60 / 0.25)"
-                />
-              );
-            })}
-
-            {/* Soft connecting arcs from a hub (London) to learner cities */}
-            {inView &&
-              learnerCities.map((c, i) => {
-                const a = proj(-0.13, 51.5); // London hub
-                const b = proj(c.lng, c.lat);
-                const mx = (a.x + b.x) / 2;
-                const my = Math.min(a.y, b.y) - 60;
-                const len = 1400;
-                return (
-                  <path
-                    key={`arc-${i}`}
-                    d={`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`}
-                    fill="none"
-                    stroke="oklch(0.58 0.17 255 / 0.35)"
-                    strokeWidth={1.2}
-                    strokeLinecap="round"
-                    strokeDasharray={len}
-                    strokeDashoffset={len}
-                    style={{
-                      animation: `lw-draw 1.6s ease-out ${0.15 * i}s forwards`,
-                    }}
-                  />
-                );
-              })}
-
-            {/* Learner city dots — glowing */}
-            {learnerCities.map((c, i) => {
-              const { x, y } = proj(c.lng, c.lat);
-              return (
-                <g key={`city-${i}`}>
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r={10}
-                    fill="oklch(0.62 0.20 35 / 0.18)"
-                    style={{
-                      transformOrigin: `${x}px ${y}px`,
-                      animation: `lw-pulse 2.6s ease-in-out ${0.2 * i}s infinite`,
-                    }}
-                  />
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r={4}
-                    fill="oklch(0.62 0.20 35)"
-                    stroke="oklch(0.99 0.005 90)"
-                    strokeWidth={1.5}
-                  />
-                </g>
-              );
-            })}
-          </svg>
-
-          {/* Decorative compass mark */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-4 right-2 hidden font-handwriting text-2xl text-foreground/40 sm:block"
-            style={{ transform: "rotate(-8deg)" }}
-          >
-            studied here →
-          </div>
-        </div>
-
-        {/* Country names — large, editorial, no pills */}
-        <div className="mx-auto mt-16 max-w-4xl">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 font-display text-xl font-bold leading-tight tracking-tight text-foreground/75 sm:text-2xl md:text-3xl">
-            {featuredCountries.map((c, i) => (
-              <span key={c} className="inline-flex items-center gap-8">
-                <span className="transition-colors hover:text-foreground">
-                  {c}
-                </span>
-                {i < featuredCountries.length - 1 && (
-                  <span
-                    aria-hidden
-                    className="h-1.5 w-1.5 rounded-full bg-foreground/25"
-                  />
-                )}
-              </span>
-            ))}
-          </div>
+        {/* The grid — 1 / 2 / 3 columns */}
+        <div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          {regions.map((r) => (
+            <RegionCard key={r.name} r={r} />
+          ))}
         </div>
       </div>
-
-      <style>{`
-        @keyframes lw-draw {
-          to { stroke-dashoffset: 0; }
-        }
-        @keyframes lw-pulse {
-          0%, 100% { transform: scale(0.85); opacity: 0.6; }
-          50%      { transform: scale(1.4);  opacity: 0.15; }
-        }
-      `}</style>
     </section>
   );
 }
