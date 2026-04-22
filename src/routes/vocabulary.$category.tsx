@@ -49,6 +49,19 @@ const categoryTone: Record<CategoryKey, { ink: string; pill: string }> = {
   slangs: { ink: "oklch(0.55 0.16 250)", pill: "oklch(0.95 0.04 250)" },
 };
 
+/* Pastel rainbow palette — cycled per topic list.
+   Each entry: resting pastel, deeper active version, and deep ink for text. */
+const pastelPalette: Array<{ bg: string; bgActive: string; ink: string }> = [
+  { bg: "oklch(0.95 0.045 165)", bgActive: "oklch(0.86 0.085 165)", ink: "oklch(0.36 0.09 165)" }, // sage
+  { bg: "oklch(0.95 0.045 55)",  bgActive: "oklch(0.86 0.09 55)",   ink: "oklch(0.42 0.11 45)"  }, // peach
+  { bg: "oklch(0.95 0.045 295)", bgActive: "oklch(0.86 0.09 295)",  ink: "oklch(0.40 0.13 295)" }, // lilac
+  { bg: "oklch(0.95 0.045 230)", bgActive: "oklch(0.86 0.09 230)",  ink: "oklch(0.40 0.13 235)" }, // sky
+  { bg: "oklch(0.95 0.05 95)",   bgActive: "oklch(0.86 0.10 90)",   ink: "oklch(0.40 0.10 80)"  }, // butter
+  { bg: "oklch(0.95 0.045 15)",  bgActive: "oklch(0.86 0.09 15)",   ink: "oklch(0.42 0.13 18)"  }, // blush
+  { bg: "oklch(0.95 0.045 180)", bgActive: "oklch(0.86 0.09 180)",  ink: "oklch(0.40 0.10 195)" }, // mint
+  { bg: "oklch(0.95 0.035 75)",  bgActive: "oklch(0.86 0.075 70)",  ink: "oklch(0.38 0.07 65)"  }, // sand
+];
+
 export const Route = createFileRoute("/vocabulary/$category")({
   validateSearch: searchSchema,
   loader: ({ params }) => {
