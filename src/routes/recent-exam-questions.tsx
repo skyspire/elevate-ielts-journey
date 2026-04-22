@@ -427,6 +427,12 @@ function ModuleToggle({
               fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
               className="transition-colors duration-500"
             />
+            {/* Ear tufts (horns) */}
+            <path
+              d="M 64 58 l 8 -18 l 12 14 Z M 136 58 l -8 -18 l -12 14 Z"
+              fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+              className="transition-colors duration-500"
+            />
             <circle
               cx="82"
               cy="92"
