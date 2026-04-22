@@ -126,48 +126,69 @@ export function ValueStatement() {
           ))}
         </div>
 
-        {/* === FEATURES — supporting === */}
-        <div className="mx-auto mt-14 max-w-4xl">
-          {/* Heading — handwritten + sparkle, no pill */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="relative inline-flex items-center gap-2">
+        {/* === FEATURES — eye-catching === */}
+        <div className="mx-auto mt-16 max-w-4xl">
+          {/* Heading — big, with highlighter swipe + sparkles */}
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-3">
               <Sparkles
-                className="h-5 w-5 text-[oklch(0.55_0.18_30)]"
+                className="h-6 w-6 text-[oklch(0.55_0.18_30)] sm:h-7 sm:w-7"
                 strokeWidth={2.5}
               />
-              <h3 className="font-handwriting text-3xl text-foreground sm:text-4xl">
-                All plans include
+              <h3 className="font-display text-3xl font-black uppercase tracking-tight text-foreground sm:text-5xl">
+                All plans{" "}
+                <span className="relative inline-block">
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-[-4px] bottom-1 -z-0 h-[55%] -rotate-1 rounded-sm"
+                    style={{
+                      background:
+                        "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
+                    }}
+                  />
+                  <span className="relative z-10">include</span>
+                </span>
               </h3>
               <Sparkles
-                className="h-5 w-5 text-[oklch(0.45_0.18_265)]"
+                className="h-6 w-6 text-[oklch(0.45_0.18_265)] sm:h-7 sm:w-7"
                 strokeWidth={2.5}
               />
             </div>
-            {/* hand-drawn underline */}
-            <svg
-              viewBox="0 0 200 12"
-              className="h-2.5 w-44 text-[oklch(0.55_0.18_30)]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            >
-              <path d="M3 7 Q 50 1, 100 6 T 197 5" />
-            </svg>
+            <p className="mt-3 font-handwriting text-xl text-foreground/65 sm:text-2xl">
+              every single feature, on every plan
+            </p>
           </div>
 
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
-            {features.map((f) => (
-              <li
-                key={f}
-                className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-base font-semibold text-foreground/85 shadow-soft backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:text-foreground hover:shadow-card"
-              >
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand">
-                  <Check className="h-3 w-3" strokeWidth={3.5} />
-                </span>
-                {f}
-              </li>
-            ))}
+          {/* Feature pills — bigger, colorful borders */}
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
+            {features.map((f, i) => {
+              const colors = [
+                "oklch(0.55 0.18 30)",
+                "oklch(0.45 0.18 265)",
+                "oklch(0.55 0.14 160)",
+                "oklch(0.6 0.16 50)",
+                "oklch(0.5 0.2 320)",
+                "oklch(0.5 0.18 200)",
+              ];
+              const c = colors[i % colors.length];
+              return (
+                <li
+                  key={f}
+                  className="group inline-flex items-center gap-2.5 rounded-full border-2 bg-card px-4 py-2.5 text-base font-bold text-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card sm:text-lg"
+                  style={{
+                    borderColor: `color-mix(in oklab, ${c} 35%, transparent)`,
+                  }}
+                >
+                  <span
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
+                    style={{ background: c, color: "white" }}
+                  >
+                    <Check className="h-3.5 w-3.5" strokeWidth={3.5} />
+                  </span>
+                  {f}
+                </li>
+              );
+            })}
           </ul>
         </div>
 
