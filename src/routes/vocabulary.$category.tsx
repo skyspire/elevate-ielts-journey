@@ -174,32 +174,34 @@ function CategoryPage() {
             </Link>
           </div>
 
-          {/* Header */}
-          <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
+          {/* Header — clean "card title as hero" with list subhead */}
+          <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <Icon
+                  className="h-4 w-4"
+                  strokeWidth={2.6}
+                  style={{ color: tone.ink }}
+                />
                 <span
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-soft"
-                  style={{ background: tone.ink }}
+                  className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em]"
+                  style={{ color: tone.ink, opacity: 0.75 }}
                 >
-                  <Icon className="h-6 w-6" strokeWidth={2.4} />
+                  Vocabulary · {category.lists.length} lists ·{" "}
+                  {totalWords(category).toLocaleString()} words
                 </span>
-                <div>
-                  <h1
-                    className="font-handwriting text-4xl font-bold leading-[0.95] text-foreground/70 sm:text-5xl"
-                    style={{ transform: "rotate(-1.5deg)" }}
-                  >
-                    {category.title}
-                  </h1>
-                  <p className="mt-1 text-[12px] font-bold uppercase tracking-[0.22em] text-foreground/45">
-                    {category.lists.length} topic lists ·{" "}
-                    {totalWords(category).toLocaleString()} words
-                  </p>
-                </div>
               </div>
-              <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-foreground/65">
-                {category.tagline}
-              </p>
+              <h1
+                className="mt-2 font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[52px]"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                {category.title}
+              </h1>
+              {activeList && (
+                <p className="mt-3 font-display text-[17px] font-semibold text-foreground/55">
+                  {activeList.title}
+                </p>
+              )}
             </div>
 
             {/* Module pill */}
@@ -482,41 +484,53 @@ function WordEntry({
   ink: string;
   pill: string;
 }) {
+  const indexLabel = String(index).padStart(2, "0");
+
   return (
-    <li className="px-5 py-5 sm:px-7">
-      {/* Headword line */}
-      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <h3
-          className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
-          style={{ color: "oklch(0.18 0.03 260)" }}
-        >
-          {word.term}
-        </h3>
-        {word.pos && (
-          <span className="text-[11px] font-medium italic text-foreground/40">
-            {word.pos}
+    <li className="flex gap-4 px-5 py-5 sm:gap-5 sm:px-7">
+      {/* Tiny mono index number */}
+      <span
+        className="shrink-0 pt-[3px] font-mono text-[11px] font-medium tabular-nums text-foreground/35"
+        aria-hidden
+      >
+        {indexLabel}
+      </span>
+
+      <div className="min-w-0 flex-1">
+        {/* Headword line */}
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <h3
+            className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
+            style={{ color: "oklch(0.18 0.03 260)" }}
+          >
+            {word.term}
+          </h3>
+          {word.pos && (
+            <span className="text-[11px] font-medium italic text-foreground/40">
+              {word.pos}
+            </span>
+          )}
+          <span className="text-foreground/35">—</span>
+          <span className="text-[14.5px] leading-snug text-foreground/75">
+            {word.meaning}
           </span>
-        )}
-        <span className="text-foreground/35">—</span>
-        <span className="text-[14.5px] leading-snug text-foreground/75">
-          {word.meaning}
-        </span>
-      </div>
+        </div>
 
-      {/* Example — plain, no label */}
-      <p className="mt-1.5 text-[13.5px] leading-relaxed text-foreground/55">
-        “{word.example}”
-      </p>
-
-      {/* Tip — quiet single line, no pill, no icon */}
-      {word.tip && (
-        <p
-          className="mt-1.5 text-[12.5px] font-medium leading-snug"
-          style={{ color: ink }}
-        >
-          {word.tip}
+        {/* Example — plain, no label */}
+        <p className="mt-1.5 text-[13.5px] leading-relaxed text-foreground/55">
+          “{word.example}”
         </p>
-      )}
+
+        {/* Tip — quiet single line, no pill, no icon */}
+        {word.tip && (
+          <p
+            className="mt-1.5 text-[12.5px] font-medium leading-snug"
+            style={{ color: ink }}
+          >
+            {word.tip}
+          </p>
+        )}
+      </div>
     </li>
   );
 }
