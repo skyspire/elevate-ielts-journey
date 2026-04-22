@@ -694,7 +694,6 @@ function MonthGrid({
 }) {
   void counts;
   void accent;
-  const allActive = selected === "all";
 
   // Abbreviate "March 2026" → "Mar 2026"
   const abbreviate = (m: string) => {
