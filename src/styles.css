@@ -218,11 +218,11 @@
 }
 
 @utility bg-paper-dots {
-  background-color: oklch(0.985 0.012 75);
+  background-color: oklch(0.995 0.008 230);
   background-image:
-    radial-gradient(oklch(0.45 0.05 60 / 0.22) 1.2px, transparent 1.4px),
-    radial-gradient(oklch(0.4 0.05 60 / 0.04) 1px, transparent 1px);
-  background-size: 24px 24px, 3px 3px;
+    radial-gradient(oklch(0.55 0.14 240 / 0.32) 1.3px, transparent 1.6px),
+    radial-gradient(oklch(0.5 0.10 240 / 0.06) 1px, transparent 1px);
+  background-size: 22px 22px, 3px 3px;
 }
 
 @utility bg-paper-sage {
