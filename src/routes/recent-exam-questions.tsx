@@ -6,12 +6,10 @@ import {
   PenLine,
   Mic,
   BookOpen,
-  Calendar,
-  Lock,
   Flame,
-  ArrowUpRight,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
+import { QuestionCard } from "@/components/site/QuestionCard";
 
 type Module = "academic" | "general";
 type WritingTask = "task1" | "task2";
@@ -246,7 +244,7 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="min-h-screen bg-paper-dots">
       <main className="relative py-10 sm:py-14">
         {/* Subtle ruled-paper background behind hero */}
         <div
@@ -915,7 +913,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         title={title}
         questions={filtered}
         accent={accent}
-        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2 & 3"}
+        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2"}
       />
     </div>
   );
@@ -962,6 +960,13 @@ function ReadingSection() {
 /* Sub-section + question card                                         */
 /* ------------------------------------------------------------------ */
 
+type QuestionType =
+  | "Writing Task 1"
+  | "Writing Task 2"
+  | "Speaking Part 1"
+  | "Speaking Part 2"
+  | "Speaking Part 3";
+
 function SubSection({
   eyebrow,
   emoji,
@@ -975,7 +980,7 @@ function SubSection({
   title: string;
   questions: Question[];
   accent: string;
-  sectionLabel: string;
+  sectionLabel: QuestionType;
 }) {
   return (
     <section>
@@ -1013,93 +1018,57 @@ function SubSection({
   );
 }
 
-/* Tag → pastel palette mapping (band background + category text color) */
-const TAG_PALETTE: Record<string, { band: string; text: string }> = {
-  // greens
-  Environment: { band: "oklch(0.92 0.07 165)", text: "oklch(0.30 0.10 175)" },
-  Health: { band: "oklch(0.93 0.06 160)", text: "oklch(0.32 0.10 170)" },
+/* Tag → tone mapping for the homepage QuestionCard */
+type Tone = "blue" | "mint" | "peach" | "lilac";
+
+const TAG_TONE: Record<string, Tone> = {
+  // greens / mint
+  Environment: "mint",
+  Health: "mint",
+  Technology: "mint",
+  Hobbies: "mint",
+  Food: "mint",
   // blues
-  Education: { band: "oklch(0.92 0.05 235)", text: "oklch(0.40 0.16 245)" },
-  Technology: { band: "oklch(0.92 0.05 240)", text: "oklch(0.38 0.18 250)" },
-  Society: { band: "oklch(0.93 0.05 235)", text: "oklch(0.40 0.16 240)" },
-  // peach / orange
-  "Bar Chart": { band: "oklch(0.93 0.05 65)", text: "oklch(0.42 0.12 50)" },
-  "Line Graph": { band: "oklch(0.93 0.05 70)", text: "oklch(0.42 0.13 55)" },
-  Process: { band: "oklch(0.93 0.06 75)", text: "oklch(0.42 0.13 60)" },
-  Map: { band: "oklch(0.93 0.05 60)", text: "oklch(0.42 0.13 50)" },
-  // letters / formal
-  Formal: { band: "oklch(0.92 0.05 280)", text: "oklch(0.40 0.15 285)" },
-  "Semi-formal": { band: "oklch(0.92 0.05 290)", text: "oklch(0.40 0.15 290)" },
-  Informal: { band: "oklch(0.93 0.05 320)", text: "oklch(0.42 0.16 330)" },
-  // speaking
-  "Part 1": { band: "oklch(0.93 0.05 220)", text: "oklch(0.40 0.15 230)" },
-  "Part 2": { band: "oklch(0.92 0.05 200)", text: "oklch(0.38 0.14 205)" },
-  "Part 3": { band: "oklch(0.92 0.05 190)", text: "oklch(0.38 0.14 195)" },
+  Education: "blue",
+  Society: "blue",
+  Hometown: "blue",
+  "Memorable Trip": "blue",
+  Travel: "blue",
+  "Work / Study": "blue",
+  // peach (charts / tasks 1)
+  "Bar Chart": "peach",
+  "Line Graph": "peach",
+  Process: "peach",
+  Map: "peach",
+  Weather: "peach",
+  "An Object": "peach",
+  // lilac (letters / events / people)
+  Formal: "lilac",
+  "Semi-formal": "lilac",
+  Informal: "lilac",
+  "A Person": "lilac",
+  "An Event": "lilac",
+  "A Place": "lilac",
 };
 
-const FALLBACK_PALETTE = { band: "oklch(0.93 0.04 80)", text: "oklch(0.40 0.10 70)" };
 
-function ExamQuestionCard({ q, sectionLabel }: { q: Question; sectionLabel: string }) {
-  const locked = q.locked ?? true;
-  const band = q.band ?? "Band 8.5";
-  const palette = TAG_PALETTE[q.tag] ?? FALLBACK_PALETTE;
-
+function ExamQuestionCard({
+  q,
+  sectionLabel,
+}: {
+  q: Question;
+  sectionLabel: QuestionType;
+}) {
+  const tone: Tone = TAG_TONE[q.tag] ?? "blue";
   return (
-    <div className="flex flex-col gap-3">
-      <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
-        {/* Pastel header band */}
-        <div
-          className="flex items-center justify-between gap-3 px-5 py-4 sm:px-6 sm:py-5"
-          style={{ background: palette.band }}
-        >
-          <span
-            className="font-display text-sm font-black uppercase tracking-[0.18em] sm:text-base"
-            style={{ color: palette.text }}
-          >
-            {q.tag}
-          </span>
-          <span
-            className="inline-flex shrink-0 rounded-full bg-white/90 px-3 py-1.5 font-display text-[10px] font-black uppercase tracking-[0.16em] sm:text-[11px]"
-            style={{ color: palette.text }}
-          >
-            {sectionLabel}
-          </span>
-        </div>
-
-        {/* Body */}
-        <div className="flex flex-1 flex-col gap-5 p-5 sm:p-6">
-          <h3 className="font-display text-lg font-black leading-snug tracking-tight text-foreground sm:text-xl">
-            {q.title}
-          </h3>
-
-          {/* Footer */}
-          <div className="mt-auto flex items-center justify-between border-t border-foreground/10 pt-4">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-foreground/55 sm:text-sm">
-                <Calendar className="h-3.5 w-3.5" strokeWidth={2.6} />
-                {q.date}
-              </span>
-              <span className="rounded-full bg-foreground/[0.08] px-2.5 py-0.5 font-display text-[10px] font-black uppercase tracking-[0.18em] text-foreground/70">
-                {band}
-              </span>
-            </div>
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/[0.08] text-foreground/60">
-              {locked ? (
-                <Lock className="h-3.5 w-3.5" strokeWidth={2.6} />
-              ) : (
-                <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
-              )}
-            </span>
-          </div>
-        </div>
-      </article>
-
-      {/* Below-card caption */}
-      {locked && (
-        <p className="px-1 text-[12px] font-semibold text-foreground/55">
-          Sign up to read · free sample
-        </p>
-      )}
-    </div>
+    <QuestionCard
+      tag={q.tag}
+      tagTone={tone}
+      type={sectionLabel}
+      title={q.title}
+      date={q.date}
+      band={q.band}
+      locked={q.locked}
+    />
   );
 }
