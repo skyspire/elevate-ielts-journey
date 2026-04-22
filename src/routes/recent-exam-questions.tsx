@@ -6,12 +6,10 @@ import {
   PenLine,
   Mic,
   BookOpen,
-  Calendar,
-  Lock,
   Flame,
-  ArrowUpRight,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
+import { QuestionCard } from "@/components/site/QuestionCard";
 
 type Module = "academic" | "general";
 type WritingTask = "task1" | "task2";
@@ -246,7 +244,7 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="min-h-screen bg-paper-dots">
       <main className="relative py-10 sm:py-14">
         {/* Subtle ruled-paper background behind hero */}
         <div
