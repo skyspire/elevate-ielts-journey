@@ -977,7 +977,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         accent={accent}
       />
 
-      <DottedResultsPanel>
+      <DottedResultsPanel tint={paletteForMonth(month)?.soft ?? null}>
         <SubSection
           eyebrow={eyebrow}
           emoji="🎙️"
