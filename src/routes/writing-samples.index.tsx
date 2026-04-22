@@ -266,7 +266,7 @@ function WritingSamplesPage() {
               onTaskChange={onTaskChange}
               isAcademic={isAcademic}
             />
-            <ThinkingRetriever taskSelected={task !== null} />
+            <ThinkingRetriever selectedTask={task} />
           </div>
 
           {/* Steps 2 & 3 — gated until a task is selected */}
@@ -454,6 +454,7 @@ function TaskEnvelopeScroll({
 
   // Compass needle: -90° points left (Task 1), +90° points right (Task 2), 0 = idle (north)
   const needleDeg = isT1 ? -90 : isT2 ? 90 : 0;
+  const roundCoord = (value: number) => Number(value.toFixed(3));
   void accentBorder;
 
   return (
@@ -508,10 +509,10 @@ function TaskEnvelopeScroll({
             {/* Tick marks (every 30°) */}
             {Array.from({ length: 12 }).map((_, i) => {
               const a = (i * 30 * Math.PI) / 180;
-              const x1 = 50 + Math.sin(a) * 36;
-              const y1 = 50 - Math.cos(a) * 36;
-              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
-              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              const x1 = roundCoord(50 + Math.sin(a) * 36);
+              const y1 = roundCoord(50 - Math.cos(a) * 36);
+              const x2 = roundCoord(50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33));
+              const y2 = roundCoord(50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33));
               return (
                 <line
                   key={i}
