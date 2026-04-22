@@ -98,10 +98,10 @@ export function Stats() {
 
       <div className="container-page relative z-10">
         <div className="mb-14 text-center">
-          <p className="font-handwriting text-2xl text-[oklch(0.55_0.16_30)] sm:text-3xl">
+          <p className="font-handwriting text-2xl text-[oklch(0.85_0.14_60)] sm:text-3xl">
             by the numbers
           </p>
-          <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[oklch(0.18_0.03_60)] sm:text-4xl">
+          <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[oklch(0.98_0.01_270)] sm:text-4xl">
             Built for serious IELTS prep
           </h2>
         </div>
