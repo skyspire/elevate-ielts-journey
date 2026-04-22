@@ -62,15 +62,23 @@ export function QuietHero() {
 
       <div className="container-page relative z-10 flex flex-col items-center py-28 text-center md:py-36 lg:py-44">
         {/* Handwritten eyebrow */}
-        <p className="font-handwriting text-2xl text-brand/80 sm:text-3xl">
+        <p className="font-handwriting text-2xl text-amber-200/90 sm:text-3xl">
           free &amp; fresh, always
         </p>
 
         {/* The big calm statement */}
-        <h1 className="mt-5 max-w-4xl font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+        <h1 className="mt-5 max-w-4xl font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl drop-shadow-[0_2px_24px_oklch(0.2_0.1_290_/_0.5)]">
           No need to buy{" "}
           <span className="relative inline-block">
-            <span className="text-gradient-shimmer">expensive</span>
+            <span
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage:
+                  "linear-gradient(100deg, oklch(0.92 0.1 85) 0%, oklch(0.85 0.14 75) 45%, oklch(0.95 0.08 90) 100%)",
+              }}
+            >
+              expensive
+            </span>
             <svg
               aria-hidden
               viewBox="0 0 240 14"
@@ -80,7 +88,7 @@ export function QuietHero() {
               <path
                 d="M3 9 C 50 3, 120 13, 180 6 S 230 5, 237 10"
                 fill="none"
-                stroke="oklch(0.6 0.2 30)"
+                stroke="oklch(0.85 0.14 75)"
                 strokeWidth="3"
                 strokeLinecap="round"
                 className="hero-underline"
@@ -91,7 +99,7 @@ export function QuietHero() {
         </h1>
 
         {/* Quiet supporting line */}
-        <p className="mx-auto mt-8 max-w-xl text-lg text-muted-foreground sm:text-xl">
+        <p className="mx-auto mt-8 max-w-xl text-lg text-white/75 sm:text-xl">
           Latest questions with Band 8–9 sample answers — drawn from real exams,
           updated regularly.
         </p>
@@ -100,7 +108,11 @@ export function QuietHero() {
         <div className="mt-12 flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
           <Button
             size="lg"
-            className="group h-12 rounded-full bg-brand px-7 text-base font-bold text-brand-foreground shadow-glow hover:bg-brand/90"
+            className="group h-12 rounded-full px-7 text-base font-bold text-[oklch(0.22_0.1_290)] shadow-[0_18px_50px_-12px_oklch(0.85_0.14_75/0.55)] hover:opacity-95"
+            style={{
+              backgroundImage:
+                "linear-gradient(100deg, oklch(0.92 0.1 85) 0%, oklch(0.82 0.14 75) 100%)",
+            }}
           >
             View Recent Questions
             <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -108,7 +120,7 @@ export function QuietHero() {
           <Button
             size="lg"
             variant="outline"
-            className="h-12 rounded-full border-border bg-background/80 px-7 text-base font-bold backdrop-blur hover:bg-secondary"
+            className="h-12 rounded-full border-white/30 bg-white/10 px-7 text-base font-bold text-white backdrop-blur hover:bg-white/20"
           >
             Unlock Full Access
           </Button>
