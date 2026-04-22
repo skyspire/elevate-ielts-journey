@@ -2,7 +2,6 @@ import { useState, type ComponentType } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   GraduationCap,
-  ArrowUpRight,
   CheckCircle2,
   PenLine,
   Mic,
