@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Sparkles } from "lucide-react";
 import { z } from "zod";
 import { sampleAnswers } from "@/data/sample-answers";
 import { parseQuestionId } from "@/data/question-helpers";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
+import { BackButton } from "@/components/site/BackButton";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
