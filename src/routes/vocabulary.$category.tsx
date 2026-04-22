@@ -224,8 +224,9 @@ function CategoryPage() {
               {/* Negative margin pulls the nav out of the page padding so pills
                   hug the actual left edge of the viewport. */}
               <nav className="-ml-5 flex flex-col gap-1.5 sm:-ml-6 lg:-ml-[max(calc((100vw-80rem)/2),1.5rem)]">
-                {category.lists.map((l) => {
+                {category.lists.map((l, idx) => {
                   const isActive = l.slug === activeList?.slug;
+                  const palette = pastelPalette[idx % pastelPalette.length];
                   return (
                     <button
                       key={l.slug}
@@ -234,26 +235,16 @@ function CategoryPage() {
                       className="group relative flex items-center text-left"
                       style={{ paddingLeft: 0 }}
                     >
-                      {/* Flush half-pill: rounded right, flat left, hugs x=0.
-                          Width grows on hover/active to reveal more of the pill. */}
+                      {/* Resting pill — soft pastel, partial width */}
                       <span
                         aria-hidden
-                        className="absolute inset-y-0 left-0 rounded-r-full transition-all duration-300 ease-out"
+                        className="absolute inset-y-0 left-0 rounded-r-full transition-all duration-300 ease-out group-hover:!w-[88%]"
                         style={{
-                          background: isActive ? tone.pill : "oklch(0.96 0.008 260)",
+                          background: isActive ? palette.bgActive : palette.bg,
                           width: isActive ? "100%" : "62%",
                           boxShadow: isActive
-                            ? `inset -1px 0 0 ${tone.ink}15, 0 1px 2px ${tone.ink}10`
+                            ? `0 1px 2px ${palette.ink}20, 0 6px 16px ${palette.ink}12`
                             : "inset -1px 0 0 oklch(0 0 0 / 0.04)",
-                        }}
-                      />
-                      {/* Hover-only width boost (CSS-only) */}
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute inset-y-0 left-0 rounded-r-full opacity-0 transition-all duration-300 ease-out group-hover:opacity-100"
-                        style={{
-                          background: tone.pill,
-                          width: isActive ? "100%" : "82%",
                         }}
                       />
                       {/* Left edge accent bar — bolder when active */}
@@ -261,12 +252,12 @@ function CategoryPage() {
                         aria-hidden
                         className="absolute inset-y-2 left-0 w-[3px] rounded-r-full transition-all duration-300"
                         style={{
-                          background: tone.ink,
-                          opacity: isActive ? 1 : 0.35,
+                          background: palette.ink,
+                          opacity: isActive ? 1 : 0.45,
                           transform: isActive ? "scaleY(1)" : "scaleY(0.6)",
                         }}
                       />
-                      {/* Pill content — pushed right with padding so it sits inside the page area */}
+                      {/* Pill content */}
                       <span
                         className="relative z-10 flex flex-col py-3 pr-5"
                         style={{
@@ -277,8 +268,9 @@ function CategoryPage() {
                         <span
                           className="font-display text-[17px] leading-[1.2] tracking-tight transition-colors sm:text-[18px]"
                           style={{
-                            color: isActive ? tone.ink : "oklch(0.28 0.03 260)",
+                            color: palette.ink,
                             fontWeight: isActive ? 900 : 700,
+                            opacity: isActive ? 1 : 0.85,
                           }}
                         >
                           {l.title}
@@ -286,7 +278,7 @@ function CategoryPage() {
                         <span
                           className="mt-0.5 text-[10.5px] font-bold uppercase tracking-[0.2em] transition-colors"
                           style={{
-                            color: isActive ? tone.ink : "oklch(0.55 0.02 260)",
+                            color: palette.ink,
                             opacity: isActive ? 0.75 : 0.5,
                           }}
                         >
