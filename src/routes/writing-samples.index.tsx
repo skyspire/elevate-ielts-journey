@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
+import { BackButton } from "@/components/site/BackButton";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
