@@ -227,13 +227,13 @@ export function LearnersWorld() {
           transition: "opacity 0.8s ease",
         }}
       >
-        {/* Soft fade edges */}
+        {/* Soft fade edges — match new background */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 sm:w-40"
           style={{
             background:
-              "linear-gradient(to right, var(--color-paper-cream, oklch(0.97 0.015 85)) 10%, transparent)",
+              "linear-gradient(to right, oklch(0.965 0.022 80) 5%, transparent)",
           }}
         />
         <div
@@ -241,7 +241,7 @@ export function LearnersWorld() {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 sm:w-40"
           style={{
             background:
-              "linear-gradient(to left, var(--color-paper-cream, oklch(0.97 0.015 85)) 10%, transparent)",
+              "linear-gradient(to left, oklch(0.965 0.022 80) 5%, transparent)",
           }}
         />
 
