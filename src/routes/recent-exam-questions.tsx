@@ -347,17 +347,17 @@ function ModuleToggle({
 }) {
   const isAcademic = module === "academic";
   return (
-    <div className="relative flex items-center justify-center gap-3 sm:gap-5">
+    <div className="relative flex items-center justify-center gap-3 sm:gap-6">
       <button
         type="button"
         onClick={() => setModule("academic")}
         aria-pressed={isAcademic}
         className={`group transition-all duration-300 ${
-          isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+          isAcademic ? "opacity-100" : "opacity-45 hover:opacity-75"
         }`}
       >
         <span
-          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
             isAcademic ? "text-foreground" : "text-foreground/55"
           }`}
         >
@@ -365,9 +365,9 @@ function ModuleToggle({
         </span>
       </button>
 
-      {/* Mini owl — same identity as dashboard */}
+      {/* Owl — same identity as dashboard */}
       <div className="relative flex shrink-0 items-end justify-center">
-        <svg viewBox="0 0 200 220" className="h-24 w-24 sm:h-32 sm:w-32" aria-label="Wise owl">
+        <svg viewBox="0 0 200 220" className="h-44 w-44 sm:h-56 sm:w-56" aria-label="Wise owl">
           <path
             d="M 20 200 Q 100 195 180 200"
             stroke="oklch(0.45 0.06 60)"
@@ -453,11 +453,11 @@ function ModuleToggle({
         onClick={() => setModule("general")}
         aria-pressed={!isAcademic}
         className={`group transition-all duration-300 ${
-          !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+          !isAcademic ? "opacity-100" : "opacity-45 hover:opacity-75"
         }`}
       >
         <span
-          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
             !isAcademic ? "text-foreground" : "text-foreground/55"
           }`}
         >
