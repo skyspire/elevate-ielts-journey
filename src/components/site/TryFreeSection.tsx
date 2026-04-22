@@ -66,8 +66,15 @@ export function TryFreeSection() {
             </h3>
 
             <p className="relative mt-4 text-[15px] font-medium leading-relaxed text-brand-foreground/85">
-              See exactly what a band-9 response looks like. Curated by our
-              team, available the moment you sign up.
+              See exactly what a{" "}
+              <span className="font-display font-extrabold text-brand-foreground underline decoration-brand-foreground/40 decoration-2 underline-offset-4">
+                band-9 response
+              </span>{" "}
+              looks like. Curated by our team, ready the{" "}
+              <span className="font-display font-extrabold text-brand-foreground">
+                moment you sign up
+              </span>
+              .
             </p>
 
             {/* Big sample callouts */}
