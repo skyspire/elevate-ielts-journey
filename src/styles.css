@@ -239,6 +239,15 @@
   background-size: 3px 3px;
 }
 
+@utility bg-paper-rose {
+  background-color: oklch(0.965 0.022 30);
+  background-image:
+    radial-gradient(oklch(0.45 0.10 30 / 0.22) 1.2px, transparent 1.4px),
+    radial-gradient(oklch(0.40 0.08 30 / 0.04) 1px, transparent 1px);
+  background-size: 24px 24px, 3px 3px;
+}
+
+
 @utility bg-paper-peach {
   background-color: oklch(0.93 0.05 55);
   background-image: radial-gradient(oklch(0.4 0.06 55 / 0.07) 1px, transparent 1px);
