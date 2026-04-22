@@ -15,6 +15,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
+import { CardMotif } from "@/components/site/CardMotif";
 
 type Module = "academic" | "general";
 
