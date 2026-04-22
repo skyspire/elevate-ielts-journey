@@ -230,16 +230,16 @@ function DashboardPage() {
   return (
     <div className="relative min-h-screen bg-paper-cream">
       <main className="relative overflow-hidden py-12 sm:py-16">
-        {/* Aurora mesh — drifting blobs of color, contained to main */}
+        {/* Holographic foil background — pearlescent rainbow with sweeping highlight */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-          <span className="aurora-blob aurora-blob-a" />
-          <span className="aurora-blob aurora-blob-b" />
-          <span className="aurora-blob aurora-blob-c" />
-          <span className="aurora-blob aurora-blob-d" />
-          {/* Soft cream wash on top to keep cards legible */}
+          {/* Base pearlescent foil */}
+          <span className="absolute inset-0 holo-foil" />
+          {/* Slow shimmer band sweeping across */}
+          <span className="absolute inset-0 holo-shimmer" />
+          {/* Soft cream wash so cards stay legible */}
           <span className="absolute inset-0 bg-[oklch(0.99_0.01_80/0.55)]" />
-          {/* Subtle grain for tactile finish */}
-          <span className="absolute inset-0 aurora-grain opacity-[0.10] mix-blend-multiply" />
+          {/* Fine grain for that real-foil tactile finish */}
+          <span className="absolute inset-0 aurora-grain opacity-[0.12] mix-blend-overlay" />
         </div>
 
         {/* Centered content column */}
