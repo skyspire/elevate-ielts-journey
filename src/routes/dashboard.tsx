@@ -305,7 +305,62 @@ function DashboardPage() {
             ))}
           </div>
 
-          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
+          {/* Bottom anchor — daily tip strip gives the page a satisfying close */}
+          <div className="mt-14">
+            <div
+              className="relative mx-auto flex max-w-3xl flex-col items-center gap-3 overflow-hidden rounded-2xl px-5 py-5 sm:flex-row sm:gap-5 sm:px-7 sm:py-6"
+              style={{
+                background:
+                  "linear-gradient(135deg, oklch(0.96 0.04 95) 0%, oklch(0.95 0.05 55) 50%, oklch(0.94 0.05 350) 100%)",
+                border: "1px solid color-mix(in oklab, oklch(0.45 0.10 60) 22%, transparent)",
+                boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.55)",
+              }}
+            >
+              {/* Pastel rosette — left */}
+              <div
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl"
+                style={{
+                  background: "oklch(0.99 0.012 85)",
+                  border: "1.5px solid color-mix(in oklab, oklch(0.45 0.10 60) 28%, transparent)",
+                  boxShadow: "inset 0 0 0 3px oklch(0.96 0.05 95)",
+                }}
+                aria-hidden
+              >
+                ✨
+              </div>
+
+              {/* Copy */}
+              <div className="flex-1 text-center sm:text-left">
+                <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/55">
+                  Today's Pick
+                </div>
+                <div className="mt-1 font-display text-base font-black tracking-tight text-foreground sm:text-lg">
+                  {module === "academic"
+                    ? "Master 5 new academic collocations today"
+                    : "Practice 1 letter from a real recent exam"}
+                </div>
+                <div className="mt-1 text-[12px] font-medium text-foreground/65">
+                  Small daily wins compound into a Band 8+ score.
+                </div>
+              </div>
+
+              {/* CTA chip */}
+              <Link
+                to={module === "academic" ? "/vocabulary" : "/writing-samples"}
+                search={{ module }}
+                className="shrink-0 rounded-full px-4 py-2 font-display text-[12px] font-black tracking-tight transition-transform hover:-translate-y-0.5"
+                style={{
+                  background: "oklch(0.22 0.04 260)",
+                  color: "oklch(0.98 0.01 85)",
+                  boxShadow: "0 4px 0 oklch(0.45 0.10 60 / 0.35)",
+                }}
+              >
+                Start now →
+              </Link>
+            </div>
+          </div>
+
+          <p className="mt-8 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
             More tools coming soon · Access never expires during your plan
           </p>
         </div>
