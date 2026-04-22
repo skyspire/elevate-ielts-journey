@@ -1018,15 +1018,6 @@ function SubSection({
       ) : (
         <>
           <div className="mb-7 text-center">
-            <div
-              className="mx-auto mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em]"
-              style={{
-                backgroundColor: `color-mix(in oklab, ${accent} 14%, white)`,
-                color: accent,
-              }}
-            >
-              <span aria-hidden>↻</span> Repeat alert
-            </div>
             <h3 className="font-display text-xl font-black leading-tight tracking-tight sm:text-2xl">
               <span style={{ color: accent }}>IELTS repeats questions</span>{" "}
               <span className="text-foreground">year after year</span>
