@@ -852,14 +852,16 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
         accent={accent}
       />
 
-      <SubSection
-        eyebrow={eyebrow}
-        emoji="✍️"
-        title={title}
-        questions={filtered}
-        accent={accent}
-        sectionLabel={task === "task1" ? "Writing Task 1" : "Writing Task 2"}
-      />
+      <DottedResultsPanel>
+        <SubSection
+          eyebrow={eyebrow}
+          emoji="✍️"
+          title={title}
+          questions={filtered}
+          accent={accent}
+          sectionLabel={task === "task1" ? "Writing Task 1" : "Writing Task 2"}
+        />
+      </DottedResultsPanel>
     </div>
   );
 }
