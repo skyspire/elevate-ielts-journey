@@ -19,18 +19,62 @@ const freeSamples = [
 ];
 
 const paidTools = [
-  { icon: PenLine, label: "Unlimited Writing samples" },
-  { icon: Mic, label: "Unlimited Speaking samples" },
-  { icon: BookOpen, label: "Vocabulary Builder" },
-  { icon: FileQuestion, label: "Recent Exam Questions" },
-  { icon: Sparkles, label: "Predictions for upcoming exams" },
-  { icon: CalendarClock, label: "Personalized Study Timetable" },
-  { icon: LineChart, label: "Mistakes Analysis" },
+  {
+    icon: PenLine,
+    label: "Unlimited Writing samples",
+    color: "oklch(0.62 0.20 35)", // warm orange
+    motion: "wiggle",
+  },
+  {
+    icon: Mic,
+    label: "Unlimited Speaking samples",
+    color: "oklch(0.65 0.18 350)", // pink
+    motion: "pulse",
+  },
+  {
+    icon: BookOpen,
+    label: "Vocabulary Builder",
+    color: "oklch(0.62 0.16 200)", // teal-blue
+    motion: "flip",
+  },
+  {
+    icon: FileQuestion,
+    label: "Recent Exam Questions",
+    color: "oklch(0.68 0.17 95)", // golden yellow
+    motion: "bounce",
+  },
+  {
+    icon: Sparkles,
+    label: "Predictions for upcoming exams",
+    color: "oklch(0.65 0.20 300)", // purple
+    motion: "spin",
+  },
+  {
+    icon: CalendarClock,
+    label: "Personalized Study Timetable",
+    color: "oklch(0.65 0.16 155)", // green
+    motion: "tick",
+  },
+  {
+    icon: LineChart,
+    label: "Mistakes Analysis",
+    color: "oklch(0.62 0.17 25)", // red-orange
+    motion: "rise",
+  },
 ];
 
 export function TryFreeSection() {
   return (
     <section className="relative overflow-hidden bg-background py-20 sm:py-28">
+      <style>{`
+        @keyframes tfs-wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-15deg)} 75%{transform:rotate(15deg)} }
+        @keyframes tfs-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+        @keyframes tfs-flip { 0%{transform:rotateY(0)} 100%{transform:rotateY(360deg)} }
+        @keyframes tfs-bounce { 0%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} 60%{transform:translateY(2px)} }
+        @keyframes tfs-spin { 0%{transform:rotate(0) scale(1)} 50%{transform:rotate(180deg) scale(1.15)} 100%{transform:rotate(360deg) scale(1)} }
+        @keyframes tfs-tick { 0%,100%{transform:rotate(0)} 25%{transform:rotate(20deg)} 50%{transform:rotate(0)} 75%{transform:rotate(-20deg)} }
+        @keyframes tfs-rise { 0%{transform:translateY(0)} 50%{transform:translateY(-5px) scale(1.1)} 100%{transform:translateY(0)} }
+      `}</style>
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
@@ -144,17 +188,39 @@ export function TryFreeSection() {
               publish — updated continuously.
             </p>
 
-            <ul className="relative mt-8 space-y-2">
+            <ul className="relative mt-8 space-y-1">
               {paidTools.map((t) => (
                 <li
                   key={t.label}
-                  className="flex items-center gap-3.5 border-b border-background/10 py-3 text-[15px] font-bold last:border-b-0"
+                  className="group/row flex items-center gap-4 border-b border-background/10 py-3 text-[15px] font-bold last:border-b-0"
                 >
-                  <Check
-                    className="h-4 w-4 shrink-0 text-brand"
-                    strokeWidth={3.5}
-                  />
-                  <span>{t.label}</span>
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover/row:scale-110"
+                    style={{
+                      backgroundColor: `color-mix(in oklab, ${t.color} 18%, transparent)`,
+                      color: t.color,
+                    }}
+                  >
+                    <t.icon
+                      className={`h-[18px] w-[18px] transition-transform duration-500 ${
+                        t.motion === "wiggle"
+                          ? "group-hover/row:[animation:tfs-wiggle_0.6s_ease-in-out]"
+                          : t.motion === "pulse"
+                            ? "group-hover/row:[animation:tfs-pulse_0.7s_ease-in-out]"
+                            : t.motion === "flip"
+                              ? "group-hover/row:[animation:tfs-flip_0.7s_ease-in-out]"
+                              : t.motion === "bounce"
+                                ? "group-hover/row:[animation:tfs-bounce_0.6s_ease-in-out]"
+                                : t.motion === "spin"
+                                  ? "group-hover/row:[animation:tfs-spin_0.8s_ease-in-out]"
+                                  : t.motion === "tick"
+                                    ? "group-hover/row:[animation:tfs-tick_0.8s_ease-in-out]"
+                                    : "group-hover/row:[animation:tfs-rise_0.6s_ease-in-out]"
+                      }`}
+                      strokeWidth={2.5}
+                    />
+                  </span>
+                  <span className="flex-1">{t.label}</span>
                 </li>
               ))}
             </ul>
