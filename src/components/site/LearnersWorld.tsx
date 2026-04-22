@@ -129,14 +129,35 @@ const rainConfig = RAIN_FLAGS.map((flag, i) => {
     return x - Math.floor(x);
   };
   const startX = 4 + rand(i + 1) * 92;
-  // Settle near the bottom half so they sit BEHIND the big number
   const restY = 48 + rand(i + 7) * 48; // 48–96%
   const rotate = (rand(i + 13) - 0.5) * 50;
   const delay = rand(i + 21) * 1.6;
   const duration = 1.6 + rand(i + 31) * 1.2;
-  // Much bigger flags
   const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
-  return { flag, startX, restY, rotate, delay, duration, size };
+  // Continuous drift parameters — each flag gets its own rhythm
+  const driftDur = 6 + rand(i + 51) * 6; // 6–12s drift loop
+  const driftDelay = -rand(i + 61) * driftDur; // negative so they're already mid-loop
+  const bobDur = 3 + rand(i + 71) * 2.5; // 3–5.5s bob loop
+  const bobDelay = -rand(i + 81) * bobDur;
+  const driftAmp = 8 + rand(i + 91) * 14; // 8–22px horizontal drift
+  const bobAmp = 6 + rand(i + 101) * 10; // 6–16px vertical bob
+  const swayDeg = 2 + rand(i + 111) * 4; // 2–6deg gentle sway
+  return {
+    flag,
+    startX,
+    restY,
+    rotate,
+    delay,
+    duration,
+    size,
+    driftDur,
+    driftDelay,
+    bobDur,
+    bobDelay,
+    driftAmp,
+    bobAmp,
+    swayDeg,
+  };
 });
 
 function CounterStage({ active }: { active: boolean }) {
