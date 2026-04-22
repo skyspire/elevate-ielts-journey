@@ -67,6 +67,7 @@ const features: Feature[] = [
     tone: "rust",
     icon: Flame,
     highlighted: true,
+    to: "/dashboard/recent-exam-questions",
   },
   {
     key: "writing",
@@ -555,6 +556,18 @@ function FeatureCard({
       )}
     </>
   );
+
+  if (feature.to === "/dashboard/recent-exam-questions") {
+    return (
+      <Link
+        to="/recent-exam-questions"
+        search={{ module, section: "writing" }}
+        className={cardClass}
+      >
+        {inner}
+      </Link>
+    );
+  }
 
   if (feature.to === "/dashboard/writing-samples") {
     return (

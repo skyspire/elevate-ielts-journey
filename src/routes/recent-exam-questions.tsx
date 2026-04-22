@@ -1,0 +1,675 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
+import { useState } from "react";
+import {
+  ArrowLeft,
+  PenLine,
+  Mic,
+  Calendar,
+  Lock,
+  Flame,
+  ArrowUpRight,
+} from "lucide-react";
+import { Footer } from "@/components/site/Footer";
+
+type Module = "academic" | "general";
+type WritingTask = "task1" | "task2";
+type SpeakingPart = "part1" | "part2" | "part3";
+type ExamSection = "writing" | "speaking";
+
+const searchSchema = z.object({
+  module: z.enum(["academic", "general"]).catch("academic"),
+  section: z.enum(["writing", "speaking"]).catch("writing"),
+});
+
+export const Route = createFileRoute("/recent-exam-questions")({
+  validateSearch: searchSchema,
+  head: () => ({
+    meta: [
+      { title: "Recent Exam Questions — BigIELTS.com" },
+      {
+        name: "description",
+        content:
+          "Real IELTS Writing and Speaking questions reported from recent test dates. Browse by Academic or General module, with Task 1/2 and Speaking Part 1/2/3.",
+      },
+      { property: "og:title", content: "Recent Exam Questions — BigIELTS.com" },
+      {
+        property: "og:description",
+        content:
+          "Latest verified IELTS questions from recent exams — Academic & General, Writing Task 1/2 and Speaking Part 1/2/3.",
+      },
+    ],
+  }),
+  component: RecentExamQuestionsPage,
+});
+
+/* ------------------------------------------------------------------ */
+/* Question data                                                       */
+/* ------------------------------------------------------------------ */
+
+type Question = {
+  tag: string;
+  title: string;
+  date: string;
+  band?: string;
+  locked?: boolean;
+};
+
+type WritingData = Record<WritingTask, Question[]>;
+type SpeakingData = Record<SpeakingPart, Question[]>;
+
+const academicWriting: WritingData = {
+  task1: [
+    {
+      tag: "Bar Chart",
+      title:
+        "The chart below shows household spending on leisure activities in four countries in 2024.",
+      date: "April 2026",
+    },
+    {
+      tag: "Line Graph",
+      title:
+        "The graph illustrates electricity consumption per capita in three regions between 1990 and 2020.",
+      date: "March 2026",
+    },
+    {
+      tag: "Process",
+      title: "The diagram shows how recycled plastic bottles are turned into clothing fibres.",
+      date: "March 2026",
+    },
+    {
+      tag: "Map",
+      title: "The two maps show changes in a coastal town between 2000 and 2024.",
+      date: "February 2026",
+    },
+  ],
+  task2: [
+    {
+      tag: "Environment",
+      title:
+        "Some people believe individuals can do little to protect the environment. To what extent do you agree?",
+      date: "April 2026",
+    },
+    {
+      tag: "Education",
+      title:
+        "Many universities now offer online courses. Are the benefits greater than the drawbacks?",
+      date: "April 2026",
+    },
+    {
+      tag: "Technology",
+      title:
+        "Some argue that smartphones harm face-to-face communication. Discuss both views and give your opinion.",
+      date: "March 2026",
+    },
+    {
+      tag: "Society",
+      title:
+        "In some countries, the number of older people is rising. What problems does this cause and how can they be solved?",
+      date: "March 2026",
+    },
+  ],
+};
+
+const generalWriting: WritingData = {
+  task1: [
+    {
+      tag: "Formal Letter",
+      title:
+        "You recently bought an item online that arrived damaged. Write a letter to the company to complain and request a refund.",
+      date: "April 2026",
+    },
+    {
+      tag: "Semi-formal",
+      title:
+        "Your neighbour has been making a lot of noise late at night. Write a polite letter asking them to stop.",
+      date: "April 2026",
+    },
+    {
+      tag: "Informal Letter",
+      title:
+        "An old friend is visiting your city next month. Write a letter telling them what you have planned.",
+      date: "March 2026",
+    },
+    {
+      tag: "Formal Letter",
+      title:
+        "Write a letter to your manager requesting time off work for a personal matter, explaining the reason.",
+      date: "February 2026",
+    },
+  ],
+  task2: [
+    {
+      tag: "Work-Life",
+      title:
+        "Some people prefer to work from home, while others prefer to go to an office. Discuss both views and give your opinion.",
+      date: "April 2026",
+    },
+    {
+      tag: "Family",
+      title:
+        "Many families today eat fewer meals together than in the past. What are the reasons and effects of this change?",
+      date: "March 2026",
+    },
+    {
+      tag: "Health",
+      title:
+        "Fast food is becoming increasingly popular. Do the disadvantages outweigh the advantages?",
+      date: "March 2026",
+    },
+    {
+      tag: "Community",
+      title:
+        "Some people think parents should teach children how to be good members of society. To what extent do you agree?",
+      date: "February 2026",
+    },
+  ],
+};
+
+// Speaking is identical for Academic and General
+const speakingData: SpeakingData = {
+  part1: [
+    {
+      tag: "Hometown",
+      title: "Describe your hometown and what you like most about it.",
+      date: "April 2026",
+    },
+    {
+      tag: "Work / Study",
+      title: "Do you work or are you a student? What do you enjoy about it?",
+      date: "April 2026",
+    },
+    {
+      tag: "Hobbies",
+      title: "What do you usually do in your free time? How long have you done it?",
+      date: "March 2026",
+    },
+    {
+      tag: "Food",
+      title: "What kind of food do you like to cook at home?",
+      date: "March 2026",
+    },
+  ],
+  part2: [
+    {
+      tag: "Memorable Trip",
+      title:
+        "Describe a journey that did not go as planned. You should say where, when, who and why.",
+      date: "April 2026",
+    },
+    {
+      tag: "A Person",
+      title:
+        "Describe a person who inspires you. Say who they are, how you know them and why they inspire you.",
+      date: "March 2026",
+    },
+    {
+      tag: "An Object",
+      title:
+        "Describe a piece of equipment in your home that you find useful. What it is, how you got it, and why it is useful.",
+      date: "March 2026",
+    },
+    {
+      tag: "An Event",
+      title:
+        "Describe a celebration you attended recently. Where it was, who was there, and how you felt.",
+      date: "February 2026",
+    },
+  ],
+  part3: [
+    {
+      tag: "Technology",
+      title: "How has technology changed the way people communicate in your country?",
+      date: "April 2026",
+    },
+    {
+      tag: "Society",
+      title: "Do you think it is important for people to take part in community events? Why?",
+      date: "March 2026",
+    },
+    {
+      tag: "Education",
+      title:
+        "How do you think school education will change in the next 20 years in your country?",
+      date: "March 2026",
+    },
+    {
+      tag: "Environment",
+      title:
+        "Should governments do more to protect the environment, or is it the responsibility of individuals?",
+      date: "February 2026",
+    },
+  ],
+};
+
+/* ------------------------------------------------------------------ */
+/* Page                                                                */
+/* ------------------------------------------------------------------ */
+
+function RecentExamQuestionsPage() {
+  const search = Route.useSearch();
+  const [module, setModule] = useState<Module>(search.module);
+  const [section, setSection] = useState<ExamSection>(search.section);
+  const isAcademic = module === "academic";
+
+  return (
+    <div className="min-h-screen bg-paper-cream">
+      <main className="relative py-10 sm:py-14">
+        {/* Subtle ruled-paper background behind hero */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[380px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+        />
+
+        <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
+          {/* Back link */}
+          <div className="mb-6">
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.2em] text-foreground/55 transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" strokeWidth={2.6} />
+              Dashboard
+            </Link>
+          </div>
+
+          {/* Hero */}
+          <div className="text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[oklch(0.62_0.20_25)]/10 px-3 py-1 ring-1 ring-inset ring-[oklch(0.62_0.20_25)]/30">
+              <Flame className="h-3.5 w-3.5 text-[oklch(0.55_0.20_25)]" strokeWidth={2.6} />
+              <span className="font-display text-[10px] font-black uppercase tracking-[0.22em] text-[oklch(0.45_0.18_25)]">
+                Fresh from recent exams
+              </span>
+            </div>
+            <div className="relative inline-block">
+              <h1
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
+                style={{ transform: "rotate(-2deg)" }}
+              >
+                Recent Exam Questions
+              </h1>
+              <svg
+                aria-hidden
+                viewBox="0 0 300 14"
+                preserveAspectRatio="none"
+                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transform: "rotate(-2deg)" }}
+              >
+                <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
+                <path
+                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
+                  opacity="0.4"
+                  strokeWidth="1.4"
+                />
+              </svg>
+            </div>
+            <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/60 sm:text-base">
+              Verified Writing & Speaking questions reported by real test-takers — updated each
+              month.
+            </p>
+          </div>
+
+          {/* Module toggle (compass-owl style, simplified) */}
+          <div className="mt-10 flex justify-center">
+            <ModuleToggle module={module} setModule={setModule} />
+          </div>
+
+          {/* Section tabs */}
+          <div className="mt-10 flex justify-center">
+            <SectionTabs section={section} setSection={setSection} />
+          </div>
+
+          {/* Content */}
+          <div className="mt-10">
+            {section === "writing" ? (
+              <WritingSection
+                data={isAcademic ? academicWriting : generalWriting}
+                isAcademic={isAcademic}
+              />
+            ) : (
+              <SpeakingSection data={speakingData} />
+            )}
+          </div>
+
+          <p className="mt-14 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
+            Updated monthly · Verified by real test-takers · Free samples available
+          </p>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Module Toggle — compact owl-inspired style                          */
+/* ------------------------------------------------------------------ */
+
+function ModuleToggle({
+  module,
+  setModule,
+}: {
+  module: Module;
+  setModule: (m: Module) => void;
+}) {
+  const isAcademic = module === "academic";
+  return (
+    <div className="relative flex items-center justify-center gap-3 sm:gap-5">
+      <button
+        type="button"
+        onClick={() => setModule("academic")}
+        aria-pressed={isAcademic}
+        className={`group transition-all duration-300 ${
+          isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+        }`}
+      >
+        <span
+          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+            isAcademic ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          Academic
+        </span>
+      </button>
+
+      {/* Mini owl — same identity as dashboard */}
+      <div className="relative flex shrink-0 items-end justify-center">
+        <svg viewBox="0 0 200 220" className="h-24 w-24 sm:h-32 sm:w-32" aria-label="Wise owl">
+          <path
+            d="M 20 200 Q 100 195 180 200"
+            stroke="oklch(0.45 0.06 60)"
+            strokeWidth="6"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <ellipse
+            cx="100"
+            cy="150"
+            rx="48"
+            ry="46"
+            fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+            className="transition-colors duration-500"
+          />
+          <ellipse cx="100" cy="158" rx="30" ry="32" fill="oklch(0.96 0.02 80)" />
+          <path
+            d="M 60 145 Q 50 175 70 188 Q 75 170 78 150 Z"
+            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            className="transition-colors duration-500"
+          />
+          <path
+            d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
+            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            className="transition-colors duration-500"
+          />
+          <g
+            style={{
+              transformOrigin: "100px 100px",
+              transform: isAcademic ? "rotate(-22deg)" : "rotate(22deg)",
+              transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+            <circle
+              cx="100"
+              cy="92"
+              r="48"
+              fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+              className="transition-colors duration-500"
+            />
+            <circle
+              cx="82"
+              cy="92"
+              r="18"
+              fill="oklch(0.99 0 0)"
+              stroke="oklch(0.20 0.02 250)"
+              strokeWidth="3.5"
+            />
+            <circle
+              cx="118"
+              cy="92"
+              r="18"
+              fill="oklch(0.99 0 0)"
+              stroke="oklch(0.20 0.02 250)"
+              strokeWidth="3.5"
+            />
+            <circle
+              cx={isAcademic ? "76" : "88"}
+              cy="92"
+              r="5"
+              fill="oklch(0.18 0.02 250)"
+              style={{ transition: "cx 500ms ease" }}
+            />
+            <circle
+              cx={isAcademic ? "112" : "124"}
+              cy="92"
+              r="5"
+              fill="oklch(0.18 0.02 250)"
+              style={{ transition: "cx 500ms ease" }}
+            />
+            <path
+              d="M 92 112 L 100 124 L 108 112 Z"
+              fill="oklch(0.70 0.16 60)"
+              stroke="oklch(0.45 0.14 60)"
+              strokeWidth="1.5"
+            />
+          </g>
+        </svg>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setModule("general")}
+        aria-pressed={!isAcademic}
+        className={`group transition-all duration-300 ${
+          !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+        }`}
+      >
+        <span
+          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+            !isAcademic ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          General
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Section Tabs — Writing / Speaking                                   */
+/* ------------------------------------------------------------------ */
+
+function SectionTabs({
+  section,
+  setSection,
+}: {
+  section: ExamSection;
+  setSection: (s: ExamSection) => void;
+}) {
+  const tabs: { key: ExamSection; label: string; icon: typeof PenLine }[] = [
+    { key: "writing", label: "Writing", icon: PenLine },
+    { key: "speaking", label: "Speaking", icon: Mic },
+  ];
+  return (
+    <div className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
+      {tabs.map((t) => {
+        const active = section === t.key;
+        const Icon = t.icon;
+        return (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => setSection(t.key)}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-display text-[12px] font-extrabold uppercase tracking-[0.16em] transition-all sm:px-5 ${
+              active
+                ? "bg-foreground text-background shadow-soft"
+                : "text-foreground/55 hover:text-foreground"
+            }`}
+          >
+            <Icon className="h-3.5 w-3.5" strokeWidth={2.6} />
+            {t.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Writing — Task 1 & Task 2                                           */
+/* ------------------------------------------------------------------ */
+
+function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: boolean }) {
+  return (
+    <div className="space-y-12">
+      <SubSection
+        eyebrow={isAcademic ? "Writing Task 1 — Reports" : "Writing Task 1 — Letters"}
+        title={isAcademic ? "Charts, graphs, processes & maps" : "Formal, semi-formal & informal"}
+        questions={data.task1}
+        accent="oklch(0.48 0.16 230)"
+      />
+      <SubSection
+        eyebrow="Writing Task 2 — Essays"
+        title="Opinion, discussion & problem–solution"
+        questions={data.task2}
+        accent="oklch(0.42 0.18 260)"
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Speaking — Part 1 / 2 / 3                                           */
+/* ------------------------------------------------------------------ */
+
+function SpeakingSection({ data }: { data: SpeakingData }) {
+  return (
+    <div className="space-y-12">
+      <SubSection
+        eyebrow="Speaking Part 1"
+        title="Personal questions & familiar topics"
+        questions={data.part1}
+        accent="oklch(0.55 0.16 250)"
+      />
+      <SubSection
+        eyebrow="Speaking Part 2"
+        title="Long-turn cue card"
+        questions={data.part2}
+        accent="oklch(0.50 0.15 200)"
+      />
+      <SubSection
+        eyebrow="Speaking Part 3"
+        title="Discussion & abstract follow-ups"
+        questions={data.part3}
+        accent="oklch(0.45 0.18 290)"
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Sub-section + question card                                         */
+/* ------------------------------------------------------------------ */
+
+function SubSection({
+  eyebrow,
+  title,
+  questions,
+  accent,
+}: {
+  eyebrow: string;
+  title: string;
+  questions: Question[];
+  accent: string;
+}) {
+  return (
+    <section>
+      <div className="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <p
+            className="font-display text-[10px] font-black uppercase tracking-[0.24em]"
+            style={{ color: accent }}
+          >
+            {eyebrow}
+          </p>
+          <h2 className="mt-1 font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+            {title}
+          </h2>
+        </div>
+        <span className="hidden font-mono text-[11px] font-semibold tabular-nums text-foreground/45 sm:inline">
+          {String(questions.length).padStart(2, "0")} questions
+        </span>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        {questions.map((q) => (
+          <ExamQuestionCard key={q.title} q={q} accent={accent} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ExamQuestionCard({ q, accent }: { q: Question; accent: string }) {
+  const locked = q.locked ?? true;
+  const band = q.band ?? "Band 8.5";
+  return (
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
+      {/* Accent rail */}
+      <span
+        aria-hidden
+        className="absolute left-0 top-0 h-full w-1"
+        style={{ background: accent }}
+      />
+      <div className="flex flex-1 flex-col gap-4 p-5 pl-6 sm:p-6 sm:pl-7">
+        {/* Tag */}
+        <div className="flex items-center justify-between gap-3">
+          <span
+            className="inline-flex rounded-full px-2.5 py-1 font-display text-[10px] font-black uppercase tracking-[0.18em]"
+            style={{ background: `color-mix(in oklab, ${accent} 12%, white)`, color: accent }}
+          >
+            {q.tag}
+          </span>
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-foreground/50">
+            <Calendar className="h-3 w-3" strokeWidth={2.6} />
+            {q.date}
+          </span>
+        </div>
+
+        {/* Question */}
+        <h3 className="font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground sm:text-base">
+          {q.title}
+        </h3>
+
+        {/* Footer */}
+        <div className="mt-auto flex items-center justify-between border-t border-foreground/10 pt-4">
+          <span className="rounded-full bg-secondary px-2 py-0.5 font-display text-[10px] font-black uppercase tracking-[0.18em] text-secondary-foreground">
+            {band}
+          </span>
+          <span
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:text-white"
+            style={{
+              backgroundColor: locked ? undefined : accent,
+            }}
+          >
+            {locked ? (
+              <Lock className="h-3.5 w-3.5" strokeWidth={2.6} />
+            ) : (
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2.6} />
+            )}
+          </span>
+        </div>
+
+        {locked && (
+          <p className="-mt-1 text-[11px] font-semibold text-foreground/55">
+            Sign up to read · free sample available
+          </p>
+        )}
+      </div>
+    </article>
+  );
+}

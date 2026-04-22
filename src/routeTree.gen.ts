@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
+import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as IndexRouteImport } from './routes/index'
@@ -22,6 +23,11 @@ import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speak
 const VocabularyRoute = VocabularyRouteImport.update({
   id: '/vocabulary',
   path: '/vocabulary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
+  id: '/recent-exam-questions',
+  path: '/recent-exam-questions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
   '/dashboard': typeof DashboardRoute
+  '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/bg-options'
     | '/dashboard'
+    | '/recent-exam-questions'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BgOptionsRoute: typeof BgOptionsRoute
   DashboardRoute: typeof DashboardRoute
+  RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/vocabulary'
       fullPath: '/vocabulary'
       preLoaderRoute: typeof VocabularyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recent-exam-questions': {
+      id: '/recent-exam-questions'
+      path: '/recent-exam-questions'
+      fullPath: '/recent-exam-questions'
+      preLoaderRoute: typeof RecentExamQuestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -232,6 +252,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BgOptionsRoute: BgOptionsRoute,
   DashboardRoute: DashboardRoute,
+  RecentExamQuestionsRoute: RecentExamQuestionsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
