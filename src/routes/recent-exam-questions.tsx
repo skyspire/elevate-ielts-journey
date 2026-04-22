@@ -726,10 +726,10 @@ function MonthGrid({
               key={m}
               type="button"
               onClick={() => onSelect(active ? "all" : m)}
-              className={`group relative rounded-xl px-1.5 py-2 text-center font-display text-[11px] font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 sm:px-3 sm:py-2.5 sm:text-sm ${
+              className={`rounded-xl border-2 px-1.5 py-2 text-center font-display text-[11px] font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 sm:px-3 sm:py-2.5 sm:text-sm ${
                 active
-                  ? "bg-foreground text-background shadow-[0_4px_0_0_hsl(var(--foreground)/0.85),0_0_0_1.5px_hsl(var(--foreground))]"
-                  : "bg-white text-foreground/70 shadow-[0_2px_0_0_hsl(var(--foreground)/0.85),inset_0_0_0_1.5px_hsl(var(--foreground)/0.85)] hover:text-foreground hover:shadow-[0_3px_0_0_hsl(var(--foreground)),inset_0_0_0_1.5px_hsl(var(--foreground))]"
+                  ? "border-foreground bg-foreground text-background shadow-[3px_3px_0_0_hsl(var(--foreground))]"
+                  : "border-foreground/80 bg-white text-foreground/75 shadow-[2px_2px_0_0_hsl(var(--foreground)/0.85)] hover:border-foreground hover:text-foreground hover:shadow-[3px_3px_0_0_hsl(var(--foreground))]"
               }`}
             >
               {abbreviate(m)}
