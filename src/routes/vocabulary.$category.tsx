@@ -1,23 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   ArrowLeft,
-  BookA,
-  Combine,
-  Quote,
-  Link2,
-  MessageCircle,
   ChevronLeft,
   ChevronRight,
-  Search,
-  type LucideProps,
 } from "lucide-react";
-import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
 import {
   getCategory,
-  totalWords,
   type CategoryKey,
   type TopicList,
   type Word,
@@ -31,14 +22,6 @@ const searchSchema = z.object({
 });
 
 const WORDS_PER_PAGE = 20;
-
-const categoryIcon: Record<CategoryKey, ComponentType<LucideProps>> = {
-  dictionary: BookA,
-  phrasal: Combine,
-  idioms: Quote,
-  collocations: Link2,
-  slangs: MessageCircle,
-};
 
 const categoryTone: Record<CategoryKey, { ink: string; pill: string }> = {
   dictionary: { ink: "oklch(0.42 0.18 260)", pill: "oklch(0.95 0.05 260)" },
@@ -121,22 +104,13 @@ function CategoryPage() {
   const activeList: TopicList | undefined =
     category.lists.find((l) => l.slug === activeListSlug) ?? category.lists[0];
 
-  const Icon = categoryIcon[category.key];
   const tone = categoryTone[category.key];
 
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  // Filter words by query (only within the active list).
-  const query = (search.q ?? "").trim().toLowerCase();
-  const filteredWords: Word[] = useMemo(() => {
-    if (!activeList) return [];
-    if (!query) return activeList.words;
-    return activeList.words.filter(
-      (w) =>
-        w.term.toLowerCase().includes(query) ||
-        w.meaning.toLowerCase().includes(query),
-    );
-  }, [activeList, query]);
+  // All words in the active list (no search filter — search bar removed).
+  const filteredWords: Word[] = useMemo(
+    () => activeList?.words ?? [],
+    [activeList],
+  );
 
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / WORDS_PER_PAGE));
   const page = Math.min(search.page, totalPages);
@@ -151,11 +125,6 @@ function CategoryPage() {
   const goToPage = (p: number) =>
     navigate({
       search: (prev) => ({ ...prev, page: Math.max(1, Math.min(totalPages, p)) }),
-    });
-
-  const setQuery = (val: string) =>
-    navigate({
-      search: (prev) => ({ ...prev, q: val || undefined, page: 1 }),
     });
 
   return (
@@ -174,43 +143,14 @@ function CategoryPage() {
             </Link>
           </div>
 
-          {/* Header — clean "card title as hero" with list subhead */}
-          <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <Icon
-                  className="h-4 w-4"
-                  strokeWidth={2.6}
-                  style={{ color: tone.ink }}
-                />
-                <span
-                  className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em]"
-                  style={{ color: tone.ink, opacity: 0.75 }}
-                >
-                  Vocabulary · {category.lists.length} lists ·{" "}
-                  {totalWords(category).toLocaleString()} words
-                </span>
-              </div>
-              <h1
-                className="mt-2 font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[52px]"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                {category.title}
-              </h1>
-              {activeList && (
-                <p className="mt-3 font-display text-[17px] font-semibold text-foreground/55">
-                  {activeList.title}
-                </p>
-              )}
-            </div>
-
-            {/* Module pill */}
-            <div className="inline-flex items-center gap-2 self-start rounded-full border border-foreground/10 bg-white px-3 py-1.5 shadow-soft sm:self-end">
-              <span className="h-2 w-2 rounded-full" style={{ background: tone.ink }} />
-              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/70">
-                IELTS {search.module === "academic" ? "Academic" : "General"}
-              </span>
-            </div>
+          {/* Header — centered title only */}
+          <header className="text-center">
+            <h1
+              className="font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[56px]"
+              style={{ letterSpacing: "-0.02em" }}
+            >
+              {category.title}
+            </h1>
           </header>
 
           {/* Sidebar + Detail layout */}
@@ -302,10 +242,6 @@ function CategoryPage() {
                   page={page}
                   totalPages={totalPages}
                   onPageChange={goToPage}
-                  query={search.q ?? ""}
-                  onQueryChange={setQuery}
-                  searchOpen={searchOpen}
-                  onToggleSearch={() => setSearchOpen((s) => !s)}
                   ink={tone.ink}
                   pill={tone.pill}
                 />
@@ -334,10 +270,6 @@ function DictionaryPage({
   page,
   totalPages,
   onPageChange,
-  query,
-  onQueryChange,
-  searchOpen,
-  onToggleSearch,
   ink,
   pill,
 }: {
@@ -347,10 +279,6 @@ function DictionaryPage({
   page: number;
   totalPages: number;
   onPageChange: (p: number) => void;
-  query: string;
-  onQueryChange: (q: string) => void;
-  searchOpen: boolean;
-  onToggleSearch: () => void;
   ink: string;
   pill: string;
 }) {
@@ -359,57 +287,24 @@ function DictionaryPage({
 
   return (
     <article className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-      {/* HEADER — list title + search */}
-      <header className="flex flex-col gap-3 border-b border-foreground/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className="h-2.5 w-2.5 rounded-full"
-              style={{ background: ink }}
-            />
-            <h2
-              className="font-display text-[20px] font-black tracking-tight"
-              style={{ color: ink }}
-            >
-              {list.title}
-            </h2>
-          </div>
-          <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
-            {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
-          </p>
-        </div>
-
+      {/* HEADER — list title only, no search */}
+      <header className="border-b border-foreground/10 px-5 py-4 sm:px-7">
         <div className="flex items-center gap-2">
-          {searchOpen ? (
-            <div className="flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
-              <Search className="h-3.5 w-3.5 text-foreground/45" strokeWidth={2.4} />
-              <input
-                autoFocus
-                value={query}
-                onChange={(e) => onQueryChange(e.target.value)}
-                placeholder="Search this list…"
-                className="w-44 bg-transparent text-[13px] font-medium text-foreground placeholder:text-foreground/40 focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={onToggleSearch}
-                className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/50 hover:text-foreground"
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={onToggleSearch}
-              className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/65 transition-colors hover:text-foreground"
-            >
-              <Search className="h-3.5 w-3.5" strokeWidth={2.4} />
-              Search
-            </button>
-          )}
+          <span
+            aria-hidden
+            className="h-2.5 w-2.5 rounded-full"
+            style={{ background: ink }}
+          />
+          <h2
+            className="font-display text-[20px] font-black tracking-tight"
+            style={{ color: ink }}
+          >
+            {list.title}
+          </h2>
         </div>
+        <p className="mt-1 text-[12.5px] font-medium text-foreground/55">
+          {list.blurb} · <span className="tabular-nums">{totalCount}</span> words
+        </p>
       </header>
 
       {/* WORDS — two-column dictionary entries */}
@@ -487,16 +382,15 @@ function WordEntry({
   const indexLabel = String(index).padStart(2, "0");
 
   return (
-    <li className="flex gap-4 px-5 py-5 sm:gap-5 sm:px-7">
-      {/* Tiny mono index number */}
-      <span
-        className="shrink-0 pt-[3px] font-mono text-[11px] font-medium tabular-nums text-foreground/35"
-        aria-hidden
-      >
-        {indexLabel}
-      </span>
+    <li className="flex items-stretch">
+      {/* Bold display index — matches writing-samples QuestionRowCard */}
+      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-5 sm:w-20 sm:pt-6">
+        <span className="font-display text-2xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-3xl">
+          {indexLabel}
+        </span>
+      </div>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 px-5 py-5 sm:px-7">
         {/* Headword line */}
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <h3
