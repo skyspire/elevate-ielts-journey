@@ -288,10 +288,6 @@ function DictionaryPage({
   page,
   totalPages,
   onPageChange,
-  query,
-  onQueryChange,
-  searchOpen,
-  onToggleSearch,
   ink,
   pill,
 }: {
@@ -301,10 +297,6 @@ function DictionaryPage({
   page: number;
   totalPages: number;
   onPageChange: (p: number) => void;
-  query: string;
-  onQueryChange: (q: string) => void;
-  searchOpen: boolean;
-  onToggleSearch: () => void;
   ink: string;
   pill: string;
 }) {
