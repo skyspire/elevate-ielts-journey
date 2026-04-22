@@ -694,15 +694,29 @@ function MonthGrid({
 }) {
   void counts;
   void accent;
+  const [showOlder, setShowOlder] = useState(false);
+
+  const MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+
+  // Generate last 5 calendar months from today (current month back 4)
+  const now = new Date();
+  const lastFive: string[] = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    lastFive.push(`${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`);
+  }
+
+  // Older months = those in our data not in the last 5
+  const olderMonths = months.filter((m) => !lastFive.includes(m));
 
   // Abbreviate "March 2026" → "Mar 2026"
   const abbreviate = (m: string) => {
     const [mon, yr] = m.split(" ");
     return `${mon.slice(0, 3)} ${yr}`;
   };
-
-  // Show only the last 5 months in a single row
-  const visible = months.slice(0, 5);
 
   return (
     <div>
@@ -712,7 +726,7 @@ function MonthGrid({
         </p>
       </div>
       <div className="mx-auto grid max-w-3xl grid-cols-5 justify-center gap-1.5 sm:gap-2.5">
-        {visible.map((m) => {
+        {lastFive.map((m) => {
           const active = selected === m;
           return (
             <button
@@ -730,6 +744,43 @@ function MonthGrid({
           );
         })}
       </div>
+
+      {/* See more — handwritten link */}
+      {olderMonths.length > 0 && (
+        <div className="mt-5 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowOlder((v) => !v)}
+            className="font-handwriting text-xl font-bold text-foreground/65 underline decoration-foreground/30 decoration-wavy underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/60 sm:text-2xl"
+            style={{ transform: "rotate(-1.5deg)" }}
+          >
+            {showOlder ? "← hide older months" : "see more →"}
+          </button>
+        </div>
+      )}
+
+      {showOlder && olderMonths.length > 0 && (
+        <div className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {olderMonths.map((m, i) => {
+            const active = selected === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => onSelect(active ? "all" : m)}
+                className={`font-handwriting text-lg font-bold underline-offset-4 transition-colors sm:text-xl ${
+                  active
+                    ? "text-foreground underline decoration-foreground/60"
+                    : "text-foreground/55 hover:text-foreground hover:underline"
+                }`}
+                style={{ transform: `rotate(${i % 2 === 0 ? -1 : 1.5}deg)` }}
+              >
+                {abbreviate(m)}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
