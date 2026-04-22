@@ -244,22 +244,25 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   // Module-tinted page background — cool ivory for Academic, warm cream for General
-  // (mirrors Dashboard, Writing Samples and Speaking Samples)
   const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
-  const ruleColor = isAcademic
-    ? "oklch(0.45 0.10 235 / 0.10)"
-    : "oklch(0.55 0.14 30 / 0.10)";
+  // Hero gradient wash — swaps softly with the Academic ⇄ General toggle.
+  // Two corner halos blend into the page color for a clean, texture-free top.
+  const heroGradient = isAcademic
+    ? `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.90 0.08 235 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.92 0.07 280 / 0.45) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.02 235 / 0.55) 0%, transparent 100%)`
+    : `radial-gradient(ellipse 70% 80% at 18% 0%, oklch(0.93 0.08 55 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 88% 12%, oklch(0.93 0.09 30 / 0.45) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.03 50 / 0.55) 0%, transparent 100%)`;
 
   return (
     <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg }}>
       <main className="relative py-10 sm:py-14">
-        {/* Soft ruled overlay behind the hero — matches Speaking/Writing Samples */}
+        {/* Soft tinted gradient wash behind the hero — swaps with the toggle */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(0deg, transparent 0, transparent 39px, ${ruleColor} 39px, ${ruleColor} 40px)`,
-          }}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[460px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+          style={{ background: heroGradient }}
         />
 
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
