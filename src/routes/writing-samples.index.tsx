@@ -146,10 +146,14 @@ function WritingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
 
+  // Writing samples uses a warm peach/rose tint to feel distinct from Speaking Samples (sage)
+  const pageBg = "bg-[oklch(0.985_0.018_30)]";
+  const pageBgTranslucent = "bg-[oklch(0.985_0.018_30)]/85";
+
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className={`min-h-screen ${pageBg}`}>
       {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-foreground/8 bg-paper-cream/85 backdrop-blur-xl">
+      <header className={`sticky top-0 z-40 border-b border-foreground/8 ${pageBgTranslucent} backdrop-blur-xl`}>
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
@@ -167,9 +171,14 @@ function WritingSamplesPage() {
       </header>
 
       <main className="relative pt-10 sm:pt-14">
+        {/* Soft peach ruled overlay for the hero zone — mirrors Speaking Samples */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent 0, transparent 39px, oklch(0.55 0.14 30 / 0.10) 39px, oklch(0.55 0.14 30 / 0.10) 40px)",
+          }}
         />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
