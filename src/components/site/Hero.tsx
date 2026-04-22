@@ -68,7 +68,7 @@ export function Hero() {
 
         {/* Handwritten subtitle */}
         <p className="mx-auto mt-3 font-handwriting text-2xl text-brand sm:text-3xl">
-          everything you need, free &amp; fresh ✦
+          everything you need, free &amp; fresh
         </p>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg font-medium text-muted-foreground sm:text-xl">
@@ -118,9 +118,8 @@ export function Hero() {
    All SVGs use a single ink color and animate gently.
    ============================================================ */
 function HeroDoodles() {
-  const ink = "oklch(0.35 0.06 60)";
-  const rose = "oklch(0.6 0.2 25)";
-  const ocean = "oklch(0.55 0.15 230)";
+  const ink = "oklch(0.4 0.06 60)";
+  const rose = "oklch(0.6 0.2 30)";
   const mint = "oklch(0.55 0.12 165)";
 
   return (
@@ -128,64 +127,23 @@ function HeroDoodles() {
       {/* Open book — top left */}
       <svg
         viewBox="0 0 120 90"
-        className="hero-drift-y absolute left-[4%] top-[14%] hidden h-24 w-32 md:block"
+        className="hero-drift-y absolute left-[5%] top-[16%] hidden h-20 w-28 opacity-80 lg:block"
         style={{ ["--r" as any]: "-6deg" }}
       >
-        <g fill="none" stroke={ink} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <g fill="none" stroke={ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 20 L60 30 L60 80 L10 70 Z" className="hero-draw" style={{ ["--dash" as any]: 240 }} />
           <path d="M110 20 L60 30 L60 80 L110 70 Z" className="hero-draw" style={{ ["--dash" as any]: 240, animationDelay: "0.2s" }} />
-          <path d="M20 36 L52 42 M22 46 L52 52 M24 56 L52 60" stroke={ocean} strokeWidth="1.6" />
-          <path d="M68 42 L100 36 M68 52 L100 46 M68 60 L100 56" stroke={ocean} strokeWidth="1.6" />
+          <path d="M22 42 L52 48 M24 54 L52 58" stroke={ink} strokeWidth="1.4" opacity="0.55" />
+          <path d="M68 48 L98 42 M68 58 L98 54" stroke={ink} strokeWidth="1.4" opacity="0.55" />
         </g>
       </svg>
 
-      {/* Pencil — top right */}
-      <svg
-        viewBox="0 0 140 60"
-        className="hero-drift-x absolute right-[5%] top-[10%] hidden h-16 w-36 md:block"
-        style={{ ["--r" as any]: "12deg" }}
-      >
-        <g fill="none" stroke={ink} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 30 L100 30" className="hero-draw" style={{ ["--dash" as any]: 100 }} />
-          <path d="M10 22 L100 22 L115 30 L100 38 L10 38 Z" fill="oklch(0.92 0.08 80)" />
-          <path d="M115 30 L130 30" stroke={rose} strokeWidth="3" />
-          <path d="M10 22 L10 38" />
-          <path d="M22 22 L22 38 M34 22 L34 38 M46 22 L46 38" stroke="oklch(0.4 0.05 60 / 0.4)" strokeWidth="1" />
-        </g>
-      </svg>
-
-      {/* Star burst — left mid */}
-      <svg
-        viewBox="0 0 60 60"
-        className="hero-twinkle absolute left-[10%] top-[44%] h-10 w-10"
-      >
-        <path
-          d="M30 6 L33 26 L52 30 L33 34 L30 54 L27 34 L8 30 L27 26 Z"
-          fill={rose}
-          opacity="0.85"
-        />
-      </svg>
-
-      {/* Sparkle outline — right mid */}
-      <svg
-        viewBox="0 0 60 60"
-        className="hero-twinkle absolute right-[12%] top-[40%] h-12 w-12"
-        style={{ animationDelay: "0.6s" }}
-      >
-        <path
-          d="M30 4 L32 28 L56 30 L32 32 L30 56 L28 32 L4 30 L28 28 Z"
-          fill="none"
-          stroke={ocean}
-          strokeWidth="2"
-        />
-      </svg>
-
-      {/* Curly arrow pointing to headline — bottom left */}
+      {/* Curly arrow — bottom left */}
       <svg
         viewBox="0 0 160 90"
-        className="absolute bottom-[16%] left-[6%] hidden h-24 w-40 lg:block"
+        className="absolute bottom-[18%] left-[6%] hidden h-20 w-36 opacity-70 lg:block"
       >
-        <g fill="none" stroke={mint} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <g fill="none" stroke={mint} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path
             d="M10 80 Q 40 60, 70 70 T 130 30"
             className="hero-draw"
@@ -199,36 +157,16 @@ function HeroDoodles() {
         </g>
       </svg>
 
-      {/* Coffee cup doodle — bottom right */}
+      {/* Single star — top right */}
       <svg
-        viewBox="0 0 100 90"
-        className="hero-drift-y absolute bottom-[14%] right-[8%] hidden h-24 w-24 lg:block"
-        style={{ ["--r" as any]: "4deg" }}
+        viewBox="0 0 60 60"
+        className="hero-twinkle absolute right-[8%] top-[20%] hidden h-10 w-10 opacity-80 md:block"
       >
-        <g fill="none" stroke={ink} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 35 L20 75 Q 20 82, 28 82 L62 82 Q 70 82, 70 75 L70 35 Z" fill="oklch(0.94 0.04 55)" />
-          <path d="M70 45 Q 86 45, 86 58 Q 86 70, 70 70" />
-          <path d="M30 20 Q 32 14, 30 8 M42 20 Q 44 14, 42 8 M54 20 Q 56 14, 54 8" stroke={ocean} />
-        </g>
-      </svg>
-
-      {/* Tiny dots scattered */}
-      <svg viewBox="0 0 20 20" className="absolute left-[28%] top-[22%] h-3 w-3 hero-twinkle">
-        <circle cx="10" cy="10" r="4" fill={rose} />
-      </svg>
-      <svg viewBox="0 0 20 20" className="absolute right-[26%] top-[68%] h-3 w-3 hero-twinkle" style={{ animationDelay: "1s" }}>
-        <circle cx="10" cy="10" r="4" fill={mint} />
-      </svg>
-      <svg viewBox="0 0 20 20" className="absolute left-[40%] bottom-[10%] h-2.5 w-2.5 hero-twinkle" style={{ animationDelay: "0.4s" }}>
-        <circle cx="10" cy="10" r="4" fill={ocean} />
-      </svg>
-
-      {/* Cross marks */}
-      <svg viewBox="0 0 30 30" className="absolute right-[18%] top-[18%] h-5 w-5 hero-wiggle">
-        <path d="M6 6 L24 24 M24 6 L6 24" stroke={rose} strokeWidth="2.4" strokeLinecap="round" fill="none" />
-      </svg>
-      <svg viewBox="0 0 30 30" className="absolute left-[20%] bottom-[28%] h-4 w-4 hero-wiggle" style={{ animationDelay: "0.8s" }}>
-        <path d="M6 6 L24 24 M24 6 L6 24" stroke={ocean} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+        <path
+          d="M30 6 L33 26 L52 30 L33 34 L30 54 L27 34 L8 30 L27 26 Z"
+          fill={rose}
+          opacity="0.85"
+        />
       </svg>
     </div>
   );
