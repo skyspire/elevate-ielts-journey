@@ -232,7 +232,7 @@ function FeatureIllustration({ featureKey }: { featureKey: string }) {
   }
 }
 
-// 1. Recent Exam Questions — globe with question marks
+// 1. Recent Exam Questions — globe with location pin
 function RecentIllustration() {
   return (
     <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
@@ -241,9 +241,9 @@ function RecentIllustration() {
       <line x1="12" y1="32" x2="52" y2="32" stroke="white" strokeWidth="1.8" opacity="0.7" />
       <path d="M14 24 Q32 18 50 24" stroke="white" strokeWidth="1.5" opacity="0.5" />
       <path d="M14 40 Q32 46 50 40" stroke="white" strokeWidth="1.5" opacity="0.5" />
-      {/* question marker pin */}
-      <circle cx="46" cy="18" r="6" fill="white" />
-      <text x="46" y="21" textAnchor="middle" fontSize="9" fontWeight="900" fill="oklch(0.45 0.18 260)">?</text>
+      {/* location pin */}
+      <path d="M46 12 C42 12 39 15 39 19 C39 23 46 30 46 30 C46 30 53 23 53 19 C53 15 50 12 46 12 Z" fill="white" />
+      <circle cx="46" cy="19" r="2.5" fill="oklch(0.45 0.18 260)" />
     </svg>
   );
 }
