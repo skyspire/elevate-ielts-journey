@@ -244,9 +244,9 @@ function DashboardPage() {
   const accent = isAcademic ? blue : sage;
 
   return (
-    <div className="relative min-h-screen bg-paper-cream">
+    <div className="relative min-h-screen" style={{ backgroundColor: "oklch(0.992 0.005 85)" }}>
       <main className="relative overflow-hidden py-12 sm:py-16">
-        {/* Handwritten study-notes background — pastel scribbles in the margins */}
+        {/* Ivory whisper background — soft pastel halos breathing in the corners */}
         <StudyNotesBackground />
 
         {/* Centered content column */}
