@@ -148,18 +148,19 @@ function WritingSamplesPage() {
 
   // Module-tinted page + ambient gradient — swaps with Academic ⇄ General.
   // Gradient covers the entire page (not just the hero).
-  const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
+  const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.96 0.025 25)";
   const pageGradient = isAcademic
     ? `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.90 0.08 235 / 0.55) 0%, transparent 60%),
        radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.92 0.07 280 / 0.45) 0%, transparent 65%),
        radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.93 0.06 200 / 0.35) 0%, transparent 65%),
        radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.92 0.06 270 / 0.35) 0%, transparent 65%),
        radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.93 0.05 220 / 0.30) 0%, transparent 70%)`
-    : `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.93 0.08 55 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.93 0.09 30 / 0.45) 0%, transparent 65%),
-       radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.94 0.07 65 / 0.35) 0%, transparent 65%),
-       radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.93 0.08 20 / 0.35) 0%, transparent 65%),
-       radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.94 0.06 50 / 0.30) 0%, transparent 70%)`;
+    : `radial-gradient(ellipse 75% 50% at 15% 0%, oklch(0.78 0.16 25 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 70% 45% at 92% 6%, oklch(0.72 0.18 15 / 0.50) 0%, transparent 65%),
+       radial-gradient(ellipse 65% 40% at 0% 50%, oklch(0.82 0.13 35 / 0.45) 0%, transparent 65%),
+       radial-gradient(ellipse 60% 35% at 100% 65%, oklch(0.70 0.18 10 / 0.45) 0%, transparent 65%),
+       radial-gradient(ellipse 85% 30% at 50% 100%, oklch(0.76 0.14 20 / 0.40) 0%, transparent 70%),
+       radial-gradient(ellipse 50% 25% at 50% 50%, oklch(0.85 0.10 30 / 0.25) 0%, transparent 70%)`;
 
   return (
     <div
