@@ -8,28 +8,21 @@ import {
   CalendarClock,
   LineChart,
   ArrowRight,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const freeItems = [
-  {
-    icon: PenLine,
-    title: "3 Writing Samples",
-    desc: "Hand-picked Task 1 & Task 2 model answers to study instantly.",
-  },
-  {
-    icon: Mic,
-    title: "3 Speaking Samples",
-    desc: "Curated Part 1, 2 & 3 responses with natural, band-9 phrasing.",
-  },
+const freeSamples = [
+  { icon: PenLine, label: "3 Writing samples" },
+  { icon: Mic, label: "3 Speaking samples" },
 ];
 
-const paidItems = [
-  { icon: PenLine, label: "Unlimited Writing Samples" },
-  { icon: Mic, label: "Unlimited Speaking Samples" },
-  { icon: BookOpen, label: "Full Vocabulary Builder" },
+const paidTools = [
+  { icon: PenLine, label: "Unlimited Writing samples" },
+  { icon: Mic, label: "Unlimited Speaking samples" },
+  { icon: BookOpen, label: "Vocabulary Builder" },
   { icon: FileQuestion, label: "Recent Exam Questions" },
-  { icon: Sparkles, label: "Predictions for Upcoming Exams" },
+  { icon: Sparkles, label: "Predictions for upcoming exams" },
   { icon: CalendarClock, label: "Personalized Study Timetable" },
   { icon: LineChart, label: "Mistakes Analysis" },
 ];
@@ -47,133 +40,120 @@ export function TryFreeSection() {
               <span className="relative z-10">Then unlock everything.</span>
             </span>
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base font-medium text-foreground/65 sm:text-lg">
-            Sign up and instantly get 6 admin-picked samples — no card, no
-            countdown. The full toolkit lives behind one simple subscription.
+          <p className="mx-auto mt-5 max-w-xl text-base font-medium text-foreground/65 sm:text-lg">
+            Sign up and instantly get 6 admin-picked samples. The full toolkit
+            lives behind one simple subscription.
           </p>
         </div>
 
         {/* Two columns */}
-        <div className="mx-auto mt-14 grid max-w-6xl gap-6 lg:grid-cols-2 lg:gap-8">
+        <div className="mx-auto mt-14 grid max-w-5xl gap-5 lg:grid-cols-2 lg:gap-6">
           {/* ============= FREE ============= */}
-          <article className="relative flex flex-col overflow-hidden rounded-3xl border-2 border-brand bg-card p-8 shadow-glow sm:p-10">
-            {/* Big top mark */}
-            <div className="flex items-baseline justify-between gap-4">
-              <div>
-                <p className="font-display text-[11px] font-black uppercase tracking-[0.22em] text-brand">
-                  Free after sign up
-                </p>
-                <h3 className="mt-3 font-display text-3xl font-black tracking-tight text-foreground sm:text-4xl">
-                  Start with 6 model answers
-                </h3>
+          <article className="group relative flex flex-col overflow-hidden rounded-3xl bg-card p-8 shadow-card ring-1 ring-foreground/8 sm:p-10">
+            {/* glow accent */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand/15 blur-3xl" />
+
+            <div className="relative">
+              <div className="flex items-center gap-2.5">
+                <span className="h-2 w-2 rounded-full bg-brand" />
+                <span className="font-display text-xs font-black uppercase tracking-[0.22em] text-brand">
+                  Free forever
+                </span>
               </div>
-              <div className="hidden shrink-0 text-right sm:block">
-                <div className="font-display text-5xl font-black leading-none text-foreground">
-                  $0
-                </div>
-                <div className="mt-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                  Forever
-                </div>
-              </div>
+
+              <h3 className="mt-6 font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl">
+                6 hand-picked
+                <br />
+                model answers
+              </h3>
+
+              <p className="mt-4 text-[15px] font-medium leading-relaxed text-muted-foreground">
+                See exactly what a band-9 response looks like. Curated by our
+                team, available the moment you sign up.
+              </p>
             </div>
 
-            <p className="mt-4 text-[15px] font-medium leading-relaxed text-muted-foreground">
-              Our team chooses the best examples so you see exactly what a
-              high-band response looks like — across both Writing and Speaking.
-            </p>
-
-            <div className="mt-8 grid gap-4">
-              {freeItems.map((item, i) => (
+            {/* Big sample callouts */}
+            <div className="relative mt-8 space-y-3">
+              {freeSamples.map((s) => (
                 <div
-                  key={item.title}
-                  className="group flex items-start gap-4 rounded-2xl border border-foreground/8 bg-background p-5 transition-all hover:border-brand/40 hover:shadow-soft"
+                  key={s.label}
+                  className="flex items-center gap-4 rounded-2xl bg-brand-soft/60 px-5 py-4"
                 >
-                  <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
-                    <item.icon className="h-5 w-5" strokeWidth={2.5} />
-                    <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-foreground font-display text-[11px] font-black text-background">
-                      {i + 1}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-display text-lg font-extrabold leading-tight text-foreground">
-                      {item.title}
-                    </p>
-                    <p className="mt-1 text-sm font-medium leading-snug text-muted-foreground">
-                      {item.desc}
-                    </p>
-                  </div>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand text-brand-foreground">
+                    <s.icon className="h-5 w-5" strokeWidth={2.5} />
+                  </span>
+                  <span className="font-display text-lg font-extrabold text-foreground">
+                    {s.label}
+                  </span>
                 </div>
               ))}
             </div>
 
             <Button
               asChild
-              className="mt-8 h-13 w-full rounded-full bg-brand py-4 text-base font-extrabold text-brand-foreground shadow-glow hover:bg-brand/90"
+              className="relative mt-8 h-12 w-full rounded-full bg-brand text-base font-extrabold text-brand-foreground shadow-glow hover:bg-brand/90"
             >
               <Link to="/dashboard">
-                Sign up & get free samples
+                Sign up free
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-
-            <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              No credit card · Instant access
-            </p>
           </article>
 
           {/* ============= PAID ============= */}
-          <article className="relative flex flex-col overflow-hidden rounded-3xl border border-foreground/10 bg-paper-cream p-8 sm:p-10">
-            {/* Top */}
-            <div className="flex items-baseline justify-between gap-4">
-              <div>
-                <p className="font-display text-[11px] font-black uppercase tracking-[0.22em] text-foreground/55">
-                  Members only
-                </p>
-                <h3 className="mt-3 font-display text-3xl font-black tracking-tight text-foreground sm:text-4xl">
-                  The complete toolkit
-                </h3>
+          <article className="relative flex flex-col overflow-hidden rounded-3xl bg-foreground p-8 text-background sm:p-10">
+            {/* subtle pattern */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.05]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 1px 1px, var(--background) 1px, transparent 0)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+
+            <div className="relative">
+              <div className="flex items-center gap-2.5">
+                <span className="h-2 w-2 rounded-full bg-background/70" />
+                <span className="font-display text-xs font-black uppercase tracking-[0.22em] text-background/70">
+                  Full Membership
+                </span>
               </div>
-              <div className="hidden shrink-0 text-right sm:block">
-                <div className="font-display text-5xl font-black leading-none text-foreground">
-                  7<span className="text-2xl text-muted-foreground">+</span>
-                </div>
-                <div className="mt-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                  Tools
-                </div>
-              </div>
+
+              <h3 className="mt-6 font-display text-3xl font-black leading-[1.05] tracking-tight sm:text-4xl">
+                Everything you
+                <br />
+                need to score 8+
+              </h3>
+
+              <p className="mt-4 text-[15px] font-medium leading-relaxed text-background/65">
+                One subscription. Every sample, every tool, every resource we
+                publish — updated continuously.
+              </p>
             </div>
 
-            <p className="mt-4 text-[15px] font-medium leading-relaxed text-muted-foreground">
-              One subscription opens every sample, every tool, and every
-              resource we publish — updated continuously.
-            </p>
-
-            <ul className="mt-8 grid gap-2.5">
-              {paidItems.map((item) => (
+            <ul className="relative mt-8 space-y-2">
+              {paidTools.map((t) => (
                 <li
-                  key={item.label}
-                  className="flex items-center gap-4 rounded-xl border border-foreground/8 bg-card px-4 py-3.5 text-[15px] font-bold text-foreground transition-colors hover:border-foreground/20"
+                  key={t.label}
+                  className="flex items-center gap-3.5 border-b border-background/10 py-3 text-[15px] font-bold last:border-b-0"
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-foreground/75">
-                    <item.icon className="h-4 w-4" strokeWidth={2.5} />
-                  </span>
-                  <span className="leading-tight">{item.label}</span>
+                  <Check
+                    className="h-4 w-4 shrink-0 text-brand"
+                    strokeWidth={3.5}
+                  />
+                  <span>{t.label}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-auto pt-8">
-              <Button
-                asChild
-                variant="outline"
-                className="h-13 w-full rounded-full border-2 border-foreground bg-card py-4 text-base font-extrabold text-foreground hover:bg-foreground hover:text-background"
-              >
-                <Link to="/dashboard">See subscription plans</Link>
-              </Button>
-              <p className="mt-4 text-center text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                Starts at $7 · Cancel anytime
-              </p>
-            </div>
+            <Button
+              asChild
+              className="relative mt-8 h-12 w-full rounded-full bg-background text-base font-extrabold text-foreground hover:bg-background/90"
+            >
+              <Link to="/dashboard">See plans</Link>
+            </Button>
           </article>
         </div>
       </div>
