@@ -297,6 +297,7 @@ function VocabularyCard({
           </span>
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
+
