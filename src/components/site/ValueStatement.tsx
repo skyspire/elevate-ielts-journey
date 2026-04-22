@@ -127,25 +127,44 @@ export function ValueStatement() {
         </div>
 
         {/* === FEATURES — supporting === */}
-        <div className="mx-auto mt-10 max-w-3xl">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px max-w-[60px] flex-1 bg-foreground/15" />
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Sparkles className="h-3.5 w-3.5 text-brand" />
-              <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.2em]">
+        <div className="mx-auto mt-14 max-w-4xl">
+          {/* Heading — handwritten + sparkle, no pill */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="relative inline-flex items-center gap-2">
+              <Sparkles
+                className="h-5 w-5 text-[oklch(0.55_0.18_30)]"
+                strokeWidth={2.5}
+              />
+              <h3 className="font-handwriting text-3xl text-foreground sm:text-4xl">
                 All plans include
-              </span>
+              </h3>
+              <Sparkles
+                className="h-5 w-5 text-[oklch(0.45_0.18_265)]"
+                strokeWidth={2.5}
+              />
             </div>
-            <span className="h-px max-w-[60px] flex-1 bg-foreground/15" />
+            {/* hand-drawn underline */}
+            <svg
+              viewBox="0 0 200 12"
+              className="h-2.5 w-44 text-[oklch(0.55_0.18_30)]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            >
+              <path d="M3 7 Q 50 1, 100 6 T 197 5" />
+            </svg>
           </div>
 
-          <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2.5">
+          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
             {features.map((f) => (
               <li
                 key={f}
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground/80"
+                className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-4 py-2 text-base font-semibold text-foreground/85 shadow-soft backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:text-foreground hover:shadow-card"
               >
-                <Check className="h-3.5 w-3.5 text-brand" strokeWidth={3} />
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand">
+                  <Check className="h-3 w-3" strokeWidth={3.5} />
+                </span>
                 {f}
               </li>
             ))}
