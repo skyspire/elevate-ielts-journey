@@ -5,7 +5,6 @@ import {
   PenLine,
   Mic,
   BookOpen,
-  Flame,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
@@ -253,12 +252,7 @@ function RecentExamQuestionsPage() {
 
           {/* Hero */}
           <div className="text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[oklch(0.62_0.20_25)]/10 px-3 py-1 ring-1 ring-inset ring-[oklch(0.62_0.20_25)]/30">
-              <Flame className="h-3.5 w-3.5 text-[oklch(0.55_0.20_25)]" strokeWidth={2.6} />
-              <span className="font-display text-[10px] font-black uppercase tracking-[0.22em] text-[oklch(0.45_0.18_25)]">
-                Fresh from recent exams
-              </span>
-            </div>
+            
             <div className="relative inline-block">
               <h1
                 className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
