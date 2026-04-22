@@ -288,8 +288,8 @@ function DashboardPage() {
             <span className="h-px w-10 bg-foreground/15" />
           </div>
 
-          {/* Bold color blocks — equal-size grid */}
-          <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {/* Vibrant gradient cards — bigger, juicy hover */}
+          <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
             {features.map((f) => (
               <FeatureCard key={f.key} feature={f} module={module} />
             ))}
