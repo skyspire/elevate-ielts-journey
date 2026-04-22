@@ -5,7 +5,6 @@ import {
   PenLine,
   Mic,
   BookOpen,
-  Flame,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
