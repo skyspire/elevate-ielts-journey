@@ -6,6 +6,9 @@ import { ValueStatement } from "@/components/site/ValueStatement";
 import { TrustCompare } from "@/components/site/TrustCompare";
 import { TryFreeSection } from "@/components/site/TryFreeSection";
 import { LatestQuestions } from "@/components/site/LatestQuestions";
+import { LearnersWorld } from "@/components/site/LearnersWorld";
+import { Faq } from "@/components/site/Faq";
+import { FinalCta } from "@/components/site/FinalCta";
 
 import { Footer } from "@/components/site/Footer";
 
@@ -24,6 +27,9 @@ function Index() {
         <TrustCompare />
         <TryFreeSection />
         <LatestQuestions />
+        <LearnersWorld />
+        <Faq />
+        <FinalCta />
       </main>
       <Footer />
     </div>
