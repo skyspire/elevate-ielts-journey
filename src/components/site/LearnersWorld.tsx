@@ -158,7 +158,7 @@ export function LearnersWorld() {
                     "linear-gradient(120deg, oklch(0.85 0.14 90 / 0.7), oklch(0.88 0.12 60 / 0.65))",
                 }}
               />
-              <span className="relative z-10">9,680 learners.</span>
+              <span className="relative z-10">70,000+ learners.</span>
             </span>
             <br />
             47 countries.
