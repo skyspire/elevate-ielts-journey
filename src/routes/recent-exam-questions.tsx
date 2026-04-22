@@ -14,7 +14,7 @@ import { Footer } from "@/components/site/Footer";
 
 type Module = "academic" | "general";
 type WritingTask = "task1" | "task2";
-type SpeakingPart = "part1" | "part2" | "part3";
+type SpeakingPart = "part1" | "part2";
 type ExamSection = "writing" | "speaking";
 
 const searchSchema = z.object({
@@ -189,55 +189,47 @@ const speakingData: SpeakingData = {
       title: "What kind of food do you like to cook at home?",
       date: "March 2026",
     },
+    {
+      tag: "Weather",
+      title: "What kind of weather do you like? Has it changed recently?",
+      date: "February 2026",
+    },
+    {
+      tag: "Travel",
+      title: "Do you enjoy travelling? Where would you like to go next?",
+      date: "January 2026",
+    },
   ],
   part2: [
     {
       tag: "Memorable Trip",
       title:
-        "Describe a journey that did not go as planned. You should say where, when, who and why.",
+        "Describe a journey that did not go as planned. You should say where, when, who and why. Follow-up: How do you usually react when plans change?",
       date: "April 2026",
     },
     {
       tag: "A Person",
       title:
-        "Describe a person who inspires you. Say who they are, how you know them and why they inspire you.",
+        "Describe a person who inspires you. Say who they are, how you know them and why. Follow-up: Are role models more important today than in the past?",
       date: "March 2026",
     },
     {
       tag: "An Object",
       title:
-        "Describe a piece of equipment in your home that you find useful. What it is, how you got it, and why it is useful.",
+        "Describe a piece of equipment in your home that you find useful. Follow-up: How has technology changed daily life in your country?",
       date: "March 2026",
     },
     {
       tag: "An Event",
       title:
-        "Describe a celebration you attended recently. Where it was, who was there, and how you felt.",
+        "Describe a celebration you attended recently. Follow-up: Do you think traditional celebrations are still important?",
       date: "February 2026",
     },
-  ],
-  part3: [
     {
-      tag: "Technology",
-      title: "How has technology changed the way people communicate in your country?",
-      date: "April 2026",
-    },
-    {
-      tag: "Society",
-      title: "Do you think it is important for people to take part in community events? Why?",
-      date: "March 2026",
-    },
-    {
-      tag: "Education",
+      tag: "A Place",
       title:
-        "How do you think school education will change in the next 20 years in your country?",
-      date: "March 2026",
-    },
-    {
-      tag: "Environment",
-      title:
-        "Should governments do more to protect the environment, or is it the responsibility of individuals?",
-      date: "February 2026",
+        "Describe a quiet place you like to visit. Follow-up: Is it harder to find peaceful places in modern cities?",
+      date: "January 2026",
     },
   ],
 };
@@ -521,53 +513,251 @@ function SectionTabs({
 }
 
 /* ------------------------------------------------------------------ */
-/* Writing — Task 1 & Task 2                                           */
+/* Sub-toggle (Task 1 / Task 2 or General Q / Cue Cards)               */
 /* ------------------------------------------------------------------ */
 
-function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: boolean }) {
+function SubToggle<T extends string>({
+  value,
+  onChange,
+  options,
+  accent,
+}: {
+  value: T;
+  onChange: (v: T) => void;
+  options: { key: T; label: string; sub?: string }[];
+  accent: string;
+}) {
   return (
-    <div className="space-y-12">
-      <SubSection
-        eyebrow={isAcademic ? "Writing Task 1 — Reports" : "Writing Task 1 — Letters"}
-        title={isAcademic ? "Charts, graphs, processes & maps" : "Formal, semi-formal & informal"}
-        questions={data.task1}
-        accent="oklch(0.48 0.16 230)"
-      />
-      <SubSection
-        eyebrow="Writing Task 2 — Essays"
-        title="Opinion, discussion & problem–solution"
-        questions={data.task2}
-        accent="oklch(0.42 0.18 260)"
-      />
+    <div className="mx-auto inline-flex w-full max-w-2xl items-stretch rounded-2xl border border-foreground/10 bg-white p-1.5 shadow-soft">
+      {options.map((opt) => {
+        const active = value === opt.key;
+        return (
+          <button
+            key={opt.key}
+            type="button"
+            onClick={() => onChange(opt.key)}
+            className={`relative flex-1 rounded-xl px-3 py-2.5 text-center transition-all sm:px-5 sm:py-3 ${
+              active ? "text-white shadow-soft" : "text-foreground/60 hover:text-foreground"
+            }`}
+            style={active ? { background: accent } : undefined}
+          >
+            <span className="block font-display text-[12px] font-black uppercase tracking-[0.18em] sm:text-[13px]">
+              {opt.label}
+            </span>
+            {opt.sub && (
+              <span
+                className={`mt-0.5 block text-[10px] font-semibold tracking-wide ${
+                  active ? "text-white/85" : "text-foreground/45"
+                }`}
+              >
+                {opt.sub}
+              </span>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Speaking — Part 1 / 2 / 3                                           */
+/* Month-Year grid                                                      */
+/* ------------------------------------------------------------------ */
+
+function MonthGrid({
+  months,
+  selected,
+  onSelect,
+  counts,
+  accent,
+}: {
+  months: string[];
+  selected: string | "all";
+  onSelect: (m: string | "all") => void;
+  counts: Record<string, number>;
+  accent: string;
+}) {
+  return (
+    <div>
+      <div className="mb-3 flex items-end justify-between">
+        <p className="font-display text-[10px] font-black uppercase tracking-[0.24em] text-foreground/55">
+          Browse by month
+        </p>
+        <button
+          type="button"
+          onClick={() => onSelect("all")}
+          className={`font-display text-[11px] font-black uppercase tracking-[0.18em] transition-colors ${
+            selected === "all" ? "text-foreground" : "text-foreground/40 hover:text-foreground"
+          }`}
+        >
+          All months
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {months.map((m) => {
+          const [mon, yr] = m.split(" ");
+          const active = selected === m;
+          const count = counts[m] ?? 0;
+          return (
+            <button
+              key={m}
+              type="button"
+              onClick={() => onSelect(m)}
+              className={`group relative overflow-hidden rounded-xl border p-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+                active
+                  ? "border-transparent text-white shadow-card"
+                  : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
+              }`}
+              style={active ? { background: accent } : undefined}
+            >
+              <span
+                className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
+                  active ? "text-white/80" : "text-foreground/50"
+                }`}
+              >
+                {yr}
+              </span>
+              <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
+                {mon}
+              </span>
+              <span
+                className={`mt-1 inline-flex items-center gap-1 font-mono text-[10px] font-semibold tabular-nums ${
+                  active ? "text-white/85" : "text-foreground/45"
+                }`}
+              >
+                <span
+                  className={`inline-block h-1 w-1 rounded-full ${
+                    active ? "bg-white/80" : "bg-foreground/40"
+                  }`}
+                />
+                {count} new
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function uniqueMonths(qs: Question[]): string[] {
+  const set = new Set(qs.map((q) => q.date));
+  return Array.from(set).sort((a, b) => {
+    const da = new Date(a + " 1");
+    const db = new Date(b + " 1");
+    return db.getTime() - da.getTime();
+  });
+}
+
+function monthCounts(qs: Question[]): Record<string, number> {
+  return qs.reduce<Record<string, number>>((acc, q) => {
+    acc[q.date] = (acc[q.date] ?? 0) + 1;
+    return acc;
+  }, {});
+}
+
+/* ------------------------------------------------------------------ */
+/* Writing — Task 1 & Task 2                                           */
+/* ------------------------------------------------------------------ */
+
+function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: boolean }) {
+  const [task, setTask] = useState<WritingTask>("task1");
+  const [month, setMonth] = useState<string | "all">("all");
+  const accent = task === "task1" ? "oklch(0.48 0.16 230)" : "oklch(0.42 0.18 260)";
+  const questions = data[task];
+  const months = uniqueMonths(questions);
+  const counts = monthCounts(questions);
+  const filtered = month === "all" ? questions : questions.filter((q) => q.date === month);
+
+  const eyebrow =
+    task === "task1"
+      ? isAcademic
+        ? "Writing Task 1 — Reports"
+        : "Writing Task 1 — Letters"
+      : "Writing Task 2 — Essays";
+  const title =
+    task === "task1"
+      ? isAcademic
+        ? "Charts, graphs, processes & maps"
+        : "Formal, semi-formal & informal"
+      : "Opinion, discussion & problem–solution";
+
+  return (
+    <div className="space-y-8">
+      <SubToggle<WritingTask>
+        value={task}
+        onChange={(v) => {
+          setTask(v);
+          setMonth("all");
+        }}
+        accent={accent}
+        options={[
+          {
+            key: "task1",
+            label: "Task 1",
+            sub: isAcademic ? "Reports" : "Letters",
+          },
+          { key: "task2", label: "Task 2", sub: "Essays" },
+        ]}
+      />
+
+      <MonthGrid
+        months={months}
+        selected={month}
+        onSelect={setMonth}
+        counts={counts}
+        accent={accent}
+      />
+
+      <SubSection eyebrow={eyebrow} title={title} questions={filtered} accent={accent} />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Speaking — General Questions / Cue Cards & Follow Ups               */
 /* ------------------------------------------------------------------ */
 
 function SpeakingSection({ data }: { data: SpeakingData }) {
+  const [part, setPart] = useState<SpeakingPart>("part1");
+  const [month, setMonth] = useState<string | "all">("all");
+  const accent = part === "part1" ? "oklch(0.55 0.16 250)" : "oklch(0.50 0.15 200)";
+  const questions = data[part];
+  const months = uniqueMonths(questions);
+  const counts = monthCounts(questions);
+  const filtered = month === "all" ? questions : questions.filter((q) => q.date === month);
+
+  const eyebrow =
+    part === "part1" ? "Speaking Part 1" : "Speaking Part 2 & 3";
+  const title =
+    part === "part1"
+      ? "Personal questions & familiar topics"
+      : "Long-turn cue cards with follow-up discussion";
+
   return (
-    <div className="space-y-12">
-      <SubSection
-        eyebrow="Speaking Part 1"
-        title="Personal questions & familiar topics"
-        questions={data.part1}
-        accent="oklch(0.55 0.16 250)"
+    <div className="space-y-8">
+      <SubToggle<SpeakingPart>
+        value={part}
+        onChange={(v) => {
+          setPart(v);
+          setMonth("all");
+        }}
+        accent={accent}
+        options={[
+          { key: "part1", label: "General Questions", sub: "Part 1 interview" },
+          { key: "part2", label: "Cue Cards & Follow Ups", sub: "Part 2 + Part 3" },
+        ]}
       />
-      <SubSection
-        eyebrow="Speaking Part 2"
-        title="Long-turn cue card"
-        questions={data.part2}
-        accent="oklch(0.50 0.15 200)"
+
+      <MonthGrid
+        months={months}
+        selected={month}
+        onSelect={setMonth}
+        counts={counts}
+        accent={accent}
       />
-      <SubSection
-        eyebrow="Speaking Part 3"
-        title="Discussion & abstract follow-ups"
-        questions={data.part3}
-        accent="oklch(0.45 0.18 290)"
-      />
+
+      <SubSection eyebrow={eyebrow} title={title} questions={filtered} accent={accent} />
     </div>
   );
 }
@@ -605,11 +795,19 @@ function SubSection({
           {String(questions.length).padStart(2, "0")} questions
         </span>
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        {questions.map((q) => (
-          <ExamQuestionCard key={q.title} q={q} accent={accent} />
-        ))}
-      </div>
+      {questions.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-8 text-center">
+          <p className="font-display text-sm font-bold text-foreground/60">
+            No questions reported for this month yet.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2">
+          {questions.map((q) => (
+            <ExamQuestionCard key={q.title} q={q} accent={accent} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
