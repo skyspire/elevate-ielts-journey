@@ -242,7 +242,7 @@ function DashboardPage() {
           <span className="velvet-glow velvet-glow-7" />
           <span className="velvet-glow velvet-glow-8" />
           {/* Star dust */}
-          <span className="absolute inset-0 velvet-stars opacity-60" />
+          <span className="absolute inset-0 velvet-stars opacity-90" />
           {/* Subtle grain for texture */}
           <span className="absolute inset-0 aurora-grain opacity-[0.18] mix-blend-overlay" />
           {/* Top-bottom vignette to frame the content */}
