@@ -179,17 +179,39 @@ export function TryFreeSection() {
               publish — updated continuously.
             </p>
 
-            <ul className="relative mt-8 space-y-2">
+            <ul className="relative mt-8 space-y-1">
               {paidTools.map((t) => (
                 <li
                   key={t.label}
-                  className="flex items-center gap-3.5 border-b border-background/10 py-3 text-[15px] font-bold last:border-b-0"
+                  className="group/row flex items-center gap-4 border-b border-background/10 py-3 text-[15px] font-bold last:border-b-0"
                 >
-                  <Check
-                    className="h-4 w-4 shrink-0 text-brand"
-                    strokeWidth={3.5}
-                  />
-                  <span>{t.label}</span>
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover/row:scale-110"
+                    style={{
+                      backgroundColor: `color-mix(in oklab, ${t.color} 18%, transparent)`,
+                      color: t.color,
+                    }}
+                  >
+                    <t.icon
+                      className={`h-[18px] w-[18px] transition-transform duration-500 ${
+                        t.motion === "wiggle"
+                          ? "group-hover/row:[animation:tfs-wiggle_0.6s_ease-in-out]"
+                          : t.motion === "pulse"
+                            ? "group-hover/row:[animation:tfs-pulse_0.7s_ease-in-out]"
+                            : t.motion === "flip"
+                              ? "group-hover/row:[animation:tfs-flip_0.7s_ease-in-out]"
+                              : t.motion === "bounce"
+                                ? "group-hover/row:[animation:tfs-bounce_0.6s_ease-in-out]"
+                                : t.motion === "spin"
+                                  ? "group-hover/row:[animation:tfs-spin_0.8s_ease-in-out]"
+                                  : t.motion === "tick"
+                                    ? "group-hover/row:[animation:tfs-tick_0.8s_ease-in-out]"
+                                    : "group-hover/row:[animation:tfs-rise_0.6s_ease-in-out]"
+                      }`}
+                      strokeWidth={2.5}
+                    />
+                  </span>
+                  <span className="flex-1">{t.label}</span>
                 </li>
               ))}
             </ul>
