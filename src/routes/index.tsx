@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { QuietHero } from "@/components/site/QuietHero";
+import { EverythingYouNeed } from "@/components/site/EverythingYouNeed";
 import { Hero } from "@/components/site/Hero";
 import { Stats } from "@/components/site/Stats";
 import { ValueStatement } from "@/components/site/ValueStatement";
@@ -22,6 +23,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <main>
         <QuietHero />
+        <EverythingYouNeed />
         <Hero />
         <Stats />
         <ValueStatement />
