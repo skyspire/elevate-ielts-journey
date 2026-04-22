@@ -308,24 +308,27 @@ function SamplesIllustration() {
   );
 }
 
-// 5. Vocabulary — stacked word tiles
+// 5. Vocabulary — stacked word tiles (no letters, just lines)
 function VocabularyIllustration() {
   return (
     <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
-      {/* 4 tiles fanned */}
+      {/* 3 tiles fanned with abstract word lines */}
       <g transform="translate(10 14) rotate(-8)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">A</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="8" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
       <g transform="translate(24 12) rotate(-2)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">B</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="9" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
       <g transform="translate(38 14) rotate(6)">
         <rect width="18" height="18" rx="3" fill="white" />
-        <text x="9" y="13" textAnchor="middle" fontSize="11" fontWeight="900" fill="oklch(0.42 0.17 230)">C</text>
+        <rect x="3" y="7" width="12" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.6" />
+        <rect x="3" y="11" width="7" height="2" rx="1" fill="oklch(0.42 0.17 230)" opacity="0.4" />
       </g>
-      {/* underline + word */}
+      {/* underline rows */}
       <rect x="14" y="40" width="36" height="3" rx="1.5" fill="white" opacity="0.85" />
       <rect x="14" y="46" width="26" height="3" rx="1.5" fill="white" opacity="0.6" />
     </svg>
