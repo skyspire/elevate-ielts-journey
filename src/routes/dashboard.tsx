@@ -241,6 +241,27 @@ const blue = {
 function DashboardPage() {
   const [module, setModule] = useState<Module>("academic");
 
+  // Sample user — replace with real auth data later
+  const userName = "Riya";
+
+  // Time-aware greeting (4 blocks)
+  const hour = new Date().getHours();
+  const greeting =
+    hour >= 5 && hour < 12
+      ? "Good morning"
+      : hour >= 12 && hour < 17
+        ? "Good afternoon"
+        : hour >= 17 && hour < 21
+          ? "Good evening"
+          : "Good night";
+
+  // Editorial date stamp
+  const dateStamp = new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: "oklch(0.992 0.005 85)" }}>
       <main className="relative overflow-hidden py-12 sm:py-16">
@@ -249,28 +270,34 @@ function DashboardPage() {
 
         {/* Centered content column */}
         <div className="relative z-[1] mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Hero — handwriting headline with sketchy pencil underline */}
+          {/* Personalized hero — date stamp · handwritten greeting · editorial tagline */}
           <div className="text-center">
-            <div className="relative inline-block">
-              <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/70 sm:text-6xl md:text-7xl"
-                style={{ transform: "rotate(-2deg)" }}
-              >
-                Pick your IELTS
-              </h1>
+            {/* Tiny date stamp on top — magazine masthead vibe */}
+            <div className="font-display text-[10px] font-extrabold uppercase tracking-[0.32em] text-foreground/45">
+              {dateStamp}
+            </div>
 
-              {/* Sketchy hand-drawn underline (double pass for pencil feel) */}
+            {/* Handwritten greeting — warm and personal */}
+            <h1
+              className="mt-3 font-handwriting text-5xl font-bold leading-[0.95] text-foreground/75 sm:text-6xl md:text-7xl"
+              style={{ transform: "rotate(-1.5deg)" }}
+            >
+              {greeting},{" "}
+              <span className="text-foreground">{userName}</span>
+            </h1>
+
+            {/* Sketchy underline */}
+            <div className="relative mx-auto mt-1 h-3 w-56 sm:h-4 sm:w-72">
               <svg
                 aria-hidden
                 viewBox="0 0 300 14"
                 preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                className="absolute inset-0 h-full w-full text-foreground/45"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ transform: "rotate(-2deg)" }}
               >
                 <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
                 <path
@@ -280,6 +307,14 @@ function DashboardPage() {
                 />
               </svg>
             </div>
+
+            {/* Editorial tagline below */}
+            <p className="mx-auto mt-6 max-w-md text-base font-medium text-foreground/60 sm:text-lg">
+              Your IELTS desk is ready —{" "}
+              <span className="font-handwriting text-xl font-bold italic text-foreground/70 sm:text-2xl">
+                let's pick up where you left off.
+              </span>
+            </p>
           </div>
 
           {/* Toggle */}
