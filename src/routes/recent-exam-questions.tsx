@@ -920,7 +920,7 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
         accent={accent}
       />
 
-      <DottedResultsPanel>
+      <DottedResultsPanel tint={paletteForMonth(month)?.soft ?? null}>
         <SubSection
           eyebrow={eyebrow}
           emoji="✍️"
