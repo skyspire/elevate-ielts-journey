@@ -169,19 +169,13 @@ function StatCard({
 
   return (
     <div className="group relative flex flex-col items-center text-center">
-      {/* Animated arc — draws as the counter runs */}
-      <div className="relative h-44 w-44 sm:h-52 sm:w-52 lg:h-56 lg:w-56">
-        {/* outer soft halo */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-full blur-2xl"
-          style={{ background: `radial-gradient(circle, oklch(0.7 0.22 ${stat.hue} / 0.28), transparent 65%)` }}
-        />
+      {/* Animated arc — refined, editorial */}
+      <div className="relative h-32 w-32 sm:h-36 sm:w-36">
         <svg viewBox="0 0 100 100" className="relative h-full w-full -rotate-[126deg]">
           <defs>
             <linearGradient id={`arc-${stat.hue}`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor={`oklch(0.88 0.16 ${stat.hue})`} />
-              <stop offset="100%" stopColor={`oklch(0.7 0.22 ${(stat.hue + 60) % 360})`} />
+              <stop offset="0%" stopColor={`oklch(0.78 0.1 ${stat.hue})`} />
+              <stop offset="100%" stopColor={`oklch(0.62 0.13 ${(stat.hue + 30) % 360})`} />
             </linearGradient>
           </defs>
           {/* track */}
@@ -190,8 +184,8 @@ function StatCard({
             cy="50"
             r={r}
             fill="none"
-            stroke="oklch(1 0 0 / 0.1)"
-            strokeWidth="5"
+            stroke="oklch(1 0 0 / 0.09)"
+            strokeWidth="2.5"
             strokeDasharray={`${arcLen} ${C}`}
             strokeLinecap="round"
           />
@@ -202,35 +196,28 @@ function StatCard({
             r={r}
             fill="none"
             stroke={`url(#arc-${stat.hue})`}
-            strokeWidth="5"
+            strokeWidth="2.5"
             strokeDasharray={`${arcLen} ${C}`}
             strokeDashoffset={dashOffset}
             strokeLinecap="round"
-            style={{
-              transition: "stroke-dashoffset 60ms linear",
-              filter: `drop-shadow(0 0 10px oklch(0.8 0.2 ${stat.hue} / 0.7))`,
-            }}
+            style={{ transition: "stroke-dashoffset 60ms linear" }}
           />
-          {/* glowing endpoint dot */}
+          {/* small endpoint dot */}
           {progress > 0.02 && (
             <circle
               cx={50 + r * Math.cos((progress * 0.8 * 2 * Math.PI))}
               cy={50 + r * Math.sin((progress * 0.8 * 2 * Math.PI))}
-              r="4"
-              fill={`oklch(0.96 0.16 ${stat.hue})`}
-              style={{ filter: `drop-shadow(0 0 12px oklch(0.9 0.22 ${stat.hue}))` }}
+              r="2.2"
+              fill={`oklch(0.92 0.1 ${stat.hue})`}
             />
           )}
         </svg>
 
         {/* Number centered inside the arc */}
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <span
-            className="font-display text-4xl font-black tabular-nums tracking-tight text-white sm:text-5xl lg:text-[56px]"
-            style={{ textShadow: `0 2px 30px oklch(0.7 0.22 ${stat.hue} / 0.6), 0 0 1px oklch(1 0 0 / 0.4)` }}
-          >
+        <div className="absolute inset-0 flex items-center justify-center px-3">
+          <span className="font-display text-[28px] font-black tabular-nums tracking-tight text-white sm:text-[32px]">
             {value.toLocaleString()}
-            <span style={{ color: `oklch(0.9 0.18 ${stat.hue})` }}>{stat.suffix}</span>
+            <span style={{ color: `oklch(0.85 0.12 ${stat.hue})` }}>{stat.suffix}</span>
           </span>
         </div>
       </div>
