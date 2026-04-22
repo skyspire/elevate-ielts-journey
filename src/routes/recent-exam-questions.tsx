@@ -252,47 +252,44 @@ function RecentExamQuestionsPage() {
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
 
           {/* Hero */}
-          <div className="relative isolate -mx-5 overflow-hidden rounded-[28px] px-5 pb-10 pt-12 sm:-mx-6 sm:px-8 sm:pb-14 sm:pt-16">
-            <HeroScenery />
-            <div className="relative z-10 text-center">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[oklch(0.62_0.20_25)]/10 px-3 py-1 ring-1 ring-inset ring-[oklch(0.62_0.20_25)]/30">
-                <Flame className="h-3.5 w-3.5 text-[oklch(0.55_0.20_25)]" strokeWidth={2.6} />
-                <span className="font-display text-[10px] font-black uppercase tracking-[0.22em] text-[oklch(0.45_0.18_25)]">
-                  Fresh from recent exams
-                </span>
-              </div>
-              <div className="relative inline-block">
-                <h1
-                  className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
-                  style={{ transform: "rotate(-2deg)" }}
-                >
-                  Recent Exam Questions
-                </h1>
-                <svg
-                  aria-hidden
-                  viewBox="0 0 300 14"
-                  preserveAspectRatio="none"
-                  className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{ transform: "rotate(-2deg)" }}
-                >
-                  <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
-                  <path
-                    d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
-                    opacity="0.4"
-                    strokeWidth="1.4"
-                  />
-                </svg>
-              </div>
-              <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/60 sm:text-base">
-                Verified Writing & Speaking questions reported by real test-takers — updated each
-                month.
-              </p>
+          <div className="text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[oklch(0.62_0.20_25)]/10 px-3 py-1 ring-1 ring-inset ring-[oklch(0.62_0.20_25)]/30">
+              <Flame className="h-3.5 w-3.5 text-[oklch(0.55_0.20_25)]" strokeWidth={2.6} />
+              <span className="font-display text-[10px] font-black uppercase tracking-[0.22em] text-[oklch(0.45_0.18_25)]">
+                Fresh from recent exams
+              </span>
             </div>
+            <div className="relative inline-block">
+              <h1
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
+                style={{ transform: "rotate(-2deg)" }}
+              >
+                Recent Exam Questions
+              </h1>
+              <svg
+                aria-hidden
+                viewBox="0 0 300 14"
+                preserveAspectRatio="none"
+                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transform: "rotate(-2deg)" }}
+              >
+                <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
+                <path
+                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
+                  opacity="0.4"
+                  strokeWidth="1.4"
+                />
+              </svg>
+            </div>
+            <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/60 sm:text-base">
+              Verified Writing & Speaking questions reported by real test-takers — updated each
+              month.
+            </p>
           </div>
 
 
