@@ -218,9 +218,9 @@ function StatCard({
         </svg>
 
         {/* Number centered inside the arc */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center px-4">
           <span
-            className="font-display text-3xl font-black tabular-nums tracking-tight text-white sm:text-4xl"
+            className="font-display text-2xl font-black tabular-nums tracking-tight text-white sm:text-[28px]"
             style={{ textShadow: `0 2px 24px oklch(0.7 0.22 ${stat.hue} / 0.55), 0 0 1px oklch(1 0 0 / 0.4)` }}
           >
             {value.toLocaleString()}
