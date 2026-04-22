@@ -21,6 +21,7 @@ import {
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
+import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -265,6 +266,7 @@ function WritingSamplesPage() {
               onTaskChange={onTaskChange}
               isAcademic={isAcademic}
             />
+            <ThinkingRetriever taskSelected={task !== null} />
           </div>
 
           {/* Steps 2 & 3 — gated until a task is selected */}
