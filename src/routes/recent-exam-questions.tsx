@@ -311,14 +311,18 @@ function RecentExamQuestionsPage() {
             <ModuleToggle module={module} setModule={setModule} />
           </div>
 
-          {/* Section tabs */}
-          <div className="mt-10 flex justify-center">
-            <SectionTabs section={section} setSection={setSection} />
-          </div>
+          {/* Section tabs — only for Writing/Speaking modules */}
+          {module !== "reading" && (
+            <div className="mt-10 flex justify-center">
+              <SectionTabs section={section} setSection={setSection} />
+            </div>
+          )}
 
           {/* Content */}
           <div className="mt-10">
-            {section === "writing" ? (
+            {module === "reading" ? (
+              <ReadingSection />
+            ) : section === "writing" ? (
               <WritingSection
                 data={isAcademic ? academicWriting : generalWriting}
                 isAcademic={isAcademic}
