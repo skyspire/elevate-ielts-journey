@@ -967,14 +967,14 @@ function DottedResultsPanel({ children }: { children: ReactNode }) {
       {/* Full-bleed dotted background extending beyond the content container */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-full w-screen -translate-x-1/2 bg-paper-dots"
+        className="pointer-events-none absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 bg-paper-dots"
       />
       {/* Soft top border to separate from cream area */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-px w-screen -translate-x-1/2 bg-foreground/10"
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-screen -translate-x-1/2 bg-foreground/10"
       />
-      <div className="py-10 sm:py-12">{children}</div>
+      <div className="relative py-10 sm:py-12">{children}</div>
     </div>
   );
 }
