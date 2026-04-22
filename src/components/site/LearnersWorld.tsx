@@ -1,4 +1,28 @@
 import { useEffect, useRef, useState } from "react";
+import learner01 from "@/assets/learners/learner-01.jpg";
+import learner02 from "@/assets/learners/learner-02.jpg";
+import learner03 from "@/assets/learners/learner-03.jpg";
+import learner04 from "@/assets/learners/learner-04.jpg";
+import learner05 from "@/assets/learners/learner-05.jpg";
+import learner06 from "@/assets/learners/learner-06.jpg";
+import learner07 from "@/assets/learners/learner-07.jpg";
+import learner08 from "@/assets/learners/learner-08.jpg";
+import learner09 from "@/assets/learners/learner-09.jpg";
+import learner10 from "@/assets/learners/learner-10.jpg";
+import learner11 from "@/assets/learners/learner-11.jpg";
+import learner12 from "@/assets/learners/learner-12.jpg";
+import learner13 from "@/assets/learners/learner-13.jpg";
+import learner14 from "@/assets/learners/learner-14.jpg";
+import learner15 from "@/assets/learners/learner-15.jpg";
+import learner16 from "@/assets/learners/learner-16.jpg";
+import learner17 from "@/assets/learners/learner-17.jpg";
+import learner18 from "@/assets/learners/learner-18.jpg";
+import learner19 from "@/assets/learners/learner-19.jpg";
+import learner20 from "@/assets/learners/learner-20.jpg";
+import learner21 from "@/assets/learners/learner-21.jpg";
+import learner22 from "@/assets/learners/learner-22.jpg";
+import learner23 from "@/assets/learners/learner-23.jpg";
+import learner24 from "@/assets/learners/learner-24.jpg";
 
 /**
  * LearnersWorld — Editorial marquee of countries with learner counts.
@@ -118,32 +142,57 @@ function MarqueeRow({
 }
 
 /* ===========================================================
- * CounterStage — Dramatic moment: flag rain + ticking 70,000+
+ * CounterStage — Floating learner avatars + ticking 70,000+
  * =========================================================== */
 
-const RAIN_FLAGS = countries.slice(0, 36).map((c) => c.flag);
+// 24 diverse smiling learner avatars paired with their country flag
+const LEARNERS: { img: string; flag: string }[] = [
+  { img: learner01, flag: "🇮🇳" },
+  { img: learner02, flag: "🇵🇰" },
+  { img: learner03, flag: "🇧🇩" },
+  { img: learner04, flag: "🇨🇳" },
+  { img: learner05, flag: "🇵🇭" },
+  { img: learner06, flag: "🇳🇬" },
+  { img: learner07, flag: "🇮🇩" },
+  { img: learner08, flag: "🇻🇳" },
+  { img: learner09, flag: "🇧🇷" },
+  { img: learner10, flag: "🇬🇧" },
+  { img: learner11, flag: "🇨🇦" },
+  { img: learner12, flag: "🇦🇺" },
+  { img: learner13, flag: "🇺🇸" },
+  { img: learner14, flag: "🇩🇪" },
+  { img: learner15, flag: "🇦🇪" },
+  { img: learner16, flag: "🇹🇷" },
+  { img: learner17, flag: "🇲🇾" },
+  { img: learner18, flag: "🇪🇬" },
+  { img: learner19, flag: "🇱🇰" },
+  { img: learner20, flag: "🇳🇵" },
+  { img: learner21, flag: "🇰🇷" },
+  { img: learner22, flag: "🇲🇽" },
+  { img: learner23, flag: "🇰🇪" },
+  { img: learner24, flag: "🇫🇷" },
+];
 
-const rainConfig = RAIN_FLAGS.map((flag, i) => {
+const rainConfig = LEARNERS.map((learner, i) => {
   const rand = (seed: number) => {
     const x = Math.sin(seed * 9301 + 49297) * 233280;
     return x - Math.floor(x);
   };
-  const startX = 4 + rand(i + 1) * 92;
-  const restY = 48 + rand(i + 7) * 48; // 48–96%
-  const rotate = (rand(i + 13) - 0.5) * 50;
+  const startX = 4 + rand(i + 1) * 90;
+  const restY = 8 + rand(i + 7) * 84; // 8–92% — distributed across full stage
+  const rotate = (rand(i + 13) - 0.5) * 30;
   const delay = rand(i + 21) * 1.6;
-  const duration = 1.6 + rand(i + 31) * 1.2;
-  const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
-  // Continuous drift parameters — each flag gets its own rhythm
-  const driftDur = 6 + rand(i + 51) * 6; // 6–12s drift loop
-  const driftDelay = -rand(i + 61) * driftDur; // negative so they're already mid-loop
-  const bobDur = 3 + rand(i + 71) * 2.5; // 3–5.5s bob loop
+  const duration = 1.8 + rand(i + 31) * 1.2;
+  const size = 56 + Math.floor(rand(i + 41) * 44); // 56–100px avatars
+  const driftDur = 7 + rand(i + 51) * 6;
+  const driftDelay = -rand(i + 61) * driftDur;
+  const bobDur = 3.2 + rand(i + 71) * 2.6;
   const bobDelay = -rand(i + 81) * bobDur;
-  const driftAmp = 8 + rand(i + 91) * 14; // 8–22px horizontal drift
-  const bobAmp = 6 + rand(i + 101) * 10; // 6–16px vertical bob
-  const swayDeg = 2 + rand(i + 111) * 4; // 2–6deg gentle sway
+  const driftAmp = 8 + rand(i + 91) * 14;
+  const bobAmp = 6 + rand(i + 101) * 10;
+  const swayDeg = 1.5 + rand(i + 111) * 3;
   return {
-    flag,
+    ...learner,
     startX,
     restY,
     rotate,
@@ -192,7 +241,7 @@ function CounterStage({ active }: { active: boolean }) {
 
   return (
     <div className="relative mx-auto mt-12 h-[460px] w-full max-w-5xl sm:h-[540px]">
-      {/* Falling flags — bigger, dulled, behind */}
+      {/* Floating learner avatars — drift continuously, behind the number */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -200,7 +249,7 @@ function CounterStage({ active }: { active: boolean }) {
         {rainConfig.map((f, i) => (
           <span
             key={i}
-            className="absolute leading-none"
+            className="absolute"
             style={{
               left: `${f.startX}%`,
               top: 0,
@@ -212,7 +261,6 @@ function CounterStage({ active }: { active: boolean }) {
               ["--rotate" as string]: `${f.rotate}deg`,
             }}
           >
-            {/* Continuous horizontal drift */}
             <span
               className="block"
               style={{
@@ -220,20 +268,44 @@ function CounterStage({ active }: { active: boolean }) {
                 ["--drift-amp" as string]: `${f.driftAmp}px`,
               }}
             >
-              {/* Continuous vertical bob + sway */}
               <span
-                className="block"
+                className="relative block"
                 style={{
-                  fontSize: `${f.size}rem`,
-                  opacity: 0.55,
-                  filter:
-                    "saturate(0.7) blur(0.3px) drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+                  width: `${f.size}px`,
+                  height: `${f.size}px`,
                   animation: `lw-bob ${f.bobDur}s ease-in-out ${f.bobDelay}s infinite`,
                   ["--bob-amp" as string]: `${f.bobAmp}px`,
                   ["--sway-deg" as string]: `${f.swayDeg}deg`,
+                  filter:
+                    "drop-shadow(0 8px 20px rgba(15,23,42,0.18)) saturate(0.9)",
                 }}
               >
-                {f.flag}
+                <img
+                  src={f.img}
+                  alt=""
+                  loading="lazy"
+                  width={f.size}
+                  height={f.size}
+                  className="h-full w-full rounded-full object-cover"
+                  style={{
+                    border: "3px solid oklch(0.99 0.008 85)",
+                    opacity: 0.92,
+                  }}
+                />
+                {/* Tiny flag pin */}
+                <span
+                  className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full"
+                  style={{
+                    width: `${Math.max(20, f.size * 0.36)}px`,
+                    height: `${Math.max(20, f.size * 0.36)}px`,
+                    fontSize: `${Math.max(11, f.size * 0.22)}px`,
+                    background: "oklch(0.99 0.008 85)",
+                    boxShadow: "0 2px 6px rgba(15,23,42,0.18)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {f.flag}
+                </span>
               </span>
             </span>
           </span>
