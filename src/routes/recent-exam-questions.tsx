@@ -1029,11 +1029,11 @@ function DottedResultsPanel({
 }) {
   return (
     <div className="relative">
-      {/* Full-bleed dotted background — extends below to merge into the footer */}
+      {/* Full-bleed dotted background — extends just enough to bridge to the footer */}
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-0 w-screen -translate-x-1/2 bg-paper-dots"
-        style={{ height: "calc(100% + 200px)" }}
+        style={{ height: "calc(100% + 56px)" }}
       />
       {/* Tinted wash that matches the active month color — sits above dots, blends with them */}
       {tint && (
@@ -1044,7 +1044,7 @@ function DottedResultsPanel({
             background: tint,
             mixBlendMode: "multiply",
             opacity: 0.85,
-            height: "calc(100% + 200px)",
+            height: "calc(100% + 56px)",
           }}
         />
       )}
