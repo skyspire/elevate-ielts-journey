@@ -122,10 +122,10 @@ export function ValueStatement() {
                 {p.days} days access
               </div>
               <Button
-                className={`mt-6 h-11 w-full rounded-full font-bold ${
+                className={`mt-6 h-11 w-full rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 ${
                   p.popular
-                    ? "bg-brand text-brand-foreground shadow-glow hover:bg-brand/90"
-                    : "bg-[oklch(0.55_0.01_270)] text-white hover:bg-[oklch(0.48_0.01_270)]"
+                    ? "bg-brand text-brand-foreground shadow-glow hover:bg-brand/90 hover:shadow-[0_0_30px_oklch(0.7_0.18_30/0.6),0_0_60px_oklch(0.7_0.18_30/0.35)]"
+                    : "bg-[oklch(0.55_0.01_270)] text-white hover:bg-[oklch(0.48_0.01_270)] hover:shadow-[0_0_24px_oklch(0.55_0.01_270/0.55),0_0_48px_oklch(0.55_0.01_270/0.3)]"
                 }`}
               >
                 Choose {p.name}
