@@ -140,34 +140,36 @@ function SpeakingSamplesPage() {
     radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.92 0.05 165 / 0.30) 0%, transparent 70%)`;
 
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: pageBg }}>
-      {/* Ambient sage gradient wash — covers the entire page */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{ background: pageGradient }}
-      />
+    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: pageBg }}>
+      {/* Wrapper for header + main — gradient lives here so the Footer stays plain */}
+      <div className="relative flex-1">
+        {/* Ambient sage gradient wash — bounded to this wrapper (excludes footer) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{ background: pageGradient }}
+        />
 
-      {/* Top bar */}
-      <header
-        className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
-        style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
-      >
-        <div className="container-page flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
-              <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
-          </Link>
+        {/* Top bar */}
+        <header
+          className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
+          style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+        >
+          <div className="container-page flex h-16 items-center justify-between">
+            <Link to="/" className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
+                <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
+              </span>
+              <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
+            </Link>
 
-          <BackButton
-            to="/dashboard"
-            ariaLabel="Back to Dashboard"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/10 bg-white text-foreground/70 shadow-soft transition-colors hover:text-foreground"
-          />
-        </div>
-      </header>
+            <BackButton
+              to="/dashboard"
+              ariaLabel="Back to Dashboard"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/10 bg-white text-foreground/70 shadow-soft transition-colors hover:text-foreground"
+            />
+          </div>
+        </header>
 
       <main className="relative z-[1] pt-10 sm:pt-14">
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
