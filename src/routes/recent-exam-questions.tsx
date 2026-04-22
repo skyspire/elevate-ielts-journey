@@ -243,9 +243,25 @@ function RecentExamQuestionsPage() {
   const [section, setSection] = useState<ExamSection>(search.section);
   const isAcademic = module === "academic";
 
+  // Module-tinted page background — cool ivory for Academic, warm cream for General
+  // (mirrors Dashboard, Writing Samples and Speaking Samples)
+  const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
+  const ruleColor = isAcademic
+    ? "oklch(0.45 0.10 235 / 0.10)"
+    : "oklch(0.55 0.14 30 / 0.10)";
+
   return (
-    <div className="min-h-screen bg-paper-white">
+    <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg }}>
       <main className="relative py-10 sm:py-14">
+        {/* Soft ruled overlay behind the hero — matches Speaking/Writing Samples */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(0deg, transparent 0, transparent 39px, ${ruleColor} 39px, ${ruleColor} 40px)`,
+          }}
+        />
+
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
@@ -357,9 +373,12 @@ function ModuleToggle({
         }`}
       >
         <span
-          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
-            isAcademic ? "text-foreground" : "text-foreground/55"
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl transition-colors duration-500 ${
+            isAcademic ? "" : "opacity-80"
           }`}
+          style={{
+            color: isAcademic ? "oklch(0.45 0.14 265)" : "oklch(0.55 0.06 265 / 0.55)",
+          }}
         >
           Academic
         </span>
@@ -457,9 +476,12 @@ function ModuleToggle({
         }`}
       >
         <span
-          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
-            !isAcademic ? "text-foreground" : "text-foreground/55"
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl transition-colors duration-500 ${
+            !isAcademic ? "" : "opacity-80"
           }`}
+          style={{
+            color: !isAcademic ? "oklch(0.52 0.16 28)" : "oklch(0.55 0.06 28 / 0.55)",
+          }}
         >
           General
         </span>
