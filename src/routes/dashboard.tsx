@@ -488,9 +488,11 @@ function FeatureCard({
 }) {
   const tone = (module === "academic" ? tonesAcademic : tonesGeneral)[feature.tone];
   const Icon = feature.icon;
+  const isHighlighted = feature.highlighted;
 
-  const cardClass =
-    "color-card group relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-2xl p-3 text-center text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_10px_24px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_20px_40px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2";
+  const cardClass = isHighlighted
+    ? "color-card group relative col-span-2 row-span-1 flex aspect-[2/1] w-full flex-col items-center justify-center overflow-hidden rounded-2xl p-4 text-center text-white shadow-[0_4px_10px_oklch(0.20_0.04_60/0.15),0_20px_40px_-12px_oklch(0.55_0.20_25/0.45)] ring-2 ring-white/70 ring-offset-2 ring-offset-paper-cream transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_8px_18px_oklch(0.20_0.04_60/0.20),0_28px_56px_-14px_oklch(0.55_0.20_25/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2"
+    : "color-card group relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-2xl p-3 text-center text-white shadow-[0_2px_4px_oklch(0.20_0.04_60/0.06),0_10px_24px_-14px_oklch(0.20_0.04_60/0.25)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_4px_8px_oklch(0.20_0.04_60/0.10),0_20px_40px_-18px_oklch(0.20_0.04_60/0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2";
 
   const inner = (
     <>
@@ -521,14 +523,36 @@ function FeatureCard({
         }}
       />
 
+      {isHighlighted && (
+        <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-0.5 font-display text-[9px] font-black uppercase tracking-[0.18em] text-foreground shadow-soft">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[oklch(0.62_0.20_25)]" />
+          New
+        </span>
+      )}
 
       {/* Centered icon + title only */}
-      <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-        <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+      <span
+        className={`relative flex items-center justify-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/25 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110 ${
+          isHighlighted ? "h-12 w-12" : "h-10 w-10"
+        }`}
+      >
+        <Icon
+          className={isHighlighted ? "h-6 w-6 text-white" : "h-5 w-5 text-white"}
+          strokeWidth={2.4}
+        />
       </span>
-      <h3 className="relative mt-3 font-display text-[13px] font-bold leading-tight tracking-tight text-white sm:text-sm">
+      <h3
+        className={`relative mt-3 font-display font-bold leading-tight tracking-tight text-white ${
+          isHighlighted ? "text-[15px] sm:text-base" : "text-[13px] sm:text-sm"
+        }`}
+      >
         {feature.title}
       </h3>
+      {isHighlighted && (
+        <p className="relative mt-1 max-w-[260px] text-[11px] font-medium leading-snug text-white/85 sm:text-xs">
+          {feature.description[module]}
+        </p>
+      )}
     </>
   );
 
