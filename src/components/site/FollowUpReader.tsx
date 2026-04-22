@@ -405,12 +405,12 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           />
         </div>
 
-        {/* Header — Back button. Now sits on parchment, so use ink color. */}
+        {/* Header — circular icon-only close button, top-right. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end items-center px-4 pt-4 sm:px-6 sm:pt-6">
           <button
             type="button"
             onClick={onClose}
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-semibold backdrop-blur-md transition-colors"
+            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-md transition-all hover:scale-105 sm:h-11 sm:w-11"
             style={{
               color: INK,
               borderColor: `${activePalette.accentDeep}55`,
@@ -418,8 +418,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             }}
             aria-label="Close"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
+            <ArrowLeft className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2.4} />
           </button>
         </div>
 
