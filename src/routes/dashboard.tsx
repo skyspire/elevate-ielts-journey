@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { CardMotif } from "@/components/site/CardMotif";
+import { StudyNotesBackground } from "@/components/site/StudyNotesBackground";
 
 type Module = "academic" | "general";
 
