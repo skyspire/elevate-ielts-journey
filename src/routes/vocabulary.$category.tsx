@@ -11,7 +11,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Lightbulb,
   type LucideProps,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -317,7 +316,7 @@ function CategoryPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer variant="light" />
     </div>
   );
 }
