@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { CardMotif } from "@/components/site/CardMotif";
+import { StudyNotesBackground } from "@/components/site/StudyNotesBackground";
 
 type Module = "academic" | "general";
 
@@ -243,34 +244,18 @@ function DashboardPage() {
   const accent = isAcademic ? blue : sage;
 
   return (
-    <div className="relative min-h-screen velvet-base">
+    <div className="relative min-h-screen bg-paper-cream">
       <main className="relative overflow-hidden py-12 sm:py-16">
-        {/* Dark velvet background — plum/charcoal with colored glow halos */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-          {/* Base gradient already on the page; add per-card glow halos */}
-          <span className="velvet-glow velvet-glow-1" />
-          <span className="velvet-glow velvet-glow-2" />
-          <span className="velvet-glow velvet-glow-3" />
-          <span className="velvet-glow velvet-glow-4" />
-          <span className="velvet-glow velvet-glow-5" />
-          <span className="velvet-glow velvet-glow-6" />
-          <span className="velvet-glow velvet-glow-7" />
-          <span className="velvet-glow velvet-glow-8" />
-          {/* Star dust */}
-          <span className="absolute inset-0 velvet-stars opacity-90" />
-          {/* Subtle grain for texture */}
-          <span className="absolute inset-0 aurora-grain opacity-[0.18] mix-blend-overlay" />
-          {/* Top-bottom vignette to frame the content */}
-          <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,oklch(0.18_0.04_300/0.55)_100%)]" />
-        </div>
+        {/* Handwritten study-notes background — pastel scribbles in the margins */}
+        <StudyNotesBackground />
 
         {/* Centered content column */}
-        <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
+        <div className="relative z-[1] mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Hero — handwriting headline with sketchy pencil underline */}
           <div className="text-center">
             <div className="relative inline-block">
               <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-white/85 sm:text-6xl md:text-7xl"
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/70 sm:text-6xl md:text-7xl"
                 style={{ transform: "rotate(-2deg)" }}
               >
                 Pick your IELTS
@@ -281,7 +266,7 @@ function DashboardPage() {
                 aria-hidden
                 viewBox="0 0 300 14"
                 preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-white/70 sm:-bottom-4 sm:h-4"
+                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2.2"
@@ -306,11 +291,11 @@ function DashboardPage() {
 
           {/* Section label */}
           <div className="mt-14 mb-5 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-white/20" />
-            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/55">
+            <span className="h-px w-10 bg-foreground/15" />
+            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/50">
               Your Toolkit
             </span>
-            <span className="h-px w-10 bg-white/20" />
+            <span className="h-px w-10 bg-foreground/15" />
           </div>
 
           {/* Vibrant gradient cards — bigger, juicy hover */}
@@ -320,7 +305,7 @@ function DashboardPage() {
             ))}
           </div>
 
-          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
+          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
             More tools coming soon · Access never expires during your plan
           </p>
         </div>
