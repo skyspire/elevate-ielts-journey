@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -37,11 +37,7 @@ export function Hero() {
       <HeroDoodles />
 
       <div className="container-page relative z-10 flex flex-col items-center py-24 text-center md:py-32 lg:py-40">
-        {/* Eyebrow */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground shadow-soft backdrop-blur">
-          <Sparkles className="h-3.5 w-3.5 text-brand" />
-          Hand-curated • Updated weekly
-        </div>
+        {/* Headline */}
 
         <h1 className="relative font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
           No need to buy{" "}
@@ -91,22 +87,6 @@ export function Hero() {
           >
             Unlock Full Access
           </Button>
-        </div>
-
-        {/* Trust pills */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full" style={{ background: "oklch(0.65 0.15 165)" }} />
-            12,000+ learners
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full" style={{ background: "oklch(0.7 0.16 70)" }} />
-            Band 8–9 samples
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-brand" />
-            No signup needed
-          </span>
         </div>
       </div>
     </section>
