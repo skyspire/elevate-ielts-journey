@@ -244,7 +244,7 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="min-h-screen bg-paper-white">
       <main className="relative py-10 sm:py-14">
         {/* Subtle ruled-paper background behind hero */}
         <div
