@@ -892,7 +892,7 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
 
 function SpeakingSection({ data }: { data: SpeakingData }) {
   const [part, setPart] = useState<SpeakingPart>("part1");
-  const [month, setMonth] = useState<string | "all">("all");
+  const [month, setMonth] = useState<string | "all">("April 2026");
   const accent = part === "part1" ? "oklch(0.55 0.16 250)" : "oklch(0.50 0.15 200)";
   const questions = data[part];
   const months = uniqueMonths(questions);
