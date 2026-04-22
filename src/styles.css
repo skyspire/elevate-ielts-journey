@@ -494,6 +494,33 @@
 .motif-fire .ember:nth-child(6) { animation-delay: 0.7s; }
 .motif-fire .ember:nth-child(7) { animation-delay: 1.4s; }
 
+/* ============================================================ */
+/* Ivory whisper background — soft pastel halos breathing slowly  */
+/* ============================================================ */
+@keyframes whisper-breathe {
+  0%, 100% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.12) translate(2%, -1%);
+    opacity: 1;
+  }
+}
+
+.ivory-halo {
+  animation-name: whisper-breathe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ivory-halo {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motif-pencil .trail,
   .motif-pencil .pencil,
