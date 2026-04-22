@@ -143,10 +143,10 @@ function VocabularyPage() {
   if (hasChildMatch) {
     return <Outlet />;
   }
-
-
+  return (
     <div className="min-h-screen bg-paper-cream">
       <main className="relative py-12 sm:py-16">
+
         {/* Subtle ruled-paper accent in the background */}
         <div
           aria-hidden
