@@ -1,225 +1,182 @@
+import { useEffect, useRef, useState } from "react";
+
 /**
- * LearnersWorld — Option 5: Continent grid spread.
+ * LearnersWorld — Vintage cartography world map.
  *
- * No geographic map. A magazine-style grid where each cell is a region card:
- *   - paper texture background (rotates through the site's washi/paper palette)
- *   - oversized region name in display type
- *   - learner count rendered HUGE (the hero number of the card)
- *   - avatar cluster of recent learners
- *   - a sample country list
- *
- * Editorial. No pills. No micro-text noise.
+ * Cream paper backdrop, sepia continent silhouettes built from dot fields,
+ * dashed shipping routes connecting a hub to learner cities, hand-drawn
+ * compass rose, and wax-seal stamps on key cities. Editorial, no pills.
  */
 
-type Region = {
-  name: string;
-  count: string; // formatted, e.g. "1,240"
-  countries: string[];
-  /** Initials shown in the avatar cluster */
-  avatars: { initials: string; tone: string }[];
-  /** Background paper utility class from styles.css */
-  paper: string;
-  /** Hand-written caption above the region name */
-  scribble: string;
-  /** Slight tilt for the card */
-  tilt: string;
+const MAP_W = 1000;
+const MAP_H = 520;
+
+const proj = (lng: number, lat: number) => {
+  const x = ((lng + 180) / 360) * MAP_W;
+  const y = ((90 - lat) / 180) * MAP_H;
+  return { x, y };
 };
 
-const regions: Region[] = [
-  {
-    name: "South Asia",
-    count: "3,820",
-    countries: ["India", "Pakistan", "Bangladesh", "Sri Lanka", "Nepal"],
-    avatars: [
-      { initials: "AS", tone: "oklch(0.7 0.15 35)" },
-      { initials: "PR", tone: "oklch(0.7 0.14 175)" },
-      { initials: "RK", tone: "oklch(0.7 0.15 290)" },
-      { initials: "AJ", tone: "oklch(0.7 0.14 95)" },
-    ],
-    paper: "bg-paper-cream",
-    scribble: "the powerhouse",
-    tilt: "lg:-rotate-[0.4deg]",
-  },
-  {
-    name: "Europe",
-    count: "1,640",
-    countries: ["UK", "Germany", "Portugal", "Italy", "Ireland", "Czechia"],
-    avatars: [
-      { initials: "SP", tone: "oklch(0.7 0.14 250)" },
-      { initials: "EK", tone: "oklch(0.7 0.15 35)" },
-      { initials: "CM", tone: "oklch(0.7 0.14 165)" },
-      { initials: "PI", tone: "oklch(0.7 0.15 295)" },
-    ],
-    paper: "bg-paper-sage",
-    scribble: "old continent",
-    tilt: "lg:rotate-[0.3deg]",
-  },
-  {
-    name: "North America",
-    count: "1,210",
-    countries: ["Canada", "United States", "Mexico"],
-    avatars: [
-      { initials: "RN", tone: "oklch(0.7 0.14 30)" },
-      { initials: "PM", tone: "oklch(0.7 0.15 250)" },
-      { initials: "CR", tone: "oklch(0.7 0.14 95)" },
-    ],
-    paper: "bg-paper-rose",
-    scribble: "PR & study visas",
-    tilt: "lg:-rotate-[0.3deg]",
-  },
-  {
-    name: "East Asia",
-    count: "980",
-    countries: ["China", "South Korea", "Japan", "Vietnam", "Singapore"],
-    avatars: [
-      { initials: "ML", tone: "oklch(0.7 0.15 30)" },
-      { initials: "DK", tone: "oklch(0.7 0.14 250)" },
-      { initials: "HT", tone: "oklch(0.7 0.15 290)" },
-      { initials: "WZ", tone: "oklch(0.7 0.14 165)" },
-    ],
-    paper: "bg-paper-mint",
-    scribble: "rising fast",
-    tilt: "lg:rotate-[0.4deg]",
-  },
-  {
-    name: "Middle East",
-    count: "740",
-    countries: ["UAE", "Saudi Arabia", "Jordan", "Lebanon", "Egypt"],
-    avatars: [
-      { initials: "AB", tone: "oklch(0.7 0.15 95)" },
-      { initials: "RA", tone: "oklch(0.7 0.14 35)" },
-      { initials: "OH", tone: "oklch(0.7 0.15 250)" },
-      { initials: "LF", tone: "oklch(0.7 0.14 295)" },
-    ],
-    paper: "bg-paper-peach",
-    scribble: "ambitious crowd",
-    tilt: "lg:-rotate-[0.5deg]",
-  },
-  {
-    name: "Africa",
-    count: "560",
-    countries: ["Nigeria", "Ghana", "Morocco", "Kenya", "South Africa"],
-    avatars: [
-      { initials: "NA", tone: "oklch(0.7 0.14 165)" },
-      { initials: "KM", tone: "oklch(0.7 0.15 35)" },
-      { initials: "FZ", tone: "oklch(0.7 0.14 295)" },
-    ],
-    paper: "bg-paper-cream",
-    scribble: "growing daily",
-    tilt: "lg:rotate-[0.2deg]",
-  },
-  {
-    name: "Oceania",
-    count: "310",
-    countries: ["Australia", "New Zealand"],
-    avatars: [
-      { initials: "NG", tone: "oklch(0.7 0.14 250)" },
-      { initials: "EP", tone: "oklch(0.7 0.15 165)" },
-    ],
-    paper: "bg-paper-dots",
-    scribble: "down under",
-    tilt: "lg:-rotate-[0.2deg]",
-  },
-  {
-    name: "Latin America",
-    count: "420",
-    countries: ["Brazil", "Argentina", "Mexico", "Colombia"],
-    avatars: [
-      { initials: "IR", tone: "oklch(0.7 0.14 95)" },
-      { initials: "DF", tone: "oklch(0.7 0.15 290)" },
-      { initials: "BS", tone: "oklch(0.7 0.14 30)" },
-    ],
-    paper: "bg-paper-rose",
-    scribble: "always on the move",
-    tilt: "lg:rotate-[0.5deg]",
-  },
+// Pseudo-random helper for stable SSR-friendly point spreads
+function rng(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+
+// Generate dot points inside a polygon-ish bounding region.
+// Each "blob" is a coarse continent shape sketched as overlapping ellipses.
+function dotsInEllipse(
+  cxLng: number,
+  cyLat: number,
+  rxLng: number,
+  ryLat: number,
+  count: number,
+  seed: number,
+) {
+  const rand = rng(seed);
+  const out: { x: number; y: number; r: number }[] = [];
+  for (let i = 0; i < count; i++) {
+    // rejection sample inside ellipse
+    let lng = 0;
+    let lat = 0;
+    for (let t = 0; t < 30; t++) {
+      lng = cxLng + (rand() * 2 - 1) * rxLng;
+      lat = cyLat + (rand() * 2 - 1) * ryLat;
+      const nx = (lng - cxLng) / rxLng;
+      const ny = (lat - cyLat) / ryLat;
+      if (nx * nx + ny * ny <= 1) break;
+    }
+    const { x, y } = proj(lng, lat);
+    // dot size varies for a hand-stippled feel
+    const r = 1.4 + rand() * 1.0;
+    out.push({ x, y, r });
+  }
+  return out;
+}
+
+// Continents — sketched as composites of ellipses.
+const continents = [
+  // North America
+  ...dotsInEllipse(-100, 45, 30, 18, 240, 11),
+  ...dotsInEllipse(-90, 28, 18, 10, 110, 12),
+  ...dotsInEllipse(-75, 52, 15, 10, 70, 13),
+  // Greenland
+  ...dotsInEllipse(-42, 72, 10, 8, 50, 14),
+  // Central America
+  ...dotsInEllipse(-85, 15, 10, 6, 40, 15),
+  // South America
+  ...dotsInEllipse(-60, -15, 18, 25, 230, 16),
+  ...dotsInEllipse(-70, -38, 8, 15, 80, 17),
+  // Europe
+  ...dotsInEllipse(15, 52, 22, 10, 180, 18),
+  ...dotsInEllipse(0, 45, 12, 8, 70, 19),
+  // UK / Ireland
+  ...dotsInEllipse(-3, 54, 5, 4, 30, 20),
+  // Africa
+  ...dotsInEllipse(20, 5, 22, 22, 280, 21),
+  ...dotsInEllipse(25, -20, 15, 15, 140, 22),
+  // Middle East
+  ...dotsInEllipse(45, 28, 14, 10, 90, 23),
+  // Russia / Northern Asia
+  ...dotsInEllipse(90, 60, 50, 12, 280, 24),
+  // South Asia
+  ...dotsInEllipse(78, 22, 12, 12, 130, 25),
+  // South-East Asia
+  ...dotsInEllipse(105, 5, 15, 12, 110, 26),
+  // East Asia
+  ...dotsInEllipse(115, 35, 18, 14, 180, 27),
+  // Japan
+  ...dotsInEllipse(138, 37, 4, 7, 35, 28),
+  // Indonesia / Philippines
+  ...dotsInEllipse(120, -2, 18, 6, 90, 29),
+  // Australia
+  ...dotsInEllipse(133, -25, 18, 12, 170, 30),
+  // New Zealand
+  ...dotsInEllipse(172, -42, 4, 6, 25, 31),
 ];
 
-function AvatarCluster({ items }: { items: Region["avatars"] }) {
-  return (
-    <div className="flex -space-x-2">
-      {items.map((a, i) => (
-        <div
-          key={i}
-          className="flex h-9 w-9 items-center justify-center rounded-full border-[2.5px] border-background font-display text-[11px] font-extrabold uppercase tracking-wider text-white shadow-sm"
-          style={{ background: a.tone }}
-        >
-          {a.initials}
-        </div>
-      ))}
-    </div>
-  );
-}
+// Learner cities — these get wax stamps + route lines
+const learnerCities = [
+  { city: "Toronto", country: "Canada", lng: -79.38, lat: 43.65, hub: false },
+  { city: "Vancouver", country: "Canada", lng: -123.12, lat: 49.28, hub: false },
+  { city: "São Paulo", country: "Brazil", lng: -46.63, lat: -23.55, hub: false },
+  { city: "London", country: "UK", lng: -0.13, lat: 51.5, hub: true },
+  { city: "Berlin", country: "Germany", lng: 13.4, lat: 52.52, hub: false },
+  { city: "Lisbon", country: "Portugal", lng: -9.14, lat: 38.72, hub: false },
+  { city: "Lagos", country: "Nigeria", lng: 3.38, lat: 6.52, hub: false },
+  { city: "Dubai", country: "UAE", lng: 55.27, lat: 25.2, hub: false },
+  { city: "Mumbai", country: "India", lng: 72.87, lat: 19.07, hub: false },
+  { city: "Delhi", country: "India", lng: 77.21, lat: 28.61, hub: false },
+  { city: "Singapore", country: "Singapore", lng: 103.82, lat: 1.35, hub: false },
+  { city: "Shanghai", country: "China", lng: 121.47, lat: 31.23, hub: false },
+  { city: "Seoul", country: "South Korea", lng: 126.98, lat: 37.57, hub: false },
+  { city: "Sydney", country: "Australia", lng: 151.21, lat: -33.87, hub: false },
+];
 
-function RegionCard({ r }: { r: Region }) {
-  return (
-    <article
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-foreground/12 p-7 shadow-[0_2px_4px_rgba(15,23,42,0.04),0_18px_40px_-22px_rgba(15,23,42,0.18)] transition-all duration-500 hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_4px_8px_rgba(15,23,42,0.06),0_28px_60px_-20px_rgba(15,23,42,0.25)] sm:p-8 ${r.paper} ${r.tilt}`}
-    >
-      {/* Top row — handwritten caption + avatar cluster */}
-      <div className="relative flex items-start justify-between gap-4">
-        <span className="font-handwriting text-xl text-foreground/55 sm:text-2xl">
-          {r.scribble}
-        </span>
-        <AvatarCluster items={r.avatars} />
-      </div>
+const featuredCountries = [
+  "Canada",
+  "United Kingdom",
+  "Germany",
+  "Portugal",
+  "UAE",
+  "India",
+  "Singapore",
+  "China",
+  "South Korea",
+  "Australia",
+  "Nigeria",
+  "Brazil",
+  "Mexico",
+  "Japan",
+  "Vietnam",
+];
 
-      {/* The hero of the card — count, then name */}
-      <div className="relative mt-10">
-        <div className="flex items-baseline gap-3">
-          <span className="font-display text-6xl font-black leading-none tracking-tight text-foreground sm:text-7xl">
-            {r.count}
-          </span>
-          <span className="font-display text-base font-bold uppercase tracking-[0.18em] text-foreground/55">
-            learners
-          </span>
-        </div>
-        <h3 className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl">
-          {r.name}
-        </h3>
-      </div>
-
-      {/* Country list — large editorial type, no pills */}
-      <div className="relative mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-foreground/15 pt-5 font-display text-base font-bold tracking-tight text-foreground/70 sm:text-lg">
-        {r.countries.map((c, i) => (
-          <span key={c} className="inline-flex items-center gap-5">
-            <span className="transition-colors group-hover:text-foreground">
-              {c}
-            </span>
-            {i < r.countries.length - 1 && (
-              <span
-                aria-hidden
-                className="h-1 w-1 rounded-full bg-foreground/30"
-              />
-            )}
-          </span>
-        ))}
-      </div>
-    </article>
-  );
-}
+// Sepia / ink palette
+const INK_DOT = "oklch(0.45 0.06 55 / 0.55)";
+const INK_LINE = "oklch(0.42 0.08 45)";
+const INK_FAINT = "oklch(0.45 0.06 55 / 0.35)";
+const STAMP_RED = "oklch(0.5 0.16 25)";
+const PIN_FILL = "oklch(0.55 0.16 35)";
+const PAPER_BG = "oklch(0.97 0.025 75)";
 
 export function LearnersWorld() {
-  return (
-    <section className="relative overflow-hidden bg-paper-white py-24 sm:py-32">
-      {/* faint warm wash so the white doesn't feel sterile */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 0% 0%, oklch(0.97 0.025 75 / 0.55), transparent 55%)," +
-            "radial-gradient(ellipse at 100% 100%, oklch(0.96 0.03 250 / 0.4), transparent 55%)",
-        }}
-      />
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [inView, setInView] = useState(false);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const hub = learnerCities.find((c) => c.hub)!;
+  const hubPt = proj(hub.lng, hub.lat);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-paper-cream py-24 sm:py-32"
+    >
       <div className="container-page relative">
-        {/* Editorial header — big type, hand-written eyebrow, no pills */}
+        {/* Editorial header */}
         <div className="mx-auto max-w-4xl text-center">
           <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
             from every corner of the world
           </p>
-          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-foreground sm:text-7xl md:text-[88px]">
+          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-foreground sm:text-7xl md:text-[80px]">
             <span className="relative inline-block">
               <span
                 aria-hidden
@@ -232,21 +189,325 @@ export function LearnersWorld() {
               <span className="relative z-10">9,680+ learners.</span>
             </span>
             <br />
-            One prep platform.
+            47 countries.
           </h2>
-          <p className="mx-auto mt-8 max-w-2xl font-display text-xl font-medium leading-relaxed text-foreground/65">
-            Students in 47 countries study with BigIELTS — from morning commutes
-            in Mumbai to late-night sessions in Toronto.
-          </p>
         </div>
 
-        {/* The grid — 1 / 2 / 3 columns */}
-        <div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {regions.map((r) => (
-            <RegionCard key={r.name} r={r} />
-          ))}
+        {/* The vintage map artifact */}
+        <div className="relative mx-auto mt-16 max-w-6xl">
+          <div
+            className="relative overflow-hidden rounded-[28px] border border-foreground/15 shadow-[0_2px_4px_rgba(15,23,42,0.05),0_30px_60px_-30px_rgba(15,23,42,0.25)]"
+            style={{
+              background: PAPER_BG,
+              backgroundImage:
+                "radial-gradient(oklch(0.4 0.06 55 / 0.06) 1px, transparent 1.2px)",
+              backgroundSize: "4px 4px",
+            }}
+          >
+            {/* Inner double-line frame */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-2 rounded-[22px] border border-foreground/15"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-[10px] rounded-[18px] border border-foreground/10"
+            />
+
+            {/* Corner ornaments */}
+            <CornerOrnament className="absolute left-3 top-3" />
+            <CornerOrnament className="absolute right-3 top-3 scale-x-[-1]" />
+            <CornerOrnament className="absolute left-3 bottom-3 scale-y-[-1]" />
+            <CornerOrnament className="absolute right-3 bottom-3 -scale-100" />
+
+            {/* Title cartouche — top-left */}
+            <div className="absolute left-8 top-7 z-10 max-w-[58%] sm:left-10 sm:top-9">
+              <p className="font-handwriting text-xl text-foreground/55 sm:text-2xl">
+                fig. 01 — atlas of learners
+              </p>
+              <p className="mt-1 font-display text-[11px] font-extrabold uppercase tracking-[0.28em] text-foreground/55 sm:text-xs">
+                Mercator projection · revised 2026
+              </p>
+            </div>
+
+            {/* Compass rose — top-right */}
+            <div className="absolute right-7 top-7 z-10 sm:right-10 sm:top-9">
+              <CompassRose />
+            </div>
+
+            {/* The map */}
+            <svg
+              viewBox={`0 0 ${MAP_W} ${MAP_H}`}
+              className="block h-auto w-full"
+              aria-hidden
+            >
+              {/* Latitude / longitude faint grid */}
+              <g stroke={INK_FAINT} strokeWidth={0.4} opacity={0.5}>
+                {Array.from({ length: 7 }).map((_, i) => {
+                  const y = ((i + 1) * MAP_H) / 8;
+                  return (
+                    <line key={`lat-${i}`} x1={0} y1={y} x2={MAP_W} y2={y} />
+                  );
+                })}
+                {Array.from({ length: 11 }).map((_, i) => {
+                  const x = ((i + 1) * MAP_W) / 12;
+                  return (
+                    <line key={`lng-${i}`} x1={x} y1={0} x2={x} y2={MAP_H} />
+                  );
+                })}
+              </g>
+
+              {/* Equator — bolder dashed line */}
+              <line
+                x1={0}
+                y1={MAP_H / 2}
+                x2={MAP_W}
+                y2={MAP_H / 2}
+                stroke={INK_LINE}
+                strokeWidth={0.6}
+                strokeDasharray="6 6"
+                opacity={0.45}
+              />
+
+              {/* Continent stipple */}
+              <g>
+                {continents.map((d, i) => (
+                  <circle
+                    key={`c-${i}`}
+                    cx={d.x}
+                    cy={d.y}
+                    r={d.r}
+                    fill={INK_DOT}
+                  />
+                ))}
+              </g>
+
+              {/* Shipping routes — dashed arcs from hub to each city */}
+              <g>
+                {inView &&
+                  learnerCities
+                    .filter((c) => !c.hub)
+                    .map((c, i) => {
+                      const a = hubPt;
+                      const b = proj(c.lng, c.lat);
+                      const mx = (a.x + b.x) / 2;
+                      const my = Math.min(a.y, b.y) - 70;
+                      const len = 1600;
+                      return (
+                        <path
+                          key={`route-${i}`}
+                          d={`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`}
+                          fill="none"
+                          stroke={INK_LINE}
+                          strokeWidth={1.1}
+                          strokeLinecap="round"
+                          strokeDasharray="3 5"
+                          strokeDashoffset={len}
+                          style={{
+                            animation: `lw-draw 2.2s ease-out ${0.12 * i}s forwards`,
+                          }}
+                          opacity={0.7}
+                        />
+                      );
+                    })}
+              </g>
+
+              {/* City pins (wax stamps) */}
+              <g>
+                {learnerCities.map((c, i) => {
+                  const { x, y } = proj(c.lng, c.lat);
+                  const labelLeft = c.lng > 100 || c.city === "Sydney";
+                  return (
+                    <g key={`pin-${i}`}>
+                      {/* pulse halo */}
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={11}
+                        fill={PIN_FILL}
+                        opacity={0.18}
+                        style={{
+                          transformOrigin: `${x}px ${y}px`,
+                          animation: `lw-pulse 2.8s ease-in-out ${0.18 * i}s infinite`,
+                        }}
+                      />
+                      {/* wax-seal stamp */}
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={5}
+                        fill={c.hub ? STAMP_RED : PIN_FILL}
+                        stroke={PAPER_BG}
+                        strokeWidth={1.5}
+                      />
+                      {c.hub && (
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r={9}
+                          fill="none"
+                          stroke={STAMP_RED}
+                          strokeWidth={1}
+                          opacity={0.7}
+                        />
+                      )}
+                      {/* city label */}
+                      <text
+                        x={labelLeft ? x - 9 : x + 9}
+                        y={y + 4}
+                        fontSize={11}
+                        fontWeight={700}
+                        fontFamily="Inter, system-ui, sans-serif"
+                        textAnchor={labelLeft ? "end" : "start"}
+                        fill="oklch(0.28 0.04 60)"
+                        style={{
+                          paintOrder: "stroke",
+                          stroke: PAPER_BG,
+                          strokeWidth: 3,
+                        }}
+                      >
+                        {c.city}
+                      </text>
+                    </g>
+                  );
+                })}
+              </g>
+            </svg>
+
+            {/* Bottom-right scribbled note */}
+            <div className="absolute bottom-6 right-8 z-10 hidden text-right sm:block">
+              <p
+                className="font-handwriting text-2xl text-foreground/55"
+                style={{ transform: "rotate(-3deg)" }}
+              >
+                — drawn by hand, sort of
+              </p>
+            </div>
+
+            {/* Bottom-left legend */}
+            <div className="absolute bottom-6 left-8 z-10 flex items-center gap-5 sm:bottom-7 sm:left-10">
+              <div className="flex items-center gap-2">
+                <span
+                  className="block h-2.5 w-2.5 rounded-full"
+                  style={{ background: STAMP_RED }}
+                />
+                <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/65">
+                  Hub
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="block h-2.5 w-2.5 rounded-full"
+                  style={{ background: PIN_FILL }}
+                />
+                <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/65">
+                  Learner city
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Country names — large editorial type */}
+        <div className="mx-auto mt-16 max-w-5xl">
+          <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 font-display text-xl font-bold leading-tight tracking-tight text-foreground/75 sm:text-2xl md:text-3xl">
+            {featuredCountries.map((c, i) => (
+              <span key={c} className="inline-flex items-center gap-7">
+                <span className="transition-colors hover:text-foreground">
+                  {c}
+                </span>
+                {i < featuredCountries.length - 1 && (
+                  <span
+                    aria-hidden
+                    className="h-1.5 w-1.5 rounded-full bg-foreground/25"
+                  />
+                )}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes lw-draw { to { stroke-dashoffset: 0; } }
+        @keyframes lw-pulse {
+          0%, 100% { transform: scale(0.85); opacity: 0.55; }
+          50%      { transform: scale(1.6);  opacity: 0.1; }
+        }
+      `}</style>
     </section>
+  );
+}
+
+/* -------------------------------------------------------------- */
+/* Decorative pieces                                              */
+/* -------------------------------------------------------------- */
+
+function CornerOrnament({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="34"
+      height="34"
+      viewBox="0 0 34 34"
+      className={`pointer-events-none ${className}`}
+      aria-hidden
+    >
+      <g
+        fill="none"
+        stroke="oklch(0.42 0.08 45 / 0.55)"
+        strokeWidth="1"
+        strokeLinecap="round"
+      >
+        <path d="M4 14 L4 4 L14 4" />
+        <path d="M4 18 L10 18" />
+        <path d="M18 4 L18 10" />
+        <circle cx="4" cy="4" r="1.6" fill="oklch(0.42 0.08 45 / 0.55)" />
+      </g>
+    </svg>
+  );
+}
+
+function CompassRose() {
+  return (
+    <svg
+      width="62"
+      height="62"
+      viewBox="0 0 62 62"
+      aria-hidden
+    >
+      <g
+        fill="none"
+        stroke="oklch(0.42 0.08 45 / 0.7)"
+        strokeWidth="0.9"
+        strokeLinecap="round"
+      >
+        <circle cx="31" cy="31" r="26" />
+        <circle cx="31" cy="31" r="20" opacity="0.6" />
+        {/* Cardinal arrows */}
+        <path
+          d="M31 5 L34 31 L31 28 L28 31 Z"
+          fill="oklch(0.5 0.16 25)"
+          stroke="oklch(0.5 0.16 25)"
+        />
+        <path d="M31 57 L34 31 L31 34 L28 31 Z" fill="oklch(0.42 0.08 45)" />
+        <path d="M5 31 L31 28 L28 31 L31 34 Z" fill="oklch(0.42 0.08 45)" />
+        <path d="M57 31 L31 28 L34 31 L31 34 Z" fill="oklch(0.42 0.08 45)" />
+        {/* Inter-cardinal hairlines */}
+        <line x1="13" y1="13" x2="49" y2="49" opacity="0.5" />
+        <line x1="49" y1="13" x2="13" y2="49" opacity="0.5" />
+        <circle cx="31" cy="31" r="2" fill="oklch(0.42 0.08 45)" />
+      </g>
+      <text
+        x="31"
+        y="11"
+        textAnchor="middle"
+        fontSize="7"
+        fontWeight="800"
+        fontFamily="Inter, system-ui, sans-serif"
+        fill="oklch(0.5 0.16 25)"
+      >
+        N
+      </text>
+    </svg>
   );
 }
