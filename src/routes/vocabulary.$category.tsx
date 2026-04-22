@@ -206,15 +206,15 @@ function CategoryPage() {
           </header>
 
           {/* Sidebar + Detail layout */}
-          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
-            {/* SIDEBAR — minimal list with color dots */}
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr] lg:gap-12">
+            {/* SIDEBAR — big bold stacked list */}
             <aside className="lg:sticky lg:top-6 lg:self-start">
-              <div className="px-1 pb-2">
+              <div className="pb-4">
                 <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
                   Topic Lists
                 </span>
               </div>
-              <nav className="flex flex-col">
+              <nav className="flex flex-col gap-1">
                 {category.lists.map((l) => {
                   const isActive = l.slug === activeList?.slug;
                   return (
@@ -222,35 +222,35 @@ function CategoryPage() {
                       key={l.slug}
                       type="button"
                       onClick={() => goToList(l.slug)}
-                      className="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-foreground/[0.04]"
+                      className="group flex flex-col items-start py-2.5 text-left transition-colors"
                     >
-                      {isActive && (
-                        <span
-                          aria-hidden
-                          className="absolute inset-y-1.5 left-0 w-[3px] rounded-full"
-                          style={{ background: tone.ink }}
-                        />
-                      )}
                       <span
-                        className="h-2 w-2 shrink-0 rounded-full"
+                        className="font-display text-[22px] leading-[1.15] tracking-tight transition-colors sm:text-[24px]"
+                        style={{
+                          color: isActive ? tone.ink : "oklch(0.30 0.03 260)",
+                          fontWeight: isActive ? 900 : 700,
+                        }}
+                      >
+                        {l.title}
+                      </span>
+                      {/* Underline accent for active */}
+                      <span
+                        aria-hidden
+                        className="mt-1 h-[3px] rounded-full transition-all duration-200"
                         style={{
                           background: tone.ink,
-                          opacity: isActive ? 1 : 0.4,
+                          width: isActive ? "32px" : "0px",
+                          opacity: isActive ? 1 : 0,
                         }}
                       />
-                      <span className="min-w-0 flex-1">
-                        <span
-                          className="block truncate text-[13.5px] leading-tight transition-colors"
-                          style={{
-                            color: isActive ? tone.ink : "oklch(0.32 0.03 260)",
-                            fontWeight: isActive ? 700 : 500,
-                          }}
-                        >
-                          {l.title}
-                        </span>
-                      </span>
-                      <span className="shrink-0 text-[11px] font-semibold tabular-nums text-foreground/40">
-                        {l.words.length}
+                      <span
+                        className="mt-1 text-[11px] font-bold uppercase tracking-[0.2em] transition-colors"
+                        style={{
+                          color: isActive ? tone.ink : "oklch(0.55 0.02 260)",
+                          opacity: isActive ? 0.8 : 0.55,
+                        }}
+                      >
+                        {l.words.length} words
                       </span>
                     </button>
                   );
@@ -451,62 +451,40 @@ function WordEntry({
   pill: string;
 }) {
   return (
-    <li className="grid grid-cols-1 gap-4 px-5 py-5 sm:grid-cols-[1fr_1fr] sm:gap-8 sm:px-7">
-      {/* LEFT COLUMN — headword + meaning */}
-      <div className="min-w-0">
-        <div className="flex items-baseline gap-2">
-          <span className="font-display text-[11px] font-bold tabular-nums text-foreground/35">
-            {String(index).padStart(2, "0")}
+    <li className="px-5 py-5 sm:px-7">
+      {/* Headword line */}
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <h3
+          className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
+          style={{ color: "oklch(0.18 0.03 260)" }}
+        >
+          {word.term}
+        </h3>
+        {word.pos && (
+          <span className="text-[11px] font-medium italic text-foreground/40">
+            {word.pos}
           </span>
-          <h3
-            className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
-            style={{ color: "oklch(0.20 0.03 260)" }}
-          >
-            {word.term}
-          </h3>
-          {word.pos && (
-            <span className="text-[11px] font-semibold italic text-foreground/45">
-              {word.pos}
-            </span>
-          )}
-        </div>
-        {word.ipa && (
-          <p className="mt-0.5 pl-7 text-[11.5px] font-medium text-foreground/45">
-            /{word.ipa}/
-          </p>
         )}
-        <p className="mt-1.5 pl-7 text-[14px] leading-relaxed text-foreground/80">
+        <span className="text-foreground/35">—</span>
+        <span className="text-[14.5px] leading-snug text-foreground/75">
           {word.meaning}
-        </p>
+        </span>
       </div>
 
-      {/* RIGHT COLUMN — example + tip */}
-      <div className="min-w-0 sm:border-l sm:border-foreground/5 sm:pl-8">
-        <div className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-          Example
-        </div>
-        <p className="mt-1 text-[14px] italic leading-relaxed text-foreground/75">
-          “{word.example}”
+      {/* Example — italic, no label */}
+      <p className="mt-1.5 text-[13.5px] italic leading-relaxed text-foreground/55">
+        “{word.example}”
+      </p>
+
+      {/* Tip — quiet single line, no pill, no icon */}
+      {word.tip && (
+        <p
+          className="mt-1.5 text-[12.5px] font-medium leading-snug"
+          style={{ color: ink }}
+        >
+          {word.tip}
         </p>
-        {word.tip && (
-          <div
-            className="mt-3 inline-flex items-start gap-1.5 rounded-md px-2.5 py-1.5"
-            style={{ background: pill }}
-          >
-            <Lightbulb
-              className="mt-[2px] h-3 w-3 shrink-0"
-              strokeWidth={2.6}
-              style={{ color: ink }}
-            />
-            <p
-              className="text-[12px] font-semibold leading-snug"
-              style={{ color: ink }}
-            >
-              {word.tip}
-            </p>
-          </div>
-        )}
-      </div>
+      )}
     </li>
   );
 }
