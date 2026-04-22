@@ -189,55 +189,47 @@ const speakingData: SpeakingData = {
       title: "What kind of food do you like to cook at home?",
       date: "March 2026",
     },
+    {
+      tag: "Weather",
+      title: "What kind of weather do you like? Has it changed recently?",
+      date: "February 2026",
+    },
+    {
+      tag: "Travel",
+      title: "Do you enjoy travelling? Where would you like to go next?",
+      date: "January 2026",
+    },
   ],
   part2: [
     {
       tag: "Memorable Trip",
       title:
-        "Describe a journey that did not go as planned. You should say where, when, who and why.",
+        "Describe a journey that did not go as planned. You should say where, when, who and why. Follow-up: How do you usually react when plans change?",
       date: "April 2026",
     },
     {
       tag: "A Person",
       title:
-        "Describe a person who inspires you. Say who they are, how you know them and why they inspire you.",
+        "Describe a person who inspires you. Say who they are, how you know them and why. Follow-up: Are role models more important today than in the past?",
       date: "March 2026",
     },
     {
       tag: "An Object",
       title:
-        "Describe a piece of equipment in your home that you find useful. What it is, how you got it, and why it is useful.",
+        "Describe a piece of equipment in your home that you find useful. Follow-up: How has technology changed daily life in your country?",
       date: "March 2026",
     },
     {
       tag: "An Event",
       title:
-        "Describe a celebration you attended recently. Where it was, who was there, and how you felt.",
+        "Describe a celebration you attended recently. Follow-up: Do you think traditional celebrations are still important?",
       date: "February 2026",
     },
-  ],
-  part3: [
     {
-      tag: "Technology",
-      title: "How has technology changed the way people communicate in your country?",
-      date: "April 2026",
-    },
-    {
-      tag: "Society",
-      title: "Do you think it is important for people to take part in community events? Why?",
-      date: "March 2026",
-    },
-    {
-      tag: "Education",
+      tag: "A Place",
       title:
-        "How do you think school education will change in the next 20 years in your country?",
-      date: "March 2026",
-    },
-    {
-      tag: "Environment",
-      title:
-        "Should governments do more to protect the environment, or is it the responsibility of individuals?",
-      date: "February 2026",
+        "Describe a quiet place you like to visit. Follow-up: Is it harder to find peaceful places in modern cities?",
+      date: "January 2026",
     },
   ],
 };
