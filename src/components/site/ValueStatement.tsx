@@ -92,11 +92,19 @@ export function ValueStatement() {
                   Most popular
                 </span>
               )}
-              <div
-                className="font-display text-sm font-extrabold uppercase tracking-[0.18em]"
-                style={{ color: p.accent }}
-              >
-                {p.name}
+              <div className="flex flex-col items-center gap-1">
+                <span
+                  className="font-display text-2xl font-black tracking-tight sm:text-[28px]"
+                  style={{ color: p.accent }}
+                >
+                  {p.name}
+                </span>
+                <span
+                  className="h-[3px] w-10 rounded-full"
+                  style={{
+                    background: `color-mix(in oklab, ${p.accent} 60%, transparent)`,
+                  }}
+                />
               </div>
               <div className="mt-4 flex items-baseline gap-1.5">
                 <span className="font-display text-6xl font-black tracking-tight text-foreground">
