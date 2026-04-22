@@ -24,36 +24,36 @@ import paperclipNotes from "@/assets/hero-objects/paperclip-notes.png";
 export function QuietHero() {
   return (
     <section className="relative isolate overflow-hidden">
-      {/* Rich warm gradient — peach → apricot → soft amber → cream */}
+      {/* Royal gradient — deep indigo → violet → midnight, with champagne glow */}
       <div
         aria-hidden
         className="absolute inset-0 -z-20"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 15% 10%, oklch(0.88 0.11 35 / 0.85) 0%, transparent 60%)," +
-            "radial-gradient(ellipse 55% 45% at 88% 12%, oklch(0.86 0.13 55 / 0.8) 0%, transparent 60%)," +
-            "radial-gradient(ellipse 70% 55% at 50% 100%, oklch(0.9 0.09 75 / 0.75) 0%, transparent 65%)," +
-            "radial-gradient(ellipse 40% 35% at 75% 75%, oklch(0.82 0.14 25 / 0.5) 0%, transparent 60%)," +
-            "linear-gradient(135deg, oklch(0.96 0.05 70) 0%, oklch(0.93 0.08 45) 50%, oklch(0.95 0.06 30) 100%)",
+            "radial-gradient(ellipse 55% 45% at 12% 8%, oklch(0.55 0.12 290 / 0.85) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 50% 45% at 90% 14%, oklch(0.42 0.16 295 / 0.9) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 75% 55% at 50% 105%, oklch(0.32 0.12 305 / 0.85) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 35% 30% at 78% 60%, oklch(0.7 0.13 75 / 0.25) 0%, transparent 60%)," +
+            "linear-gradient(140deg, oklch(0.28 0.1 285) 0%, oklch(0.32 0.13 295) 50%, oklch(0.26 0.11 305) 100%)",
         }}
       />
-      {/* Warm grain texture for premium depth */}
+      {/* Subtle starfield grain for depth */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 opacity-[0.4] mix-blend-soft-light"
+        className="absolute inset-0 -z-10 opacity-[0.3] mix-blend-screen"
         style={{
           backgroundImage:
-            "radial-gradient(oklch(0.35 0.08 40 / 0.22) 1px, transparent 1.2px)",
-          backgroundSize: "3px 3px",
+            "radial-gradient(oklch(0.95 0.04 290 / 0.4) 1px, transparent 1.2px)",
+          backgroundSize: "4px 4px",
         }}
       />
-      {/* Soft golden glow vignette at top */}
+      {/* Champagne gold halo at top center */}
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 -z-10 h-[60%]"
+        className="absolute inset-x-0 top-0 -z-10 h-[55%]"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(0.95 0.08 65 / 0.5) 0%, transparent 70%)",
+            "radial-gradient(ellipse 70% 55% at 50% 0%, oklch(0.85 0.1 80 / 0.18) 0%, transparent 70%)",
         }}
       />
 
