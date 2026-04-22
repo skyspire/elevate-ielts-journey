@@ -1051,12 +1051,6 @@ const TAG_TONE: Record<string, Tone> = {
   "A Place": "lilac",
 };
 
-type QuestionType =
-  | "Writing Task 1"
-  | "Writing Task 2"
-  | "Speaking Part 1"
-  | "Speaking Part 2"
-  | "Speaking Part 3";
 
 function ExamQuestionCard({
   q,
