@@ -125,7 +125,7 @@ export function ValueStatement() {
                 className={`mt-6 h-11 w-full rounded-full font-bold ${
                   p.popular
                     ? "bg-brand text-brand-foreground shadow-glow hover:bg-brand/90"
-                    : "bg-foreground text-background hover:bg-foreground/90"
+                    : "bg-[oklch(0.45_0.18_265)] text-white hover:bg-[oklch(0.4_0.2_265)]"
                 }`}
               >
                 Choose {p.name}
