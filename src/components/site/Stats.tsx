@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 
 const stats = [
   { target: 1300, suffix: "+", label: "Writing Questions", hue: 285 },
-  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 195 },
-  { target: 170, suffix: "+", label: "Cue Cards", hue: 70 },
-  { target: 4000, suffix: "+", label: "Active Users", hue: 15 },
+  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 320 },
+  { target: 170, suffix: "+", label: "Cue Cards", hue: 55 },
+  { target: 4000, suffix: "+", label: "Active Users", hue: 25 },
 ];
 
 /* easeOutCubic — fast at start, gently decelerates */
