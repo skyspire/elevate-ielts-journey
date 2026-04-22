@@ -1,11 +1,14 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+  type PanInfo,
+} from "framer-motion";
+import { ArrowLeft, ChevronUp, ChevronDown } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import {
   getCategory,
@@ -17,31 +20,30 @@ import {
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).catch("academic"),
   list: z.string().optional(),
-  page: z.coerce.number().int().min(1).catch(1),
-  q: z.string().optional(),
 });
 
-const WORDS_PER_PAGE = 20;
+type CategoryToneKey = CategoryKey;
 
-const categoryTone: Record<CategoryKey, { ink: string; pill: string }> = {
-  dictionary: { ink: "oklch(0.42 0.18 260)", pill: "oklch(0.95 0.05 260)" },
-  phrasal: { ink: "oklch(0.48 0.16 230)", pill: "oklch(0.95 0.04 230)" },
-  idioms: { ink: "oklch(0.45 0.18 290)", pill: "oklch(0.95 0.05 290)" },
-  collocations: { ink: "oklch(0.50 0.15 200)", pill: "oklch(0.94 0.05 200)" },
-  slangs: { ink: "oklch(0.55 0.16 250)", pill: "oklch(0.95 0.04 250)" },
+const categoryTone: Record<CategoryToneKey, { ink: string }> = {
+  dictionary: { ink: "oklch(0.42 0.18 260)" },
+  phrasal: { ink: "oklch(0.48 0.16 230)" },
+  idioms: { ink: "oklch(0.45 0.18 290)" },
+  collocations: { ink: "oklch(0.50 0.15 200)" },
+  slangs: { ink: "oklch(0.55 0.16 250)" },
 };
 
-/* Pastel rainbow palette — cycled per topic list.
-   Each entry: resting pastel, deeper active version, and deep ink for text. */
-const pastelPalette: Array<{ bg: string; bgActive: string; ink: string }> = [
-  { bg: "oklch(0.95 0.045 165)", bgActive: "oklch(0.86 0.085 165)", ink: "oklch(0.36 0.09 165)" }, // sage
-  { bg: "oklch(0.95 0.045 55)",  bgActive: "oklch(0.86 0.09 55)",   ink: "oklch(0.42 0.11 45)"  }, // peach
-  { bg: "oklch(0.95 0.045 295)", bgActive: "oklch(0.86 0.09 295)",  ink: "oklch(0.40 0.13 295)" }, // lilac
-  { bg: "oklch(0.95 0.045 230)", bgActive: "oklch(0.86 0.09 230)",  ink: "oklch(0.40 0.13 235)" }, // sky
-  { bg: "oklch(0.95 0.05 95)",   bgActive: "oklch(0.86 0.10 90)",   ink: "oklch(0.40 0.10 80)"  }, // butter
-  { bg: "oklch(0.95 0.045 15)",  bgActive: "oklch(0.86 0.09 15)",   ink: "oklch(0.42 0.13 18)"  }, // blush
-  { bg: "oklch(0.95 0.045 180)", bgActive: "oklch(0.86 0.09 180)",  ink: "oklch(0.40 0.10 195)" }, // mint
-  { bg: "oklch(0.95 0.035 75)",  bgActive: "oklch(0.86 0.075 70)",  ink: "oklch(0.38 0.07 65)"  }, // sand
+/* Pastel rainbow palette — cycled per topic list. */
+type Palette = { bg: string; bgDeep: string; ink: string; glow: string };
+
+const pastelPalette: Palette[] = [
+  { bg: "oklch(0.95 0.045 165)", bgDeep: "oklch(0.88 0.085 165)", ink: "oklch(0.34 0.10 165)", glow: "oklch(0.70 0.13 165)" },
+  { bg: "oklch(0.95 0.05 55)",   bgDeep: "oklch(0.88 0.10 55)",   ink: "oklch(0.40 0.12 45)",  glow: "oklch(0.72 0.14 45)"  },
+  { bg: "oklch(0.95 0.05 295)",  bgDeep: "oklch(0.87 0.10 295)",  ink: "oklch(0.38 0.14 295)", glow: "oklch(0.70 0.15 295)" },
+  { bg: "oklch(0.95 0.05 230)",  bgDeep: "oklch(0.87 0.10 230)",  ink: "oklch(0.38 0.14 235)", glow: "oklch(0.70 0.15 230)" },
+  { bg: "oklch(0.95 0.055 95)",  bgDeep: "oklch(0.87 0.11 90)",   ink: "oklch(0.38 0.11 80)",  glow: "oklch(0.74 0.14 90)"  },
+  { bg: "oklch(0.95 0.05 15)",   bgDeep: "oklch(0.87 0.10 15)",   ink: "oklch(0.40 0.14 18)",  glow: "oklch(0.70 0.15 15)"  },
+  { bg: "oklch(0.95 0.05 180)",  bgDeep: "oklch(0.87 0.10 180)",  ink: "oklch(0.38 0.11 195)", glow: "oklch(0.72 0.13 180)" },
+  { bg: "oklch(0.95 0.04 75)",   bgDeep: "oklch(0.87 0.085 70)",  ink: "oklch(0.36 0.08 65)",  glow: "oklch(0.72 0.12 70)"  },
 ];
 
 export const Route = createFileRoute("/vocabulary/$category")({
@@ -67,9 +69,9 @@ export const Route = createFileRoute("/vocabulary/$category")({
     ],
   }),
   notFoundComponent: () => (
-    <div className="flex min-h-screen items-center justify-center bg-paper-cream px-4">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="text-center">
-        <h1 className="font-handwriting text-5xl text-foreground/70">Not found</h1>
+        <h1 className="font-display text-4xl font-black text-foreground/80">Not found</h1>
         <p className="mt-2 text-sm text-foreground/60">
           That vocabulary category doesn't exist.
         </p>
@@ -84,9 +86,9 @@ export const Route = createFileRoute("/vocabulary/$category")({
     </div>
   ),
   errorComponent: ({ error }) => (
-    <div className="flex min-h-screen items-center justify-center bg-paper-cream px-4">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="text-center">
-        <h1 className="font-handwriting text-4xl text-foreground/70">Something went wrong</h1>
+        <h1 className="font-display text-3xl font-black text-foreground/80">Something went wrong</h1>
         <p className="mt-2 max-w-md text-sm text-foreground/60">{error.message}</p>
       </div>
     </div>
@@ -99,38 +101,39 @@ function CategoryPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/vocabulary/$category" });
 
-  // Active list (defaults to first list).
-  const activeListSlug = search.list ?? category.lists[0]?.slug;
-  const activeList: TopicList | undefined =
-    category.lists.find((l) => l.slug === activeListSlug) ?? category.lists[0];
+  const tone = categoryTone[category.key as CategoryToneKey];
+  const lists = category.lists;
 
-  const tone = categoryTone[category.key];
-
-  // All words in the active list (no search filter — search bar removed).
-  const filteredWords: Word[] = useMemo(
-    () => activeList?.words ?? [],
-    [activeList],
+  // Active list index (driven by URL ?list=slug)
+  const initialIndex = Math.max(
+    0,
+    lists.findIndex((l: TopicList) => l.slug === search.list),
   );
+  const activeIndex = initialIndex === -1 ? 0 : initialIndex;
+  const activeList = lists[activeIndex] ?? lists[0];
 
-  const totalPages = Math.max(1, Math.ceil(filteredWords.length / WORDS_PER_PAGE));
-  const page = Math.min(search.page, totalPages);
-  const start = (page - 1) * WORDS_PER_PAGE;
-  const pageWords = filteredWords.slice(start, start + WORDS_PER_PAGE);
-
-  const goToList = (slug: string) =>
+  const setActiveIndex = (i: number) => {
+    const clamped = Math.max(0, Math.min(lists.length - 1, i));
+    const slug = lists[clamped]?.slug;
+    if (!slug) return;
     navigate({
-      search: (prev) => ({ ...prev, list: slug, page: 1, q: undefined }),
+      search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, list: slug }),
+      replace: true,
     });
-
-  const goToPage = (p: number) =>
-    navigate({
-      search: (prev) => ({ ...prev, page: Math.max(1, Math.min(totalPages, p)) }),
-    });
+    // Light haptic feedback on supported devices
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      try {
+        navigator.vibrate?.(8);
+      } catch {
+        /* ignore */
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
-      <main className="relative py-10 sm:py-14">
-        <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-6">
+      <main className="relative">
+        <div className="mx-auto w-full max-w-7xl px-5 pt-8 sm:px-6 sm:pt-10">
           {/* Back link */}
           <div className="mb-5">
             <Link
@@ -143,114 +146,37 @@ function CategoryPage() {
             </Link>
           </div>
 
-          {/* Header — centered title only */}
+          {/* Page title */}
           <header className="text-center">
             <h1
-              className="font-display text-[40px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[56px]"
+              className="font-display text-[36px] font-black leading-[1.02] tracking-tight text-foreground sm:text-[52px]"
               style={{ letterSpacing: "-0.02em" }}
             >
               {category.title}
             </h1>
+            <p className="mx-auto mt-2 max-w-xl text-[13px] text-foreground/55 sm:text-sm">
+              {category.tagline}
+            </p>
           </header>
+        </div>
 
-          {/* Sidebar + Detail layout */}
-          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr] lg:gap-10">
-            {/* SIDEBAR — sneaking flush half-pills (anchored to viewport edge) */}
-            <aside className="lg:sticky lg:top-6 lg:self-start">
-              <div className="px-5 pb-4 sm:px-6 lg:px-0">
-                <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
-                  Topic Lists
-                </span>
-              </div>
-              {/* Negative margin pulls the nav out of the page padding so pills
-                  hug the actual left edge of the viewport. */}
-              <nav className="-ml-5 flex flex-col gap-1.5 sm:-ml-6 lg:-ml-[max(calc((100vw-80rem)/2),1.5rem)]">
-                {category.lists.map((l, idx) => {
-                  const isActive = l.slug === activeList?.slug;
-                  const palette = pastelPalette[idx % pastelPalette.length];
-                  return (
-                    <button
-                      key={l.slug}
-                      type="button"
-                      onClick={() => goToList(l.slug)}
-                      className="group relative flex items-center text-left"
-                      style={{ paddingLeft: 0 }}
-                    >
-                      {/* Resting pill — soft pastel, partial width */}
-                      <span
-                        aria-hidden
-                        className="absolute inset-y-0 left-0 rounded-r-full transition-all duration-300 ease-out group-hover:!w-[88%]"
-                        style={{
-                          background: isActive ? palette.bgActive : palette.bg,
-                          width: isActive ? "100%" : "62%",
-                          boxShadow: isActive
-                            ? `0 1px 2px ${palette.ink}20, 0 6px 16px ${palette.ink}12`
-                            : "inset -1px 0 0 oklch(0 0 0 / 0.04)",
-                        }}
-                      />
-                      {/* Left edge accent bar — bolder when active */}
-                      <span
-                        aria-hidden
-                        className="absolute inset-y-2 left-0 w-[3px] rounded-r-full transition-all duration-300"
-                        style={{
-                          background: palette.ink,
-                          opacity: isActive ? 1 : 0.45,
-                          transform: isActive ? "scaleY(1)" : "scaleY(0.6)",
-                        }}
-                      />
-                      {/* Pill content */}
-                      <span
-                        className="relative z-10 flex flex-col py-3 pr-5"
-                        style={{
-                          paddingLeft:
-                            "max(calc((100vw - 80rem)/2 + 1.5rem), 1.75rem)",
-                        }}
-                      >
-                        <span
-                          className="font-display text-[17px] leading-[1.2] tracking-tight transition-colors sm:text-[18px]"
-                          style={{
-                            color: palette.ink,
-                            fontWeight: isActive ? 900 : 700,
-                            opacity: isActive ? 1 : 0.85,
-                          }}
-                        >
-                          {l.title}
-                        </span>
-                        <span
-                          className="mt-0.5 text-[10.5px] font-bold uppercase tracking-[0.2em] transition-colors"
-                          style={{
-                            color: palette.ink,
-                            opacity: isActive ? 0.75 : 0.5,
-                          }}
-                        >
-                          {l.words.length} words
-                        </span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </aside>
+        {/* Two-column workspace */}
+        <div className="mx-auto mt-6 w-full max-w-7xl px-5 pb-10 sm:px-6 sm:mt-8 sm:pb-14">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,33fr)_minmax(0,67fr)] lg:gap-8">
+            {/* LEFT — Card stack */}
+            <CardStack
+              lists={lists}
+              activeIndex={activeIndex}
+              onChange={setActiveIndex}
+            />
 
-            {/* DETAIL — clean dictionary page */}
-            <section className="min-w-0">
-              {activeList ? (
-                <DictionaryPage
-                  list={activeList}
-                  words={pageWords}
-                  totalCount={filteredWords.length}
-                  page={page}
-                  totalPages={totalPages}
-                  onPageChange={goToPage}
-                  ink={tone.ink}
-                  pill={tone.pill}
-                />
-              ) : (
-                <div className="rounded-2xl border border-foreground/10 bg-white p-10 text-center shadow-soft">
-                  <p className="text-foreground/60">No lists yet.</p>
-                </div>
-              )}
-            </section>
+            {/* RIGHT — Content panel */}
+            <ContentPanel
+              key={activeList?.slug}
+              list={activeList}
+              ink={tone.ink}
+              palette={pastelPalette[activeIndex % pastelPalette.length]}
+            />
           </div>
         </div>
       </main>
@@ -259,132 +185,397 @@ function CategoryPage() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* DictionaryPage — clean two-column dictionary list (no expand).     */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* CARD STACK — vertically swipeable stacked cards                     */
+/* ================================================================== */
 
-function DictionaryPage({
-  list,
-  words,
-  totalCount,
-  page,
-  totalPages,
-  onPageChange,
-  ink,
-  pill,
+function CardStack({
+  lists,
+  activeIndex,
+  onChange,
 }: {
-  list: TopicList;
-  words: Word[];
-  totalCount: number;
-  page: number;
-  totalPages: number;
-  onPageChange: (p: number) => void;
-  ink: string;
-  pill: string;
+  lists: TopicList[];
+  activeIndex: number;
+  onChange: (i: number) => void;
 }) {
-  const startIndex = (page - 1) * WORDS_PER_PAGE + 1;
-  const endIndex = startIndex + words.length - 1;
+  // Show up to 3 cards in the stack: active + next two
+  const VISIBLE = 3;
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-      {/* HEADER — centered list title, clean and bold */}
-      <header className="border-b border-foreground/10 px-5 py-6 text-center sm:px-7 sm:py-7">
-        <h2
-          className="font-display text-[26px] font-black leading-[1.05] tracking-tight sm:text-[32px]"
-          style={{ color: ink, letterSpacing: "-0.02em" }}
+    <div className="lg:sticky lg:top-6 lg:self-start">
+      <div className="mb-3 flex items-center justify-between px-1">
+        <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
+          Topic Cards
+        </span>
+        <span className="font-mono text-[11px] font-semibold tabular-nums text-foreground/45">
+          {String(activeIndex + 1).padStart(2, "0")} / {String(lists.length).padStart(2, "0")}
+        </span>
+      </div>
+
+      {/* Stack viewport */}
+      <div
+        className="relative w-full select-none"
+        style={{ height: "min(60vh, 460px)", perspective: "1200px" }}
+      >
+        <AnimatePresence initial={false}>
+          {lists.map((list, idx) => {
+            const offset = idx - activeIndex;
+            // Render only the active card and a few behind/ahead
+            if (offset < -1 || offset > VISIBLE - 1) return null;
+            const palette = pastelPalette[idx % pastelPalette.length];
+            return (
+              <StackCard
+                key={list.slug}
+                list={list}
+                palette={palette}
+                offset={offset}
+                isActive={offset === 0}
+                canPrev={activeIndex > 0}
+                canNext={activeIndex < lists.length - 1}
+                onSwipeUp={() => onChange(activeIndex + 1)}
+                onSwipeDown={() => onChange(activeIndex - 1)}
+                onTap={() => {
+                  if (offset > 0) onChange(activeIndex + 1);
+                }}
+              />
+            );
+          })}
+        </AnimatePresence>
+      </div>
+
+      {/* Controls */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => onChange(activeIndex - 1)}
+          disabled={activeIndex <= 0}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/65 transition-all hover:scale-105 hover:text-foreground disabled:opacity-40 disabled:hover:scale-100"
+          aria-label="Previous card"
         >
-          {list.title}
-        </h2>
+          <ChevronUp className="h-4 w-4" strokeWidth={2.6} />
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(activeIndex + 1)}
+          disabled={activeIndex >= lists.length - 1}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/65 transition-all hover:scale-105 hover:text-foreground disabled:opacity-40 disabled:hover:scale-100"
+          aria-label="Next card"
+        >
+          <ChevronDown className="h-4 w-4" strokeWidth={2.6} />
+        </button>
+      </div>
+
+      {/* Helper text */}
+      <p className="mt-2 text-center text-[11px] font-medium text-foreground/40">
+        Swipe up to flip through cards
+      </p>
+    </div>
+  );
+}
+
+function StackCard({
+  list,
+  palette,
+  offset,
+  isActive,
+  canPrev,
+  canNext,
+  onSwipeUp,
+  onSwipeDown,
+  onTap,
+}: {
+  list: TopicList;
+  palette: Palette;
+  offset: number; // 0 = active, 1 = next, 2 = next next, -1 = previous (transitioning out)
+  isActive: boolean;
+  canPrev: boolean;
+  canNext: boolean;
+  onSwipeUp: () => void;
+  onSwipeDown: () => void;
+  onTap: () => void;
+}) {
+  const y = useMotionValue(0);
+  const rotate = useTransform(y, [-200, 0, 200], [-8, 0, 8]);
+  const dragOpacity = useTransform(y, [-300, 0, 300], [0.4, 1, 0.4]);
+
+  // Stack visual depth — each card behind sits lower-z, slightly smaller, more rotated
+  const baseTranslateY = offset === -1 ? -40 : offset * 14;
+  const baseScale = offset === -1 ? 0.96 : 1 - offset * 0.05;
+  const baseRotate = offset === -1 ? -3 : offset * 1.2;
+  const baseOpacity = offset === -1 ? 0 : offset === 0 ? 1 : 0.85 - offset * 0.15;
+
+  const handleDragEnd = (_: unknown, info: PanInfo) => {
+    const threshold = 90;
+    const velocity = info.velocity.y;
+    if ((info.offset.y < -threshold || velocity < -500) && canNext) {
+      onSwipeUp();
+    } else if ((info.offset.y > threshold || velocity > 500) && canPrev) {
+      onSwipeDown();
+    }
+    y.set(0);
+  };
+
+  return (
+    <motion.button
+      type="button"
+      onClick={!isActive ? onTap : undefined}
+      drag={isActive ? "y" : false}
+      dragConstraints={{ top: 0, bottom: 0 }}
+      dragElastic={0.7}
+      onDragEnd={handleDragEnd}
+      style={{
+        y: isActive ? y : 0,
+        rotate: isActive ? rotate : baseRotate,
+        opacity: isActive ? dragOpacity : baseOpacity,
+        zIndex: 10 - Math.abs(offset),
+      }}
+      initial={{
+        y: baseTranslateY + 60,
+        scale: baseScale,
+        rotate: baseRotate,
+        opacity: 0,
+      }}
+      animate={{
+        y: baseTranslateY,
+        scale: baseScale,
+        rotate: baseRotate,
+        opacity: baseOpacity,
+      }}
+      exit={{
+        y: -180,
+        opacity: 0,
+        scale: 0.92,
+        rotate: -6,
+        transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] },
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 320,
+        damping: 32,
+        mass: 0.9,
+      }}
+      whileTap={isActive ? { scale: baseScale * 0.99 } : undefined}
+      className="absolute inset-0 flex w-full origin-bottom flex-col overflow-hidden rounded-[24px] text-left outline-none focus-visible:ring-2 focus-visible:ring-foreground/30"
+      aria-label={`Topic: ${list.title}`}
+      aria-current={isActive ? "true" : undefined}
+    >
+      {/* Card body */}
+      <div
+        className="relative flex h-full w-full flex-col justify-between p-6 sm:p-7"
+        style={{
+          background: isActive
+            ? `linear-gradient(155deg, ${palette.bg} 0%, ${palette.bgDeep} 100%)`
+            : `linear-gradient(155deg, ${palette.bg} 0%, ${palette.bgDeep} 100%)`,
+          boxShadow: isActive
+            ? `0 1px 0 0 oklch(1 0 0 / 0.6) inset, 0 24px 60px -20px ${palette.ink}55, 0 8px 24px -10px ${palette.ink}30, 0 0 0 1px ${palette.ink}25`
+            : `0 1px 0 0 oklch(1 0 0 / 0.5) inset, 0 8px 24px -12px ${palette.ink}30, 0 0 0 1px ${palette.ink}15`,
+        }}
+      >
+        {/* Subtle paper grain */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 10%, oklch(0 0 0) 1px, transparent 1px), radial-gradient(circle at 70% 60%, oklch(0 0 0) 1px, transparent 1px)",
+            backgroundSize: "24px 24px, 32px 32px",
+          }}
+        />
+
+        {/* Active glow */}
+        {isActive && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-px rounded-[24px]"
+            style={{
+              boxShadow: `0 0 0 1.5px ${palette.ink}40, 0 0 24px -4px ${palette.glow}55`,
+            }}
+          />
+        )}
+
+        {/* Top — small index */}
+        <div className="relative flex items-start justify-between">
+          <span
+            className="font-mono text-[11px] font-bold uppercase tracking-[0.2em]"
+            style={{ color: palette.ink, opacity: 0.55 }}
+          >
+            Card
+          </span>
+          <span
+            className="font-display text-[12px] font-black tabular-nums"
+            style={{ color: palette.ink, opacity: 0.7 }}
+          >
+            {list.words.length} items
+          </span>
+        </div>
+
+        {/* Center — title */}
+        <div className="relative flex flex-1 items-center">
+          <h3
+            className="font-display text-[26px] font-black leading-[1.05] tracking-tight sm:text-[30px]"
+            style={{
+              color: palette.ink,
+              letterSpacing: "-0.02em",
+              textShadow: isActive ? `0 1px 0 oklch(1 0 0 / 0.4)` : undefined,
+            }}
+          >
+            {list.title}
+          </h3>
+        </div>
+
+        {/* Bottom — blurb */}
+        <p
+          className="relative line-clamp-2 text-[12.5px] leading-snug"
+          style={{ color: palette.ink, opacity: 0.7 }}
+        >
+          {list.blurb}
+        </p>
+      </div>
+    </motion.button>
+  );
+}
+
+/* ================================================================== */
+/* CONTENT PANEL — sticky-header scrollable list of words              */
+/* ================================================================== */
+
+function ContentPanel({
+  list,
+  ink,
+  palette,
+}: {
+  list: TopicList | undefined;
+  ink: string;
+  palette: Palette;
+}) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Reset scroll when list changes
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    setScrolled(false);
+  }, [list?.slug]);
+
+  const words = useMemo(() => list?.words ?? [], [list]);
+
+  if (!list) {
+    return (
+      <div className="rounded-2xl border border-foreground/10 bg-white p-10 text-center shadow-soft">
+        <p className="text-foreground/60">No lists yet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, x: 12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
+      className="overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft"
+    >
+      {/* Sticky header */}
+      <header
+        className="sticky top-0 z-10 border-b transition-shadow"
+        style={{
+          background: "white",
+          borderColor: scrolled ? "oklch(0 0 0 / 0.08)" : "oklch(0 0 0 / 0.05)",
+          boxShadow: scrolled ? "0 6px 16px -10px oklch(0 0 0 / 0.18)" : "none",
+        }}
+      >
+        <div className="flex items-center justify-between gap-3 px-5 py-4 sm:px-7 sm:py-5">
+          <div className="min-w-0">
+            <p
+              className="font-mono text-[10px] font-bold uppercase tracking-[0.22em]"
+              style={{ color: palette.ink, opacity: 0.6 }}
+            >
+              Active Card
+            </p>
+            <h2
+              className="mt-0.5 truncate font-display text-[22px] font-black leading-tight tracking-tight sm:text-[26px]"
+              style={{ color: ink, letterSpacing: "-0.02em" }}
+            >
+              {list.title}
+            </h2>
+          </div>
+          <span
+            className="shrink-0 rounded-full px-3 py-1 font-display text-[11px] font-extrabold uppercase tracking-[0.18em]"
+            style={{
+              background: palette.bg,
+              color: palette.ink,
+              boxShadow: `inset 0 0 0 1px ${palette.ink}25`,
+            }}
+          >
+            {words.length} {words.length === 1 ? "item" : "items"}
+          </span>
+        </div>
       </header>
 
-      {/* WORDS — two-column dictionary entries */}
-      {words.length === 0 ? (
-        <div className="px-6 py-16 text-center">
-          <p className="font-handwriting text-3xl text-foreground/55">No matches</p>
-          <p className="mt-2 text-[13px] text-foreground/55">
-            Try a different word or clear the search.
-          </p>
-        </div>
-      ) : (
-        <ol className="divide-y divide-foreground/5">
-          {words.map((word, i) => (
-            <WordEntry
-              key={word.id}
-              word={word}
-              index={startIndex + i}
-              ink={ink}
-              pill={pill}
-            />
-          ))}
-        </ol>
-      )}
-
-      {/* FOOTER — pagination */}
-      <footer className="flex flex-col items-center justify-between gap-3 border-t border-foreground/10 px-5 py-4 sm:flex-row sm:px-7">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/45">
-          {totalCount === 0
-            ? "No words"
-            : `Words ${startIndex}–${endIndex} of ${totalCount}`}
-        </p>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onPageChange(page - 1)}
-            disabled={page <= 1}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/65 transition-colors hover:text-foreground disabled:opacity-40"
-            aria-label="Previous page"
-          >
-            <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
-          </button>
-          <span className="min-w-[80px] text-center font-display text-[13px] font-extrabold tabular-nums text-foreground/75">
-            Page {page} / {totalPages}
-          </span>
-          <button
-            type="button"
-            onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/65 transition-colors hover:text-foreground disabled:opacity-40"
-            aria-label="Next page"
-          >
-            <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
-          </button>
-        </div>
-      </footer>
-    </article>
+      {/* Scrollable list */}
+      <div
+        ref={scrollRef}
+        onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 4)}
+        className="max-h-[min(72vh,720px)] overflow-y-auto"
+      >
+        {words.length === 0 ? (
+          <div className="px-6 py-16 text-center">
+            <p className="font-display text-2xl font-black text-foreground/55">
+              Nothing here yet
+            </p>
+          </div>
+        ) : (
+          <ol className="divide-y divide-foreground/5">
+            <AnimatePresence mode="popLayout">
+              {words.map((word, i) => (
+                <motion.li
+                  key={`${list.slug}-${word.id}`}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.28,
+                    delay: Math.min(i * 0.012, 0.18),
+                    ease: [0.32, 0.72, 0, 1],
+                  }}
+                  className="flex items-stretch"
+                >
+                  <WordEntry word={word} index={i + 1} ink={ink} />
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ol>
+        )}
+      </div>
+    </motion.article>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* WordEntry — fully visible two-column dictionary entry.             */
+/* WordEntry — one dictionary entry                                    */
 /* ------------------------------------------------------------------ */
 
 function WordEntry({
   word,
   index,
   ink,
-  pill,
 }: {
   word: Word;
   index: number;
   ink: string;
-  pill: string;
 }) {
   const indexLabel = String(index).padStart(2, "0");
 
   return (
-    <li className="flex items-stretch">
-      {/* Bold display index — matches writing-samples QuestionRowCard */}
-      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-5 sm:w-20 sm:pt-6">
-        <span className="font-display text-2xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-3xl">
+    <>
+      <div className="flex w-12 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.02] px-2 pt-5 pb-5 sm:w-16 sm:pt-6">
+        <span className="font-display text-xl font-black tracking-tight text-foreground/40 sm:text-2xl">
           {indexLabel}
         </span>
       </div>
 
       <div className="min-w-0 flex-1 px-5 py-5 sm:px-7">
-        {/* Headword line */}
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <h3
-            className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
+            className="font-display text-[17px] font-extrabold leading-tight tracking-tight sm:text-[18px]"
             style={{ color: "oklch(0.18 0.03 260)" }}
           >
             {word.term}
@@ -395,17 +586,15 @@ function WordEntry({
             </span>
           )}
           <span className="text-foreground/35">—</span>
-          <span className="text-[14.5px] leading-snug text-foreground/75">
+          <span className="text-[14px] leading-snug text-foreground/75 sm:text-[14.5px]">
             {word.meaning}
           </span>
         </div>
 
-        {/* Example — plain, no label */}
-        <p className="mt-1.5 text-[13.5px] leading-relaxed text-foreground/55">
+        <p className="mt-1.5 text-[13px] leading-relaxed text-foreground/55 sm:text-[13.5px]">
           “{word.example}”
         </p>
 
-        {/* Tip — quiet single line, no pill, no icon */}
         {word.tip && (
           <p
             className="mt-1.5 text-[12.5px] font-medium leading-snug"
@@ -415,6 +604,6 @@ function WordEntry({
           </p>
         )}
       </div>
-    </li>
+    </>
   );
 }
