@@ -228,18 +228,25 @@ function DashboardPage() {
   const accent = isAcademic ? blue : sage;
 
   return (
-    <div className="relative min-h-screen bg-paper-cream">
+    <div className="relative min-h-screen velvet-base">
       <main className="relative overflow-hidden py-12 sm:py-16">
-        {/* Holographic foil background — pearlescent rainbow with sweeping highlight */}
+        {/* Dark velvet background — plum/charcoal with colored glow halos */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
-          {/* Base pearlescent foil */}
-          <span className="absolute inset-0 holo-foil" />
-          {/* Slow shimmer band sweeping across */}
-          <span className="absolute inset-0 holo-shimmer" />
-          {/* Soft cream wash so cards stay legible */}
-          <span className="absolute inset-0 bg-[oklch(0.99_0.01_80/0.55)]" />
-          {/* Fine grain for that real-foil tactile finish */}
-          <span className="absolute inset-0 aurora-grain opacity-[0.12] mix-blend-overlay" />
+          {/* Base gradient already on the page; add per-card glow halos */}
+          <span className="velvet-glow velvet-glow-1" />
+          <span className="velvet-glow velvet-glow-2" />
+          <span className="velvet-glow velvet-glow-3" />
+          <span className="velvet-glow velvet-glow-4" />
+          <span className="velvet-glow velvet-glow-5" />
+          <span className="velvet-glow velvet-glow-6" />
+          <span className="velvet-glow velvet-glow-7" />
+          <span className="velvet-glow velvet-glow-8" />
+          {/* Star dust */}
+          <span className="absolute inset-0 velvet-stars opacity-60" />
+          {/* Subtle grain for texture */}
+          <span className="absolute inset-0 aurora-grain opacity-[0.18] mix-blend-overlay" />
+          {/* Top-bottom vignette to frame the content */}
+          <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,oklch(0.18_0.04_300/0.55)_100%)]" />
         </div>
 
         {/* Centered content column */}
@@ -248,7 +255,7 @@ function DashboardPage() {
           <div className="text-center">
             <div className="relative inline-block">
               <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
+                className="font-handwriting text-5xl font-bold leading-[0.95] text-white/85 sm:text-6xl md:text-7xl"
                 style={{ transform: "rotate(-2deg)" }}
               >
                 Pick your IELTS
@@ -259,7 +266,7 @@ function DashboardPage() {
                 aria-hidden
                 viewBox="0 0 300 14"
                 preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                className="absolute -bottom-3 left-0 h-3 w-full text-white/70 sm:-bottom-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2.2"
@@ -284,11 +291,11 @@ function DashboardPage() {
 
           {/* Section label */}
           <div className="mt-14 mb-5 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-foreground/15" />
-            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/50">
+            <span className="h-px w-10 bg-white/20" />
+            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/55">
               Your Toolkit
             </span>
-            <span className="h-px w-10 bg-foreground/15" />
+            <span className="h-px w-10 bg-white/20" />
           </div>
 
           {/* Vibrant gradient cards — bigger, juicy hover */}
@@ -298,7 +305,7 @@ function DashboardPage() {
             ))}
           </div>
 
-          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
+          <p className="mt-12 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
             More tools coming soon · Access never expires during your plan
           </p>
         </div>
