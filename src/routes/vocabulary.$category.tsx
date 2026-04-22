@@ -451,62 +451,40 @@ function WordEntry({
   pill: string;
 }) {
   return (
-    <li className="grid grid-cols-1 gap-4 px-5 py-5 sm:grid-cols-[1fr_1fr] sm:gap-8 sm:px-7">
-      {/* LEFT COLUMN — headword + meaning */}
-      <div className="min-w-0">
-        <div className="flex items-baseline gap-2">
-          <span className="font-display text-[11px] font-bold tabular-nums text-foreground/35">
-            {String(index).padStart(2, "0")}
+    <li className="px-5 py-5 sm:px-7">
+      {/* Headword line */}
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <h3
+          className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
+          style={{ color: "oklch(0.18 0.03 260)" }}
+        >
+          {word.term}
+        </h3>
+        {word.pos && (
+          <span className="text-[11px] font-medium italic text-foreground/40">
+            {word.pos}
           </span>
-          <h3
-            className="font-display text-[18px] font-extrabold leading-tight tracking-tight"
-            style={{ color: "oklch(0.20 0.03 260)" }}
-          >
-            {word.term}
-          </h3>
-          {word.pos && (
-            <span className="text-[11px] font-semibold italic text-foreground/45">
-              {word.pos}
-            </span>
-          )}
-        </div>
-        {word.ipa && (
-          <p className="mt-0.5 pl-7 text-[11.5px] font-medium text-foreground/45">
-            /{word.ipa}/
-          </p>
         )}
-        <p className="mt-1.5 pl-7 text-[14px] leading-relaxed text-foreground/80">
+        <span className="text-foreground/35">—</span>
+        <span className="text-[14.5px] leading-snug text-foreground/75">
           {word.meaning}
-        </p>
+        </span>
       </div>
 
-      {/* RIGHT COLUMN — example + tip */}
-      <div className="min-w-0 sm:border-l sm:border-foreground/5 sm:pl-8">
-        <div className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-          Example
-        </div>
-        <p className="mt-1 text-[14px] italic leading-relaxed text-foreground/75">
-          “{word.example}”
+      {/* Example — italic, no label */}
+      <p className="mt-1.5 text-[13.5px] italic leading-relaxed text-foreground/55">
+        “{word.example}”
+      </p>
+
+      {/* Tip — quiet single line, no pill, no icon */}
+      {word.tip && (
+        <p
+          className="mt-1.5 text-[12.5px] font-medium leading-snug"
+          style={{ color: ink }}
+        >
+          {word.tip}
         </p>
-        {word.tip && (
-          <div
-            className="mt-3 inline-flex items-start gap-1.5 rounded-md px-2.5 py-1.5"
-            style={{ background: pill }}
-          >
-            <Lightbulb
-              className="mt-[2px] h-3 w-3 shrink-0"
-              strokeWidth={2.6}
-              style={{ color: ink }}
-            />
-            <p
-              className="text-[12px] font-semibold leading-snug"
-              style={{ color: ink }}
-            >
-              {word.tip}
-            </p>
-          </div>
-        )}
-      </div>
+      )}
     </li>
   );
 }
