@@ -694,13 +694,15 @@ function MonthGrid({
 }) {
   void counts;
   void accent;
-  const allActive = selected === "all";
 
   // Abbreviate "March 2026" → "Mar 2026"
   const abbreviate = (m: string) => {
     const [mon, yr] = m.split(" ");
     return `${mon.slice(0, 3)} ${yr}`;
   };
+
+  // Show only the last 5 months in a single row
+  const visible = months.slice(0, 5);
 
   return (
     <div>
@@ -709,28 +711,15 @@ function MonthGrid({
           Browse by month
         </p>
       </div>
-      <div className="mx-auto grid max-w-3xl grid-cols-3 justify-center gap-2.5 sm:grid-cols-5">
-        {/* All months chip */}
-        <button
-          type="button"
-          onClick={() => onSelect("all")}
-          className={`rounded-xl border px-3 py-2.5 text-center font-display text-sm font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
-            allActive
-              ? "border-foreground/30 bg-foreground/15 text-foreground shadow-soft"
-              : "border-foreground/10 bg-white text-foreground/55 hover:border-foreground/20 hover:text-foreground"
-          }`}
-        >
-          All
-        </button>
-
-        {months.map((m) => {
+      <div className="mx-auto grid max-w-3xl grid-cols-5 justify-center gap-1.5 sm:gap-2.5">
+        {visible.map((m) => {
           const active = selected === m;
           return (
             <button
               key={m}
               type="button"
-              onClick={() => onSelect(m)}
-              className={`rounded-xl border px-3 py-2.5 text-center font-display text-sm font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 ${
+              onClick={() => onSelect(active ? "all" : m)}
+              className={`rounded-xl border px-1.5 py-2 text-center font-display text-[11px] font-black tracking-tight transition-all duration-200 hover:-translate-y-0.5 sm:px-3 sm:py-2.5 sm:text-sm ${
                 active
                   ? "border-foreground/30 bg-foreground/15 text-foreground shadow-soft"
                   : "border-foreground/10 bg-white text-foreground/55 hover:border-foreground/20 hover:text-foreground"
