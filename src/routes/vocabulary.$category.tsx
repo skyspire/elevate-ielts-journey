@@ -124,19 +124,11 @@ function CategoryPage() {
   const Icon = categoryIcon[category.key];
   const tone = categoryTone[category.key];
 
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  // Filter words by query (only within the active list).
-  const query = (search.q ?? "").trim().toLowerCase();
-  const filteredWords: Word[] = useMemo(() => {
-    if (!activeList) return [];
-    if (!query) return activeList.words;
-    return activeList.words.filter(
-      (w) =>
-        w.term.toLowerCase().includes(query) ||
-        w.meaning.toLowerCase().includes(query),
-    );
-  }, [activeList, query]);
+  // All words in the active list (no search filter — search bar removed).
+  const filteredWords: Word[] = useMemo(
+    () => activeList?.words ?? [],
+    [activeList],
+  );
 
   const totalPages = Math.max(1, Math.ceil(filteredWords.length / WORDS_PER_PAGE));
   const page = Math.min(search.page, totalPages);
@@ -151,11 +143,6 @@ function CategoryPage() {
   const goToPage = (p: number) =>
     navigate({
       search: (prev) => ({ ...prev, page: Math.max(1, Math.min(totalPages, p)) }),
-    });
-
-  const setQuery = (val: string) =>
-    navigate({
-      search: (prev) => ({ ...prev, q: val || undefined, page: 1 }),
     });
 
   return (
@@ -273,10 +260,6 @@ function CategoryPage() {
                   page={page}
                   totalPages={totalPages}
                   onPageChange={goToPage}
-                  query={search.q ?? ""}
-                  onQueryChange={setQuery}
-                  searchOpen={searchOpen}
-                  onToggleSearch={() => setSearchOpen((s) => !s)}
                   ink={tone.ink}
                   pill={tone.pill}
                 />
