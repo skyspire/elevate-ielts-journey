@@ -851,7 +851,7 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
         value={task}
         onChange={(v) => {
           setTask(v);
-          setMonth("all");
+          setMonth("April 2026");
         }}
         accent={accent}
         options={[
