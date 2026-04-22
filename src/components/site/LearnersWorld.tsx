@@ -439,8 +439,22 @@ export function LearnersWorld() {
             opacity: 1;
           }
         }
+        @keyframes lw-drift {
+          0%, 100% { transform: translateX(calc(var(--drift-amp, 12px) * -1)); }
+          50%      { transform: translateX(var(--drift-amp, 12px)); }
+        }
+        @keyframes lw-bob {
+          0%, 100% {
+            transform: translateY(calc(var(--bob-amp, 10px) * -1)) rotate(calc(var(--sway-deg, 3deg) * -1));
+          }
+          50% {
+            transform: translateY(var(--bob-amp, 10px)) rotate(var(--sway-deg, 3deg));
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [style*="lw-marquee"], [style*="lw-fall"] { animation: none !important; }
+          [style*="lw-marquee"], [style*="lw-fall"], [style*="lw-drift"], [style*="lw-bob"] {
+            animation: none !important;
+          }
         }
       `}</style>
     </section>
