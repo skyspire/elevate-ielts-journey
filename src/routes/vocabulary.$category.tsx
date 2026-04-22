@@ -206,15 +206,17 @@ function CategoryPage() {
           </header>
 
           {/* Sidebar + Detail layout */}
-          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr] lg:gap-12">
-            {/* SIDEBAR — big bold stacked list */}
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr] lg:gap-10">
+            {/* SIDEBAR — sneaking flush half-pills (anchored to viewport edge) */}
             <aside className="lg:sticky lg:top-6 lg:self-start">
-              <div className="pb-4">
+              <div className="px-5 pb-4 sm:px-6 lg:px-0">
                 <span className="font-display text-[10px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
                   Topic Lists
                 </span>
               </div>
-              <nav className="flex flex-col gap-1">
+              {/* Negative margin pulls the nav out of the page padding so pills
+                  hug the actual left edge of the viewport. */}
+              <nav className="-ml-5 flex flex-col gap-1.5 sm:-ml-6 lg:-ml-[max(calc((100vw-80rem)/2),1.5rem)]">
                 {category.lists.map((l) => {
                   const isActive = l.slug === activeList?.slug;
                   return (
@@ -222,35 +224,67 @@ function CategoryPage() {
                       key={l.slug}
                       type="button"
                       onClick={() => goToList(l.slug)}
-                      className="group flex flex-col items-start py-2.5 text-left transition-colors"
+                      className="group relative flex items-center text-left"
+                      style={{ paddingLeft: 0 }}
                     >
-                      <span
-                        className="font-display text-[22px] leading-[1.15] tracking-tight transition-colors sm:text-[24px]"
-                        style={{
-                          color: isActive ? tone.ink : "oklch(0.30 0.03 260)",
-                          fontWeight: isActive ? 900 : 700,
-                        }}
-                      >
-                        {l.title}
-                      </span>
-                      {/* Underline accent for active */}
+                      {/* Flush half-pill: rounded right, flat left, hugs x=0.
+                          Width grows on hover/active to reveal more of the pill. */}
                       <span
                         aria-hidden
-                        className="mt-1 h-[3px] rounded-full transition-all duration-200"
+                        className="absolute inset-y-0 left-0 rounded-r-full transition-all duration-300 ease-out"
                         style={{
-                          background: tone.ink,
-                          width: isActive ? "32px" : "0px",
-                          opacity: isActive ? 1 : 0,
+                          background: isActive ? tone.pill : "oklch(0.96 0.008 260)",
+                          width: isActive ? "100%" : "62%",
+                          boxShadow: isActive
+                            ? `inset -1px 0 0 ${tone.ink}15, 0 1px 2px ${tone.ink}10`
+                            : "inset -1px 0 0 oklch(0 0 0 / 0.04)",
                         }}
                       />
+                      {/* Hover-only width boost (CSS-only) */}
                       <span
-                        className="mt-1 text-[11px] font-bold uppercase tracking-[0.2em] transition-colors"
+                        aria-hidden
+                        className="pointer-events-none absolute inset-y-0 left-0 rounded-r-full opacity-0 transition-all duration-300 ease-out group-hover:opacity-100"
                         style={{
-                          color: isActive ? tone.ink : "oklch(0.55 0.02 260)",
-                          opacity: isActive ? 0.8 : 0.55,
+                          background: tone.pill,
+                          width: isActive ? "100%" : "82%",
+                        }}
+                      />
+                      {/* Left edge accent bar — bolder when active */}
+                      <span
+                        aria-hidden
+                        className="absolute inset-y-2 left-0 w-[3px] rounded-r-full transition-all duration-300"
+                        style={{
+                          background: tone.ink,
+                          opacity: isActive ? 1 : 0.35,
+                          transform: isActive ? "scaleY(1)" : "scaleY(0.6)",
+                        }}
+                      />
+                      {/* Pill content — pushed right with padding so it sits inside the page area */}
+                      <span
+                        className="relative z-10 flex flex-col py-3 pr-5"
+                        style={{
+                          paddingLeft:
+                            "max(calc((100vw - 80rem)/2 + 1.5rem), 1.75rem)",
                         }}
                       >
-                        {l.words.length} words
+                        <span
+                          className="font-display text-[17px] leading-[1.2] tracking-tight transition-colors sm:text-[18px]"
+                          style={{
+                            color: isActive ? tone.ink : "oklch(0.28 0.03 260)",
+                            fontWeight: isActive ? 900 : 700,
+                          }}
+                        >
+                          {l.title}
+                        </span>
+                        <span
+                          className="mt-0.5 text-[10.5px] font-bold uppercase tracking-[0.2em] transition-colors"
+                          style={{
+                            color: isActive ? tone.ink : "oklch(0.55 0.02 260)",
+                            opacity: isActive ? 0.75 : 0.5,
+                          }}
+                        >
+                          {l.words.length} words
+                        </span>
                       </span>
                     </button>
                   );
