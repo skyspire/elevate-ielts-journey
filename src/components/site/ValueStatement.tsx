@@ -13,7 +13,7 @@ export function ValueStatement() {
 
           {/* Tagline — editorial line with handwritten accent */}
           <div className="mt-10 flex flex-col items-center gap-3">
-            <p className="font-display text-lg font-extrabold uppercase tracking-[0.22em] text-foreground sm:text-2xl">
+            <p className="font-display text-xl font-black uppercase tracking-[0.08em] text-foreground sm:text-3xl">
               <span className="text-[oklch(0.55_0.18_30)]">Academic</span>
               <span className="mx-3 text-foreground/25">/</span>
               <span className="text-[oklch(0.45_0.18_265)]">General</span>
