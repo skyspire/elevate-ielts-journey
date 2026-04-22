@@ -707,6 +707,34 @@ function SubToggle<T extends string>({
 /* Month-Year grid                                                      */
 /* ------------------------------------------------------------------ */
 
+// Shared palette so MonthGrid and the results panel stay in sync
+const MONTH_PALETTE = [
+  { fill: "oklch(0.42 0.10 258)", soft: "oklch(0.96 0.02 258)" }, // indigo
+  { fill: "oklch(0.45 0.09 195)", soft: "oklch(0.96 0.02 195)" }, // teal
+  { fill: "oklch(0.44 0.10 155)", soft: "oklch(0.96 0.02 155)" }, // forest
+  { fill: "oklch(0.46 0.10 40)",  soft: "oklch(0.96 0.02 50)"  }, // burnt sienna
+  { fill: "oklch(0.40 0.09 320)", soft: "oklch(0.96 0.02 320)" }, // plum
+] as const;
+
+const MONTH_NAMES_FULL = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+// Returns the palette entry that matches the given "Month YYYY" label,
+// based on its position in the last-five-months window. Returns null when
+// the month is outside that window or "all".
+function paletteForMonth(month: string | "all"): { fill: string; soft: string } | null {
+  if (month === "all") return null;
+  const now = new Date();
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const label = `${MONTH_NAMES_FULL[d.getMonth()]} ${d.getFullYear()}`;
+    if (label === month) return MONTH_PALETTE[i % MONTH_PALETTE.length];
+  }
+  return null;
+}
+
 function MonthGrid({
   months,
   selected,
