@@ -514,17 +514,22 @@ function FeatureCard({
 
   const inner = (
     <div className="relative h-full w-full">
-      {/* Crisp flat box — solid pastel fill, tight corners, thin dark border, no shadow */}
+      {/* Tonal layered box:
+          - Solid pastel fill (tone.front)
+          - Outer border: mid-tone (same hue, slightly deeper) via color-mix
+          - Inner stroke: deeper same-hue tone via inset box-shadow
+          - No drop shadow — refined, card-stock layering only */}
       <span
-        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[6px] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 ${
+        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[10px] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 ${
           isHighlighted ? "p-4 sm:p-5" : "p-3.5 sm:p-4"
         }`}
         style={{
           background: tone.front,
-          border: `1px solid ${tone.deep}`,
+          border: `1.5px solid color-mix(in oklab, ${tone.deep} 35%, ${tone.front})`,
+          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${tone.deep} 18%, ${tone.front}), inset 0 0 0 4px ${tone.front}`,
         }}
       >
-        {/* Animated motif loop — the Lottie-style scene, kept intact */}
+        {/* Animated motif loop — Lottie-style scene preserved */}
         <CardMotif
           kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
           color={tone.deep}
