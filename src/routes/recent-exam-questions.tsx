@@ -524,38 +524,152 @@ function SubToggle<T extends string>({
 }: {
   value: T;
   onChange: (v: T) => void;
-  options: { key: T; label: string; sub?: string }[];
+  options: [{ key: T; label: string; sub?: string }, { key: T; label: string; sub?: string }];
   accent: string;
 }) {
+  const [left, right] = options;
+  const isLeft = value === left.key;
+  // Needle swings from -55deg (left) to +55deg (right)
+  const angle = isLeft ? -55 : 55;
+
   return (
-    <div className="mx-auto inline-flex w-full max-w-2xl items-stretch rounded-2xl border border-foreground/10 bg-white p-1.5 shadow-soft">
-      {options.map((opt) => {
-        const active = value === opt.key;
-        return (
-          <button
-            key={opt.key}
-            type="button"
-            onClick={() => onChange(opt.key)}
-            className={`relative flex-1 rounded-xl px-3 py-2.5 text-center transition-all sm:px-5 sm:py-3 ${
-              active ? "text-white shadow-soft" : "text-foreground/60 hover:text-foreground"
-            }`}
-            style={active ? { background: accent } : undefined}
+    <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+      {/* Left label */}
+      <button
+        type="button"
+        onClick={() => onChange(left.key)}
+        aria-pressed={isLeft}
+        className={`order-2 text-center transition-all duration-300 sm:order-1 sm:text-right ${
+          isLeft ? "scale-105" : "scale-95 opacity-50 hover:opacity-80"
+        }`}
+      >
+        <span
+          className={`block font-display text-base font-black uppercase tracking-[0.14em] sm:text-lg ${
+            isLeft ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          {left.label}
+        </span>
+        {left.sub && (
+          <span className="mt-0.5 block text-[10px] font-semibold tracking-wide text-foreground/45">
+            {left.sub}
+          </span>
+        )}
+      </button>
+
+      {/* Compass dial */}
+      <div className="order-1 relative shrink-0 sm:order-2">
+        <svg
+          viewBox="0 0 140 140"
+          className="h-24 w-24 sm:h-28 sm:w-28"
+          aria-label="Compass selector"
+        >
+          {/* Outer ring */}
+          <circle
+            cx="70"
+            cy="70"
+            r="62"
+            fill="oklch(0.99 0.005 90)"
+            stroke="oklch(0.45 0.06 60)"
+            strokeWidth="3"
+          />
+          {/* Inner bezel */}
+          <circle
+            cx="70"
+            cy="70"
+            r="54"
+            fill="none"
+            stroke="oklch(0.45 0.06 60)"
+            strokeWidth="1"
+            strokeDasharray="2 4"
+            opacity="0.5"
+          />
+          {/* Cardinal ticks */}
+          {[0, 90, 180, 270].map((deg) => (
+            <line
+              key={deg}
+              x1="70"
+              y1="14"
+              x2="70"
+              y2="22"
+              stroke="oklch(0.45 0.06 60)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              transform={`rotate(${deg} 70 70)`}
+            />
+          ))}
+          {/* W / E hint letters */}
+          <text
+            x="22"
+            y="74"
+            textAnchor="middle"
+            className="font-display"
+            fontSize="9"
+            fontWeight="900"
+            fill="oklch(0.45 0.06 60)"
+            opacity="0.6"
           >
-            <span className="block font-display text-[12px] font-black uppercase tracking-[0.18em] sm:text-[13px]">
-              {opt.label}
-            </span>
-            {opt.sub && (
-              <span
-                className={`mt-0.5 block text-[10px] font-semibold tracking-wide ${
-                  active ? "text-white/85" : "text-foreground/45"
-                }`}
-              >
-                {opt.sub}
-              </span>
-            )}
-          </button>
-        );
-      })}
+            W
+          </text>
+          <text
+            x="118"
+            y="74"
+            textAnchor="middle"
+            className="font-display"
+            fontSize="9"
+            fontWeight="900"
+            fill="oklch(0.45 0.06 60)"
+            opacity="0.6"
+          >
+            E
+          </text>
+
+          {/* Needle group */}
+          <g
+            style={{
+              transformOrigin: "70px 70px",
+              transform: `rotate(${angle}deg)`,
+              transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+            {/* Active needle */}
+            <polygon points="70,18 76,72 64,72" fill={accent} />
+            {/* Tail */}
+            <polygon
+              points="70,122 76,72 64,72"
+              fill="oklch(0.85 0.02 60)"
+              stroke="oklch(0.45 0.06 60)"
+              strokeWidth="0.8"
+            />
+          </g>
+          {/* Center hub */}
+          <circle cx="70" cy="70" r="6" fill="oklch(0.20 0.02 250)" />
+          <circle cx="70" cy="70" r="2.5" fill="oklch(0.95 0 0)" />
+        </svg>
+      </div>
+
+      {/* Right label */}
+      <button
+        type="button"
+        onClick={() => onChange(right.key)}
+        aria-pressed={!isLeft}
+        className={`order-3 text-center transition-all duration-300 sm:text-left ${
+          !isLeft ? "scale-105" : "scale-95 opacity-50 hover:opacity-80"
+        }`}
+      >
+        <span
+          className={`block font-display text-base font-black uppercase tracking-[0.14em] sm:text-lg ${
+            !isLeft ? "text-foreground" : "text-foreground/55"
+          }`}
+        >
+          {right.label}
+        </span>
+        {right.sub && (
+          <span className="mt-0.5 block text-[10px] font-semibold tracking-wide text-foreground/45">
+            {right.sub}
+          </span>
+        )}
+      </button>
     </div>
   );
 }
