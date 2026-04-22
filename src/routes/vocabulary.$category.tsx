@@ -11,7 +11,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Lightbulb,
   type LucideProps,
 } from "lucide-react";
 import type { ComponentType } from "react";
