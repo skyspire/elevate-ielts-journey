@@ -144,14 +144,8 @@ function VocabularyPage() {
     return <Outlet />;
   }
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="min-h-screen bg-white">
       <main className="relative py-12 sm:py-16">
-
-        {/* Subtle ruled-paper accent in the background */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-paper-ruled opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-        />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Back link */}
