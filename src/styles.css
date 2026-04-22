@@ -679,33 +679,70 @@
   50%      { transform: scale(1.12) translateY(-8px); opacity: 0.70; }
 }
 
-/* Star dust — tiny twinkling specks */
+/* Star dust — premium two-layer twinkle for subtle depth */
 .velvet-stars {
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, oklch(1 0 0 / 0.55), transparent 60%),
-    radial-gradient(1px 1px at 28% 42%, oklch(1 0 0 / 0.45), transparent 60%),
-    radial-gradient(1px 1px at 47% 12%, oklch(1 0 0 / 0.50), transparent 60%),
-    radial-gradient(1px 1px at 63% 28%, oklch(1 0 0 / 0.40), transparent 60%),
-    radial-gradient(1.2px 1.2px at 78% 8%, oklch(1 0 0 / 0.55), transparent 60%),
-    radial-gradient(1px 1px at 88% 38%, oklch(1 0 0 / 0.45), transparent 60%),
-    radial-gradient(1px 1px at 8% 62%, oklch(1 0 0 / 0.40), transparent 60%),
-    radial-gradient(1.2px 1.2px at 22% 78%, oklch(1 0 0 / 0.55), transparent 60%),
-    radial-gradient(1px 1px at 42% 88%, oklch(1 0 0 / 0.45), transparent 60%),
-    radial-gradient(1px 1px at 58% 72%, oklch(1 0 0 / 0.40), transparent 60%),
-    radial-gradient(1px 1px at 72% 92%, oklch(1 0 0 / 0.45), transparent 60%),
-    radial-gradient(1.2px 1.2px at 92% 70%, oklch(1 0 0 / 0.55), transparent 60%);
-  background-size: 100% 100%;
-  animation: velvet-twinkle 6s ease-in-out infinite;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.velvet-stars::before,
+.velvet-stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  will-change: opacity, transform;
 }
 
-@keyframes velvet-twinkle {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 0.75; }
+/* Far layer — tiny, faint, slow */
+.velvet-stars::before {
+  background-image:
+    radial-gradient(1px 1px at 11% 17%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 29% 41%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 46% 11%, oklch(1 0 0 / 0.50), transparent 60%),
+    radial-gradient(1px 1px at 62% 27%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1px 1px at 78%  9%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 88% 37%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at  9% 61%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1px 1px at 23% 78%, oklch(1 0 0 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 43% 89%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 58% 72%, oklch(1 0 0 / 0.40), transparent 60%),
+    radial-gradient(1px 1px at 72% 92%, oklch(1 0 0 / 0.45), transparent 60%),
+    radial-gradient(1px 1px at 92% 70%, oklch(1 0 0 / 0.55), transparent 60%);
+  background-size: 100% 100%;
+  opacity: 0.35;
+  animation: velvet-twinkle-far 9s ease-in-out infinite;
+}
+
+/* Near layer — slightly bigger, brighter accents, offset rhythm */
+.velvet-stars::after {
+  background-image:
+    radial-gradient(1.4px 1.4px at 17% 33%, oklch(1 0 0 / 0.70), transparent 60%),
+    radial-gradient(1.4px 1.4px at 38% 64%, oklch(0.95 0.04 280 / 0.65), transparent 60%),
+    radial-gradient(1.4px 1.4px at 67% 49%, oklch(1 0 0 / 0.65), transparent 60%),
+    radial-gradient(1.4px 1.4px at 83% 22%, oklch(0.95 0.05 30 / 0.65), transparent 60%),
+    radial-gradient(1.4px 1.4px at 51% 84%, oklch(1 0 0 / 0.70), transparent 60%);
+  background-size: 100% 100%;
+  opacity: 0.30;
+  animation: velvet-twinkle-near 13s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+
+@keyframes velvet-twinkle-far {
+  0%, 100% { opacity: 0.18; transform: translateY(0);    }
+  50%      { opacity: 0.45; transform: translateY(-2px); }
+}
+@keyframes velvet-twinkle-near {
+  0%, 100% { opacity: 0.20; transform: translateY(0);   }
+  50%      { opacity: 0.55; transform: translateY(2px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .velvet-glow,
-  .velvet-stars {
+  .velvet-stars::before,
+  .velvet-stars::after {
     animation: none !important;
   }
+  .velvet-stars::before { opacity: 0.30; }
+  .velvet-stars::after  { opacity: 0.35; }
 }
