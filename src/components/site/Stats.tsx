@@ -54,34 +54,54 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-24 sm:py-32"
     >
-      {/* Muted sage / olive wash with subtle organic texture */}
+      {/* Midnight aurora — deep navy base with violet & indigo light blooms */}
       <div
         aria-hidden
         className="absolute inset-0 -z-30"
         style={{
           background:
-            "radial-gradient(ellipse 70% 60% at 18% 15%, oklch(0.92 0.04 145 / 0.7) 0%, transparent 65%)," +
-            "radial-gradient(ellipse 65% 55% at 88% 85%, oklch(0.88 0.05 130 / 0.65) 0%, transparent 65%)," +
-            "linear-gradient(180deg, oklch(0.93 0.03 140) 0%, oklch(0.9 0.04 135) 100%)",
+            "linear-gradient(180deg, oklch(0.18 0.06 270) 0%, oklch(0.14 0.07 280) 50%, oklch(0.12 0.06 285) 100%)",
         }}
       />
-      {/* Faint grain for realism */}
+      {/* Soft blurred aurora blooms */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-20 opacity-[0.35] mix-blend-multiply"
+        className="absolute inset-0 -z-25"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 45% at 15% 20%, oklch(0.55 0.22 295 / 0.55) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 50% 40% at 85% 30%, oklch(0.6 0.2 250 / 0.5) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 60% 50% at 50% 90%, oklch(0.5 0.24 320 / 0.45) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 40% 35% at 90% 80%, oklch(0.58 0.18 220 / 0.4) 0%, transparent 60%)",
+          filter: "blur(40px)",
+        }}
+      />
+      {/* Subtle star/noise grain for depth */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 opacity-[0.25] mix-blend-screen"
         style={{
           backgroundImage:
-            "radial-gradient(oklch(0.4 0.05 130 / 0.18) 1px, transparent 1.2px)",
-          backgroundSize: "3px 3px",
+            "radial-gradient(oklch(0.95 0.02 270 / 0.6) 0.5px, transparent 1px)",
+          backgroundSize: "4px 4px",
+        }}
+      />
+      {/* Top & bottom edge vignette for cinematic finish */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-15 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, oklch(0.1 0.05 280 / 0.6) 0%, transparent 15%, transparent 85%, oklch(0.1 0.05 280 / 0.6) 100%)",
         }}
       />
 
       <div className="container-page relative z-10">
         <div className="mb-14 text-center">
-          <p className="font-handwriting text-2xl text-[oklch(0.55_0.16_30)] sm:text-3xl">
+          <p className="font-handwriting text-2xl text-[oklch(0.85_0.14_60)] sm:text-3xl">
             by the numbers
           </p>
-          <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[oklch(0.18_0.03_60)] sm:text-4xl">
+          <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[oklch(0.98_0.01_270)] sm:text-4xl">
             Built for serious IELTS prep
           </h2>
         </div>
@@ -111,17 +131,17 @@ function StatCard({
       className="group relative flex flex-col items-center rounded-2xl px-5 py-8 text-center sm:px-6 sm:py-10"
       style={{
         background:
-          "linear-gradient(180deg, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0.35) 100%)",
-        backdropFilter: "blur(14px) saturate(140%)",
-        WebkitBackdropFilter: "blur(14px) saturate(140%)",
+          "linear-gradient(180deg, oklch(1 0 0 / 0.12) 0%, oklch(1 0 0 / 0.05) 100%)",
+        backdropFilter: "blur(20px) saturate(160%)",
+        WebkitBackdropFilter: "blur(20px) saturate(160%)",
         boxShadow:
-          "inset 0 1px 0 oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.3 0.04 60 / 0.06), 0 18px 40px -12px oklch(0.3 0.04 60 / 0.18)",
-        border: "1px solid oklch(1 0 0 / 0.5)",
+          "inset 0 1px 0 oklch(1 0 0 / 0.25), 0 1px 2px oklch(0 0 0 / 0.2), 0 20px 50px -12px oklch(0.1 0.06 280 / 0.6)",
+        border: "1px solid oklch(1 0 0 / 0.18)",
       }}
     >
-      <div className="font-display text-5xl font-black tabular-nums tracking-tight text-[oklch(0.16_0.03_60)] sm:text-6xl md:text-[64px]">
+      <div className="font-display text-5xl font-black tabular-nums tracking-tight text-[oklch(0.98_0.01_270)] sm:text-6xl md:text-[64px]">
         {value.toLocaleString()}
-        <span className="text-[oklch(0.55_0.18_30)]">{stat.suffix}</span>
+        <span className="text-[oklch(0.82_0.16_55)]">{stat.suffix}</span>
       </div>
 
       {/* Hand-drawn underline that draws as the counter runs */}
@@ -134,7 +154,7 @@ function StatCard({
         <path
           d="M4 8 C 40 2, 90 12, 130 6 S 190 4, 196 9"
           fill="none"
-          stroke="oklch(0.55 0.18 30)"
+          stroke="oklch(0.82 0.16 55)"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeDasharray="220"
@@ -143,7 +163,7 @@ function StatCard({
         />
       </svg>
 
-      <div className="mt-4 font-display text-sm font-bold uppercase tracking-[0.18em] text-[oklch(0.32_0.04_60)] sm:text-[15px]">
+      <div className="mt-4 font-display text-sm font-bold uppercase tracking-[0.18em] text-[oklch(0.85_0.03_270)] sm:text-[15px]">
         {stat.label}
       </div>
     </div>
