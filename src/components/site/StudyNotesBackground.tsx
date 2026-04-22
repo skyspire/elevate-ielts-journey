@@ -80,15 +80,6 @@ export function StudyNotesBackground() {
         }}
       />
 
-      {/* Whisper-thin grain for premium paper feel */}
-      <div
-        className="absolute inset-0 opacity-[0.025] mix-blend-multiply"
-        style={{
-          backgroundImage:
-            "radial-gradient(oklch(0.3 0.02 60 / 0.6) 1px, transparent 1px)",
-          backgroundSize: "3px 3px",
-        }}
-      />
     </div>
   );
 }
