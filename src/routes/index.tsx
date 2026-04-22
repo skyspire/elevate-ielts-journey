@@ -5,7 +5,6 @@ import { ValueStatement } from "@/components/site/ValueStatement";
 
 import { TrustCompare } from "@/components/site/TrustCompare";
 import { TryFreeSection } from "@/components/site/TryFreeSection";
-import { FreeVsPaid } from "@/components/site/FreeVsPaid";
 import { LatestQuestions } from "@/components/site/LatestQuestions";
 import { SamplePreview } from "@/components/site/SamplePreview";
 import { CategorySections } from "@/components/site/CategorySections";
@@ -30,7 +29,6 @@ function Index() {
         
         <TrustCompare />
         <TryFreeSection />
-        <FreeVsPaid />
         <LatestQuestions />
         <SamplePreview />
         <CategorySections />
