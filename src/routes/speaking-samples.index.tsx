@@ -131,10 +131,28 @@ function SpeakingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
+  // Full-page sage/teal ambient gradient — matches the page's accent identity.
+  const pageBg = "oklch(0.985 0.014 165)";
+  const pageGradient = `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.90 0.07 165 / 0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.91 0.08 175 / 0.45) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.92 0.06 155 / 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.91 0.07 180 / 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.92 0.05 165 / 0.30) 0%, transparent 70%)`;
+
   return (
-    <div className="min-h-screen bg-[oklch(0.985_0.014_165)]">
+    <div className="relative min-h-screen" style={{ backgroundColor: pageBg }}>
+      {/* Ambient sage gradient wash — covers the entire page */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{ background: pageGradient }}
+      />
+
       {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-foreground/8 bg-[oklch(0.985_0.014_165)]/85 backdrop-blur-xl">
+      <header
+        className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
+        style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+      >
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-soft">
@@ -151,17 +169,7 @@ function SpeakingSamplesPage() {
         </div>
       </header>
 
-      <main className="relative pt-10 sm:pt-14">
-        {/* Soft sage ruled overlay for the hero zone */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent 0, transparent 39px, oklch(0.45 0.08 165 / 0.10) 39px, oklch(0.45 0.08 165 / 0.10) 40px)",
-          }}
-        />
-
+      <main className="relative z-[1] pt-10 sm:pt-14">
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Massive eyebrow */}
           <div className="mt-4 text-center">
@@ -253,9 +261,9 @@ function SpeakingSamplesPage() {
                 })}
               </div>
 
-              {/* Step 3 — Topic cards with sage paper-dots background */}
-              <div className="relative mt-16 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-sage pb-20 sm:mt-20 sm:pb-28">
-                <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
+              {/* Step 3 — Topic cards — sit over the page-wide ambient gradient */}
+              <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
+                <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
                   <div className="mb-8 text-center">
                     <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
                       {activeCategory.label} · {topics.length} topics
