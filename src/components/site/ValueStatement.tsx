@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 const plans = [
   {
-    name: "Weekly",
+    name: "Bi-Weekly",
     price: "7",
     days: "15",
     popular: false,
