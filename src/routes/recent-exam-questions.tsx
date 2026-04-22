@@ -453,11 +453,11 @@ function ModuleToggle({
         onClick={() => setModule("general")}
         aria-pressed={!isAcademic}
         className={`group transition-all duration-300 ${
-          !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+          !isAcademic ? "opacity-100" : "opacity-45 hover:opacity-75"
         }`}
       >
         <span
-          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+          className={`font-display text-2xl font-black tracking-tight sm:text-4xl md:text-5xl ${
             !isAcademic ? "text-foreground" : "text-foreground/55"
           }`}
         >
