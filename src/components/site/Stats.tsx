@@ -57,49 +57,47 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-20 sm:py-28"
     >
-      {/* Distinct cool slate gradient — contrasts the warm hero above */}
+      {/* Base deep gradient */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-20"
+        className="absolute inset-0 -z-30"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 15% 20%, oklch(0.32 0.06 260 / 0.95) 0%, transparent 65%)," +
-            "radial-gradient(ellipse 55% 50% at 85% 80%, oklch(0.35 0.08 240 / 0.85) 0%, transparent 65%)," +
-            "linear-gradient(180deg, oklch(0.22 0.04 260) 0%, oklch(0.18 0.05 250) 100%)",
+            "linear-gradient(180deg, oklch(0.18 0.06 285) 0%, oklch(0.16 0.07 250) 55%, oklch(0.18 0.08 220) 100%)",
         }}
       />
-      {/* fine grid for editorial feel */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            "linear-gradient(oklch(0.95 0.01 250) 1px, transparent 1px)," +
-            "linear-gradient(90deg, oklch(0.95 0.01 250) 1px, transparent 1px)",
-          backgroundSize: "48px 48px, 48px 48px",
-        }}
-      />
-      {/* glowing top + bottom hairlines */}
+      {/* Animated mesh blobs (indigo / teal / rose) */}
+      <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+        <div
+          className="mesh-blob absolute -left-[10%] -top-[20%] h-[60vh] w-[60vh] rounded-full opacity-70 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.55 0.22 285 / 0.9), transparent 60%)" }}
+        />
+        <div
+          className="mesh-blob absolute right-[-15%] top-[10%] h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.65 0.18 195 / 0.85), transparent 60%)", animationDelay: "-7s" }}
+        />
+        <div
+          className="mesh-blob absolute bottom-[-20%] left-[30%] h-[50vh] w-[50vh] rounded-full opacity-55 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.6 0.2 15 / 0.8), transparent 60%)", animationDelay: "-14s" }}
+        />
+      </div>
+      {/* Particle field */}
+      <ParticleField />
+      {/* hairlines */}
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, oklch(0.7 0.18 255 / 0.6), transparent)",
-        }}
+        style={{ background: "linear-gradient(90deg, transparent, oklch(0.85 0.1 280 / 0.5), transparent)" }}
       />
       <div
         aria-hidden
         className="absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, oklch(0.7 0.18 255 / 0.4), transparent)",
-        }}
+        style={{ background: "linear-gradient(90deg, transparent, oklch(0.85 0.1 220 / 0.4), transparent)" }}
       />
 
       <div className="container-page relative z-10">
         <div className="mb-12 text-center">
-          <p className="font-handwriting text-2xl text-[oklch(0.85_0.12_70)] sm:text-3xl">
+          <p className="font-handwriting text-2xl text-[oklch(0.85_0.14_70)] sm:text-3xl">
             by the numbers
           </p>
           <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
@@ -114,6 +112,44 @@ export function Stats() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* Drifting particles — pure CSS, no Lottie payload, GPU-friendly. */
+function ParticleField() {
+  // Deterministic pseudo-random positions so SSR matches client.
+  const particles = Array.from({ length: 28 }, (_, i) => {
+    const seed = (n: number) => ((Math.sin((i + 1) * n) + 1) / 2);
+    const left = (seed(12.9898) * 100).toFixed(2);
+    const size = 2 + seed(78.233) * 4;
+    const dur = 16 + seed(37.719) * 18;
+    const delay = -seed(91.345) * dur;
+    const drift = (seed(45.164) - 0.5) * 80;
+    const opacity = 0.35 + seed(23.51) * 0.5;
+    const hue = 200 + Math.floor(seed(11.7) * 120); // teal → violet → rose
+    return { left, size, dur, delay, drift, opacity, hue, key: i };
+  });
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      {particles.map((p) => (
+        <span
+          key={p.key}
+          className="particle absolute bottom-0 rounded-full"
+          style={{
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.size,
+            background: `oklch(0.85 0.14 ${p.hue})`,
+            boxShadow: `0 0 ${p.size * 3}px oklch(0.8 0.18 ${p.hue} / 0.7)`,
+            ["--pd" as any]: `${p.dur}s`,
+            ["--pdelay" as any]: `${p.delay}s`,
+            ["--pdx" as any]: `${p.drift}px`,
+            ["--ps" as any]: 1,
+            ["--po" as any]: p.opacity,
+          }}
+        />
+      ))}
+    </div>
   );
 }
 

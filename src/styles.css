@@ -334,6 +334,21 @@
 .hero-twinkle { animation: twinkle 2.6s ease-in-out infinite; }
 .hero-wiggle  { animation: wiggle-slow 5s ease-in-out infinite; }
 
+/* === Stats: gradient mesh + drifting particles === */
+@keyframes mesh-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%      { transform: translate3d(3%, -2%, 0) scale(1.05); }
+  66%      { transform: translate3d(-2%, 2%, 0) scale(0.97); }
+}
+@keyframes particle-rise {
+  0%   { transform: translate3d(0, 100vh, 0) scale(var(--ps, 1)); opacity: 0; }
+  10%  { opacity: var(--po, 0.8); }
+  90%  { opacity: var(--po, 0.8); }
+  100% { transform: translate3d(var(--pdx, 0px), -10vh, 0) scale(var(--ps, 1)); opacity: 0; }
+}
+.mesh-blob { animation: mesh-drift 22s ease-in-out infinite; }
+.particle  { animation: particle-rise var(--pd, 18s) linear infinite; animation-delay: var(--pdelay, 0s); }
+
 /* Gravity drop & settle — silent, organic answer transition.
    Stage 1 (0→25%): tiny anti-gravity lift (-6px) — like an inhale.
    Stage 2 (25→100%): accelerating drop (+28px) under gravity, fading to 0. */
