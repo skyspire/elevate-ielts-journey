@@ -23,7 +23,40 @@ import paperclipNotes from "@/assets/hero-objects/paperclip-notes.png";
  */
 export function QuietHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-paper-cream">
+    <section className="relative isolate overflow-hidden">
+      {/* Rich warm gradient — peach → apricot → soft amber → cream */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 15% 10%, oklch(0.88 0.11 35 / 0.85) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 55% 45% at 88% 12%, oklch(0.86 0.13 55 / 0.8) 0%, transparent 60%)," +
+            "radial-gradient(ellipse 70% 55% at 50% 100%, oklch(0.9 0.09 75 / 0.75) 0%, transparent 65%)," +
+            "radial-gradient(ellipse 40% 35% at 75% 75%, oklch(0.82 0.14 25 / 0.5) 0%, transparent 60%)," +
+            "linear-gradient(135deg, oklch(0.96 0.05 70) 0%, oklch(0.93 0.08 45) 50%, oklch(0.95 0.06 30) 100%)",
+        }}
+      />
+      {/* Warm grain texture for premium depth */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 opacity-[0.4] mix-blend-soft-light"
+        style={{
+          backgroundImage:
+            "radial-gradient(oklch(0.35 0.08 40 / 0.22) 1px, transparent 1.2px)",
+          backgroundSize: "3px 3px",
+        }}
+      />
+      {/* Soft golden glow vignette at top */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 -z-10 h-[60%]"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(0.95 0.08 65 / 0.5) 0%, transparent 70%)",
+        }}
+      />
+
       {/* Floating 3D study objects — peripheral, never crowding text */}
       <FloatingObjects />
 
