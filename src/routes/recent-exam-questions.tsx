@@ -921,6 +921,43 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Reading — coming soon placeholder                                   */
+/* ------------------------------------------------------------------ */
+
+function ReadingSection() {
+  const accent = "oklch(0.55 0.13 155)";
+  return (
+    <div className="space-y-6">
+      <section>
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p
+              className="font-display text-[10px] font-black uppercase tracking-[0.24em]"
+              style={{ color: accent }}
+            >
+              Reading — Recent Passages
+            </p>
+            <h2 className="mt-1 font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+              Latest reading passages & question types
+            </h2>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-10 text-center">
+          <p className="font-display text-base font-black tracking-tight text-foreground sm:text-lg">
+            Reading question bank is on the way.
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-sm text-foreground/60">
+            We&apos;re curating the most-recently reported reading passages and question types
+            from real test-takers. Check back soon — or sign up to be notified the moment they
+            drop.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Sub-section + question card                                         */
 /* ------------------------------------------------------------------ */
 
