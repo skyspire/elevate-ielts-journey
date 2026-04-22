@@ -26,6 +26,7 @@ function Index() {
         <Hero />
         <Stats />
         <ValueStatement />
+        <Pricing />
         <ModuleFeatures />
         <TrustCompare />
         <FreeVsPaid />
@@ -35,7 +36,6 @@ function Index() {
         <Ebooks />
         <WhyChooseUs />
         <HowItWorks />
-        <Pricing />
         <CtaBanner />
       </main>
       <Footer />
