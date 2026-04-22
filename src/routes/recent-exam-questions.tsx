@@ -353,27 +353,26 @@ function ModuleToggle({
   module: Module;
   setModule: (m: Module) => void;
 }) {
-  const isAcademic = module === "academic";
-  return (
-    <div className="relative flex items-center justify-center gap-3 sm:gap-5">
-      <button
-        type="button"
-        onClick={() => setModule("academic")}
-        aria-pressed={isAcademic}
-        className={`group transition-all duration-300 ${
-          isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
-        }`}
-      >
-        <span
-          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
-            isAcademic ? "text-foreground" : "text-foreground/55"
-          }`}
-        >
-          Academic
-        </span>
-      </button>
+  // Color identity per module (drives owl body + eye direction)
+  const palette: Record<
+    Module,
+    { body: string; wing: string; eyeOffset: number; tilt: number }
+  > = {
+    academic: { body: "oklch(0.62 0.10 265)", wing: "oklch(0.50 0.12 265)", eyeOffset: -6, tilt: -22 },
+    general: { body: "oklch(0.60 0.15 28)", wing: "oklch(0.48 0.16 28)", eyeOffset: 6, tilt: 22 },
+    reading: { body: "oklch(0.55 0.13 155)", wing: "oklch(0.42 0.14 155)", eyeOffset: 0, tilt: 0 },
+  };
+  const current = palette[module];
 
-      {/* Mini owl — same identity as dashboard */}
+  const buttons: { key: Module; label: string }[] = [
+    { key: "academic", label: "Academic" },
+    { key: "general", label: "General" },
+    { key: "reading", label: "Reading" },
+  ];
+
+  return (
+    <div className="flex flex-col items-center gap-4 sm:gap-5">
+      {/* Mini owl — shared mascot, color & gaze shift with selection */}
       <div className="relative flex shrink-0 items-end justify-center">
         <svg viewBox="0 0 200 220" className="h-24 w-24 sm:h-32 sm:w-32" aria-label="Wise owl">
           <path
@@ -388,24 +387,24 @@ function ModuleToggle({
             cy="150"
             rx="48"
             ry="46"
-            fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+            fill={current.body}
             className="transition-colors duration-500"
           />
           <ellipse cx="100" cy="158" rx="30" ry="32" fill="oklch(0.96 0.02 80)" />
           <path
             d="M 60 145 Q 50 175 70 188 Q 75 170 78 150 Z"
-            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            fill={current.wing}
             className="transition-colors duration-500"
           />
           <path
             d="M 140 145 Q 150 175 130 188 Q 125 170 122 150 Z"
-            fill={isAcademic ? "oklch(0.50 0.12 265)" : "oklch(0.48 0.16 28)"}
+            fill={current.wing}
             className="transition-colors duration-500"
           />
           <g
             style={{
               transformOrigin: "100px 100px",
-              transform: isAcademic ? "rotate(-22deg)" : "rotate(22deg)",
+              transform: `rotate(${current.tilt}deg)`,
               transition: "transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           >
@@ -413,7 +412,7 @@ function ModuleToggle({
               cx="100"
               cy="92"
               r="48"
-              fill={isAcademic ? "oklch(0.62 0.10 265)" : "oklch(0.60 0.15 28)"}
+              fill={current.body}
               className="transition-colors duration-500"
             />
             <circle
@@ -433,14 +432,14 @@ function ModuleToggle({
               strokeWidth="3.5"
             />
             <circle
-              cx={isAcademic ? "76" : "88"}
+              cx={82 + current.eyeOffset}
               cy="92"
               r="5"
               fill="oklch(0.18 0.02 250)"
               style={{ transition: "cx 500ms ease" }}
             />
             <circle
-              cx={isAcademic ? "112" : "124"}
+              cx={118 + current.eyeOffset}
               cy="92"
               r="5"
               fill="oklch(0.18 0.02 250)"
@@ -456,22 +455,31 @@ function ModuleToggle({
         </svg>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setModule("general")}
-        aria-pressed={!isAcademic}
-        className={`group transition-all duration-300 ${
-          !isAcademic ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
-        }`}
-      >
-        <span
-          className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
-            !isAcademic ? "text-foreground" : "text-foreground/55"
-          }`}
-        >
-          General
-        </span>
-      </button>
+      {/* Three module labels */}
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:gap-x-8">
+        {buttons.map((b) => {
+          const active = module === b.key;
+          return (
+            <button
+              key={b.key}
+              type="button"
+              onClick={() => setModule(b.key)}
+              aria-pressed={active}
+              className={`group transition-all duration-300 ${
+                active ? "scale-110" : "scale-95 opacity-45 hover:opacity-75"
+              }`}
+            >
+              <span
+                className={`font-display text-xl font-black tracking-tight sm:text-3xl ${
+                  active ? "text-foreground" : "text-foreground/55"
+                }`}
+              >
+                {b.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
