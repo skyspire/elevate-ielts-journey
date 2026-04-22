@@ -50,13 +50,9 @@ export function TryFreeSection() {
         {/* Two columns */}
         <div className="mx-auto mt-14 grid max-w-5xl gap-6 lg:grid-cols-2">
           {/* ============= FREE ============= */}
-          <article className="relative flex flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-brand via-brand to-[oklch(0.62_0.18_45)] p-8 text-brand-foreground shadow-glow sm:p-10">
-            {/* decorative blobs */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/15 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-
+          <article className="relative flex flex-col overflow-hidden rounded-3xl bg-brand p-8 text-brand-foreground shadow-card sm:p-10">
             {/* Floating badge */}
-            <div className="relative inline-flex w-fit items-center gap-2 rounded-full bg-brand-foreground/15 px-3.5 py-1.5 backdrop-blur-sm ring-1 ring-brand-foreground/25">
+            <div className="relative inline-flex w-fit items-center gap-2 rounded-full bg-brand-foreground/15 px-3.5 py-1.5 ring-1 ring-brand-foreground/25">
               <Gift className="h-3.5 w-3.5" strokeWidth={2.75} />
               <span className="font-display text-[11px] font-black uppercase tracking-[0.2em]">
                 Free Forever
@@ -79,7 +75,7 @@ export function TryFreeSection() {
               {freeSamples.map((s) => (
                 <div
                   key={s.label}
-                  className="flex items-center gap-4 rounded-2xl bg-brand-foreground/12 p-4 backdrop-blur-sm ring-1 ring-brand-foreground/20"
+                  className="flex items-center gap-4 rounded-2xl bg-brand-foreground/12 p-4 ring-1 ring-brand-foreground/20"
                 >
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-foreground text-brand shadow-soft">
                     <s.icon className="h-5 w-5" strokeWidth={2.5} />
