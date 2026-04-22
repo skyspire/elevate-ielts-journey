@@ -10,7 +10,6 @@ import {
 import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
-import { HeroScenery } from "@/components/site/HeroScenery";
 
 
 type Module = "academic" | "general";
