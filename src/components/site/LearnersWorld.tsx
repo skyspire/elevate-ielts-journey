@@ -129,11 +129,13 @@ const rainConfig = RAIN_FLAGS.map((flag, i) => {
     return x - Math.floor(x);
   };
   const startX = 4 + rand(i + 1) * 92;
-  const restY = 62 + rand(i + 7) * 30;
+  // Settle near the bottom half so they sit BEHIND the big number
+  const restY = 48 + rand(i + 7) * 48; // 48–96%
   const rotate = (rand(i + 13) - 0.5) * 50;
   const delay = rand(i + 21) * 1.6;
   const duration = 1.6 + rand(i + 31) * 1.2;
-  const size = 1.6 + rand(i + 41) * 1.4;
+  // Much bigger flags
+  const size = 3 + rand(i + 41) * 3.2; // 3.0–6.2rem
   return { flag, startX, restY, rotate, delay, duration, size };
 });
 
