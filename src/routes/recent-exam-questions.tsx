@@ -854,7 +854,15 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
         accent={accent}
       />
 
-      <SubSection eyebrow={eyebrow} title={title} questions={filtered} accent={accent} />
+      <SubSection
+        eyebrow={task === "task1" ? "Writing — Task 1" : "Writing — Task 2"}
+        emoji="✍️"
+        title={title}
+        questions={filtered}
+        accent={accent}
+        sectionLabel={task === "task1" ? "Writing Task 1" : "Writing Task 2"}
+      />
+      <p className="sr-only">{eyebrow}</p>
     </div>
   );
 }
@@ -902,7 +910,14 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         accent={accent}
       />
 
-      <SubSection eyebrow={eyebrow} title={title} questions={filtered} accent={accent} />
+      <SubSection
+        eyebrow={eyebrow}
+        emoji="🎙️"
+        title={title}
+        questions={filtered}
+        accent={accent}
+        sectionLabel={part === "part1" ? "Speaking Part 1" : "Speaking Part 2 & 3"}
+      />
     </div>
   );
 }
