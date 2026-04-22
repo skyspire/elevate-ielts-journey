@@ -188,7 +188,7 @@ export function TrustCompare() {
   const rowB = testimonials.slice(half);
 
   return (
-    <section className="bg-paper-white py-20 sm:py-28">
+    <section className="bg-paper-white pt-10 pb-20 sm:pt-12 sm:pb-28">
       <div className="container-page">
         {/* Testimonials */}
         <div className="mx-auto max-w-2xl text-center">
