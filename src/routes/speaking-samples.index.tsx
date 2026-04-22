@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { FlipExpansion } from "@/components/site/FlipExpansion";
 import {
   GraduationCap,
-  ArrowLeft,
   MessageCircle,
   
   ArrowUpRight,
