@@ -1016,11 +1016,30 @@ function SubSection({
           </p>
         </div>
       ) : (
-        <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-          {questions.map((q) => (
-            <ExamQuestionCard key={q.title} q={q} sectionLabel={sectionLabel} />
-          ))}
-        </div>
+        <>
+          <div
+            className="mb-6 flex items-start gap-3 rounded-2xl border-2 border-foreground/85 bg-white px-4 py-3 shadow-[3px_3px_0_0_hsl(var(--foreground)/0.85)] sm:items-center"
+          >
+            <span
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base"
+              style={{ backgroundColor: `color-mix(in oklab, ${accent} 18%, white)`, color: accent }}
+              aria-hidden
+            >
+              ↻
+            </span>
+            <p className="font-display text-[13px] font-bold leading-snug text-foreground sm:text-sm">
+              IELTS repeats questions year after year —{" "}
+              <span className="text-foreground/70 font-semibold">
+                every question below is worth practising.
+              </span>
+            </p>
+          </div>
+          <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+            {questions.map((q) => (
+              <ExamQuestionCard key={q.title} q={q} sectionLabel={sectionLabel} />
+            ))}
+          </div>
+        </>
       )}
     </section>
   );
