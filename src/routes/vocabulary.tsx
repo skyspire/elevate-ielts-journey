@@ -134,7 +134,17 @@ function VocabularyPage() {
   const isAcademic = module === "academic";
   const tones = isAcademic ? tonesAcademic : tonesGeneral;
 
-  return (
+  // When a child route like /vocabulary/$category is active,
+  // render the child instead of the cards landing page.
+  const matches = useMatches();
+  const hasChildMatch = matches.some(
+    (m) => m.routeId !== "/vocabulary" && m.routeId.startsWith("/vocabulary/"),
+  );
+  if (hasChildMatch) {
+    return <Outlet />;
+  }
+
+
     <div className="min-h-screen bg-paper-cream">
       <main className="relative py-12 sm:py-16">
         {/* Subtle ruled-paper accent in the background */}
