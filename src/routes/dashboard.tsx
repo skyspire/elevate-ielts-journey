@@ -611,7 +611,6 @@ function FeatureCard({
         }`}
         style={{
           background: tone.front,
-          border: `1px solid color-mix(in oklab, ${tone.deep} 22%, ${tone.front})`,
           boxShadow: [
             "0 1px 1px oklch(0.20 0.04 60 / 0.06)",
             "0 6px 14px -8px oklch(0.20 0.04 60 / 0.18)",
@@ -638,23 +637,16 @@ function FeatureCard({
           className="relative z-[1] opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
         />
 
-        {/* Title + meta — quiet ink on muted ground */}
-        <span className="relative z-[1] mt-auto flex flex-col items-center gap-0.5">
+        {/* Title only — quiet ink on muted ground */}
+        <span className="relative z-[1] mt-auto flex flex-col items-center">
           <h3
             className={`text-center font-display font-extrabold leading-tight tracking-tight ${
-              isHighlighted ? "text-sm sm:text-base" : "text-[12px] sm:text-[13px]"
+              isHighlighted ? "text-base sm:text-lg" : "text-[14px] sm:text-[16px]"
             }`}
             style={{ color: tone.deep }}
           >
             {feature.title}
           </h3>
-          <span
-            className="text-center font-semibold uppercase leading-none tracking-[0.1em] text-[8.5px] sm:text-[9.5px]"
-            style={{ color: `color-mix(in oklab, ${tone.deep} 65%, transparent)` }}
-          >
-            <span className="font-black">{feature.count[module].value}</span>
-            <span className="opacity-80"> · {feature.count[module].label}</span>
-          </span>
         </span>
       </span>
     </div>
