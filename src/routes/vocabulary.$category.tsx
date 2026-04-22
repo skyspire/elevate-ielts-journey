@@ -160,14 +160,8 @@ function CategoryPage() {
     });
 
   return (
-    <div className="min-h-screen bg-paper-cream">
+    <div className="min-h-screen bg-white">
       <main className="relative py-10 sm:py-14">
-        {/* Subtle ruled-paper top accent */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[360px] bg-paper-ruled opacity-35 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-        />
-
         <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-6">
           {/* Back link */}
           <div className="mb-5">
