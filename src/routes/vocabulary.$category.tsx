@@ -8,7 +8,8 @@ import {
   useTransform,
   type PanInfo,
 } from "framer-motion";
-import { ArrowLeft, ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
+import { BackButton } from "@/components/site/BackButton";
 import { Footer } from "@/components/site/Footer";
 import {
   getCategory,
