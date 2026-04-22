@@ -691,64 +691,99 @@ function MonthGrid({
   counts: Record<string, number>;
   accent: string;
 }) {
+  const allActive = selected === "all";
   return (
     <div>
-      <div className="mb-3 flex items-end justify-between">
+      <div className="mb-3 flex items-end justify-center">
         <p className="font-display text-[10px] font-black uppercase tracking-[0.24em] text-foreground/55">
           Browse by month
         </p>
-        <button
-          type="button"
-          onClick={() => onSelect("all")}
-          className={`font-display text-[11px] font-black uppercase tracking-[0.18em] transition-colors ${
-            selected === "all" ? "text-foreground" : "text-foreground/40 hover:text-foreground"
-          }`}
-        >
-          All months
-        </button>
       </div>
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {months.map((m) => {
-          const [mon, yr] = m.split(" ");
-          const active = selected === m;
-          const count = counts[m] ?? 0;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => onSelect(m)}
-              className={`group relative overflow-hidden rounded-xl border p-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
-                active
-                  ? "border-transparent text-white shadow-card"
-                  : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
+      <div className="relative -mx-5 px-5 sm:mx-0 sm:px-0">
+        {/* Edge fades */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-paper-cream to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-paper-cream to-transparent"
+        />
+        <div
+          className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {/* All months chip */}
+          <button
+            type="button"
+            onClick={() => onSelect("all")}
+            className={`group relative flex shrink-0 snap-start flex-col items-start overflow-hidden rounded-xl border px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+              allActive
+                ? "border-transparent text-white shadow-card"
+                : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
+            }`}
+            style={allActive ? { background: accent } : undefined}
+          >
+            <span
+              className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
+                allActive ? "text-white/80" : "text-foreground/50"
               }`}
-              style={active ? { background: accent } : undefined}
             >
-              <span
-                className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
-                  active ? "text-white/80" : "text-foreground/50"
+              View
+            </span>
+            <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
+              All
+            </span>
+            <span
+              className={`mt-1 font-mono text-[10px] font-semibold tabular-nums ${
+                allActive ? "text-white/85" : "text-foreground/45"
+              }`}
+            >
+              {Object.values(counts).reduce((a, b) => a + b, 0)} total
+            </span>
+          </button>
+
+          {months.map((m) => {
+            const [mon, yr] = m.split(" ");
+            const active = selected === m;
+            const count = counts[m] ?? 0;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => onSelect(m)}
+                className={`group relative flex shrink-0 snap-start flex-col items-start overflow-hidden rounded-xl border px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+                  active
+                    ? "border-transparent text-white shadow-card"
+                    : "border-foreground/10 bg-white text-foreground hover:border-foreground/25 hover:shadow-soft"
                 }`}
-              >
-                {yr}
-              </span>
-              <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
-                {mon}
-              </span>
-              <span
-                className={`mt-1 inline-flex items-center gap-1 font-mono text-[10px] font-semibold tabular-nums ${
-                  active ? "text-white/85" : "text-foreground/45"
-                }`}
+                style={active ? { background: accent } : undefined}
               >
                 <span
-                  className={`inline-block h-1 w-1 rounded-full ${
-                    active ? "bg-white/80" : "bg-foreground/40"
+                  className={`block font-display text-[10px] font-black uppercase tracking-[0.2em] ${
+                    active ? "text-white/80" : "text-foreground/50"
                   }`}
-                />
-                {count} new
-              </span>
-            </button>
-          );
-        })}
+                >
+                  {yr}
+                </span>
+                <span className="mt-0.5 block font-display text-base font-black tracking-tight sm:text-lg">
+                  {mon}
+                </span>
+                <span
+                  className={`mt-1 inline-flex items-center gap-1 font-mono text-[10px] font-semibold tabular-nums ${
+                    active ? "text-white/85" : "text-foreground/45"
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-1 w-1 rounded-full ${
+                      active ? "bg-white/80" : "bg-foreground/40"
+                    }`}
+                  />
+                  {count} new
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
