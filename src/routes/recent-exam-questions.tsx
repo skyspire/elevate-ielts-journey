@@ -327,9 +327,6 @@ function RecentExamQuestionsPage() {
             )}
           </div>
 
-          <p className="mt-14 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground/40">
-            Updated monthly · Verified by real test-takers · Free samples available
-          </p>
         </div>
       </main>
       <Footer />
