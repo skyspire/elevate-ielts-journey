@@ -67,13 +67,21 @@ const row3 = countries.filter((_, i) => i % 3 === 2);
 
 function CountryItem({ c }: { c: Country }) {
   return (
-    <div className="flex shrink-0 items-baseline gap-4 px-8">
-      <span className="text-3xl leading-none sm:text-4xl">{c.flag}</span>
-      <div className="flex items-baseline gap-2.5">
-        <span className="font-display text-3xl font-black tabular-nums leading-none tracking-tight text-foreground sm:text-4xl">
+    <div className="flex shrink-0 items-center gap-5 px-10">
+      <span
+        className="leading-none"
+        style={{
+          fontSize: "clamp(3rem, 6vw, 4.5rem)",
+          filter: "drop-shadow(0 6px 14px rgba(15,23,42,0.18))",
+        }}
+      >
+        {c.flag}
+      </span>
+      <div className="flex flex-col leading-none">
+        <span className="font-display text-4xl font-black tabular-nums tracking-tight text-foreground sm:text-5xl">
           {c.count}
         </span>
-        <span className="font-display text-base font-semibold tracking-tight text-foreground/55 sm:text-lg">
+        <span className="mt-2 font-display text-sm font-semibold uppercase tracking-[0.18em] text-foreground/50 sm:text-base">
           {c.name}
         </span>
       </div>
