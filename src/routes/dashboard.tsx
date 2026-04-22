@@ -536,8 +536,8 @@ function FeatureCard({
           className="opacity-95 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
         />
 
-        {/* Title — centered chip pinned to the bottom */}
-        <span className="relative z-[1] mt-auto flex justify-center">
+        {/* Title + meta — pinned to the bottom, gives each card weight */}
+        <span className="relative z-[1] mt-auto flex flex-col items-center gap-0.5">
           <h3
             className={`text-center font-display font-black leading-tight tracking-tight ${
               isHighlighted ? "text-sm sm:text-base" : "text-[12px] sm:text-[13px]"
@@ -546,6 +546,13 @@ function FeatureCard({
           >
             {feature.title}
           </h3>
+          <span
+            className="text-center font-semibold uppercase leading-none tracking-[0.08em] text-[8.5px] sm:text-[9.5px]"
+            style={{ color: `color-mix(in oklab, ${tone.deep} 75%, transparent)` }}
+          >
+            <span className="font-black">{feature.count[module].value}</span>
+            <span className="opacity-80"> · {feature.count[module].label}</span>
+          </span>
         </span>
       </span>
     </div>
