@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import marbleBg from "@/assets/marble-bg.jpg";
+
 
 const stats = [
   { target: 1300, suffix: "+", label: "Writing Questions" },
