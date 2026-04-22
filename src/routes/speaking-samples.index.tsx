@@ -291,6 +291,7 @@ function SpeakingSamplesPage() {
           )}
         </div>
       </main>
+      </div>
       <Footer />
 
       {flipTopic && (
