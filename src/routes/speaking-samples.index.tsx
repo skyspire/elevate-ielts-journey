@@ -25,6 +25,7 @@ import {
 import { z } from "zod";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
+import { BackButton } from "@/components/site/BackButton";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
