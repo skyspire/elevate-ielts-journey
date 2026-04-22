@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Menu,
   X,
@@ -10,14 +11,12 @@ import {
   BookOpen,
   PenLine,
   Library,
+  ArrowRight,
+  Globe2,
+  Star,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const INK = "oklch(0.20 0.01 250)";
 const INK_SOFT = "oklch(0.45 0.01 250)";
@@ -30,43 +29,49 @@ type ResourceItem = {
   description: string;
   icon: typeof FileText;
   accent: string;
+  meta: string;
 };
 
 const resourceItems: ResourceItem[] = [
   {
     label: "Recent Exams",
     to: "/recent-exam-questions",
-    description: "Verified questions from real test-takers",
+    description: "Verified questions from real test-takers across 40+ countries.",
     icon: FileText,
     accent: "oklch(0.62 0.17 255)",
+    meta: "Updated April 2026",
   },
   {
     label: "Predictions",
     to: "/predictions",
-    description: "AI-ranked topics for your next sitting",
+    description: "AI-ranked topics most likely to appear in your next sitting.",
     icon: Sparkles,
     accent: "oklch(0.6 0.2 295)",
+    meta: "Updated weekly",
   },
   {
     label: "E-books",
     to: "/ebooks",
-    description: "Deep-dive guides by Band 9 examiners",
+    description: "Deep-dive PDF guides written by certified Band 9 examiners.",
     icon: BookOpen,
     accent: "oklch(0.62 0.16 35)",
+    meta: "12 titles",
   },
   {
     label: "Band 8+ Sample Answers",
     to: "/writing-samples",
-    description: "Annotated Writing & Speaking models",
+    description: "Annotated Writing & Speaking models with examiner notes.",
     icon: PenLine,
     accent: "oklch(0.55 0.14 165)",
+    meta: "600+ samples",
   },
   {
     label: "Vocabulary",
     to: "/vocabulary",
-    description: "Curated, topic-grouped word lists",
+    description: "High-yield collocations and lexical chunks, grouped by topic.",
     icon: Library,
     accent: "oklch(0.6 0.16 230)",
+    meta: "30 topics",
   },
 ];
 
@@ -75,6 +80,35 @@ const resourceItems: ResourceItem[] = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const location = useLocation();
+
+  // Close the mega menu on route change
+  useEffect(() => {
+    setMegaOpen(false);
+  }, [location.pathname]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!megaOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMegaOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [megaOpen]);
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setMegaOpen(false), 160);
+  };
 
   return (
     <header
