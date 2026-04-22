@@ -101,11 +101,11 @@ export function Hero() {
         {/* Trust pills */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="h-2 w-2 rounded-full" style={{ background: "oklch(0.65 0.15 165)" }} />
             12,000+ learners
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-amber-500" />
+            <span className="h-2 w-2 rounded-full" style={{ background: "oklch(0.7 0.16 70)" }} />
             Band 8–9 samples
           </span>
           <span className="flex items-center gap-1.5">
