@@ -825,7 +825,7 @@ function monthCounts(qs: Question[]): Record<string, number> {
 
 function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: boolean }) {
   const [task, setTask] = useState<WritingTask>("task1");
-  const [month, setMonth] = useState<string | "all">("all");
+  const [month, setMonth] = useState<string | "all">("April 2026");
   const accent = task === "task1" ? "oklch(0.48 0.16 230)" : "oklch(0.42 0.18 260)";
   const questions = data[task];
   const months = uniqueMonths(questions);
@@ -851,7 +851,7 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
         value={task}
         onChange={(v) => {
           setTask(v);
-          setMonth("all");
+          setMonth("April 2026");
         }}
         accent={accent}
         options={[
@@ -892,7 +892,7 @@ function WritingSection({ data, isAcademic }: { data: WritingData; isAcademic: b
 
 function SpeakingSection({ data }: { data: SpeakingData }) {
   const [part, setPart] = useState<SpeakingPart>("part1");
-  const [month, setMonth] = useState<string | "all">("all");
+  const [month, setMonth] = useState<string | "all">("April 2026");
   const accent = part === "part1" ? "oklch(0.55 0.16 250)" : "oklch(0.50 0.15 200)";
   const questions = data[part];
   const months = uniqueMonths(questions);
@@ -912,7 +912,7 @@ function SpeakingSection({ data }: { data: SpeakingData }) {
         value={part}
         onChange={(v) => {
           setPart(v);
-          setMonth("all");
+          setMonth("April 2026");
         }}
         accent={accent}
         options={[
