@@ -280,21 +280,26 @@ function RecentExamQuestionsPage() {
                 />
               </svg>
             </div>
-            <p className="mx-auto mt-6 max-w-xl text-sm text-foreground/65 sm:text-base">
-              Verified Writing &amp; Speaking questions reported by{" "}
-              <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
-                <span
-                  aria-hidden
-                  className="absolute inset-x-[-2px] bottom-[2px] -z-0 h-[55%] -rotate-[1.5deg] rounded-[2px]"
-                  style={{
-                    background:
-                      "linear-gradient(100deg, oklch(0.92 0.16 95 / 0.85) 0%, oklch(0.88 0.18 90 / 0.85) 60%, oklch(0.92 0.16 95 / 0.7) 100%)",
-                  }}
-                />
-                <span className="relative">real test-takers</span>
-              </span>{" "}
-              — updated each month.
-            </p>
+            <div className="mx-auto mt-6 max-w-xl space-y-2">
+              <p className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
+                Real questions. Real test-takers.
+              </p>
+              <p className="text-sm text-foreground/65 sm:text-[15px]">
+                Verified Writing &amp; Speaking questions reported by{" "}
+                <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-[-2px] bottom-[2px] -z-0 h-[55%] -rotate-[1.5deg] rounded-[2px]"
+                    style={{
+                      background:
+                        "linear-gradient(100deg, oklch(0.92 0.16 95 / 0.85) 0%, oklch(0.88 0.18 90 / 0.85) 60%, oklch(0.92 0.16 95 / 0.7) 100%)",
+                    }}
+                  />
+                  <span className="relative">real test-takers</span>
+                </span>{" "}
+                — updated every month.
+              </p>
+            </div>
           </div>
 
 
