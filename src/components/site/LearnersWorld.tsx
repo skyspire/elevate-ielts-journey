@@ -1,67 +1,55 @@
 import { useEffect, useRef, useState } from "react";
-import { WORLD_LAND_PATH } from "./world-map-path";
+import worldMapImg from "@/assets/world-map-3d.jpg";
 
 /**
- * LearnersWorld — real world map with floating regional callouts.
- * The map is the hero; 5 callouts sit in the empty ocean spaces around it,
- * each connected to its region by a thin ink line.
+ * LearnersWorld — 3D world map photo with floating regional callouts.
+ * The map is a high-quality 3D illustration; cards float in the negative
+ * space around it and connect to their region with a thin ink line.
  */
 
-const MAP_W = 1000;
-const MAP_H = 500;
-
-const proj = (lng: number, lat: number) => {
-  const x = ((lng + 180) / 360) * MAP_W;
-  const y = ((90 - lat) / 180) * MAP_H;
-  return { x, y };
-};
-
 // Calm editorial palette
-const PAPER = "oklch(0.97 0.018 80)";
-const LAND = "oklch(0.42 0.04 255)";
-const LAND_STROKE = "oklch(0.32 0.05 255)";
 const PIN = "oklch(0.58 0.17 255)";
-const PIN_HALO = "oklch(0.58 0.17 255 / 0.18)";
+const PIN_HALO = "oklch(0.58 0.17 255 / 0.22)";
 const PIN_CORE = "oklch(0.99 0.005 90)";
-const LINE = "oklch(0.32 0.05 255 / 0.55)";
+const LINE = "oklch(0.32 0.05 255 / 0.5)";
 
-// All learner pins (small dots on the map)
-const cities = [
-  { lng: -79.38, lat: 43.65 },   // Toronto
-  { lng: -123.12, lat: 49.28 },  // Vancouver
-  { lng: -99.13, lat: 19.43 },   // Mexico City
-  { lng: -46.63, lat: -23.55 },  // São Paulo
-  { lng: -0.13, lat: 51.5 },     // London
-  { lng: 13.4, lat: 52.52 },     // Berlin
-  { lng: -9.14, lat: 38.72 },    // Lisbon
-  { lng: 12.5, lat: 41.9 },      // Rome
-  { lng: 3.38, lat: 6.52 },      // Lagos
-  { lng: 31.24, lat: 30.04 },    // Cairo
-  { lng: 55.27, lat: 25.2 },     // Dubai
-  { lng: 72.87, lat: 19.07 },    // Mumbai
-  { lng: 77.21, lat: 28.61 },    // Delhi
-  { lng: 90.4, lat: 23.8 },      // Dhaka
-  { lng: 103.82, lat: 1.35 },    // Singapore
-  { lng: 121.47, lat: 31.23 },   // Shanghai
-  { lng: 126.98, lat: 37.57 },   // Seoul
-  { lng: 139.69, lat: 35.69 },   // Tokyo
-  { lng: 151.21, lat: -33.87 },  // Sydney
+/**
+ * All decorative pin dots — positions are in % of the map image
+ * (left, top), hand-tuned to sit on continents in the rendered image.
+ */
+const pins = [
+  { x: 22, y: 32 }, // Vancouver
+  { x: 28, y: 36 }, // Toronto
+  { x: 26, y: 50 }, // Mexico City
+  { x: 33, y: 70 }, // São Paulo
+  { x: 47, y: 30 }, // London
+  { x: 50, y: 33 }, // Berlin
+  { x: 46, y: 38 }, // Lisbon
+  { x: 51, y: 55 }, // Lagos
+  { x: 56, y: 48 }, // Cairo
+  { x: 60, y: 50 }, // Dubai
+  { x: 67, y: 52 }, // Mumbai
+  { x: 68, y: 47 }, // Delhi
+  { x: 76, y: 60 }, // Singapore
+  { x: 80, y: 45 }, // Shanghai
+  { x: 82, y: 43 }, // Seoul
+  { x: 85, y: 44 }, // Tokyo
+  { x: 88, y: 75 }, // Sydney
 ];
 
 /**
- * Floating callouts — positioned in % of the SVG viewBox so they hover
- * in ocean / empty regions. Each anchors to a target country/region.
+ * Floating callouts — positioned in % of the wrapper container.
+ * Each anchors to a target % point on the map image.
  */
 type Callout = {
   flag: string;
   country: string;
   count: string;
-  // Position of the callout box (in viewBox % units, 0-100)
-  cardX: number; // left edge %
-  cardY: number; // top edge %
-  // Target geo point (lng, lat) to draw the connector line to
-  targetLng: number;
-  targetLat: number;
+  cardX: number;
+  cardY: number;
+  // Target point on the map (% of map image)
+  targetX: number;
+  targetY: number;
   side: "left" | "right";
 };
 
@@ -71,9 +59,9 @@ const callouts: Callout[] = [
     country: "Canada",
     count: "720",
     cardX: -2,
-    cardY: 4,
-    targetLng: -100,
-    targetLat: 56,
+    cardY: 6,
+    targetX: 24,
+    targetY: 30,
     side: "left",
   },
   {
@@ -81,19 +69,19 @@ const callouts: Callout[] = [
     country: "United Kingdom",
     count: "590",
     cardX: 28,
-    cardY: -6,
-    targetLng: -2,
-    targetLat: 53,
+    cardY: -4,
+    targetX: 47,
+    targetY: 30,
     side: "left",
   },
   {
     flag: "🇮🇳",
     country: "India",
     count: "2,840",
-    cardX: 79,
+    cardX: 78,
     cardY: 8,
-    targetLng: 78,
-    targetLat: 22,
+    targetX: 68,
+    targetY: 50,
     side: "right",
   },
   {
@@ -101,9 +89,9 @@ const callouts: Callout[] = [
     country: "Brazil",
     count: "410",
     cardX: -2,
-    cardY: 70,
-    targetLng: -52,
-    targetLat: -10,
+    cardY: 72,
+    targetX: 33,
+    targetY: 70,
     side: "left",
   },
   {
@@ -112,8 +100,8 @@ const callouts: Callout[] = [
     count: "310",
     cardX: 78,
     cardY: 78,
-    targetLng: 134,
-    targetLat: -25,
+    targetX: 88,
+    targetY: 75,
     side: "right",
   },
 ];
@@ -166,35 +154,69 @@ export function LearnersWorld() {
           </h2>
         </div>
 
-        {/* Map + floating callouts container */}
+        {/* Map + callouts wrapper */}
         <div className="relative mx-auto mt-20 max-w-7xl px-2 sm:px-6 lg:px-12">
-          {/* Connector lines layer (sits under cards, over map) */}
+          {/* The map image */}
+          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[24px]">
+            <img
+              src={worldMapImg}
+              alt="World map showing learners across continents"
+              loading="lazy"
+              width={1920}
+              height={1080}
+              className="h-full w-full object-cover"
+            />
+
+            {/* Pin layer — positioned over the map image */}
+            <div className="pointer-events-none absolute inset-0">
+              {pins.map((p, i) => (
+                <div
+                  key={`pin-${i}`}
+                  className="absolute"
+                  style={{
+                    left: `${p.x}%`,
+                    top: `${p.y}%`,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  {inView && (
+                    <span
+                      className="absolute left-1/2 top-1/2 block h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                      style={{
+                        background: PIN_HALO,
+                        animation: `lw-pulse 3s ease-in-out ${0.15 * i}s infinite`,
+                      }}
+                    />
+                  )}
+                  <span
+                    className="relative block h-2.5 w-2.5 rounded-full"
+                    style={{
+                      background: PIN,
+                      boxShadow: `0 0 0 2px ${PIN_CORE}`,
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Connector lines — sit above map, below cards */}
           <svg
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute inset-0 z-10 h-full w-full"
+            className="pointer-events-none absolute inset-0 z-10 hidden h-full w-full lg:block"
             aria-hidden
           >
             {callouts.map((c, i) => {
-              // Map area sits roughly inside the container — convert geo → % of container.
-              // The map svg occupies the full inner area, so we use the same geo proj
-              // and convert MAP px → % of MAP_W / MAP_H.
-              const t = proj(c.targetLng, c.targetLat);
-              const tx = (t.x / MAP_W) * 100;
-              const ty = (t.y / MAP_H) * 100;
-
-              // Callout anchor point (where the line meets the card)
-              const ax =
-                c.side === "left" ? c.cardX + 22 : c.cardX + 0; // right edge of left cards / left edge of right cards
-              const ay = c.cardY + 12; // mid-height of card
-
+              const ax = c.side === "left" ? c.cardX + 22 : c.cardX;
+              const ay = c.cardY + 12;
               return (
                 <line
                   key={`line-${i}`}
                   x1={ax}
                   y1={ay}
-                  x2={tx}
-                  y2={ty}
+                  x2={c.targetX}
+                  y2={c.targetY}
                   stroke={LINE}
                   strokeWidth="0.18"
                   strokeDasharray="0.6 0.8"
@@ -208,54 +230,7 @@ export function LearnersWorld() {
             })}
           </svg>
 
-          {/* The map */}
-          <div className="relative">
-            <svg
-              viewBox={`0 0 ${MAP_W} ${MAP_H}`}
-              className="block h-auto w-full"
-              aria-hidden
-              style={{ background: PAPER, borderRadius: "20px" }}
-            >
-              <path
-                d={WORLD_LAND_PATH}
-                fill={LAND}
-                stroke={LAND_STROKE}
-                strokeWidth={0.4}
-                strokeLinejoin="round"
-              />
-              <g>
-                {cities.map((c, i) => {
-                  const { x, y } = proj(c.lng, c.lat);
-                  return (
-                    <g key={`city-${i}`}>
-                      {inView && (
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={11}
-                          fill={PIN_HALO}
-                          style={{
-                            transformOrigin: `${x}px ${y}px`,
-                            animation: `lw-pulse 3s ease-in-out ${0.15 * i}s infinite`,
-                          }}
-                        />
-                      )}
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={3.6}
-                        fill={PIN}
-                        stroke={PIN_CORE}
-                        strokeWidth={1.2}
-                      />
-                    </g>
-                  );
-                })}
-              </g>
-            </svg>
-          </div>
-
-          {/* Floating callout cards — hidden on small screens to avoid clutter */}
+          {/* Floating callout cards — desktop only */}
           <div className="pointer-events-none absolute inset-0 z-20 hidden lg:block">
             {callouts.map((c, i) => (
               <div
@@ -285,7 +260,7 @@ export function LearnersWorld() {
             ))}
           </div>
 
-          {/* Mobile-only: stacked summary below the map */}
+          {/* Mobile-only stacked summary */}
           <div className="mt-10 grid grid-cols-2 gap-3 lg:hidden">
             {callouts.map((c) => (
               <div
@@ -309,8 +284,8 @@ export function LearnersWorld() {
 
       <style>{`
         @keyframes lw-pulse {
-          0%, 100% { transform: scale(0.7); opacity: 0.55; }
-          50%      { transform: scale(1.8); opacity: 0; }
+          0%, 100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.55; }
+          50%      { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
         }
       `}</style>
     </section>
