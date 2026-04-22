@@ -65,7 +65,34 @@ const paidTools = [
 
 export function TryFreeSection() {
   return (
-    <section className="relative overflow-hidden bg-background py-20 sm:py-28">
+    <section className="relative overflow-hidden bg-paper-cream py-20 sm:py-28">
+      {/* White textured paper background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundColor: "oklch(0.99 0.003 90)",
+          backgroundImage: [
+            // soft warm vignette corners
+            "radial-gradient(ellipse at 0% 0%, oklch(0.96 0.02 75 / 0.55), transparent 55%)",
+            "radial-gradient(ellipse at 100% 100%, oklch(0.96 0.02 60 / 0.45), transparent 55%)",
+            // fine fiber noise (two layered dot grids offset)
+            "radial-gradient(circle at 1px 1px, oklch(0.55 0.02 80 / 0.07) 1px, transparent 0)",
+            "radial-gradient(circle at 1px 1px, oklch(0.55 0.02 80 / 0.05) 1px, transparent 0)",
+          ].join(","),
+          backgroundSize: "auto, auto, 18px 18px, 31px 31px",
+          backgroundPosition: "0 0, 0 0, 0 0, 7px 11px",
+        }}
+      />
+      {/* subtle horizontal grain lines */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent 0 3px, oklch(0.5 0.02 80 / 0.025) 3px 4px)",
+        }}
+      />
       <style>{`
         @keyframes tfs-wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-15deg)} 75%{transform:rotate(15deg)} }
         @keyframes tfs-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
