@@ -241,7 +241,7 @@ const blue = {
 function DashboardPage() {
   const [module, setModule] = useState<Module>("academic");
   const isAcademic = module === "academic";
-  const accent = isAcademic ? blue : sage;
+  
 
   // Editorial date line — looks like a publication's issue stamp
   const today = new Date();
