@@ -222,17 +222,7 @@ function StatCard({
         </div>
       </div>
 
-      <div
-        className="mt-6 font-display text-base font-black uppercase leading-tight tracking-[0.16em] sm:text-lg"
-        style={{
-          background: `linear-gradient(135deg, oklch(0.98 0.02 ${stat.hue}) 0%, oklch(0.85 0.18 ${stat.hue}) 55%, oklch(0.75 0.22 ${(stat.hue + 30) % 360}) 100%)`,
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          color: "transparent",
-          textShadow: "none",
-          filter: `drop-shadow(0 2px 14px oklch(0.7 0.22 ${stat.hue} / 0.35))`,
-        }}
-      >
+      <div className="mt-5 font-display text-[13px] font-bold uppercase tracking-[0.2em] text-white/85 sm:text-sm">
         {stat.label}
       </div>
     </div>
