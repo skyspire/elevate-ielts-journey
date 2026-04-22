@@ -54,6 +54,21 @@ type Feature = {
 
 const features: Feature[] = [
   {
+    key: "recent-exams",
+    title: "Recent Exam Questions",
+    description: {
+      academic: "Latest real Academic questions reported from recent test dates.",
+      general: "Latest real General Training questions from recent test dates.",
+    },
+    count: {
+      academic: { value: "Fresh", label: "from recent exams" },
+      general: { value: "Fresh", label: "from recent exams" },
+    },
+    tone: "rust",
+    icon: Flame,
+    highlighted: true,
+  },
+  {
     key: "writing",
     title: "Writing Samples",
     description: {
