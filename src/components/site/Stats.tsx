@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 
 const stats = [
   { target: 1300, suffix: "+", label: "Writing Questions", hue: 285 },
-  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 195 },
-  { target: 170, suffix: "+", label: "Cue Cards", hue: 70 },
-  { target: 4000, suffix: "+", label: "Active Users", hue: 15 },
+  { target: 4500, suffix: "+", label: "Speaking Questions", hue: 320 },
+  { target: 170, suffix: "+", label: "Cue Cards", hue: 55 },
+  { target: 4000, suffix: "+", label: "Active Users", hue: 25 },
 ];
 
 /* easeOutCubic — fast at start, gently decelerates */
@@ -56,28 +56,28 @@ export function Stats() {
       ref={sectionRef}
       className="relative isolate overflow-hidden py-20 sm:py-28"
     >
-      {/* Base deep gradient */}
+      {/* Base — deep indigo → plum → warm rose, bridges to the cream hero */}
       <div
         aria-hidden
         className="absolute inset-0 -z-30"
         style={{
           background:
-            "linear-gradient(180deg, oklch(0.18 0.06 285) 0%, oklch(0.16 0.07 250) 55%, oklch(0.18 0.08 220) 100%)",
+            "linear-gradient(180deg, oklch(0.22 0.07 280) 0%, oklch(0.22 0.09 320) 55%, oklch(0.26 0.1 25) 100%)",
         }}
       />
-      {/* Animated mesh blobs (indigo / teal / rose) */}
+      {/* Animated mesh blobs — brand-aligned hues */}
       <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
         <div
-          className="mesh-blob absolute -left-[10%] -top-[20%] h-[60vh] w-[60vh] rounded-full opacity-70 blur-3xl"
+          className="mesh-blob absolute -left-[10%] -top-[20%] h-[60vh] w-[60vh] rounded-full opacity-65 blur-3xl"
           style={{ background: "radial-gradient(circle, oklch(0.55 0.22 285 / 0.9), transparent 60%)" }}
         />
         <div
-          className="mesh-blob absolute right-[-15%] top-[10%] h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.65 0.18 195 / 0.85), transparent 60%)", animationDelay: "-7s" }}
+          className="mesh-blob absolute right-[-15%] top-[5%] h-[55vh] w-[55vh] rounded-full opacity-55 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.62 0.2 340 / 0.85), transparent 60%)", animationDelay: "-7s" }}
         />
         <div
-          className="mesh-blob absolute bottom-[-20%] left-[30%] h-[50vh] w-[50vh] rounded-full opacity-55 blur-3xl"
-          style={{ background: "radial-gradient(circle, oklch(0.6 0.2 15 / 0.8), transparent 60%)", animationDelay: "-14s" }}
+          className="mesh-blob absolute bottom-[-20%] left-[28%] h-[55vh] w-[55vh] rounded-full opacity-60 blur-3xl"
+          style={{ background: "radial-gradient(circle, oklch(0.65 0.2 35 / 0.85), transparent 60%)", animationDelay: "-14s" }}
         />
       </div>
       {/* Particle field */}
@@ -220,16 +220,19 @@ function StatCard({
         {/* Number centered inside the arc */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="font-display text-2xl font-extrabold tabular-nums tracking-tight text-white sm:text-3xl"
-            style={{ textShadow: `0 0 18px oklch(0.7 0.2 ${stat.hue} / 0.45)` }}
+            className="font-display text-3xl font-black tabular-nums tracking-tight text-white sm:text-4xl"
+            style={{ textShadow: `0 2px 24px oklch(0.7 0.22 ${stat.hue} / 0.55), 0 0 1px oklch(1 0 0 / 0.4)` }}
           >
             {value.toLocaleString()}
-            <span style={{ color: `oklch(0.85 0.16 ${stat.hue})` }}>{stat.suffix}</span>
+            <span style={{ color: `oklch(0.88 0.18 ${stat.hue})` }}>{stat.suffix}</span>
           </span>
         </div>
       </div>
 
-      <div className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70 sm:text-xs">
+      <div
+        className="mt-5 font-display text-sm font-bold uppercase tracking-[0.22em] text-white sm:text-[15px]"
+        style={{ textShadow: "0 1px 12px oklch(0.2 0.05 280 / 0.6)" }}
+      >
         {stat.label}
       </div>
     </div>
