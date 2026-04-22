@@ -603,69 +603,54 @@ function FeatureCard({
 
   const inner = (
     <div className="relative h-full w-full">
-      {/* Bold jewel-tone card with paper-grain texture + letterpress title.
-          tone.front = deep jewel fill, tone.deep = light cream ink. */}
+      {/* Soft squircle (Apple-icon-style ~24px corners) with quiet scholarly fill,
+          fine paper grain, hairline tonal border, and gentle drop shadow. */}
       <span
-        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[8px] transition-transform duration-300 ease-out group-hover:-translate-y-0.5 ${
+        className={`relative flex h-full w-full flex-col overflow-hidden rounded-[24px] transition-all duration-300 ease-out group-hover:-translate-y-1 ${
           isHighlighted ? "p-4 sm:p-5" : "p-3.5 sm:p-4"
         }`}
         style={{
           background: tone.front,
-          border: `1px solid color-mix(in oklab, ${tone.deep} 28%, ${tone.front})`,
+          border: `1px solid color-mix(in oklab, ${tone.deep} 22%, ${tone.front})`,
           boxShadow: [
-            "0 1px 2px oklch(0.15 0.02 60 / 0.18)",
-            "0 8px 18px -8px oklch(0.15 0.02 60 / 0.35)",
-            "inset 0 1px 0 oklch(1 0 0 / 0.10)",
-            "inset 0 -1px 0 oklch(0 0 0 / 0.18)",
+            "0 1px 1px oklch(0.20 0.04 60 / 0.06)",
+            "0 6px 14px -8px oklch(0.20 0.04 60 / 0.18)",
+            "inset 0 1px 0 oklch(1 0 0 / 0.40)",
           ].join(", "),
         }}
       >
-        {/* Paper grain texture — fine radial dot weave for tooth */}
+        {/* Fine paper grain — very subtle, just enough tooth */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 mix-blend-overlay"
+          className="pointer-events-none absolute inset-0 mix-blend-multiply"
           style={{
             backgroundImage:
-              "radial-gradient(oklch(1 0 0 / 0.18) 0.6px, transparent 0.8px), radial-gradient(oklch(0 0 0 / 0.22) 0.5px, transparent 0.7px)",
-            backgroundSize: "3px 3px, 5px 5px",
-            backgroundPosition: "0 0, 1.5px 1.5px",
-            opacity: 0.55,
+              "radial-gradient(oklch(0 0 0 / 0.15) 0.5px, transparent 0.7px)",
+            backgroundSize: "3px 3px",
+            opacity: 0.4,
           }}
         />
 
-        {/* Soft vignette — darkens corners for premium card-stock feel */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 55%, oklch(0 0 0 / 0.18) 100%)",
-          }}
-        />
-
-        {/* Animated motif — drawn in the light "ink" of the card */}
+        {/* Animated motif — drawn in the deep ink of the card */}
         <CardMotif
           kind={feature.key as Parameters<typeof CardMotif>[0]["kind"]}
           color={tone.deep}
           className="relative z-[1] opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
         />
 
-        {/* Title + meta — letterpress cream-ink on deep jewel ground */}
+        {/* Title + meta — quiet ink on muted ground */}
         <span className="relative z-[1] mt-auto flex flex-col items-center gap-0.5">
           <h3
             className={`text-center font-display font-extrabold leading-tight tracking-tight ${
               isHighlighted ? "text-sm sm:text-base" : "text-[12px] sm:text-[13px]"
             }`}
-            style={{
-              color: tone.deep,
-              textShadow: "0 1px 0 oklch(0 0 0 / 0.30)",
-            }}
+            style={{ color: tone.deep }}
           >
             {feature.title}
           </h3>
           <span
             className="text-center font-semibold uppercase leading-none tracking-[0.1em] text-[8.5px] sm:text-[9.5px]"
-            style={{ color: `color-mix(in oklab, ${tone.deep} 70%, transparent)` }}
+            style={{ color: `color-mix(in oklab, ${tone.deep} 65%, transparent)` }}
           >
             <span className="font-black">{feature.count[module].value}</span>
             <span className="opacity-80"> · {feature.count[module].label}</span>
