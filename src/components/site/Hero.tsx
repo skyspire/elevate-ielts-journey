@@ -37,11 +37,7 @@ export function Hero() {
       <HeroDoodles />
 
       <div className="container-page relative z-10 flex flex-col items-center py-24 text-center md:py-32 lg:py-40">
-        {/* Eyebrow */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground shadow-soft backdrop-blur">
-          <Sparkles className="h-3.5 w-3.5 text-brand" />
-          Hand-curated • Updated weekly
-        </div>
+        {/* Headline */}
 
         <h1 className="relative font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
           No need to buy{" "}
