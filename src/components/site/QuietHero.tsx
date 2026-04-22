@@ -1,21 +1,31 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import bookCoral from "@/assets/hero-objects/book-coral.png";
+import bookNavy from "@/assets/hero-objects/book-navy.png";
+import bookStack from "@/assets/hero-objects/book-stack.png";
+import notebookOpen from "@/assets/hero-objects/notebook-open.png";
+import notebookKraft from "@/assets/hero-objects/notebook-kraft.png";
+import stickyScore from "@/assets/hero-objects/sticky-score.png";
+import stickyPink from "@/assets/hero-objects/sticky-pink.png";
+import flashcardVocab from "@/assets/hero-objects/flashcard-vocab.png";
+import pencil from "@/assets/hero-objects/pencil.png";
+import highlighter from "@/assets/hero-objects/highlighter.png";
+import examPaper from "@/assets/hero-objects/exam-paper.png";
+import paperclipNotes from "@/assets/hero-objects/paperclip-notes.png";
 
 /**
- * QuietHero — Neat, calm, editorial hero in the same spirit as LearnersWorld.
+ * QuietHero — Real 3D study objects floating around a calm headline.
  *
- * Recipe (matches LearnersWorld DNA):
- *  - Lots of breathing room, centered composition
- *  - One bold statement (the headline) sits like the "70,000+"
- *  - One handwritten accent above (eyebrow) + one quiet supporting line
- *  - Soft cream paper background — no shouting gradients
- *  - Gentle peripheral drift (paper snippets) — never near the text
+ * Same DNA as LearnersWorld: bold centered statement + photographic
+ * objects gently drifting around the periphery on cream paper.
+ * Here, instead of human faces, it's Apple-style 3D rendered IELTS
+ * study material: books, notebooks, sticky notes, pencils, flashcards.
  */
 export function QuietHero() {
   return (
     <section className="relative isolate overflow-hidden bg-paper-cream">
-      {/* Quiet peripheral drift — far from text, soft & slow */}
-      <PeripheralPapers />
+      {/* Floating 3D study objects — peripheral, never crowding text */}
+      <FloatingObjects />
 
       <div className="container-page relative z-10 flex flex-col items-center py-28 text-center md:py-36 lg:py-44">
         {/* Handwritten eyebrow */}
@@ -76,90 +86,96 @@ export function QuietHero() {
 }
 
 /* ============================================================
-   Peripheral paper snippets — drift far from the text.
-   Same calm motion soul as LearnersWorld avatars.
+   Real 3D objects, scattered at the edges, drifting gently.
+   Each has its own size, position, rotation, delay, and duration
+   so the motion feels organic — like LearnersWorld avatars.
    ============================================================ */
-function PeripheralPapers() {
-  // Positioned only at the edges — never near the centered headline.
-  const papers = [
-    { top: "12%", left: "4%", rotate: -8, w: 88, delay: "0s", dur: "11s" },
-    { top: "22%", right: "5%", rotate: 6, w: 96, delay: "1.4s", dur: "13s" },
-    { bottom: "16%", left: "6%", rotate: 4, w: 92, delay: "0.6s", dur: "12s" },
-    { bottom: "22%", right: "7%", rotate: -6, w: 84, delay: "2.1s", dur: "14s" },
-    { top: "48%", left: "2%", rotate: -3, w: 70, delay: "1.1s", dur: "15s" },
-    { top: "52%", right: "2%", rotate: 5, w: 74, delay: "0.3s", dur: "12.5s" },
-  ];
+type FloatItem = {
+  src: string;
+  alt: string;
+  size: number;
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  rotate: number;
+  delay: string;
+  dur: string;
+  hideBelow?: "md" | "lg";
+};
 
+const ITEMS: FloatItem[] = [
+  // ---- Far left column ----
+  { src: bookNavy, alt: "Cambridge IELTS book", size: 150, top: "8%", left: "3%", rotate: -12, delay: "0s", dur: "11s" },
+  { src: notebookOpen, alt: "Open notebook with notes", size: 170, top: "44%", left: "1%", rotate: 8, delay: "1.6s", dur: "13s" },
+  { src: pencil, alt: "Pencil", size: 110, bottom: "12%", left: "8%", rotate: -25, delay: "0.8s", dur: "10s" },
+  { src: stickyScore, alt: "Sticky note 8.5", size: 95, top: "26%", left: "12%", rotate: -8, delay: "2.2s", dur: "12s", hideBelow: "lg" },
+
+  // ---- Far right column ----
+  { src: bookCoral, alt: "IELTS book", size: 150, top: "10%", right: "4%", rotate: 10, delay: "0.5s", dur: "12s" },
+  { src: bookStack, alt: "Stack of IELTS books", size: 180, bottom: "8%", right: "3%", rotate: -6, delay: "1.2s", dur: "14s" },
+  { src: highlighter, alt: "Highlighter", size: 110, top: "42%", right: "2%", rotate: 35, delay: "2s", dur: "11s" },
+  { src: stickyPink, alt: "Sticky note Speaking", size: 100, top: "22%", right: "12%", rotate: 12, delay: "0.3s", dur: "13s", hideBelow: "lg" },
+
+  // ---- Mid-distance accents (md+) ----
+  { src: flashcardVocab, alt: "Vocabulary flashcard", size: 120, bottom: "30%", left: "14%", rotate: -10, delay: "1.8s", dur: "12.5s", hideBelow: "lg" },
+  { src: examPaper, alt: "Exam paper Nov 2025", size: 130, bottom: "26%", right: "14%", rotate: 8, delay: "0.9s", dur: "13.5s", hideBelow: "lg" },
+  { src: notebookKraft, alt: "Kraft notebook", size: 110, top: "62%", left: "6%", rotate: -4, delay: "2.6s", dur: "15s", hideBelow: "md" },
+  { src: paperclipNotes, alt: "Paper clip with notes", size: 100, top: "60%", right: "8%", rotate: 14, delay: "1.4s", dur: "14s", hideBelow: "md" },
+];
+
+function FloatingObjects() {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 hidden lg:block"
-    >
-      {papers.map((p, i) => (
-        <div
-          key={i}
-          className="qh-float absolute"
-          style={{
-            top: p.top,
-            bottom: p.bottom,
-            left: p.left,
-            right: p.right,
-            width: `${p.w}px`,
-            ["--rot" as any]: `${p.rotate}deg`,
-            ["--dur" as any]: p.dur,
-            animationDelay: p.delay,
-          }}
-        >
-          <PaperSnippet variant={i % 3} />
-        </div>
-      ))}
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      {ITEMS.map((item, i) => {
+        const hideClass =
+          item.hideBelow === "lg"
+            ? "hidden lg:block"
+            : item.hideBelow === "md"
+              ? "hidden md:block"
+              : "hidden sm:block";
+        return (
+          <div
+            key={i}
+            className={`qh-float absolute ${hideClass}`}
+            style={{
+              top: item.top,
+              bottom: item.bottom,
+              left: item.left,
+              right: item.right,
+              width: `${item.size}px`,
+              ["--rot" as any]: `${item.rotate}deg`,
+              ["--dur" as any]: item.dur,
+              animationDelay: item.delay,
+            }}
+          >
+            <img
+              src={item.src}
+              alt={item.alt}
+              loading="lazy"
+              width={item.size}
+              height={item.size}
+              className="h-auto w-full select-none"
+              draggable={false}
+            />
+          </div>
+        );
+      })}
 
       <style>{`
         @keyframes qh-float {
           0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
-          50%      { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) + 1.5deg)); }
+          50%      { transform: translateY(-14px) rotate(calc(var(--rot, 0deg) + 2deg)); }
         }
         .qh-float {
           animation: qh-float var(--dur, 12s) ease-in-out infinite;
-          opacity: 0.55;
-          filter: drop-shadow(0 6px 14px oklch(0.4 0.05 60 / 0.12));
+          filter: drop-shadow(0 14px 28px oklch(0.4 0.05 60 / 0.18));
+          will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .qh-float { animation: none; }
         }
       `}</style>
     </div>
-  );
-}
-
-function PaperSnippet({ variant }: { variant: number }) {
-  // Three quiet variants: ruled note, sticky note, index card.
-  if (variant === 0) {
-    // Ruled notebook page
-    return (
-      <svg viewBox="0 0 100 80" className="h-auto w-full">
-        <rect x="2" y="2" width="96" height="76" rx="3" fill="oklch(0.985 0.012 75)" stroke="oklch(0.4 0.05 60 / 0.25)" strokeWidth="1" />
-        <line x1="14" y1="2" x2="14" y2="78" stroke="oklch(0.6 0.2 30 / 0.4)" strokeWidth="0.8" />
-        {[20, 30, 40, 50, 60, 70].map((y) => (
-          <line key={y} x1="18" y1={y} x2="92" y2={y} stroke="oklch(0.55 0.05 250 / 0.2)" strokeWidth="0.5" />
-        ))}
-        <path d="M20 24 L60 24 M20 34 L70 34 M20 44 L55 44" stroke="oklch(0.4 0.06 60 / 0.5)" strokeWidth="1" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  if (variant === 1) {
-    // Sticky note
-    return (
-      <svg viewBox="0 0 100 90" className="h-auto w-full">
-        <rect x="3" y="3" width="94" height="84" fill="oklch(0.94 0.08 95)" stroke="oklch(0.4 0.05 60 / 0.15)" strokeWidth="0.5" />
-        <path d="M3 3 L14 3 L3 14 Z" fill="oklch(0.88 0.08 95)" />
-        <path d="M16 26 L80 26 M16 38 L72 38 M16 50 L78 50 M16 62 L60 62" stroke="oklch(0.4 0.06 60 / 0.55)" strokeWidth="1.2" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  // Index card with a band score
-  return (
-    <svg viewBox="0 0 100 70" className="h-auto w-full">
-      <rect x="2" y="2" width="96" height="66" rx="2" fill="oklch(0.99 0.005 250)" stroke="oklch(0.4 0.05 60 / 0.25)" strokeWidth="1" />
-      <line x1="2" y1="18" x2="98" y2="18" stroke="oklch(0.6 0.2 30 / 0.5)" strokeWidth="0.7" />
-      <text x="50" y="48" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="22" fontWeight="800" fill="oklch(0.58 0.17 255)">8.5</text>
-    </svg>
   );
 }
