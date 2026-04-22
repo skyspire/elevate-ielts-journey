@@ -746,3 +746,47 @@
   .velvet-stars::before { opacity: 0.30; }
   .velvet-stars::after  { opacity: 0.35; }
 }
+
+/* ============================================================ */
+/* Study notes background animations — handwritten margin notes  */
+/* ============================================================ */
+@keyframes study-note-breathe {
+  0%, 100% { opacity: 0;    transform: translateY(4px) rotate(var(--r, 0deg)); }
+  15%      { opacity: 1;    }
+  70%      { opacity: 1;    transform: translateY(-2px); }
+  100%     { opacity: 0;    }
+}
+.study-note {
+  /* The element already has a transform: rotate(...) inline.
+     The animation overrides during keyframes, so we keep it simple:
+     a gentle fade-in/out cycle that doesn't reset the rotation. */
+  animation: study-note-fade 12s ease-in-out infinite;
+  will-change: opacity;
+}
+@keyframes study-note-fade {
+  0%, 100% { opacity: 0;    }
+  10%      { opacity: 1;    }
+  70%      { opacity: 0.95; }
+  90%      { opacity: 0;    }
+}
+
+@keyframes study-highlighter-sweep {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+  10%  { opacity: 1; }
+  35%  { clip-path: inset(0 0 0 0);    opacity: 1; }
+  75%  { clip-path: inset(0 0 0 0);    opacity: 1; }
+  100% { clip-path: inset(0 0 0 0);    opacity: 0; }
+}
+.study-highlighter {
+  animation: study-highlighter-sweep 14s ease-in-out infinite;
+  will-change: clip-path, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .study-note,
+  .study-highlighter {
+    animation: none !important;
+    opacity: 0.7;
+  }
+  .study-highlighter { clip-path: none !important; }
+}
