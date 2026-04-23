@@ -196,7 +196,9 @@ function ReaderPage() {
 
   const theme = THEMES[prefs.theme];
   const fs = FONT_SIZES[prefs.fontSize];
-  const progressPct = ((current + 1) / total) * 100;
+
+  if (!book) return null;
+  const progressPct = total > 0 ? ((current + 1) / total) * 100 : 0;
 
   return (
     <div
