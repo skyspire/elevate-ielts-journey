@@ -98,21 +98,6 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
-  // Auto-pagination: how many viewport-sized slices each source page becomes.
-  const [leftSubCount, setLeftSubCount] = useState(1);
-  const [rightSubCount, setRightSubCount] = useState(1);
-  const [subIndex, setSubIndex] = useState(0);
-
-  // Two-page spread on desktop
-  const [isWide, setIsWide] = useState(false);
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setIsWide(mql.matches);
-    sync();
-    mql.addEventListener("change", sync);
-    return () => mql.removeEventListener("change", sync);
-  }, []);
-
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
   const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
@@ -127,38 +112,20 @@ function ReaderPage() {
   }, [total, state.currentPage, setState]);
 
   const leftPage = flat[current] ?? flat[0];
-  const rightPage = isWide ? flat[current + 1] : undefined;
-
-  // Reset sub-page when the source page or layout changes.
-  useEffect(() => {
-    setSubIndex(0);
-  }, [current, isWide]);
-
-  const maxSubCount = Math.max(leftSubCount, isWide ? rightSubCount : 1);
 
   const goPrev = useCallback(() => {
-    setSubIndex((idx) => {
-      if (idx > 0) return idx - 1;
-      // Move to previous source page; jump to its last sub-page after measure.
-      setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
-      return 0;
-    });
-  }, [isWide, setState]);
+    setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - 1) }));
+  }, [setState]);
 
   const goNext = useCallback(() => {
-    setSubIndex((idx) => {
-      if (idx + 1 < maxSubCount) return idx + 1;
-      setState((s) => {
-        const step = isWide ? 2 : 1;
-        const next = total > 0 ? Math.min(total - 1, s.currentPage + step) : 0;
-        if (!user && next >= freePages) {
-          return { ...s, currentPage: Math.max(0, freePages - 1) };
-        }
-        return { ...s, currentPage: next };
-      });
-      return 0;
+    setState((s) => {
+      const next = total > 0 ? Math.min(total - 1, s.currentPage + 1) : 0;
+      if (!user && next >= freePages) {
+        return { ...s, currentPage: Math.max(0, freePages - 1) };
+      }
+      return { ...s, currentPage: next };
     });
-  }, [isWide, setState, total, user, freePages, maxSubCount]);
+  }, [setState, total, user, freePages]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -342,35 +309,15 @@ function ReaderPage() {
       )}
 
       {/* Reader area */}
-      <div className="relative mx-auto max-w-7xl px-3 pb-6 pt-3 sm:px-4 sm:pt-4">
-        <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-0">
-          {/* Left page */}
+      <div className="relative mx-auto max-w-3xl px-3 pb-4 pt-3 sm:px-4 sm:pt-4">
+        <div className="relative">
           <PageView
             page={leftPage}
             theme={theme}
             fs={fs}
             highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
             onMouseUp={handleMouseUp(leftPage.index)}
-            side="left"
-            isWide={isWide}
-            subIndex={Math.min(subIndex, leftSubCount - 1)}
-            onSubCountChange={setLeftSubCount}
           />
-          {/* Right page (desktop) */}
-          {isWide && rightPage && (
-            <PageView
-              page={rightPage}
-              theme={theme}
-              fs={fs}
-              highlights={state.highlights.filter((h) => h.pageIndex === rightPage.index)}
-              onMouseUp={handleMouseUp(rightPage.index)}
-              side="right"
-              isWide={isWide}
-              locked={!user && rightPage.index >= freePages}
-              subIndex={Math.min(subIndex, rightSubCount - 1)}
-              onSubCountChange={setRightSubCount}
-            />
-          )}
 
           {/* Edge overlay arrows */}
           <button
@@ -427,12 +374,10 @@ function ReaderPage() {
 
         {/* Slim page counter */}
         <p
-          className="mt-3 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
+          className="mt-2 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
           style={{ color: theme.muted }}
         >
-          Page {current + 1}
-          {isWide && rightPage ? `–${current + 2}` : ""} of {total}
-          {maxSubCount > 1 ? ` · ${subIndex + 1}/${maxSubCount}` : ""}
+          Page {current + 1} of {total}
         </p>
       </div>
 
@@ -638,50 +583,50 @@ function PageView({
   fs,
   highlights,
   onMouseUp,
-  side,
-  isWide,
   locked,
-  subIndex,
-  onSubCountChange,
 }: {
   page: { content: string; index: number; chapterTitle: string };
   theme: typeof THEMES[keyof typeof THEMES];
   fs: typeof FONT_SIZES[keyof typeof FONT_SIZES];
   highlights: Highlight[];
   onMouseUp: () => void;
-  side: "left" | "right";
-  isWide: boolean;
   locked?: boolean;
-  subIndex: number;
-  onSubCountChange: (count: number) => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
-  const [cardHeight, setCardHeight] = useState(0);
-  const [contentHeight, setContentHeight] = useState(0);
+  const [scale, setScale] = useState(1);
 
-  // Measure card + content; recompute slice count whenever they change.
+  // Auto-shrink: measure intrinsic content vs available card area, scale down to fit.
   useEffect(() => {
     if (!cardRef.current || !innerRef.current) return;
+    const card = cardRef.current;
+    const inner = innerRef.current;
+
     const measure = () => {
-      const ch = cardRef.current?.clientHeight ?? 0;
-      const ih = innerRef.current?.scrollHeight ?? 0;
-      setCardHeight(ch);
-      setContentHeight(ih);
+      // Reset to natural size before measuring
+      inner.style.transform = "scale(1)";
+      inner.style.width = "100%";
+      const cardH = card.clientHeight;
+      const cardW = card.clientWidth;
+      const innerH = inner.scrollHeight;
+      const innerW = inner.scrollWidth;
+      if (cardH === 0 || innerH === 0) return;
+      // Fit by height; allow scale up to 1 (never enlarge)
+      const heightScale = cardH / innerH;
+      const widthScale = cardW / Math.max(innerW, 1);
+      const fit = Math.min(1, heightScale, widthScale);
+      // Floor so 12px text remains readable on tiny screens.
+      // Approximate: base font ~14px (text-sm) * 0.6 ≈ 8.4px — clamp scale at 0.6
+      const next = Math.max(0.6, fit);
+      setScale(next);
     };
+
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(cardRef.current);
-    ro.observe(innerRef.current);
+    ro.observe(card);
+    ro.observe(inner);
     return () => ro.disconnect();
   }, [page.content, fs]);
-
-  const slices = cardHeight > 0 ? Math.max(1, Math.ceil(contentHeight / cardHeight)) : 1;
-  useEffect(() => {
-    onSubCountChange(slices);
-  }, [slices, onSubCountChange]);
-
-  const safeIndex = Math.min(Math.max(subIndex, 0), slices - 1);
 
   const lines = page.content.split("\n");
 
@@ -728,14 +673,11 @@ function PageView({
     <div
       ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative overflow-hidden rounded-lg p-6 sm:p-10"
+      className="relative overflow-hidden rounded-lg p-5 sm:p-8"
       style={{
         background: theme.page,
-        boxShadow:
-          side === "left"
-            ? "inset -8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)"
-            : "inset 8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
-        borderRadius: isWide ? (side === "left" ? "8px 0 0 8px" : "0 8px 8px 0") : "8px",
+        boxShadow: "0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
+        borderRadius: "8px",
         height: "calc(100dvh - 9.5rem)",
         maxHeight: "calc(100dvh - 9.5rem)",
       }}
@@ -750,13 +692,15 @@ function PageView({
       ) : (
         <article
           ref={innerRef}
-          className="will-change-transform transition-transform duration-300"
+          className="origin-top-left will-change-transform"
           style={{
             fontFamily: "'Playfair Display', serif",
             color: theme.text,
-            transform: `translateY(-${safeIndex * cardHeight}px)`,
+            transform: `scale(${scale})`,
+            width: `${100 / scale}%`,
           }}
         >
+
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
