@@ -83,8 +83,18 @@ function QuestionTypeEditor() {
           categoryKey={type.id}
           defaultRecord={WRITING_DEFAULTS}
           placeholder="Type the full essay prompt or letter brief…"
+          enableAnswers
         />
       ) : (
+        <TopicListEditor
+          title={title}
+          description={description}
+          breadcrumb={breadcrumb}
+          storageKey={SPEAKING_TOPICS_KEY}
+          categoryKey={type.id}
+          defaultRecord={speakingTopicsByCategory}
+        />
+      )}
         <TopicListEditor
           title={title}
           description={description}
