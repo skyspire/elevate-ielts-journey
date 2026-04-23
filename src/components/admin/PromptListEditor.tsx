@@ -38,6 +38,8 @@ type StringListEditorProps = {
   defaultRecord: Record<string, string[]>;
   /** Placeholder for the new-item textarea. */
   placeholder?: string;
+  /** When true, each row gets an "Edit answer" toggle that opens the WritingAnswerEditor. */
+  enableAnswers?: boolean;
 };
 
 export function PromptListEditor({
