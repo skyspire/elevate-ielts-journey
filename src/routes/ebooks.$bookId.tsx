@@ -353,6 +353,8 @@ function ReaderPage() {
             onMouseUp={handleMouseUp(leftPage.index)}
             side="left"
             isWide={isWide}
+            subIndex={Math.min(subIndex, leftSubCount - 1)}
+            onSubCountChange={setLeftSubCount}
           />
           {/* Right page (desktop) */}
           {isWide && rightPage && (
@@ -365,6 +367,8 @@ function ReaderPage() {
               side="right"
               isWide={isWide}
               locked={!user && rightPage.index >= freePages}
+              subIndex={Math.min(subIndex, rightSubCount - 1)}
+              onSubCountChange={setRightSubCount}
             />
           )}
 
