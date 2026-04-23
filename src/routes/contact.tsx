@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Mail, MapPin, Clock, Building2 } from "lucide-react";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { CONTACT_KEY, CONTACT_DEFAULT } from "@/lib/admin/defaults";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -48,6 +50,7 @@ function Row({
 }
 
 function ContactPage() {
+  const c = useCmsSection(CONTACT_KEY, CONTACT_DEFAULT);
   return (
     <div className="min-h-screen bg-background">
       <Header />
