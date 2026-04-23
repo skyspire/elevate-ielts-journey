@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PredictionsRouteImport } from './routes/predictions'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -60,6 +62,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
   id: '/recent-exam-questions',
   path: '/recent-exam-questions',
@@ -73,6 +80,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -264,9 +276,11 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/admin/activity': typeof AdminActivityRoute
@@ -305,9 +319,11 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/admin/activity': typeof AdminActivityRoute
@@ -348,9 +364,11 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/admin/activity': typeof AdminActivityRoute
@@ -392,9 +410,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/login'
     | '/predictions'
     | '/privacy'
     | '/recent-exam-questions'
+    | '/signup'
     | '/terms'
     | '/vocabulary'
     | '/admin/activity'
@@ -433,9 +453,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/login'
     | '/predictions'
     | '/privacy'
     | '/recent-exam-questions'
+    | '/signup'
     | '/terms'
     | '/vocabulary'
     | '/admin/activity'
@@ -475,9 +497,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/login'
     | '/predictions'
     | '/privacy'
     | '/recent-exam-questions'
+    | '/signup'
     | '/terms'
     | '/vocabulary'
     | '/admin/activity'
@@ -518,9 +542,11 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRoute
   FaqRoute: typeof FaqRoute
+  LoginRoute: typeof LoginRoute
   PredictionsRoute: typeof PredictionsRoute
   PrivacyRoute: typeof PrivacyRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
+  SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
@@ -545,6 +571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recent-exam-questions': {
       id: '/recent-exam-questions'
       path: '/recent-exam-questions'
@@ -564,6 +597,13 @@ declare module '@tanstack/react-router' {
       path: '/predictions'
       fullPath: '/predictions'
       preLoaderRoute: typeof PredictionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -890,9 +930,11 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRoute,
   FaqRoute: FaqRoute,
+  LoginRoute: LoginRoute,
   PredictionsRoute: PredictionsRoute,
   PrivacyRoute: PrivacyRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
+  SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
@@ -903,3 +945,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
