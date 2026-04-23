@@ -17,6 +17,8 @@ export type WritingAnswerOverride = {
   bandScore?: string;
   wordCount?: number;
   paragraphs?: AnswerParagraph[];
+  /** Optional question-image (base64). Used for Task 1 charts/maps. */
+  imageDataUrl?: string;
 };
 
 export type WritingAnswersOverrides = Record<string, WritingAnswerOverride>;
