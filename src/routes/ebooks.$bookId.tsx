@@ -206,6 +206,7 @@ function ReaderPage() {
   const fs = FONT_SIZES[prefs.fontSize];
 
   if (!book) return null;
+  if (!leftPage) return null;
   const progressPct = total > 0 ? ((current + 1) / total) * 100 : 0;
 
   return (
