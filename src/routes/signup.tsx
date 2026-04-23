@@ -78,7 +78,7 @@ function SignupPage() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2.5">
         <div>
           <Label htmlFor="name">Full name</Label>
           <Input
@@ -88,7 +88,7 @@ function SignupPage() {
             placeholder="Priya Ramaswamy"
             required
             autoComplete="name"
-            className="mt-1.5 h-11"
+            className="mt-1 h-9"
           />
         </div>
         <div>
@@ -101,12 +101,12 @@ function SignupPage() {
             placeholder="you@example.com"
             required
             autoComplete="email"
-            className="mt-1.5 h-11"
+            className="mt-1 h-9"
           />
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
-          <div className="relative mt-1.5">
+          <div className="relative mt-1">
             <Input
               id="password"
               type={showPw ? "text" : "password"}
@@ -114,7 +114,7 @@ function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="h-11 pr-10"
+              className="h-9 pr-10"
             />
             <button
               type="button"
@@ -126,19 +126,16 @@ function SignupPage() {
             </button>
           </div>
 
-          {/* Password strength checklist */}
-          <ul className="mt-2 grid grid-cols-3 gap-1.5 text-[11px]">
+          <ul className="mt-1.5 grid grid-cols-3 gap-1.5 text-[10px]">
             {[
-              { ok: checks.length, label: "8+ characters" },
+              { ok: checks.length, label: "8+ chars" },
               { ok: checks.upper, label: "1 uppercase" },
               { ok: checks.number, label: "1 number" },
             ].map((c) => (
               <li
                 key={c.label}
-                className={`flex items-center gap-1 rounded-md px-2 py-1 transition ${
-                  c.ok
-                    ? "bg-primary/10 text-primary"
-                    : "bg-muted/50 text-muted-foreground"
+                className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 transition ${
+                  c.ok ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground"
                 }`}
               >
                 <Check className={`h-3 w-3 ${c.ok ? "opacity-100" : "opacity-30"}`} />
@@ -148,7 +145,7 @@ function SignupPage() {
           </ul>
         </div>
 
-        <label className="flex cursor-pointer select-none items-start gap-2 text-sm text-muted-foreground">
+        <label className="flex cursor-pointer select-none items-start gap-2 text-xs text-muted-foreground">
           <input
             type="checkbox"
             checked={agree}
@@ -169,18 +166,18 @@ function SignupPage() {
         </label>
 
         {error && (
-          <div className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-start gap-2 rounded-md bg-destructive/10 p-2 text-xs text-destructive">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <Button type="submit" className="h-11 w-full text-[15px] font-semibold">
+        <Button type="submit" className="h-10 w-full text-[15px] font-semibold">
           Create my free account
         </Button>
       </form>
 
-      <div className="my-6 flex items-center gap-3">
+      <div className="my-3 flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
         <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
           or continue with
@@ -189,12 +186,6 @@ function SignupPage() {
       </div>
 
       <SocialAuthButtons mode="signup" />
-
-      <p className="mt-6 rounded-md border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
-        ⚠️ <strong className="text-foreground">Prototype:</strong> data lives in your browser only.
-        To activate real authentication (Google, Apple, magic link, password reset), enable Lovable
-        Cloud.
-      </p>
     </AuthSplitLayout>
   );
 }
