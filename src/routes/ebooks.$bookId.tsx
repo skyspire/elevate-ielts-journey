@@ -127,6 +127,13 @@ function ReaderPage() {
     };
   }, [mounted]);
 
+  const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
+  const total = flat.length;
+  const savedPage = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
+  const current = mounted ? savedPage : 0;
+  const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
+  const isLocked = !!book && !user && current >= freePages;
+
   // Self-heal stale localStorage if the saved page is out of range for the new book content.
   useEffect(() => {
     if (total > 0 && state.currentPage > total - 1) {
