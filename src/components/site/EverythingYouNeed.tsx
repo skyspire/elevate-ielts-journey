@@ -111,7 +111,10 @@ export function EverythingYouNeed() {
 
       <div className="container-page relative">
         {/* Header */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="relative mx-auto max-w-3xl text-center">
+          {/* Wax seal stamp — top right, close to content */}
+          <WaxSealStamp />
+
           <h2 className="font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Everything you need to hit{" "}
             <span
@@ -142,6 +145,80 @@ export function EverythingYouNeed() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------- Wax seal stamp that drops in on scroll ---------- */
+function WaxSealStamp() {
+  return (
+    <motion.div
+      aria-hidden
+      initial={{ opacity: 0, scale: 0.4, rotate: -35, y: -30 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: -14, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{
+        type: "spring",
+        stiffness: 220,
+        damping: 14,
+        mass: 0.9,
+        delay: 0.15,
+      }}
+      className="pointer-events-none absolute -top-4 right-0 z-10 sm:-top-6 sm:-right-2 md:-right-8"
+      style={{ transformOrigin: "center center" }}
+    >
+      <div
+        className="relative flex h-20 w-20 items-center justify-center rounded-full sm:h-24 sm:w-24"
+        style={{
+          background:
+            "radial-gradient(circle at 32% 28%, oklch(0.55 0.16 15) 0%, oklch(0.4 0.18 18) 45%, oklch(0.28 0.14 20) 100%)",
+          boxShadow:
+            "0 10px 22px -8px oklch(0.25 0.14 20 / 0.55), inset 0 2px 3px oklch(1 0 0 / 0.25), inset 0 -6px 12px oklch(0.18 0.1 20 / 0.6), inset 0 0 0 1px oklch(0.22 0.12 20 / 0.4)",
+        }}
+      >
+        {/* Inner ring */}
+        <div
+          className="absolute inset-2 rounded-full"
+          style={{
+            border: "1.5px dashed oklch(0.95 0.04 60 / 0.55)",
+          }}
+        />
+        {/* Glossy highlight */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at 30% 22%, oklch(1 0 0 / 0.32) 0%, transparent 40%)",
+          }}
+        />
+        {/* Text */}
+        <div className="relative flex flex-col items-center justify-center text-center leading-none">
+          <span
+            className="font-display text-[8px] font-bold uppercase tracking-[0.18em] sm:text-[9px]"
+            style={{ color: "oklch(0.95 0.04 60 / 0.85)" }}
+          >
+            And
+          </span>
+          <span
+            className="font-display text-base font-black italic sm:text-lg"
+            style={{
+              color: "oklch(0.97 0.04 60)",
+              textShadow: "0 1px 1px oklch(0.2 0.1 20 / 0.6)",
+            }}
+          >
+            much
+          </span>
+          <span
+            className="font-display text-base font-black italic sm:text-lg"
+            style={{
+              color: "oklch(0.97 0.04 60)",
+              textShadow: "0 1px 1px oklch(0.2 0.1 20 / 0.6)",
+            }}
+          >
+            more
+          </span>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
