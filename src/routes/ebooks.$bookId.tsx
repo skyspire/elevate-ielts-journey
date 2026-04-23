@@ -344,7 +344,7 @@ function ReaderPage() {
               onMouseUp={handleMouseUp(rightPage.index)}
               side="right"
               isWide={isWide}
-              locked={!user && rightPage.index >= book.freePages}
+              locked={!user && rightPage.index >= freePages}
             />
           )}
         </div>
