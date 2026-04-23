@@ -1,15 +1,16 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ChevronRight, FileQuestion } from "lucide-react";
-import { findSection, findSkill } from "@/lib/admin/content-tree";
+import { findModule, findSection, findSkill } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
 export const Route = createFileRoute("/admin/content/$module/$skill/$section/")({
   component: SectionHub,
   loader: ({ params }) => {
-    const skill = findSkill(params.skill);
-    const section = findSection(params.skill, params.section);
-    if (!skill || !section) throw notFound();
-    return { skill, section };
+    const mod = findModule(params.module);
+    const skill = findSkill(params.module, params.skill);
+    const section = findSection(params.module, params.skill, params.section);
+    if (!mod || !skill || !section) throw notFound();
+    return { mod, skill, section };
   },
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl py-12 text-center">
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/admin/content/$module/$skill/$section/")(
 });
 
 function SectionHub() {
-  const { skill, section } = Route.useLoaderData();
+  const { mod, skill, section } = Route.useLoaderData();
   const params = Route.useParams();
 
   return (
@@ -30,6 +31,7 @@ function SectionHub() {
       <Crumbs
         trail={[
           { label: "Content", to: "/admin/content" },
+          { label: mod.label },
           { label: skill.label },
           { label: section.label },
         ]}
@@ -37,13 +39,13 @@ function SectionHub() {
       <div className="mt-2 flex items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-extrabold tracking-tight">
-            {skill.label} — {section.label}
+            {mod.shortLabel} — {skill.label} — {section.label}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">{section.blurb}</p>
         </div>
         <Link
-          to="/admin/content/$skill"
-          params={{ skill: params.skill }}
+          to="/admin/content/$module/$skill"
+          params={{ module: params.module, skill: params.skill }}
           className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -59,8 +61,13 @@ function SectionHub() {
         {section.questionTypes.map((qt) => (
           <Link
             key={qt.id}
-            to="/admin/content/$skill/$section/$type"
-            params={{ skill: params.skill, section: params.section, type: qt.id }}
+            to="/admin/content/$module/$skill/$section/$type"
+            params={{
+              module: params.module,
+              skill: params.skill,
+              section: params.section,
+              type: qt.id,
+            }}
             className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-foreground/30 hover:shadow-md"
           >
             <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-foreground/70 group-hover:bg-foreground group-hover:text-background">
