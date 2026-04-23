@@ -144,11 +144,11 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
         </div>
 
         {/* Form block — clean professional card */}
-        <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
-          <div className="rounded-2xl border border-border/60 bg-card/95 p-7 shadow-[0_20px_50px_-25px_oklch(0.3_0.08_260/0.25)] backdrop-blur-sm sm:p-8">
-            <div className="mb-7">
+        <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-4">
+          <div className="rounded-2xl border border-border/60 bg-card/95 p-5 shadow-[0_20px_50px_-25px_oklch(0.3_0.08_260/0.25)] backdrop-blur-sm sm:p-6">
+            <div className="mb-4">
               <h1
-                className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[34px]"
+                className="font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[28px]"
               >
                 {title}
                 <span
@@ -159,13 +159,13 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
                   }}
                 />
               </h1>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{subtitle}</p>
+              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">{subtitle}</p>
             </div>
             {children}
           </div>
 
           {footer && (
-            <div className="mx-auto mt-6 w-full max-w-md text-center text-xs text-muted-foreground">
+            <div className="mx-auto mt-3 w-full max-w-md text-center text-xs text-muted-foreground">
               {footer}
             </div>
           )}
