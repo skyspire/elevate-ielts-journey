@@ -61,22 +61,42 @@ function AdminDashboard() {
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c) => {
           const Icon = c.icon;
+          const featured = "featured" in c && c.featured;
           return (
             <Link
               key={c.to}
               to={c.to}
-              className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className={`group rounded-xl border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md ${
+                featured
+                  ? "border-foreground/40 shadow-sm sm:col-span-2 lg:col-span-3"
+                  : "border-border"
+              }`}
             >
-              <div
-                className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg text-white"
-                style={{ backgroundColor: c.color }}
-              >
-                <Icon className="h-5 w-5" />
+              <div className="flex items-start gap-4">
+                <div
+                  className={`flex shrink-0 items-center justify-center rounded-lg text-white ${
+                    featured ? "h-14 w-14" : "h-10 w-10"
+                  }`}
+                  style={{ backgroundColor: c.color }}
+                >
+                  <Icon className={featured ? "h-7 w-7" : "h-5 w-5"} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div
+                    className={`font-display font-extrabold text-foreground group-hover:underline ${
+                      featured ? "text-xl" : "text-base"
+                    }`}
+                  >
+                    {c.title}
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
+                  {featured && (
+                    <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-foreground/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-foreground">
+                      Start here
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="font-display text-base font-extrabold text-foreground group-hover:underline">
-                {c.title}
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
             </Link>
           );
         })}
