@@ -484,7 +484,8 @@ function TermsPage() {
               href="mailto:bigielts@gmail.com"
               className="mt-3 inline-flex items-center gap-2 rounded-lg border border-brand/30 bg-brand-soft px-4 py-2 text-sm font-bold text-brand transition-colors hover:bg-brand hover:text-brand-foreground"
             >
-              <Mail className="h-4 w-4" /> bigielts@gmail.com
+              <Mail className="h-4 w-4" />
+              <span>bigielts@gmail.com</span>
             </a>
           </Section>
 
@@ -657,7 +658,8 @@ function TermsPage() {
               href="mailto:bigielts@gmail.com"
               className="mt-3 inline-flex items-center gap-2 rounded-lg border border-brand/30 bg-brand-soft px-4 py-2 text-sm font-bold text-brand transition-colors hover:bg-brand hover:text-brand-foreground"
             >
-              <Mail className="h-4 w-4" /> bigielts@gmail.com
+              <Mail className="h-4 w-4" />
+              <span>bigielts@gmail.com</span>
             </a>
             <P>
               The Company reserves the right to investigate and take appropriate action based on
@@ -688,6 +690,44 @@ function TermsPage() {
               ]}
             />
           </Section>
+
+          {/* Disclaimer Block */}
+          <div className="mt-20 rounded-2xl border border-foreground/10 bg-muted/40 p-6 sm:p-8">
+            <div className="flex items-center gap-3">
+              <FileWarning className="h-6 w-6 text-brand" />
+              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                Disclaimer
+              </h2>
+            </div>
+
+            <P>
+              <strong>BigIELTS.com</strong> is an independent educational platform operated by{" "}
+              <strong>Skyspire Academy Private Limited</strong>. The Platform is{" "}
+              <strong>not affiliated with, endorsed by, sponsored by, or in any way officially
+              connected with</strong>{" "}
+              IELTS, the British Council, IDP Education, or Cambridge Assessment English.
+            </P>
+
+            <P>
+              All trademarks, service marks, trade names, and logos referenced on the Platform are
+              the property of their respective owners. Their use on this Platform is solely for
+              identification and informational purposes and does not imply any association,
+              endorsement, or approval.
+            </P>
+
+            <P>
+              The content made available on BigIELTS.com is provided strictly for{" "}
+              <strong>educational and informational purposes</strong>. While reasonable efforts are
+              made to ensure accuracy and relevance, the Company makes no representations or
+              warranties regarding the completeness, reliability, or suitability of such content
+              for any specific purpose.
+            </P>
+
+            <P>
+              Use of the Platform and its materials is at the{" "}
+              <strong>sole discretion and risk of the User</strong>.
+            </P>
+          </div>
         </article>
       </main>
 
