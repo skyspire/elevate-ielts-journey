@@ -159,7 +159,11 @@ export function ValueStatement() {
                   {group.codes.map((code) => {
                     const c = CURRENCIES[code];
                     return (
-                      <SelectItem key={`${group.label}-${code}`} value={code}>
+                      <SelectItem
+                        key={`${group.label}-${code}`}
+                        value={code}
+                        className="pr-2 [&>span:first-child]:hidden"
+                      >
                         <span className="flex items-center gap-2 font-semibold">
                           <span className="text-base leading-none">{c.flag}</span>
                           <span>{c.label}</span>
