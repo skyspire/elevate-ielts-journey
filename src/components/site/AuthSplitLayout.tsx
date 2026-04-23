@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Quote, Sparkles, Globe2, BookOpen, Star, Zap } from "lucide-react";
+import { GraduationCap, Quote, Sparkles, Globe2, BookOpen } from "lucide-react";
 import authHero from "@/assets/auth-hero.jpg";
 
 type Props = {
@@ -79,39 +79,34 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
 
       {/* RIGHT — colorful form panel */}
       <div className="relative flex min-h-screen flex-col overflow-hidden px-5 py-8 sm:px-10 lg:px-14 lg:py-12">
-        {/* Colorful animated gradient background */}
+        {/* Subtle professional gradient background */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(135deg, oklch(0.97 0.04 80) 0%, oklch(0.96 0.05 330) 35%, oklch(0.95 0.06 250) 70%, oklch(0.97 0.05 160) 100%)",
+              "linear-gradient(160deg, oklch(0.99 0.005 250) 0%, oklch(0.97 0.02 250) 50%, oklch(0.96 0.03 220) 100%)",
           }}
         />
-        {/* Floating colorful blobs */}
+        {/* Soft accent blobs — restrained */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-20 top-10 -z-10 h-72 w-72 rounded-full opacity-60 blur-3xl"
-          style={{ background: "oklch(0.85 0.15 25)" }}
+          className="pointer-events-none absolute -right-32 -top-32 -z-10 h-80 w-80 rounded-full opacity-40 blur-3xl"
+          style={{ background: "oklch(0.85 0.1 250)" }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute right-[-60px] top-1/3 -z-10 h-80 w-80 rounded-full opacity-50 blur-3xl"
-          style={{ background: "oklch(0.82 0.14 280)" }}
+          className="pointer-events-none absolute -bottom-32 -left-20 -z-10 h-72 w-72 rounded-full opacity-30 blur-3xl"
+          style={{ background: "oklch(0.86 0.08 200)" }}
         />
+        {/* Faint dot grid for texture */}
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-[-80px] left-1/3 -z-10 h-96 w-96 rounded-full opacity-45 blur-3xl"
-          style={{ background: "oklch(0.84 0.13 180)" }}
-        />
-        {/* Tiny dot grid for texture */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.18]"
+          className="absolute inset-0 -z-10 opacity-[0.08]"
           style={{
             backgroundImage:
               "radial-gradient(oklch(0.35 0.05 260) 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
+            backgroundSize: "24px 24px",
           }}
         />
 
@@ -123,10 +118,10 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
             aria-label="BigIELTS home"
           >
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-lg"
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-md"
               style={{
                 background:
-                  "linear-gradient(135deg, oklch(0.62 0.2 25), oklch(0.6 0.22 320))",
+                  "linear-gradient(135deg, oklch(0.55 0.16 255), oklch(0.5 0.17 280))",
               }}
             >
               <GraduationCap className="h-5 w-5" />
@@ -143,49 +138,21 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
           </Link>
         </div>
 
-        {/* Floating mini-badges */}
-        <div className="relative mx-auto mt-6 flex w-full max-w-md flex-wrap items-center justify-center gap-2">
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm"
-            style={{ background: "linear-gradient(135deg, oklch(0.62 0.2 25), oklch(0.65 0.2 50))" }}
-          >
-            <Zap className="h-3 w-3" /> 100% free
-          </span>
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm"
-            style={{ background: "linear-gradient(135deg, oklch(0.6 0.2 280), oklch(0.62 0.2 320))" }}
-          >
-            <Star className="h-3 w-3" /> Band 8–9 answers
-          </span>
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm"
-            style={{ background: "linear-gradient(135deg, oklch(0.55 0.16 180), oklch(0.6 0.18 200))" }}
-          >
-            <Sparkles className="h-3 w-3" /> Updated weekly
-          </span>
-        </div>
-
-        {/* Form block — colorful card */}
+        {/* Form block — clean professional card */}
         <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
-          <div
-            className="rounded-3xl border border-white/60 bg-background/85 p-7 shadow-[0_30px_80px_-30px_oklch(0.3_0.1_280/0.35)] backdrop-blur-xl sm:p-8"
-            style={{
-              boxShadow:
-                "0 30px 80px -30px oklch(0.3 0.1 280 / 0.35), 0 0 0 1px oklch(1 0 0 / 0.5) inset",
-            }}
-          >
+          <div className="rounded-2xl border border-border/60 bg-card/95 p-7 shadow-[0_20px_50px_-25px_oklch(0.3_0.08_260/0.25)] backdrop-blur-sm sm:p-8">
             <div className="mb-7">
               <h1
-                className="font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-[34px]"
-                style={{
-                  background:
-                    "linear-gradient(120deg, oklch(0.45 0.2 280) 0%, oklch(0.55 0.22 25) 60%, oklch(0.55 0.2 200) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+                className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[34px]"
               >
                 {title}
+                <span
+                  className="ml-1 inline-block h-2 w-2 rounded-full align-middle"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, oklch(0.6 0.18 255), oklch(0.6 0.18 320))",
+                  }}
+                />
               </h1>
               <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{subtitle}</p>
             </div>
