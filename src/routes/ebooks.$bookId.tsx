@@ -55,14 +55,14 @@ const FONT_SIZES = {
   xl: { body: "text-[21px] leading-[1.9]", h1: "text-[2.4rem]", h2: "text-2xl" },
 } as const;
 
-// Modern paperback palette — clean off-white paper, deep ink, warm sepia option, soft dark.
+// Modern paperback palette — pure white default, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.965 0.008 85)",
-    page: "oklch(0.985 0.006 85)",
-    text: "oklch(0.22 0.015 260)",
-    muted: "oklch(0.48 0.02 260)",
-    border: "oklch(0.92 0.01 250)",
+    bg: "oklch(0.985 0 0)",
+    page: "oklch(1 0 0)",
+    text: "oklch(0.2 0.015 260)",
+    muted: "oklch(0.5 0.015 260)",
+    border: "oklch(0.93 0.005 250)",
   },
   sepia: {
     bg: "oklch(0.92 0.035 78)",
