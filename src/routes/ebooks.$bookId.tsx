@@ -47,36 +47,39 @@ export const Route = createFileRoute("/ebooks/$bookId")({
   component: ReaderPage,
 });
 
+// Body font is Lora throughout for a soft, book-like read.
 const FONT_SIZES = {
-  sm: { body: "text-sm leading-7", h1: "text-xl", h2: "text-base" },
-  md: { body: "text-base leading-8", h1: "text-2xl", h2: "text-lg" },
-  lg: { body: "text-lg leading-9", h1: "text-3xl", h2: "text-xl" },
-  xl: { body: "text-xl leading-[2.25rem]", h1: "text-4xl", h2: "text-2xl" },
+  sm: { body: "text-[15px] leading-[1.75]", h1: "text-2xl", h2: "text-base" },
+  md: { body: "text-[17px] leading-[1.8]", h1: "text-3xl", h2: "text-lg" },
+  lg: { body: "text-[19px] leading-[1.85]", h1: "text-[2rem]", h2: "text-xl" },
+  xl: { body: "text-[21px] leading-[1.9]", h1: "text-[2.4rem]", h2: "text-2xl" },
 } as const;
 
+// Modern paperback palette — clean off-white paper, deep ink, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.99 0.005 90)",
-    page: "oklch(1 0 0)",
-    text: "oklch(0.18 0.02 260)",
-    muted: "oklch(0.45 0.02 260)",
+    bg: "oklch(0.965 0.008 85)",
+    page: "oklch(0.985 0.006 85)",
+    text: "oklch(0.22 0.015 260)",
+    muted: "oklch(0.48 0.02 260)",
     border: "oklch(0.92 0.01 250)",
   },
   sepia: {
-    bg: "oklch(0.93 0.04 80)",
-    page: "oklch(0.96 0.035 80)",
-    text: "oklch(0.28 0.04 50)",
-    muted: "oklch(0.45 0.05 50)",
-    border: "oklch(0.85 0.05 70)",
+    bg: "oklch(0.92 0.035 78)",
+    page: "oklch(0.955 0.03 80)",
+    text: "oklch(0.28 0.035 50)",
+    muted: "oklch(0.46 0.045 50)",
+    border: "oklch(0.86 0.04 70)",
   },
   dark: {
-    bg: "oklch(0.16 0.01 260)",
-    page: "oklch(0.21 0.015 260)",
-    text: "oklch(0.92 0.01 250)",
-    muted: "oklch(0.65 0.02 250)",
+    bg: "oklch(0.17 0.01 260)",
+    page: "oklch(0.22 0.012 260)",
+    text: "oklch(0.93 0.008 250)",
+    muted: "oklch(0.66 0.018 250)",
     border: "oklch(0.30 0.02 260)",
   },
 } as const;
+
 
 function ReaderPage() {
   const { bookId } = Route.useParams();
