@@ -322,8 +322,8 @@ function ReaderPage() {
       )}
 
       {/* Reader area */}
-      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:py-12">
-        <div className="relative grid gap-6 lg:grid-cols-2 lg:gap-0">
+      <div className="relative mx-auto max-w-7xl px-3 pb-6 pt-3 sm:px-4 sm:pt-4">
+        <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-0">
           {/* Left page */}
           <PageView
             page={leftPage}
@@ -347,12 +347,32 @@ function ReaderPage() {
               locked={!user && rightPage.index >= freePages}
             />
           )}
+
+          {/* Edge overlay arrows */}
+          <button
+            onClick={goPrev}
+            disabled={current === 0}
+            aria-label="Previous page"
+            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:left-2"
+            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+          >
+            <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
+          </button>
+          <button
+            onClick={goNext}
+            disabled={current >= total - 1 || isLocked}
+            aria-label="Next page"
+            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:right-2"
+            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+          >
+            <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
+          </button>
         </div>
 
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="mt-8 rounded-xl border p-8 text-center"
+            className="mt-4 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -381,30 +401,14 @@ function ReaderPage() {
           </div>
         )}
 
-        {/* Page nav */}
-        <div className="mt-8 flex items-center justify-between gap-4">
-          <button
-            onClick={goPrev}
-            disabled={current === 0}
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-opacity disabled:opacity-30"
-            style={{ border: `1px solid ${theme.border}`, color: theme.text }}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous
-          </button>
-          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: theme.muted }}>
-            Page {current + 1}{isWide && rightPage ? `–${current + 2}` : ""} of {total}
-          </p>
-          <button
-            onClick={goNext}
-            disabled={current >= total - 1 || isLocked}
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold text-white transition-opacity disabled:opacity-30"
-            style={{ background: "oklch(0.55 0.18 30)" }}
-          >
-            Next
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
+        {/* Slim page counter */}
+        <p
+          className="mt-3 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
+          style={{ color: theme.muted }}
+        >
+          Page {current + 1}
+          {isWide && rightPage ? `–${current + 2}` : ""} of {total}
+        </p>
       </div>
 
       {/* Highlight popover */}
