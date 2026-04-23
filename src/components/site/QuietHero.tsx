@@ -1,10 +1,13 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { HERO_KEY, HERO_DEFAULT } from "@/lib/admin/defaults";
 
 /**
  * QuietHero — Royal gradient hero. Clean: no floating objects, no grain.
  */
 export function QuietHero() {
+  const hero = useCmsSection(HERO_KEY, HERO_DEFAULT);
   return (
     <section className="relative isolate overflow-hidden">
       {/* Royal gradient — deep indigo → violet → midnight, with champagne glow */}
@@ -33,12 +36,12 @@ export function QuietHero() {
       <div className="container-page relative z-10 flex flex-col items-center py-28 text-center md:py-36 lg:py-44">
         {/* Handwritten eyebrow */}
         <p className="font-handwriting text-2xl text-amber-200/90 sm:text-3xl">
-          free &amp; fresh, always
+          {hero.eyebrow}
         </p>
 
         {/* The big calm statement */}
         <h1 className="mt-5 max-w-4xl font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl drop-shadow-[0_2px_24px_oklch(0.2_0.1_290_/_0.5)]">
-          No need to buy{" "}
+          {hero.headlinePrefix}{" "}
           <span className="relative inline-block">
             <span
               className="bg-clip-text text-transparent"
@@ -47,7 +50,7 @@ export function QuietHero() {
                   "linear-gradient(100deg, oklch(0.92 0.1 85) 0%, oklch(0.85 0.14 75) 45%, oklch(0.95 0.08 90) 100%)",
               }}
             >
-              expensive
+              {hero.headlineHighlight}
             </span>
             <svg
               aria-hidden
@@ -65,13 +68,12 @@ export function QuietHero() {
               />
             </svg>
           </span>{" "}
-          IELTS books.
+          {hero.headlineSuffix}
         </h1>
 
         {/* Quiet supporting line */}
         <p className="mx-auto mt-8 max-w-xl text-lg text-white/75 sm:text-xl">
-          Latest questions with Band 8–9 sample answers — drawn from real exams,
-          updated regularly.
+          {hero.subline}
         </p>
 
         {/* Calm CTA pair */}
@@ -84,7 +86,7 @@ export function QuietHero() {
                 "linear-gradient(100deg, oklch(0.92 0.1 85) 0%, oklch(0.82 0.14 75) 100%)",
             }}
           >
-            View Recent Questions
+            {hero.primaryCta}
             <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Button>
           <Button
@@ -92,7 +94,7 @@ export function QuietHero() {
             variant="outline"
             className="h-12 rounded-full border-white/30 bg-white/10 px-7 text-base font-bold text-white backdrop-blur hover:bg-white/20"
           >
-            Unlock Full Access
+            {hero.secondaryCta}
           </Button>
         </div>
       </div>

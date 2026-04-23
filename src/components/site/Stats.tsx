@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
-
-const stats = [
-  { target: 1300, suffix: "+", label: "Writing Questions" },
-  { target: 4500, suffix: "+", label: "Speaking Questions" },
-  { target: 170, suffix: "+", label: "Cue Cards" },
-  { target: 4000, suffix: "+", label: "Active Users" },
-];
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { STATS_KEY, STATS_DEFAULT } from "@/lib/admin/defaults";
 
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
@@ -30,6 +24,7 @@ function useCountUp(target: number, run: boolean, duration = 1800) {
 }
 
 export function Stats() {
+  const content = useCmsSection(STATS_KEY, STATS_DEFAULT);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
 
@@ -99,15 +94,15 @@ export function Stats() {
       <div className="container-page relative z-10">
         <div className="mb-14 text-center">
           <p className="font-handwriting text-2xl text-[oklch(0.85_0.14_60)] sm:text-3xl">
-            by the numbers
+            {content.eyebrow}
           </p>
           <h2 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-[oklch(0.98_0.01_270)] sm:text-4xl">
-            Built for serious IELTS prep
+            {content.heading}
           </h2>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
-          {stats.map((s) => (
+          {content.items.map((s) => (
             <StatCard key={s.label} stat={s} run={inView} />
           ))}
         </div>
