@@ -150,81 +150,144 @@ export function EverythingYouNeed() {
 
 /* ---------- Wax seal stamp that drops in on scroll ---------- */
 function WaxSealStamp() {
+  // Irregular blob edge — looks like real pressed wax, not a perfect circle
+  const wavyClip =
+    "polygon(50% 0%, 62% 3%, 73% 8%, 84% 14%, 92% 24%, 97% 36%, 100% 50%, 97% 63%, 92% 75%, 83% 85%, 73% 92%, 62% 97%, 50% 100%, 38% 97%, 27% 93%, 16% 86%, 8% 76%, 3% 64%, 0% 50%, 3% 37%, 8% 25%, 17% 15%, 27% 8%, 38% 3%)";
+
   return (
     <motion.div
       aria-hidden
-      initial={{ opacity: 0, scale: 0.4, rotate: -35, y: -30 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: -14, y: 0 }}
+      initial={{ opacity: 0, scale: 0.5, rotate: -28, y: -24 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: -11, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{
         type: "spring",
-        stiffness: 220,
-        damping: 14,
-        mass: 0.9,
-        delay: 0.15,
+        stiffness: 200,
+        damping: 13,
+        mass: 1,
+        delay: 0.2,
       }}
-      className="pointer-events-none absolute -top-6 right-0 z-10 flex flex-col items-center sm:-top-8 sm:-right-2 md:-right-8"
+      className="pointer-events-none absolute -top-8 right-0 z-10 flex flex-col items-center sm:-top-10 sm:-right-2 md:-right-10"
       style={{ transformOrigin: "center center" }}
     >
+      {/* Drop shadow on a separate element so clip-path doesn't kill it */}
       <div
-        className="relative flex h-24 w-24 items-center justify-center rounded-full sm:h-28 sm:w-28"
+        className="relative h-[104px] w-[104px] sm:h-[120px] sm:w-[120px]"
         style={{
-          background:
-            "radial-gradient(circle at 32% 28%, oklch(0.55 0.16 15) 0%, oklch(0.4 0.18 18) 45%, oklch(0.28 0.14 20) 100%)",
-          boxShadow:
-            "0 10px 22px -8px oklch(0.25 0.14 20 / 0.55), inset 0 2px 3px oklch(1 0 0 / 0.25), inset 0 -6px 12px oklch(0.18 0.1 20 / 0.6), inset 0 0 0 1px oklch(0.22 0.12 20 / 0.4)",
+          filter:
+            "drop-shadow(0 8px 14px oklch(0.2 0.12 22 / 0.45)) drop-shadow(0 2px 3px oklch(0.18 0.1 20 / 0.4))",
         }}
       >
-        {/* Inner ring */}
+        {/* Wax body — irregular blob */}
         <div
-          className="absolute inset-2 rounded-full"
+          className="absolute inset-0"
           style={{
-            border: "1.5px dashed oklch(0.95 0.04 60 / 0.6)",
-          }}
-        />
-        {/* Glossy highlight */}
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
+            clipPath: wavyClip,
             background:
-              "radial-gradient(ellipse at 30% 22%, oklch(1 0 0 / 0.32) 0%, transparent 40%)",
+              "radial-gradient(circle at 34% 26%, oklch(0.58 0.17 18) 0%, oklch(0.46 0.19 20) 38%, oklch(0.32 0.16 22) 78%, oklch(0.24 0.12 22) 100%)",
           }}
-        />
-        {/* Text — all lowercase, clear & bold */}
-        <div className="relative flex flex-col items-center justify-center text-center leading-[0.95]">
-          <span
-            className="font-display text-[15px] font-black sm:text-[17px]"
+        >
+          {/* Mottled ink texture */}
+          <div
+            className="absolute inset-0 mix-blend-overlay opacity-70"
             style={{
-              color: "oklch(0.98 0.03 60)",
-              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
+              background:
+                "radial-gradient(circle at 70% 75%, oklch(0.18 0.08 20 / 0.55), transparent 45%), radial-gradient(circle at 22% 80%, oklch(0.85 0.1 30 / 0.18), transparent 35%), radial-gradient(circle at 80% 30%, oklch(0.2 0.1 20 / 0.4), transparent 40%)",
             }}
-          >
-            all
-          </span>
-          <span
-            className="font-display text-[13px] font-black sm:text-[15px]"
+          />
+          {/* Glossy press highlight */}
+          <div
+            className="absolute inset-0"
             style={{
-              color: "oklch(0.98 0.03 60)",
-              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
+              background:
+                "radial-gradient(ellipse 60% 45% at 32% 22%, oklch(1 0 0 / 0.28) 0%, transparent 55%)",
             }}
-          >
-            at one
-          </span>
-          <span
-            className="font-display text-[15px] font-black sm:text-[17px]"
+          />
+          {/* Embossed inner ring */}
+          <div
+            className="absolute inset-[10%] rounded-full"
             style={{
-              color: "oklch(0.98 0.03 60)",
-              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
+              border: "1px solid oklch(0.95 0.05 50 / 0.55)",
+              boxShadow:
+                "inset 0 1px 1px oklch(0.18 0.1 20 / 0.55), 0 1px 0 oklch(1 0 0 / 0.12)",
             }}
-          >
-            place
-          </span>
+          />
+          {/* Tiny embossed dots around ring (like a real seal) */}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const angle = (i / 12) * Math.PI * 2;
+            const r = 38;
+            const cx = 50 + Math.cos(angle) * r;
+            const cy = 50 + Math.sin(angle) * r;
+            return (
+              <span
+                key={i}
+                className="absolute h-[3px] w-[3px] rounded-full"
+                style={{
+                  left: `${cx}%`,
+                  top: `${cy}%`,
+                  transform: "translate(-50%, -50%)",
+                  background: "oklch(0.95 0.05 50 / 0.55)",
+                  boxShadow: "inset 0 1px 0 oklch(0.18 0.1 20 / 0.6)",
+                }}
+              />
+            );
+          })}
+
+          {/* Pressed text — engraved serif look */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-[1]">
+            <span
+              className="text-[11px] sm:text-[13px]"
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                color: "oklch(0.94 0.05 55)",
+                textShadow:
+                  "0 1px 0 oklch(0.18 0.1 20 / 0.85), 0 -1px 0 oklch(1 0 0 / 0.08)",
+              }}
+            >
+              ALL · AT
+            </span>
+            <span
+              className="my-[3px] text-[16px] sm:text-[19px]"
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontWeight: 900,
+                letterSpacing: "0.08em",
+                color: "oklch(0.96 0.05 55)",
+                textShadow:
+                  "0 1px 0 oklch(0.18 0.1 20 / 0.9), 0 2px 1px oklch(0.18 0.1 20 / 0.5), 0 -1px 0 oklch(1 0 0 / 0.1)",
+              }}
+            >
+              ONE
+            </span>
+            <span
+              className="text-[11px] sm:text-[13px]"
+              style={{
+                fontFamily: "'Cinzel', serif",
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "oklch(0.94 0.05 55)",
+                textShadow:
+                  "0 1px 0 oklch(0.18 0.1 20 / 0.85), 0 -1px 0 oklch(1 0 0 / 0.08)",
+              }}
+            >
+              PLACE
+            </span>
+          </div>
         </div>
       </div>
-      {/* Signature outside the stamp */}
+
+      {/* Handwritten signature outside the seal */}
       <span
-        className="mt-1.5 font-display text-[10px] font-bold uppercase tracking-[0.22em] sm:text-[11px]"
-        style={{ color: "oklch(0.4 0.18 18)" }}
+        className="-mt-1 inline-block rotate-[-6deg]"
+        style={{
+          fontFamily: "'Pinyon Script', cursive",
+          fontSize: "20px",
+          lineHeight: 1,
+          color: "oklch(0.32 0.14 22)",
+          textShadow: "0 1px 0 oklch(1 0 0 / 0.5)",
+        }}
       >
         BigIELTS.com
       </span>
