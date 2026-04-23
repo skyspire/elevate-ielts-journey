@@ -134,8 +134,8 @@ export function EverythingYouNeed() {
           </p>
         </div>
 
-        {/* Feature list — single column */}
-        <div className="mx-auto mt-16 max-w-3xl space-y-6">
+        {/* Feature list — two columns on md+ */}
+        <div className="mx-auto mt-16 grid max-w-5xl gap-x-8 gap-y-4 md:grid-cols-2">
           {FEATURES.map((f, idx) => (
             <FeatureRow key={f.key} feature={f} index={idx} />
           ))}
