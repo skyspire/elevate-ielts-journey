@@ -2,8 +2,8 @@ import { useEffect, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 import { z } from "zod";
-import { sampleAnswers } from "@/data/sample-answers";
 import { parseQuestionId } from "@/data/question-helpers";
+import { useWritingAnswer } from "@/lib/admin/writing-answers";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import { BackButton } from "@/components/site/BackButton";
 
@@ -37,7 +37,7 @@ function QuestionDetailPage() {
   const module = search.module ?? "general";
   const title = search.title || "Sample Question";
 
-  const answer = sampleAnswers[questionId];
+  const answer = useWritingAnswer(questionId);
 
   // 1-based question index within its category — drives the big numeral
   // shown in the billboard's left column.

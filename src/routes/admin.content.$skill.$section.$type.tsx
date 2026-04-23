@@ -83,6 +83,7 @@ function QuestionTypeEditor() {
           categoryKey={type.id}
           defaultRecord={WRITING_DEFAULTS}
           placeholder="Type the full essay prompt or letter brief…"
+          enableAnswers
         />
       ) : (
         <TopicListEditor

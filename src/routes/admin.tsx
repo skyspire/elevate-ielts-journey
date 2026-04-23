@@ -39,21 +39,26 @@ function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Avoid SSR/CSR hydration mismatch: useSession reads from localStorage which
+  // is null on the server. Wait for first client mount before branching on it.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!user && location.pathname !== "/admin/login") {
+    if (mounted && !user && location.pathname !== "/admin/login") {
       navigate({ to: "/admin/login" });
     }
-  }, [user, location.pathname, navigate]);
+  }, [mounted, user, location.pathname, navigate]);
 
   if (location.pathname === "/admin/login") {
     return <Outlet />;
   }
 
-  if (!user) {
+  if (!mounted || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted/30">
-        <p className="text-sm text-muted-foreground">Redirecting to login…</p>
+        <p className="text-sm text-muted-foreground">Loading admin…</p>
       </div>
     );
   }

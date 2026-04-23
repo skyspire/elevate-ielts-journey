@@ -9,12 +9,19 @@
 // question type they picked from the nav — not the whole JSON blob.
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, GripVertical, Pencil, X, Check, AlertCircle } from "lucide-react";
+import { Plus, Trash2, GripVertical, Pencil, X, Check, AlertCircle, FileText, ChevronDown } from "lucide-react";
 import { EditorShell } from "@/components/admin/EditorShell";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCmsEditor } from "@/lib/admin/cms-store";
+import { useCmsEditor, useCmsSection } from "@/lib/admin/cms-store";
+import { WritingAnswerEditor } from "@/components/admin/WritingAnswerEditor";
+import {
+  WRITING_ANSWERS_KEY,
+  WRITING_ANSWERS_DEFAULT,
+  type WritingAnswersOverrides,
+} from "@/lib/admin/writing-answers";
+import { sampleAnswers } from "@/data/sample-answers";
 
 // ───────── Generic prompt list editor ─────────
 
@@ -31,6 +38,8 @@ type StringListEditorProps = {
   defaultRecord: Record<string, string[]>;
   /** Placeholder for the new-item textarea. */
   placeholder?: string;
+  /** When true, each row gets an "Edit answer" toggle that opens the WritingAnswerEditor. */
+  enableAnswers?: boolean;
 };
 
 export function PromptListEditor({
@@ -41,16 +50,22 @@ export function PromptListEditor({
   categoryKey,
   defaultRecord,
   placeholder = "Type a new prompt…",
+  enableAnswers = false,
 }: StringListEditorProps) {
   const { value: record, update, reset } = useCmsEditor<Record<string, string[]>>(
     storageKey,
     defaultRecord,
+  );
+  const answerOverrides = useCmsSection<WritingAnswersOverrides>(
+    WRITING_ANSWERS_KEY,
+    WRITING_ANSWERS_DEFAULT,
   );
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<string[]>(original);
   const [draft, setDraft] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [openAnswerIndex, setOpenAnswerIndex] = useState<number | null>(null);
 
   // Re-sync local state if the underlying record changes (e.g. import).
   useEffect(() => {
@@ -150,65 +165,104 @@ export function PromptListEditor({
         <ul className="space-y-2">
           {items.map((item, i) => {
             const editing = editingIndex === i;
+            const answerOpen = openAnswerIndex === i;
+            const questionId = `${categoryKey}-${i + 1}`;
+            const hasOverride = !!answerOverrides[questionId];
+            const hasDefault = !!sampleAnswers[questionId];
+            const answerStatus: "custom" | "default" | "missing" = hasOverride
+              ? "custom"
+              : hasDefault
+              ? "default"
+              : "missing";
             return (
-              <li
-                key={i}
-                className="group flex items-start gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20"
-              >
-                <ReorderHandle
-                  index={i}
-                  total={items.length}
-                  onUp={() => move(i, -1)}
-                  onDown={() => move(i, 1)}
-                />
-                <div className="min-w-0 flex-1">
-                  {editing ? (
-                    <Textarea
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                      rows={3}
-                      autoFocus
-                    />
-                  ) : (
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-                      <span className="mr-2 inline-flex h-5 w-6 items-center justify-center rounded bg-muted text-[10px] font-bold text-muted-foreground">
-                        {i + 1}
-                      </span>
-                      {item}
-                    </p>
-                  )}
+              <li key={i} className="space-y-2">
+                <div className="group flex items-start gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20">
+                  <ReorderHandle
+                    index={i}
+                    total={items.length}
+                    onUp={() => move(i, -1)}
+                    onDown={() => move(i, 1)}
+                  />
+                  <div className="min-w-0 flex-1">
+                    {editing ? (
+                      <Textarea
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        rows={3}
+                        autoFocus
+                      />
+                    ) : (
+                      <>
+                        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                          <span className="mr-2 inline-flex h-5 w-6 items-center justify-center rounded bg-muted text-[10px] font-bold text-muted-foreground">
+                            {i + 1}
+                          </span>
+                          {item}
+                        </p>
+                        {enableAnswers && (
+                          <AnswerStatusBadge status={answerStatus} />
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+                    {editing ? (
+                      <>
+                        <Button size="icon" variant="ghost" onClick={commitEdit} title="Save">
+                          <Check className="h-4 w-4 text-emerald-600" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => setEditingIndex(null)}
+                          title="Cancel"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        {enableAnswers && (
+                          <Button
+                            size="sm"
+                            variant={answerOpen ? "default" : "outline"}
+                            onClick={() =>
+                              setOpenAnswerIndex((cur) => (cur === i ? null : i))
+                            }
+                            title={answerOpen ? "Hide answer editor" : "Edit model answer"}
+                          >
+                            <FileText className="mr-1.5 h-3.5 w-3.5" />
+                            Answer
+                            <ChevronDown
+                              className={`ml-1 h-3 w-3 transition-transform ${
+                                answerOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </Button>
+                        )}
+                        <Button size="icon" variant="ghost" onClick={() => startEdit(i)} title="Edit prompt">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => removeItem(i)}
+                          title="Delete"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
-                  {editing ? (
-                    <>
-                      <Button size="icon" variant="ghost" onClick={commitEdit} title="Save">
-                        <Check className="h-4 w-4 text-emerald-600" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setEditingIndex(null)}
-                        title="Cancel"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button size="icon" variant="ghost" onClick={() => startEdit(i)} title="Edit">
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => removeItem(i)}
-                        title="Delete"
-                      >
-                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                      </Button>
-                    </>
-                  )}
-                </div>
+
+                {enableAnswers && answerOpen && (
+                  <WritingAnswerEditor
+                    questionId={questionId}
+                    questionTitle={item}
+                    onClose={() => setOpenAnswerIndex(null)}
+                  />
+                )}
               </li>
             );
           })}
@@ -492,5 +546,32 @@ function ReorderHandle({
         <GripVertical className="h-3 w-3 rotate-90" />
       </button>
     </div>
+  );
+}
+
+function AnswerStatusBadge({ status }: { status: "custom" | "default" | "missing" }) {
+  const map = {
+    custom: {
+      label: "Custom answer",
+      className:
+        "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+    },
+    default: {
+      label: "Default answer",
+      className: "bg-foreground/8 text-foreground/70 border-border",
+    },
+    missing: {
+      label: "No answer yet",
+      className:
+        "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
+    },
+  } as const;
+  const { label, className } = map[status];
+  return (
+    <span
+      className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
+    >
+      {label}
+    </span>
   );
 }
