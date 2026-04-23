@@ -238,6 +238,23 @@ export function Header() {
           >
             Dashboard
           </Link>
+          <Link
+            to="/admin"
+            className="ml-1 inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-[13px] font-bold transition-all"
+            style={{ color: INK, borderColor: HAIRLINE, backgroundColor: "oklch(0.98 0.005 250)" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = INK;
+              e.currentTarget.style.color = "white";
+              e.currentTarget.style.borderColor = INK;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "oklch(0.98 0.005 250)";
+              e.currentTarget.style.color = INK;
+              e.currentTarget.style.borderColor = HAIRLINE;
+            }}
+          >
+            Admin
+          </Link>
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">

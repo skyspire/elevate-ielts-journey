@@ -21,41 +21,11 @@ import {
   getStoredCurrency,
   setStoredCurrency,
 } from "@/lib/currency";
-
-const plans = [
-  {
-    key: "biweekly" as const,
-    name: "Bi-Weekly",
-    days: "15",
-    popular: false,
-    accent: "oklch(0.55 0.18 30)", // coral
-  },
-  {
-    key: "monthly" as const,
-    name: "Monthly",
-    days: "30",
-    popular: true,
-    accent: "oklch(0.45 0.18 265)", // indigo
-  },
-  {
-    key: "quarterly" as const,
-    name: "3-Month",
-    days: "90",
-    popular: false,
-    accent: "oklch(0.55 0.14 160)", // teal
-  },
-];
-
-const features = [
-  "Academic + General",
-  "Complete question bank",
-  "Band 8–9 Writing samples",
-  "Speaking model answers",
-  "Vocabulary & structures",
-  "Recent exam questions (monthly)",
-];
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { PRICING_KEY, PRICING_DEFAULT } from "@/lib/admin/defaults";
 
 export function ValueStatement() {
+  const { plans, features, footnote } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
   const [autoDetected, setAutoDetected] = useState(false);
 
@@ -217,7 +187,7 @@ export function ValueStatement() {
               </div>
               <div className="mt-4 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl font-black tracking-tight text-foreground sm:text-6xl">
-                  {formatPrice(PRICES[p.key][currency], currency)}
+                  {formatPrice(PRICES[p.key as "biweekly" | "monthly" | "quarterly"][currency], currency)}
                 </span>
                 <span className="text-sm font-bold text-muted-foreground">
                   {currency}
@@ -272,7 +242,7 @@ export function ValueStatement() {
         </div>
 
         <p className="mt-8 text-center text-xs font-semibold text-muted-foreground">
-          Cancel anytime
+          {footnote}
         </p>
       </div>
     </section>
