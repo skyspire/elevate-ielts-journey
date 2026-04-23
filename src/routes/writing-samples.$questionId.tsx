@@ -3,7 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 import { z } from "zod";
 import { parseQuestionId } from "@/data/question-helpers";
-import { useWritingAnswer } from "@/lib/admin/writing-answers";
+import {
+  useWritingAnswer,
+  WRITING_ANSWERS_KEY,
+  WRITING_ANSWERS_DEFAULT,
+  type WritingAnswersOverrides,
+} from "@/lib/admin/writing-answers";
+import { useCmsSection } from "@/lib/admin/cms-store";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import { BackButton } from "@/components/site/BackButton";
 
@@ -38,6 +44,11 @@ function QuestionDetailPage() {
   const title = search.title || "Sample Question";
 
   const answer = useWritingAnswer(questionId);
+  const overrides = useCmsSection<WritingAnswersOverrides>(
+    WRITING_ANSWERS_KEY,
+    WRITING_ANSWERS_DEFAULT,
+  );
+  const questionImage = overrides[questionId]?.imageDataUrl;
 
   // 1-based question index within its category — drives the big numeral
   // shown in the billboard's left column.
