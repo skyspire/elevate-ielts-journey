@@ -11,7 +11,7 @@ type Props = {
 
 export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
   return (
-    <div className="grid min-h-screen w-full grid-cols-1 bg-background md:grid-cols-[1fr_1.05fr]">
+    <div className="grid h-screen w-full grid-cols-1 overflow-hidden bg-background md:grid-cols-[1fr_1.05fr]">
       {/* LEFT — hero panel (now on the LEFT) */}
       <div className="relative hidden overflow-hidden md:block">
         {/* Background image */}
@@ -61,7 +61,7 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
       </div>
 
       {/* RIGHT — colorful form panel */}
-      <div className="relative flex min-h-screen flex-col overflow-hidden px-5 py-8 sm:px-10 lg:px-14 lg:py-12">
+      <div className="relative flex h-screen flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:px-14 lg:py-8">
         {/* Mesh gradient background — soft warm base */}
         <div
           aria-hidden
