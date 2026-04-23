@@ -62,52 +62,46 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
 
       {/* RIGHT — colorful form panel */}
       <div className="relative flex h-screen flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:px-14 lg:py-8">
-        {/* Premium warm gradient base — cream → champagne */}
+        {/* Premium warm gradient base — deep amber → champagne → terracotta */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(135deg, oklch(0.97 0.025 80) 0%, oklch(0.94 0.045 60) 45%, oklch(0.9 0.06 40) 100%)",
+              "linear-gradient(135deg, oklch(0.92 0.06 75) 0%, oklch(0.86 0.09 55) 40%, oklch(0.78 0.13 40) 100%)",
           }}
         />
         {/* Warm glow — top-right (golden amber) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-32 -top-32 -z-10 h-[520px] w-[520px] rounded-full opacity-70 blur-[100px]"
-          style={{ background: "oklch(0.85 0.15 70)" }}
+          className="pointer-events-none absolute -right-32 -top-32 -z-10 h-[560px] w-[560px] rounded-full opacity-80 blur-[110px]"
+          style={{ background: "oklch(0.85 0.17 75)" }}
         />
         {/* Warm glow — center-left (rose gold) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-24 top-1/3 -z-10 h-[440px] w-[440px] rounded-full opacity-60 blur-[110px]"
-          style={{ background: "oklch(0.82 0.13 30)" }}
+          className="pointer-events-none absolute -left-24 top-1/4 -z-10 h-[480px] w-[480px] rounded-full opacity-70 blur-[120px]"
+          style={{ background: "oklch(0.78 0.15 25)" }}
         />
         {/* Warm glow — bottom-right (terracotta) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 -right-20 -z-10 h-[460px] w-[460px] rounded-full opacity-55 blur-[110px]"
-          style={{ background: "oklch(0.78 0.14 45)" }}
+          className="pointer-events-none absolute -bottom-32 -right-20 -z-10 h-[500px] w-[500px] rounded-full opacity-75 blur-[120px]"
+          style={{ background: "oklch(0.72 0.16 35)" }}
         />
         {/* Warm glow — bottom-left (soft peach) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-24 left-1/4 -z-10 h-[380px] w-[380px] rounded-full opacity-55 blur-[100px]"
-          style={{ background: "oklch(0.88 0.1 55)" }}
-        />
-        {/* Subtle warm wash for form readability */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{ background: "oklch(1 0.01 70 / 0.25)" }}
+          className="pointer-events-none absolute -bottom-24 left-1/4 -z-10 h-[400px] w-[400px] rounded-full opacity-65 blur-[100px]"
+          style={{ background: "oklch(0.85 0.13 60)" }}
         />
         {/* Faint warm dot grid for texture */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.07]"
+          className="absolute inset-0 -z-10 opacity-[0.08]"
           style={{
             backgroundImage:
-              "radial-gradient(oklch(0.4 0.08 50) 1px, transparent 1px)",
+              "radial-gradient(oklch(0.35 0.1 40) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
           }}
         />
