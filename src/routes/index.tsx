@@ -1,3 +1,4 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { QuietHero } from "@/components/site/QuietHero";
 import { EverythingYouNeed } from "@/components/site/EverythingYouNeed";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const SECTION_MAP: Record<string, () => JSX.Element> = {
+const SECTION_MAP: Record<string, () => React.ReactElement> = {
   hero: QuietHero,
   everything: EverythingYouNeed,
   stats: Stats,
