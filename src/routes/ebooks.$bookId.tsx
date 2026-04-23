@@ -621,6 +621,51 @@ function IconBtn({
   );
 }
 
+function ArrowButton({
+  side,
+  theme,
+  visible,
+  onClick,
+  disabled,
+  ariaLabel,
+}: {
+  side: "left" | "right";
+  theme: typeof THEMES[keyof typeof THEMES];
+  visible: boolean;
+  onClick: () => void;
+  disabled: boolean;
+  ariaLabel: string;
+}) {
+  const Icon = side === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      className="group absolute top-1/2 z-20 -translate-y-1/2 transition-all duration-300 ease-out disabled:pointer-events-none"
+      style={{
+        [side]: "0.5rem",
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transform: `translateY(-50%) ${visible ? "translateX(0)" : `translateX(${side === "left" ? "-8px" : "8px"})`}`,
+      }}
+    >
+      <span
+        className="flex h-11 w-11 items-center justify-center rounded-full shadow-lg transition-all duration-200 ease-out group-hover:scale-110 group-active:scale-95"
+        style={{
+          background: theme.page,
+          color: theme.text,
+          border: `1px solid ${theme.border}`,
+          boxShadow:
+            "0 8px 24px -10px oklch(0.2 0.05 260 / 0.35), 0 2px 6px -2px oklch(0.2 0.05 260 / 0.15)",
+        }}
+      >
+        <Icon className="h-5 w-5 opacity-80 transition-opacity group-hover:opacity-100" strokeWidth={2.25} />
+      </span>
+    </button>
+  );
+}
+
 function ThemeBtn({
   active,
   onClick,
