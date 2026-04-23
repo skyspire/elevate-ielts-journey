@@ -19,7 +19,7 @@ import {
 import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
-export const Route = createFileRoute("/admin/content/$skill/$section/$type")({
+export const Route = createFileRoute("/admin/content/$module/$skill/$section/$type")({
   component: QuestionTypeEditor,
   loader: ({ params }) => {
     const skill = findSkill(params.skill);

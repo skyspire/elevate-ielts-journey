@@ -3,7 +3,7 @@ import { ChevronRight, ArrowLeft } from "lucide-react";
 import { findSkill } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
-export const Route = createFileRoute("/admin/content/$skill/")({
+export const Route = createFileRoute("/admin/content/$module/$skill/")({
   component: SkillHub,
   loader: ({ params }) => {
     const skill = findSkill(params.skill);

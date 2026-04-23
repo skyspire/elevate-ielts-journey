@@ -3,7 +3,7 @@ import { ArrowLeft, ChevronRight, FileQuestion } from "lucide-react";
 import { findSection, findSkill } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
-export const Route = createFileRoute("/admin/content/$skill/$section/")({
+export const Route = createFileRoute("/admin/content/$module/$skill/$section/")({
   component: SectionHub,
   loader: ({ params }) => {
     const skill = findSkill(params.skill);
