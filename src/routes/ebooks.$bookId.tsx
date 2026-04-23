@@ -98,21 +98,6 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
-  // Auto-pagination: how many viewport-sized slices each source page becomes.
-  const [leftSubCount, setLeftSubCount] = useState(1);
-  const [rightSubCount, setRightSubCount] = useState(1);
-  const [subIndex, setSubIndex] = useState(0);
-
-  // Two-page spread on desktop
-  const [isWide, setIsWide] = useState(false);
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setIsWide(mql.matches);
-    sync();
-    mql.addEventListener("change", sync);
-    return () => mql.removeEventListener("change", sync);
-  }, []);
-
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
   const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
@@ -127,38 +112,20 @@ function ReaderPage() {
   }, [total, state.currentPage, setState]);
 
   const leftPage = flat[current] ?? flat[0];
-  const rightPage = isWide ? flat[current + 1] : undefined;
-
-  // Reset sub-page when the source page or layout changes.
-  useEffect(() => {
-    setSubIndex(0);
-  }, [current, isWide]);
-
-  const maxSubCount = Math.max(leftSubCount, isWide ? rightSubCount : 1);
 
   const goPrev = useCallback(() => {
-    setSubIndex((idx) => {
-      if (idx > 0) return idx - 1;
-      // Move to previous source page; jump to its last sub-page after measure.
-      setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
-      return 0;
-    });
-  }, [isWide, setState]);
+    setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - 1) }));
+  }, [setState]);
 
   const goNext = useCallback(() => {
-    setSubIndex((idx) => {
-      if (idx + 1 < maxSubCount) return idx + 1;
-      setState((s) => {
-        const step = isWide ? 2 : 1;
-        const next = total > 0 ? Math.min(total - 1, s.currentPage + step) : 0;
-        if (!user && next >= freePages) {
-          return { ...s, currentPage: Math.max(0, freePages - 1) };
-        }
-        return { ...s, currentPage: next };
-      });
-      return 0;
+    setState((s) => {
+      const next = total > 0 ? Math.min(total - 1, s.currentPage + 1) : 0;
+      if (!user && next >= freePages) {
+        return { ...s, currentPage: Math.max(0, freePages - 1) };
+      }
+      return { ...s, currentPage: next };
     });
-  }, [isWide, setState, total, user, freePages, maxSubCount]);
+  }, [setState, total, user, freePages]);
 
   // Keyboard navigation
   useEffect(() => {
