@@ -22,7 +22,7 @@ import {
   Settings as SettingsIcon,
 } from "lucide-react";
 import { useSession, canManageUsers } from "@/lib/admin/auth";
-import { CONTENT_TREE } from "@/lib/admin/content-tree";
+import { CONTENT_MODULES } from "@/lib/admin/content-tree";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -142,11 +142,6 @@ function AdminLayout() {
 // ───────── Sidebar tree ─────────
 
 function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath: string }) {
-  // Auto-expand the section that matches the current URL
-  const initialContentOpen = currentPath.startsWith("/admin/content");
-  const initialWritingOpen = currentPath.startsWith("/admin/content/writing");
-  const initialSpeakingOpen = currentPath.startsWith("/admin/content/speaking");
-
   return (
     <div className="space-y-5">
       {/* Overview */}
@@ -156,57 +151,66 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
 
       {/* Content — the big nested tree */}
       <Section label="Content">
-        <Group
-          icon={GraduationCap}
-          label={CONTENT_TREE.label}
-          to="/admin/content"
-          defaultOpen={initialContentOpen}
-        >
-          {CONTENT_TREE.skills.map((skill) => {
-            const SkillIcon = skill.id === "writing" ? BookOpen : MessageSquare;
-            const skillOpen =
-              (skill.id === "writing" && initialWritingOpen) ||
-              (skill.id === "speaking" && initialSpeakingOpen);
-            return (
-              <Group
-                key={skill.id}
-                icon={SkillIcon}
-                label={skill.label}
-                to="/admin/content/$skill"
-                params={{ skill: skill.id }}
-                defaultOpen={skillOpen}
-                indent
-              >
-                {skill.sections.map((section) => {
-                  const sectionPath = `/admin/content/${skill.id}/${section.id}`;
-                  const sectionOpen = currentPath.startsWith(sectionPath);
-                  return (
-                    <Group
-                      key={section.id}
-                      icon={Folder}
-                      label={section.label}
-                      to="/admin/content/$skill/$section"
-                      params={{ skill: skill.id, section: section.id }}
-                      defaultOpen={sectionOpen}
-                      indent
-                      indentLevel={2}
-                    >
-                      {section.questionTypes.map((qt) => (
-                        <TypeLeaf
-                          key={qt.id}
-                          skill={skill.id}
-                          section={section.id}
-                          type={qt.id}
-                          label={qt.label}
-                        />
-                      ))}
-                    </Group>
-                  );
-                })}
-              </Group>
-            );
-          })}
-        </Group>
+        {CONTENT_MODULES.map((mod) => {
+          const moduleBasePath = `/admin/content/${mod.id}`;
+          const moduleOpen = currentPath.startsWith(moduleBasePath);
+          return (
+            <Group
+              key={mod.id}
+              icon={GraduationCap}
+              label={mod.label}
+              to="/admin/content/$module"
+              params={{ module: mod.id }}
+              defaultOpen={moduleOpen}
+            >
+              {mod.skills.map((skill) => {
+                const SkillIcon = skill.id === "writing" ? BookOpen : MessageSquare;
+                const skillBasePath = `${moduleBasePath}/${skill.id}`;
+                const skillOpen = currentPath.startsWith(skillBasePath);
+                return (
+                  <Group
+                    key={skill.id}
+                    icon={SkillIcon}
+                    label={skill.label}
+                    to="/admin/content/$module/$skill"
+                    params={{ module: mod.id, skill: skill.id }}
+                    defaultOpen={skillOpen}
+                    indent
+                    indentLevel={1}
+                  >
+                    {skill.sections.map((section) => {
+                      const sectionPath = `${skillBasePath}/${section.id}`;
+                      const sectionOpen = currentPath.startsWith(sectionPath);
+                      return (
+                        <Group
+                          key={section.id}
+                          icon={Folder}
+                          label={section.label}
+                          to="/admin/content/$module/$skill/$section"
+                          params={{ module: mod.id, skill: skill.id, section: section.id }}
+                          defaultOpen={sectionOpen}
+                          indent
+                          indentLevel={2}
+                        >
+                          {section.questionTypes.map((qt) => (
+                            <TypeLeaf
+                              key={qt.id}
+                              moduleId={mod.id}
+                              skill={skill.id}
+                              section={section.id}
+                              type={qt.id}
+                              label={qt.label}
+                            />
+                          ))}
+                        </Group>
+                      );
+                    })}
+                  </Group>
+                );
+              })}
+            </Group>
+          );
+        })}
 
         <Leaf to="/admin/vocabulary" icon={Library} label="Vocabulary" />
       </Section>
@@ -284,23 +288,25 @@ function Leaf({ to, icon: Icon, label, exact, indentLevel = 0 }: LeafProps) {
   );
 }
 
-// Typed link to /admin/content/$skill/$section/$type
+// Typed link to /admin/content/$module/$skill/$section/$type
 function TypeLeaf({
+  moduleId,
   skill,
   section,
   type,
   label,
 }: {
+  moduleId: string;
   skill: string;
   section: string;
   type: string;
   label: string;
 }) {
   return (
-    <li style={{ paddingLeft: 36 }}>
+    <li style={{ paddingLeft: 48 }}>
       <Link
-        to="/admin/content/$skill/$section/$type"
-        params={{ skill, section, type }}
+        to="/admin/content/$module/$skill/$section/$type"
+        params={{ module: moduleId, skill, section, type }}
         className="flex items-center gap-2 rounded-md px-2.5 py-1 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         activeProps={{
           className:
@@ -319,8 +325,9 @@ type GroupProps = {
   label: string;
   to:
     | "/admin/content"
-    | "/admin/content/$skill"
-    | "/admin/content/$skill/$section";
+    | "/admin/content/$module"
+    | "/admin/content/$module/$skill"
+    | "/admin/content/$module/$skill/$section";
   params?: Record<string, string>;
   defaultOpen?: boolean;
   indent?: boolean;

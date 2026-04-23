@@ -1,14 +1,15 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ChevronRight, ArrowLeft } from "lucide-react";
-import { findSkill } from "@/lib/admin/content-tree";
+import { findModule, findSkill } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
-export const Route = createFileRoute("/admin/content/$skill/")({
+export const Route = createFileRoute("/admin/content/$module/$skill/")({
   component: SkillHub,
   loader: ({ params }) => {
-    const skill = findSkill(params.skill);
-    if (!skill) throw notFound();
-    return { skill };
+    const mod = findModule(params.module);
+    const skill = findSkill(params.module, params.skill);
+    if (!mod || !skill) throw notFound();
+    return { mod, skill };
   },
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl py-12 text-center">
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/admin/content/$skill/")({
 });
 
 function SkillHub() {
-  const { skill } = Route.useLoaderData();
+  const { mod, skill } = Route.useLoaderData();
   const params = Route.useParams();
 
   return (
@@ -29,17 +30,20 @@ function SkillHub() {
       <Crumbs
         trail={[
           { label: "Content", to: "/admin/content" },
-          { label: "IELTS Academic", to: "/admin/content" },
+          { label: mod.label },
           { label: skill.label },
         ]}
       />
       <div className="mt-2 flex items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-extrabold tracking-tight">{skill.label}</h1>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight">
+            {mod.shortLabel} — {skill.label}
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">{skill.blurb}</p>
         </div>
         <Link
-          to="/admin/content"
+          to="/admin/content/$module"
+          params={{ module: params.module }}
           className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -51,8 +55,8 @@ function SkillHub() {
         {skill.sections.map((section) => (
           <Link
             key={section.id}
-            to="/admin/content/$skill/$section"
-            params={{ skill: params.skill, section: section.id }}
+            to="/admin/content/$module/$skill/$section"
+            params={{ module: params.module, skill: params.skill, section: section.id }}
             className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
             <div className="mb-2 flex items-center justify-between">

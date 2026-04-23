@@ -12,6 +12,7 @@ import {
   SPEAKING_TOPICS_KEY,
 } from "@/lib/admin/defaults";
 import {
+  findModule,
   findQuestionType,
   findSection,
   findSkill,
@@ -19,14 +20,15 @@ import {
 import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
-export const Route = createFileRoute("/admin/content/$skill/$section/$type")({
+export const Route = createFileRoute("/admin/content/$module/$skill/$section/$type")({
   component: QuestionTypeEditor,
   loader: ({ params }) => {
-    const skill = findSkill(params.skill);
-    const section = findSection(params.skill, params.section);
-    const type = findQuestionType(params.skill, params.section, params.type);
-    if (!skill || !section || !type) throw notFound();
-    return { skill, section, type };
+    const mod = findModule(params.module);
+    const skill = findSkill(params.module, params.skill);
+    const section = findSection(params.module, params.skill, params.section);
+    const type = findQuestionType(params.module, params.skill, params.section, params.type);
+    if (!mod || !skill || !section || !type) throw notFound();
+    return { mod, skill, section, type };
   },
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl py-12 text-center">
@@ -38,36 +40,37 @@ export const Route = createFileRoute("/admin/content/$skill/$section/$type")({
   ),
 });
 
-// Combined defaults for the writing prompts record (Task 1 + Task 2 keys)
+// Combined defaults for the writing prompts record.
+// task2Prompts: keyed by essay type (opinion, discussion, …) — shared by both modules.
+// task1GeneralPrompts: keyed by formal / informal — General Training Task 1.
+// Academic Task 1 keys (graphs, process) start empty so admins can fill them in.
 const WRITING_DEFAULTS: Record<string, string[]> = {
   ...task2Prompts,
   ...task1GeneralPrompts,
-  // Academic Task 1 keys are not in writing-prompts.ts yet — start empty so
-  // admins can add them. The public Task 1 page will fall back to placeholders.
   graphs: [],
   process: [],
 };
 
 function QuestionTypeEditor() {
-  const { skill, section, type } = Route.useLoaderData();
+  const { mod, skill, section, type } = Route.useLoaderData();
   const params = Route.useParams();
 
   const breadcrumb = [
     "Content",
-    "IELTS Academic",
+    mod.label,
     skill.label,
     section.label,
     type.label,
   ];
 
-  const title = `${skill.label} · ${section.label} · ${type.label}`;
+  const title = `${mod.shortLabel} · ${skill.label} · ${section.label} · ${type.label}`;
   const description = type.hint;
 
   return (
     <div className="mx-auto max-w-4xl">
       <Link
-        to="/admin/content/$skill/$section"
-        params={{ skill: params.skill, section: params.section }}
+        to="/admin/content/$module/$skill/$section"
+        params={{ module: params.module, skill: params.skill, section: params.section }}
         className="mb-3 inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
