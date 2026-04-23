@@ -670,7 +670,7 @@ function PageView({
   return (
     <div
       onMouseUp={onMouseUp}
-      className="relative rounded-lg p-8 sm:p-12"
+      className="relative overflow-hidden rounded-lg p-6 sm:p-10"
       style={{
         background: theme.page,
         boxShadow:
@@ -678,18 +678,22 @@ function PageView({
             ? "inset -8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)"
             : "inset 8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
         borderRadius: isWide ? (side === "left" ? "8px 0 0 8px" : "0 8px 8px 0") : "8px",
-        minHeight: "70vh",
+        height: "calc(100dvh - 9.5rem)",
+        maxHeight: "calc(100dvh - 9.5rem)",
       }}
     >
       {locked ? (
-        <div className="flex h-full min-h-[60vh] flex-col items-center justify-center text-center">
+        <div className="flex h-full flex-col items-center justify-center text-center">
           <Lock className="h-10 w-10 opacity-40" />
           <p className="mt-4 text-sm font-bold uppercase tracking-wider opacity-50">
             Locked — sign in to read
           </p>
         </div>
       ) : (
-        <article style={{ fontFamily: "'Playfair Display', serif", color: theme.text }}>
+        <article
+          className="h-full overflow-y-auto pr-1"
+          style={{ fontFamily: "'Playfair Display', serif", color: theme.text }}
+        >
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
@@ -711,17 +715,11 @@ function PageView({
             }
             if (line.trim() === "") return <div key={i} className="h-2" />;
             return (
-              <p key={i} className={`${fs.body} mb-5`}>
+              <p key={i} className={`${fs.body} mb-3`}>
                 {renderText(line)}
               </p>
             );
           })}
-          <p
-            className="mt-10 text-center text-xs font-semibold"
-            style={{ color: theme.muted, fontFamily: "Inter, sans-serif" }}
-          >
-            — {page.index + 1} —
-          </p>
         </article>
       )}
     </div>
