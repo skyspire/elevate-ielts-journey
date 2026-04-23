@@ -4,12 +4,16 @@ import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
   CURRENCIES,
+  CURRENCY_GROUPS,
   PRICES,
   type CurrencyCode,
   detectCurrencyFromIP,
