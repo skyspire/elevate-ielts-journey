@@ -102,18 +102,30 @@ function ReaderPage() {
   const pageRef = useRef<HTMLDivElement>(null);
 
   // Avoid SSR/CSR hydration mismatch from localStorage-driven state.
-  // Render the canonical first page on first paint, then sync to saved state.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
-  const total = flat.length;
-  const savedPage = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
-  const current = mounted ? savedPage : 0;
-  const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
-  const isLocked = !!book && !user && current >= freePages;
+  // Immersive auto-hide chrome (top toolbar + bottom counter).
+  // Visible on mouse move, tap, scroll, or keyboard nav; hides after 2.5s of inactivity.
+  const [chromeVisible, setChromeVisible] = useState(true);
+  useEffect(() => {
+    if (!mounted) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const show = () => {
+      setChromeVisible(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setChromeVisible(false), 2500);
+    };
+    show();
+    const events: (keyof WindowEventMap)[] = ["mousemove", "keydown", "touchstart", "click"];
+    events.forEach((e) => window.addEventListener(e, show, { passive: true }));
+    return () => {
+      clearTimeout(timer);
+      events.forEach((e) => window.removeEventListener(e, show));
+    };
+  }, [mounted]);
 
   // Self-heal stale localStorage if the saved page is out of range for the new book content.
   useEffect(() => {
