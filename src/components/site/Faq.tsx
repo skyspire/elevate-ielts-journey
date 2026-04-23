@@ -70,14 +70,14 @@ export function Faq() {
                       className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-brand sm:text-lg">
+                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-foreground sm:text-lg">
                         {f.q}
                       </span>
                       <span
-                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-foreground/20 transition-all duration-300 ${
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
                           isOpen
-                            ? "rotate-45 border-brand bg-brand text-brand-foreground"
-                            : "bg-background text-foreground group-hover:border-brand group-hover:text-brand"
+                            ? "rotate-45 border-foreground bg-foreground text-background"
+                            : "border-foreground/25 bg-background text-foreground/70 group-hover:border-foreground group-hover:text-foreground"
                         }`}
                       >
                         <Plus className="h-3.5 w-3.5" strokeWidth={3} />
@@ -92,20 +92,20 @@ export function Faq() {
                       <div className="min-h-0">
                         <div className="pb-5 pr-12">
                           {lead && (
-                            <p className="font-display text-sm font-semibold leading-relaxed text-foreground sm:text-base">
+                            <p className="border-l-2 border-foreground/80 pl-4 font-display text-sm font-semibold leading-relaxed text-foreground sm:text-base">
                               {lead}
                             </p>
                           )}
                           {bullets.length > 0 && (
-                            <ul className="mt-3 space-y-1.5">
+                            <ul className="mt-4 space-y-2 pl-4">
                               {bullets.map((b) => (
                                 <li
                                   key={b}
-                                  className="flex gap-3 font-display text-sm font-medium leading-relaxed text-foreground/65"
+                                  className="flex gap-3 font-display text-sm font-medium leading-relaxed text-foreground/70"
                                 >
                                   <span
                                     aria-hidden
-                                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                                    className="mt-[0.65rem] h-px w-3 shrink-0 bg-foreground/40"
                                   />
                                   <span>{b}</span>
                                 </li>
