@@ -357,7 +357,7 @@ function ReaderPage() {
           width: "min(680px, 100vw - 1.5rem)",
           minHeight: "100dvh",
           paddingTop: "0.75rem",
-          paddingBottom: "3.5rem", // breathing room above page counter
+          paddingBottom: "0.75rem",
         }}
       >
         <div className="relative w-full" style={{ perspective: "2400px" }}>
