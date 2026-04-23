@@ -129,13 +129,13 @@ export function EverythingYouNeed() {
             in your next exam
           </h2>
 
-          {/* Paragraph + thin outline seal beside it */}
-          <div className="mt-4 flex flex-col items-center justify-center gap-5 sm:mt-5 sm:flex-row sm:items-center sm:gap-7">
+          {/* Paragraph + rubber stamp tucked to the right */}
+          <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
             <p className="max-w-xl text-sm font-semibold text-foreground/75 sm:text-base sm:text-left">
               Six focused resources, built by Band 9 examiners. No fluff, no
               recycled content — just what actually moves your score.
             </p>
-            <ThinOutlineSeal />
+            <RubberStamp />
           </div>
         </div>
 
