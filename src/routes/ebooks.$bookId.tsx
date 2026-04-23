@@ -245,10 +245,16 @@ function ReaderPage() {
       className="min-h-screen transition-colors duration-300"
       style={{ background: theme.bg, color: theme.text }}
     >
-      {/* Top bar */}
+      {/* Top bar — auto-hide */}
       <header
-        className="sticky top-0 z-40 border-b backdrop-blur-md"
-        style={{ borderColor: theme.border, background: `${theme.bg}f5` }}
+        className="fixed left-0 right-0 top-0 z-40 border-b backdrop-blur-md transition-all duration-300"
+        style={{
+          borderColor: theme.border,
+          background: `${theme.bg}f5`,
+          transform: chromeVisible ? "translateY(0)" : "translateY(-100%)",
+          opacity: chromeVisible ? 1 : 0,
+          pointerEvents: chromeVisible ? "auto" : "none",
+        }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-3 min-w-0">
