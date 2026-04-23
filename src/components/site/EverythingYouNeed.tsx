@@ -111,10 +111,7 @@ export function EverythingYouNeed() {
 
       <div className="container-page relative">
         {/* Header */}
-        <div className="relative mx-auto max-w-3xl text-center">
-          {/* Wax seal stamp — top right, close to content */}
-          <WaxSealStamp />
-
+        <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Everything you need to hit{" "}
             <span
@@ -131,10 +128,15 @@ export function EverythingYouNeed() {
             </span>{" "}
             in your next exam
           </h2>
-          <p className="mt-3 text-sm font-semibold text-foreground/75 sm:text-base">
-            Six focused resources, built by Band 9 examiners. No fluff, no
-            recycled content — just what actually moves your score.
-          </p>
+
+          {/* Paragraph + thin outline seal beside it */}
+          <div className="mt-4 flex flex-col items-center justify-center gap-5 sm:mt-5 sm:flex-row sm:items-center sm:gap-7">
+            <p className="max-w-xl text-sm font-semibold text-foreground/75 sm:text-base sm:text-left">
+              Six focused resources, built by Band 9 examiners. No fluff, no
+              recycled content — just what actually moves your score.
+            </p>
+            <ThinOutlineSeal />
+          </div>
         </div>
 
         {/* Feature list — two columns on md+ */}
@@ -148,48 +150,53 @@ export function EverythingYouNeed() {
   );
 }
 
-/* ---------- Clean minimal circular stamp ---------- */
-function WaxSealStamp() {
+/* ---------- Thin outline circular seal — sober, formal serif ---------- */
+function ThinOutlineSeal() {
   return (
     <motion.div
       aria-hidden
-      initial={{ opacity: 0, scale: 0.7, rotate: -12, y: -10 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: -6, y: 0 }}
+      initial={{ opacity: 0, scale: 0.85, rotate: -4 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: -3 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{
-        type: "spring",
-        stiffness: 220,
-        damping: 18,
-        mass: 0.8,
-        delay: 0.15,
-      }}
-      className="pointer-events-none absolute -top-6 right-2 z-10 sm:-top-4 sm:right-4 md:-top-2 md:-right-4"
-      style={{ transformOrigin: "center center" }}
+      transition={{ type: "spring", stiffness: 220, damping: 20, delay: 0.15 }}
+      className="shrink-0"
     >
       <div
-        className="flex h-24 w-24 flex-col items-center justify-center rounded-full sm:h-28 sm:w-28"
+        className="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-full sm:h-24 sm:w-24"
         style={{
-          background: "oklch(0.98 0.005 250)",
-          border: "2px solid oklch(0.45 0.18 260)",
-          boxShadow:
-            "0 4px 12px -4px oklch(0.45 0.18 260 / 0.25), inset 0 0 0 4px oklch(0.98 0.005 250), inset 0 0 0 5px oklch(0.45 0.18 260 / 0.4)",
+          background: "transparent",
+          border: "1px solid oklch(0.45 0.18 260 / 0.55)",
+          boxShadow: "inset 0 0 0 3px oklch(1 0 0 / 0), inset 0 0 0 4px oklch(0.45 0.18 260 / 0.18)",
         }}
       >
         <span
-          className="font-display text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
-          style={{ color: "oklch(0.45 0.18 260)" }}
+          className="text-[9px] uppercase tracking-[0.2em] sm:text-[10px]"
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700,
+            color: "oklch(0.45 0.18 260 / 0.85)",
+          }}
         >
           All at
         </span>
         <span
-          className="font-display text-base font-black uppercase leading-none sm:text-lg"
-          style={{ color: "oklch(0.32 0.18 262)" }}
+          className="my-0.5 text-lg leading-none sm:text-xl"
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 800,
+            fontStyle: "italic",
+            color: "oklch(0.32 0.18 262)",
+          }}
         >
           One
         </span>
         <span
-          className="font-display text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
-          style={{ color: "oklch(0.45 0.18 260)" }}
+          className="text-[9px] uppercase tracking-[0.2em] sm:text-[10px]"
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontWeight: 700,
+            color: "oklch(0.45 0.18 260 / 0.85)",
+          }}
         >
           Place
         </span>
