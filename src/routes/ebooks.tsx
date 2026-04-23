@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
 import { BookOpen, Lock, Sparkles } from "lucide-react";
 import { ebooks, type EbookCategory } from "@/data/ebooks";
@@ -40,6 +40,14 @@ function EbooksPage() {
     () => (category === "All" ? ebooks : ebooks.filter((b) => b.category === category)),
     [category],
   );
+  const matches = useMatches();
+  const hasChildMatch = matches.some(
+    (m) => m.routeId !== "/ebooks" && m.routeId.startsWith("/ebooks/"),
+  );
+
+  if (hasChildMatch) {
+    return <Outlet />;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
