@@ -272,7 +272,7 @@ export function ValueStatement() {
         </div>
 
         <p className="mt-8 text-center text-xs font-semibold text-muted-foreground">
-          E-books sold separately • Cancel anytime • No auto-renewal
+          Cancel anytime
         </p>
       </div>
     </section>
