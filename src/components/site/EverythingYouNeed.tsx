@@ -233,17 +233,16 @@ function WaxSealStamp() {
             );
           })}
 
-          {/* Pressed text — clean, highly legible serif */}
+          {/* Pressed text — clean, bold formal serif */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-[1.05]">
             <span
               className="text-[12px] sm:text-[14px]"
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontWeight: 700,
+                fontWeight: 800,
                 letterSpacing: "0.04em",
                 color: "oklch(0.97 0.04 60)",
-                textShadow:
-                  "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
+                textShadow: "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
               }}
             >
               all at
@@ -253,7 +252,6 @@ function WaxSealStamp() {
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontWeight: 900,
-                fontStyle: "italic",
                 letterSpacing: "-0.01em",
                 color: "oklch(0.98 0.04 60)",
                 textShadow:
@@ -266,11 +264,10 @@ function WaxSealStamp() {
               className="text-[12px] sm:text-[14px]"
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontWeight: 700,
+                fontWeight: 800,
                 letterSpacing: "0.06em",
                 color: "oklch(0.97 0.04 60)",
-                textShadow:
-                  "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
+                textShadow: "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
               }}
             >
               place
@@ -279,12 +276,14 @@ function WaxSealStamp() {
         </div>
       </div>
 
-      {/* Smooth script signature outside the seal */}
+      {/* Formal signature — bold serif, no handwriting */}
       <span
-        className="mt-0.5 inline-block rotate-[-5deg]"
+        className="mt-1 inline-block"
         style={{
-          fontFamily: "'Great Vibes', cursive",
-          fontSize: "26px",
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: "13px",
+          fontWeight: 800,
+          letterSpacing: "0.02em",
           lineHeight: 1,
           color: "oklch(0.34 0.15 22)",
           textShadow: "0 1px 0 oklch(1 0 0 / 0.55)",
