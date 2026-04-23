@@ -111,7 +111,10 @@ export function EverythingYouNeed() {
 
       <div className="container-page relative">
         {/* Header */}
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="relative mx-auto max-w-3xl text-center">
+          {/* Wax seal stamp — top right, close to content */}
+          <WaxSealStamp />
+
           <h2 className="font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Everything you need to hit{" "}
             <span
