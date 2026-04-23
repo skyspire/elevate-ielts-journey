@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -78,11 +79,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const isAuth = location.pathname === "/login" || location.pathname === "/signup";
+  const hideChrome = isAdmin || isAuth;
   return (
     <>
-      {!isAdmin && <AnnouncementBanner />}
-      {!isAdmin && <Header />}
+      {!hideChrome && <AnnouncementBanner />}
+      {!hideChrome && <Header />}
       <Outlet />
+      <Toaster />
     </>
   );
 }
