@@ -102,11 +102,30 @@ function ReaderPage() {
   const pageRef = useRef<HTMLDivElement>(null);
 
   // Avoid SSR/CSR hydration mismatch from localStorage-driven state.
-  // Render the canonical first page on first paint, then sync to saved state.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Immersive auto-hide chrome (top toolbar + bottom counter).
+  // Visible on mouse move, tap, scroll, or keyboard nav; hides after 2.5s of inactivity.
+  const [chromeVisible, setChromeVisible] = useState(true);
+  useEffect(() => {
+    if (!mounted) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const show = () => {
+      setChromeVisible(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setChromeVisible(false), 2500);
+    };
+    show();
+    const events: (keyof WindowEventMap)[] = ["mousemove", "keydown", "touchstart", "click"];
+    events.forEach((e) => window.addEventListener(e, show, { passive: true }));
+    return () => {
+      clearTimeout(timer);
+      events.forEach((e) => window.removeEventListener(e, show));
+    };
+  }, [mounted]);
 
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
@@ -226,10 +245,16 @@ function ReaderPage() {
       className="min-h-screen transition-colors duration-300"
       style={{ background: theme.bg, color: theme.text }}
     >
-      {/* Top bar */}
+      {/* Top bar — auto-hide */}
       <header
-        className="sticky top-0 z-40 border-b backdrop-blur-md"
-        style={{ borderColor: theme.border, background: `${theme.bg}f5` }}
+        className="fixed left-0 right-0 top-0 z-40 border-b backdrop-blur-md transition-all duration-300"
+        style={{
+          borderColor: theme.border,
+          background: `${theme.bg}f5`,
+          transform: chromeVisible ? "translateY(0)" : "translateY(-100%)",
+          opacity: chromeVisible ? 1 : 0,
+          pointerEvents: chromeVisible ? "auto" : "none",
+        }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-3 min-w-0">
@@ -319,9 +344,17 @@ function ReaderPage() {
         </div>
       )}
 
-      {/* Reader area */}
-      <div className="relative mx-auto max-w-3xl px-3 pb-4 pt-3 sm:px-4 sm:pt-4">
-        <div className="relative">
+      {/* Reader area — full viewport, centered paperback column */}
+      <div
+        className="relative mx-auto flex items-center justify-center"
+        style={{
+          width: "min(640px, 100vw - 1.5rem)",
+          minHeight: "100dvh",
+          paddingTop: "0.5rem",
+          paddingBottom: "0.5rem",
+        }}
+      >
+        <div className="relative w-full">
           <PageView
             page={leftPage}
             theme={theme}
@@ -330,13 +363,19 @@ function ReaderPage() {
             onMouseUp={handleMouseUp(leftPage.index)}
           />
 
-          {/* Edge overlay arrows */}
+          {/* Edge overlay arrows — auto-hide with chrome */}
           <button
             onClick={goPrev}
             disabled={current === 0}
             aria-label="Previous page"
-            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:left-2"
-            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:left-2"
+            style={{
+              background: `${theme.page}d9`,
+              color: theme.text,
+              border: `1px solid ${theme.border}`,
+              opacity: chromeVisible && current !== 0 ? 1 : 0,
+              pointerEvents: chromeVisible && current !== 0 ? "auto" : "none",
+            }}
           >
             <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
           </button>
@@ -344,8 +383,14 @@ function ReaderPage() {
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
             aria-label="Next page"
-            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:right-2"
-            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:right-2"
+            style={{
+              background: `${theme.page}d9`,
+              color: theme.text,
+              border: `1px solid ${theme.border}`,
+              opacity: chromeVisible && current < total - 1 && !isLocked ? 1 : 0,
+              pointerEvents: chromeVisible && current < total - 1 && !isLocked ? "auto" : "none",
+            }}
           >
             <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
           </button>
@@ -354,7 +399,7 @@ function ReaderPage() {
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="mt-4 rounded-xl border p-6 text-center"
+            className="absolute inset-x-4 bottom-16 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -383,10 +428,13 @@ function ReaderPage() {
           </div>
         )}
 
-        {/* Slim page counter */}
+        {/* Slim page counter — auto-hide with chrome */}
         <p
-          className="mt-2 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
-          style={{ color: theme.muted }}
+          className="pointer-events-none fixed bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.18em] transition-opacity duration-300"
+          style={{
+            color: theme.muted,
+            opacity: chromeVisible ? 1 : 0,
+          }}
         >
           Page {current + 1} of {total}
         </p>
@@ -703,11 +751,12 @@ function PageView({
       style={{
         background: theme.page,
         boxShadow:
-          "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 12px 28px -18px oklch(0.2 0.05 260 / 0.25), 0 2px 6px -2px oklch(0.2 0.05 260 / 0.08)",
-        borderRadius: "4px",
-        height: "calc(100dvh - 9.5rem)",
-        maxHeight: "calc(100dvh - 9.5rem)",
-        padding: "clamp(1.5rem, 4vw, 3.25rem) clamp(1.25rem, 5vw, 3.5rem)",
+          "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 18px 40px -22px oklch(0.2 0.05 260 / 0.3), 0 2px 8px -2px oklch(0.2 0.05 260 / 0.1)",
+        borderRadius: "6px",
+        height: "calc(100dvh - 1rem)",
+        maxHeight: "calc(100dvh - 1rem)",
+        // Generous A4 book margins: ~2.5cm top/bottom, ~2cm sides (responsive).
+        padding: "clamp(2rem, 6vh, 2.5cm) clamp(1.25rem, 5vw, 2cm)",
       }}
     >
       {locked ? (
