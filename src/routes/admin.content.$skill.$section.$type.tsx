@@ -95,15 +95,6 @@ function QuestionTypeEditor() {
           defaultRecord={speakingTopicsByCategory}
         />
       )}
-        <TopicListEditor
-          title={title}
-          description={description}
-          breadcrumb={breadcrumb}
-          storageKey={SPEAKING_TOPICS_KEY}
-          categoryKey={type.id}
-          defaultRecord={speakingTopicsByCategory}
-        />
-      )}
     </div>
   );
 }
