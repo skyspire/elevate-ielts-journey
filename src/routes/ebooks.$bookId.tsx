@@ -702,6 +702,9 @@ function PageView({
   page,
   theme,
   fs,
+  bookTitle,
+  pageNumber,
+  totalPages,
   highlights,
   onMouseUp,
   locked,
@@ -709,6 +712,9 @@ function PageView({
   page: { content: string; index: number; chapterTitle: string };
   theme: typeof THEMES[keyof typeof THEMES];
   fs: typeof FONT_SIZES[keyof typeof FONT_SIZES];
+  bookTitle: string;
+  pageNumber: number;
+  totalPages: number;
   highlights: Highlight[];
   onMouseUp: () => void;
   locked?: boolean;
@@ -718,7 +724,6 @@ function PageView({
   const [scale, setScale] = useState(1);
 
   // Auto-shrink: measure intrinsic content vs available card area, scale down to fit.
-  // Uses rAF + size guard to avoid ResizeObserver loop notifications.
   useEffect(() => {
     if (!cardRef.current || !innerRef.current) return;
     const card = cardRef.current;
@@ -728,7 +733,6 @@ function PageView({
     let lastScale = -1;
     const measure = () => {
       raf = 0;
-      // Reset to natural size before measuring
       inner.style.transform = "scale(1)";
       inner.style.width = "100%";
       const cardH = card.clientHeight;
@@ -739,9 +743,7 @@ function PageView({
       const heightScale = cardH / innerH;
       const widthScale = cardW / Math.max(innerW, 1);
       const fit = Math.min(1, heightScale, widthScale);
-      // Floor at 0.6 so text stays readable (~12px min on small screens).
       const next = Math.max(0.6, fit);
-      // Round to avoid tiny oscillations re-triggering ResizeObserver.
       const rounded = Math.round(next * 1000) / 1000;
       if (Math.abs(rounded - lastScale) < 0.002) return;
       lastScale = rounded;
@@ -765,7 +767,6 @@ function PageView({
 
   const lines = page.content.split("\n");
 
-  // Apply highlights by wrapping matching text spans.
   const renderText = (text: string): React.ReactNode => {
     if (highlights.length === 0) return text;
     type Node = string | React.ReactElement;
@@ -804,84 +805,124 @@ function PageView({
     return <>{result.map((n, i) => (typeof n === "string" ? <span key={i}>{n}</span> : n))}</>;
   };
 
-  // Modern paperback: clean paper, very subtle binding-side shadow, generous margins.
+  // Modern paperback page with printed-book header (title + chapter) and footer (page number).
   return (
     <div
       ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative overflow-hidden"
+      className="relative flex flex-col overflow-hidden"
       style={{
         background: theme.page,
         boxShadow:
           "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 18px 40px -22px oklch(0.2 0.05 260 / 0.3), 0 2px 8px -2px oklch(0.2 0.05 260 / 0.1)",
         borderRadius: "6px",
-        height: "calc(100dvh - 4.25rem)",
-        maxHeight: "calc(100dvh - 4.25rem)",
-        // Generous A4 book margins: ~2.5cm top/bottom, ~2cm sides (responsive).
-        padding: "clamp(2rem, 6vh, 2.5cm) clamp(1.25rem, 5vw, 2cm)",
+        height: "calc(100dvh - 1.5rem)",
+        maxHeight: "calc(100dvh - 1.5rem)",
+        // Generous A4 book margins, with extra room reserved for in-page header/footer.
+        padding: "clamp(1.25rem, 4vh, 1.75cm) clamp(1.25rem, 5vw, 2cm)",
       }}
     >
-      {locked ? (
-        <div className="flex h-full flex-col items-center justify-center text-center">
-          <Lock className="h-10 w-10 opacity-40" />
-          <p className="mt-4 text-sm font-bold uppercase tracking-wider opacity-50">
-            Locked — sign in to read
-          </p>
-        </div>
-      ) : (
-        <article
-          ref={innerRef}
-          className="origin-top-left will-change-transform"
-          style={{
-            fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
-            color: theme.text,
-            transform: `scale(${scale})`,
-            width: `${100 / scale}%`,
-            // Soft on-screen rendering
-            WebkitFontSmoothing: "antialiased",
-            MozOsxFontSmoothing: "grayscale",
-            textRendering: "optimizeLegibility",
-          }}
+      {/* In-page running header — book title (left) + chapter (right) */}
+      <header
+        className="flex shrink-0 items-baseline justify-between gap-4 pb-3"
+        style={{
+          borderBottom: `1px solid ${theme.border}`,
+          fontFamily: "'Lora', Georgia, serif",
+          color: theme.muted,
+        }}
+      >
+        <span
+          className="truncate text-[10px] font-semibold uppercase tracking-[0.18em]"
+          title={bookTitle}
         >
-          {lines.map((line, i) => {
-            if (line.startsWith("# ")) {
+          {bookTitle}
+        </span>
+        <span
+          className="truncate text-[10px] font-semibold italic tracking-wide"
+          title={page.chapterTitle}
+        >
+          {page.chapterTitle}
+        </span>
+      </header>
+
+      {/* Page body — fills remaining vertical space */}
+      <div className="relative flex-1 overflow-hidden pt-4">
+        {locked ? (
+          <div className="flex h-full flex-col items-center justify-center text-center">
+            <Lock className="h-10 w-10 opacity-40" />
+            <p className="mt-4 text-sm font-bold uppercase tracking-wider opacity-50">
+              Locked — sign in to read
+            </p>
+          </div>
+        ) : (
+          <article
+            ref={innerRef}
+            className="origin-top-left will-change-transform"
+            style={{
+              fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
+              color: theme.text,
+              transform: `scale(${scale})`,
+              width: `${100 / scale}%`,
+              WebkitFontSmoothing: "antialiased",
+              MozOsxFontSmoothing: "grayscale",
+              textRendering: "optimizeLegibility",
+            }}
+          >
+            {lines.map((line, i) => {
+              if (line.startsWith("# ")) {
+                return (
+                  <h1
+                    key={i}
+                    className={`${fs.h1} mb-3 font-bold leading-[1.2] tracking-tight`}
+                    style={{ fontFamily: "'Lora', Georgia, serif" }}
+                  >
+                    {line.slice(2)}
+                  </h1>
+                );
+              }
+              if (line.startsWith("## ")) {
+                return (
+                  <h2
+                    key={i}
+                    className={`${fs.h2} mb-5 mt-1 font-semibold italic`}
+                    style={{
+                      color: theme.muted,
+                      fontFamily: "'Lora', Georgia, serif",
+                    }}
+                  >
+                    {line.slice(3)}
+                  </h2>
+                );
+              }
+              if (line.trim() === "") return <div key={i} style={{ height: "0.6em" }} />;
               return (
-                <h1
+                <p
                   key={i}
-                  className={`${fs.h1} mb-3 font-bold leading-[1.2] tracking-tight`}
-                  style={{ fontFamily: "'Lora', Georgia, serif" }}
+                  className={`${fs.body} mb-4`}
+                  style={{ textAlign: "justify", hyphens: "auto" }}
                 >
-                  {line.slice(2)}
-                </h1>
+                  {renderText(line)}
+                </p>
               );
-            }
-            if (line.startsWith("## ")) {
-              return (
-                <h2
-                  key={i}
-                  className={`${fs.h2} mb-5 mt-1 font-semibold italic`}
-                  style={{
-                    color: theme.muted,
-                    fontFamily: "'Lora', Georgia, serif",
-                  }}
-                >
-                  {line.slice(3)}
-                </h2>
-              );
-            }
-            if (line.trim() === "") return <div key={i} style={{ height: "0.6em" }} />;
-            return (
-              <p
-                key={i}
-                className={`${fs.body} mb-4`}
-                style={{ textAlign: "justify", hyphens: "auto" }}
-              >
-                {renderText(line)}
-              </p>
-            );
-          })}
-        </article>
-      )}
+            })}
+          </article>
+        )}
+      </div>
+
+      {/* In-page running footer — centered page number */}
+      <footer
+        className="flex shrink-0 items-center justify-center pt-3"
+        style={{
+          borderTop: `1px solid ${theme.border}`,
+          fontFamily: "'Lora', Georgia, serif",
+          color: theme.muted,
+        }}
+      >
+        <span className="text-[11px] font-semibold tracking-[0.2em]">
+          · {pageNumber} ·
+        </span>
+        <span className="ml-2 text-[10px] opacity-60">/ {totalPages}</span>
+      </footer>
     </div>
   );
 }
