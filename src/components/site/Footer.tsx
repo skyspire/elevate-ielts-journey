@@ -3,19 +3,19 @@ import { GraduationCap } from "lucide-react";
 const cols = [
   {
     title: "Navigate",
-    links: ["Home", "Recent Questions", "Vocabulary", "E-books"],
+    links: [{ label: "Home", to: "/" }, { label: "Recent Questions", to: "#" }, { label: "Vocabulary", to: "#" }, { label: "E-books", to: "#" }],
   },
   {
     title: "IELTS",
-    links: ["Academic Writing", "Academic Speaking", "General Writing", "General Speaking"],
+    links: [{ label: "Academic Writing", to: "#" }, { label: "Academic Speaking", to: "#" }, { label: "General Writing", to: "#" }, { label: "General Speaking", to: "#" }],
   },
   {
     title: "Account",
-    links: ["Sign In", "Sign Up", "My Subscription", "Billing"],
+    links: [{ label: "Sign In", to: "#" }, { label: "Sign Up", to: "#" }, { label: "My Subscription", to: "#" }, { label: "Billing", to: "#" }],
   },
   {
     title: "Support",
-    links: ["FAQ", "Contact", "Terms of Service", "Privacy Policy"],
+    links: [{ label: "FAQ", to: "/faq" }, { label: "Contact", to: "#" }, { label: "Terms of Service", to: "/terms" }, { label: "Privacy Policy", to: "#" }],
   },
 ];
 
@@ -65,13 +65,13 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 </h4>
                 <ul className="mt-4 space-y-2.5">
                   {c.links.map((l) => (
-                    <li key={l}>
+                    <li key={l.label}>
                       <a
-                        href="#"
-                        className="text-sm font-semibold transition-colors"
+                        href={l.to}
+                        className="text-sm font-semibold transition-colors hover:underline"
                         style={{ color: isLight ? "oklch(0.45 0.02 260)" : "oklch(0.95 0.01 250 / 0.70)" }}
                       >
-                        {l}
+                        {l.label}
                       </a>
                     </li>
                   ))}

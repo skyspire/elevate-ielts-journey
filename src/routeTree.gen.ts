@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -26,6 +27,11 @@ import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speak
 const VocabularyRoute = VocabularyRouteImport.update({
   id: '/vocabulary',
   path: '/vocabulary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
+  '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/predictions'
     | '/recent-exam-questions'
+    | '/terms'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/predictions'
     | '/recent-exam-questions'
+    | '/terms'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/predictions'
     | '/recent-exam-questions'
+    | '/terms'
     | '/vocabulary'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -193,6 +205,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   PredictionsRoute: typeof PredictionsRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
+  TermsRoute: typeof TermsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/vocabulary'
       fullPath: '/vocabulary'
       preLoaderRoute: typeof VocabularyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recent-exam-questions': {
@@ -316,6 +336,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   PredictionsRoute: PredictionsRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
+  TermsRoute: TermsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
