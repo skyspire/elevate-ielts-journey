@@ -91,7 +91,7 @@ const FEATURES: Feature[] = [
 export function EverythingYouNeed() {
   return (
     <section
-      className="relative overflow-hidden py-20 sm:py-28"
+      className="relative overflow-hidden py-12 sm:py-16"
       style={{
         background:
           "linear-gradient(180deg, oklch(0.985 0.012 75) 0%, oklch(0.97 0.018 295) 55%, oklch(0.96 0.025 290) 100%)",
@@ -112,7 +112,7 @@ export function EverythingYouNeed() {
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-foreground sm:text-6xl">
+          <h2 className="font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Everything you need to hit{" "}
             <span
               className="relative inline-block"
@@ -128,14 +128,14 @@ export function EverythingYouNeed() {
             </span>{" "}
             in your next exam
           </h2>
-          <p className="mt-6 text-lg font-bold text-foreground/80 sm:text-xl">
+          <p className="mt-3 text-sm font-semibold text-foreground/75 sm:text-base">
             Six focused resources, built by Band 9 examiners. No fluff, no
             recycled content — just what actually moves your score.
           </p>
         </div>
 
         {/* Feature list — two columns on md+ */}
-        <div className="mx-auto mt-16 grid max-w-5xl gap-x-8 gap-y-4 md:grid-cols-2">
+        <div className="mx-auto mt-8 grid max-w-5xl gap-x-6 gap-y-2 sm:mt-10 md:grid-cols-2">
           {FEATURES.map((f, idx) => (
             <FeatureRow key={f.key} feature={f} index={idx} />
           ))}
@@ -152,17 +152,17 @@ function FeatureRow({ feature, index }: { feature: Feature; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.05, ease: "easeOut" }}
-      className="group flex items-center gap-5 rounded-2xl p-3 transition-all hover:bg-white/60 sm:gap-7 sm:p-4"
+      className="group flex items-center gap-4 rounded-2xl p-2 transition-all hover:bg-white/60 sm:gap-5 sm:p-3"
     >
       {/* Circular medallion */}
       <FeatureMedallion feature={feature} />
 
       {/* Text */}
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+        <h3 className="font-display text-base font-black tracking-tight text-foreground sm:text-lg">
           {feature.label}
         </h3>
-        <p className="mt-2 text-base font-semibold leading-relaxed text-foreground/75 sm:text-lg">
+        <p className="mt-1 text-xs font-semibold leading-snug text-foreground/75 sm:text-sm">
           {feature.description}
         </p>
       </div>
@@ -188,7 +188,7 @@ function FeatureMedallion({ feature }: { feature: Feature }) {
 
       {/* The circle */}
       <div
-        className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 sm:h-24 sm:w-24"
+        className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 sm:h-16 sm:w-16"
         style={{
           background: `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${feature.accent} 0%, ${feature.accentDeep} 100%)`,
           boxShadow: `0 12px 28px -10px ${feature.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4), inset 0 -8px 18px ${feature.accentDeep}40`,
