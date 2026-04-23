@@ -165,65 +165,104 @@ export function PromptListEditor({
         <ul className="space-y-2">
           {items.map((item, i) => {
             const editing = editingIndex === i;
+            const answerOpen = openAnswerIndex === i;
+            const questionId = `${categoryKey}-${i + 1}`;
+            const hasOverride = !!answerOverrides[questionId];
+            const hasDefault = !!sampleAnswers[questionId];
+            const answerStatus: "custom" | "default" | "missing" = hasOverride
+              ? "custom"
+              : hasDefault
+              ? "default"
+              : "missing";
             return (
-              <li
-                key={i}
-                className="group flex items-start gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20"
-              >
-                <ReorderHandle
-                  index={i}
-                  total={items.length}
-                  onUp={() => move(i, -1)}
-                  onDown={() => move(i, 1)}
-                />
-                <div className="min-w-0 flex-1">
-                  {editing ? (
-                    <Textarea
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                      rows={3}
-                      autoFocus
-                    />
-                  ) : (
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-                      <span className="mr-2 inline-flex h-5 w-6 items-center justify-center rounded bg-muted text-[10px] font-bold text-muted-foreground">
-                        {i + 1}
-                      </span>
-                      {item}
-                    </p>
-                  )}
+              <li key={i} className="space-y-2">
+                <div className="group flex items-start gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20">
+                  <ReorderHandle
+                    index={i}
+                    total={items.length}
+                    onUp={() => move(i, -1)}
+                    onDown={() => move(i, 1)}
+                  />
+                  <div className="min-w-0 flex-1">
+                    {editing ? (
+                      <Textarea
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        rows={3}
+                        autoFocus
+                      />
+                    ) : (
+                      <>
+                        <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                          <span className="mr-2 inline-flex h-5 w-6 items-center justify-center rounded bg-muted text-[10px] font-bold text-muted-foreground">
+                            {i + 1}
+                          </span>
+                          {item}
+                        </p>
+                        {enableAnswers && (
+                          <AnswerStatusBadge status={answerStatus} />
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+                    {editing ? (
+                      <>
+                        <Button size="icon" variant="ghost" onClick={commitEdit} title="Save">
+                          <Check className="h-4 w-4 text-emerald-600" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => setEditingIndex(null)}
+                          title="Cancel"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        {enableAnswers && (
+                          <Button
+                            size="sm"
+                            variant={answerOpen ? "default" : "outline"}
+                            onClick={() =>
+                              setOpenAnswerIndex((cur) => (cur === i ? null : i))
+                            }
+                            title={answerOpen ? "Hide answer editor" : "Edit model answer"}
+                          >
+                            <FileText className="mr-1.5 h-3.5 w-3.5" />
+                            Answer
+                            <ChevronDown
+                              className={`ml-1 h-3 w-3 transition-transform ${
+                                answerOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </Button>
+                        )}
+                        <Button size="icon" variant="ghost" onClick={() => startEdit(i)} title="Edit prompt">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => removeItem(i)}
+                          title="Delete"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
-                  {editing ? (
-                    <>
-                      <Button size="icon" variant="ghost" onClick={commitEdit} title="Save">
-                        <Check className="h-4 w-4 text-emerald-600" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setEditingIndex(null)}
-                        title="Cancel"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button size="icon" variant="ghost" onClick={() => startEdit(i)} title="Edit">
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => removeItem(i)}
-                        title="Delete"
-                      >
-                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                      </Button>
-                    </>
-                  )}
-                </div>
+
+                {enableAnswers && answerOpen && (
+                  <WritingAnswerEditor
+                    questionId={questionId}
+                    questionTitle={item}
+                    onClose={() => setOpenAnswerIndex(null)}
+                  />
+                )}
               </li>
             );
           })}
