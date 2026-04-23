@@ -56,6 +56,9 @@ export function Faq() {
             <ul className="border-t border-foreground/15">
               {faqs.map((f, i) => {
                 const isOpen = open === i;
+                const lines = f.a.split("\n").map((l) => l.trim()).filter(Boolean);
+                const lead = lines.find((l) => !l.startsWith("- ")) ?? "";
+                const bullets = lines.filter((l) => l.startsWith("- ")).map((l) => l.slice(2).trim());
                 return (
                   <li
                     key={f.q}
@@ -64,10 +67,10 @@ export function Faq() {
                     <button
                       type="button"
                       onClick={() => setOpen(isOpen ? null : i)}
-                      className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors hover:text-brand"
+                      className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-foreground sm:text-lg">
+                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-brand sm:text-lg">
                         {f.q}
                       </span>
                       <span
@@ -87,9 +90,29 @@ export function Faq() {
                       }}
                     >
                       <div className="min-h-0">
-                        <p className="pb-5 pr-12 font-display text-sm font-medium leading-relaxed text-foreground/70 sm:text-base">
-                          {f.a}
-                        </p>
+                        <div className="pb-5 pr-12">
+                          {lead && (
+                            <p className="font-display text-sm font-semibold leading-relaxed text-foreground sm:text-base">
+                              {lead}
+                            </p>
+                          )}
+                          {bullets.length > 0 && (
+                            <ul className="mt-3 space-y-1.5">
+                              {bullets.map((b) => (
+                                <li
+                                  key={b}
+                                  className="flex gap-3 font-display text-sm font-medium leading-relaxed text-foreground/65"
+                                >
+                                  <span
+                                    aria-hidden
+                                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                                  />
+                                  <span>{b}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </li>
