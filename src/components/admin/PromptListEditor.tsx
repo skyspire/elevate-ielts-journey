@@ -548,3 +548,30 @@ function ReorderHandle({
     </div>
   );
 }
+
+function AnswerStatusBadge({ status }: { status: "custom" | "default" | "missing" }) {
+  const map = {
+    custom: {
+      label: "Custom answer",
+      className:
+        "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+    },
+    default: {
+      label: "Default answer",
+      className: "bg-foreground/8 text-foreground/70 border-border",
+    },
+    missing: {
+      label: "No answer yet",
+      className:
+        "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
+    },
+  } as const;
+  const { label, className } = map[status];
+  return (
+    <span
+      className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
+    >
+      {label}
+    </span>
+  );
+}
