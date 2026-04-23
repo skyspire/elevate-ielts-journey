@@ -432,6 +432,7 @@ function ReaderPage() {
         >
           Page {current + 1}
           {isWide && rightPage ? `–${current + 2}` : ""} of {total}
+          {maxSubCount > 1 ? ` · ${subIndex + 1}/${maxSubCount}` : ""}
         </p>
       </div>
 
