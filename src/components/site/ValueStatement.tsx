@@ -4,12 +4,16 @@ import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
   CURRENCIES,
+  CURRENCY_GROUPS,
   PRICES,
   type CurrencyCode,
   detectCurrencyFromIP,
@@ -145,17 +149,28 @@ export function ValueStatement() {
                 </span>
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="max-h-72">
-              {Object.values(CURRENCIES).map((c) => (
-                <SelectItem key={c.code} value={c.code}>
-                  <span className="flex items-center gap-2 font-semibold">
-                    <span className="text-base leading-none">{c.flag}</span>
-                    <span>{c.label}</span>
-                    <span className="text-muted-foreground">
-                      ({c.symbol.trim()})
-                    </span>
-                  </span>
-                </SelectItem>
+            <SelectContent className="max-h-80">
+              {CURRENCY_GROUPS.map((group, gi) => (
+                <SelectGroup key={group.label}>
+                  {gi > 0 && <SelectSeparator />}
+                  <SelectLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    {group.label}
+                  </SelectLabel>
+                  {group.codes.map((code) => {
+                    const c = CURRENCIES[code];
+                    return (
+                      <SelectItem key={`${group.label}-${code}`} value={code}>
+                        <span className="flex items-center gap-2 font-semibold">
+                          <span className="text-base leading-none">{c.flag}</span>
+                          <span>{c.label}</span>
+                          <span className="text-muted-foreground">
+                            ({c.symbol.trim()})
+                          </span>
+                        </span>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectGroup>
               ))}
             </SelectContent>
           </Select>
