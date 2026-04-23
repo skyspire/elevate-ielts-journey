@@ -98,6 +98,11 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
+  // Auto-pagination: how many viewport-sized slices each source page becomes.
+  const [leftSubCount, setLeftSubCount] = useState(1);
+  const [rightSubCount, setRightSubCount] = useState(1);
+  const [subIndex, setSubIndex] = useState(0);
+
   // Two-page spread on desktop
   const [isWide, setIsWide] = useState(false);
   useEffect(() => {
@@ -124,21 +129,36 @@ function ReaderPage() {
   const leftPage = flat[current] ?? flat[0];
   const rightPage = isWide ? flat[current + 1] : undefined;
 
+  // Reset sub-page when the source page or layout changes.
+  useEffect(() => {
+    setSubIndex(0);
+  }, [current, isWide]);
+
+  const maxSubCount = Math.max(leftSubCount, isWide ? rightSubCount : 1);
+
   const goPrev = useCallback(() => {
-    setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
+    setSubIndex((idx) => {
+      if (idx > 0) return idx - 1;
+      // Move to previous source page; jump to its last sub-page after measure.
+      setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
+      return 0;
+    });
   }, [isWide, setState]);
 
   const goNext = useCallback(() => {
-    setState((s) => {
-      const step = isWide ? 2 : 1;
-      const next = total > 0 ? Math.min(total - 1, s.currentPage + step) : 0;
-      // free-preview lock
-      if (!user && next >= freePages) {
-        return { ...s, currentPage: Math.max(0, freePages - 1) };
-      }
-      return { ...s, currentPage: next };
+    setSubIndex((idx) => {
+      if (idx + 1 < maxSubCount) return idx + 1;
+      setState((s) => {
+        const step = isWide ? 2 : 1;
+        const next = total > 0 ? Math.min(total - 1, s.currentPage + step) : 0;
+        if (!user && next >= freePages) {
+          return { ...s, currentPage: Math.max(0, freePages - 1) };
+        }
+        return { ...s, currentPage: next };
+      });
+      return 0;
     });
-  }, [isWide, setState, total, user, freePages]);
+  }, [isWide, setState, total, user, freePages, maxSubCount]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -322,8 +342,8 @@ function ReaderPage() {
       )}
 
       {/* Reader area */}
-      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:py-12">
-        <div className="relative grid gap-6 lg:grid-cols-2 lg:gap-0">
+      <div className="relative mx-auto max-w-7xl px-3 pb-6 pt-3 sm:px-4 sm:pt-4">
+        <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-0">
           {/* Left page */}
           <PageView
             page={leftPage}
@@ -333,6 +353,8 @@ function ReaderPage() {
             onMouseUp={handleMouseUp(leftPage.index)}
             side="left"
             isWide={isWide}
+            subIndex={Math.min(subIndex, leftSubCount - 1)}
+            onSubCountChange={setLeftSubCount}
           />
           {/* Right page (desktop) */}
           {isWide && rightPage && (
@@ -345,14 +367,36 @@ function ReaderPage() {
               side="right"
               isWide={isWide}
               locked={!user && rightPage.index >= freePages}
+              subIndex={Math.min(subIndex, rightSubCount - 1)}
+              onSubCountChange={setRightSubCount}
             />
           )}
+
+          {/* Edge overlay arrows */}
+          <button
+            onClick={goPrev}
+            disabled={current === 0}
+            aria-label="Previous page"
+            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:left-2"
+            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+          >
+            <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
+          </button>
+          <button
+            onClick={goNext}
+            disabled={current >= total - 1 || isLocked}
+            aria-label="Next page"
+            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:right-2"
+            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+          >
+            <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
+          </button>
         </div>
 
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="mt-8 rounded-xl border p-8 text-center"
+            className="mt-4 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -381,30 +425,15 @@ function ReaderPage() {
           </div>
         )}
 
-        {/* Page nav */}
-        <div className="mt-8 flex items-center justify-between gap-4">
-          <button
-            onClick={goPrev}
-            disabled={current === 0}
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-opacity disabled:opacity-30"
-            style={{ border: `1px solid ${theme.border}`, color: theme.text }}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous
-          </button>
-          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: theme.muted }}>
-            Page {current + 1}{isWide && rightPage ? `–${current + 2}` : ""} of {total}
-          </p>
-          <button
-            onClick={goNext}
-            disabled={current >= total - 1 || isLocked}
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold text-white transition-opacity disabled:opacity-30"
-            style={{ background: "oklch(0.55 0.18 30)" }}
-          >
-            Next
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
+        {/* Slim page counter */}
+        <p
+          className="mt-3 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
+          style={{ color: theme.muted }}
+        >
+          Page {current + 1}
+          {isWide && rightPage ? `–${current + 2}` : ""} of {total}
+          {maxSubCount > 1 ? ` · ${subIndex + 1}/${maxSubCount}` : ""}
+        </p>
       </div>
 
       {/* Highlight popover */}
@@ -612,6 +641,8 @@ function PageView({
   side,
   isWide,
   locked,
+  subIndex,
+  onSubCountChange,
 }: {
   page: { content: string; index: number; chapterTitle: string };
   theme: typeof THEMES[keyof typeof THEMES];
@@ -621,7 +652,37 @@ function PageView({
   side: "left" | "right";
   isWide: boolean;
   locked?: boolean;
+  subIndex: number;
+  onSubCountChange: (count: number) => void;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [cardHeight, setCardHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  // Measure card + content; recompute slice count whenever they change.
+  useEffect(() => {
+    if (!cardRef.current || !innerRef.current) return;
+    const measure = () => {
+      const ch = cardRef.current?.clientHeight ?? 0;
+      const ih = innerRef.current?.scrollHeight ?? 0;
+      setCardHeight(ch);
+      setContentHeight(ih);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(cardRef.current);
+    ro.observe(innerRef.current);
+    return () => ro.disconnect();
+  }, [page.content, fs]);
+
+  const slices = cardHeight > 0 ? Math.max(1, Math.ceil(contentHeight / cardHeight)) : 1;
+  useEffect(() => {
+    onSubCountChange(slices);
+  }, [slices, onSubCountChange]);
+
+  const safeIndex = Math.min(Math.max(subIndex, 0), slices - 1);
+
   const lines = page.content.split("\n");
 
   // Apply highlights by wrapping matching text spans.
@@ -665,8 +726,9 @@ function PageView({
 
   return (
     <div
+      ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative rounded-lg p-8 sm:p-12"
+      className="relative overflow-hidden rounded-lg p-6 sm:p-10"
       style={{
         background: theme.page,
         boxShadow:
@@ -674,18 +736,27 @@ function PageView({
             ? "inset -8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)"
             : "inset 8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
         borderRadius: isWide ? (side === "left" ? "8px 0 0 8px" : "0 8px 8px 0") : "8px",
-        minHeight: "70vh",
+        height: "calc(100dvh - 9.5rem)",
+        maxHeight: "calc(100dvh - 9.5rem)",
       }}
     >
       {locked ? (
-        <div className="flex h-full min-h-[60vh] flex-col items-center justify-center text-center">
+        <div className="flex h-full flex-col items-center justify-center text-center">
           <Lock className="h-10 w-10 opacity-40" />
           <p className="mt-4 text-sm font-bold uppercase tracking-wider opacity-50">
             Locked — sign in to read
           </p>
         </div>
       ) : (
-        <article style={{ fontFamily: "'Playfair Display', serif", color: theme.text }}>
+        <article
+          ref={innerRef}
+          className="will-change-transform transition-transform duration-300"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            color: theme.text,
+            transform: `translateY(-${safeIndex * cardHeight}px)`,
+          }}
+        >
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
@@ -707,17 +778,11 @@ function PageView({
             }
             if (line.trim() === "") return <div key={i} className="h-2" />;
             return (
-              <p key={i} className={`${fs.body} mb-5`}>
+              <p key={i} className={`${fs.body} mb-3`}>
                 {renderText(line)}
               </p>
             );
           })}
-          <p
-            className="mt-10 text-center text-xs font-semibold"
-            style={{ color: theme.muted, fontFamily: "Inter, sans-serif" }}
-          >
-            — {page.index + 1} —
-          </p>
         </article>
       )}
     </div>
