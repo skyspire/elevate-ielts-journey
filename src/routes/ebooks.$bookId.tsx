@@ -309,35 +309,15 @@ function ReaderPage() {
       )}
 
       {/* Reader area */}
-      <div className="relative mx-auto max-w-7xl px-3 pb-6 pt-3 sm:px-4 sm:pt-4">
-        <div className="relative grid gap-4 lg:grid-cols-2 lg:gap-0">
-          {/* Left page */}
+      <div className="relative mx-auto max-w-3xl px-3 pb-4 pt-3 sm:px-4 sm:pt-4">
+        <div className="relative">
           <PageView
             page={leftPage}
             theme={theme}
             fs={fs}
             highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
             onMouseUp={handleMouseUp(leftPage.index)}
-            side="left"
-            isWide={isWide}
-            subIndex={Math.min(subIndex, leftSubCount - 1)}
-            onSubCountChange={setLeftSubCount}
           />
-          {/* Right page (desktop) */}
-          {isWide && rightPage && (
-            <PageView
-              page={rightPage}
-              theme={theme}
-              fs={fs}
-              highlights={state.highlights.filter((h) => h.pageIndex === rightPage.index)}
-              onMouseUp={handleMouseUp(rightPage.index)}
-              side="right"
-              isWide={isWide}
-              locked={!user && rightPage.index >= freePages}
-              subIndex={Math.min(subIndex, rightSubCount - 1)}
-              onSubCountChange={setRightSubCount}
-            />
-          )}
 
           {/* Edge overlay arrows */}
           <button
@@ -394,12 +374,10 @@ function ReaderPage() {
 
         {/* Slim page counter */}
         <p
-          className="mt-3 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
+          className="mt-2 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
           style={{ color: theme.muted }}
         >
-          Page {current + 1}
-          {isWide && rightPage ? `–${current + 2}` : ""} of {total}
-          {maxSubCount > 1 ? ` · ${subIndex + 1}/${maxSubCount}` : ""}
+          Page {current + 1} of {total}
         </p>
       </div>
 
