@@ -266,7 +266,7 @@ export function Header() {
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = HOVER_BG)}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
           >
-            <Link to="/dashboard">Log in</Link>
+            <Link to="/login">Log in</Link>
           </Button>
           <Button
             asChild
@@ -277,7 +277,7 @@ export function Header() {
             }
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = INK)}
           >
-            <Link to="/dashboard">Get Started</Link>
+            <Link to="/signup">Get Started</Link>
           </Button>
         </div>
 
@@ -578,7 +578,7 @@ export function Header() {
                 className="h-11 rounded-md font-semibold"
                 style={{ color: INK, borderColor: HAIRLINE }}
               >
-                <Link to="/dashboard" onClick={() => setOpen(false)}>
+                <Link to="/login" onClick={() => setOpen(false)}>
                   Log in
                 </Link>
               </Button>
@@ -587,7 +587,7 @@ export function Header() {
                 className="h-11 rounded-md font-semibold text-white"
                 style={{ backgroundColor: INK }}
               >
-                <Link to="/dashboard" onClick={() => setOpen(false)}>
+                <Link to="/signup" onClick={() => setOpen(false)}>
                   Get Started
                 </Link>
               </Button>
