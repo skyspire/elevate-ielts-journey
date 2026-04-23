@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { GraduationCap, Quote, Sparkles, Globe2, BookOpen } from "lucide-react";
-import authHero from "@/assets/auth-hero.jpg";
+import authHero from "@/assets/auth-hero.png";
 
 type Props = {
   title: string;
@@ -11,9 +11,9 @@ type Props = {
 
 export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
   return (
-    <div className="grid min-h-screen w-full grid-cols-1 bg-background lg:grid-cols-[1fr_1.05fr]">
+    <div className="grid min-h-screen w-full grid-cols-1 bg-background md:grid-cols-[1fr_1.05fr]">
       {/* LEFT — hero panel (now on the LEFT) */}
-      <div className="relative hidden overflow-hidden lg:block">
+      <div className="relative hidden overflow-hidden md:block">
         {/* Background image */}
         <img
           src={authHero}
