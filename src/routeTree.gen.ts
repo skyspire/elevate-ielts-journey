@@ -38,7 +38,11 @@ import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminFaqRouteImport } from './routes/admin.faq'
 import { Route as AdminDataRouteImport } from './routes/admin.data'
 import { Route as AdminContactRouteImport } from './routes/admin.contact'
+import { Route as AdminContentIndexRouteImport } from './routes/admin.content.index'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
+import { Route as AdminContentSkillIndexRouteImport } from './routes/admin.content.$skill.index'
+import { Route as AdminContentSkillSectionIndexRouteImport } from './routes/admin.content.$skill.$section.index'
+import { Route as AdminContentSkillSectionTypeRouteImport } from './routes/admin.content.$skill.$section.$type'
 
 const VocabularyRoute = VocabularyRouteImport.update({
   id: '/vocabulary',
@@ -186,11 +190,33 @@ const AdminContactRoute = AdminContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
+  id: '/content/',
+  path: '/content/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const SpeakingSamplesCategoryTopicRoute =
   SpeakingSamplesCategoryTopicRouteImport.update({
     id: '/speaking-samples/$category/$topic',
     path: '/speaking-samples/$category/$topic',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const AdminContentSkillIndexRoute = AdminContentSkillIndexRouteImport.update({
+  id: '/content/$skill/',
+  path: '/content/$skill/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminContentSkillSectionIndexRoute =
+  AdminContentSkillSectionIndexRouteImport.update({
+    id: '/content/$skill/$section/',
+    path: '/content/$skill/$section/',
+    getParentRoute: () => AdminRoute,
+  } as any)
+const AdminContentSkillSectionTypeRoute =
+  AdminContentSkillSectionTypeRouteImport.update({
+    id: '/content/$skill/$section/$type',
+    path: '/content/$skill/$section/$type',
+    getParentRoute: () => AdminRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -224,6 +250,10 @@ export interface FileRoutesByFullPath {
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
+  '/admin/content/': typeof AdminContentIndexRoute
+  '/admin/content/$skill/': typeof AdminContentSkillIndexRoute
+  '/admin/content/$skill/$section/$type': typeof AdminContentSkillSectionTypeRoute
+  '/admin/content/$skill/$section/': typeof AdminContentSkillSectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -255,6 +285,10 @@ export interface FileRoutesByTo {
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
+  '/admin/content': typeof AdminContentIndexRoute
+  '/admin/content/$skill': typeof AdminContentSkillIndexRoute
+  '/admin/content/$skill/$section/$type': typeof AdminContentSkillSectionTypeRoute
+  '/admin/content/$skill/$section': typeof AdminContentSkillSectionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -288,6 +322,10 @@ export interface FileRoutesById {
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
+  '/admin/content/': typeof AdminContentIndexRoute
+  '/admin/content/$skill/': typeof AdminContentSkillIndexRoute
+  '/admin/content/$skill/$section/$type': typeof AdminContentSkillSectionTypeRoute
+  '/admin/content/$skill/$section/': typeof AdminContentSkillSectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,6 +360,10 @@ export interface FileRouteTypes {
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
+    | '/admin/content/'
+    | '/admin/content/$skill/'
+    | '/admin/content/$skill/$section/$type'
+    | '/admin/content/$skill/$section/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -353,6 +395,10 @@ export interface FileRouteTypes {
     | '/speaking-samples'
     | '/writing-samples'
     | '/speaking-samples/$category/$topic'
+    | '/admin/content'
+    | '/admin/content/$skill'
+    | '/admin/content/$skill/$section/$type'
+    | '/admin/content/$skill/$section'
   id:
     | '__root__'
     | '/'
@@ -385,6 +431,10 @@ export interface FileRouteTypes {
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
+    | '/admin/content/'
+    | '/admin/content/$skill/'
+    | '/admin/content/$skill/$section/$type'
+    | '/admin/content/$skill/$section/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -611,12 +661,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContactRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/content/': {
+      id: '/admin/content/'
+      path: '/content'
+      fullPath: '/admin/content/'
+      preLoaderRoute: typeof AdminContentIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/speaking-samples/$category/$topic': {
       id: '/speaking-samples/$category/$topic'
       path: '/speaking-samples/$category/$topic'
       fullPath: '/speaking-samples/$category/$topic'
       preLoaderRoute: typeof SpeakingSamplesCategoryTopicRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/content/$skill/': {
+      id: '/admin/content/$skill/'
+      path: '/content/$skill'
+      fullPath: '/admin/content/$skill/'
+      preLoaderRoute: typeof AdminContentSkillIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/content/$skill/$section/': {
+      id: '/admin/content/$skill/$section/'
+      path: '/content/$skill/$section'
+      fullPath: '/admin/content/$skill/$section/'
+      preLoaderRoute: typeof AdminContentSkillSectionIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/content/$skill/$section/$type': {
+      id: '/admin/content/$skill/$section/$type'
+      path: '/content/$skill/$section/$type'
+      fullPath: '/admin/content/$skill/$section/$type'
+      preLoaderRoute: typeof AdminContentSkillSectionTypeRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
@@ -635,6 +713,10 @@ interface AdminRouteChildren {
   AdminVocabularyRoute: typeof AdminVocabularyRoute
   AdminWritingRoute: typeof AdminWritingRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminContentIndexRoute: typeof AdminContentIndexRoute
+  AdminContentSkillIndexRoute: typeof AdminContentSkillIndexRoute
+  AdminContentSkillSectionTypeRoute: typeof AdminContentSkillSectionTypeRoute
+  AdminContentSkillSectionIndexRoute: typeof AdminContentSkillSectionIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -651,6 +733,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminVocabularyRoute: AdminVocabularyRoute,
   AdminWritingRoute: AdminWritingRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminContentIndexRoute: AdminContentIndexRoute,
+  AdminContentSkillIndexRoute: AdminContentSkillIndexRoute,
+  AdminContentSkillSectionTypeRoute: AdminContentSkillSectionTypeRoute,
+  AdminContentSkillSectionIndexRoute: AdminContentSkillSectionIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
