@@ -115,7 +115,7 @@ function StatCard({
   stat,
   run,
 }: {
-  stat: (typeof stats)[number];
+  stat: { target: number; suffix: string; label: string };
   run: boolean;
 }) {
   const value = useCountUp(stat.target, run);
