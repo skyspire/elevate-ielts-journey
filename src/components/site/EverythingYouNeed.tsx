@@ -235,7 +235,7 @@ function FeatureIllustration({ featureKey }: { featureKey: string }) {
 // 1. Recent Exam Questions — globe with location pin
 function RecentIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       <circle cx="32" cy="32" r="20" stroke="white" strokeWidth="2.5" opacity="0.95" />
       <ellipse cx="32" cy="32" rx="8" ry="20" stroke="white" strokeWidth="1.8" opacity="0.7" />
       <line x1="12" y1="32" x2="52" y2="32" stroke="white" strokeWidth="1.8" opacity="0.7" />
@@ -251,7 +251,7 @@ function RecentIllustration() {
 // 2. Prediction Questions — crystal ball / chart with sparkle
 function PredictionsIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* bars rising */}
       <rect x="14" y="38" width="7" height="14" rx="1.5" fill="white" opacity="0.85" />
       <rect x="24" y="30" width="7" height="22" rx="1.5" fill="white" opacity="0.95" />
@@ -268,7 +268,7 @@ function PredictionsIllustration() {
 // 3. E-Books — open book with bookmark
 function EbooksIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* book */}
       <path d="M10 16 Q10 14 12 14 L30 14 Q32 14 32 16 L32 50 Q32 48 30 48 L12 48 Q10 48 10 50 Z" fill="white" opacity="0.95" />
       <path d="M54 16 Q54 14 52 14 L34 14 Q32 14 32 16 L32 50 Q32 48 34 48 L52 48 Q54 48 54 50 Z" fill="white" opacity="0.95" />
@@ -290,7 +290,7 @@ function EbooksIllustration() {
 // 4. Writing & Speaking Samples — pencil + speech bubble
 function SamplesIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* speech bubble */}
       <path d="M10 14 Q10 10 14 10 L42 10 Q46 10 46 14 L46 30 Q46 34 42 34 L22 34 L16 40 L18 34 L14 34 Q10 34 10 30 Z" fill="white" opacity="0.95" />
       {/* lines in bubble */}
@@ -311,7 +311,7 @@ function SamplesIllustration() {
 // 5. Vocabulary — stacked word tiles (no letters, just lines)
 function VocabularyIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* 3 tiles fanned with abstract word lines */}
       <g transform="translate(10 14) rotate(-8)">
         <rect width="18" height="18" rx="3" fill="white" />
@@ -338,7 +338,7 @@ function VocabularyIllustration() {
 // 6. Catastrophic Mistakes — warning triangle with X
 function MistakesIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       <path
         d="M32 10 L56 50 L8 50 Z"
         fill="white"
