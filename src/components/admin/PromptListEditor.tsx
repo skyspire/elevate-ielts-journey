@@ -50,16 +50,22 @@ export function PromptListEditor({
   categoryKey,
   defaultRecord,
   placeholder = "Type a new prompt…",
+  enableAnswers = false,
 }: StringListEditorProps) {
   const { value: record, update, reset } = useCmsEditor<Record<string, string[]>>(
     storageKey,
     defaultRecord,
+  );
+  const answerOverrides = useCmsSection<WritingAnswersOverrides>(
+    WRITING_ANSWERS_KEY,
+    WRITING_ANSWERS_DEFAULT,
   );
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<string[]>(original);
   const [draft, setDraft] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [openAnswerIndex, setOpenAnswerIndex] = useState<number | null>(null);
 
   // Re-sync local state if the underlying record changes (e.g. import).
   useEffect(() => {
