@@ -240,7 +240,7 @@ function CounterStage({ active }: { active: boolean }) {
   const INK_BLUE_SOFT = "oklch(0.45 0.08 255)";
 
   return (
-    <div className="relative mx-auto mt-12 h-[460px] w-full max-w-5xl sm:h-[540px]">
+    <div className="relative mx-auto mt-8 h-[300px] w-full max-w-5xl sm:h-[380px]">
       {/* Floating learner avatars — drift continuously, behind the number */}
       <div
         aria-hidden
@@ -328,7 +328,7 @@ function CounterStage({ active }: { active: boolean }) {
           className="font-display font-black tabular-nums tracking-tight"
           style={{
             color: INK_BLUE,
-            fontSize: "clamp(5rem, 16vw, 12rem)",
+            fontSize: "clamp(3.5rem, 11vw, 8rem)",
             lineHeight: 0.92,
             textShadow:
               "0 1px 0 oklch(0.99 0.005 85), 0 4px 30px oklch(0.97 0.015 85 / 0.9)",
@@ -338,7 +338,7 @@ function CounterStage({ active }: { active: boolean }) {
           <span style={{ color: INK_BLUE_SOFT }}>+</span>
         </div>
         <p
-          className="mt-4 font-handwriting text-2xl sm:text-3xl"
+          className="mt-3 font-handwriting text-xl sm:text-2xl"
           style={{ color: INK_BLUE_SOFT, opacity: 0.8 }}
         >
           learners across 47 countries
@@ -381,7 +381,7 @@ export function LearnersWorld() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-24 sm:py-32"
+      className="relative overflow-hidden py-14 sm:py-20"
       style={{
         background:
           "linear-gradient(180deg, oklch(0.985 0.012 85) 0%, oklch(0.965 0.022 80) 50%, oklch(0.945 0.028 70) 100%)",
@@ -434,10 +434,10 @@ export function LearnersWorld() {
       <div className="container-page relative">
         {/* Editorial header */}
         <div className="mx-auto max-w-4xl text-center">
-          <p className="font-handwriting text-3xl text-foreground/55 sm:text-4xl">
+          <p className="font-handwriting text-2xl text-foreground/55 sm:text-3xl">
             from every corner of the world
           </p>
-          <h2 className="mt-3 font-display text-4xl font-black leading-[1] tracking-tight text-foreground sm:text-5xl">
+          <h2 className="mt-2 font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl">
             A quiet movement,
             <br />
             <span className="text-foreground/60">growing every day.</span>
@@ -447,7 +447,7 @@ export function LearnersWorld() {
         {/* The dramatic counter stage */}
         <CounterStage active={inView} />
 
-        <p className="mx-auto mt-10 max-w-2xl text-center font-display text-base text-foreground/65 sm:text-lg">
+        <p className="mx-auto mt-6 max-w-2xl text-center font-display text-sm text-foreground/65 sm:text-base">
           A quiet movement of writers, speakers, and readers — preparing for
           their band, in their own time, from their own city.
         </p>
@@ -455,7 +455,7 @@ export function LearnersWorld() {
 
       {/* Full-bleed marquee rows */}
       <div
-        className="relative mt-16 sm:mt-20"
+        className="relative mt-10 sm:mt-14"
         style={{
           opacity: inView ? 1 : 0,
           transition: "opacity 0.8s ease",

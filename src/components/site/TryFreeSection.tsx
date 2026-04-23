@@ -65,7 +65,7 @@ const paidTools = [
 
 export function TryFreeSection() {
   return (
-    <section className="relative overflow-hidden bg-paper-cream py-20 sm:py-28">
+    <section className="relative overflow-hidden bg-paper-cream py-14 sm:py-20">
       {/* White textured paper background */}
       <div
         aria-hidden
@@ -105,21 +105,21 @@ export function TryFreeSection() {
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl">
+          <h2 className="font-display text-2xl font-black tracking-tight text-foreground sm:text-4xl">
             Try it free.{" "}
             <span className="relative inline-block">
               <span className="absolute inset-x-[-4px] bottom-1 -z-0 h-[40%] -rotate-1 rounded-sm bg-[linear-gradient(120deg,oklch(0.85_0.14_90_/_0.7),oklch(0.88_0.12_60_/_0.65))]" />
               <span className="relative z-10">Then unlock everything.</span>
             </span>
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base font-medium text-foreground/65 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-sm font-medium text-foreground/65 sm:text-base">
             Sign up and instantly get 6 admin-picked samples. The full toolkit
             lives behind one simple subscription.
           </p>
         </div>
 
         {/* Two columns */}
-        <div className="mx-auto mt-14 grid max-w-5xl gap-6 lg:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5 lg:grid-cols-2">
           {/* ============= FREE ============= */}
           <article className="relative flex flex-col overflow-hidden rounded-3xl bg-brand p-8 text-brand-foreground shadow-card sm:p-10">
             {/* Floating badge */}
