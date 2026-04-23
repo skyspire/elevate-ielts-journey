@@ -437,24 +437,7 @@ function ReaderPage() {
           </div>
         )}
 
-        {/* Slim page counter — auto-hide with chrome */}
-        <div
-          className="pointer-events-none fixed bottom-0 left-0 right-0 z-30 flex justify-center pb-3 transition-opacity duration-300"
-          style={{ opacity: chromeVisible ? 1 : 0 }}
-        >
-          <div
-            className="rounded-full border px-4 py-1.5 backdrop-blur-md"
-            style={{
-              background: `${theme.page}e6`,
-              borderColor: theme.border,
-              color: theme.muted,
-            }}
-          >
-            <span className="text-[11px] font-bold uppercase tracking-[0.18em]">
-              Page {current + 1} of {total}
-            </span>
-          </div>
-        </div>
+        {/* Page number lives inside the page footer (printed-book style) */}
       </div>
 
       {/* Highlight popover */}
