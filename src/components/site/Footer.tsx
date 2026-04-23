@@ -86,7 +86,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
           style={{ borderTop: `1px solid ${isLight ? "oklch(0.93 0.01 250)" : "oklch(1 0 0 / 0.10)"}` }}
         >
           <p
-            className="text-xs font-semibold leading-relaxed"
+            className="mx-auto max-w-4xl text-center text-xs font-semibold leading-relaxed"
             style={{ color: isLight ? "oklch(0.52 0.02 260)" : "oklch(0.95 0.01 250 / 0.55)" }}
           >
             Disclaimer: BigIELTS.com is an independent IELTS preparation resource and is{" "}
@@ -98,7 +98,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
             educational purposes only.
           </p>
           <p
-            className="mt-4 text-xs font-bold"
+            className="mt-4 text-center text-xs font-bold"
             style={{ color: isLight ? "oklch(0.55 0.02 260)" : "oklch(0.95 0.01 250 / 0.50)" }}
           >
             © {new Date().getFullYear()} BigIELTS.com. All rights reserved.
