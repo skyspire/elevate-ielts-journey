@@ -583,50 +583,50 @@ function PageView({
   fs,
   highlights,
   onMouseUp,
-  side,
-  isWide,
   locked,
-  subIndex,
-  onSubCountChange,
 }: {
   page: { content: string; index: number; chapterTitle: string };
   theme: typeof THEMES[keyof typeof THEMES];
   fs: typeof FONT_SIZES[keyof typeof FONT_SIZES];
   highlights: Highlight[];
   onMouseUp: () => void;
-  side: "left" | "right";
-  isWide: boolean;
   locked?: boolean;
-  subIndex: number;
-  onSubCountChange: (count: number) => void;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
-  const [cardHeight, setCardHeight] = useState(0);
-  const [contentHeight, setContentHeight] = useState(0);
+  const [scale, setScale] = useState(1);
 
-  // Measure card + content; recompute slice count whenever they change.
+  // Auto-shrink: measure intrinsic content vs available card area, scale down to fit.
   useEffect(() => {
     if (!cardRef.current || !innerRef.current) return;
+    const card = cardRef.current;
+    const inner = innerRef.current;
+
     const measure = () => {
-      const ch = cardRef.current?.clientHeight ?? 0;
-      const ih = innerRef.current?.scrollHeight ?? 0;
-      setCardHeight(ch);
-      setContentHeight(ih);
+      // Reset to natural size before measuring
+      inner.style.transform = "scale(1)";
+      inner.style.width = "100%";
+      const cardH = card.clientHeight;
+      const cardW = card.clientWidth;
+      const innerH = inner.scrollHeight;
+      const innerW = inner.scrollWidth;
+      if (cardH === 0 || innerH === 0) return;
+      // Fit by height; allow scale up to 1 (never enlarge)
+      const heightScale = cardH / innerH;
+      const widthScale = cardW / Math.max(innerW, 1);
+      const fit = Math.min(1, heightScale, widthScale);
+      // Floor so 12px text remains readable on tiny screens.
+      // Approximate: base font ~14px (text-sm) * 0.6 ≈ 8.4px — clamp scale at 0.6
+      const next = Math.max(0.6, fit);
+      setScale(next);
     };
+
     measure();
     const ro = new ResizeObserver(measure);
-    ro.observe(cardRef.current);
-    ro.observe(innerRef.current);
+    ro.observe(card);
+    ro.observe(inner);
     return () => ro.disconnect();
   }, [page.content, fs]);
-
-  const slices = cardHeight > 0 ? Math.max(1, Math.ceil(contentHeight / cardHeight)) : 1;
-  useEffect(() => {
-    onSubCountChange(slices);
-  }, [slices, onSubCountChange]);
-
-  const safeIndex = Math.min(Math.max(subIndex, 0), slices - 1);
 
   const lines = page.content.split("\n");
 
@@ -673,14 +673,11 @@ function PageView({
     <div
       ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative overflow-hidden rounded-lg p-6 sm:p-10"
+      className="relative overflow-hidden rounded-lg p-5 sm:p-8"
       style={{
         background: theme.page,
-        boxShadow:
-          side === "left"
-            ? "inset -8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)"
-            : "inset 8px 0 12px -8px oklch(0.2 0.05 260 / 0.18), 0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
-        borderRadius: isWide ? (side === "left" ? "8px 0 0 8px" : "0 8px 8px 0") : "8px",
+        boxShadow: "0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
+        borderRadius: "8px",
         height: "calc(100dvh - 9.5rem)",
         maxHeight: "calc(100dvh - 9.5rem)",
       }}
@@ -695,13 +692,15 @@ function PageView({
       ) : (
         <article
           ref={innerRef}
-          className="will-change-transform transition-transform duration-300"
+          className="origin-top-left will-change-transform"
           style={{
             fontFamily: "'Playfair Display', serif",
             color: theme.text,
-            transform: `translateY(-${safeIndex * cardHeight}px)`,
+            transform: `scale(${scale})`,
+            width: `${100 / scale}%`,
           }}
         >
+
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
