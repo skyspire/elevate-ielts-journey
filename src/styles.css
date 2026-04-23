@@ -938,3 +938,36 @@
   font-style: normal;
   color: var(--muted-foreground);
 }
+
+/* E-book reader page-flip animations */
+@keyframes page-flip-next {
+  0% {
+    transform: rotateY(-12deg) translateX(6%);
+    opacity: 0;
+    filter: brightness(0.96);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0deg) translateX(0);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes page-flip-prev {
+  0% {
+    transform: rotateY(12deg) translateX(-6%);
+    opacity: 0;
+    filter: brightness(0.96);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0deg) translateX(0);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
