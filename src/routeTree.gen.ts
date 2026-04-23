@@ -31,13 +31,18 @@ import { Route as AdminVocabularyRouteImport } from './routes/admin.vocabulary'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 import { Route as AdminSpeakingRouteImport } from './routes/admin.speaking'
+import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminHomepageRouteImport } from './routes/admin.homepage'
 import { Route as AdminHeroRouteImport } from './routes/admin.hero'
 import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminFaqRouteImport } from './routes/admin.faq'
 import { Route as AdminDataRouteImport } from './routes/admin.data'
 import { Route as AdminContactRouteImport } from './routes/admin.contact'
+import { Route as AdminBrandingRouteImport } from './routes/admin.branding'
+import { Route as AdminBannerRouteImport } from './routes/admin.banner'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminContentIndexRouteImport } from './routes/admin.content.index'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 import { Route as AdminContentModuleIndexRouteImport } from './routes/admin.content.$module.index'
@@ -156,6 +161,11 @@ const AdminSpeakingRoute = AdminSpeakingRouteImport.update({
   path: '/speaking',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSeoRoute = AdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -164,6 +174,11 @@ const AdminPricingRoute = AdminPricingRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHomepageRoute = AdminHomepageRouteImport.update({
+  id: '/homepage',
+  path: '/homepage',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminHeroRoute = AdminHeroRouteImport.update({
@@ -189,6 +204,21 @@ const AdminDataRoute = AdminDataRouteImport.update({
 const AdminContactRoute = AdminContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBrandingRoute = AdminBrandingRouteImport.update({
+  id: '/branding',
+  path: '/branding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBannerRoute = AdminBannerRouteImport.update({
+  id: '/banner',
+  path: '/banner',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
@@ -239,13 +269,18 @@ export interface FileRoutesByFullPath {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/banner': typeof AdminBannerRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/hero': typeof AdminHeroRoute
+  '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -275,13 +310,18 @@ export interface FileRoutesByTo {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/banner': typeof AdminBannerRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/hero': typeof AdminHeroRoute
+  '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -313,13 +353,18 @@ export interface FileRoutesById {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/banner': typeof AdminBannerRoute
+  '/admin/branding': typeof AdminBrandingRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
   '/admin/footer': typeof AdminFooterRoute
   '/admin/hero': typeof AdminHeroRoute
+  '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -352,13 +397,18 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/activity'
+    | '/admin/banner'
+    | '/admin/branding'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
     | '/admin/footer'
     | '/admin/hero'
+    | '/admin/homepage'
     | '/admin/login'
     | '/admin/pricing'
+    | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
@@ -388,13 +438,18 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/activity'
+    | '/admin/banner'
+    | '/admin/branding'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
     | '/admin/footer'
     | '/admin/hero'
+    | '/admin/homepage'
     | '/admin/login'
     | '/admin/pricing'
+    | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
@@ -425,13 +480,18 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/activity'
+    | '/admin/banner'
+    | '/admin/branding'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
     | '/admin/footer'
     | '/admin/hero'
+    | '/admin/homepage'
     | '/admin/login'
     | '/admin/pricing'
+    | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
@@ -625,6 +685,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSpeakingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/seo': {
+      id: '/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AdminSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pricing': {
       id: '/admin/pricing'
       path: '/pricing'
@@ -637,6 +704,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/homepage': {
+      id: '/admin/homepage'
+      path: '/homepage'
+      fullPath: '/admin/homepage'
+      preLoaderRoute: typeof AdminHomepageRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/hero': {
@@ -672,6 +746,27 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/admin/contact'
       preLoaderRoute: typeof AdminContactRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/branding': {
+      id: '/admin/branding'
+      path: '/branding'
+      fullPath: '/admin/branding'
+      preLoaderRoute: typeof AdminBrandingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/banner': {
+      id: '/admin/banner'
+      path: '/banner'
+      fullPath: '/admin/banner'
+      preLoaderRoute: typeof AdminBannerRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/content/': {
@@ -720,13 +815,18 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminActivityRoute: typeof AdminActivityRoute
+  AdminBannerRoute: typeof AdminBannerRoute
+  AdminBrandingRoute: typeof AdminBrandingRoute
   AdminContactRoute: typeof AdminContactRoute
   AdminDataRoute: typeof AdminDataRoute
   AdminFaqRoute: typeof AdminFaqRoute
   AdminFooterRoute: typeof AdminFooterRoute
   AdminHeroRoute: typeof AdminHeroRoute
+  AdminHomepageRoute: typeof AdminHomepageRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminPricingRoute: typeof AdminPricingRoute
+  AdminSeoRoute: typeof AdminSeoRoute
   AdminSpeakingRoute: typeof AdminSpeakingRoute
   AdminStatsRoute: typeof AdminStatsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -741,13 +841,18 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminActivityRoute: AdminActivityRoute,
+  AdminBannerRoute: AdminBannerRoute,
+  AdminBrandingRoute: AdminBrandingRoute,
   AdminContactRoute: AdminContactRoute,
   AdminDataRoute: AdminDataRoute,
   AdminFaqRoute: AdminFaqRoute,
   AdminFooterRoute: AdminFooterRoute,
   AdminHeroRoute: AdminHeroRoute,
+  AdminHomepageRoute: AdminHomepageRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminPricingRoute: AdminPricingRoute,
+  AdminSeoRoute: AdminSeoRoute,
   AdminSpeakingRoute: AdminSpeakingRoute,
   AdminStatsRoute: AdminStatsRoute,
   AdminUsersRoute: AdminUsersRoute,
