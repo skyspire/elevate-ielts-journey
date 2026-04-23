@@ -79,30 +79,52 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
 
       {/* RIGHT — colorful form panel */}
       <div className="relative flex min-h-screen flex-col overflow-hidden px-5 py-8 sm:px-10 lg:px-14 lg:py-12">
-        {/* Subtle professional gradient background */}
+        {/* Mesh gradient background — soft warm base */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "linear-gradient(160deg, oklch(0.99 0.005 250) 0%, oklch(0.97 0.02 250) 50%, oklch(0.96 0.03 220) 100%)",
-          }}
+          style={{ background: "oklch(0.985 0.005 250)" }}
         />
-        {/* Soft accent blobs — restrained */}
+        {/* Mesh blob — top-right (peach) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-32 -top-32 -z-10 h-80 w-80 rounded-full opacity-40 blur-3xl"
-          style={{ background: "oklch(0.85 0.1 250)" }}
+          className="pointer-events-none absolute -right-24 -top-24 -z-10 h-[420px] w-[420px] rounded-full opacity-60 blur-[90px]"
+          style={{ background: "oklch(0.86 0.12 40)" }}
         />
+        {/* Mesh blob — top-left (lilac) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-20 -z-10 h-72 w-72 rounded-full opacity-30 blur-3xl"
-          style={{ background: "oklch(0.86 0.08 200)" }}
+          className="pointer-events-none absolute -left-32 top-10 -z-10 h-[360px] w-[360px] rounded-full opacity-55 blur-[100px]"
+          style={{ background: "oklch(0.82 0.13 300)" }}
+        />
+        {/* Mesh blob — center (sky blue) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/3 -z-10 h-[440px] w-[440px] -translate-x-1/2 rounded-full opacity-50 blur-[110px]"
+          style={{ background: "oklch(0.84 0.13 240)" }}
+        />
+        {/* Mesh blob — bottom-right (mint) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-32 right-1/4 -z-10 h-[380px] w-[380px] rounded-full opacity-55 blur-[100px]"
+          style={{ background: "oklch(0.86 0.11 170)" }}
+        />
+        {/* Mesh blob — bottom-left (soft pink) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-20 -z-10 h-[340px] w-[340px] rounded-full opacity-50 blur-[90px]"
+          style={{ background: "oklch(0.87 0.1 350)" }}
+        />
+        {/* Subtle white wash so form stays readable */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{ background: "oklch(1 0 0 / 0.3)" }}
         />
         {/* Faint dot grid for texture */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.08]"
+          className="absolute inset-0 -z-10 opacity-[0.06]"
           style={{
             backgroundImage:
               "radial-gradient(oklch(0.35 0.05 260) 1px, transparent 1px)",
