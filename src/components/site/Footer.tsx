@@ -15,7 +15,7 @@ const cols = [
   },
   {
     title: "Support",
-    links: [{ label: "FAQ", to: "/faq" }, { label: "Contact", to: "#" }, { label: "Terms of Service", to: "/terms" }, { label: "Privacy Policy", to: "/privacy" }],
+    links: [{ label: "FAQ", to: "/faq" }, { label: "Contact", to: "/contact" }, { label: "Terms of Service", to: "/terms" }, { label: "Privacy Policy", to: "/privacy" }],
   },
 ];
 
