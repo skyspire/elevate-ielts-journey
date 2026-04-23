@@ -148,149 +148,127 @@ export function EverythingYouNeed() {
   );
 }
 
-/* ---------- Wax seal stamp that drops in on scroll ---------- */
+/* ---------- Round notary seal stamp that drops in on scroll ---------- */
 function WaxSealStamp() {
-  // Irregular blob edge — looks like real pressed wax, not a perfect circle
-  const wavyClip =
-    "polygon(50% 0%, 62% 3%, 73% 8%, 84% 14%, 92% 24%, 97% 36%, 100% 50%, 97% 63%, 92% 75%, 83% 85%, 73% 92%, 62% 97%, 50% 100%, 38% 97%, 27% 93%, 16% 86%, 8% 76%, 3% 64%, 0% 50%, 3% 37%, 8% 25%, 17% 15%, 27% 8%, 38% 3%)";
-
   return (
     <motion.div
       aria-hidden
-      initial={{ opacity: 0, scale: 0.5, rotate: -28, y: -24 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: -11, y: 0 }}
+      initial={{ opacity: 0, scale: 0.55, rotate: -18, y: -20 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: -6, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{
         type: "spring",
         stiffness: 200,
-        damping: 13,
-        mass: 1,
+        damping: 14,
+        mass: 0.95,
         delay: 0.2,
       }}
-      className="pointer-events-none absolute -top-8 right-0 z-10 flex flex-col items-center sm:-top-10 sm:-right-2 md:-right-10"
+      className="pointer-events-none absolute -top-14 -right-2 z-10 sm:-top-16 sm:-right-6 md:-top-20 md:-right-14"
       style={{ transformOrigin: "center center" }}
     >
-      {/* Drop shadow on a separate element so clip-path doesn't kill it */}
-      <div
-        className="relative h-[104px] w-[104px] sm:h-[120px] sm:w-[120px]"
+      <svg
+        viewBox="0 0 200 200"
+        className="h-[112px] w-[112px] sm:h-[128px] sm:w-[128px] md:h-[140px] md:w-[140px]"
         style={{
           filter:
-            "drop-shadow(0 8px 14px oklch(0.2 0.12 22 / 0.45)) drop-shadow(0 2px 3px oklch(0.18 0.1 20 / 0.4))",
+            "drop-shadow(0 6px 12px oklch(0.2 0.06 260 / 0.35)) drop-shadow(0 2px 3px oklch(0.18 0.05 260 / 0.3))",
         }}
       >
-        {/* Wax body — irregular blob */}
-        <div
-          className="absolute inset-0"
+        <defs>
+          {/* Curved paths for text — top arc and bottom arc */}
+          <path
+            id="seal-top-arc"
+            d="M 28 100 A 72 72 0 0 1 172 100"
+            fill="none"
+          />
+          <path
+            id="seal-bottom-arc"
+            d="M 30 104 A 70 70 0 0 0 170 104"
+            fill="none"
+          />
+          {/* Navy radial fill */}
+          <radialGradient id="seal-navy" cx="38%" cy="32%" r="75%">
+            <stop offset="0%" stopColor="oklch(0.32 0.08 260)" />
+            <stop offset="55%" stopColor="oklch(0.22 0.07 262)" />
+            <stop offset="100%" stopColor="oklch(0.16 0.06 262)" />
+          </radialGradient>
+          {/* Gold gradient for text and rings */}
+          <linearGradient id="seal-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="oklch(0.92 0.13 90)" />
+            <stop offset="50%" stopColor="oklch(0.82 0.15 85)" />
+            <stop offset="100%" stopColor="oklch(0.68 0.14 80)" />
+          </linearGradient>
+        </defs>
+
+        {/* Outer gold ring */}
+        <circle cx="100" cy="100" r="96" fill="url(#seal-gold)" />
+        {/* Navy seal body */}
+        <circle cx="100" cy="100" r="90" fill="url(#seal-navy)" />
+        {/* Inner thin gold ring */}
+        <circle
+          cx="100"
+          cy="100"
+          r="68"
+          fill="none"
+          stroke="url(#seal-gold)"
+          strokeWidth="1.2"
+          opacity="0.85"
+        />
+        {/* Subtle highlight */}
+        <ellipse
+          cx="78"
+          cy="62"
+          rx="48"
+          ry="22"
+          fill="oklch(1 0 0 / 0.08)"
+        />
+
+        {/* Top curved text */}
+        <text
+          fill="url(#seal-gold)"
           style={{
-            clipPath: wavyClip,
-            background:
-              "radial-gradient(circle at 34% 26%, oklch(0.58 0.17 18) 0%, oklch(0.46 0.19 20) 38%, oklch(0.32 0.16 22) 78%, oklch(0.24 0.12 22) 100%)",
+            fontFamily: "'Archivo Black', system-ui, sans-serif",
+            fontSize: "16px",
+            letterSpacing: "3.2px",
           }}
         >
-          {/* Mottled ink texture */}
-          <div
-            className="absolute inset-0 mix-blend-overlay opacity-70"
-            style={{
-              background:
-                "radial-gradient(circle at 70% 75%, oklch(0.18 0.08 20 / 0.55), transparent 45%), radial-gradient(circle at 22% 80%, oklch(0.85 0.1 30 / 0.18), transparent 35%), radial-gradient(circle at 80% 30%, oklch(0.2 0.1 20 / 0.4), transparent 40%)",
-            }}
-          />
-          {/* Glossy press highlight */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 45% at 32% 22%, oklch(1 0 0 / 0.28) 0%, transparent 55%)",
-            }}
-          />
-          {/* Embossed inner ring */}
-          <div
-            className="absolute inset-[10%] rounded-full"
-            style={{
-              border: "1px solid oklch(0.95 0.05 50 / 0.55)",
-              boxShadow:
-                "inset 0 1px 1px oklch(0.18 0.1 20 / 0.55), 0 1px 0 oklch(1 0 0 / 0.12)",
-            }}
-          />
-          {/* Tiny embossed dots around ring (like a real seal) */}
-          {Array.from({ length: 12 }).map((_, i) => {
-            const angle = (i / 12) * Math.PI * 2;
-            const r = 38;
-            const cx = 50 + Math.cos(angle) * r;
-            const cy = 50 + Math.sin(angle) * r;
-            return (
-              <span
-                key={i}
-                className="absolute h-[3px] w-[3px] rounded-full"
-                style={{
-                  left: `${cx}%`,
-                  top: `${cy}%`,
-                  transform: "translate(-50%, -50%)",
-                  background: "oklch(0.95 0.05 50 / 0.55)",
-                  boxShadow: "inset 0 1px 0 oklch(0.18 0.1 20 / 0.6)",
-                }}
-              />
-            );
-          })}
+          <textPath
+            href="#seal-top-arc"
+            startOffset="50%"
+            textAnchor="middle"
+          >
+            ALL AT ONE PLACE
+          </textPath>
+        </text>
 
-          {/* Pressed text — clean, bold formal serif */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-[1.05]">
-            <span
-              className="text-[12px] sm:text-[14px]"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontWeight: 800,
-                letterSpacing: "0.04em",
-                color: "oklch(0.97 0.04 60)",
-                textShadow: "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
-              }}
-            >
-              all at
-            </span>
-            <span
-              className="my-[2px] text-[20px] sm:text-[24px]"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontWeight: 900,
-                letterSpacing: "-0.01em",
-                color: "oklch(0.98 0.04 60)",
-                textShadow:
-                  "0 1px 1px oklch(0.18 0.1 20 / 0.9), 0 2px 2px oklch(0.18 0.1 20 / 0.45)",
-              }}
-            >
-              one
-            </span>
-            <span
-              className="text-[12px] sm:text-[14px]"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontWeight: 800,
-                letterSpacing: "0.06em",
-                color: "oklch(0.97 0.04 60)",
-                textShadow: "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
-              }}
-            >
-              place
-            </span>
-          </div>
-        </div>
-      </div>
+        {/* Decorative dots flanking the center star */}
+        <circle cx="62" cy="100" r="2" fill="url(#seal-gold)" />
+        <circle cx="138" cy="100" r="2" fill="url(#seal-gold)" />
 
-      {/* Formal signature — bold serif, no handwriting */}
-      <span
-        className="mt-1 inline-block"
-        style={{
-          fontFamily: "'Playfair Display', Georgia, serif",
-          fontSize: "13px",
-          fontWeight: 800,
-          letterSpacing: "0.02em",
-          lineHeight: 1,
-          color: "oklch(0.34 0.15 22)",
-          textShadow: "0 1px 0 oklch(1 0 0 / 0.55)",
-        }}
-      >
-        BigIELTS.com
-      </span>
+        {/* Center star */}
+        <path
+          d="M 100 86 L 103.6 96 L 114 96 L 105.6 102.4 L 109 112.5 L 100 106.4 L 91 112.5 L 94.4 102.4 L 86 96 L 96.4 96 Z"
+          fill="url(#seal-gold)"
+        />
+
+        {/* Bottom curved text */}
+        <text
+          fill="url(#seal-gold)"
+          style={{
+            fontFamily: "'Archivo Black', system-ui, sans-serif",
+            fontSize: "11px",
+            letterSpacing: "2.5px",
+          }}
+        >
+          <textPath
+            href="#seal-bottom-arc"
+            startOffset="50%"
+            textAnchor="middle"
+          >
+            BIGIELTS · COM
+          </textPath>
+        </text>
+      </svg>
     </motion.div>
   );
 }
