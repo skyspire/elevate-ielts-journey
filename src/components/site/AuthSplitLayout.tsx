@@ -22,24 +22,7 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
           height={1024}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        {/* Soft warm overlay */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(160deg, oklch(0.95 0.03 80 / 0.55) 0%, oklch(0.92 0.05 250 / 0.45) 100%)",
-          }}
-        />
-        {/* Paper grain */}
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-[0.12] mix-blend-multiply"
-          style={{
-            backgroundImage: "radial-gradient(oklch(0.3 0.02 60) 1px, transparent 1px)",
-            backgroundSize: "3px 3px",
-          }}
-        />
+        {/* No overlays — show the real photo */}
 
         {/* Top trust pill */}
         <div className="absolute left-8 top-8 z-10 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-background/80 px-3 py-1.5 backdrop-blur">
