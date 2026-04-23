@@ -187,7 +187,7 @@ export function ValueStatement() {
               </div>
               <div className="mt-4 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl font-black tracking-tight text-foreground sm:text-6xl">
-                  {formatPrice(PRICES[p.key][currency], currency)}
+                  {formatPrice(PRICES[p.key as "biweekly" | "monthly" | "quarterly"][currency], currency)}
                 </span>
                 <span className="text-sm font-bold text-muted-foreground">
                   {currency}
@@ -242,7 +242,7 @@ export function ValueStatement() {
         </div>
 
         <p className="mt-8 text-center text-xs font-semibold text-muted-foreground">
-          Cancel anytime
+          {footnote}
         </p>
       </div>
     </section>
