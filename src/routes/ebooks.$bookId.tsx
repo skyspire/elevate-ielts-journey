@@ -360,17 +360,17 @@ function ReaderPage() {
           paddingBottom: "3.5rem", // breathing room above page counter
         }}
       >
-        <div className="relative w-full" style={{ perspective: "2200px" }}>
-          {/* Page-flip wrapper — re-keyed per page to retrigger animation */}
+        <div className="relative w-full" style={{ perspective: "2400px" }}>
+          {/* Corner-peel page wrapper — re-keyed per page to retrigger animation */}
           <div
             key={flipKey}
             className="h-full"
             style={{
               animation: flipDir
-                ? `${flipDir === "next" ? "page-flip-next" : "page-flip-prev"} 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both`
+                ? `${flipDir === "next" ? "page-peel-next" : "page-peel-prev"} 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both`
                 : undefined,
-              transformOrigin: flipDir === "next" ? "left center" : "right center",
               transformStyle: "preserve-3d",
+              backfaceVisibility: "hidden",
             }}
             onAnimationEnd={() => setFlipDir(null)}
           >
@@ -378,6 +378,9 @@ function ReaderPage() {
               page={leftPage}
               theme={theme}
               fs={fs}
+              bookTitle={book.title}
+              pageNumber={current + 1}
+              totalPages={total}
               highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
               onMouseUp={handleMouseUp(leftPage.index)}
             />
