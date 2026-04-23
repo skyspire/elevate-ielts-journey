@@ -28,6 +28,7 @@ import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samp
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
+import { Route as EbooksBookIdRouteImport } from './routes/ebooks.$bookId'
 import { Route as AdminWritingRouteImport } from './routes/admin.writing'
 import { Route as AdminVocabularyRouteImport } from './routes/admin.vocabulary'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -147,6 +148,11 @@ const VocabularyCategoryRoute = VocabularyCategoryRouteImport.update({
   id: '/$category',
   path: '/$category',
   getParentRoute: () => VocabularyRoute,
+} as any)
+const EbooksBookIdRoute = EbooksBookIdRouteImport.update({
+  id: '/$bookId',
+  path: '/$bookId',
+  getParentRoute: () => EbooksRoute,
 } as any)
 const AdminWritingRoute = AdminWritingRouteImport.update({
   id: '/writing',
@@ -274,7 +280,7 @@ export interface FileRoutesByFullPath {
   '/bg-options': typeof BgOptionsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/ebooks': typeof EbooksRoute
+  '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/writing': typeof AdminWritingRoute
+  '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -317,7 +324,7 @@ export interface FileRoutesByTo {
   '/bg-options': typeof BgOptionsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/ebooks': typeof EbooksRoute
+  '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
@@ -343,6 +350,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/writing': typeof AdminWritingRoute
+  '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin': typeof AdminIndexRoute
@@ -362,7 +370,7 @@ export interface FileRoutesById {
   '/bg-options': typeof BgOptionsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
-  '/ebooks': typeof EbooksRoute
+  '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
@@ -388,6 +396,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/writing': typeof AdminWritingRoute
+  '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -434,6 +443,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/writing'
+    | '/ebooks/$bookId'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin/'
@@ -477,6 +487,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/writing'
+    | '/ebooks/$bookId'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin'
@@ -521,6 +532,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/writing'
+    | '/ebooks/$bookId'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin/'
@@ -540,7 +552,7 @@ export interface RootRouteChildren {
   BgOptionsRoute: typeof BgOptionsRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
-  EbooksRoute: typeof EbooksRoute
+  EbooksRoute: typeof EbooksRouteWithChildren
   FaqRoute: typeof FaqRoute
   LoginRoute: typeof LoginRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -689,6 +701,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/vocabulary/$category'
       preLoaderRoute: typeof VocabularyCategoryRouteImport
       parentRoute: typeof VocabularyRoute
+    }
+    '/ebooks/$bookId': {
+      id: '/ebooks/$bookId'
+      path: '/$bookId'
+      fullPath: '/ebooks/$bookId'
+      preLoaderRoute: typeof EbooksBookIdRouteImport
+      parentRoute: typeof EbooksRoute
     }
     '/admin/writing': {
       id: '/admin/writing'
@@ -910,6 +929,17 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface EbooksRouteChildren {
+  EbooksBookIdRoute: typeof EbooksBookIdRoute
+}
+
+const EbooksRouteChildren: EbooksRouteChildren = {
+  EbooksBookIdRoute: EbooksBookIdRoute,
+}
+
+const EbooksRouteWithChildren =
+  EbooksRoute._addFileChildren(EbooksRouteChildren)
+
 interface VocabularyRouteChildren {
   VocabularyCategoryRoute: typeof VocabularyCategoryRoute
 }
@@ -928,7 +958,7 @@ const rootRouteChildren: RootRouteChildren = {
   BgOptionsRoute: BgOptionsRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
-  EbooksRoute: EbooksRoute,
+  EbooksRoute: EbooksRouteWithChildren,
   FaqRoute: FaqRoute,
   LoginRoute: LoginRoute,
   PredictionsRoute: PredictionsRoute,
