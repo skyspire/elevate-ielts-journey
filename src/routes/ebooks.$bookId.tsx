@@ -608,12 +608,16 @@ function PageView({
   const [scale, setScale] = useState(1);
 
   // Auto-shrink: measure intrinsic content vs available card area, scale down to fit.
+  // Uses rAF + size guard to avoid ResizeObserver loop notifications.
   useEffect(() => {
     if (!cardRef.current || !innerRef.current) return;
     const card = cardRef.current;
     const inner = innerRef.current;
 
+    let raf = 0;
+    let lastScale = -1;
     const measure = () => {
+      raf = 0;
       // Reset to natural size before measuring
       inner.style.transform = "scale(1)";
       inner.style.width = "100%";
@@ -622,21 +626,31 @@ function PageView({
       const innerH = inner.scrollHeight;
       const innerW = inner.scrollWidth;
       if (cardH === 0 || innerH === 0) return;
-      // Fit by height; allow scale up to 1 (never enlarge)
       const heightScale = cardH / innerH;
       const widthScale = cardW / Math.max(innerW, 1);
       const fit = Math.min(1, heightScale, widthScale);
-      // Floor so 12px text remains readable on tiny screens.
-      // Approximate: base font ~14px (text-sm) * 0.6 ≈ 8.4px — clamp scale at 0.6
+      // Floor at 0.6 so text stays readable (~12px min on small screens).
       const next = Math.max(0.6, fit);
-      setScale(next);
+      // Round to avoid tiny oscillations re-triggering ResizeObserver.
+      const rounded = Math.round(next * 1000) / 1000;
+      if (Math.abs(rounded - lastScale) < 0.002) return;
+      lastScale = rounded;
+      setScale(rounded);
     };
 
-    measure();
-    const ro = new ResizeObserver(measure);
+    const schedule = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(measure);
+    };
+
+    schedule();
+    const ro = new ResizeObserver(schedule);
     ro.observe(card);
     ro.observe(inner);
-    return () => ro.disconnect();
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, [page.content, fs]);
 
   const lines = page.content.split("\n");
@@ -680,17 +694,20 @@ function PageView({
     return <>{result.map((n, i) => (typeof n === "string" ? <span key={i}>{n}</span> : n))}</>;
   };
 
+  // Modern paperback: clean paper, very subtle binding-side shadow, generous margins.
   return (
     <div
       ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative overflow-hidden rounded-lg p-5 sm:p-8"
+      className="relative overflow-hidden"
       style={{
         background: theme.page,
-        boxShadow: "0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
-        borderRadius: "8px",
+        boxShadow:
+          "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 12px 28px -18px oklch(0.2 0.05 260 / 0.25), 0 2px 6px -2px oklch(0.2 0.05 260 / 0.08)",
+        borderRadius: "4px",
         height: "calc(100dvh - 9.5rem)",
         maxHeight: "calc(100dvh - 9.5rem)",
+        padding: "clamp(1.5rem, 4vw, 3.25rem) clamp(1.25rem, 5vw, 3.5rem)",
       }}
     >
       {locked ? (
@@ -705,17 +722,24 @@ function PageView({
           ref={innerRef}
           className="origin-top-left will-change-transform"
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
             color: theme.text,
             transform: `scale(${scale})`,
             width: `${100 / scale}%`,
+            // Soft on-screen rendering
+            WebkitFontSmoothing: "antialiased",
+            MozOsxFontSmoothing: "grayscale",
+            textRendering: "optimizeLegibility",
           }}
         >
-
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
-                <h1 key={i} className={`${fs.h1} mb-2 font-black leading-tight`}>
+                <h1
+                  key={i}
+                  className={`${fs.h1} mb-3 font-bold leading-[1.2] tracking-tight`}
+                  style={{ fontFamily: "'Lora', Georgia, serif" }}
+                >
                   {line.slice(2)}
                 </h1>
               );
@@ -724,16 +748,23 @@ function PageView({
               return (
                 <h2
                   key={i}
-                  className={`${fs.h2} mb-6 mt-1 font-bold uppercase tracking-wider`}
-                  style={{ color: theme.muted, fontFamily: "Inter, sans-serif", fontSize: "11px" }}
+                  className={`${fs.h2} mb-5 mt-1 font-semibold italic`}
+                  style={{
+                    color: theme.muted,
+                    fontFamily: "'Lora', Georgia, serif",
+                  }}
                 >
                   {line.slice(3)}
                 </h2>
               );
             }
-            if (line.trim() === "") return <div key={i} className="h-2" />;
+            if (line.trim() === "") return <div key={i} style={{ height: "0.6em" }} />;
             return (
-              <p key={i} className={`${fs.body} mb-3`}>
+              <p
+                key={i}
+                className={`${fs.body} mb-4`}
+                style={{ textAlign: "justify", hyphens: "auto" }}
+              >
                 {renderText(line)}
               </p>
             );
