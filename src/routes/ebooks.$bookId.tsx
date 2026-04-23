@@ -101,9 +101,17 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
+  // Avoid SSR/CSR hydration mismatch from localStorage-driven state.
+  // Render the canonical first page on first paint, then sync to saved state.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
-  const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
+  const savedPage = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
+  const current = mounted ? savedPage : 0;
   const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
   const isLocked = !!book && !user && current >= freePages;
 
