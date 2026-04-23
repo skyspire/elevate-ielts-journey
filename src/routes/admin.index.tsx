@@ -10,6 +10,7 @@ import {
   Library,
   BarChart3,
   ExternalLink,
+  GraduationCap,
 } from "lucide-react";
 import { useSession } from "@/lib/admin/auth";
 
@@ -18,15 +19,14 @@ export const Route = createFileRoute("/admin/")({
 });
 
 const cards = [
+  { to: "/admin/content" as const, title: "Content — IELTS Academic", desc: "Writing (Task 1, 2) & Speaking (Part 1, 2 & 3) by question type.", icon: GraduationCap, color: "oklch(0.45 0.18 265)", featured: true },
+  { to: "/admin/vocabulary" as const, title: "Vocabulary", desc: "Categories, lists, words.", icon: Library, color: "oklch(0.6 0.16 130)" },
   { to: "/admin/hero" as const, title: "Hero Section", desc: "Headline, subline, and CTAs.", icon: Type, color: "oklch(0.62 0.17 255)" },
   { to: "/admin/stats" as const, title: "Stats", desc: "Counters shown under hero.", icon: BarChart3, color: "oklch(0.6 0.16 230)" },
   { to: "/admin/pricing" as const, title: "Pricing", desc: "Plans, prices, features.", icon: CreditCard, color: "oklch(0.55 0.18 30)" },
   { to: "/admin/faq" as const, title: "FAQ", desc: "Frequently asked questions.", icon: HelpCircle, color: "oklch(0.6 0.2 295)" },
   { to: "/admin/footer" as const, title: "Footer", desc: "Columns, links, disclaimer.", icon: Layout, color: "oklch(0.55 0.14 165)" },
   { to: "/admin/contact" as const, title: "Contact Page", desc: "Email, address, hours.", icon: Mail, color: "oklch(0.62 0.16 35)" },
-  { to: "/admin/writing" as const, title: "Writing Prompts", desc: "Task 2 essay prompts by category.", icon: BookOpen, color: "oklch(0.5 0.16 200)" },
-  { to: "/admin/speaking" as const, title: "Speaking Topics", desc: "Topic catalog by category.", icon: MessageSquare, color: "oklch(0.55 0.16 320)" },
-  { to: "/admin/vocabulary" as const, title: "Vocabulary", desc: "Categories, lists, words.", icon: Library, color: "oklch(0.6 0.16 130)" },
 ];
 
 function AdminDashboard() {
