@@ -70,14 +70,14 @@ export function Faq() {
                       className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-brand sm:text-lg">
+                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-foreground sm:text-lg">
                         {f.q}
                       </span>
                       <span
-                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-foreground/20 transition-all duration-300 ${
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
                           isOpen
-                            ? "rotate-45 border-brand bg-brand text-brand-foreground"
-                            : "bg-background text-foreground group-hover:border-brand group-hover:text-brand"
+                            ? "rotate-45 border-foreground bg-foreground text-background"
+                            : "border-foreground/25 bg-background text-foreground/70 group-hover:border-foreground group-hover:text-foreground"
                         }`}
                       >
                         <Plus className="h-3.5 w-3.5" strokeWidth={3} />
