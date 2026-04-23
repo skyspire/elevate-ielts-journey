@@ -163,11 +163,11 @@ function WaxSealStamp() {
         mass: 0.9,
         delay: 0.15,
       }}
-      className="pointer-events-none absolute -top-4 right-0 z-10 sm:-top-6 sm:-right-2 md:-right-8"
+      className="pointer-events-none absolute -top-6 right-0 z-10 flex flex-col items-center sm:-top-8 sm:-right-2 md:-right-8"
       style={{ transformOrigin: "center center" }}
     >
       <div
-        className="relative flex h-20 w-20 items-center justify-center rounded-full sm:h-24 sm:w-24"
+        className="relative flex h-24 w-24 items-center justify-center rounded-full sm:h-28 sm:w-28"
         style={{
           background:
             "radial-gradient(circle at 32% 28%, oklch(0.55 0.16 15) 0%, oklch(0.4 0.18 18) 45%, oklch(0.28 0.14 20) 100%)",
@@ -179,7 +179,7 @@ function WaxSealStamp() {
         <div
           className="absolute inset-2 rounded-full"
           style={{
-            border: "1.5px dashed oklch(0.95 0.04 60 / 0.55)",
+            border: "1.5px dashed oklch(0.95 0.04 60 / 0.6)",
           }}
         />
         {/* Glossy highlight */}
@@ -190,34 +190,44 @@ function WaxSealStamp() {
               "radial-gradient(ellipse at 30% 22%, oklch(1 0 0 / 0.32) 0%, transparent 40%)",
           }}
         />
-        {/* Text */}
-        <div className="relative flex flex-col items-center justify-center text-center leading-none">
+        {/* Text — all lowercase, clear & bold */}
+        <div className="relative flex flex-col items-center justify-center text-center leading-[0.95]">
           <span
-            className="font-display text-[8px] font-bold uppercase tracking-[0.18em] sm:text-[9px]"
-            style={{ color: "oklch(0.95 0.04 60 / 0.85)" }}
-          >
-            And
-          </span>
-          <span
-            className="font-display text-base font-black italic sm:text-lg"
+            className="font-display text-[15px] font-black sm:text-[17px]"
             style={{
-              color: "oklch(0.97 0.04 60)",
-              textShadow: "0 1px 1px oklch(0.2 0.1 20 / 0.6)",
+              color: "oklch(0.98 0.03 60)",
+              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
             }}
           >
-            much
+            all
           </span>
           <span
-            className="font-display text-base font-black italic sm:text-lg"
+            className="font-display text-[13px] font-black sm:text-[15px]"
             style={{
-              color: "oklch(0.97 0.04 60)",
-              textShadow: "0 1px 1px oklch(0.2 0.1 20 / 0.6)",
+              color: "oklch(0.98 0.03 60)",
+              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
             }}
           >
-            more
+            at one
+          </span>
+          <span
+            className="font-display text-[15px] font-black sm:text-[17px]"
+            style={{
+              color: "oklch(0.98 0.03 60)",
+              textShadow: "0 1px 2px oklch(0.18 0.1 20 / 0.7)",
+            }}
+          >
+            place
           </span>
         </div>
       </div>
+      {/* Signature outside the stamp */}
+      <span
+        className="mt-1.5 font-display text-[10px] font-bold uppercase tracking-[0.22em] sm:text-[11px]"
+        style={{ color: "oklch(0.4 0.18 18)" }}
+      >
+        BigIELTS.com
+      </span>
     </motion.div>
   );
 }
