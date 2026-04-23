@@ -54,10 +54,10 @@ export function ValueStatement() {
   };
 
   return (
-    <section id="pricing" className="scroll-mt-24 bg-white pt-24 pb-12 sm:pt-32 sm:pb-16">
+    <section id="pricing" className="scroll-mt-24 bg-white pt-14 pb-8 sm:pt-20 sm:pb-12">
       <div className="container-page">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             <span className="text-[oklch(0.55_0.18_30)]">One</span>{" "}
             <span className="text-foreground">Subscription.</span>
             <br />
@@ -66,22 +66,22 @@ export function ValueStatement() {
           </h2>
 
           {/* Tagline — editorial line with handwritten accent */}
-          <div className="mt-10 flex flex-col items-center gap-3">
-            <p className="font-display text-xl font-black uppercase tracking-[0.08em] text-foreground sm:text-3xl">
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <p className="font-display text-base font-black uppercase tracking-[0.08em] text-foreground sm:text-xl">
               <span className="text-[oklch(0.55_0.18_30)]">Academic</span>
-              <span className="mx-3 text-foreground/25">/</span>
+              <span className="mx-2 text-foreground/25">/</span>
               <span className="text-[oklch(0.45_0.18_265)]">General</span>
             </p>
             <div className="flex items-center gap-3">
-              <span className="h-px w-12 bg-foreground/20" />
-              <span className="font-handwriting text-xl text-foreground/70 sm:text-2xl">
+              <span className="h-px w-10 bg-foreground/20" />
+              <span className="font-handwriting text-base text-foreground/70 sm:text-lg">
                 one plan unlocks both
               </span>
-              <span className="h-px w-12 bg-foreground/20" />
+              <span className="h-px w-10 bg-foreground/20" />
             </div>
           </div>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-relaxed text-foreground/60 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-relaxed text-foreground/60 sm:text-base">
             Hundreds of{" "}
             <span className="font-bold text-[oklch(0.55_0.18_30)]">recent</span>{" "}
             IELTS Writing and Speaking questions with{" "}
@@ -95,7 +95,7 @@ export function ValueStatement() {
         </div>
 
         {/* === CURRENCY SWITCHER === */}
-        <div className="mx-auto mt-12 flex max-w-md flex-col items-center gap-2">
+        <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-2">
           <label
             htmlFor="currency-select"
             className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
@@ -156,11 +156,11 @@ export function ValueStatement() {
         </div>
 
         {/* === PRICING === */}
-        <div className="mx-auto mt-10 grid max-w-5xl gap-5 sm:mt-12 sm:grid-cols-3">
+        <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:mt-10 sm:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.name}
-              className={`relative flex flex-col items-center rounded-3xl border p-8 text-center transition-all hover:-translate-y-1 ${
+              className={`relative flex flex-col items-center rounded-3xl border p-6 text-center transition-all hover:-translate-y-1 ${
                 p.popular
                   ? "border-transparent bg-card shadow-card ring-2 ring-brand sm:scale-105"
                   : "border-border bg-card shadow-soft hover:shadow-card"
