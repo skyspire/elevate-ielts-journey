@@ -640,6 +640,8 @@ function PageView({
   side,
   isWide,
   locked,
+  subIndex,
+  onSubCountChange,
 }: {
   page: { content: string; index: number; chapterTitle: string };
   theme: typeof THEMES[keyof typeof THEMES];
@@ -649,7 +651,37 @@ function PageView({
   side: "left" | "right";
   isWide: boolean;
   locked?: boolean;
+  subIndex: number;
+  onSubCountChange: (count: number) => void;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const [cardHeight, setCardHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  // Measure card + content; recompute slice count whenever they change.
+  useEffect(() => {
+    if (!cardRef.current || !innerRef.current) return;
+    const measure = () => {
+      const ch = cardRef.current?.clientHeight ?? 0;
+      const ih = innerRef.current?.scrollHeight ?? 0;
+      setCardHeight(ch);
+      setContentHeight(ih);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(cardRef.current);
+    ro.observe(innerRef.current);
+    return () => ro.disconnect();
+  }, [page.content, fs]);
+
+  const slices = cardHeight > 0 ? Math.max(1, Math.ceil(contentHeight / cardHeight)) : 1;
+  useEffect(() => {
+    onSubCountChange(slices);
+  }, [slices, onSubCountChange]);
+
+  const safeIndex = Math.min(Math.max(subIndex, 0), slices - 1);
+
   const lines = page.content.split("\n");
 
   // Apply highlights by wrapping matching text spans.
@@ -693,6 +725,7 @@ function PageView({
 
   return (
     <div
+      ref={cardRef}
       onMouseUp={onMouseUp}
       className="relative overflow-hidden rounded-lg p-6 sm:p-10"
       style={{
@@ -715,8 +748,13 @@ function PageView({
         </div>
       ) : (
         <article
-          className="h-full overflow-y-auto pr-1"
-          style={{ fontFamily: "'Playfair Display', serif", color: theme.text }}
+          ref={innerRef}
+          className="will-change-transform transition-transform duration-300"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            color: theme.text,
+            transform: `translateY(-${safeIndex * cardHeight}px)`,
+          }}
         >
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
