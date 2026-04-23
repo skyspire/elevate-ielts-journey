@@ -1,24 +1,41 @@
+import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CURRENCIES,
+  PRICES,
+  type CurrencyCode,
+  detectCurrencyFromIP,
+  formatPrice,
+  getStoredCurrency,
+  setStoredCurrency,
+} from "@/lib/currency";
 
 const plans = [
   {
+    key: "biweekly" as const,
     name: "Bi-Weekly",
-    price: "7",
     days: "15",
     popular: false,
     accent: "oklch(0.55 0.18 30)", // coral
   },
   {
+    key: "monthly" as const,
     name: "Monthly",
-    price: "12",
     days: "30",
     popular: true,
     accent: "oklch(0.45 0.18 265)", // indigo
   },
   {
+    key: "quarterly" as const,
     name: "3-Month",
-    price: "29",
     days: "90",
     popular: false,
     accent: "oklch(0.55 0.14 160)", // teal
@@ -35,6 +52,33 @@ const features = [
 ];
 
 export function ValueStatement() {
+  const [currency, setCurrency] = useState<CurrencyCode>("CAD");
+  const [autoDetected, setAutoDetected] = useState(false);
+
+  useEffect(() => {
+    const stored = getStoredCurrency();
+    if (stored) {
+      setCurrency(stored);
+      return;
+    }
+    let cancelled = false;
+    detectCurrencyFromIP().then((code) => {
+      if (cancelled) return;
+      setCurrency(code);
+      setAutoDetected(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleChange = (code: string) => {
+    const next = code as CurrencyCode;
+    setCurrency(next);
+    setStoredCurrency(next);
+    setAutoDetected(false);
+  };
+
   return (
     <section id="pricing" className="scroll-mt-24 bg-white pt-24 pb-12 sm:pt-32 sm:pb-16">
       <div className="container-page">
@@ -76,8 +120,54 @@ export function ValueStatement() {
           </p>
         </div>
 
+        {/* === CURRENCY SWITCHER === */}
+        <div className="mx-auto mt-12 flex max-w-md flex-col items-center gap-2">
+          <label
+            htmlFor="currency-select"
+            className="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+          >
+            Show prices in
+          </label>
+          <Select value={currency} onValueChange={handleChange}>
+            <SelectTrigger
+              id="currency-select"
+              className="h-11 w-56 rounded-full border-2 border-foreground/15 bg-card px-4 text-sm font-bold shadow-soft focus:ring-2 focus:ring-brand"
+            >
+              <SelectValue>
+                <span className="flex items-center gap-2">
+                  <span className="text-base leading-none">
+                    {CURRENCIES[currency].flag}
+                  </span>
+                  <span>{CURRENCIES[currency].label}</span>
+                  <span className="text-muted-foreground">
+                    ({CURRENCIES[currency].symbol.trim()})
+                  </span>
+                </span>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="max-h-72">
+              {Object.values(CURRENCIES).map((c) => (
+                <SelectItem key={c.code} value={c.code}>
+                  <span className="flex items-center gap-2 font-semibold">
+                    <span className="text-base leading-none">{c.flag}</span>
+                    <span>{c.label}</span>
+                    <span className="text-muted-foreground">
+                      ({c.symbol.trim()})
+                    </span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {autoDetected && (
+            <p className="text-[11px] font-medium text-muted-foreground">
+              Auto-detected from your location · change anytime
+            </p>
+          )}
+        </div>
+
         {/* === PRICING === */}
-        <div className="mx-auto mt-16 grid max-w-5xl gap-5 sm:mt-20 sm:grid-cols-3">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5 sm:mt-12 sm:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.name}
@@ -107,10 +197,12 @@ export function ValueStatement() {
                 />
               </div>
               <div className="mt-4 flex items-baseline gap-1.5">
-                <span className="font-display text-6xl font-black tracking-tight text-foreground">
-                  ${p.price}
+                <span className="font-display text-5xl font-black tracking-tight text-foreground sm:text-6xl">
+                  {formatPrice(PRICES[p.key][currency], currency)}
                 </span>
-                <span className="text-sm font-bold text-muted-foreground">CAD</span>
+                <span className="text-sm font-bold text-muted-foreground">
+                  {currency}
+                </span>
               </div>
               <div
                 className="mt-3 rounded-full px-4 py-1.5 text-sm font-extrabold"
