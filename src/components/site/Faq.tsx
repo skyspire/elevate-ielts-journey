@@ -28,7 +28,7 @@ export function Faq() {
         <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           {/* Left — headline */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <h2 className="font-display text-4xl font-black leading-[1.02] tracking-tight text-foreground sm:text-6xl">
+            <h2 className="font-display text-3xl font-black leading-[1.02] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               Questions
               <br />
               we hear
@@ -45,7 +45,7 @@ export function Faq() {
                 <span className="relative z-10">every day.</span>
               </span>
             </h2>
-            <p className="mt-6 max-w-md font-display text-xl font-medium leading-relaxed text-foreground/65">
+            <p className="mt-5 max-w-md font-display text-base font-medium leading-relaxed text-foreground/65 sm:text-lg">
               Real answers, written plainly. If something here isn't covered,
               email us — a human replies.
             </p>
