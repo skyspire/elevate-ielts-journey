@@ -72,31 +72,32 @@ export const PRICING_DEFAULT: PricingContent = {
 export const FAQ_KEY = "faq";
 export type FaqItem = { q: string; a: string };
 export type FaqContent = { items: FaqItem[] };
+// Answer convention: first line = lead sentence. Lines starting with "- " render as bullets.
 export const FAQ_DEFAULT: FaqContent = {
   items: [
     {
       q: "Is BigIELTS for Academic or General Training?",
-      a: "Both. Every Writing and Speaking section is split into Academic and General — Task 1 letters, Task 1 charts, Task 2 essays, and the full Speaking Part 1, 2, 3 banks. Choose your track once and the library filters automatically.",
+      a: "Both tracks are fully covered — choose once and the library filters automatically.\n- Writing Task 1 letters and charts\n- Writing Task 2 essays\n- Speaking Part 1, 2, and 3 banks",
     },
     {
       q: "Are the model answers really Band 9?",
-      a: "Yes. Every sample is hand-written by certified IELTS instructors and reviewed by Cambridge-trained examiners. Each answer is graded against the four official band descriptors — Task Response, Coherence, Lexical Resource, and Grammatical Range.",
+      a: "Yes — every sample is hand-written by certified IELTS instructors and reviewed by Cambridge-trained examiners.\n- Graded against Task Response\n- Graded against Coherence and Cohesion\n- Graded against Lexical Resource\n- Graded against Grammatical Range and Accuracy",
     },
     {
       q: "How often are new questions added?",
-      a: "New Writing and Speaking questions are added every month, sourced from real test-takers worldwide. Predictions for upcoming exams are refreshed before each new test window.",
+      a: "New questions land every month, sourced from real test-takers worldwide.\n- Writing questions refreshed monthly\n- Speaking questions refreshed monthly\n- Predictions updated before each test window",
     },
     {
       q: "Can I cancel anytime?",
-      a: "Yes. Subscriptions are non-binding — cancel from your dashboard in one click. You keep full access until the end of your billing period and there are no cancellation fees.",
+      a: "Yes. Subscriptions are non-binding and cancel in one click from your dashboard.\n- No cancellation fees\n- Full access until the period ends\n- Resubscribe anytime",
     },
     {
       q: "Do I need to pay to see anything?",
-      a: "No. Sign up free and instantly unlock 6 hand-picked Band 9 model answers — 3 Writing and 3 Speaking. The full library, vocabulary builder, predictions, and templates open with one subscription starting at $7.",
+      a: "No — sign up free and instantly unlock six hand-picked Band 9 model answers.\n- 3 Writing samples\n- 3 Speaking samples\n- Full library opens from $7",
     },
     {
       q: "Will this work on my phone?",
-      a: "Absolutely. BigIELTS is designed mobile-first — every sample, vocabulary card, and timetable works the same on phone, tablet, and desktop. One account, every device.",
+      a: "Absolutely — BigIELTS is built mobile-first and syncs across devices.\n- Works on phone, tablet, and desktop\n- One account, every device\n- Offline-friendly reading view",
     },
   ],
 };
