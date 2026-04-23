@@ -110,8 +110,15 @@ function ReaderPage() {
 
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
-  const current = Math.min(Math.max(state.currentPage, 0), Math.max(total - 1, 0));
+  const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
   const isLocked = !!book && !user && current >= book.freePages;
+
+  // Self-heal stale localStorage if the saved page is out of range for the new book content.
+  useEffect(() => {
+    if (total > 0 && state.currentPage > total - 1) {
+      setState((s) => ({ ...s, currentPage: 0 }));
+    }
+  }, [total, state.currentPage, setState]);
 
   const leftPage = flat[current];
   const rightPage = isWide ? flat[current + 1] : undefined;
