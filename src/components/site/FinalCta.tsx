@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
  */
 export function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-brand py-28 text-brand-foreground sm:py-36">
+    <section className="relative overflow-hidden bg-brand py-16 text-brand-foreground sm:py-20">
       {/* Softly glowing background blooms — subtle, not gradient-heavy */}
       <div
         aria-hidden
@@ -31,18 +31,18 @@ export function FinalCta() {
       />
 
       <div className="container-page relative">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="font-handwriting text-3xl text-brand-foreground/75 sm:text-4xl">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="font-handwriting text-2xl text-brand-foreground/75 sm:text-3xl">
             ready when you are
           </p>
-          <h2 className="mt-3 font-display text-5xl font-black leading-[1] tracking-tight text-brand-foreground sm:text-7xl md:text-[88px]">
+          <h2 className="mt-2 font-display text-4xl font-black leading-[1.05] tracking-tight text-brand-foreground sm:text-5xl md:text-6xl">
             Stop guessing.
             <br />
             Start scoring{" "}
             <span className="relative inline-block">
               <span
                 aria-hidden
-                className="absolute inset-x-[-10px] bottom-2 -z-0 h-[26%] -rotate-1 rounded-sm"
+                className="absolute inset-x-[-8px] bottom-1 -z-0 h-[26%] -rotate-1 rounded-sm"
                 style={{
                   background:
                     "linear-gradient(120deg, oklch(0.85 0.16 75 / 0.85), oklch(0.78 0.18 55 / 0.85))",
@@ -52,16 +52,16 @@ export function FinalCta() {
             </span>
           </h2>
 
-          <p className="mx-auto mt-8 max-w-2xl font-display text-xl font-medium leading-relaxed text-brand-foreground/80 sm:text-2xl">
+          <p className="mx-auto mt-5 max-w-xl font-display text-base font-medium leading-relaxed text-brand-foreground/80 sm:text-lg">
             Sign up free and unlock 6 hand-picked Band 9 model answers in
             seconds. Upgrade when — and only when — you're ready.
           </p>
 
-          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <Button
               asChild
               size="lg"
-              className="h-14 rounded-full bg-brand-foreground px-9 text-lg font-extrabold text-brand hover:bg-brand-foreground/95"
+              className="h-12 rounded-full bg-brand-foreground px-7 text-base font-extrabold text-brand hover:bg-brand-foreground/95"
             >
               <Link to="/dashboard">
                 Start free
@@ -72,7 +72,7 @@ export function FinalCta() {
               asChild
               size="lg"
               variant="outline"
-              className="h-14 rounded-full border-brand-foreground/40 bg-transparent px-9 text-lg font-extrabold text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground"
+              className="h-12 rounded-full border-brand-foreground/40 bg-transparent px-7 text-base font-extrabold text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground"
             >
               <Link to="/recent-exam-questions">Browse questions</Link>
             </Button>
