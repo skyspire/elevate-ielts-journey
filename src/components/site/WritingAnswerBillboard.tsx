@@ -464,28 +464,44 @@ export function WritingAnswerBillboard({
                 `whiteSpace: pre-line` preserves the `\n` line breaks used
                 inside letter bodies (greetings, sign-offs). */}
             <div className="mt-6 space-y-7">
-              {activeAnswer.paragraphs.map((p) => (
-                <div key={p.heading}>
-                  <h3
-                    className="font-display text-[15px] font-extrabold uppercase tracking-[0.16em]"
-                    style={{ color: SIGNATURE_INK, opacity: 0.75 }}
-                  >
-                    {p.heading}
-                  </h3>
-                  <p
-                    className="mt-2 font-display"
-                    style={{
-                      color: SIGNATURE_INK_SOFT,
-                      fontSize: "clamp(1rem, 1.45vw, 1.125rem)",
-                      lineHeight: 1.78,
-                      fontWeight: 500,
-                      whiteSpace: "pre-line",
-                    }}
-                  >
-                    {p.body}
-                  </p>
-                </div>
-              ))}
+              {activeAnswer.paragraphs.map((p) => {
+                const isHtml = /<[a-z][\s\S]*>/i.test(p.body);
+                return (
+                  <div key={p.heading}>
+                    <h3
+                      className="font-display text-[15px] font-extrabold uppercase tracking-[0.16em]"
+                      style={{ color: SIGNATURE_INK, opacity: 0.75 }}
+                    >
+                      {p.heading}
+                    </h3>
+                    {isHtml ? (
+                      <div
+                        className="answer-body mt-2 font-display"
+                        style={{
+                          color: SIGNATURE_INK_SOFT,
+                          fontSize: "clamp(1rem, 1.45vw, 1.125rem)",
+                          lineHeight: 1.78,
+                          fontWeight: 500,
+                        }}
+                        dangerouslySetInnerHTML={{ __html: p.body }}
+                      />
+                    ) : (
+                      <p
+                        className="mt-2 font-display"
+                        style={{
+                          color: SIGNATURE_INK_SOFT,
+                          fontSize: "clamp(1rem, 1.45vw, 1.125rem)",
+                          lineHeight: 1.78,
+                          fontWeight: 500,
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {p.body}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </article>
         </div>
