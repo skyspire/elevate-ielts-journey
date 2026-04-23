@@ -1,23 +1,6 @@
 import { GraduationCap } from "lucide-react";
-
-const cols = [
-  {
-    title: "Navigate",
-    links: [{ label: "Home", to: "/" }, { label: "Recent Questions", to: "#" }, { label: "Vocabulary", to: "#" }, { label: "E-books", to: "#" }],
-  },
-  {
-    title: "IELTS",
-    links: [{ label: "Academic Writing", to: "#" }, { label: "Academic Speaking", to: "#" }, { label: "General Writing", to: "#" }, { label: "General Speaking", to: "#" }],
-  },
-  {
-    title: "Account",
-    links: [{ label: "Sign In", to: "#" }, { label: "Sign Up", to: "#" }, { label: "My Subscription", to: "#" }, { label: "Billing", to: "#" }],
-  },
-  {
-    title: "Support",
-    links: [{ label: "FAQ", to: "/faq" }, { label: "Contact", to: "/contact" }, { label: "Terms of Service", to: "/terms" }, { label: "Privacy Policy", to: "/privacy" }],
-  },
-];
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { FOOTER_KEY, FOOTER_DEFAULT } from "@/lib/admin/defaults";
 
 type FooterProps = {
   variant?: "dark" | "light";

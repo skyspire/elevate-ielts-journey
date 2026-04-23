@@ -1,38 +1,14 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { FAQ_KEY, FAQ_DEFAULT } from "@/lib/admin/defaults";
 
 /**
  * Faq — editorial accordion. Big questions, generous spacing, no pills.
  */
 
-const faqs = [
-  {
-    q: "Is BigIELTS for Academic or General Training?",
-    a: "Both. Every Writing and Speaking section is split into Academic and General — Task 1 letters, Task 1 charts, Task 2 essays, and the full Speaking Part 1, 2, 3 banks. Choose your track once and the library filters automatically.",
-  },
-  {
-    q: "Are the model answers really Band 9?",
-    a: "Yes. Every sample is hand-written by certified IELTS instructors and reviewed by Cambridge-trained examiners. Each answer is graded against the four official band descriptors — Task Response, Coherence, Lexical Resource, and Grammatical Range.",
-  },
-  {
-    q: "How often are new questions added?",
-    a: "New Writing and Speaking questions are added every month, sourced from real test-takers worldwide. Predictions for upcoming exams are refreshed before each new test window.",
-  },
-  {
-    q: "Can I cancel anytime?",
-    a: "Yes. Subscriptions are non-binding — cancel from your dashboard in one click. You keep full access until the end of your billing period and there are no cancellation fees.",
-  },
-  {
-    q: "Do I need to pay to see anything?",
-    a: "No. Sign up free and instantly unlock 6 hand-picked Band 9 model answers — 3 Writing and 3 Speaking. The full library, vocabulary builder, predictions, and templates open with one subscription starting at $7.",
-  },
-  {
-    q: "Will this work on my phone?",
-    a: "Absolutely. BigIELTS is designed mobile-first — every sample, vocabulary card, and timetable works the same on phone, tablet, and desktop. One account, every device.",
-  },
-];
-
 export function Faq() {
+  const { items: faqs } = useCmsSection(FAQ_KEY, FAQ_DEFAULT);
   const [open, setOpen] = useState<number | null>(0);
 
   return (
