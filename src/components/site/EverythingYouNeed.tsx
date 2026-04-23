@@ -148,127 +148,52 @@ export function EverythingYouNeed() {
   );
 }
 
-/* ---------- Round notary seal stamp that drops in on scroll ---------- */
+/* ---------- Clean minimal circular stamp ---------- */
 function WaxSealStamp() {
   return (
     <motion.div
       aria-hidden
-      initial={{ opacity: 0, scale: 0.55, rotate: -18, y: -20 }}
+      initial={{ opacity: 0, scale: 0.7, rotate: -12, y: -10 }}
       whileInView={{ opacity: 1, scale: 1, rotate: -6, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{
         type: "spring",
-        stiffness: 200,
-        damping: 14,
-        mass: 0.95,
-        delay: 0.2,
+        stiffness: 220,
+        damping: 18,
+        mass: 0.8,
+        delay: 0.15,
       }}
-      className="pointer-events-none absolute -top-14 -right-2 z-10 sm:-top-16 sm:-right-6 md:-top-20 md:-right-14"
+      className="pointer-events-none absolute -top-6 right-2 z-10 sm:-top-4 sm:right-4 md:-top-2 md:-right-4"
       style={{ transformOrigin: "center center" }}
     >
-      <svg
-        viewBox="0 0 200 200"
-        className="h-[112px] w-[112px] sm:h-[128px] sm:w-[128px] md:h-[140px] md:w-[140px]"
+      <div
+        className="flex h-24 w-24 flex-col items-center justify-center rounded-full sm:h-28 sm:w-28"
         style={{
-          filter:
-            "drop-shadow(0 6px 12px oklch(0.2 0.06 260 / 0.35)) drop-shadow(0 2px 3px oklch(0.18 0.05 260 / 0.3))",
+          background: "oklch(0.98 0.005 250)",
+          border: "2px solid oklch(0.45 0.18 260)",
+          boxShadow:
+            "0 4px 12px -4px oklch(0.45 0.18 260 / 0.25), inset 0 0 0 4px oklch(0.98 0.005 250), inset 0 0 0 5px oklch(0.45 0.18 260 / 0.4)",
         }}
       >
-        <defs>
-          {/* Curved paths for text — top arc and bottom arc */}
-          <path
-            id="seal-top-arc"
-            d="M 28 100 A 72 72 0 0 1 172 100"
-            fill="none"
-          />
-          <path
-            id="seal-bottom-arc"
-            d="M 30 104 A 70 70 0 0 0 170 104"
-            fill="none"
-          />
-          {/* Navy radial fill */}
-          <radialGradient id="seal-navy" cx="38%" cy="32%" r="75%">
-            <stop offset="0%" stopColor="oklch(0.32 0.08 260)" />
-            <stop offset="55%" stopColor="oklch(0.22 0.07 262)" />
-            <stop offset="100%" stopColor="oklch(0.16 0.06 262)" />
-          </radialGradient>
-          {/* Gold gradient for text and rings */}
-          <linearGradient id="seal-gold" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="oklch(0.92 0.13 90)" />
-            <stop offset="50%" stopColor="oklch(0.82 0.15 85)" />
-            <stop offset="100%" stopColor="oklch(0.68 0.14 80)" />
-          </linearGradient>
-        </defs>
-
-        {/* Outer gold ring */}
-        <circle cx="100" cy="100" r="96" fill="url(#seal-gold)" />
-        {/* Navy seal body */}
-        <circle cx="100" cy="100" r="90" fill="url(#seal-navy)" />
-        {/* Inner thin gold ring */}
-        <circle
-          cx="100"
-          cy="100"
-          r="68"
-          fill="none"
-          stroke="url(#seal-gold)"
-          strokeWidth="1.2"
-          opacity="0.85"
-        />
-        {/* Subtle highlight */}
-        <ellipse
-          cx="78"
-          cy="62"
-          rx="48"
-          ry="22"
-          fill="oklch(1 0 0 / 0.08)"
-        />
-
-        {/* Top curved text */}
-        <text
-          fill="url(#seal-gold)"
-          style={{
-            fontFamily: "'Archivo Black', system-ui, sans-serif",
-            fontSize: "16px",
-            letterSpacing: "3.2px",
-          }}
+        <span
+          className="font-display text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
+          style={{ color: "oklch(0.45 0.18 260)" }}
         >
-          <textPath
-            href="#seal-top-arc"
-            startOffset="50%"
-            textAnchor="middle"
-          >
-            ALL AT ONE PLACE
-          </textPath>
-        </text>
-
-        {/* Decorative dots flanking the center star */}
-        <circle cx="62" cy="100" r="2" fill="url(#seal-gold)" />
-        <circle cx="138" cy="100" r="2" fill="url(#seal-gold)" />
-
-        {/* Center star */}
-        <path
-          d="M 100 86 L 103.6 96 L 114 96 L 105.6 102.4 L 109 112.5 L 100 106.4 L 91 112.5 L 94.4 102.4 L 86 96 L 96.4 96 Z"
-          fill="url(#seal-gold)"
-        />
-
-        {/* Bottom curved text */}
-        <text
-          fill="url(#seal-gold)"
-          style={{
-            fontFamily: "'Archivo Black', system-ui, sans-serif",
-            fontSize: "11px",
-            letterSpacing: "2.5px",
-          }}
+          All at
+        </span>
+        <span
+          className="font-display text-base font-black uppercase leading-none sm:text-lg"
+          style={{ color: "oklch(0.32 0.18 262)" }}
         >
-          <textPath
-            href="#seal-bottom-arc"
-            startOffset="50%"
-            textAnchor="middle"
-          >
-            BIGIELTS · COM
-          </textPath>
-        </text>
-      </svg>
+          One
+        </span>
+        <span
+          className="font-display text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
+          style={{ color: "oklch(0.45 0.18 260)" }}
+        >
+          Place
+        </span>
+      </div>
     </motion.div>
   );
 }
