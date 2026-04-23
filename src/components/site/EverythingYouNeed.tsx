@@ -129,13 +129,13 @@ export function EverythingYouNeed() {
             in your next exam
           </h2>
 
-          {/* Paragraph + thin outline seal beside it */}
-          <div className="mt-4 flex flex-col items-center justify-center gap-5 sm:mt-5 sm:flex-row sm:items-center sm:gap-7">
+          {/* Paragraph + rubber stamp tucked to the right */}
+          <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
             <p className="max-w-xl text-sm font-semibold text-foreground/75 sm:text-base sm:text-left">
               Six focused resources, built by Band 9 examiners. No fluff, no
               recycled content — just what actually moves your score.
             </p>
-            <ThinOutlineSeal />
+            <RubberStamp />
           </div>
         </div>
 
@@ -150,55 +150,52 @@ export function EverythingYouNeed() {
   );
 }
 
-/* ---------- Thin outline circular seal — sober, formal serif ---------- */
-function ThinOutlineSeal() {
+/* ---------- Rubber stamp — uses the site's display font (Inter) ---------- */
+function RubberStamp() {
+  // Brand-consistent inky red, slightly faded for an authentic rubber-ink look
+  const ink = "oklch(0.5 0.19 25)";
+  const inkSoft = "oklch(0.5 0.19 25 / 0.78)";
   return (
     <motion.div
       aria-hidden
-      initial={{ opacity: 0, scale: 0.85, rotate: -4 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: -3 }}
+      initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: -7 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ type: "spring", stiffness: 220, damping: 20, delay: 0.15 }}
+      transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.2 }}
       className="shrink-0"
     >
       <div
-        className="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-full sm:h-24 sm:w-24"
+        className="relative flex flex-col items-center justify-center px-3 py-1.5 sm:px-3.5 sm:py-2"
         style={{
-          background: "transparent",
-          border: "1px solid oklch(0.45 0.18 260 / 0.55)",
-          boxShadow: "inset 0 0 0 3px oklch(1 0 0 / 0), inset 0 0 0 4px oklch(0.45 0.18 260 / 0.18)",
+          border: `2.5px solid ${inkSoft}`,
+          borderRadius: "6px",
+          color: ink,
+          // Faded, uneven rubber ink texture
+          background:
+            "radial-gradient(circle at 20% 30%, transparent 0.5px, oklch(1 0 0 / 0) 1px), radial-gradient(circle at 70% 60%, transparent 0.5px, oklch(1 0 0 / 0) 1px)",
+          boxShadow:
+            "inset 0 0 0 1px oklch(1 0 0 / 0.4), inset 0 0 8px oklch(1 0 0 / 0.5)",
+          mixBlendMode: "multiply",
+          opacity: 0.92,
         }}
       >
         <span
-          className="text-[9px] uppercase tracking-[0.2em] sm:text-[10px]"
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
-            color: "oklch(0.45 0.18 260 / 0.85)",
-          }}
+          className="font-display text-[8px] font-bold uppercase leading-none tracking-[0.22em] sm:text-[9px]"
+          style={{ color: inkSoft }}
         >
-          All at
+          All&nbsp;at
         </span>
         <span
-          className="my-0.5 text-lg leading-none sm:text-xl"
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 800,
-            fontStyle: "italic",
-            color: "oklch(0.32 0.18 262)",
-          }}
+          className="font-display text-base font-black uppercase leading-none tracking-[0.04em] sm:text-lg"
+          style={{ color: ink, letterSpacing: "0.02em" }}
         >
-          One
+          One&nbsp;Place
         </span>
         <span
-          className="text-[9px] uppercase tracking-[0.2em] sm:text-[10px]"
-          style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontWeight: 700,
-            color: "oklch(0.45 0.18 260 / 0.85)",
-          }}
+          className="mt-0.5 font-display text-[7px] font-semibold uppercase leading-none tracking-[0.3em] sm:text-[8px]"
+          style={{ color: inkSoft }}
         >
-          Place
+          ★ Verified ★
         </span>
       </div>
     </motion.div>
