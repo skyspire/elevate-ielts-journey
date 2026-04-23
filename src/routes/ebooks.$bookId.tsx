@@ -344,9 +344,17 @@ function ReaderPage() {
         </div>
       )}
 
-      {/* Reader area */}
-      <div className="relative mx-auto max-w-3xl px-3 pb-4 pt-3 sm:px-4 sm:pt-4">
-        <div className="relative">
+      {/* Reader area — full viewport, centered paperback column */}
+      <div
+        className="relative mx-auto flex items-center justify-center"
+        style={{
+          width: "min(640px, 100vw - 1.5rem)",
+          minHeight: "100dvh",
+          paddingTop: "0.5rem",
+          paddingBottom: "0.5rem",
+        }}
+      >
+        <div className="relative w-full">
           <PageView
             page={leftPage}
             theme={theme}
@@ -355,13 +363,19 @@ function ReaderPage() {
             onMouseUp={handleMouseUp(leftPage.index)}
           />
 
-          {/* Edge overlay arrows */}
+          {/* Edge overlay arrows — auto-hide with chrome */}
           <button
             onClick={goPrev}
             disabled={current === 0}
             aria-label="Previous page"
-            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:left-2"
-            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:left-2"
+            style={{
+              background: `${theme.page}d9`,
+              color: theme.text,
+              border: `1px solid ${theme.border}`,
+              opacity: chromeVisible && current !== 0 ? 1 : 0,
+              pointerEvents: chromeVisible && current !== 0 ? "auto" : "none",
+            }}
           >
             <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
           </button>
@@ -369,8 +383,14 @@ function ReaderPage() {
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
             aria-label="Next page"
-            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity disabled:pointer-events-none disabled:opacity-0 sm:right-2"
-            style={{ background: `${theme.page}d9`, color: theme.text, border: `1px solid ${theme.border}` }}
+            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:right-2"
+            style={{
+              background: `${theme.page}d9`,
+              color: theme.text,
+              border: `1px solid ${theme.border}`,
+              opacity: chromeVisible && current < total - 1 && !isLocked ? 1 : 0,
+              pointerEvents: chromeVisible && current < total - 1 && !isLocked ? "auto" : "none",
+            }}
           >
             <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
           </button>
@@ -379,7 +399,7 @@ function ReaderPage() {
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="mt-4 rounded-xl border p-6 text-center"
+            className="absolute inset-x-4 bottom-16 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -408,10 +428,13 @@ function ReaderPage() {
           </div>
         )}
 
-        {/* Slim page counter */}
+        {/* Slim page counter — auto-hide with chrome */}
         <p
-          className="mt-2 text-center text-[11px] font-bold uppercase tracking-[0.18em]"
-          style={{ color: theme.muted }}
+          className="pointer-events-none fixed bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.18em] transition-opacity duration-300"
+          style={{
+            color: theme.muted,
+            opacity: chromeVisible ? 1 : 0,
+          }}
         >
           Page {current + 1} of {total}
         </p>
