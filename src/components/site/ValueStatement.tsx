@@ -25,6 +25,7 @@ import { useCmsSection } from "@/lib/admin/cms-store";
 import { PRICING_KEY, PRICING_DEFAULT } from "@/lib/admin/defaults";
 
 export function ValueStatement() {
+  const { plans, features, footnote } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
   const [autoDetected, setAutoDetected] = useState(false);
 
