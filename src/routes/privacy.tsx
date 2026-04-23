@@ -413,7 +413,7 @@ function PrivacyPage() {
         </article>
       </main>
 
-      <Footer variant="light" />
+      <Footer />
     </div>
   );
 }

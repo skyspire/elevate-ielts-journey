@@ -213,7 +213,7 @@ function VocabularyPage() {
           </p>
         </div>
       </main>
-      <Footer variant="light" />
+      <Footer />
     </div>
   );
 }
