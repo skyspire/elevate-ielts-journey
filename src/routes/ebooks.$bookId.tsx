@@ -352,60 +352,60 @@ function ReaderPage() {
 
       {/* Reader area — full viewport, centered paperback column */}
       <div
-        className="relative mx-auto flex items-center justify-center"
+        className="relative mx-auto flex items-stretch justify-center"
         style={{
-          width: "min(640px, 100vw - 1.5rem)",
+          width: "min(680px, 100vw - 1.5rem)",
           minHeight: "100dvh",
-          paddingTop: "0.5rem",
-          paddingBottom: "0.5rem",
+          paddingTop: "0.75rem",
+          paddingBottom: "3.5rem", // breathing room above page counter
         }}
       >
-        <div className="relative w-full">
-          <PageView
-            page={leftPage}
-            theme={theme}
-            fs={fs}
-            highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
-            onMouseUp={handleMouseUp(leftPage.index)}
-          />
+        <div className="relative w-full" style={{ perspective: "2200px" }}>
+          {/* Page-flip wrapper — re-keyed per page to retrigger animation */}
+          <div
+            key={flipKey}
+            className="h-full"
+            style={{
+              animation: flipDir
+                ? `${flipDir === "next" ? "page-flip-next" : "page-flip-prev"} 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both`
+                : undefined,
+              transformOrigin: flipDir === "next" ? "left center" : "right center",
+              transformStyle: "preserve-3d",
+            }}
+            onAnimationEnd={() => setFlipDir(null)}
+          >
+            <PageView
+              page={leftPage}
+              theme={theme}
+              fs={fs}
+              highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
+              onMouseUp={handleMouseUp(leftPage.index)}
+            />
+          </div>
 
           {/* Edge overlay arrows — auto-hide with chrome */}
-          <button
+          <ArrowButton
+            side="left"
+            theme={theme}
+            visible={chromeVisible && current !== 0}
             onClick={goPrev}
             disabled={current === 0}
-            aria-label="Previous page"
-            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:left-2"
-            style={{
-              background: `${theme.page}d9`,
-              color: theme.text,
-              border: `1px solid ${theme.border}`,
-              opacity: chromeVisible && current !== 0 ? 1 : 0,
-              pointerEvents: chromeVisible && current !== 0 ? "auto" : "none",
-            }}
-          >
-            <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
-          </button>
-          <button
+            ariaLabel="Previous page"
+          />
+          <ArrowButton
+            side="right"
+            theme={theme}
+            visible={chromeVisible && current < total - 1 && !isLocked}
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
-            aria-label="Next page"
-            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:right-2"
-            style={{
-              background: `${theme.page}d9`,
-              color: theme.text,
-              border: `1px solid ${theme.border}`,
-              opacity: chromeVisible && current < total - 1 && !isLocked ? 1 : 0,
-              pointerEvents: chromeVisible && current < total - 1 && !isLocked ? "auto" : "none",
-            }}
-          >
-            <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
-          </button>
+            ariaLabel="Next page"
+          />
         </div>
 
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="absolute inset-x-4 bottom-16 rounded-xl border p-6 text-center"
+            className="absolute inset-x-4 bottom-20 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -435,15 +435,23 @@ function ReaderPage() {
         )}
 
         {/* Slim page counter — auto-hide with chrome */}
-        <p
-          className="pointer-events-none fixed bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.18em] transition-opacity duration-300"
-          style={{
-            color: theme.muted,
-            opacity: chromeVisible ? 1 : 0,
-          }}
+        <div
+          className="pointer-events-none fixed bottom-0 left-0 right-0 z-30 flex justify-center pb-3 transition-opacity duration-300"
+          style={{ opacity: chromeVisible ? 1 : 0 }}
         >
-          Page {current + 1} of {total}
-        </p>
+          <div
+            className="rounded-full border px-4 py-1.5 backdrop-blur-md"
+            style={{
+              background: `${theme.page}e6`,
+              borderColor: theme.border,
+              color: theme.muted,
+            }}
+          >
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em]">
+              Page {current + 1} of {total}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Highlight popover */}
