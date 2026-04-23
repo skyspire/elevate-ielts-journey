@@ -64,20 +64,20 @@ export function Faq() {
                     <button
                       type="button"
                       onClick={() => setOpen(isOpen ? null : i)}
-                      className="group flex w-full items-start justify-between gap-6 py-7 text-left transition-colors hover:text-brand"
+                      className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors hover:text-brand"
                       aria-expanded={isOpen}
                     >
-                      <span className="font-display text-xl font-extrabold leading-snug tracking-tight text-foreground sm:text-2xl">
+                      <span className="font-display text-base font-extrabold leading-snug tracking-tight text-foreground sm:text-lg">
                         {f.q}
                       </span>
                       <span
-                        className={`mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/20 transition-all duration-300 ${
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-foreground/20 transition-all duration-300 ${
                           isOpen
                             ? "rotate-45 border-brand bg-brand text-brand-foreground"
                             : "bg-background text-foreground group-hover:border-brand group-hover:text-brand"
                         }`}
                       >
-                        <Plus className="h-4 w-4" strokeWidth={3} />
+                        <Plus className="h-3.5 w-3.5" strokeWidth={3} />
                       </span>
                     </button>
                     <div
@@ -87,7 +87,7 @@ export function Faq() {
                       }}
                     >
                       <div className="min-h-0">
-                        <p className="pb-7 pr-14 font-display text-lg font-medium leading-relaxed text-foreground/70">
+                        <p className="pb-5 pr-12 font-display text-sm font-medium leading-relaxed text-foreground/70 sm:text-base">
                           {f.a}
                         </p>
                       </div>
