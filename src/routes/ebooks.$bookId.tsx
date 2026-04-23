@@ -55,14 +55,14 @@ const FONT_SIZES = {
   xl: { body: "text-[21px] leading-[1.9]", h1: "text-[2.4rem]", h2: "text-2xl" },
 } as const;
 
-// Modern paperback palette — clean off-white paper, deep ink, warm sepia option, soft dark.
+// Modern paperback palette — pure white default, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.965 0.008 85)",
-    page: "oklch(0.985 0.006 85)",
-    text: "oklch(0.22 0.015 260)",
-    muted: "oklch(0.48 0.02 260)",
-    border: "oklch(0.92 0.01 250)",
+    bg: "oklch(0.985 0 0)",
+    page: "oklch(1 0 0)",
+    text: "oklch(0.2 0.015 260)",
+    muted: "oklch(0.5 0.015 260)",
+    border: "oklch(0.93 0.005 250)",
   },
   sepia: {
     bg: "oklch(0.92 0.035 78)",
@@ -143,11 +143,17 @@ function ReaderPage() {
 
   const leftPage = flat[current] ?? flat[0];
 
+  // Page-flip animation state
+  const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
+  const flipKey = current; // re-mount PageView on page change to trigger animation
+
   const goPrev = useCallback(() => {
+    setFlipDir("prev");
     setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - 1) }));
   }, [setState]);
 
   const goNext = useCallback(() => {
+    setFlipDir("next");
     setState((s) => {
       const next = total > 0 ? Math.min(total - 1, s.currentPage + 1) : 0;
       if (!user && next >= freePages) {
@@ -346,60 +352,60 @@ function ReaderPage() {
 
       {/* Reader area — full viewport, centered paperback column */}
       <div
-        className="relative mx-auto flex items-center justify-center"
+        className="relative mx-auto flex items-stretch justify-center"
         style={{
-          width: "min(640px, 100vw - 1.5rem)",
+          width: "min(680px, 100vw - 1.5rem)",
           minHeight: "100dvh",
-          paddingTop: "0.5rem",
-          paddingBottom: "0.5rem",
+          paddingTop: "0.75rem",
+          paddingBottom: "3.5rem", // breathing room above page counter
         }}
       >
-        <div className="relative w-full">
-          <PageView
-            page={leftPage}
-            theme={theme}
-            fs={fs}
-            highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
-            onMouseUp={handleMouseUp(leftPage.index)}
-          />
+        <div className="relative w-full" style={{ perspective: "2200px" }}>
+          {/* Page-flip wrapper — re-keyed per page to retrigger animation */}
+          <div
+            key={flipKey}
+            className="h-full"
+            style={{
+              animation: flipDir
+                ? `${flipDir === "next" ? "page-flip-next" : "page-flip-prev"} 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both`
+                : undefined,
+              transformOrigin: flipDir === "next" ? "left center" : "right center",
+              transformStyle: "preserve-3d",
+            }}
+            onAnimationEnd={() => setFlipDir(null)}
+          >
+            <PageView
+              page={leftPage}
+              theme={theme}
+              fs={fs}
+              highlights={state.highlights.filter((h) => h.pageIndex === leftPage.index)}
+              onMouseUp={handleMouseUp(leftPage.index)}
+            />
+          </div>
 
           {/* Edge overlay arrows — auto-hide with chrome */}
-          <button
+          <ArrowButton
+            side="left"
+            theme={theme}
+            visible={chromeVisible && current !== 0}
             onClick={goPrev}
             disabled={current === 0}
-            aria-label="Previous page"
-            className="group absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:left-2"
-            style={{
-              background: `${theme.page}d9`,
-              color: theme.text,
-              border: `1px solid ${theme.border}`,
-              opacity: chromeVisible && current !== 0 ? 1 : 0,
-              pointerEvents: chromeVisible && current !== 0 ? "auto" : "none",
-            }}
-          >
-            <ChevronLeft className="h-5 w-5 opacity-70 group-hover:opacity-100" />
-          </button>
-          <button
+            ariaLabel="Previous page"
+          />
+          <ArrowButton
+            side="right"
+            theme={theme}
+            visible={chromeVisible && current < total - 1 && !isLocked}
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
-            aria-label="Next page"
-            className="group absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 backdrop-blur-md transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0 sm:right-2"
-            style={{
-              background: `${theme.page}d9`,
-              color: theme.text,
-              border: `1px solid ${theme.border}`,
-              opacity: chromeVisible && current < total - 1 && !isLocked ? 1 : 0,
-              pointerEvents: chromeVisible && current < total - 1 && !isLocked ? "auto" : "none",
-            }}
-          >
-            <ChevronRight className="h-5 w-5 opacity-70 group-hover:opacity-100" />
-          </button>
+            ariaLabel="Next page"
+          />
         </div>
 
         {/* Locked overlay */}
         {isLocked && (
           <div
-            className="absolute inset-x-4 bottom-16 rounded-xl border p-6 text-center"
+            className="absolute inset-x-4 bottom-20 rounded-xl border p-6 text-center"
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
@@ -429,15 +435,23 @@ function ReaderPage() {
         )}
 
         {/* Slim page counter — auto-hide with chrome */}
-        <p
-          className="pointer-events-none fixed bottom-2 left-1/2 -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.18em] transition-opacity duration-300"
-          style={{
-            color: theme.muted,
-            opacity: chromeVisible ? 1 : 0,
-          }}
+        <div
+          className="pointer-events-none fixed bottom-0 left-0 right-0 z-30 flex justify-center pb-3 transition-opacity duration-300"
+          style={{ opacity: chromeVisible ? 1 : 0 }}
         >
-          Page {current + 1} of {total}
-        </p>
+          <div
+            className="rounded-full border px-4 py-1.5 backdrop-blur-md"
+            style={{
+              background: `${theme.page}e6`,
+              borderColor: theme.border,
+              color: theme.muted,
+            }}
+          >
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em]">
+              Page {current + 1} of {total}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Highlight popover */}
@@ -607,6 +621,51 @@ function IconBtn({
   );
 }
 
+function ArrowButton({
+  side,
+  theme,
+  visible,
+  onClick,
+  disabled,
+  ariaLabel,
+}: {
+  side: "left" | "right";
+  theme: typeof THEMES[keyof typeof THEMES];
+  visible: boolean;
+  onClick: () => void;
+  disabled: boolean;
+  ariaLabel: string;
+}) {
+  const Icon = side === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      className="group absolute top-1/2 z-20 -translate-y-1/2 transition-all duration-300 ease-out disabled:pointer-events-none"
+      style={{
+        [side]: "0.5rem",
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+        transform: `translateY(-50%) ${visible ? "translateX(0)" : `translateX(${side === "left" ? "-8px" : "8px"})`}`,
+      }}
+    >
+      <span
+        className="flex h-11 w-11 items-center justify-center rounded-full shadow-lg transition-all duration-200 ease-out group-hover:scale-110 group-active:scale-95"
+        style={{
+          background: theme.page,
+          color: theme.text,
+          border: `1px solid ${theme.border}`,
+          boxShadow:
+            "0 8px 24px -10px oklch(0.2 0.05 260 / 0.35), 0 2px 6px -2px oklch(0.2 0.05 260 / 0.15)",
+        }}
+      >
+        <Icon className="h-5 w-5 opacity-80 transition-opacity group-hover:opacity-100" strokeWidth={2.25} />
+      </span>
+    </button>
+  );
+}
+
 function ThemeBtn({
   active,
   onClick,
@@ -753,8 +812,8 @@ function PageView({
         boxShadow:
           "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 18px 40px -22px oklch(0.2 0.05 260 / 0.3), 0 2px 8px -2px oklch(0.2 0.05 260 / 0.1)",
         borderRadius: "6px",
-        height: "calc(100dvh - 1rem)",
-        maxHeight: "calc(100dvh - 1rem)",
+        height: "calc(100dvh - 4.25rem)",
+        maxHeight: "calc(100dvh - 4.25rem)",
         // Generous A4 book margins: ~2.5cm top/bottom, ~2cm sides (responsive).
         padding: "clamp(2rem, 6vh, 2.5cm) clamp(1.25rem, 5vw, 2cm)",
       }}

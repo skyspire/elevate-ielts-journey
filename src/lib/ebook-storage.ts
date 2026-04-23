@@ -35,7 +35,7 @@ function isBrowser() {
 }
 
 const defaultState: ReaderState = { currentPage: 0, bookmarks: [], highlights: [] };
-const defaultPrefs: ReaderPrefs = { fontSize: "md", theme: "sepia" };
+const defaultPrefs: ReaderPrefs = { fontSize: "md", theme: "light" };
 
 function normalizePageIndex(value: unknown) {
   const n = typeof value === "number" ? value : Number(value);
