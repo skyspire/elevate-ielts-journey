@@ -11,7 +11,7 @@ type Props = {
 
 export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
   return (
-    <div className="grid min-h-screen w-full grid-cols-1 bg-background md:grid-cols-[1fr_1.05fr]">
+    <div className="grid h-screen w-full grid-cols-1 overflow-hidden bg-background md:grid-cols-[1fr_1.05fr]">
       {/* LEFT — hero panel (now on the LEFT) */}
       <div className="relative hidden overflow-hidden md:block">
         {/* Background image */}
@@ -61,7 +61,7 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
       </div>
 
       {/* RIGHT — colorful form panel */}
-      <div className="relative flex min-h-screen flex-col overflow-hidden px-5 py-8 sm:px-10 lg:px-14 lg:py-12">
+      <div className="relative flex h-screen flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:px-14 lg:py-8">
         {/* Mesh gradient background — soft warm base */}
         <div
           aria-hidden
@@ -144,11 +144,11 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
         </div>
 
         {/* Form block — clean professional card */}
-        <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
-          <div className="rounded-2xl border border-border/60 bg-card/95 p-7 shadow-[0_20px_50px_-25px_oklch(0.3_0.08_260/0.25)] backdrop-blur-sm sm:p-8">
-            <div className="mb-7">
+        <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-4">
+          <div className="rounded-2xl border border-border/60 bg-card/95 p-5 shadow-[0_20px_50px_-25px_oklch(0.3_0.08_260/0.25)] backdrop-blur-sm sm:p-6">
+            <div className="mb-4">
               <h1
-                className="font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[34px]"
+                className="font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[28px]"
               >
                 {title}
                 <span
@@ -159,13 +159,13 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
                   }}
                 />
               </h1>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{subtitle}</p>
+              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">{subtitle}</p>
             </div>
             {children}
           </div>
 
           {footer && (
-            <div className="mx-auto mt-6 w-full max-w-md text-center text-xs text-muted-foreground">
+            <div className="mx-auto mt-3 w-full max-w-md text-center text-xs text-muted-foreground">
               {footer}
             </div>
           )}
