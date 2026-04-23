@@ -24,10 +24,17 @@ export type WritingAnswerOverride = {
 export type WritingAnswersOverrides = Record<string, WritingAnswerOverride>;
 export const WRITING_ANSWERS_DEFAULT: WritingAnswersOverrides = {};
 
-/** Compute word count from an array of paragraphs. */
+/** Compute word count from an array of paragraphs. Treats HTML body as text. */
 export function computeWordCount(paragraphs: AnswerParagraph[]): number {
   return paragraphs
-    .map((p) => p.body.trim().split(/\s+/).filter(Boolean).length)
+    .map((p) =>
+      p.body
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length,
+    )
     .reduce((a, b) => a + b, 0);
 }
 
