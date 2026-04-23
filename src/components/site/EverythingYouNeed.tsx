@@ -233,60 +233,61 @@ function WaxSealStamp() {
             );
           })}
 
-          {/* Pressed text — engraved serif look */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-[1]">
+          {/* Pressed text — clean, highly legible serif */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-[1.05]">
             <span
-              className="text-[11px] sm:text-[13px]"
+              className="text-[12px] sm:text-[14px]"
               style={{
-                fontFamily: "'Cinzel', serif",
+                fontFamily: "'Playfair Display', Georgia, serif",
                 fontWeight: 700,
-                letterSpacing: "0.12em",
-                color: "oklch(0.94 0.05 55)",
+                letterSpacing: "0.04em",
+                color: "oklch(0.97 0.04 60)",
                 textShadow:
-                  "0 1px 0 oklch(0.18 0.1 20 / 0.85), 0 -1px 0 oklch(1 0 0 / 0.08)",
+                  "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
               }}
             >
-              ALL · AT
+              all at
             </span>
             <span
-              className="my-[3px] text-[16px] sm:text-[19px]"
+              className="my-[2px] text-[20px] sm:text-[24px]"
               style={{
-                fontFamily: "'Cinzel', serif",
+                fontFamily: "'Playfair Display', Georgia, serif",
                 fontWeight: 900,
-                letterSpacing: "0.08em",
-                color: "oklch(0.96 0.05 55)",
+                fontStyle: "italic",
+                letterSpacing: "-0.01em",
+                color: "oklch(0.98 0.04 60)",
                 textShadow:
-                  "0 1px 0 oklch(0.18 0.1 20 / 0.9), 0 2px 1px oklch(0.18 0.1 20 / 0.5), 0 -1px 0 oklch(1 0 0 / 0.1)",
+                  "0 1px 1px oklch(0.18 0.1 20 / 0.9), 0 2px 2px oklch(0.18 0.1 20 / 0.45)",
               }}
             >
-              ONE
+              one
             </span>
             <span
-              className="text-[11px] sm:text-[13px]"
+              className="text-[12px] sm:text-[14px]"
               style={{
-                fontFamily: "'Cinzel', serif",
+                fontFamily: "'Playfair Display', Georgia, serif",
                 fontWeight: 700,
-                letterSpacing: "0.18em",
-                color: "oklch(0.94 0.05 55)",
+                letterSpacing: "0.06em",
+                color: "oklch(0.97 0.04 60)",
                 textShadow:
-                  "0 1px 0 oklch(0.18 0.1 20 / 0.85), 0 -1px 0 oklch(1 0 0 / 0.08)",
+                  "0 1px 1px oklch(0.18 0.1 20 / 0.85)",
               }}
             >
-              PLACE
+              place
             </span>
           </div>
         </div>
       </div>
 
-      {/* Handwritten signature outside the seal */}
+      {/* Smooth script signature outside the seal */}
       <span
-        className="-mt-1 inline-block rotate-[-6deg]"
+        className="mt-0.5 inline-block rotate-[-5deg]"
         style={{
-          fontFamily: "'Pinyon Script', cursive",
-          fontSize: "20px",
+          fontFamily: "'Great Vibes', cursive",
+          fontSize: "26px",
           lineHeight: 1,
-          color: "oklch(0.32 0.14 22)",
-          textShadow: "0 1px 0 oklch(1 0 0 / 0.5)",
+          color: "oklch(0.34 0.15 22)",
+          textShadow: "0 1px 0 oklch(1 0 0 / 0.55)",
         }}
       >
         BigIELTS.com
