@@ -19,11 +19,14 @@ import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
 import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 
 const VocabularyRoute = VocabularyRouteImport.update({
@@ -76,6 +79,11 @@ const BgOptionsRoute = BgOptionsRouteImport.update({
   path: '/bg-options',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -91,6 +99,11 @@ const SpeakingSamplesIndexRoute = SpeakingSamplesIndexRouteImport.update({
   path: '/speaking-samples/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const WritingSamplesQuestionIdRoute =
   WritingSamplesQuestionIdRouteImport.update({
     id: '/writing-samples/$questionId',
@@ -102,6 +115,11 @@ const VocabularyCategoryRoute = VocabularyCategoryRouteImport.update({
   path: '/$category',
   getParentRoute: () => VocabularyRoute,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
 const SpeakingSamplesCategoryTopicRoute =
   SpeakingSamplesCategoryTopicRouteImport.update({
     id: '/speaking-samples/$category/$topic',
@@ -111,6 +129,7 @@ const SpeakingSamplesCategoryTopicRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -121,8 +140,10 @@ export interface FileRoutesByFullPath {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -139,8 +160,10 @@ export interface FileRoutesByTo {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/admin': typeof AdminIndexRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -148,6 +171,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
@@ -158,8 +182,10 @@ export interface FileRoutesById {
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -168,6 +194,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/bg-options'
     | '/contact'
     | '/dashboard'
@@ -178,8 +205,10 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/login'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
+    | '/admin/'
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
@@ -196,14 +225,17 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/login'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
+    | '/admin'
     | '/speaking-samples'
     | '/writing-samples'
     | '/speaking-samples/$category/$topic'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/bg-options'
     | '/contact'
     | '/dashboard'
@@ -214,8 +246,10 @@ export interface FileRouteTypes {
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
+    | '/admin/login'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
+    | '/admin/'
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
@@ -223,6 +257,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BgOptionsRoute: typeof BgOptionsRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
@@ -311,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BgOptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -332,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpeakingSamplesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/writing-samples/$questionId': {
       id: '/writing-samples/$questionId'
       path: '/writing-samples/$questionId'
@@ -346,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VocabularyCategoryRouteImport
       parentRoute: typeof VocabularyRoute
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/speaking-samples/$category/$topic': {
       id: '/speaking-samples/$category/$topic'
       path: '/speaking-samples/$category/$topic'
@@ -355,6 +411,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface VocabularyRouteChildren {
   VocabularyCategoryRoute: typeof VocabularyCategoryRoute
@@ -370,6 +438,7 @@ const VocabularyRouteWithChildren = VocabularyRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   BgOptionsRoute: BgOptionsRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
