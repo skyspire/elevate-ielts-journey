@@ -76,6 +76,7 @@ function QuestionDetailPage() {
           questionTitle={title}
           questionNumber={questionNumber}
           answer={answer}
+          questionImage={questionImage}
           fullScreen
         />
       ) : (
