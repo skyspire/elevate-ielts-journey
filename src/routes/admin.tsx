@@ -353,10 +353,9 @@ function Group({
         >
           {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
         </button>
-        {/* @ts-expect-error -- dynamic typed Link with conditional params handled at call sites */}
         <Link
-          to={to}
-          params={params}
+          to={to as string}
+          params={params as never}
           className="flex flex-1 items-center gap-2 rounded-md px-1.5 py-1.5 text-sm font-semibold text-foreground/80 hover:text-foreground"
           activeProps={{
             className:
