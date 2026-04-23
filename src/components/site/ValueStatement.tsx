@@ -21,39 +21,8 @@ import {
   getStoredCurrency,
   setStoredCurrency,
 } from "@/lib/currency";
-
-const plans = [
-  {
-    key: "biweekly" as const,
-    name: "Bi-Weekly",
-    days: "15",
-    popular: false,
-    accent: "oklch(0.55 0.18 30)", // coral
-  },
-  {
-    key: "monthly" as const,
-    name: "Monthly",
-    days: "30",
-    popular: true,
-    accent: "oklch(0.45 0.18 265)", // indigo
-  },
-  {
-    key: "quarterly" as const,
-    name: "3-Month",
-    days: "90",
-    popular: false,
-    accent: "oklch(0.55 0.14 160)", // teal
-  },
-];
-
-const features = [
-  "Academic + General",
-  "Complete question bank",
-  "Band 8–9 Writing samples",
-  "Speaking model answers",
-  "Vocabulary & structures",
-  "Recent exam questions (monthly)",
-];
+import { useCmsSection } from "@/lib/admin/cms-store";
+import { PRICING_KEY, PRICING_DEFAULT } from "@/lib/admin/defaults";
 
 export function ValueStatement() {
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
