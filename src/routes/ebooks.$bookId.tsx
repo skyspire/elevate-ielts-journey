@@ -333,6 +333,8 @@ function ReaderPage() {
             onMouseUp={handleMouseUp(leftPage.index)}
             side="left"
             isWide={isWide}
+            subPage={state.subPage}
+            onSubPagesChange={setLeftSubCount}
           />
           {/* Right page (desktop) */}
           {isWide && rightPage && (
@@ -345,6 +347,8 @@ function ReaderPage() {
               side="right"
               isWide={isWide}
               locked={!user && rightPage.index >= freePages}
+              subPage={0}
+              onSubPagesChange={() => {}}
             />
           )}
 
