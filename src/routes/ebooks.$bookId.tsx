@@ -120,17 +120,18 @@ function ReaderPage() {
     setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
   }, [isWide, setState]);
 
+  const freePages = book?.freePages ?? 0;
   const goNext = useCallback(() => {
     setState((s) => {
       const step = isWide ? 2 : 1;
       const next = Math.min(total - 1, s.currentPage + step);
       // free-preview lock
-      if (!user && next >= book.freePages) {
-        return { ...s, currentPage: book.freePages - 1 };
+      if (!user && next >= freePages) {
+        return { ...s, currentPage: freePages - 1 };
       }
       return { ...s, currentPage: next };
     });
-  }, [isWide, setState, total, user, book.freePages]);
+  }, [isWide, setState, total, user, freePages]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -602,30 +603,42 @@ function PageView({
   const lines = page.content.split("\n");
 
   // Apply highlights by wrapping matching text spans.
-  const renderText = (text: string) => {
+  const renderText = (text: string): React.ReactNode => {
     if (highlights.length === 0) return text;
-    let result: (string | React.ReactNode)[] = [text];
+    type Node = string | React.ReactElement;
+    let result: Node[] = [text];
     highlights.forEach((h, i) => {
-      result = result.flatMap((part) => {
-        if (typeof part !== "string") return [part];
+      const next: Node[] = [];
+      result.forEach((part) => {
+        if (typeof part !== "string") {
+          next.push(part);
+          return;
+        }
         const idx = part.indexOf(h.text);
-        if (idx === -1) return [part];
+        if (idx === -1) {
+          next.push(part);
+          return;
+        }
         const color =
           h.color === "yellow"
             ? "oklch(0.92 0.15 95 / 0.6)"
             : h.color === "green"
               ? "oklch(0.88 0.13 145 / 0.6)"
               : "oklch(0.88 0.10 0 / 0.6)";
-        return [
-          part.slice(0, idx),
-          <mark key={`${h.id}-${i}`} style={{ background: color, color: "inherit", padding: "1px 2px", borderRadius: 2 }}>
+        next.push(part.slice(0, idx));
+        next.push(
+          <mark
+            key={`${h.id}-${i}`}
+            style={{ background: color, color: "inherit", padding: "1px 2px", borderRadius: 2 }}
+          >
             {h.text}
           </mark>,
-          part.slice(idx + h.text.length),
-        ];
+        );
+        next.push(part.slice(idx + h.text.length));
       });
+      result = next;
     });
-    return <>{result}</>;
+    return <>{result.map((n, i) => (typeof n === "string" ? <span key={i}>{n}</span> : n))}</>;
   };
 
   return (
