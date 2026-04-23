@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
+import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
 
 import appCss from "../styles.css?url";
 
@@ -79,6 +80,7 @@ function RootComponent() {
   const isAdmin = location.pathname.startsWith("/admin");
   return (
     <>
+      {!isAdmin && <AnnouncementBanner />}
       {!isAdmin && <Header />}
       <Outlet />
     </>
