@@ -939,34 +939,40 @@
   color: var(--muted-foreground);
 }
 
-/* E-book reader page-flip animations */
-@keyframes page-flip-next {
+/* E-book reader: corner peel page-flip animations.
+   Next page: peels in from the bottom-right corner (like turning a paperback).
+   Prev page: peels in from the bottom-left corner. */
+@keyframes page-peel-next {
   0% {
-    transform: rotateY(-12deg) translateX(6%);
+    transform: rotate3d(-1, 1, 0, 85deg);
+    transform-origin: bottom right;
     opacity: 0;
-    filter: brightness(0.96);
+    filter: brightness(0.94) drop-shadow(0 12px 18px oklch(0.2 0.05 260 / 0.25));
   }
-  60% {
+  40% {
     opacity: 1;
   }
   100% {
-    transform: rotateY(0deg) translateX(0);
+    transform: rotate3d(0, 0, 0, 0deg);
+    transform-origin: bottom right;
     opacity: 1;
     filter: brightness(1);
   }
 }
 
-@keyframes page-flip-prev {
+@keyframes page-peel-prev {
   0% {
-    transform: rotateY(12deg) translateX(-6%);
+    transform: rotate3d(-1, -1, 0, 85deg);
+    transform-origin: bottom left;
     opacity: 0;
-    filter: brightness(0.96);
+    filter: brightness(0.94) drop-shadow(0 12px 18px oklch(0.2 0.05 260 / 0.25));
   }
-  60% {
+  40% {
     opacity: 1;
   }
   100% {
-    transform: rotateY(0deg) translateX(0);
+    transform: rotate3d(0, 0, 0, 0deg);
+    transform-origin: bottom left;
     opacity: 1;
     filter: brightness(1);
   }
