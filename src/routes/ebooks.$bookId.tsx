@@ -47,36 +47,39 @@ export const Route = createFileRoute("/ebooks/$bookId")({
   component: ReaderPage,
 });
 
+// Body font is Lora throughout for a soft, book-like read.
 const FONT_SIZES = {
-  sm: { body: "text-sm leading-7", h1: "text-xl", h2: "text-base" },
-  md: { body: "text-base leading-8", h1: "text-2xl", h2: "text-lg" },
-  lg: { body: "text-lg leading-9", h1: "text-3xl", h2: "text-xl" },
-  xl: { body: "text-xl leading-[2.25rem]", h1: "text-4xl", h2: "text-2xl" },
+  sm: { body: "text-[15px] leading-[1.75]", h1: "text-2xl", h2: "text-base" },
+  md: { body: "text-[17px] leading-[1.8]", h1: "text-3xl", h2: "text-lg" },
+  lg: { body: "text-[19px] leading-[1.85]", h1: "text-[2rem]", h2: "text-xl" },
+  xl: { body: "text-[21px] leading-[1.9]", h1: "text-[2.4rem]", h2: "text-2xl" },
 } as const;
 
+// Modern paperback palette — clean off-white paper, deep ink, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.99 0.005 90)",
-    page: "oklch(1 0 0)",
-    text: "oklch(0.18 0.02 260)",
-    muted: "oklch(0.45 0.02 260)",
+    bg: "oklch(0.965 0.008 85)",
+    page: "oklch(0.985 0.006 85)",
+    text: "oklch(0.22 0.015 260)",
+    muted: "oklch(0.48 0.02 260)",
     border: "oklch(0.92 0.01 250)",
   },
   sepia: {
-    bg: "oklch(0.93 0.04 80)",
-    page: "oklch(0.96 0.035 80)",
-    text: "oklch(0.28 0.04 50)",
-    muted: "oklch(0.45 0.05 50)",
-    border: "oklch(0.85 0.05 70)",
+    bg: "oklch(0.92 0.035 78)",
+    page: "oklch(0.955 0.03 80)",
+    text: "oklch(0.28 0.035 50)",
+    muted: "oklch(0.46 0.045 50)",
+    border: "oklch(0.86 0.04 70)",
   },
   dark: {
-    bg: "oklch(0.16 0.01 260)",
-    page: "oklch(0.21 0.015 260)",
-    text: "oklch(0.92 0.01 250)",
-    muted: "oklch(0.65 0.02 250)",
+    bg: "oklch(0.17 0.01 260)",
+    page: "oklch(0.22 0.012 260)",
+    text: "oklch(0.93 0.008 250)",
+    muted: "oklch(0.66 0.018 250)",
     border: "oklch(0.30 0.02 260)",
   },
 } as const;
+
 
 function ReaderPage() {
   const { bookId } = Route.useParams();
@@ -98,9 +101,17 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
+  // Avoid SSR/CSR hydration mismatch from localStorage-driven state.
+  // Render the canonical first page on first paint, then sync to saved state.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
-  const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
+  const savedPage = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
+  const current = mounted ? savedPage : 0;
   const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
   const isLocked = !!book && !user && current >= freePages;
 
@@ -234,7 +245,7 @@ function ReaderPage() {
             <div className="min-w-0">
               <p
                 className="truncate font-bold leading-tight"
-                style={{ fontFamily: "'Playfair Display', serif" }}
+                style={{ fontFamily: "'Lora', Georgia, serif" }}
               >
                 {book.title}
               </p>
@@ -347,7 +358,7 @@ function ReaderPage() {
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
-            <h3 className="mt-3 text-xl font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h3 className="mt-3 text-xl font-black" style={{ fontFamily: "'Lora', Georgia, serif" }}>
               You've reached the end of the free preview
             </h3>
             <p className="mx-auto mt-2 max-w-md text-sm font-semibold" style={{ color: theme.muted }}>
@@ -597,12 +608,16 @@ function PageView({
   const [scale, setScale] = useState(1);
 
   // Auto-shrink: measure intrinsic content vs available card area, scale down to fit.
+  // Uses rAF + size guard to avoid ResizeObserver loop notifications.
   useEffect(() => {
     if (!cardRef.current || !innerRef.current) return;
     const card = cardRef.current;
     const inner = innerRef.current;
 
+    let raf = 0;
+    let lastScale = -1;
     const measure = () => {
+      raf = 0;
       // Reset to natural size before measuring
       inner.style.transform = "scale(1)";
       inner.style.width = "100%";
@@ -611,21 +626,31 @@ function PageView({
       const innerH = inner.scrollHeight;
       const innerW = inner.scrollWidth;
       if (cardH === 0 || innerH === 0) return;
-      // Fit by height; allow scale up to 1 (never enlarge)
       const heightScale = cardH / innerH;
       const widthScale = cardW / Math.max(innerW, 1);
       const fit = Math.min(1, heightScale, widthScale);
-      // Floor so 12px text remains readable on tiny screens.
-      // Approximate: base font ~14px (text-sm) * 0.6 ≈ 8.4px — clamp scale at 0.6
+      // Floor at 0.6 so text stays readable (~12px min on small screens).
       const next = Math.max(0.6, fit);
-      setScale(next);
+      // Round to avoid tiny oscillations re-triggering ResizeObserver.
+      const rounded = Math.round(next * 1000) / 1000;
+      if (Math.abs(rounded - lastScale) < 0.002) return;
+      lastScale = rounded;
+      setScale(rounded);
     };
 
-    measure();
-    const ro = new ResizeObserver(measure);
+    const schedule = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(measure);
+    };
+
+    schedule();
+    const ro = new ResizeObserver(schedule);
     ro.observe(card);
     ro.observe(inner);
-    return () => ro.disconnect();
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, [page.content, fs]);
 
   const lines = page.content.split("\n");
@@ -669,17 +694,20 @@ function PageView({
     return <>{result.map((n, i) => (typeof n === "string" ? <span key={i}>{n}</span> : n))}</>;
   };
 
+  // Modern paperback: clean paper, very subtle binding-side shadow, generous margins.
   return (
     <div
       ref={cardRef}
       onMouseUp={onMouseUp}
-      className="relative overflow-hidden rounded-lg p-5 sm:p-8"
+      className="relative overflow-hidden"
       style={{
         background: theme.page,
-        boxShadow: "0 4px 16px -8px oklch(0.2 0.05 260 / 0.2)",
-        borderRadius: "8px",
+        boxShadow:
+          "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 12px 28px -18px oklch(0.2 0.05 260 / 0.25), 0 2px 6px -2px oklch(0.2 0.05 260 / 0.08)",
+        borderRadius: "4px",
         height: "calc(100dvh - 9.5rem)",
         maxHeight: "calc(100dvh - 9.5rem)",
+        padding: "clamp(1.5rem, 4vw, 3.25rem) clamp(1.25rem, 5vw, 3.5rem)",
       }}
     >
       {locked ? (
@@ -694,17 +722,24 @@ function PageView({
           ref={innerRef}
           className="origin-top-left will-change-transform"
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Lora', Georgia, 'Times New Roman', serif",
             color: theme.text,
             transform: `scale(${scale})`,
             width: `${100 / scale}%`,
+            // Soft on-screen rendering
+            WebkitFontSmoothing: "antialiased",
+            MozOsxFontSmoothing: "grayscale",
+            textRendering: "optimizeLegibility",
           }}
         >
-
           {lines.map((line, i) => {
             if (line.startsWith("# ")) {
               return (
-                <h1 key={i} className={`${fs.h1} mb-2 font-black leading-tight`}>
+                <h1
+                  key={i}
+                  className={`${fs.h1} mb-3 font-bold leading-[1.2] tracking-tight`}
+                  style={{ fontFamily: "'Lora', Georgia, serif" }}
+                >
                   {line.slice(2)}
                 </h1>
               );
@@ -713,16 +748,23 @@ function PageView({
               return (
                 <h2
                   key={i}
-                  className={`${fs.h2} mb-6 mt-1 font-bold uppercase tracking-wider`}
-                  style={{ color: theme.muted, fontFamily: "Inter, sans-serif", fontSize: "11px" }}
+                  className={`${fs.h2} mb-5 mt-1 font-semibold italic`}
+                  style={{
+                    color: theme.muted,
+                    fontFamily: "'Lora', Georgia, serif",
+                  }}
                 >
                   {line.slice(3)}
                 </h2>
               );
             }
-            if (line.trim() === "") return <div key={i} className="h-2" />;
+            if (line.trim() === "") return <div key={i} style={{ height: "0.6em" }} />;
             return (
-              <p key={i} className={`${fs.body} mb-3`}>
+              <p
+                key={i}
+                className={`${fs.body} mb-4`}
+                style={{ textAlign: "justify", hyphens: "auto" }}
+              >
                 {renderText(line)}
               </p>
             );
@@ -752,7 +794,7 @@ function SidePanel({
         style={{ background: theme.page, color: theme.text }}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h2 className="text-lg font-black" style={{ fontFamily: "'Lora', Georgia, serif" }}>
             {title}
           </h2>
           <button
