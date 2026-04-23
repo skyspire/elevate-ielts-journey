@@ -56,7 +56,7 @@ function LoginPage() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <Label htmlFor="email">Email</Label>
           <Input
@@ -67,7 +67,7 @@ function LoginPage() {
             placeholder="you@example.com"
             required
             autoComplete="email"
-            className="mt-1.5 h-11"
+            className="mt-1 h-10"
           />
         </div>
         <div>
@@ -85,7 +85,7 @@ function LoginPage() {
               Forgot password?
             </button>
           </div>
-          <div className="relative mt-1.5">
+          <div className="relative mt-1">
             <Input
               id="password"
               type={showPw ? "text" : "password"}
@@ -93,7 +93,7 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="h-11 pr-10"
+              className="h-10 pr-10"
             />
             <button
               type="button"
@@ -106,7 +106,7 @@ function LoginPage() {
           </div>
         </div>
 
-        <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-muted-foreground">
+        <label className="flex cursor-pointer select-none items-center gap-2 text-xs text-muted-foreground">
           <input
             type="checkbox"
             checked={remember}
@@ -117,18 +117,18 @@ function LoginPage() {
         </label>
 
         {error && (
-          <div className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-start gap-2 rounded-md bg-destructive/10 p-2.5 text-sm text-destructive">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <Button type="submit" className="h-11 w-full text-[15px] font-semibold">
+        <Button type="submit" className="h-10 w-full text-[15px] font-semibold">
           Sign in
         </Button>
       </form>
 
-      <div className="my-6 flex items-center gap-3">
+      <div className="my-4 flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
         <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
           or continue with
@@ -137,12 +137,6 @@ function LoginPage() {
       </div>
 
       <SocialAuthButtons mode="login" />
-
-      <p className="mt-6 rounded-md border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
-        ⚠️ <strong className="text-foreground">Prototype:</strong> data lives in your browser only.
-        To activate real authentication (Google, Apple, magic link, password reset), enable Lovable
-        Cloud.
-      </p>
     </AuthSplitLayout>
   );
 }
