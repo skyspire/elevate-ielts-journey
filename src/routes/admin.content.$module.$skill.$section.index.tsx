@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ChevronRight, FileQuestion } from "lucide-react";
-import { findModule, findSection, findSkill } from "@/lib/admin/content-tree";
+import { findModule, findSection, findSkill, type QuestionType } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
 export const Route = createFileRoute("/admin/content/$module/$skill/$section/")({
@@ -58,7 +58,7 @@ function SectionHub() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {section.questionTypes.map((qt) => (
+        {section.questionTypes.map((qt: QuestionType) => (
           <Link
             key={qt.id}
             to="/admin/content/$module/$skill/$section/$type"

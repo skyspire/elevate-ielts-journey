@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, ChevronRight, MessageSquare } from "lucide-react";
-import { findModule } from "@/lib/admin/content-tree";
+import { findModule, type ContentSection, type ContentSkill } from "@/lib/admin/content-tree";
 import { Crumbs } from "./admin.content.index";
 
 export const Route = createFileRoute("/admin/content/$module/")({
@@ -42,9 +42,12 @@ function ModuleHub() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {mod.skills.map((skill) => {
+        {mod.skills.map((skill: ContentSkill) => {
           const Icon = skill.id === "writing" ? BookOpen : MessageSquare;
-          const totalTypes = skill.sections.reduce((n, s) => n + s.questionTypes.length, 0);
+          const totalTypes = skill.sections.reduce(
+            (n: number, s: ContentSection) => n + s.questionTypes.length,
+            0,
+          );
           return (
             <Link
               key={skill.id}
@@ -63,7 +66,7 @@ function ModuleHub() {
               </div>
               <p className="mt-1 text-sm text-muted-foreground">{skill.blurb}</p>
               <div className="mt-3 flex gap-2">
-                {skill.sections.map((s) => (
+                {skill.sections.map((s: ContentSection) => (
                   <span
                     key={s.id}
                     className="rounded-full bg-foreground/5 px-2 py-0.5 text-[11px] font-bold text-foreground/80"
