@@ -98,13 +98,6 @@ function ReaderPage() {
 
   const pageRef = useRef<HTMLDivElement>(null);
 
-  if (!book) return null;
-
-  const flat = useMemo(() => flattenPages(book), [book]);
-  const total = flat.length;
-  const current = Math.min(Math.max(state.currentPage, 0), total - 1);
-  const isLocked = !user && current >= book.freePages;
-
   // Two-page spread on desktop
   const [isWide, setIsWide] = useState(false);
   useEffect(() => {
@@ -114,6 +107,11 @@ function ReaderPage() {
     mql.addEventListener("change", sync);
     return () => mql.removeEventListener("change", sync);
   }, []);
+
+  const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
+  const total = flat.length;
+  const current = Math.min(Math.max(state.currentPage, 0), Math.max(total - 1, 0));
+  const isLocked = !!book && !user && current >= book.freePages;
 
   const leftPage = flat[current];
   const rightPage = isWide ? flat[current + 1] : undefined;
