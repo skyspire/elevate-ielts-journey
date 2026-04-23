@@ -565,6 +565,15 @@ export function Header() {
             )}
 
             <Link
+              to="/ebooks"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              E-books
+            </Link>
+            <Link
               to="/"
               hash="pricing"
               onClick={() => setOpen(false)}
