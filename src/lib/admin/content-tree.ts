@@ -4,13 +4,20 @@
 //
 // Tree:
 //   Content
-//     └─ IELTS Academic
+//     ├─ IELTS Academic
+//     │   ├─ Writing
+//     │   │    ├─ Task 1   ─ Graphs & Charts, Processes & Maps
+//     │   │    └─ Task 2   ─ 7 essay types (Opinion, Discussion, ...)
+//     │   └─ Speaking
+//     │        ├─ Part 1       ─ 6 general categories
+//     │        └─ Part 2 & 3   ─ 14 cue card categories
+//     └─ IELTS General Training
 //         ├─ Writing
-//         │    ├─ Task 1   ─ Graphs & Charts, Processes & Maps
-//         │    └─ Task 2   ─ 7 essay types (Opinion, Discussion, ...)
+//         │    ├─ Task 1   ─ Formal Letters, Informal Letters
+//         │    └─ Task 2   ─ same 7 essay types as Academic
 //         └─ Speaking
-//              ├─ Part 1       ─ 6 general categories
-//              └─ Part 2 & 3   ─ 14 cue card categories
+//              ├─ Part 1       ─ same 6 general categories
+//              └─ Part 2 & 3   ─ same 14 cue card categories
 
 export type ContentDataKind = "writing-prompts" | "speaking-topics";
 
@@ -39,20 +46,14 @@ export type ContentSkill = {
 };
 
 export type ContentModule = {
-  id: "academic";
+  id: "academic" | "general";
   label: string;
+  shortLabel: string;
   blurb: string;
   skills: ContentSkill[];
 };
 
-// ───────── Writing — Task 1 ─────────
-// Mirrors categoriesByModuleTask.academic.task1 in writing-samples.index.tsx
-const writingTask1: QuestionType[] = [
-  { id: "graphs", label: "Graphs & Charts", hint: "Bar, line, pie, table", dataKind: "writing-prompts" },
-  { id: "process", label: "Processes & Maps", hint: "Diagrams & map changes", dataKind: "writing-prompts" },
-];
-
-// ───────── Writing — Task 2 ─────────
+// ───────── Writing — Task 2 (shared by Academic & General) ─────────
 // Mirrors task2Essays in writing-samples.index.tsx
 const writingTask2: QuestionType[] = [
   { id: "opinion", label: "Opinion Essay", hint: "Agree / Disagree", dataKind: "writing-prompts" },
@@ -64,8 +65,24 @@ const writingTask2: QuestionType[] = [
   { id: "cause", label: "Cause and Effect", hint: "Reasons and results", dataKind: "writing-prompts" },
 ];
 
+// ───────── Writing — Academic Task 1 ─────────
+// Mirrors categoriesByModuleTask.academic.task1 in writing-samples.index.tsx
+const academicWritingTask1: QuestionType[] = [
+  { id: "graphs", label: "Graphs & Charts", hint: "Bar, line, pie, table", dataKind: "writing-prompts" },
+  { id: "process", label: "Processes & Maps", hint: "Diagrams & map changes", dataKind: "writing-prompts" },
+];
+
+// ───────── Writing — General Training Task 1 ─────────
+// Mirrors categoriesByModuleTask.general.task1 in writing-samples.index.tsx
+const generalWritingTask1: QuestionType[] = [
+  { id: "formal", label: "Formal Letters", hint: "To officials, managers, companies", dataKind: "writing-prompts" },
+  { id: "informal", label: "Informal Letters", hint: "To friends & family", dataKind: "writing-prompts" },
+];
+
 // ───────── Speaking — Part 1 (general questions) ─────────
-// Mirrors categoriesByMode.general in speaking-samples.index.tsx
+// Mirrors categoriesByMode.general in speaking-samples.index.tsx.
+// IELTS Speaking is identical for Academic and General Training, so both
+// modules share the same data keys (edits reflect on both module views).
 const speakingPart1: QuestionType[] = [
   { id: "things", label: "Things", hint: "Objects, gifts, items", dataKind: "speaking-topics" },
   { id: "activities", label: "Activities", hint: "Hobbies & routines", dataKind: "speaking-topics" },
@@ -94,17 +111,24 @@ const speakingPart23: QuestionType[] = [
   { id: "cc-society", label: "Society & Culture", hint: "Traditions & change", dataKind: "speaking-topics" },
 ];
 
-export const CONTENT_TREE: ContentModule = {
+const sharedSpeakingSections: ContentSection[] = [
+  { id: "part1", label: "Part 1", blurb: "General questions across 6 categories.", questionTypes: speakingPart1 },
+  { id: "part23", label: "Part 2 & 3", blurb: "Cue cards & follow-ups across 14 themes.", questionTypes: speakingPart23 },
+];
+
+// ───────── Modules ─────────
+const ACADEMIC_MODULE: ContentModule = {
   id: "academic",
   label: "IELTS Academic",
-  blurb: "Writing & Speaking content as it appears on bigielts.com.",
+  shortLabel: "Academic",
+  blurb: "Writing & Speaking content for the Academic module of bigielts.com.",
   skills: [
     {
       id: "writing",
       label: "Writing",
       blurb: "Task 1 (charts, processes, maps) and Task 2 (essays).",
       sections: [
-        { id: "task1", label: "Task 1", blurb: "Academic charts, processes & maps.", questionTypes: writingTask1 },
+        { id: "task1", label: "Task 1", blurb: "Academic charts, processes & maps.", questionTypes: academicWritingTask1 },
         { id: "task2", label: "Task 2", blurb: "Essay prompts across 7 question types.", questionTypes: writingTask2 },
       ],
     },
@@ -112,27 +136,62 @@ export const CONTENT_TREE: ContentModule = {
       id: "speaking",
       label: "Speaking",
       blurb: "Part 1 (general questions) and Part 2 & 3 (cue cards + follow-ups).",
-      sections: [
-        { id: "part1", label: "Part 1", blurb: "General questions across 6 categories.", questionTypes: speakingPart1 },
-        { id: "part23", label: "Part 2 & 3", blurb: "Cue cards & follow-ups across 14 themes.", questionTypes: speakingPart23 },
-      ],
+      sections: sharedSpeakingSections,
     },
   ],
 };
 
-// ───────── Lookup helpers ─────────
-export function findSkill(skillId: string): ContentSkill | undefined {
-  return CONTENT_TREE.skills.find((s) => s.id === skillId);
+const GENERAL_MODULE: ContentModule = {
+  id: "general",
+  label: "IELTS General Training",
+  shortLabel: "General Training",
+  blurb: "Writing & Speaking content for the General Training module of bigielts.com.",
+  skills: [
+    {
+      id: "writing",
+      label: "Writing",
+      blurb: "Task 1 (formal & informal letters) and Task 2 (essays).",
+      sections: [
+        { id: "task1", label: "Task 1", blurb: "Formal & informal letter prompts.", questionTypes: generalWritingTask1 },
+        { id: "task2", label: "Task 2", blurb: "Essay prompts across 7 question types.", questionTypes: writingTask2 },
+      ],
+    },
+    {
+      id: "speaking",
+      label: "Speaking",
+      blurb: "Part 1 (general questions) and Part 2 & 3 (cue cards + follow-ups). Shared with Academic — IELTS Speaking is identical for both modules.",
+      sections: sharedSpeakingSections,
+    },
+  ],
+};
+
+export const CONTENT_MODULES: ContentModule[] = [ACADEMIC_MODULE, GENERAL_MODULE];
+
+// Back-compat alias — older imports may still reference CONTENT_TREE.
+export const CONTENT_TREE = ACADEMIC_MODULE;
+
+// ───────── Lookup helpers (module-aware) ─────────
+export function findModule(moduleId: string): ContentModule | undefined {
+  return CONTENT_MODULES.find((m) => m.id === moduleId);
 }
 
-export function findSection(skillId: string, sectionId: string): ContentSection | undefined {
-  return findSkill(skillId)?.sections.find((sec) => sec.id === sectionId);
+export function findSkill(moduleId: string, skillId: string): ContentSkill | undefined {
+  return findModule(moduleId)?.skills.find((s) => s.id === skillId);
+}
+
+export function findSection(
+  moduleId: string,
+  skillId: string,
+  sectionId: string,
+): ContentSection | undefined {
+  return findSkill(moduleId, skillId)?.sections.find((sec) => sec.id === sectionId);
 }
 
 export function findQuestionType(
+  moduleId: string,
   skillId: string,
   sectionId: string,
   typeId: string,
 ): QuestionType | undefined {
-  return findSection(skillId, sectionId)?.questionTypes.find((q) => q.id === typeId);
+  return findSection(moduleId, skillId, sectionId)?.questionTypes.find((q) => q.id === typeId);
 }
