@@ -143,11 +143,17 @@ function ReaderPage() {
 
   const leftPage = flat[current] ?? flat[0];
 
+  // Page-flip animation state
+  const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
+  const flipKey = current; // re-mount PageView on page change to trigger animation
+
   const goPrev = useCallback(() => {
+    setFlipDir("prev");
     setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - 1) }));
   }, [setState]);
 
   const goNext = useCallback(() => {
+    setFlipDir("next");
     setState((s) => {
       const next = total > 0 ? Math.min(total - 1, s.currentPage + 1) : 0;
       if (!user && next >= freePages) {
