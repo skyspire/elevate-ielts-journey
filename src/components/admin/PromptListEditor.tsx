@@ -9,12 +9,19 @@
 // question type they picked from the nav — not the whole JSON blob.
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, GripVertical, Pencil, X, Check, AlertCircle } from "lucide-react";
+import { Plus, Trash2, GripVertical, Pencil, X, Check, AlertCircle, FileText, ChevronDown } from "lucide-react";
 import { EditorShell } from "@/components/admin/EditorShell";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCmsEditor } from "@/lib/admin/cms-store";
+import { useCmsEditor, useCmsSection } from "@/lib/admin/cms-store";
+import { WritingAnswerEditor } from "@/components/admin/WritingAnswerEditor";
+import {
+  WRITING_ANSWERS_KEY,
+  WRITING_ANSWERS_DEFAULT,
+  type WritingAnswersOverrides,
+} from "@/lib/admin/writing-answers";
+import { sampleAnswers } from "@/data/sample-answers";
 
 // ───────── Generic prompt list editor ─────────
 
