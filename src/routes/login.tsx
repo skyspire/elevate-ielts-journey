@@ -56,16 +56,6 @@ function LoginPage() {
         </p>
       }
     >
-      <SocialAuthButtons mode="login" />
-
-      <div className="my-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-          or with email
-        </span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label htmlFor="email">Email</Label>
@@ -136,13 +126,23 @@ function LoginPage() {
         <Button type="submit" className="h-11 w-full text-[15px] font-semibold">
           Sign in
         </Button>
-
-        <p className="rounded-md border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
-          ⚠️ <strong className="text-foreground">Prototype:</strong> data lives in your browser
-          only. To activate real authentication (Google, Apple, magic link, password reset), enable
-          Lovable Cloud.
-        </p>
       </form>
+
+      <div className="my-6 flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          or continue with
+        </span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      <SocialAuthButtons mode="login" />
+
+      <p className="mt-6 rounded-md border border-dashed border-border bg-muted/30 p-3 text-[11px] leading-relaxed text-muted-foreground">
+        ⚠️ <strong className="text-foreground">Prototype:</strong> data lives in your browser only.
+        To activate real authentication (Google, Apple, magic link, password reset), enable Lovable
+        Cloud.
+      </p>
     </AuthSplitLayout>
   );
 }
