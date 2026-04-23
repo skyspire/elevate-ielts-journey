@@ -91,7 +91,7 @@ const FEATURES: Feature[] = [
 export function EverythingYouNeed() {
   return (
     <section
-      className="relative overflow-hidden py-20 sm:py-28"
+      className="relative overflow-hidden py-12 sm:py-16"
       style={{
         background:
           "linear-gradient(180deg, oklch(0.985 0.012 75) 0%, oklch(0.97 0.018 295) 55%, oklch(0.96 0.025 290) 100%)",
@@ -112,7 +112,7 @@ export function EverythingYouNeed() {
       <div className="container-page relative">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-foreground sm:text-6xl">
+          <h2 className="font-display text-3xl font-black leading-[1.05] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Everything you need to hit{" "}
             <span
               className="relative inline-block"
@@ -128,14 +128,14 @@ export function EverythingYouNeed() {
             </span>{" "}
             in your next exam
           </h2>
-          <p className="mt-6 text-lg font-bold text-foreground/80 sm:text-xl">
+          <p className="mt-3 text-sm font-semibold text-foreground/75 sm:text-base">
             Six focused resources, built by Band 9 examiners. No fluff, no
             recycled content — just what actually moves your score.
           </p>
         </div>
 
         {/* Feature list — two columns on md+ */}
-        <div className="mx-auto mt-16 grid max-w-5xl gap-x-8 gap-y-4 md:grid-cols-2">
+        <div className="mx-auto mt-8 grid max-w-5xl gap-x-6 gap-y-2 sm:mt-10 md:grid-cols-2">
           {FEATURES.map((f, idx) => (
             <FeatureRow key={f.key} feature={f} index={idx} />
           ))}
@@ -152,17 +152,17 @@ function FeatureRow({ feature, index }: { feature: Feature; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.05, ease: "easeOut" }}
-      className="group flex items-center gap-5 rounded-2xl p-3 transition-all hover:bg-white/60 sm:gap-7 sm:p-4"
+      className="group flex items-center gap-4 rounded-2xl p-2 transition-all hover:bg-white/60 sm:gap-5 sm:p-3"
     >
       {/* Circular medallion */}
       <FeatureMedallion feature={feature} />
 
       {/* Text */}
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+        <h3 className="font-display text-base font-black tracking-tight text-foreground sm:text-lg">
           {feature.label}
         </h3>
-        <p className="mt-2 text-base font-semibold leading-relaxed text-foreground/75 sm:text-lg">
+        <p className="mt-1 text-xs font-semibold leading-snug text-foreground/75 sm:text-sm">
           {feature.description}
         </p>
       </div>
@@ -188,7 +188,7 @@ function FeatureMedallion({ feature }: { feature: Feature }) {
 
       {/* The circle */}
       <div
-        className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 sm:h-24 sm:w-24"
+        className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 sm:h-16 sm:w-16"
         style={{
           background: `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${feature.accent} 0%, ${feature.accentDeep} 100%)`,
           boxShadow: `0 12px 28px -10px ${feature.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4), inset 0 -8px 18px ${feature.accentDeep}40`,
@@ -235,7 +235,7 @@ function FeatureIllustration({ featureKey }: { featureKey: string }) {
 // 1. Recent Exam Questions — globe with location pin
 function RecentIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       <circle cx="32" cy="32" r="20" stroke="white" strokeWidth="2.5" opacity="0.95" />
       <ellipse cx="32" cy="32" rx="8" ry="20" stroke="white" strokeWidth="1.8" opacity="0.7" />
       <line x1="12" y1="32" x2="52" y2="32" stroke="white" strokeWidth="1.8" opacity="0.7" />
@@ -251,7 +251,7 @@ function RecentIllustration() {
 // 2. Prediction Questions — crystal ball / chart with sparkle
 function PredictionsIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* bars rising */}
       <rect x="14" y="38" width="7" height="14" rx="1.5" fill="white" opacity="0.85" />
       <rect x="24" y="30" width="7" height="22" rx="1.5" fill="white" opacity="0.95" />
@@ -268,7 +268,7 @@ function PredictionsIllustration() {
 // 3. E-Books — open book with bookmark
 function EbooksIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* book */}
       <path d="M10 16 Q10 14 12 14 L30 14 Q32 14 32 16 L32 50 Q32 48 30 48 L12 48 Q10 48 10 50 Z" fill="white" opacity="0.95" />
       <path d="M54 16 Q54 14 52 14 L34 14 Q32 14 32 16 L32 50 Q32 48 34 48 L52 48 Q54 48 54 50 Z" fill="white" opacity="0.95" />
@@ -290,7 +290,7 @@ function EbooksIllustration() {
 // 4. Writing & Speaking Samples — pencil + speech bubble
 function SamplesIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* speech bubble */}
       <path d="M10 14 Q10 10 14 10 L42 10 Q46 10 46 14 L46 30 Q46 34 42 34 L22 34 L16 40 L18 34 L14 34 Q10 34 10 30 Z" fill="white" opacity="0.95" />
       {/* lines in bubble */}
@@ -311,7 +311,7 @@ function SamplesIllustration() {
 // 5. Vocabulary — stacked word tiles (no letters, just lines)
 function VocabularyIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       {/* 3 tiles fanned with abstract word lines */}
       <g transform="translate(10 14) rotate(-8)">
         <rect width="18" height="18" rx="3" fill="white" />
@@ -338,7 +338,7 @@ function VocabularyIllustration() {
 // 6. Catastrophic Mistakes — warning triangle with X
 function MistakesIllustration() {
   return (
-    <svg viewBox="0 0 64 64" className="relative h-12 w-12 sm:h-14 sm:w-14" fill="none">
+    <svg viewBox="0 0 64 64" className="relative h-9 w-9 sm:h-10 sm:w-10" fill="none">
       <path
         d="M32 10 L56 50 L8 50 Z"
         fill="white"
