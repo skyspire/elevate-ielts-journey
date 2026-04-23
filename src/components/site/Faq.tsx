@@ -92,20 +92,20 @@ export function Faq() {
                       <div className="min-h-0">
                         <div className="pb-5 pr-12">
                           {lead && (
-                            <p className="font-display text-sm font-semibold leading-relaxed text-foreground sm:text-base">
+                            <p className="border-l-2 border-foreground/80 pl-4 font-display text-sm font-semibold leading-relaxed text-foreground sm:text-base">
                               {lead}
                             </p>
                           )}
                           {bullets.length > 0 && (
-                            <ul className="mt-3 space-y-1.5">
+                            <ul className="mt-4 space-y-2 pl-4">
                               {bullets.map((b) => (
                                 <li
                                   key={b}
-                                  className="flex gap-3 font-display text-sm font-medium leading-relaxed text-foreground/65"
+                                  className="flex gap-3 font-display text-sm font-medium leading-relaxed text-foreground/70"
                                 >
                                   <span
                                     aria-hidden
-                                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                                    className="mt-[0.65rem] h-px w-3 shrink-0 bg-foreground/40"
                                   />
                                   <span>{b}</span>
                                 </li>
