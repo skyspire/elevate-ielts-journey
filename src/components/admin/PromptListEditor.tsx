@@ -1,20 +1,51 @@
-// Friendly list editor for a single question type (one category key)
-// inside a Record<string, Item[]> CMS section.
+// Friendly list editor for a single question type (one category key) inside a
+// Record<string, Item[]> CMS section.
 //
 // Used for:
-//   • Writing prompts (Item = string)
-//   • Speaking topics (Item = { id, label })
+//   • Writing prompts (Item = string)   — PromptListEditor
+//   • Speaking topics (Item = { id, label }) — TopicListEditor (unchanged)
 //
-// Scoping to a single category means an admin sees ONLY the prompts for the
-// question type they picked from the nav — not the whole JSON blob.
+// Advanced controls in PromptListEditor:
+//   • Draft / Published per item with last-edited timestamp
+//   • Duplicate (template) → inserts a copy below the source
+//   • "View on site" link per prompt
+//   • Per-item reset to default
+//   • Last-10 version history with restore
+//   • Diff vs default (modal)
+//   • Inline rich-text answer editor + Task 1 image upload
+//   • Activity log on every mutation
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2, GripVertical, Pencil, X, Check, AlertCircle, FileText, ChevronDown } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  GripVertical,
+  Pencil,
+  X,
+  Check,
+  AlertCircle,
+  FileText,
+  ChevronDown,
+  Copy,
+  ExternalLink,
+  RotateCcw,
+  History,
+  GitCompare,
+  Eye,
+} from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { EditorShell } from "@/components/admin/EditorShell";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCmsEditor, useCmsSection } from "@/lib/admin/cms-store";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useCmsEditor, useCmsSection, getSection, setSection } from "@/lib/admin/cms-store";
 import { WritingAnswerEditor } from "@/components/admin/WritingAnswerEditor";
 import {
   WRITING_ANSWERS_KEY,
@@ -22,6 +53,17 @@ import {
   type WritingAnswersOverrides,
 } from "@/lib/admin/writing-answers";
 import { sampleAnswers } from "@/data/sample-answers";
+import {
+  PROMPT_META_KEY,
+  PROMPT_META_DEFAULT,
+  type PromptMetaStore,
+  type PromptStatus,
+  applyPromptChange,
+  promptIdOf,
+  timeAgo,
+} from "@/lib/admin/prompt-meta";
+import { logActivity } from "@/lib/admin/activity-log";
+import { TextDiff } from "@/components/admin/TextDiff";
 
 // ───────── Generic prompt list editor ─────────
 
@@ -40,6 +82,11 @@ type StringListEditorProps = {
   placeholder?: string;
   /** When true, each row gets an "Edit answer" toggle that opens the WritingAnswerEditor. */
   enableAnswers?: boolean;
+  /** When true, the answer editor shows a Task 1 image uploader. */
+  showAnswerImage?: boolean;
+  /** Optional preview link config — admin can open the public page for this prompt. */
+  previewModule?: "academic" | "general";
+  previewTask?: "task1" | "task2";
 };
 
 export function PromptListEditor({
@@ -51,6 +98,9 @@ export function PromptListEditor({
   defaultRecord,
   placeholder = "Type a new prompt…",
   enableAnswers = false,
+  showAnswerImage = false,
+  previewModule = "academic",
+  previewTask = "task2",
 }: StringListEditorProps) {
   const { value: record, update, reset } = useCmsEditor<Record<string, string[]>>(
     storageKey,
@@ -60,14 +110,22 @@ export function PromptListEditor({
     WRITING_ANSWERS_KEY,
     WRITING_ANSWERS_DEFAULT,
   );
+  const metaStore = useCmsSection<PromptMetaStore>(PROMPT_META_KEY, PROMPT_META_DEFAULT);
+
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
+  const defaults = useMemo(() => defaultRecord[categoryKey] ?? [], [defaultRecord, categoryKey]);
   const [items, setItems] = useState<string[]>(original);
   const [draft, setDraft] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [openAnswerIndex, setOpenAnswerIndex] = useState<number | null>(null);
 
-  // Re-sync local state if the underlying record changes (e.g. import).
+  // Modals
+  const [diffFor, setDiffFor] = useState<{ index: number; current: string; original: string } | null>(null);
+  const [historyFor, setHistoryFor] = useState<{ index: number; id: string } | null>(null);
+
+  const areaPath = breadcrumb.join(" / ");
+
   useEffect(() => {
     setItems(record[categoryKey] ?? []);
     setEditingIndex(null);
@@ -75,22 +133,72 @@ export function PromptListEditor({
 
   const isDirty = JSON.stringify(items) !== JSON.stringify(original);
 
+  const persistMeta = (next: PromptMetaStore) => {
+    setSection(PROMPT_META_KEY, next);
+  };
+
   const save = () => {
     update({ ...record, [categoryKey]: items });
+    logActivity({
+      kind: "prompt-edited",
+      message: `Saved ${items.length} prompt${items.length === 1 ? "" : "s"} in ${categoryKey}`,
+      area: areaPath,
+    });
   };
 
   const onReset = () => {
-    setItems(defaultRecord[categoryKey] ?? []);
+    setItems(defaults);
+    logActivity({
+      kind: "answer-reset",
+      message: `Reset all prompts in ${categoryKey} to default`,
+      area: areaPath,
+    });
   };
 
   const addItem = () => {
     const text = draft.trim();
     if (!text) return;
-    setItems((prev) => [...prev, text]);
+    const newIndex = items.length;
+    const next = [...items, text];
+    setItems(next);
     setDraft("");
+    // Persist the new item's meta entry immediately so timestamp is recorded.
+    const id = promptIdOf(categoryKey, newIndex);
+    persistMeta(
+      applyPromptChange(getSection(PROMPT_META_KEY, PROMPT_META_DEFAULT), id, {
+        snapshot: { prompt: text },
+        action: "created",
+      }),
+    );
+    logActivity({
+      kind: "prompt-added",
+      message: `Added prompt: "${truncate(text)}"`,
+      area: areaPath,
+    });
   };
 
-  const removeItem = (i: number) => setItems((prev) => prev.filter((_, idx) => idx !== i));
+  const removeItem = (i: number) => {
+    const removed = items[i];
+    setItems((prev) => prev.filter((_, idx) => idx !== i));
+    logActivity({
+      kind: "prompt-deleted",
+      message: `Deleted prompt: "${truncate(removed ?? "")}"`,
+      area: areaPath,
+    });
+  };
+
+  const duplicateItem = (i: number) => {
+    setItems((prev) => {
+      const next = [...prev];
+      next.splice(i + 1, 0, `${prev[i]} (copy)`);
+      return next;
+    });
+    logActivity({
+      kind: "prompt-duplicated",
+      message: `Duplicated prompt: "${truncate(items[i] ?? "")}"`,
+      area: areaPath,
+    });
+  };
 
   const startEdit = (i: number) => {
     setEditingIndex(i);
@@ -101,7 +209,14 @@ export function PromptListEditor({
     if (editingIndex === null) return;
     const text = editValue.trim();
     if (!text) return;
+    const id = promptIdOf(categoryKey, editingIndex);
     setItems((prev) => prev.map((p, i) => (i === editingIndex ? text : p)));
+    persistMeta(
+      applyPromptChange(getSection(PROMPT_META_KEY, PROMPT_META_DEFAULT), id, {
+        snapshot: { prompt: text },
+        action: "edited",
+      }),
+    );
     setEditingIndex(null);
   };
 
@@ -115,6 +230,56 @@ export function PromptListEditor({
     });
   };
 
+  const resetSinglePrompt = (i: number) => {
+    if (i >= defaults.length) return;
+    const id = promptIdOf(categoryKey, i);
+    setItems((prev) => prev.map((p, idx) => (idx === i ? defaults[i] : p)));
+    persistMeta(
+      applyPromptChange(getSection(PROMPT_META_KEY, PROMPT_META_DEFAULT), id, {
+        snapshot: { prompt: defaults[i] },
+        action: "restored",
+      }),
+    );
+    logActivity({
+      kind: "answer-reset",
+      message: `Reset prompt #${i + 1} to default`,
+      area: areaPath,
+    });
+  };
+
+  const setStatus = (i: number, status: PromptStatus) => {
+    const id = promptIdOf(categoryKey, i);
+    persistMeta(
+      applyPromptChange(getSection(PROMPT_META_KEY, PROMPT_META_DEFAULT), id, {
+        status,
+        action: "status-changed",
+      }),
+    );
+    logActivity({
+      kind: "status-changed",
+      message: `Marked prompt #${i + 1} as ${status}`,
+      area: areaPath,
+    });
+  };
+
+  const restoreFromHistory = (id: string, snapshot: { prompt: string }) => {
+    const idx = parseInt(id.split("-").pop() || "0", 10) - 1;
+    if (idx < 0 || idx >= items.length) return;
+    setItems((prev) => prev.map((p, i) => (i === idx ? snapshot.prompt : p)));
+    persistMeta(
+      applyPromptChange(getSection(PROMPT_META_KEY, PROMPT_META_DEFAULT), id, {
+        snapshot: { prompt: snapshot.prompt },
+        action: "restored",
+      }),
+    );
+    logActivity({
+      kind: "prompt-edited",
+      message: `Restored prompt #${idx + 1} from history`,
+      area: areaPath,
+    });
+    setHistoryFor(null);
+  };
+
   return (
     <EditorShell
       title={title}
@@ -123,7 +288,6 @@ export function PromptListEditor({
       onSave={save}
       onReset={() => {
         onReset();
-        // also clear the saved override so default truly comes back
         reset();
       }}
     >
@@ -166,7 +330,9 @@ export function PromptListEditor({
           {items.map((item, i) => {
             const editing = editingIndex === i;
             const answerOpen = openAnswerIndex === i;
-            const questionId = `${categoryKey}-${i + 1}`;
+            const questionId = promptIdOf(categoryKey, i);
+            const meta = metaStore[questionId];
+            const status: PromptStatus = meta?.status ?? "published";
             const hasOverride = !!answerOverrides[questionId];
             const hasDefault = !!sampleAnswers[questionId];
             const answerStatus: "custom" | "default" | "missing" = hasOverride
@@ -174,9 +340,20 @@ export function PromptListEditor({
               : hasDefault
               ? "default"
               : "missing";
+            const defaultPrompt = defaults[i];
+            const hasDefaultPrompt = typeof defaultPrompt === "string";
+            const promptDiffers = hasDefaultPrompt && defaultPrompt !== item;
+            const historyCount = meta?.history?.length ?? 0;
+
             return (
               <li key={i} className="space-y-2">
-                <div className="group flex items-start gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20">
+                <div
+                  className={`group flex items-start gap-2 rounded-lg border bg-card p-3 transition-colors ${
+                    status === "draft"
+                      ? "border-amber-400/60 bg-amber-50/40 dark:bg-amber-500/5"
+                      : "border-border hover:border-foreground/20"
+                  }`}
+                >
                   <ReorderHandle
                     index={i}
                     total={items.length}
@@ -199,15 +376,26 @@ export function PromptListEditor({
                           </span>
                           {item}
                         </p>
-                        {enableAnswers && (
-                          <AnswerStatusBadge status={answerStatus} />
-                        )}
+                        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                          <StatusBadge status={status} />
+                          {enableAnswers && <AnswerStatusBadge status={answerStatus} />}
+                          {promptDiffers && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/30 bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
+                              Edited
+                            </span>
+                          )}
+                          {meta?.lastEditedAt && (
+                            <span className="text-[10px] font-medium text-muted-foreground">
+                              Edited {timeAgo(meta.lastEditedAt)}
+                            </span>
+                          )}
+                        </div>
                       </>
                     )}
                   </div>
-                  <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+                  <div className="flex shrink-0 flex-col items-end gap-1.5 opacity-80 transition-opacity group-hover:opacity-100">
                     {editing ? (
-                      <>
+                      <div className="flex gap-1">
                         <Button size="icon" variant="ghost" onClick={commitEdit} title="Save">
                           <Check className="h-4 w-4 text-emerald-600" />
                         </Button>
@@ -219,38 +407,130 @@ export function PromptListEditor({
                         >
                           <X className="h-4 w-4" />
                         </Button>
-                      </>
+                      </div>
                     ) : (
                       <>
-                        {enableAnswers && (
+                        <div className="flex flex-wrap items-center justify-end gap-1">
+                          {/* Status toggle */}
                           <Button
                             size="sm"
-                            variant={answerOpen ? "default" : "outline"}
+                            variant="outline"
                             onClick={() =>
-                              setOpenAnswerIndex((cur) => (cur === i ? null : i))
+                              setStatus(i, status === "published" ? "draft" : "published")
                             }
-                            title={answerOpen ? "Hide answer editor" : "Edit model answer"}
+                            title={status === "published" ? "Move to draft" : "Publish"}
+                            className="h-7 text-[11px]"
                           >
-                            <FileText className="mr-1.5 h-3.5 w-3.5" />
-                            Answer
-                            <ChevronDown
-                              className={`ml-1 h-3 w-3 transition-transform ${
-                                answerOpen ? "rotate-180" : ""
-                              }`}
-                            />
+                            {status === "published" ? "Unpublish" : "Publish"}
                           </Button>
-                        )}
-                        <Button size="icon" variant="ghost" onClick={() => startEdit(i)} title="Edit prompt">
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => removeItem(i)}
-                          title="Delete"
-                        >
-                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                        </Button>
+                          {/* Preview */}
+                          <Button
+                            asChild
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7"
+                            title="Preview on site"
+                          >
+                            <Link
+                              to="/writing-samples/$questionId"
+                              params={{ questionId }}
+                              search={{
+                                title: item,
+                                module: previewModule,
+                                task: previewTask,
+                                category: categoryKey,
+                                topic: "",
+                                difficulty: "Medium",
+                              }}
+                              target="_blank"
+                            >
+                              <Eye className="h-3.5 w-3.5" />
+                            </Link>
+                          </Button>
+                          {enableAnswers && (
+                            <Button
+                              size="sm"
+                              variant={answerOpen ? "default" : "outline"}
+                              onClick={() =>
+                                setOpenAnswerIndex((cur) => (cur === i ? null : i))
+                              }
+                              title={answerOpen ? "Hide answer editor" : "Edit model answer"}
+                              className="h-7"
+                            >
+                              <FileText className="mr-1 h-3.5 w-3.5" />
+                              Answer
+                              <ChevronDown
+                                className={`ml-0.5 h-3 w-3 transition-transform ${
+                                  answerOpen ? "rotate-180" : ""
+                                }`}
+                              />
+                            </Button>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-0.5">
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => startEdit(i)}
+                            title="Edit prompt"
+                            className="h-7 w-7"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => duplicateItem(i)}
+                            title="Duplicate"
+                            className="h-7 w-7"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                          </Button>
+                          {promptDiffers && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() =>
+                                setDiffFor({ index: i, current: item, original: defaultPrompt! })
+                              }
+                              title="View diff vs default"
+                              className="h-7 w-7"
+                            >
+                              <GitCompare className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                          {historyCount > 0 && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => setHistoryFor({ index: i, id: questionId })}
+                              title={`History (${historyCount})`}
+                              className="h-7 w-7"
+                            >
+                              <History className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                          {hasDefaultPrompt && promptDiffers && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => resetSinglePrompt(i)}
+                              title="Reset to default"
+                              className="h-7 w-7"
+                            >
+                              <RotateCcw className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => removeItem(i)}
+                            title="Delete"
+                            className="h-7 w-7"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          </Button>
+                        </div>
                       </>
                     )}
                   </div>
@@ -260,6 +540,8 @@ export function PromptListEditor({
                   <WritingAnswerEditor
                     questionId={questionId}
                     questionTitle={item}
+                    showImage={showAnswerImage}
+                    area={areaPath}
                     onClose={() => setOpenAnswerIndex(null)}
                   />
                 )}
@@ -268,11 +550,72 @@ export function PromptListEditor({
           })}
         </ul>
       </div>
+
+      {/* Diff modal */}
+      <Dialog open={!!diffFor} onOpenChange={(open) => !open && setDiffFor(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Diff vs default</DialogTitle>
+            <DialogDescription>
+              Red = removed from default · Green = added in your edit.
+            </DialogDescription>
+          </DialogHeader>
+          {diffFor && <TextDiff defaultText={diffFor.original} currentText={diffFor.current} />}
+        </DialogContent>
+      </Dialog>
+
+      {/* History modal */}
+      <Dialog open={!!historyFor} onOpenChange={(open) => !open && setHistoryFor(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Version history</DialogTitle>
+            <DialogDescription>
+              Last {(historyFor && metaStore[historyFor.id]?.history.length) || 0} edits — pick
+              one to restore the prompt to that revision.
+            </DialogDescription>
+          </DialogHeader>
+          {historyFor && (
+            <div className="max-h-96 overflow-y-auto rounded-md border border-border">
+              {(metaStore[historyFor.id]?.history ?? []).map((h, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-start justify-between gap-3 border-b border-border p-3 last:border-b-0"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex items-center gap-2 text-[11px]">
+                      <span className="rounded-full bg-foreground/10 px-2 py-0.5 font-bold uppercase tracking-wider text-foreground">
+                        {h.action}
+                      </span>
+                      <span className="text-muted-foreground">{timeAgo(h.ts)}</span>
+                    </div>
+                    <p className="line-clamp-3 whitespace-pre-wrap text-sm text-foreground">
+                      {h.prompt}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      restoreFromHistory(historyFor.id, { prompt: h.prompt })
+                    }
+                  >
+                    <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                    Restore
+                  </Button>
+                </div>
+              ))}
+              {(metaStore[historyFor.id]?.history ?? []).length === 0 && (
+                <p className="p-6 text-center text-sm text-muted-foreground">No edits yet.</p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </EditorShell>
   );
 }
 
-// ───────── Topic list editor (Speaking) ─────────
+// ───────── Topic list editor (Speaking) — unchanged ─────────
 
 export type TopicItem = { id: string; label: string };
 
@@ -318,9 +661,7 @@ export function TopicListEditor({
       .replace(/^-|-$/g, "");
 
   const ensureUniqueId = (id: string, ignoreIndex?: number) => {
-    const existing = new Set(
-      items.filter((_, i) => i !== ignoreIndex).map((t) => t.id),
-    );
+    const existing = new Set(items.filter((_, i) => i !== ignoreIndex).map((t) => t.id));
     let candidate = id || "topic";
     let n = 2;
     while (existing.has(candidate)) candidate = `${id}-${n++}`;
@@ -346,9 +687,7 @@ export function TopicListEditor({
     if (editingIndex === null) return;
     const label = editLabel.trim();
     if (!label) return;
-    setItems((prev) =>
-      prev.map((t, i) => (i === editingIndex ? { id: t.id, label } : t)),
-    );
+    setItems((prev) => prev.map((t, i) => (i === editingIndex ? { id: t.id, label } : t)));
     setEditingIndex(null);
   };
 
@@ -549,12 +888,26 @@ function ReorderHandle({
   );
 }
 
+function StatusBadge({ status }: { status: PromptStatus }) {
+  if (status === "draft") {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+        Draft
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+      Published
+    </span>
+  );
+}
+
 function AnswerStatusBadge({ status }: { status: "custom" | "default" | "missing" }) {
   const map = {
     custom: {
       label: "Custom answer",
-      className:
-        "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+      className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
     },
     default: {
       label: "Default answer",
@@ -562,16 +915,22 @@ function AnswerStatusBadge({ status }: { status: "custom" | "default" | "missing
     },
     missing: {
       label: "No answer yet",
-      className:
-        "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
+      className: "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
     },
   } as const;
   const { label, className } = map[status];
   return (
     <span
-      className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${className}`}
     >
       {label}
     </span>
   );
+}
+
+// Unused — kept for backwards compat with prior imports if any.
+export const _unused_ExternalLink = ExternalLink;
+
+function truncate(s: string, n = 60) {
+  return s.length > n ? `${s.slice(0, n)}…` : s;
 }

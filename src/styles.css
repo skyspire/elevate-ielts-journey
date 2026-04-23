@@ -882,3 +882,59 @@
   }
   .study-highlighter { clip-path: none !important; }
 }
+
+/* Rich-text answer body (Quill output rendered on the public page) */
+.answer-body p { margin: 0.6em 0; }
+.answer-body strong { font-weight: 700; color: inherit; }
+.answer-body em { font-style: italic; }
+.answer-body u { text-decoration: underline; }
+.answer-body h2,
+.answer-body h3 {
+  font-weight: 800;
+  margin: 1em 0 0.4em;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+.answer-body h2 { font-size: 1.25em; }
+.answer-body h3 { font-size: 1.1em; }
+.answer-body ul,
+.answer-body ol {
+  margin: 0.6em 0 0.6em 1.5em;
+  padding-left: 0.5em;
+}
+.answer-body ul { list-style: disc; }
+.answer-body ol { list-style: decimal; }
+.answer-body li { margin: 0.25em 0; }
+.answer-body blockquote {
+  border-left: 3px solid currentColor;
+  padding: 0.2em 0 0.2em 1em;
+  margin: 0.8em 0;
+  opacity: 0.85;
+  font-style: italic;
+}
+.answer-body a {
+  color: oklch(0.55 0.18 250);
+  text-decoration: underline;
+}
+
+/* Quill toolbar fits the admin theme */
+.rich-text-editor .ql-toolbar.ql-snow,
+.rich-text-editor .ql-container.ql-snow {
+  border: none;
+}
+.rich-text-editor .ql-toolbar.ql-snow {
+  border-bottom: 1px solid var(--border);
+  background: oklch(0 0 0 / 0.02);
+  border-top-left-radius: calc(var(--radius) - 6px);
+  border-top-right-radius: calc(var(--radius) - 6px);
+}
+.rich-text-editor .ql-editor {
+  min-height: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.rich-text-editor .ql-editor.ql-blank::before {
+  font-style: normal;
+  color: var(--muted-foreground);
+}

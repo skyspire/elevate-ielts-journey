@@ -1,12 +1,11 @@
-// Inline editor for a Writing model answer (band score, paragraphs, word count).
-// Mounted from PromptListEditor when the admin clicks "Edit answer" on a prompt.
+// Inline editor for a Writing model answer (band score, paragraphs, word count,
+// optional Task 1 image). Paragraph bodies use a Quill rich-text editor.
 
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, Save, RotateCcw, X, ExternalLink, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useCmsEditor } from "@/lib/admin/cms-store";
 import {
   WRITING_ANSWERS_KEY,
@@ -15,10 +14,17 @@ import {
   computeWordCount,
 } from "@/lib/admin/writing-answers";
 import { sampleAnswers, type AnswerParagraph } from "@/data/sample-answers";
+import { RichTextEditor, countWords } from "@/components/admin/RichTextEditor";
+import { ImageUploader } from "@/components/admin/ImageUploader";
+import { logActivity } from "@/lib/admin/activity-log";
 
 type WritingAnswerEditorProps = {
   questionId: string;
   questionTitle: string;
+  /** When true, show the Task 1 image uploader. */
+  showImage?: boolean;
+  /** Where the prompt lives — used for activity log breadcrumb. */
+  area?: string;
   /** Optional close callback (renders an X in the header). */
   onClose?: () => void;
 };
@@ -33,6 +39,8 @@ const EMPTY_PARAGRAPHS: AnswerParagraph[] = [
 export function WritingAnswerEditor({
   questionId,
   questionTitle,
+  showImage = false,
+  area,
   onClose,
 }: WritingAnswerEditorProps) {
   const { value: overrides, update, reset } = useCmsEditor<WritingAnswersOverrides>(
@@ -43,7 +51,6 @@ export function WritingAnswerEditor({
   const baseAnswer = sampleAnswers[questionId];
   const ov = overrides[questionId];
 
-  // Initial state — override paragraphs win, then base, then empty scaffold.
   const initialParagraphs = useMemo<AnswerParagraph[]>(() => {
     if (ov?.paragraphs) return ov.paragraphs;
     if (baseAnswer?.paragraphs) return baseAnswer.paragraphs;
@@ -51,14 +58,16 @@ export function WritingAnswerEditor({
   }, [ov, baseAnswer]);
 
   const initialBandScore = ov?.bandScore ?? baseAnswer?.bandScore ?? "8.5";
+  const initialImage = ov?.imageDataUrl;
 
   const [bandScore, setBandScore] = useState(initialBandScore);
   const [paragraphs, setParagraphs] = useState<AnswerParagraph[]>(initialParagraphs);
+  const [imageDataUrl, setImageDataUrl] = useState<string | undefined>(initialImage);
 
-  // Re-sync local state when target question changes
   useEffect(() => {
     setBandScore(initialBandScore);
     setParagraphs(initialParagraphs);
+    setImageDataUrl(initialImage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionId]);
 
@@ -66,7 +75,8 @@ export function WritingAnswerEditor({
 
   const isDirty =
     bandScore !== initialBandScore ||
-    JSON.stringify(paragraphs) !== JSON.stringify(initialParagraphs);
+    JSON.stringify(paragraphs) !== JSON.stringify(initialParagraphs) ||
+    (imageDataUrl ?? "") !== (initialImage ?? "");
 
   const save = () => {
     update({
@@ -75,12 +85,17 @@ export function WritingAnswerEditor({
         bandScore,
         wordCount,
         paragraphs,
+        imageDataUrl,
       },
+    });
+    logActivity({
+      kind: "answer-edited",
+      message: `Updated model answer for "${truncate(questionTitle)}"`,
+      area,
     });
   };
 
   const onResetThis = () => {
-    // Strip the override for this question only.
     const next = { ...overrides };
     delete next[questionId];
     if (Object.keys(next).length === 0) {
@@ -90,6 +105,12 @@ export function WritingAnswerEditor({
     }
     setBandScore(baseAnswer?.bandScore ?? "8.5");
     setParagraphs(baseAnswer?.paragraphs ?? EMPTY_PARAGRAPHS);
+    setImageDataUrl(undefined);
+    logActivity({
+      kind: "answer-reset",
+      message: `Reset model answer for "${truncate(questionTitle)}"`,
+      area,
+    });
   };
 
   const updateParagraph = (i: number, patch: Partial<AnswerParagraph>) => {
@@ -137,7 +158,7 @@ export function WritingAnswerEditor({
             )}
           </div>
           <p className="mt-1 max-w-xl text-xs text-muted-foreground">
-            What learners see on the public answer page for this prompt.
+            Rich text editor — bold, italic, headings, lists, colors, links.
           </p>
         </div>
         <div className="flex items-center gap-1.5">
@@ -168,7 +189,7 @@ export function WritingAnswerEditor({
         </div>
       </div>
 
-      {/* Meta row — band score + auto word count */}
+      {/* Meta row — band score + word count */}
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
         <div>
           <label className="mb-1 block text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -190,6 +211,18 @@ export function WritingAnswerEditor({
           </div>
         </div>
       </div>
+
+      {/* Optional Task 1 image */}
+      {showImage && (
+        <div className="mb-4">
+          <ImageUploader
+            value={imageDataUrl}
+            onChange={setImageDataUrl}
+            label="Question image (chart / map / diagram)"
+            hint="PNG / JPG up to 600KB — visible above the answer on the public page."
+          />
+        </div>
+      )}
 
       {/* Paragraphs */}
       <div>
@@ -243,15 +276,14 @@ export function WritingAnswerEditor({
                   </Button>
                 </div>
               </div>
-              <Textarea
+              <RichTextEditor
                 value={p.body}
-                onChange={(e) => updateParagraph(i, { body: e.target.value })}
+                onChange={(html) => updateParagraph(i, { body: html })}
                 placeholder="Paragraph body…"
-                rows={5}
-                className="bg-background text-sm leading-relaxed"
+                minHeight={140}
               />
               <div className="mt-1 text-right text-[11px] text-muted-foreground">
-                {p.body.trim().split(/\s+/).filter(Boolean).length} words
+                {countWords(p.body)} words
               </div>
             </div>
           ))}
@@ -271,4 +303,8 @@ export function WritingAnswerEditor({
       )}
     </div>
   );
+}
+
+function truncate(s: string, n = 60) {
+  return s.length > n ? `${s.slice(0, n)}…` : s;
 }

@@ -12,6 +12,7 @@ import {
   getSpeakingQuestions,
   getTopic,
   isCueCardCategory,
+  type SpeakingQuestion,
 } from "@/data/speaking-questions";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
@@ -136,7 +137,7 @@ function SpeakingTopicPage() {
           <div className="relative mt-12 left-1/2 right-1/2 -mx-[50vw] w-screen bg-paper-sage pb-20 sm:mt-16 sm:pb-28">
             <div className="relative mx-auto w-full max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {questions.map((q, i) => {
+                {questions.map((q: SpeakingQuestion, i: number) => {
                   const isUnlocked = i === 0;
                   return (
                     <article

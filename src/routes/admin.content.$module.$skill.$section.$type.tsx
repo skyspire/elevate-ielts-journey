@@ -87,6 +87,9 @@ function QuestionTypeEditor() {
           defaultRecord={WRITING_DEFAULTS}
           placeholder="Type the full essay prompt or letter brief…"
           enableAnswers
+          showAnswerImage={params.section === "task1"}
+          previewModule={params.module as "academic" | "general"}
+          previewTask={params.section as "task1" | "task2"}
         />
       ) : (
         <TopicListEditor
