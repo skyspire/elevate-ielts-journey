@@ -245,7 +245,7 @@ function ReaderPage() {
             <div className="min-w-0">
               <p
                 className="truncate font-bold leading-tight"
-                style={{ fontFamily: "'Playfair Display', serif" }}
+                style={{ fontFamily: "'Lora', Georgia, serif" }}
               >
                 {book.title}
               </p>
@@ -358,7 +358,7 @@ function ReaderPage() {
             style={{ background: theme.page, borderColor: theme.border }}
           >
             <Lock className="mx-auto h-8 w-8" style={{ color: "oklch(0.55 0.18 30)" }} />
-            <h3 className="mt-3 text-xl font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h3 className="mt-3 text-xl font-black" style={{ fontFamily: "'Lora', Georgia, serif" }}>
               You've reached the end of the free preview
             </h3>
             <p className="mx-auto mt-2 max-w-md text-sm font-semibold" style={{ color: theme.muted }}>
@@ -794,7 +794,7 @@ function SidePanel({
         style={{ background: theme.page, color: theme.text }}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-black" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h2 className="text-lg font-black" style={{ fontFamily: "'Lora', Georgia, serif" }}>
             {title}
           </h2>
           <button
