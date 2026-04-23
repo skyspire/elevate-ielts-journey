@@ -812,8 +812,8 @@ function PageView({
         boxShadow:
           "0 1px 0 oklch(0.2 0.05 260 / 0.04), 0 18px 40px -22px oklch(0.2 0.05 260 / 0.3), 0 2px 8px -2px oklch(0.2 0.05 260 / 0.1)",
         borderRadius: "6px",
-        height: "calc(100dvh - 1rem)",
-        maxHeight: "calc(100dvh - 1rem)",
+        height: "calc(100dvh - 4.25rem)",
+        maxHeight: "calc(100dvh - 4.25rem)",
         // Generous A4 book margins: ~2.5cm top/bottom, ~2cm sides (responsive).
         padding: "clamp(2rem, 6vh, 2.5cm) clamp(1.25rem, 5vw, 2cm)",
       }}
