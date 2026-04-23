@@ -111,7 +111,8 @@ function ReaderPage() {
   const flat = useMemo(() => (book ? flattenPages(book) : []), [book]);
   const total = flat.length;
   const current = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
-  const isLocked = !!book && !user && current >= book.freePages;
+  const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
+  const isLocked = !!book && !user && current >= freePages;
 
   // Self-heal stale localStorage if the saved page is out of range for the new book content.
   useEffect(() => {
@@ -120,21 +121,20 @@ function ReaderPage() {
     }
   }, [total, state.currentPage, setState]);
 
-  const leftPage = flat[current];
+  const leftPage = flat[current] ?? flat[0];
   const rightPage = isWide ? flat[current + 1] : undefined;
 
   const goPrev = useCallback(() => {
     setState((s) => ({ ...s, currentPage: Math.max(0, s.currentPage - (isWide ? 2 : 1)) }));
   }, [isWide, setState]);
 
-  const freePages = book?.freePages ?? 0;
   const goNext = useCallback(() => {
     setState((s) => {
       const step = isWide ? 2 : 1;
-      const next = Math.min(total - 1, s.currentPage + step);
+      const next = total > 0 ? Math.min(total - 1, s.currentPage + step) : 0;
       // free-preview lock
       if (!user && next >= freePages) {
-        return { ...s, currentPage: freePages - 1 };
+        return { ...s, currentPage: Math.max(0, freePages - 1) };
       }
       return { ...s, currentPage: next };
     });
@@ -206,7 +206,21 @@ function ReaderPage() {
   const fs = FONT_SIZES[prefs.fontSize];
 
   if (!book) return null;
-  if (!leftPage) return null;
+  if (!leftPage) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-6 text-center text-foreground">
+        <div>
+          <h1 className="text-2xl font-black">This sample is still loading</h1>
+          <p className="mt-2 text-sm font-medium text-foreground/70">
+            Please go back to the library and open the book again.
+          </p>
+          <Link to="/ebooks" className="mt-5 inline-flex rounded-md border border-border px-4 py-2 text-sm font-bold">
+            Back to library
+          </Link>
+        </div>
+      </div>
+    );
+  }
   const progressPct = total > 0 ? ((current + 1) / total) * 100 : 0;
 
   return (
