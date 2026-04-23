@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 const cards = [
-  { to: "/admin/content" as const, title: "Content — IELTS Academic", desc: "Writing (Task 1, 2) & Speaking (Part 1, 2 & 3) by question type.", icon: GraduationCap, color: "oklch(0.45 0.18 265)", featured: true },
+  { to: "/admin/content" as const, title: "Content — Academic & General Training", desc: "Writing (Task 1, 2) & Speaking (Part 1, 2 & 3) for both IELTS modules.", icon: GraduationCap, color: "oklch(0.45 0.18 265)", featured: true },
   { to: "/admin/vocabulary" as const, title: "Vocabulary", desc: "Categories, lists, words.", icon: Library, color: "oklch(0.6 0.16 130)" },
   { to: "/admin/hero" as const, title: "Hero Section", desc: "Headline, subline, and CTAs.", icon: Type, color: "oklch(0.62 0.17 255)" },
   { to: "/admin/stats" as const, title: "Stats", desc: "Counters shown under hero.", icon: BarChart3, color: "oklch(0.6 0.16 230)" },
