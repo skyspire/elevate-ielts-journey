@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { JsonEditorPage } from "@/components/admin/JsonEditorPage";
-import { categories } from "@/data/vocabulary";
+import { vocabulary } from "@/data/vocabulary";
 import { VOCABULARY_KEY } from "@/lib/admin/defaults";
 
 export const Route = createFileRoute("/admin/vocabulary")({
@@ -13,7 +13,7 @@ function VocabularyEditor() {
       title="Vocabulary"
       description="Categories → topic lists → words."
       storageKey={VOCABULARY_KEY}
-      defaultValue={categories}
+      defaultValue={vocabulary}
       hint="Each category has { key, title, slug, tagline, lists }. Each list has { slug, title, blurb, words }."
     />
   );
