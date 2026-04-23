@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VocabularyRouteImport } from './routes/vocabulary'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
@@ -37,6 +38,11 @@ const TermsRoute = TermsRouteImport.update({
 const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
   id: '/recent-exam-questions',
   path: '/recent-exam-questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PredictionsRoute = PredictionsRouteImport.update({
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
+  '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
+  '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/ebooks': typeof EbooksRoute
   '/faq': typeof FaqRoute
   '/predictions': typeof PredictionsRoute
+  '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
+    | '/privacy'
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
+    | '/privacy'
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/predictions'
+    | '/privacy'
     | '/recent-exam-questions'
     | '/terms'
     | '/vocabulary'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   EbooksRoute: typeof EbooksRoute
   FaqRoute: typeof FaqRoute
   PredictionsRoute: typeof PredictionsRoute
+  PrivacyRoute: typeof PrivacyRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
   TermsRoute: typeof TermsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/recent-exam-questions'
       fullPath: '/recent-exam-questions'
       preLoaderRoute: typeof RecentExamQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/predictions': {
@@ -335,6 +355,7 @@ const rootRouteChildren: RootRouteChildren = {
   EbooksRoute: EbooksRoute,
   FaqRoute: FaqRoute,
   PredictionsRoute: PredictionsRoute,
+  PrivacyRoute: PrivacyRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
   TermsRoute: TermsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
