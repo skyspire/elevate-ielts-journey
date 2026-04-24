@@ -537,17 +537,19 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               }}
             >
               <p>
-                <span
-                  className="font-display font-extrabold"
-                  style={{
-                    color: activePalette.ink,
-                    fontSize: "1.12em",
-                    letterSpacing: "-0.005em",
-                  }}
-                >
-                  {openingPhrase}
-                </span>
-                {bodyBeforePullQuote && <span> {bodyBeforePullQuote}</span>}
+                <Highlight tone="amber">
+                  <span
+                    className="font-display font-extrabold"
+                    style={{
+                      color: activePalette.ink,
+                      fontSize: "1.12em",
+                      letterSpacing: "-0.005em",
+                    }}
+                  >
+                    {openingPhrase}
+                  </span>
+                </Highlight>
+                {bodyBeforePullQuote && <span> {annotateText(bodyBeforePullQuote)}</span>}
               </p>
 
               {pullQuote && (
