@@ -358,25 +358,23 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        {/* ── PARCHMENT background + per-variant gradient wash ──────────────
-            Layered for richness:
-              1. Warm cream parchment base (constant — readable, premium)
-              2. Per-variant atmospheric gradient wash (multiply blend, ~32%)
-                 — Sunrise / Forest / Twilight tints the room without
-                 fighting the ink
-              3. Soft top→bottom vignette to give depth
-              4. Faint paper grain (multiply, ~10%) for tactility */}
+        {/* ── STUDY PAPER background ────────────────────────────────────
+            Confident & tactile dotted bullet-journal paper, layered with
+            a per-variant atmospheric wash so the reader still carries the
+            Sunrise / Forest / Twilight color identity. */}
+        <StudyPaperBackground tone="cream" />
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden"
-          style={{ backgroundColor: PARCHMENT }}
+          aria-hidden
         >
-          {/* Atmospheric gradient wash — variant-specific */}
+          {/* Per-variant atmospheric tint — soft multiply so the dot grid
+              still reads through it. */}
           <div
             className="absolute inset-0"
             style={{
               backgroundImage: `linear-gradient(160deg, ${activePalette.gradTop} 0%, ${activePalette.gradMid} 55%, ${activePalette.gradBottom} 100%)`,
               mixBlendMode: "multiply",
-              opacity: 0.32,
+              opacity: 0.18,
               transition:
                 "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), opacity 640ms cubic-bezier(0.4, 0, 0.2, 1)",
             }}
@@ -392,16 +390,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           <div
             className="absolute inset-x-0 bottom-0 h-56"
             style={{
-              background: `linear-gradient(0deg, ${PARCHMENT_DEEP}cc 0%, transparent 100%)`,
-            }}
-          />
-          {/* Paper grain — fine dotted overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.10] mix-blend-multiply"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 1px 1px, oklch(0.30 0.04 60) 0.5px, transparent 1.2px), radial-gradient(circle at 2px 3px, oklch(0.30 0.04 60) 0.4px, transparent 1px)",
-              backgroundSize: "4px 4px, 7px 7px",
+              background: `linear-gradient(0deg, ${PARCHMENT_DEEP}aa 0%, transparent 100%)`,
             }}
           />
         </div>
