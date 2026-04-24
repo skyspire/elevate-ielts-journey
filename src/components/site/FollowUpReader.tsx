@@ -595,7 +595,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
                 </figure>
               )}
 
-              {bodyAfterPullQuote && <p>{bodyAfterPullQuote}</p>}
+              {bodyAfterPullQuote && <p>{annotateText(bodyAfterPullQuote)}</p>}
             </div>
           );
 
