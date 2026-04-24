@@ -36,7 +36,6 @@ import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 import { Route as AdminSpeakingRouteImport } from './routes/admin.speaking'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
-import { Route as AdminPressRouteImport } from './routes/admin.press'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHomepageRouteImport } from './routes/admin.homepage'
 import { Route as AdminHeroRouteImport } from './routes/admin.hero'
@@ -190,11 +189,6 @@ const AdminPricingRoute = AdminPricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminPressRoute = AdminPressRouteImport.update({
-  id: '/press',
-  path: '/press',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -305,7 +299,6 @@ export interface FileRoutesByFullPath {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/press': typeof AdminPressRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -350,7 +343,6 @@ export interface FileRoutesByTo {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/press': typeof AdminPressRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -397,7 +389,6 @@ export interface FileRoutesById {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/press': typeof AdminPressRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -445,7 +436,6 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
-    | '/admin/press'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -490,7 +480,6 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
-    | '/admin/press'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -536,7 +525,6 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
-    | '/admin/press'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -770,13 +758,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/press': {
-      id: '/admin/press'
-      path: '/press'
-      fullPath: '/admin/press'
-      preLoaderRoute: typeof AdminPressRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -903,7 +884,6 @@ interface AdminRouteChildren {
   AdminHeroRoute: typeof AdminHeroRoute
   AdminHomepageRoute: typeof AdminHomepageRoute
   AdminLoginRoute: typeof AdminLoginRoute
-  AdminPressRoute: typeof AdminPressRoute
   AdminPricingRoute: typeof AdminPricingRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminSpeakingRoute: typeof AdminSpeakingRoute
@@ -930,7 +910,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminHeroRoute: AdminHeroRoute,
   AdminHomepageRoute: AdminHomepageRoute,
   AdminLoginRoute: AdminLoginRoute,
-  AdminPressRoute: AdminPressRoute,
   AdminPricingRoute: AdminPricingRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminSpeakingRoute: AdminSpeakingRoute,

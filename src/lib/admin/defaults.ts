@@ -183,32 +183,6 @@ export type PricesOverride = Partial<
 >;
 export const PRICES_DEFAULT: PricesOverride = {};
 
-// ───────── Press / Featured-in strip ─────────
-export const PRESS_KEY = "press-strip";
-export type PressLogo = {
-  /** Display name shown as the wordmark */
-  name: string;
-  /** Optional small tagline below the name (e.g. "subreddit", "YouTube") */
-  kind?: string;
-};
-export type PressContent = {
-  enabled: boolean;
-  eyebrow: string;
-  logos: PressLogo[];
-};
-export const PRESS_DEFAULT: PressContent = {
-  enabled: true,
-  eyebrow: "Trusted by learners from communities like",
-  logos: [
-    { name: "r/IELTS", kind: "subreddit" },
-    { name: "IELTS Liz", kind: "blog" },
-    { name: "E2 IELTS", kind: "YouTube" },
-    { name: "IELTS Advantage", kind: "community" },
-    { name: "IELTS Network", kind: "Facebook group" },
-    { name: "Magoosh", kind: "prep blog" },
-  ],
-};
-
 // Bulk JSON sections for large data files
 export const WRITING_PROMPTS_KEY = "writing-prompts";
 export const SPEAKING_TOPICS_KEY = "speaking-topics";
