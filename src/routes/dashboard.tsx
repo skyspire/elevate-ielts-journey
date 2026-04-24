@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   CalendarDays,
   Flame,
+  HelpCircle,
   type LucideProps,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
@@ -51,6 +52,7 @@ type Feature = {
   icon: ComponentType<LucideProps>;
   to?: string;
   highlighted?: boolean;
+  comingSoon?: boolean;
 };
 
 const features: Feature[] = [
@@ -170,6 +172,21 @@ const features: Feature[] = [
     },
     tone: "espresso",
     icon: CalendarDays,
+  },
+  {
+    key: "quizzes",
+    title: "Quizzes",
+    description: {
+      academic: "Quick band-builder quizzes across all four IELTS skills.",
+      general: "Bite-sized quizzes to sharpen your General Training skills.",
+    },
+    count: {
+      academic: { value: "Soon", label: "interactive quizzes" },
+      general: { value: "Soon", label: "interactive quizzes" },
+    },
+    tone: "teal",
+    icon: HelpCircle,
+    comingSoon: true,
   },
 ];
 
@@ -649,6 +666,20 @@ function FeatureCard({
           color={tone.deep}
           className="relative z-[1] opacity-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105"
         />
+
+        {/* Coming soon ribbon — pinned top-right */}
+        {feature.comingSoon && (
+          <span
+            className="absolute right-2 top-2 z-[2] rounded-full px-2 py-0.5 font-display text-[9px] font-extrabold uppercase tracking-[0.18em]"
+            style={{
+              background: "oklch(0.22 0.04 260)",
+              color: "oklch(0.98 0.01 85)",
+              boxShadow: "0 2px 0 oklch(0.45 0.10 60 / 0.35)",
+            }}
+          >
+            Coming soon
+          </span>
+        )}
 
         {/* Title only — quiet ink on muted ground */}
         <span className="relative z-[1] mt-auto flex flex-col items-center">
