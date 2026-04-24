@@ -218,6 +218,7 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
       {/* Site / Homepage */}
       <Section label="Site">
         <Leaf to="/admin/hero" icon={Type} label="Hero Section" />
+        <Leaf to="/admin/press" icon={SettingsIcon} label="Press / Featured-in" />
         <Leaf to="/admin/homepage" icon={Layout} label="Homepage Layout" />
         <Leaf to="/admin/stats" icon={BarChart3} label="Stats" />
         <Leaf to="/admin/pricing" icon={CreditCard} label="Pricing" />
@@ -272,6 +273,7 @@ type LeafProps = {
     | "/admin/branding"
     | "/admin/homepage"
     | "/admin/seo"
+    | "/admin/press"
     | "/admin/banner";
   icon: typeof LayoutDashboard;
   label: string;
