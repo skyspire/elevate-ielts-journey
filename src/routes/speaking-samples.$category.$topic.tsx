@@ -190,7 +190,7 @@ function SpeakingTopicPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer variant="dark" />
     </div>
   );
 }
