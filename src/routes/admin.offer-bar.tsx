@@ -82,14 +82,14 @@ function OfferBarEditor() {
         />
       </div>
 
-      <div className="mt-6 rounded-lg border border-border bg-slate-900 p-3 text-center text-[13px] font-medium text-slate-50">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+      <div className="mt-6 rounded-lg border border-border bg-foreground p-3 text-center text-[13px] font-medium text-background">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-background/60">
           Live preview
         </div>
         <div className="mt-2 flex items-center justify-center gap-3">
           <span>{draft.message || "—"}</span>
           {draft.ctaLabel && draft.ctaHref && (
-            <span className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-slate-900">
+            <span className="rounded-full bg-background px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-foreground">
               {draft.ctaLabel}
             </span>
           )}

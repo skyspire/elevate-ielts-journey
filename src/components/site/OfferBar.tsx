@@ -32,14 +32,14 @@ export function OfferBar() {
     <div
       role="region"
       aria-label="Site offer"
-      className="sticky top-0 z-40 w-full border-b border-white/10 bg-slate-900 text-slate-50"
+      className="sticky top-0 z-40 w-full border-b border-border/40 bg-foreground text-background"
     >
-      <div className="container-page flex items-center justify-center gap-3 px-4 py-2 text-center text-[13px] font-medium sm:text-sm">
+      <div className="container-page relative flex items-center justify-center gap-3 px-4 py-2 text-center text-[13px] font-medium sm:text-sm">
         <span className="flex-1 sm:flex-none">{bar.message}</span>
         {bar.ctaLabel && bar.ctaHref && (
           <a
             href={bar.ctaHref}
-            className="hidden shrink-0 rounded-full bg-white px-3 py-1 text-[12px] font-bold uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-200 sm:inline-block"
+            className="hidden shrink-0 rounded-full bg-background px-3 py-1 text-[12px] font-bold uppercase tracking-wider text-foreground transition-opacity hover:opacity-90 sm:inline-block"
           >
             {bar.ctaLabel}
           </a>
@@ -48,7 +48,7 @@ export function OfferBar() {
           <button
             type="button"
             onClick={handleDismiss}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-300 hover:bg-white/10 hover:text-white"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-background/70 hover:bg-background/10 hover:text-background"
             aria-label="Dismiss offer"
           >
             <X className="h-3.5 w-3.5" />
@@ -59,7 +59,7 @@ export function OfferBar() {
         <div className="flex justify-center pb-2 sm:hidden">
           <a
             href={bar.ctaHref}
-            className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-900"
+            className="rounded-full bg-background px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-foreground"
           >
             {bar.ctaLabel}
           </a>
