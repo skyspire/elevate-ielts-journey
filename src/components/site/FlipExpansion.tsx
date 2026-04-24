@@ -544,13 +544,10 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* ── PURE WHITE reading surface — flat, no gradient, no texture.
-          The user explicitly asked for pure white across all variants;
-          color identity lives only in the footer pager + follow-up rail. */}
-      <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ backgroundColor: PURE_WHITE }}
-      />
+      {/* ── STUDY PAPER reading surface — confident & tactile dotted
+          bullet-journal paper. Replaces the previous pure-white lane so
+          the answer reads like it's on real stationery. */}
+      <StudyPaperBackground tone="cream" />
 
       {/* ── Two-column reading layout ─────────────────────────────────────
           Desktop (≥md): tinted left column (sticky) carries the topic
@@ -839,7 +836,7 @@ function CueCardReader({
                             fontWeight: 500,
                           }}
                         >
-                          {s.body}
+                          {annotateText(s.body)}
                         </p>
                       </section>
                     );
