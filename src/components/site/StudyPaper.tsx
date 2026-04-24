@@ -27,46 +27,27 @@ export function StudyPaperBackground({
   tone?: "cream" | "ivory";
   className?: string;
 }) {
-  // Confident dot grid — visible enough to read as bullet-journal paper,
-  // but never loud enough to compete with the ink.
-  const dotColor = "oklch(0.32 0.025 70 / 0.32)";
-  const baseColor = tone === "cream" ? "oklch(0.978 0.018 82)" : "oklch(0.985 0.010 90)";
+  // Near-white paper with only the faintest grain — the dot grid was too
+  // visible and disturbed reading, so we drop it entirely. What remains is
+  // a quiet warm-white wash + a whisper-soft fractal grain that gives the
+  // lane just enough tactility to feel like paper, not a screen.
+  const baseColor = tone === "cream" ? "oklch(0.992 0.006 85)" : "oklch(0.994 0.004 90)";
 
   return (
     <div
       aria-hidden
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className ?? ""}`}
     >
-      {/* Warm cream paper base */}
+      {/* Near-white paper base */}
       <div className="absolute inset-0" style={{ backgroundColor: baseColor }} />
 
-      {/* Dot grid — bullet-journal style. Two layers (primary + offset) so
-          the grid feels organically inked, not screen-printed. */}
+      {/* Whisper-soft paper grain — fractal noise, very light multiply.
+          Just enough tactility to read as paper without competing with ink. */}
       <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `radial-gradient(circle, ${dotColor} 1.15px, transparent 1.6px)`,
-          backgroundSize: "22px 22px",
-          backgroundPosition: "0 0",
-        }}
-      />
-
-      {/* Subtle paper grain — fractal noise, very light multiply.
-          Adds tactility so the lane reads as paper, not flat colour. */}
-      <div
-        className="absolute inset-0 opacity-[0.10] mix-blend-multiply"
+        className="absolute inset-0 opacity-[0.06] mix-blend-multiply"
         style={{
           backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.30  0 0 0 0 0.26  0 0 0 0 0.20  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
           backgroundSize: "240px 240px",
-        }}
-      />
-
-      {/* Soft top-edge warmth so the lane never feels flat */}
-      <div
-        className="absolute inset-x-0 top-0 h-40"
-        style={{
-          background:
-            "linear-gradient(180deg, oklch(0.96 0.025 70 / 0.55) 0%, transparent 100%)",
         }}
       />
     </div>
