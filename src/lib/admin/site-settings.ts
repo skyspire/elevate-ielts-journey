@@ -45,7 +45,6 @@ export type HomepageSection = {
 
 export const HOMEPAGE_DEFAULT: HomepageSection[] = [
   { id: "hero", label: "Hero", visible: true },
-  { id: "press", label: "Press / Featured-in", visible: true },
   { id: "everything", label: "Everything You Need", visible: true },
   { id: "stats", label: "Stats", visible: true },
   { id: "value", label: "Value Statement", visible: true },
@@ -61,9 +60,12 @@ export function useHomepageLayout(): HomepageSection[] {
   // If the saved value has fewer sections than defaults (e.g. we added new ones),
   // merge them in at the end with visible=true so the homepage never breaks.
   const stored = useCmsSection<HomepageSection[]>(HOMEPAGE_LAYOUT_KEY, HOMEPAGE_DEFAULT);
-  const known = new Set(stored.map((s) => s.id));
+  // Drop any legacy section ids that no longer exist in defaults (e.g. removed "press").
+  const validIds = new Set(HOMEPAGE_DEFAULT.map((s) => s.id));
+  const cleaned = stored.filter((s) => validIds.has(s.id));
+  const known = new Set(cleaned.map((s) => s.id));
   const extras = HOMEPAGE_DEFAULT.filter((s) => !known.has(s.id));
-  return extras.length === 0 ? stored : [...stored, ...extras];
+  return extras.length === 0 ? cleaned : [...cleaned, ...extras];
 }
 
 // ───────── Per-route SEO ─────────

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { QuietHero } from "@/components/site/QuietHero";
-import { PressStrip } from "@/components/site/PressStrip";
 import { EverythingYouNeed } from "@/components/site/EverythingYouNeed";
 import { Stats } from "@/components/site/Stats";
 import { ValueStatement } from "@/components/site/ValueStatement";
@@ -22,7 +21,6 @@ export const Route = createFileRoute("/")({
 
 const SECTION_MAP: Record<string, React.ComponentType> = {
   hero: QuietHero,
-  press: PressStrip,
   everything: EverythingYouNeed,
   stats: Stats,
   value: ValueStatement,
