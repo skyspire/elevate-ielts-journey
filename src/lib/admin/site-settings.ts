@@ -129,3 +129,31 @@ export const BANNER_DEFAULT: AnnouncementBanner = {
 export function useAnnouncementBanner(): AnnouncementBanner {
   return useCmsSection<AnnouncementBanner>(BANNER_KEY, BANNER_DEFAULT);
 }
+
+// ───────── Top sticky offer bar ─────────
+
+export const OFFER_BAR_KEY = "offer-bar";
+
+export type OfferBar = {
+  enabled: boolean;
+  message: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  /** If true, user can dismiss for this version. If false, always visible. */
+  dismissible: boolean;
+  /** Bump on save so dismissed bars reappear. */
+  version: number;
+};
+
+export const OFFER_BAR_DEFAULT: OfferBar = {
+  enabled: true,
+  message: "Try 6 Band-9 samples free — no credit card needed.",
+  ctaLabel: "Start free",
+  ctaHref: "/signup",
+  dismissible: true,
+  version: 1,
+};
+
+export function useOfferBar(): OfferBar {
+  return useCmsSection<OfferBar>(OFFER_BAR_KEY, OFFER_BAR_DEFAULT);
+}
