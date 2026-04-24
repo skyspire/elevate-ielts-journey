@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const SECTION_MAP: Record<string, () => React.ReactElement> = {
+const SECTION_MAP: Record<string, React.ComponentType> = {
   hero: QuietHero,
   press: PressStrip,
   everything: EverythingYouNeed,
