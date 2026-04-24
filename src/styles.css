@@ -917,6 +917,27 @@
   text-decoration: underline;
 }
 
+/* ── Annotations: highlighter + colored underlines ───────────────────────
+   Authored in the admin via Quill. Highlighter uses Quill's native
+   `background` inline style — we soften the look with a tiny vertical
+   pad + rounded corners so it reads as a felt-tip swipe instead of a
+   sharp box. Colored underlines use a custom `text-decoration-color`
+   style; any inline span carrying that style is rendered with a 2px
+   underline at +3px offset, both in the editor and on the public page. */
+.answer-body span[style*="background"] {
+  padding: 0.06em 0.18em;
+  border-radius: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.answer-body span[style*="text-decoration-color"],
+.ql-editor span[style*="text-decoration-color"] {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+  text-decoration-skip-ink: auto;
+}
+
 /* Quill toolbar fits the admin theme */
 .rich-text-editor .ql-toolbar.ql-snow,
 .rich-text-editor .ql-container.ql-snow {
