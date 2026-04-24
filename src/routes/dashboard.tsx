@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   CalendarDays,
   Flame,
+  HelpCircle,
   type LucideProps,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
