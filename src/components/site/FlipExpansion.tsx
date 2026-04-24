@@ -23,6 +23,7 @@ import {
 } from "@/data/speaking-questions";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { FollowUpReader } from "./FollowUpReader";
+import { StudyPaperBackground, annotateText } from "./StudyPaper";
 
 type FlipExpansionProps = {
   open: boolean;
