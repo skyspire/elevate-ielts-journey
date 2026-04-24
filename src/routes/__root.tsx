@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
+import { OfferBar } from "@/components/site/OfferBar";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
@@ -83,6 +84,7 @@ function RootComponent() {
   const hideChrome = isAdmin || isAuth;
   return (
     <>
+      {!hideChrome && <OfferBar />}
       {!hideChrome && <AnnouncementBanner />}
       {!hideChrome && <Header />}
       <Outlet />

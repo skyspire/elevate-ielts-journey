@@ -224,6 +224,7 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
         <Leaf to="/admin/faq" icon={HelpCircle} label="FAQ" />
         <Leaf to="/admin/footer" icon={Layout} label="Footer" />
         <Leaf to="/admin/contact" icon={Mail} label="Contact Page" />
+        <Leaf to="/admin/offer-bar" icon={SettingsIcon} label="Top Offer Bar" />
         <Leaf to="/admin/banner" icon={SettingsIcon} label="Announcement Banner" />
         <Leaf to="/admin/branding" icon={SettingsIcon} label="Theme & Branding" />
         <Leaf to="/admin/seo" icon={SettingsIcon} label="Per-page SEO" />
@@ -272,6 +273,7 @@ type LeafProps = {
     | "/admin/branding"
     | "/admin/homepage"
     | "/admin/seo"
+    | "/admin/offer-bar"
     | "/admin/banner";
   icon: typeof LayoutDashboard;
   label: string;
