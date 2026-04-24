@@ -149,8 +149,8 @@ function EbooksPage() {
     (m) => m.routeId !== "/ebooks" && m.routeId.startsWith("/ebooks/"),
   );
 
-  const session = useLearnerSession();
-  const userId = session?.id ?? null;
+  const { user } = useLearnerSession();
+  const userId = user?.id ?? null;
   const [progressMap, setProgressMap] = useState<Record<string, number>>({});
 
   useEffect(() => {
