@@ -173,6 +173,21 @@ const features: Feature[] = [
     tone: "espresso",
     icon: CalendarDays,
   },
+  {
+    key: "quizzes",
+    title: "Quizzes",
+    description: {
+      academic: "Quick band-builder quizzes across all four IELTS skills.",
+      general: "Bite-sized quizzes to sharpen your General Training skills.",
+    },
+    count: {
+      academic: { value: "Soon", label: "interactive quizzes" },
+      general: { value: "Soon", label: "interactive quizzes" },
+    },
+    tone: "teal",
+    icon: HelpCircle,
+    comingSoon: true,
+  },
 ];
 
 // Macaron candy palette — soft pastels with bakery-window appeal.
