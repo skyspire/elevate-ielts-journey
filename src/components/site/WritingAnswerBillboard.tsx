@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, GraduationCap } from "lucide-react";
 import type { SampleAnswer } from "@/data/sample-answers";
+import { StudyPaperBackground, annotateText } from "./StudyPaper";
 
 /**
  * WritingAnswerBillboard — parchment + ink billboard reader for writing
@@ -379,11 +380,13 @@ export function WritingAnswerBillboard({
         {/* RIGHT scrollable reading lane. */}
         <div
           ref={scrollRef}
-          className="relative flex-1 overflow-y-auto bg-white"
+          className="relative flex-1 overflow-y-auto"
           // Reserve room at the bottom so the footer pager doesn't cover
           // the last paragraph.
           style={{ paddingBottom: "96px" }}
         >
+          {/* Confident & tactile dotted bullet-journal paper. */}
+          <StudyPaperBackground tone="cream" />
           {/* ── Word-count "ink stamp" ──────────────────────────────────
               Round, clean rubber-stamp using the site's display typography.
               Sticky inside the right column so it stays visible while the
@@ -509,7 +512,7 @@ export function WritingAnswerBillboard({
                           whiteSpace: "pre-line",
                         }}
                       >
-                        {p.body}
+                        {annotateText(p.body)}
                       </p>
                     )}
                   </div>
