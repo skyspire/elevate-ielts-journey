@@ -4,6 +4,7 @@ import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
 } from "@/data/speaking-model-answers";
+import { StudyPaperBackground, Highlight, annotateText } from "./StudyPaper";
 
 /**
  * FollowUpReader — full-screen reader for examiner follow-up questions.
