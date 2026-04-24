@@ -45,6 +45,7 @@ export type HomepageSection = {
 
 export const HOMEPAGE_DEFAULT: HomepageSection[] = [
   { id: "hero", label: "Hero", visible: true },
+  { id: "press", label: "Press / Featured-in", visible: true },
   { id: "everything", label: "Everything You Need", visible: true },
   { id: "stats", label: "Stats", visible: true },
   { id: "value", label: "Value Statement", visible: true },
