@@ -52,6 +52,7 @@ type Feature = {
   icon: ComponentType<LucideProps>;
   to?: string;
   highlighted?: boolean;
+  comingSoon?: boolean;
 };
 
 const features: Feature[] = [
