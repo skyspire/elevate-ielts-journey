@@ -142,9 +142,9 @@ function SpeakingTopicPage() {
                   return (
                     <article
                       key={q.id}
-                      className="group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white p-5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
+                      className="group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white pb-0 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
                     >
-                      <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start justify-between gap-3 px-5 pt-5">
                         <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
                           Q{String(i + 1).padStart(2, "0")}
                         </span>
@@ -159,24 +159,27 @@ function SpeakingTopicPage() {
                         </div>
                       </div>
 
-                      <p className="whitespace-pre-line font-display text-[15px] font-bold leading-snug tracking-tight text-foreground">
+                      <p className="whitespace-pre-line px-5 font-display text-[15px] font-bold leading-snug tracking-tight text-foreground">
                         {q.title}
                       </p>
 
-                      <div className="mt-1 flex items-center justify-between gap-2 border-t border-foreground/8 pt-3">
-                        <span className="text-[11px] font-semibold text-foreground/55">
+                      <div
+                        className="mt-1 flex items-center justify-between gap-2 px-5 py-3"
+                        style={{ backgroundColor: "oklch(0.28 0.01 260)" }}
+                      >
+                        <span className="text-[11px] font-semibold text-white/70">
                           {topic.label}
                         </span>
                         {isUnlocked ? (
                           <button
                             type="button"
-                            className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.50_0.10_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
+                            className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.55_0.12_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
                           >
                             View answer
                             <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.6} />
                           </button>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-foreground/5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-foreground/55">
+                          <span className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white/70">
                             <Lock className="h-3.5 w-3.5" />
                             Pro
                           </span>
