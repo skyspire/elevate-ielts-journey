@@ -817,7 +817,7 @@ function CueCardReader({
                           className="-mx-6 mb-4 flex items-center px-6 py-3 font-display text-xl font-extrabold tracking-tight sm:-mx-10 sm:px-10 sm:text-2xl"
                           style={{
                             color: activePalette.tabBorder,
-                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(1 0 0))`,
+                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(0.985 0.018 82))`,
                             borderTop: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             borderBottom: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             letterSpacing: "-0.005em",
