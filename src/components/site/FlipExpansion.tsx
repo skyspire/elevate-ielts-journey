@@ -23,6 +23,7 @@ import {
 } from "@/data/speaking-questions";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { FollowUpReader } from "./FollowUpReader";
+import { StudyPaperBackground, annotateText } from "./StudyPaper";
 
 type FlipExpansionProps = {
   open: boolean;
@@ -543,13 +544,10 @@ function CueCardReader({
           : "pointer-events-none scale-[0.98] opacity-0"
       }`}
     >
-      {/* ── PURE WHITE reading surface — flat, no gradient, no texture.
-          The user explicitly asked for pure white across all variants;
-          color identity lives only in the footer pager + follow-up rail. */}
-      <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ backgroundColor: PURE_WHITE }}
-      />
+      {/* ── STUDY PAPER reading surface — confident & tactile dotted
+          bullet-journal paper. Replaces the previous pure-white lane so
+          the answer reads like it's on real stationery. */}
+      <StudyPaperBackground tone="cream" />
 
       {/* ── Two-column reading layout ─────────────────────────────────────
           Desktop (≥md): tinted left column (sticky) carries the topic
@@ -819,7 +817,7 @@ function CueCardReader({
                           className="-mx-6 mb-4 flex items-center px-6 py-3 font-display text-xl font-extrabold tracking-tight sm:-mx-10 sm:px-10 sm:text-2xl"
                           style={{
                             color: activePalette.tabBorder,
-                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(1 0 0))`,
+                            backgroundColor: `color-mix(in oklab, ${activePalette.tabBorder} 10%, oklch(0.985 0.018 82))`,
                             borderTop: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             borderBottom: `1px solid color-mix(in oklab, ${activePalette.tabBorder} 28%, transparent)`,
                             letterSpacing: "-0.005em",
@@ -838,7 +836,7 @@ function CueCardReader({
                             fontWeight: 500,
                           }}
                         >
-                          {s.body}
+                          {annotateText(s.body)}
                         </p>
                       </section>
                     );
