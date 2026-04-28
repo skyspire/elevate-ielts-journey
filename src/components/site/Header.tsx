@@ -357,9 +357,7 @@ export function Header() {
             asChild
             className="h-10 rounded-md px-5 font-semibold text-white shadow-none"
             style={{ backgroundColor: INK }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = "oklch(0.28 0.01 250)")
-            }
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "oklch(0.28 0.01 250)")}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = INK)}
           >
             <Link to="/signup">Get Started</Link>
@@ -406,264 +404,231 @@ export function Header() {
               <div className="container-page py-8">
                 {/* Live resources */}
                 <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
-                  {resourceItems.filter((i) => !i.comingSoon).map((item) => {
-                    const Icon = item.icon;
-                    const isSoon = false as const;
-                    const isFeatured = item.label === "E-books";
+                  {resourceItems
+                    .filter((i) => !i.comingSoon)
+                    .map((item) => {
+                      const Icon = item.icon;
+                      const isSoon = false as const;
+                      const isFeatured = item.label === "E-books";
 
-                    const inner = (
-                      <>
-                        {/* Coming soon ribbon */}
-                        {isSoon && (
-                          <div
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 rounded-xl"
+                      const inner = (
+                        <>
+                          {/* Coming soon ribbon */}
+                          {isSoon && (
+                            <div
+                              aria-hidden
+                              className="pointer-events-none absolute inset-0 rounded-xl"
+                              style={{
+                                background:
+                                  "linear-gradient(135deg, oklch(0.98 0.005 250) 0%, oklch(0.96 0.01 280) 100%)",
+                              }}
+                            />
+                          )}
+                          <span
+                            className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110 ${
+                              isFeatured ? "h-12 w-12" : "h-10 w-10"
+                            }`}
                             style={{
-                              background:
-                                "linear-gradient(135deg, oklch(0.98 0.005 250) 0%, oklch(0.96 0.01 280) 100%)",
+                              background: isSoon
+                                ? `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`
+                                : `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
+                              boxShadow: isFeatured
+                                ? `0 12px 28px -8px ${item.accent}99, 0 4px 10px -2px ${item.accent}60, inset 0 1px 0 oklch(1 0 0 / 0.5)`
+                                : `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                              opacity: isSoon ? 0.85 : 1,
                             }}
-                          />
-                        )}
-                        <span
-                          className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110 ${
-                            isFeatured ? "h-12 w-12" : "h-10 w-10"
-                          }`}
-                          style={{
-                            background: isSoon
-                              ? `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`
-                              : `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
-                            boxShadow: isFeatured
-                              ? `0 12px 28px -8px ${item.accent}99, 0 4px 10px -2px ${item.accent}60, inset 0 1px 0 oklch(1 0 0 / 0.5)`
-                              : `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
-                            opacity: isSoon ? 0.85 : 1,
-                          }}
-                        >
-                          <Icon
-                            className={isFeatured ? "h-6 w-6 text-white" : "h-5 w-5 text-white"}
-                            strokeWidth={2.4}
-                          />
-                        </span>
-                        <div className="relative min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <span
-                              className="font-display text-[14px] font-black leading-tight"
-                              style={{ color: INK }}
+                          >
+                            <Icon
+                              className={isFeatured ? "h-6 w-6 text-white" : "h-5 w-5 text-white"}
+                              strokeWidth={2.4}
+                            />
+                          </span>
+                          <div className="relative min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <span
+                                className="font-display text-[14px] font-black leading-tight"
+                                style={{ color: INK }}
+                              >
+                                {item.label}
+                              </span>
+                              {!isSoon && (
+                                <ArrowRight
+                                  className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
+                                  style={{ color: item.accent }}
+                                />
+                              )}
+                            </div>
+                            <p
+                              className="mt-1.5 text-[12px] font-medium leading-snug"
+                              style={{ color: INK_SOFT }}
                             >
-                              {item.label}
-                            </span>
-                            {!isSoon && (
-                              <ArrowRight
-                                className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
+                              {item.description}
+                            </p>
+                            {isSoon ? (
+                              <span
+                                className="mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider"
+                                style={{
+                                  background: `linear-gradient(135deg, color-mix(in oklab, ${item.accent} 18%, white) 0%, color-mix(in oklab, ${item.accent} 28%, white) 100%)`,
+                                  color: `color-mix(in oklab, ${item.accent} 75%, black)`,
+                                  boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${item.accent} 35%, white)`,
+                                }}
+                              >
+                                <Clock className="h-3 w-3" />
+                                Coming soon
+                              </span>
+                            ) : (
+                              <div
+                                className="mt-2 inline-flex items-center text-[10px] font-bold uppercase tracking-wider"
                                 style={{ color: item.accent }}
-                              />
+                              >
+                                {item.meta}
+                              </div>
                             )}
                           </div>
-                          <p
-                            className="mt-1.5 text-[12px] font-medium leading-snug"
-                            style={{ color: INK_SOFT }}
-                          >
-                            {item.description}
-                          </p>
-                          {isSoon ? (
-                            <span
-                              className="mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider"
-                              style={{
-                                background: `linear-gradient(135deg, color-mix(in oklab, ${item.accent} 18%, white) 0%, color-mix(in oklab, ${item.accent} 28%, white) 100%)`,
-                                color: `color-mix(in oklab, ${item.accent} 75%, black)`,
-                                boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${item.accent} 35%, white)`,
-                              }}
-                            >
-                              <Clock className="h-3 w-3" />
-                              Coming soon
-                            </span>
-                          ) : (
-                            <div
-                              className="mt-2 inline-flex items-center text-[10px] font-bold uppercase tracking-wider"
-                              style={{ color: item.accent }}
-                            >
-                              {item.meta}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    );
-
-                    const baseClass =
-                      "group/item relative flex h-full flex-col gap-3 overflow-hidden rounded-xl border border-transparent p-4 transition-all";
-                    const cssVars = {
-                      ["--mega-hover" as string]: HOVER_BG,
-                    } as React.CSSProperties;
-
-                    if (isSoon) {
-                      return (
-                        <div
-                          key={item.label}
-                          aria-disabled="true"
-                          className={`${baseClass} cursor-not-allowed`}
-                          style={{
-                            ...cssVars,
-                            borderColor: `${item.accent}25`,
-                            background:
-                              "linear-gradient(135deg, oklch(0.985 0.004 250) 0%, oklch(0.97 0.012 280) 100%)",
-                          }}
-                        >
-                          {inner}
-                        </div>
+                        </>
                       );
-                    }
 
-                    return (
-                      <Link
-                        key={item.label}
-                        to={item.to}
-                        onClick={() => setMegaOpen(false)}
-                        className={`${baseClass} hover:bg-[var(--mega-hover)]`}
-                        style={cssVars}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = `${item.accent}30`;
-                          e.currentTarget.style.boxShadow = `0 8px 24px -12px ${item.accent}40`;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = "transparent";
-                          e.currentTarget.style.boxShadow = "none";
-                        }}
-                      >
-                        {inner}
-                      </Link>
-                    );
-                  })}
-                </div>
+                      const baseClass =
+                        "group/item relative flex h-full flex-col gap-3 overflow-hidden rounded-xl border border-transparent p-4 transition-all";
+                      const cssVars = {
+                        ["--mega-hover" as string]: HOVER_BG,
+                      } as React.CSSProperties;
 
-                {/* Coming Soon — warm cream→rose band */}
-                <div
-                  className="relative mt-6 overflow-hidden rounded-2xl border"
-                  style={{
-                    borderColor: "oklch(0.9 0.03 25)",
-                    background:
-                      "linear-gradient(135deg, oklch(0.985 0.018 75) 0%, oklch(0.96 0.035 45) 35%, oklch(0.92 0.05 20) 100%)",
-                    boxShadow:
-                      "0 10px 40px -20px oklch(0.6 0.15 25 / 0.35), inset 0 1px 0 oklch(1 0 0 / 0.5)",
-                  }}
-                >
-                  {/* Decorative glow */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-50 blur-3xl"
-                    style={{ background: "oklch(0.85 0.08 30)" }}
-                  />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full opacity-40 blur-3xl"
-                    style={{ background: "oklch(0.88 0.06 350)" }}
-                  />
-
-                  <div className="relative grid gap-6 p-6 md:grid-cols-[260px_1fr] md:items-center md:p-7">
-                    {/* Big title block */}
-                    <div className="flex flex-col gap-3">
-                      {/* Editorial dateline — replaces the pill */}
-                      <div
-                        className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]"
-                        style={{ color: "oklch(0.45 0.13 25)" }}
-                      >
-                        <span
-                          aria-hidden
-                          className="inline-block h-[2px] w-6"
-                          style={{ background: "currentColor" }}
-                        />
-                        <span>Vol. 02 · 2026</span>
-                        <span
-                          aria-hidden
-                          className="relative inline-flex h-1.5 w-1.5"
-                        >
-                          <span
-                            className="absolute inset-0 animate-ping rounded-full opacity-70"
-                            style={{ background: "oklch(0.6 0.18 25)" }}
-                          />
-                          <span
-                            className="relative inline-block h-1.5 w-1.5 rounded-full"
-                            style={{ background: "oklch(0.6 0.18 25)" }}
-                          />
-                        </span>
-                      </div>
-                      <h3
-                        className="font-display text-[34px] font-black leading-[0.95] tracking-tight"
-                        style={{ color: "oklch(0.32 0.08 20)" }}
-                      >
-                        Coming
-                        <br />
-                        Soon
-                      </h3>
-                      {/* Handwritten-style sub-note with wavy underline */}
-                      <p
-                        className="text-[12.5px] font-medium leading-snug"
-                        style={{ color: "oklch(0.42 0.05 20)" }}
-                      >
-                        New formats we're crafting for your prep —{" "}
-                        <span
-                          className="relative whitespace-nowrap font-semibold italic"
-                          style={{ color: "oklch(0.38 0.12 25)" }}
-                        >
-                          shipping through 2026
-                          <svg
-                            aria-hidden
-                            viewBox="0 0 120 6"
-                            preserveAspectRatio="none"
-                            className="absolute -bottom-1 left-0 h-[5px] w-full"
-                          >
-                            <path
-                              d="M0,4 Q15,0 30,4 T60,4 T90,4 T120,4"
-                              fill="none"
-                              stroke="oklch(0.62 0.16 25)"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Soon cards */}
-                    <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3">
-                      {resourceItems.filter((i) => i.comingSoon).map((item) => {
-                        const Icon = item.icon;
+                      if (isSoon) {
                         return (
                           <div
                             key={item.label}
                             aria-disabled="true"
-                            className="group/soon relative flex cursor-not-allowed items-start gap-2.5 overflow-hidden rounded-xl p-3 transition-all"
+                            className={`${baseClass} cursor-not-allowed`}
                             style={{
-                              background: "oklch(1 0 0 / 0.55)",
-                              boxShadow:
-                                "inset 0 0 0 1px oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.5 0.08 25 / 0.06)",
-                              backdropFilter: "blur(4px)",
+                              ...cssVars,
+                              borderColor: `${item.accent}25`,
+                              background:
+                                "linear-gradient(135deg, oklch(0.985 0.004 250) 0%, oklch(0.97 0.012 280) 100%)",
                             }}
                           >
-                            <span
-                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-                              style={{
-                                background: `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`,
-                                boxShadow: `0 4px 10px -4px ${item.accent}70`,
-                              }}
-                            >
-                              <Icon className="h-4 w-4 text-white" strokeWidth={2.4} />
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <div
-                                className="font-display text-[13px] font-black leading-tight"
-                                style={{ color: "oklch(0.28 0.05 20)" }}
-                              >
-                                {item.label}
-                              </div>
-                              <p
-                                className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug"
-                                style={{ color: "oklch(0.48 0.04 20)" }}
-                              >
-                                {item.description}
-                              </p>
-                            </div>
+                            {inner}
                           </div>
                         );
-                      })}
+                      }
+
+                      return (
+                        <Link
+                          key={item.label}
+                          to={item.to}
+                          onClick={() => setMegaOpen(false)}
+                          className={`${baseClass} hover:bg-[var(--mega-hover)]`}
+                          style={cssVars}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = `${item.accent}30`;
+                            e.currentTarget.style.boxShadow = `0 8px 24px -12px ${item.accent}40`;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "transparent";
+                            e.currentTarget.style.boxShadow = "none";
+                          }}
+                        >
+                          {inner}
+                        </Link>
+                      );
+                    })}
+                </div>
+
+                {/* Coming Soon — professional roadmap band */}
+                <div
+                  className="relative mt-6 overflow-hidden rounded-xl border bg-white"
+                  style={{
+                    borderColor: HAIRLINE,
+                    boxShadow: "0 18px 45px -34px oklch(0.2 0.01 250 / 0.35)",
+                  }}
+                >
+                  <div className="relative grid gap-6 p-6 md:grid-cols-[280px_1fr] md:items-start md:p-7">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-3">
+                        <span
+                          aria-hidden
+                          className="h-10 w-[3px] rounded-full"
+                          style={{ background: INK }}
+                        />
+                        <div>
+                          <div
+                            className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                            style={{ color: INK_SOFT }}
+                          >
+                            Roadmap · 2026
+                          </div>
+                          <h3
+                            className="font-display text-[25px] font-black leading-tight"
+                            style={{ color: INK }}
+                          >
+                            Upcoming formats
+                          </h3>
+                        </div>
+                      </div>
+                      <p
+                        className="max-w-[250px] text-[13px] font-medium leading-relaxed"
+                        style={{ color: INK_SOFT }}
+                      >
+                        New IELTS prep resources are being prepared by our specialist team.
+                      </p>
+                      <div className="h-px w-full" style={{ background: HAIRLINE }} aria-hidden />
+                      <div
+                        className="text-[11px] font-bold uppercase tracking-[0.16em]"
+                        style={{ color: INK_SOFT }}
+                      >
+                        Planned additions
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                      {resourceItems
+                        .filter((i) => i.comingSoon)
+                        .map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <div
+                              key={item.label}
+                              aria-disabled="true"
+                              className="relative flex cursor-not-allowed items-start gap-3 rounded-lg border p-3.5"
+                              style={{
+                                borderColor: HAIRLINE,
+                                background: "oklch(0.985 0.003 250)",
+                              }}
+                            >
+                              <span
+                                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
+                                style={{
+                                  color: item.accent,
+                                  background: `color-mix(in oklab, ${item.accent} 10%, white)`,
+                                }}
+                              >
+                                <Icon className="h-4 w-4" strokeWidth={2.2} />
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div
+                                    className="font-display text-[13px] font-black leading-tight"
+                                    style={{ color: INK }}
+                                  >
+                                    {item.label}
+                                  </div>
+                                  <span
+                                    className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em]"
+                                    style={{ color: INK_SOFT }}
+                                  >
+                                    Planned
+                                  </span>
+                                </div>
+                                <p
+                                  className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug"
+                                  style={{ color: INK_SOFT }}
+                                >
+                                  {item.description}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>
@@ -703,7 +668,10 @@ export function Header() {
               />
             </button>
             {mobileResourcesOpen && (
-              <div className="ml-2 flex flex-col gap-0.5 border-l pl-3" style={{ borderColor: HAIRLINE }}>
+              <div
+                className="ml-2 flex flex-col gap-0.5 border-l pl-3"
+                style={{ borderColor: HAIRLINE }}
+              >
                 {resourceItems.map((item) => {
                   const Icon = item.icon;
                   if (item.comingSoon) {
