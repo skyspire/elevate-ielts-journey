@@ -6,7 +6,9 @@ import {
   BRANDING_KEY,
   BRANDING_DEFAULT,
   THEME_FONT_OPTIONS,
+  LOGO_SIZE_OPTIONS,
   type Branding,
+  type LogoSize,
 } from "@/lib/admin/site-settings";
 import { useCmsEditor } from "@/lib/admin/cms-store";
 import { logActivity } from "@/lib/admin/activity-log";
