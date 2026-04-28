@@ -404,10 +404,11 @@ export function Header() {
               style={{ borderColor: HAIRLINE }}
             >
               <div className="container-page py-8">
-                <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                  {resourceItems.map((item) => {
+                {/* Live resources */}
+                <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
+                  {resourceItems.filter((i) => !i.comingSoon).map((item) => {
                     const Icon = item.icon;
-                    const isSoon = item.comingSoon === true;
+                    const isSoon = false as const;
 
                     const inner = (
                       <>
