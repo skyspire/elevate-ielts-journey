@@ -451,18 +451,6 @@ export function Header() {
                             >
                               {item.label}
                             </span>
-                            {isFeatured && (
-                              <span
-                                className="inline-flex items-center rounded-full px-1.5 py-[1px] text-[9px] font-black uppercase tracking-wider"
-                                style={{
-                                  background: `color-mix(in oklab, ${item.accent} 14%, white)`,
-                                  color: `color-mix(in oklab, ${item.accent} 75%, black)`,
-                                  boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${item.accent} 30%, white)`,
-                                }}
-                              >
-                                Popular
-                              </span>
-                            )}
                             {!isSoon && (
                               <ArrowRight
                                 className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
