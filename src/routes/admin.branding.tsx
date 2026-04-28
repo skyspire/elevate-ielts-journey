@@ -45,6 +45,19 @@ function BrandingPage() {
           placeholder="BigIELTS.com"
         />
       </Field>
+      <Field label="Logo size" hint="Controls the wheel mark size in the header.">
+        <select
+          value={draft.logoSize ?? "md"}
+          onChange={(e) => setDraft({ ...draft, logoSize: e.target.value as LogoSize })}
+          className="h-9 w-full max-w-md rounded-md border border-input bg-background px-3 text-sm"
+        >
+          {LOGO_SIZE_OPTIONS.map((o) => (
+            <option key={o.key} value={o.key}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </Field>
       <Field label="Primary color" hint="Used for buttons, accents and links.">
         <div className="flex items-center gap-3">
           <input
