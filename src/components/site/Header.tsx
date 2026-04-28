@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Menu,
   X,
-  GraduationCap,
   ChevronDown,
   FileText,
   Sparkles,
@@ -17,6 +16,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useBranding, LOGO_SIZE_PX } from "@/lib/admin/site-settings";
+import logoWheel from "@/assets/logo-wheel.png";
 
 const INK = "oklch(0.20 0.01 250)";
 const INK_SOFT = "oklch(0.45 0.01 250)";
