@@ -404,57 +404,6 @@ export function Header() {
                           </Link>
                         );
                       })}
-                    </div>
-                  </div>
-
-                  {/* Right: featured promo card */}
-                  <div className="col-span-3">
-                    <div
-                      className="relative h-full overflow-hidden rounded-2xl p-5 text-white"
-                      style={{
-                        background:
-                          "linear-gradient(160deg, oklch(0.32 0.13 295) 0%, oklch(0.22 0.1 285) 60%, oklch(0.18 0.08 280) 100%)",
-                      }}
-                    >
-                      {/* Gold halo */}
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full blur-3xl"
-                        style={{ background: "oklch(0.85 0.12 80 / 0.35)" }}
-                      />
-                      <div className="relative">
-                        <span
-                          className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider"
-                          style={{
-                            background: "oklch(0.85 0.12 80 / 0.2)",
-                            color: "oklch(0.9 0.12 85)",
-                          }}
-                        >
-                          <Sparkles className="h-3 w-3" />
-                          New this week
-                        </span>
-                        <h4 className="mt-4 font-display text-xl font-black leading-tight">
-                          April 2026 Predictions
-                        </h4>
-                        <p className="mt-2 text-[12px] font-semibold leading-relaxed text-white/75">
-                          12 new high-likelihood Writing Task 2 topics, ranked by
-                          our prediction engine.
-                        </p>
-                        <Link
-                          to="/predictions"
-                          onClick={() => setMegaOpen(false)}
-                          className="mt-5 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[12px] font-black"
-                          style={{
-                            background: "oklch(0.9 0.12 85)",
-                            color: "oklch(0.22 0.1 285)",
-                          }}
-                        >
-                          See predictions
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </motion.div>
