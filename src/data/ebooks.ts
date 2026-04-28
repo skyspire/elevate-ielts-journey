@@ -46,7 +46,7 @@ export const ebooks: Ebook[] = [
     id: "task2-frameworks",
     title: "Task 2 Frameworks",
     subtitle: "Band 9 essay structures decoded",
-    author: "James Whitfield, ex-IELTS examiner",
+    author: "James Whitfield, IELTS Specialist",
     category: "Writing",
     band: "Band 7–9",
     pageCount: 184,

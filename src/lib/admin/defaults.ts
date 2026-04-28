@@ -81,7 +81,7 @@ export const FAQ_DEFAULT: FaqContent = {
     },
     {
       q: "Are the model answers really Band 9?",
-      a: "Yes — every sample is hand-written by certified IELTS instructors and reviewed by Cambridge-trained examiners.\n- Graded against Task Response\n- Graded against Coherence and Cohesion\n- Graded against Lexical Resource\n- Graded against Grammatical Range and Accuracy",
+      a: "Yes — every sample is hand-written and reviewed by our qualified IELTS team.\n- Graded against Task Response\n- Graded against Coherence and Cohesion\n- Graded against Lexical Resource\n- Graded against Grammatical Range and Accuracy",
     },
     {
       q: "How often are new questions added?",
