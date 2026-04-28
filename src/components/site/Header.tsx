@@ -404,11 +404,80 @@ export function Header() {
               style={{ borderColor: HAIRLINE }}
             >
               <div className="container-page py-8">
-                {/* Live resources */}
-                <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
+                {/* Live resources — E-books featured spotlight (spans 2 cols) */}
+                <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-6">
                   {resourceItems.filter((i) => !i.comingSoon).map((item) => {
                     const Icon = item.icon;
                     const isSoon = false as const;
+                    const isFeatured = item.label === "E-books";
+
+                    if (isFeatured && item.to) {
+                      return (
+                        <Link
+                          key={item.label}
+                          to={item.to}
+                          onClick={() => setMegaOpen(false)}
+                          className="group/feat relative col-span-2 flex h-full flex-col justify-between gap-3 overflow-hidden rounded-2xl p-5 text-white transition-all duration-300 hover:-translate-y-0.5"
+                          style={{
+                            background: `radial-gradient(circle at 85% 15%, oklch(1 0 0 / 0.18), transparent 55%), linear-gradient(135deg, ${item.accent} 0%, oklch(0.42 0.18 320) 55%, oklch(0.32 0.16 285) 100%)`,
+                            boxShadow: `0 14px 40px -16px ${item.accent}90, 0 4px 14px -8px oklch(0.32 0.16 285 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.25)`,
+                          }}
+                        >
+                          {/* Animated glow halo */}
+                          <div
+                            aria-hidden
+                            className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-60 blur-3xl transition-opacity duration-500 group-hover/feat:opacity-90"
+                            style={{ background: "oklch(0.85 0.18 60)" }}
+                          />
+                          {/* Featured ribbon */}
+                          <span
+                            className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9.5px] font-black uppercase tracking-[0.14em] backdrop-blur"
+                            style={{
+                              background: "oklch(1 0 0 / 0.22)",
+                              color: "oklch(0.99 0.02 80)",
+                              boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.35)",
+                            }}
+                          >
+                            <Sparkles className="h-2.5 w-2.5" />
+                            Featured
+                          </span>
+
+                          <div className="relative flex items-start gap-3">
+                            <span
+                              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover/feat:scale-110 group-hover/feat:rotate-[-4deg]"
+                              style={{
+                                background: "oklch(1 0 0 / 0.18)",
+                                boxShadow: "inset 0 1px 0 oklch(1 0 0 / 0.4), 0 6px 16px -8px oklch(0 0 0 / 0.4)",
+                                backdropFilter: "blur(6px)",
+                              }}
+                            >
+                              <Icon className="h-6 w-6 text-white" strokeWidth={2.4} />
+                            </span>
+                            <div className="min-w-0 flex-1 pr-16">
+                              <div className="font-display text-[18px] font-black leading-tight tracking-tight">
+                                {item.label}
+                              </div>
+                              <p className="mt-1.5 text-[12.5px] font-medium leading-snug text-white/85">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="relative flex items-center justify-between">
+                            <span
+                              className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-white/90"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-white/90 shadow-[0_0_8px_oklch(1_0_0/0.8)]" />
+                              {item.meta}
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white transition-transform duration-300 group-hover/feat:translate-x-1">
+                              Explore
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </span>
+                          </div>
+                        </Link>
+                      );
+                    }
 
                     const inner = (
                       <>
