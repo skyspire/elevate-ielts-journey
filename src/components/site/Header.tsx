@@ -560,17 +560,31 @@ export function Header() {
                   <div className="relative grid gap-6 p-6 md:grid-cols-[260px_1fr] md:items-center md:p-7">
                     {/* Big title block */}
                     <div className="flex flex-col gap-3">
-                      <span
-                        className="inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em]"
-                        style={{
-                          background: "oklch(1 0 0 / 0.65)",
-                          color: "oklch(0.45 0.15 25)",
-                          boxShadow: "inset 0 0 0 1px oklch(0.9 0.05 25)",
-                        }}
+                      {/* Editorial dateline — replaces the pill */}
+                      <div
+                        className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]"
+                        style={{ color: "oklch(0.45 0.13 25)" }}
                       >
-                        <Sparkles className="h-3 w-3" />
-                        On the way
-                      </span>
+                        <span
+                          aria-hidden
+                          className="inline-block h-[2px] w-6"
+                          style={{ background: "currentColor" }}
+                        />
+                        <span>Vol. 02 · 2026</span>
+                        <span
+                          aria-hidden
+                          className="relative inline-flex h-1.5 w-1.5"
+                        >
+                          <span
+                            className="absolute inset-0 animate-ping rounded-full opacity-70"
+                            style={{ background: "oklch(0.6 0.18 25)" }}
+                          />
+                          <span
+                            className="relative inline-block h-1.5 w-1.5 rounded-full"
+                            style={{ background: "oklch(0.6 0.18 25)" }}
+                          />
+                        </span>
+                      </div>
                       <h3
                         className="font-display text-[34px] font-black leading-[0.95] tracking-tight"
                         style={{ color: "oklch(0.32 0.08 20)" }}
@@ -579,11 +593,32 @@ export function Header() {
                         <br />
                         Soon
                       </h3>
+                      {/* Handwritten-style sub-note with wavy underline */}
                       <p
                         className="text-[12.5px] font-medium leading-snug"
                         style={{ color: "oklch(0.42 0.05 20)" }}
                       >
-                        New formats we're crafting for your prep — launching across 2026.
+                        New formats we're crafting for your prep —{" "}
+                        <span
+                          className="relative whitespace-nowrap font-semibold italic"
+                          style={{ color: "oklch(0.38 0.12 25)" }}
+                        >
+                          shipping through 2026
+                          <svg
+                            aria-hidden
+                            viewBox="0 0 120 6"
+                            preserveAspectRatio="none"
+                            className="absolute -bottom-1 left-0 h-[5px] w-full"
+                          >
+                            <path
+                              d="M0,4 Q15,0 30,4 T60,4 T90,4 T120,4"
+                              fill="none"
+                              stroke="oklch(0.62 0.16 25)"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </span>
                       </p>
                     </div>
 
