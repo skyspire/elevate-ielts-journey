@@ -534,129 +534,96 @@ export function Header() {
                   })}
                 </div>
 
-                {/* Coming Soon — warm cream→rose band */}
+                {/* Coming Soon — professional roadmap band */}
                 <div
-                  className="relative mt-6 overflow-hidden rounded-2xl border"
+                  className="relative mt-6 overflow-hidden rounded-xl border bg-white"
                   style={{
-                    borderColor: "oklch(0.9 0.03 25)",
-                    background:
-                      "linear-gradient(135deg, oklch(0.985 0.018 75) 0%, oklch(0.96 0.035 45) 35%, oklch(0.92 0.05 20) 100%)",
-                    boxShadow:
-                      "0 10px 40px -20px oklch(0.6 0.15 25 / 0.35), inset 0 1px 0 oklch(1 0 0 / 0.5)",
+                    borderColor: HAIRLINE,
+                    boxShadow: "0 18px 45px -34px oklch(0.2 0.01 250 / 0.35)",
                   }}
                 >
-                  {/* Decorative glow */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-50 blur-3xl"
-                    style={{ background: "oklch(0.85 0.08 30)" }}
-                  />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full opacity-40 blur-3xl"
-                    style={{ background: "oklch(0.88 0.06 350)" }}
-                  />
-
-                  <div className="relative grid gap-6 p-6 md:grid-cols-[260px_1fr] md:items-center md:p-7">
-                    {/* Big title block */}
-                    <div className="flex flex-col gap-3">
-                      {/* Editorial dateline — replaces the pill */}
-                      <div
-                        className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em]"
-                        style={{ color: "oklch(0.45 0.13 25)" }}
-                      >
+                  <div className="relative grid gap-6 p-6 md:grid-cols-[280px_1fr] md:items-start md:p-7">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-3">
                         <span
                           aria-hidden
-                          className="inline-block h-[2px] w-6"
-                          style={{ background: "currentColor" }}
+                          className="h-10 w-[3px] rounded-full"
+                          style={{ background: INK }}
                         />
-                        <span>Vol. 02 · 2026</span>
-                        <span
-                          aria-hidden
-                          className="relative inline-flex h-1.5 w-1.5"
-                        >
-                          <span
-                            className="absolute inset-0 animate-ping rounded-full opacity-70"
-                            style={{ background: "oklch(0.6 0.18 25)" }}
-                          />
-                          <span
-                            className="relative inline-block h-1.5 w-1.5 rounded-full"
-                            style={{ background: "oklch(0.6 0.18 25)" }}
-                          />
-                        </span>
-                      </div>
-                      <h3
-                        className="font-display text-[34px] font-black leading-[0.95] tracking-tight"
-                        style={{ color: "oklch(0.32 0.08 20)" }}
-                      >
-                        Coming
-                        <br />
-                        Soon
-                      </h3>
-                      {/* Handwritten-style sub-note with wavy underline */}
-                      <p
-                        className="text-[12.5px] font-medium leading-snug"
-                        style={{ color: "oklch(0.42 0.05 20)" }}
-                      >
-                        New formats we're crafting for your prep —{" "}
-                        <span
-                          className="relative whitespace-nowrap font-semibold italic"
-                          style={{ color: "oklch(0.38 0.12 25)" }}
-                        >
-                          shipping through 2026
-                          <svg
-                            aria-hidden
-                            viewBox="0 0 120 6"
-                            preserveAspectRatio="none"
-                            className="absolute -bottom-1 left-0 h-[5px] w-full"
+                        <div>
+                          <div
+                            className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                            style={{ color: INK_SOFT }}
                           >
-                            <path
-                              d="M0,4 Q15,0 30,4 T60,4 T90,4 T120,4"
-                              fill="none"
-                              stroke="oklch(0.62 0.16 25)"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </span>
+                            Roadmap · 2026
+                          </div>
+                          <h3
+                            className="font-display text-[25px] font-black leading-tight"
+                            style={{ color: INK }}
+                          >
+                            Upcoming formats
+                          </h3>
+                        </div>
+                      </div>
+                      <p
+                        className="max-w-[250px] text-[13px] font-medium leading-relaxed"
+                        style={{ color: INK_SOFT }}
+                      >
+                        New IELTS prep resources are being prepared by our specialist team.
                       </p>
+                      <div
+                        className="h-px w-full"
+                        style={{ background: HAIRLINE }}
+                        aria-hidden
+                      />
+                      <div
+                        className="text-[11px] font-bold uppercase tracking-[0.16em]"
+                        style={{ color: INK_SOFT }}
+                      >
+                        Planned additions
+                      </div>
                     </div>
 
-                    {/* Soon cards */}
-                    <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                       {resourceItems.filter((i) => i.comingSoon).map((item) => {
                         const Icon = item.icon;
                         return (
                           <div
                             key={item.label}
                             aria-disabled="true"
-                            className="group/soon relative flex cursor-not-allowed items-start gap-2.5 overflow-hidden rounded-xl p-3 transition-all"
+                            className="relative flex cursor-not-allowed items-start gap-3 rounded-lg border p-3.5"
                             style={{
-                              background: "oklch(1 0 0 / 0.55)",
-                              boxShadow:
-                                "inset 0 0 0 1px oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.5 0.08 25 / 0.06)",
-                              backdropFilter: "blur(4px)",
+                              borderColor: HAIRLINE,
+                              background: "oklch(0.985 0.003 250)",
                             }}
                           >
                             <span
-                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
                               style={{
-                                background: `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`,
-                                boxShadow: `0 4px 10px -4px ${item.accent}70`,
+                                color: item.accent,
+                                background: `color-mix(in oklab, ${item.accent} 10%, white)`,
                               }}
                             >
-                              <Icon className="h-4 w-4 text-white" strokeWidth={2.4} />
+                              <Icon className="h-4 w-4" strokeWidth={2.2} />
                             </span>
                             <div className="min-w-0 flex-1">
-                              <div
-                                className="font-display text-[13px] font-black leading-tight"
-                                style={{ color: "oklch(0.28 0.05 20)" }}
-                              >
-                                {item.label}
+                              <div className="flex items-start justify-between gap-2">
+                                <div
+                                  className="font-display text-[13px] font-black leading-tight"
+                                  style={{ color: INK }}
+                                >
+                                  {item.label}
+                                </div>
+                                <span
+                                  className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em]"
+                                  style={{ color: INK_SOFT }}
+                                >
+                                  Planned
+                                </span>
                               </div>
                               <p
                                 className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug"
-                                style={{ color: "oklch(0.48 0.04 20)" }}
+                                style={{ color: INK_SOFT }}
                               >
                                 {item.description}
                               </p>
