@@ -600,10 +600,9 @@ export function Header() {
                               aria-disabled="true"
                               className="group/soon relative flex cursor-not-allowed items-start gap-2.5 overflow-hidden rounded-xl p-3 transition-all"
                               style={{
-                                background: "oklch(1 0 0 / 0.55)",
+                                background: "white",
                                 boxShadow:
-                                  "inset 0 0 0 1px oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.5 0.08 25 / 0.06)",
-                                backdropFilter: "blur(4px)",
+                                  "inset 0 0 0 1px oklch(0.88 0.008 90), 0 1px 2px oklch(0.2 0.02 90 / 0.04)",
                               }}
                             >
                               <span
