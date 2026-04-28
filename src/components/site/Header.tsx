@@ -534,27 +534,28 @@ export function Header() {
                     })}
                 </div>
 
-                {/* Coming Soon — warm cream→rose band */}
+                {/* Coming Soon — editorial paper band */}
                 <div
-                  className="relative mt-6 overflow-hidden rounded-2xl border"
+                  className="relative mt-6 overflow-hidden rounded-2xl"
                   style={{
-                    borderColor: "oklch(0.9 0.03 25)",
-                    background:
-                      "linear-gradient(135deg, oklch(0.985 0.018 75) 0%, oklch(0.96 0.035 45) 35%, oklch(0.92 0.05 20) 100%)",
+                    background: "oklch(0.985 0.004 90)",
                     boxShadow:
-                      "0 10px 40px -20px oklch(0.6 0.15 25 / 0.35), inset 0 1px 0 oklch(1 0 0 / 0.5)",
+                      "inset 0 0 0 1px oklch(0.88 0.008 90), 0 1px 0 oklch(1 0 0 / 0.6)",
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg, transparent 0, transparent 27px, oklch(0.92 0.008 90) 27px, oklch(0.92 0.008 90) 28px)",
                   }}
                 >
-                  {/* Decorative glow */}
+                  {/* Top accent rule */}
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full opacity-50 blur-3xl"
-                    style={{ background: "oklch(0.85 0.08 30)" }}
+                    className="absolute inset-x-0 top-0 h-[3px]"
+                    style={{ background: INK }}
                   />
+                  {/* Left margin rule (notebook-style) */}
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full opacity-40 blur-3xl"
-                    style={{ background: "oklch(0.88 0.06 350)" }}
+                    className="pointer-events-none absolute inset-y-0 left-[44px] w-px"
+                    style={{ background: "oklch(0.82 0.04 25 / 0.5)" }}
                   />
 
                   <div className="relative grid gap-6 p-6 md:grid-cols-[260px_1fr] md:items-center md:p-7">
