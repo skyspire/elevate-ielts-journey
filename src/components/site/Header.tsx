@@ -597,33 +597,33 @@ export function Header() {
                             <div
                               key={item.label}
                               aria-disabled="true"
-                            className="group/soon relative flex cursor-not-allowed items-start gap-2.5 overflow-hidden rounded-xl p-3 transition-all"
+                              className="group/soon relative flex cursor-not-allowed items-start gap-2.5 overflow-hidden rounded-xl p-3 transition-all"
                               style={{
-                              background: "oklch(1 0 0 / 0.55)",
-                              boxShadow:
-                                "inset 0 0 0 1px oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.5 0.08 25 / 0.06)",
-                              backdropFilter: "blur(4px)",
+                                background: "oklch(1 0 0 / 0.55)",
+                                boxShadow:
+                                  "inset 0 0 0 1px oklch(1 0 0 / 0.7), 0 1px 2px oklch(0.5 0.08 25 / 0.06)",
+                                backdropFilter: "blur(4px)",
                               }}
                             >
                               <span
-                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                                 style={{
-                                background: `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`,
-                                boxShadow: `0 4px 10px -4px ${item.accent}70`,
+                                  background: `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`,
+                                  boxShadow: `0 4px 10px -4px ${item.accent}70`,
                                 }}
                               >
-                              <Icon className="h-4 w-4 text-white" strokeWidth={2.4} />
+                                <Icon className="h-4 w-4 text-white" strokeWidth={2.4} />
                               </span>
                               <div className="min-w-0 flex-1">
-                              <div
-                                className="font-display text-[13px] font-black leading-tight"
-                                style={{ color: "oklch(0.28 0.05 20)" }}
-                              >
-                                {item.label}
+                                <div
+                                  className="font-display text-[13px] font-black leading-tight"
+                                  style={{ color: "oklch(0.28 0.05 20)" }}
+                                >
+                                  {item.label}
                                 </div>
                                 <p
                                   className="mt-0.5 line-clamp-2 text-[11px] font-medium leading-snug"
-                                style={{ color: "oklch(0.48 0.04 20)" }}
+                                  style={{ color: "oklch(0.48 0.04 20)" }}
                                 >
                                   {item.description}
                                 </p>
