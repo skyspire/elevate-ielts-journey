@@ -534,30 +534,14 @@ export function Header() {
                     })}
                 </div>
 
-                {/* Coming Soon — editorial paper band */}
+                {/* Coming Soon — soft warm band */}
                 <div
                   className="relative mt-6 overflow-hidden rounded-2xl"
                   style={{
-                    background: "oklch(0.985 0.004 90)",
-                    boxShadow:
-                      "inset 0 0 0 1px oklch(0.88 0.008 90), 0 1px 0 oklch(1 0 0 / 0.6)",
-                    backgroundImage:
-                      "repeating-linear-gradient(0deg, transparent 0, transparent 27px, oklch(0.92 0.008 90) 27px, oklch(0.92 0.008 90) 28px)",
+                    background: "oklch(0.975 0.012 60)",
+                    boxShadow: "inset 0 0 0 1px oklch(0.9 0.02 50)",
                   }}
                 >
-                  {/* Top accent rule */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-x-0 top-0 h-[3px]"
-                    style={{ background: INK }}
-                  />
-                  {/* Left margin rule (notebook-style) */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-y-0 left-[44px] w-px"
-                    style={{ background: "oklch(0.82 0.04 25 / 0.5)" }}
-                  />
-
                   <div className="relative grid gap-6 p-6 md:grid-cols-[260px_1fr] md:items-center md:p-7">
                     {/* Big title block */}
                     <div className="flex flex-col gap-3">
