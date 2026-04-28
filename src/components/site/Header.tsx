@@ -14,6 +14,13 @@ import {
   Globe2,
   Star,
   TrendingUp,
+  ClipboardList,
+  GraduationCap,
+  Headphones,
+  Video,
+  Mic,
+  StickyNote,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBranding, LOGO_SIZE_PX } from "@/lib/admin/site-settings";
