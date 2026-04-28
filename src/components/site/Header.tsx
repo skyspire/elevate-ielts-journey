@@ -425,16 +425,23 @@ export function Header() {
                           />
                         )}
                         <span
-                          className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110"
+                          className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110 ${
+                            isFeatured ? "h-12 w-12" : "h-10 w-10"
+                          }`}
                           style={{
                             background: isSoon
                               ? `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`
                               : `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
-                            boxShadow: `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                            boxShadow: isFeatured
+                              ? `0 12px 28px -8px ${item.accent}99, 0 4px 10px -2px ${item.accent}60, inset 0 1px 0 oklch(1 0 0 / 0.5)`
+                              : `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
                             opacity: isSoon ? 0.85 : 1,
                           }}
                         >
-                          <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+                          <Icon
+                            className={isFeatured ? "h-6 w-6 text-white" : "h-5 w-5 text-white"}
+                            strokeWidth={2.4}
+                          />
                         </span>
                         <div className="relative min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
