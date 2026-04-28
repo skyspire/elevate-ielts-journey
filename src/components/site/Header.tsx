@@ -527,8 +527,6 @@ export function Header() {
                           e.currentTarget.style.borderColor = "transparent";
                           e.currentTarget.style.boxShadow = "none";
                         }}
-                          e.currentTarget.style.boxShadow = "none";
-                        }}
                       >
                         {inner}
                       </Link>
