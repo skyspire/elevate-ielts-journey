@@ -425,16 +425,23 @@ export function Header() {
                           />
                         )}
                         <span
-                          className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110"
+                          className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110 ${
+                            isFeatured ? "h-12 w-12" : "h-10 w-10"
+                          }`}
                           style={{
                             background: isSoon
                               ? `linear-gradient(140deg, color-mix(in oklab, ${item.accent} 55%, white) 0%, color-mix(in oklab, ${item.accent} 80%, black) 100%)`
                               : `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
-                            boxShadow: `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                            boxShadow: isFeatured
+                              ? `0 12px 28px -8px ${item.accent}99, 0 4px 10px -2px ${item.accent}60, inset 0 1px 0 oklch(1 0 0 / 0.5)`
+                              : `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
                             opacity: isSoon ? 0.85 : 1,
                           }}
                         >
-                          <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+                          <Icon
+                            className={isFeatured ? "h-6 w-6 text-white" : "h-5 w-5 text-white"}
+                            strokeWidth={2.4}
+                          />
                         </span>
                         <div className="relative min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
@@ -444,18 +451,6 @@ export function Header() {
                             >
                               {item.label}
                             </span>
-                            {isFeatured && (
-                              <span
-                                className="inline-flex items-center rounded-full px-1.5 py-[1px] text-[9px] font-black uppercase tracking-wider"
-                                style={{
-                                  background: `color-mix(in oklab, ${item.accent} 14%, white)`,
-                                  color: `color-mix(in oklab, ${item.accent} 75%, black)`,
-                                  boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${item.accent} 30%, white)`,
-                                }}
-                              >
-                                Popular
-                              </span>
-                            )}
                             {!isSoon && (
                               <ArrowRight
                                 className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover/item:translate-x-0 group-hover/item:opacity-100"
@@ -523,23 +518,13 @@ export function Header() {
                         to={item.to}
                         onClick={() => setMegaOpen(false)}
                         className={`${baseClass} hover:bg-[var(--mega-hover)]`}
-                        style={{
-                          ...cssVars,
-                          ...(isFeatured
-                            ? {
-                                background: `color-mix(in oklab, ${item.accent} 6%, white)`,
-                                borderColor: `color-mix(in oklab, ${item.accent} 22%, white)`,
-                              }
-                            : {}),
-                        }}
+                        style={cssVars}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.borderColor = `${item.accent}30`;
                           e.currentTarget.style.boxShadow = `0 8px 24px -12px ${item.accent}40`;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = isFeatured
-                            ? `color-mix(in oklab, ${item.accent} 22%, white)`
-                            : "transparent";
+                          e.currentTarget.style.borderColor = "transparent";
                           e.currentTarget.style.boxShadow = "none";
                         }}
                       >
