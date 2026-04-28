@@ -563,6 +563,31 @@ export function Header() {
               <div className="ml-2 flex flex-col gap-0.5 border-l pl-3" style={{ borderColor: HAIRLINE }}>
                 {resourceItems.map((item) => {
                   const Icon = item.icon;
+                  if (item.comingSoon) {
+                    return (
+                      <div
+                        key={item.label}
+                        aria-disabled="true"
+                        className="flex items-center justify-between gap-2 rounded-md px-3 py-2.5 text-[14px] font-semibold opacity-80"
+                        style={{ color: INK_SOFT }}
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <Icon className="h-4 w-4" style={{ color: item.accent }} />
+                          {item.label}
+                        </span>
+                        <span
+                          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider"
+                          style={{
+                            background: `color-mix(in oklab, ${item.accent} 15%, white)`,
+                            color: `color-mix(in oklab, ${item.accent} 75%, black)`,
+                          }}
+                        >
+                          <Clock className="h-3 w-3" />
+                          Soon
+                        </span>
+                      </div>
+                    );
+                  }
                   return (
                     <Link
                       key={item.label}
