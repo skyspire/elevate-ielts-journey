@@ -132,7 +132,7 @@ export function EverythingYouNeed() {
           {/* Paragraph + rubber stamp tucked to the right */}
           <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
             <p className="max-w-xl text-sm font-semibold text-foreground/75 sm:text-base sm:text-left">
-              Six focused resources, built by Band 9 examiners. No fluff, no
+              Six focused resources, built by our qualified IELTS team. No fluff, no
               recycled content — just what actually moves your score.
             </p>
             <RubberStamp />
