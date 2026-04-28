@@ -6,7 +6,9 @@ import {
   BRANDING_KEY,
   BRANDING_DEFAULT,
   THEME_FONT_OPTIONS,
+  LOGO_SIZE_OPTIONS,
   type Branding,
+  type LogoSize,
 } from "@/lib/admin/site-settings";
 import { useCmsEditor } from "@/lib/admin/cms-store";
 import { logActivity } from "@/lib/admin/activity-log";
@@ -42,6 +44,19 @@ function BrandingPage() {
           onChange={(e) => setDraft({ ...draft, logoText: e.target.value })}
           placeholder="BigIELTS.com"
         />
+      </Field>
+      <Field label="Logo size" hint="Controls the wheel mark size in the header.">
+        <select
+          value={draft.logoSize ?? "md"}
+          onChange={(e) => setDraft({ ...draft, logoSize: e.target.value as LogoSize })}
+          className="h-9 w-full max-w-md rounded-md border border-input bg-background px-3 text-sm"
+        >
+          {LOGO_SIZE_OPTIONS.map((o) => (
+            <option key={o.key} value={o.key}>
+              {o.label}
+            </option>
+          ))}
+        </select>
       </Field>
       <Field label="Primary color" hint="Used for buttons, accents and links.">
         <div className="flex items-center gap-3">

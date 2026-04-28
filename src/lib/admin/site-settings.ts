@@ -7,6 +7,8 @@ import { useCmsSection, getSection } from "@/lib/admin/cms-store";
 
 export const BRANDING_KEY = "branding";
 
+export type LogoSize = "sm" | "md" | "lg" | "xl";
+
 export type Branding = {
   /** Hex color, applied as primary tint via CSS vars on the public site. */
   primaryHex: string;
@@ -14,13 +16,31 @@ export type Branding = {
   fontKey: string;
   /** Logo wordmark text. */
   logoText: string;
+  /** Header logo mark size. */
+  logoSize: LogoSize;
 };
 
 export const BRANDING_DEFAULT: Branding = {
   primaryHex: "#3b6df7",
   fontKey: "inter",
   logoText: "BigIELTS.com",
+  logoSize: "md",
 };
+
+/** Pixel size for the logo mark in the header, by preset. */
+export const LOGO_SIZE_PX: Record<LogoSize, number> = {
+  sm: 32,
+  md: 40,
+  lg: 52,
+  xl: 64,
+};
+
+export const LOGO_SIZE_OPTIONS: { key: LogoSize; label: string }[] = [
+  { key: "sm", label: "Small (32px)" },
+  { key: "md", label: "Medium (40px) — default" },
+  { key: "lg", label: "Large (52px)" },
+  { key: "xl", label: "Extra Large (64px)" },
+];
 
 export const THEME_FONT_OPTIONS: { key: string; label: string; cssStack: string }[] = [
   { key: "inter", label: "Inter (default)", cssStack: '"Inter", ui-sans-serif, system-ui, sans-serif' },
