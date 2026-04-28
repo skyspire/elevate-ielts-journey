@@ -523,13 +523,23 @@ export function Header() {
                         to={item.to}
                         onClick={() => setMegaOpen(false)}
                         className={`${baseClass} hover:bg-[var(--mega-hover)]`}
-                        style={cssVars}
+                        style={{
+                          ...cssVars,
+                          ...(isFeatured
+                            ? {
+                                background: `color-mix(in oklab, ${item.accent} 6%, white)`,
+                                borderColor: `color-mix(in oklab, ${item.accent} 22%, white)`,
+                              }
+                            : {}),
+                        }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.borderColor = `${item.accent}30`;
                           e.currentTarget.style.boxShadow = `0 8px 24px -12px ${item.accent}40`;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = "transparent";
+                          e.currentTarget.style.borderColor = isFeatured
+                            ? `color-mix(in oklab, ${item.accent} 22%, white)`
+                            : "transparent";
                           e.currentTarget.style.boxShadow = "none";
                         }}
                       >
