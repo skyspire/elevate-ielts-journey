@@ -84,6 +84,8 @@ export function Header() {
   const [megaOpen, setMegaOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
+  const branding = useBranding();
+  const logoPx = LOGO_SIZE_PX[branding.logoSize ?? "md"];
 
   // Close the mega menu on route change
   useEffect(() => {
@@ -119,12 +121,12 @@ export function Header() {
       <div className="container-page flex h-[68px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5">
-          <span
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-white"
-            style={{ backgroundColor: INK }}
-          >
-            <GraduationCap className="h-5 w-5" strokeWidth={2.75} />
-          </span>
+          <img
+            src={logoWheel}
+            alt="BigIELTS logo"
+            style={{ height: logoPx, width: logoPx }}
+            className="object-contain"
+          />
           <span
             className="font-display text-[20px] font-extrabold tracking-tight"
             style={{ color: INK }}
