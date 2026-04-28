@@ -351,7 +351,7 @@ export function Header() {
                             key={item.label}
                             to={item.to}
                             onClick={() => setMegaOpen(false)}
-                            className="group/item relative flex items-start gap-3 overflow-hidden rounded-xl border border-transparent p-3.5 transition-all hover:bg-[var(--mega-hover)]"
+                            className="group/item relative flex h-full flex-col gap-3 overflow-hidden rounded-xl border border-transparent p-4 transition-all hover:bg-[var(--mega-hover)]"
                             style={
                               {
                                 ["--mega-hover" as string]: HOVER_BG,
@@ -367,7 +367,7 @@ export function Header() {
                             }}
                           >
                             <span
-                              className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110"
+                              className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-transform duration-300 group-hover/item:scale-110"
                               style={{
                                 background: `radial-gradient(circle at 30% 25%, oklch(1 0 0 / 0.3), transparent 50%), linear-gradient(140deg, ${item.accent} 0%, color-mix(in oklab, ${item.accent} 70%, black) 100%)`,
                                 boxShadow: `0 6px 14px -6px ${item.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
@@ -376,7 +376,7 @@ export function Header() {
                               <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
                             </span>
                             <div className="min-w-0 flex-1">
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1.5">
                                 <span
                                   className="font-display text-[14px] font-black leading-tight"
                                   style={{ color: INK }}
@@ -389,13 +389,13 @@ export function Header() {
                                 />
                               </div>
                               <p
-                                className="mt-1 text-[12px] font-medium leading-snug"
+                                className="mt-1.5 text-[12px] font-medium leading-snug"
                                 style={{ color: INK_SOFT }}
                               >
                                 {item.description}
                               </p>
                               <div
-                                className="mt-1.5 inline-flex items-center text-[10px] font-bold uppercase tracking-wider"
+                                className="mt-2 inline-flex items-center text-[10px] font-bold uppercase tracking-wider"
                                 style={{ color: item.accent }}
                               >
                                 {item.meta}
