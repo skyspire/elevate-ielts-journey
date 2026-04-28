@@ -342,63 +342,8 @@ export function Header() {
               className="absolute inset-x-0 top-full z-50 hidden border-b bg-white shadow-2xl lg:block"
               style={{ borderColor: HAIRLINE }}
             >
-              <div className="container-page py-10">
-                <div className="grid grid-cols-12 gap-8">
-                  {/* Left: heading + intro */}
-                  <div className="col-span-3">
-                    <span
-                      className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
-                      style={{
-                        background: "oklch(0.95 0.04 290)",
-                        color: "oklch(0.4 0.15 290)",
-                      }}
-                    >
-                      <Sparkles className="h-3 w-3" />
-                      Everything for Band 8+
-                    </span>
-                    <h3
-                      className="mt-4 font-display text-2xl font-black leading-tight tracking-tight"
-                      style={{ color: INK }}
-                    >
-                      Five focused resources, one subscription.
-                    </h3>
-                    <p
-                      className="mt-3 text-sm font-semibold leading-relaxed"
-                      style={{ color: INK_SOFT }}
-                    >
-                      Built by certified Band 9 examiners. No fluff, no recycled
-                      content — just what moves your score.
-                    </p>
-
-                    {/* Trust strip */}
-                    <div className="mt-6 space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
-                        <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                        <span className="font-black">4.9/5</span>
-                        <span style={{ color: INK_SOFT }}>· 2,400+ learners</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
-                        <Globe2 className="h-3.5 w-3.5" style={{ color: "oklch(0.55 0.16 255)" }} />
-                        <span className="font-black">40+</span>
-                        <span style={{ color: INK_SOFT }}>countries</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs font-semibold" style={{ color: INK }}>
-                        <TrendingUp className="h-3.5 w-3.5" style={{ color: "oklch(0.55 0.14 165)" }} />
-                        <span className="font-black">+1.2 bands</span>
-                        <span style={{ color: INK_SOFT }}>average uplift</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Middle: resource grid */}
-                  <div className="col-span-6">
-                    <div
-                      className="mb-3 text-[11px] font-black uppercase tracking-widest"
-                      style={{ color: INK_SOFT }}
-                    >
-                      Resources
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
+              <div className="container-page py-8">
+                <div className="grid grid-cols-5 gap-3">
                       {resourceItems.map((item) => {
                         const Icon = item.icon;
                         return (
