@@ -31,14 +31,20 @@ const INK_SOFT = "oklch(0.45 0.01 250)";
 const HAIRLINE = "oklch(0.92 0.003 250)";
 const HOVER_BG = "oklch(0.97 0.003 250)";
 
+type ResourceLink =
+  | "/recent-exam-questions"
+  | "/predictions"
+  | "/ebooks"
+  | "/writing-samples"
+  | "/vocabulary";
+
 type ResourceItem = {
   label: string;
-  to: "/recent-exam-questions" | "/predictions" | "/ebooks" | "/writing-samples" | "/vocabulary";
   description: string;
   icon: typeof FileText;
   accent: string;
   meta: string;
-};
+} & ({ to: ResourceLink; comingSoon?: false } | { to?: undefined; comingSoon: true });
 
 const resourceItems: ResourceItem[] = [
   {
@@ -80,6 +86,54 @@ const resourceItems: ResourceItem[] = [
     icon: Library,
     accent: "oklch(0.6 0.16 230)",
     meta: "30 topics",
+  },
+  {
+    label: "Quizzes",
+    description: "Bite-size band-targeted quizzes for grammar, vocab and reading.",
+    icon: ClipboardList,
+    accent: "oklch(0.62 0.17 145)",
+    meta: "Coming soon",
+    comingSoon: true,
+  },
+  {
+    label: "Assignments",
+    description: "Guided weekly assignments with personalised examiner feedback.",
+    icon: GraduationCap,
+    accent: "oklch(0.55 0.18 25)",
+    meta: "Coming soon",
+    comingSoon: true,
+  },
+  {
+    label: "Audio Courses",
+    description: "Listen-on-the-go lessons covering every IELTS skill.",
+    icon: Headphones,
+    accent: "oklch(0.6 0.16 195)",
+    meta: "Coming soon",
+    comingSoon: true,
+  },
+  {
+    label: "Video Courses",
+    description: "Structured video classes from certified Band 9 examiners.",
+    icon: Video,
+    accent: "oklch(0.55 0.2 15)",
+    meta: "Coming soon",
+    comingSoon: true,
+  },
+  {
+    label: "Podcasts",
+    description: "Weekly episodes on test strategy, mindset and real exam stories.",
+    icon: Mic,
+    accent: "oklch(0.55 0.18 305)",
+    meta: "Coming soon",
+    comingSoon: true,
+  },
+  {
+    label: "Study Notes",
+    description: "Printable cheat-sheets and one-page summaries for every topic.",
+    icon: StickyNote,
+    accent: "oklch(0.6 0.15 75)",
+    meta: "Coming soon",
+    comingSoon: true,
   },
 ];
 
