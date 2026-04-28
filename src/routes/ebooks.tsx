@@ -13,13 +13,13 @@ export const Route = createFileRoute("/ebooks")({
       {
         name: "description",
         content:
-          "Read IELTS e-books in a beautiful Kindle-style reader. Writing frameworks, speaking cue cards, vocabulary and grammar — by Band 9 examiners.",
+          "Read IELTS e-books in a beautiful Kindle-style reader. Writing frameworks, speaking cue cards, vocabulary and grammar — by our qualified IELTS team.",
       },
       { property: "og:title", content: "IELTS E-Book Library — BigIELTS" },
       {
         property: "og:description",
         content:
-          "A bookshelf of IELTS e-books — written by Band 9 examiners, read in a beautiful in-browser reader.",
+          "A bookshelf of IELTS e-books — written by our qualified IELTS team, read in a beautiful in-browser reader.",
       },
     ],
   }),

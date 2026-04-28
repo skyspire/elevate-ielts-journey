@@ -46,7 +46,7 @@ const FEATURES: Feature[] = [
     key: "ebooks",
     label: "E-Books for Serious Study",
     description:
-      "Deep-dive guides written by Band 9 examiners — frameworks, vocabulary, pronunciation, grammar.",
+      "Deep-dive guides written by our qualified IELTS team — frameworks, vocabulary, pronunciation, grammar.",
     icon: BookOpen,
     accent: "oklch(0.62 0.16 35)",
     accentDeep: "oklch(0.45 0.17 30)",
@@ -57,7 +57,7 @@ const FEATURES: Feature[] = [
     key: "samples",
     label: "Writing & Speaking Samples",
     description:
-      "Hundreds of Band 8 & 9 model answers with examiner annotations — see what scores really look like.",
+      "Hundreds of Band 8 & 9 model answers with expert annotations — see what scores really look like.",
     icon: PenLine,
     accent: "oklch(0.55 0.14 165)",
     accentDeep: "oklch(0.4 0.15 165)",

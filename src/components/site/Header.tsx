@@ -66,7 +66,7 @@ const resourceItems: ResourceItem[] = [
   {
     label: "E-books",
     to: "/ebooks",
-    description: "Deep-dive PDF guides written by certified Band 9 examiners.",
+    description: "Deep-dive PDF guides written by our qualified IELTS team.",
     icon: BookOpen,
     accent: "oklch(0.62 0.16 35)",
     meta: "12 titles",
@@ -74,7 +74,7 @@ const resourceItems: ResourceItem[] = [
   {
     label: "Band 8+ Sample Answers",
     to: "/writing-samples",
-    description: "Annotated Writing & Speaking models with examiner notes.",
+    description: "Annotated Writing & Speaking models with expert notes.",
     icon: PenLine,
     accent: "oklch(0.55 0.14 165)",
     meta: "600+ samples",
@@ -97,7 +97,7 @@ const resourceItems: ResourceItem[] = [
   },
   {
     label: "Assignments",
-    description: "Guided weekly assignments with personalised examiner feedback.",
+    description: "Guided weekly assignments with personalised expert feedback.",
     icon: GraduationCap,
     accent: "oklch(0.55 0.18 25)",
     meta: "Coming soon",
@@ -113,7 +113,7 @@ const resourceItems: ResourceItem[] = [
   },
   {
     label: "Video Courses",
-    description: "Structured video classes from certified Band 9 examiners.",
+    description: "Structured video classes from our qualified IELTS team.",
     icon: Video,
     accent: "oklch(0.55 0.2 15)",
     meta: "Coming soon",

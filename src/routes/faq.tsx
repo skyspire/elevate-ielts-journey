@@ -38,7 +38,7 @@ const FAQS = [
   },
   {
     q: "Who writes the sample answers?",
-    a: "All Band 8+ sample answers are written and graded by certified IELTS examiners with at least 5 years of marking experience.",
+    a: "All Band 8+ sample answers are written and graded by our qualified IELTS team — IELTS specialists with at least 5 years of teaching and marking experience.",
   },
   {
     q: "Can I cancel my subscription anytime?",
