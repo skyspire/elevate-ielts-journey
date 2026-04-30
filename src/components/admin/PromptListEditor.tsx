@@ -300,8 +300,19 @@ export function PromptListEditor({
       {/* Add new */}
       <div className="rounded-xl border border-dashed border-border bg-muted/30 p-4">
         <div className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Add a new prompt
+          {isTask1 ? "Step 1 — Write the question" : "Add a new prompt"}
         </div>
+        {isTask1 && (
+          <p className="mb-3 text-xs text-muted-foreground">
+            After saving the question, the answer editor opens automatically so you can
+            <strong className="mx-1 font-semibold text-foreground">
+              upload the chart / map image
+            </strong>
+            and
+            <strong className="mx-1 font-semibold text-foreground">write the full model answer</strong>
+            in one flow.
+          </p>
+        )}
         <Textarea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -312,7 +323,7 @@ export function PromptListEditor({
         <div className="mt-2 flex justify-end">
           <Button size="sm" onClick={addItem} disabled={!draft.trim()}>
             <Plus className="mr-1.5 h-3.5 w-3.5" />
-            Add prompt
+            {isTask1 ? "Add question & open answer editor" : "Add prompt"}
           </Button>
         </div>
       </div>
