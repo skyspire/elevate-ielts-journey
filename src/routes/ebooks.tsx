@@ -1,10 +1,17 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
 import { BookOpen } from "lucide-react";
-import { ebooks, type EbookCategory } from "@/data/ebooks";
+import { type EbookCategory } from "@/data/ebooks";
 import { useEffect, useMemo, useState } from "react";
 import { getReaderState } from "@/lib/ebook-storage";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import {
+  EBOOKS_KEY,
+  EBOOKS_DEFAULT,
+  resolvePublicEbooks,
+  type EbooksStore,
+} from "@/lib/admin/ebooks-store";
 
 export const Route = createFileRoute("/ebooks")({
   head: () => ({
