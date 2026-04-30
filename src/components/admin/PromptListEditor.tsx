@@ -176,6 +176,9 @@ export function PromptListEditor({
       message: `Added prompt: "${truncate(text)}"`,
       area: areaPath,
     });
+    // Task 1: jump straight into the answer editor so admin can upload the
+    // chart/map image and write the model answer in one flow.
+    if (isTask1) setOpenAnswerIndex(newIndex);
   };
 
   const removeItem = (i: number) => {
