@@ -147,9 +147,11 @@ function CoverMotif({ category }: { category: EbookCategory }) {
 
 function EbooksPage() {
   const [category, setCategory] = useState<"All" | EbookCategory>("All");
+  const store = useCmsSection<EbooksStore>(EBOOKS_KEY, EBOOKS_DEFAULT);
+  const ebooks = useMemo(() => resolvePublicEbooks(store), [store]);
   const filtered = useMemo(
     () => (category === "All" ? ebooks : ebooks.filter((b) => b.category === category)),
-    [category],
+    [category, ebooks],
   );
   const matches = useMatches();
   const hasChildMatch = matches.some(
@@ -171,7 +173,7 @@ function EbooksPage() {
       }
     }
     setProgressMap(next);
-  }, [userId]);
+  }, [userId, ebooks]);
 
   if (hasChildMatch) {
     return <Outlet />;
