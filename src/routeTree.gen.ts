@@ -37,6 +37,7 @@ import { Route as AdminSpeakingRouteImport } from './routes/admin.speaking'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
 import { Route as AdminOfferBarRouteImport } from './routes/admin.offer-bar'
+import { Route as AdminMonetizationRouteImport } from './routes/admin.monetization'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHomepageRouteImport } from './routes/admin.homepage'
 import { Route as AdminHeroRouteImport } from './routes/admin.hero'
@@ -199,6 +200,11 @@ const AdminOfferBarRoute = AdminOfferBarRouteImport.update({
   path: '/offer-bar',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMonetizationRoute = AdminMonetizationRouteImport.update({
+  id: '/monetization',
+  path: '/monetization',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -333,6 +339,7 @@ export interface FileRoutesByFullPath {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
@@ -382,6 +389,7 @@ export interface FileRoutesByTo {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
@@ -433,6 +441,7 @@ export interface FileRoutesById {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
@@ -485,6 +494,7 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/pricing'
     | '/admin/seo'
@@ -534,6 +544,7 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/pricing'
     | '/admin/seo'
@@ -584,6 +595,7 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/pricing'
     | '/admin/seo'
@@ -827,6 +839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOfferBarRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/monetization': {
+      id: '/admin/monetization'
+      path: '/monetization'
+      fullPath: '/admin/monetization'
+      preLoaderRoute: typeof AdminMonetizationRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -983,6 +1002,7 @@ interface AdminRouteChildren {
   AdminHeroRoute: typeof AdminHeroRoute
   AdminHomepageRoute: typeof AdminHomepageRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminMonetizationRoute: typeof AdminMonetizationRoute
   AdminOfferBarRoute: typeof AdminOfferBarRoute
   AdminPricingRoute: typeof AdminPricingRoute
   AdminSeoRoute: typeof AdminSeoRoute
@@ -1014,6 +1034,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminHeroRoute: AdminHeroRoute,
   AdminHomepageRoute: AdminHomepageRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminMonetizationRoute: AdminMonetizationRoute,
   AdminOfferBarRoute: AdminOfferBarRoute,
   AdminPricingRoute: AdminPricingRoute,
   AdminSeoRoute: AdminSeoRoute,
