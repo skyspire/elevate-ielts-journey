@@ -285,7 +285,8 @@ type LeafProps = {
     | "/admin/homepage"
     | "/admin/seo"
     | "/admin/offer-bar"
-    | "/admin/banner";
+    | "/admin/banner"
+    | "/admin/accounts";
   icon: typeof LayoutDashboard;
   label: string;
   exact?: boolean;
