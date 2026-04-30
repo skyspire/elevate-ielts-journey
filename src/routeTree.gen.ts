@@ -47,6 +47,7 @@ import { Route as AdminContactRouteImport } from './routes/admin.contact'
 import { Route as AdminBrandingRouteImport } from './routes/admin.branding'
 import { Route as AdminBannerRouteImport } from './routes/admin.banner'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
+import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminContentIndexRouteImport } from './routes/admin.content.index'
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 import { Route as AdminContentResourcesIndexRouteImport } from './routes/admin.content.resources.index'
@@ -247,6 +248,11 @@ const AdminActivityRoute = AdminActivityRouteImport.update({
   path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAccountsRoute = AdminAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
   id: '/content/',
   path: '/content/',
@@ -309,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
@@ -356,6 +363,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
@@ -405,6 +413,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/vocabulary': typeof VocabularyRouteWithChildren
+  '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/vocabulary'
+    | '/admin/accounts'
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
@@ -502,6 +512,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/vocabulary'
+    | '/admin/accounts'
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
@@ -550,6 +561,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/terms'
     | '/vocabulary'
+    | '/admin/accounts'
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
@@ -873,6 +885,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/accounts': {
+      id: '/admin/accounts'
+      path: '/accounts'
+      fullPath: '/admin/accounts'
+      preLoaderRoute: typeof AdminAccountsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/content/': {
       id: '/admin/content/'
       path: '/content'
@@ -933,6 +952,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAccountsRoute: typeof AdminAccountsRoute
   AdminActivityRoute: typeof AdminActivityRoute
   AdminBannerRoute: typeof AdminBannerRoute
   AdminBrandingRoute: typeof AdminBrandingRoute
@@ -962,6 +982,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAccountsRoute: AdminAccountsRoute,
   AdminActivityRoute: AdminActivityRoute,
   AdminBannerRoute: AdminBannerRoute,
   AdminBrandingRoute: AdminBrandingRoute,
