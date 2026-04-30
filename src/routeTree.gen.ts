@@ -51,6 +51,7 @@ import { Route as AdminContentIndexRouteImport } from './routes/admin.content.in
 import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 import { Route as AdminContentResourcesIndexRouteImport } from './routes/admin.content.resources.index'
 import { Route as AdminContentModuleIndexRouteImport } from './routes/admin.content.$module.index'
+import { Route as AdminContentResourcesResourceRouteImport } from './routes/admin.content.resources.$resource'
 import { Route as AdminContentModuleSkillIndexRouteImport } from './routes/admin.content.$module.$skill.index'
 import { Route as AdminContentModuleSkillSectionIndexRouteImport } from './routes/admin.content.$module.$skill.$section.index'
 import { Route as AdminContentModuleSkillSectionTypeRouteImport } from './routes/admin.content.$module.$skill.$section.$type'
@@ -268,6 +269,12 @@ const AdminContentModuleIndexRoute = AdminContentModuleIndexRouteImport.update({
   path: '/content/$module/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContentResourcesResourceRoute =
+  AdminContentResourcesResourceRouteImport.update({
+    id: '/content/resources/$resource',
+    path: '/content/resources/$resource',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminContentModuleSkillIndexRoute =
   AdminContentModuleSkillIndexRouteImport.update({
     id: '/content/$module/$skill/',
@@ -328,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content/': typeof AdminContentIndexRoute
+  '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module/': typeof AdminContentModuleIndexRoute
   '/admin/content/resources/': typeof AdminContentResourcesIndexRoute
   '/admin/content/$module/$skill/': typeof AdminContentModuleSkillIndexRoute
@@ -374,6 +382,7 @@ export interface FileRoutesByTo {
   '/writing-samples': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content': typeof AdminContentIndexRoute
+  '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module': typeof AdminContentModuleIndexRoute
   '/admin/content/resources': typeof AdminContentResourcesIndexRoute
   '/admin/content/$module/$skill': typeof AdminContentModuleSkillIndexRoute
@@ -422,6 +431,7 @@ export interface FileRoutesById {
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content/': typeof AdminContentIndexRoute
+  '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module/': typeof AdminContentModuleIndexRoute
   '/admin/content/resources/': typeof AdminContentResourcesIndexRoute
   '/admin/content/$module/$skill/': typeof AdminContentModuleSkillIndexRoute
@@ -471,6 +481,7 @@ export interface FileRouteTypes {
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
     | '/admin/content/'
+    | '/admin/content/resources/$resource'
     | '/admin/content/$module/'
     | '/admin/content/resources/'
     | '/admin/content/$module/$skill/'
@@ -517,6 +528,7 @@ export interface FileRouteTypes {
     | '/writing-samples'
     | '/speaking-samples/$category/$topic'
     | '/admin/content'
+    | '/admin/content/resources/$resource'
     | '/admin/content/$module'
     | '/admin/content/resources'
     | '/admin/content/$module/$skill'
@@ -564,6 +576,7 @@ export interface FileRouteTypes {
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
     | '/admin/content/'
+    | '/admin/content/resources/$resource'
     | '/admin/content/$module/'
     | '/admin/content/resources/'
     | '/admin/content/$module/$skill/'
@@ -888,6 +901,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContentModuleIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/content/resources/$resource': {
+      id: '/admin/content/resources/$resource'
+      path: '/content/resources/$resource'
+      fullPath: '/admin/content/resources/$resource'
+      preLoaderRoute: typeof AdminContentResourcesResourceRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/content/$module/$skill/': {
       id: '/admin/content/$module/$skill/'
       path: '/content/$module/$skill'
@@ -933,6 +953,7 @@ interface AdminRouteChildren {
   AdminWritingRoute: typeof AdminWritingRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminContentIndexRoute: typeof AdminContentIndexRoute
+  AdminContentResourcesResourceRoute: typeof AdminContentResourcesResourceRoute
   AdminContentModuleIndexRoute: typeof AdminContentModuleIndexRoute
   AdminContentResourcesIndexRoute: typeof AdminContentResourcesIndexRoute
   AdminContentModuleSkillIndexRoute: typeof AdminContentModuleSkillIndexRoute
@@ -961,6 +982,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminWritingRoute: AdminWritingRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminContentIndexRoute: AdminContentIndexRoute,
+  AdminContentResourcesResourceRoute: AdminContentResourcesResourceRoute,
   AdminContentModuleIndexRoute: AdminContentModuleIndexRoute,
   AdminContentResourcesIndexRoute: AdminContentResourcesIndexRoute,
   AdminContentModuleSkillIndexRoute: AdminContentModuleSkillIndexRoute,
