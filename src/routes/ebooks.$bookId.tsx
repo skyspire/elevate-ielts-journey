@@ -19,6 +19,14 @@ import {
 import { getEbookById, flattenPages } from "@/data/ebooks";
 import { useReaderPrefs, useReaderState, type Highlight } from "@/lib/ebook-storage";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import {
+  EBOOKS_KEY,
+  EBOOKS_DEFAULT,
+  resolvePublicEbooks,
+  type EbooksStore,
+} from "@/lib/admin/ebooks-store";
+import { PdfReaderView } from "@/components/site/PdfReaderView";
 
 export const Route = createFileRoute("/ebooks/$bookId")({
   head: ({ params }) => {
