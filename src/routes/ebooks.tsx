@@ -293,8 +293,15 @@ function EbooksPage() {
                       backfaceVisibility: "hidden",
                     }}
                   >
-                    {/* abstract motif tied to category */}
-                    <CoverMotif category={book.category} />
+                    {book.coverImageDataUrl ? (
+                      <img
+                        src={book.coverImageDataUrl}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    ) : (
+                      <CoverMotif category={book.category} />
+                    )}
 
                     {/* spine shadow */}
                     <div
