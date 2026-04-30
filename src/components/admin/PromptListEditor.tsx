@@ -119,6 +119,7 @@ export function PromptListEditor({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [openAnswerIndex, setOpenAnswerIndex] = useState<number | null>(null);
+  const isTask1 = enableAnswers && showAnswerImage;
 
   // Modals
   const [diffFor, setDiffFor] = useState<{ index: number; current: string; original: string } | null>(null);
