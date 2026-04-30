@@ -44,6 +44,7 @@ import { Route as AdminFooterRouteImport } from './routes/admin.footer'
 import { Route as AdminFaqRouteImport } from './routes/admin.faq'
 import { Route as AdminDataRouteImport } from './routes/admin.data'
 import { Route as AdminContactRouteImport } from './routes/admin.contact'
+import { Route as AdminCommunicationsRouteImport } from './routes/admin.communications'
 import { Route as AdminBrandingRouteImport } from './routes/admin.branding'
 import { Route as AdminBannerRouteImport } from './routes/admin.banner'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
@@ -233,6 +234,11 @@ const AdminContactRoute = AdminContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCommunicationsRoute = AdminCommunicationsRouteImport.update({
+  id: '/communications',
+  path: '/communications',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBrandingRoute = AdminBrandingRouteImport.update({
   id: '/branding',
   path: '/branding',
@@ -319,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
+  '/admin/communications': typeof AdminCommunicationsRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
@@ -367,6 +374,7 @@ export interface FileRoutesByTo {
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
+  '/admin/communications': typeof AdminCommunicationsRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
@@ -417,6 +425,7 @@ export interface FileRoutesById {
   '/admin/activity': typeof AdminActivityRoute
   '/admin/banner': typeof AdminBannerRoute
   '/admin/branding': typeof AdminBrandingRoute
+  '/admin/communications': typeof AdminCommunicationsRoute
   '/admin/contact': typeof AdminContactRoute
   '/admin/data': typeof AdminDataRoute
   '/admin/faq': typeof AdminFaqRoute
@@ -468,6 +477,7 @@ export interface FileRouteTypes {
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
+    | '/admin/communications'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
+    | '/admin/communications'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
@@ -565,6 +576,7 @@ export interface FileRouteTypes {
     | '/admin/activity'
     | '/admin/banner'
     | '/admin/branding'
+    | '/admin/communications'
     | '/admin/contact'
     | '/admin/data'
     | '/admin/faq'
@@ -864,6 +876,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContactRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/communications': {
+      id: '/admin/communications'
+      path: '/communications'
+      fullPath: '/admin/communications'
+      preLoaderRoute: typeof AdminCommunicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/branding': {
       id: '/admin/branding'
       path: '/branding'
@@ -956,6 +975,7 @@ interface AdminRouteChildren {
   AdminActivityRoute: typeof AdminActivityRoute
   AdminBannerRoute: typeof AdminBannerRoute
   AdminBrandingRoute: typeof AdminBrandingRoute
+  AdminCommunicationsRoute: typeof AdminCommunicationsRoute
   AdminContactRoute: typeof AdminContactRoute
   AdminDataRoute: typeof AdminDataRoute
   AdminFaqRoute: typeof AdminFaqRoute
@@ -986,6 +1006,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminActivityRoute: AdminActivityRoute,
   AdminBannerRoute: AdminBannerRoute,
   AdminBrandingRoute: AdminBrandingRoute,
+  AdminCommunicationsRoute: AdminCommunicationsRoute,
   AdminContactRoute: AdminContactRoute,
   AdminDataRoute: AdminDataRoute,
   AdminFaqRoute: AdminFaqRoute,
