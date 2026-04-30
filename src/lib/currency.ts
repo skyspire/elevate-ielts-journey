@@ -232,3 +232,14 @@ export const CURRENCY_GROUPS: { label: string; codes: CurrencyCode[] }[] = [
   },
   { label: "Oceania", codes: ["AUD", "NZD", "FJD"] },
 ];
+
+// Resolve a plan's effective price for a given currency, honoring admin overrides.
+export function getPlanPrice(
+  planKey: PlanKey,
+  currency: CurrencyCode,
+  overrides?: Record<string, number>,
+): number {
+  const o = overrides?.[currency];
+  if (typeof o === "number" && !Number.isNaN(o) && o > 0) return o;
+  return PRICES[planKey][currency];
+}
