@@ -9,7 +9,6 @@ import {
   Layout,
   BookOpen,
   MessageSquare,
-  Library,
   Users,
   LogOut,
   ExternalLink,
@@ -23,6 +22,7 @@ import {
 } from "lucide-react";
 import { useSession, canManageUsers } from "@/lib/admin/auth";
 import { CONTENT_MODULES } from "@/lib/admin/content-tree";
+import { RESOURCES } from "@/lib/admin/resources-tree";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -212,7 +212,17 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
           );
         })}
 
-        <Leaf to="/admin/vocabulary" icon={Library} label="Vocabulary" />
+        {/* Resources */}
+        <Group
+          icon={Folder}
+          label="Resources"
+          to="/admin/content/resources"
+          defaultOpen={currentPath.startsWith("/admin/content/resources")}
+        >
+          {RESOURCES.map((r) => (
+            <ResourceLeaf key={r.id} resourceId={r.id} label={r.label} status={r.status} />
+          ))}
+        </Group>
       </Section>
 
       {/* Site / Homepage */}
@@ -332,6 +342,39 @@ function TypeLeaf({
   );
 }
 
+// Typed link to /admin/content/resources/$resource
+function ResourceLeaf({
+  resourceId,
+  label,
+  status,
+}: {
+  resourceId: string;
+  label: string;
+  status: "live" | "coming-soon";
+}) {
+  return (
+    <li style={{ paddingLeft: 36 }}>
+      <Link
+        to="/admin/content/resources/$resource"
+        params={{ resource: resourceId }}
+        className="flex items-center gap-2 rounded-md px-2.5 py-1 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        activeProps={{
+          className:
+            "flex items-center gap-2 rounded-md px-2.5 py-1 text-[13px] font-semibold bg-foreground/10 text-foreground",
+        }}
+      >
+        <span className="h-1 w-1 rounded-full bg-current opacity-50" />
+        <span className="truncate">{label}</span>
+        {status === "coming-soon" && (
+          <span className="ml-auto rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
+            Soon
+          </span>
+        )}
+      </Link>
+    </li>
+  );
+}
+
 type GroupProps = {
   icon: typeof LayoutDashboard;
   label: string;
@@ -339,7 +382,8 @@ type GroupProps = {
     | "/admin/content"
     | "/admin/content/$module"
     | "/admin/content/$module/$skill"
-    | "/admin/content/$module/$skill/$section";
+    | "/admin/content/$module/$skill/$section"
+    | "/admin/content/resources";
   params?: Record<string, string>;
   defaultOpen?: boolean;
   indent?: boolean;
