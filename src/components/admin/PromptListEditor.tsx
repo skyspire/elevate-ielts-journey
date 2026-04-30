@@ -119,6 +119,7 @@ export function PromptListEditor({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [openAnswerIndex, setOpenAnswerIndex] = useState<number | null>(null);
+  const isTask1 = enableAnswers && showAnswerImage;
 
   // Modals
   const [diffFor, setDiffFor] = useState<{ index: number; current: string; original: string } | null>(null);
@@ -175,6 +176,9 @@ export function PromptListEditor({
       message: `Added prompt: "${truncate(text)}"`,
       area: areaPath,
     });
+    // Task 1: jump straight into the answer editor so admin can upload the
+    // chart/map image and write the model answer in one flow.
+    if (isTask1) setOpenAnswerIndex(newIndex);
   };
 
   const removeItem = (i: number) => {
@@ -296,8 +300,19 @@ export function PromptListEditor({
       {/* Add new */}
       <div className="rounded-xl border border-dashed border-border bg-muted/30 p-4">
         <div className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          Add a new prompt
+          {isTask1 ? "Step 1 — Write the question" : "Add a new prompt"}
         </div>
+        {isTask1 && (
+          <p className="mb-3 text-xs text-muted-foreground">
+            After saving the question, the answer editor opens automatically so you can
+            <strong className="mx-1 font-semibold text-foreground">
+              upload the chart / map image
+            </strong>
+            and
+            <strong className="mx-1 font-semibold text-foreground">write the full model answer</strong>
+            in one flow.
+          </p>
+        )}
         <Textarea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -308,7 +323,7 @@ export function PromptListEditor({
         <div className="mt-2 flex justify-end">
           <Button size="sm" onClick={addItem} disabled={!draft.trim()}>
             <Plus className="mr-1.5 h-3.5 w-3.5" />
-            Add prompt
+            {isTask1 ? "Add question & open answer editor" : "Add prompt"}
           </Button>
         </div>
       </div>
@@ -360,6 +375,14 @@ export function PromptListEditor({
                     onUp={() => move(i, -1)}
                     onDown={() => move(i, 1)}
                   />
+                  {/* Task 1: inline thumbnail of the uploaded chart/map */}
+                  {isTask1 && answerOverrides[questionId]?.imageDataUrl && (
+                    <img
+                      src={answerOverrides[questionId]!.imageDataUrl}
+                      alt="Question visual"
+                      className="h-16 w-20 shrink-0 rounded-md border border-border object-cover"
+                    />
+                  )}
                   <div className="min-w-0 flex-1">
                     {editing ? (
                       <Textarea
@@ -379,6 +402,11 @@ export function PromptListEditor({
                         <div className="mt-2 flex flex-wrap items-center gap-1.5">
                           <StatusBadge status={status} />
                           {enableAnswers && <AnswerStatusBadge status={answerStatus} />}
+                          {isTask1 && !answerOverrides[questionId]?.imageDataUrl && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                              No image
+                            </span>
+                          )}
                           {promptDiffers && (
                             <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/30 bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
                               Edited
