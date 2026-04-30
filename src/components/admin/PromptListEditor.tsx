@@ -375,6 +375,14 @@ export function PromptListEditor({
                     onUp={() => move(i, -1)}
                     onDown={() => move(i, 1)}
                   />
+                  {/* Task 1: inline thumbnail of the uploaded chart/map */}
+                  {isTask1 && answerOverrides[questionId]?.imageDataUrl && (
+                    <img
+                      src={answerOverrides[questionId]!.imageDataUrl}
+                      alt="Question visual"
+                      className="h-16 w-20 shrink-0 rounded-md border border-border object-cover"
+                    />
+                  )}
                   <div className="min-w-0 flex-1">
                     {editing ? (
                       <Textarea
@@ -394,6 +402,11 @@ export function PromptListEditor({
                         <div className="mt-2 flex flex-wrap items-center gap-1.5">
                           <StatusBadge status={status} />
                           {enableAnswers && <AnswerStatusBadge status={answerStatus} />}
+                          {isTask1 && !answerOverrides[questionId]?.imageDataUrl && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                              No image
+                            </span>
+                          )}
                           {promptDiffers && (
                             <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/30 bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
                               Edited
