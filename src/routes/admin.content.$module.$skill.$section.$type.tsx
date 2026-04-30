@@ -43,12 +43,17 @@ export const Route = createFileRoute("/admin/content/$module/$skill/$section/$ty
 // Combined defaults for the writing prompts record.
 // task2Prompts: keyed by essay type (opinion, discussion, …) — shared by both modules.
 // task1GeneralPrompts: keyed by formal / informal — General Training Task 1.
-// Academic Task 1 keys (graphs, process) start empty so admins can fill them in.
+// Academic Task 1 keys start empty so admins can fill them in.
 const WRITING_DEFAULTS: Record<string, string[]> = {
   ...task2Prompts,
   ...task1GeneralPrompts,
-  graphs: [],
-  process: [],
+  "line-graph": [],
+  "bar-chart": [],
+  "pie-chart": [],
+  "table": [],
+  "process-diagram": [],
+  "map": [],
+  "multiple-charts": [],
 };
 
 function QuestionTypeEditor() {

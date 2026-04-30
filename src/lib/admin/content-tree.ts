@@ -68,8 +68,13 @@ const writingTask2: QuestionType[] = [
 // ───────── Writing — Academic Task 1 ─────────
 // Mirrors categoriesByModuleTask.academic.task1 in writing-samples.index.tsx
 const academicWritingTask1: QuestionType[] = [
-  { id: "graphs", label: "Graphs & Charts", hint: "Bar, line, pie, table", dataKind: "writing-prompts" },
-  { id: "process", label: "Processes & Maps", hint: "Diagrams & map changes", dataKind: "writing-prompts" },
+  { id: "line-graph", label: "Line Graph", hint: "Trends & changes over time", dataKind: "writing-prompts" },
+  { id: "bar-chart", label: "Bar Chart", hint: "Compare categories or groups", dataKind: "writing-prompts" },
+  { id: "pie-chart", label: "Pie Chart", hint: "Proportions & percentages", dataKind: "writing-prompts" },
+  { id: "table", label: "Table", hint: "Data across rows & columns", dataKind: "writing-prompts" },
+  { id: "process-diagram", label: "Process Diagram", hint: "Stages of a process or cycle", dataKind: "writing-prompts" },
+  { id: "map", label: "Map", hint: "Changes to a place over time", dataKind: "writing-prompts" },
+  { id: "multiple-charts", label: "Multiple Charts/Graphs", hint: "Two or more visuals combined", dataKind: "writing-prompts" },
 ];
 
 // ───────── Writing — General Training Task 1 ─────────

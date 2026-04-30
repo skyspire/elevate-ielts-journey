@@ -79,8 +79,13 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
   },
   academic: {
     task1: [
-      { id: "graphs", label: "Graphs & Charts", hint: "Bar, line, pie, table", icon: BarChart3 },
-      { id: "process", label: "Processes & Maps", hint: "Diagrams & map changes", icon: FileText },
+      { id: "line-graph", label: "Line Graph", hint: "Trends & changes over time", icon: TrendingUp },
+      { id: "bar-chart", label: "Bar Chart", hint: "Compare categories or groups", icon: BarChart3 },
+      { id: "pie-chart", label: "Pie Chart", hint: "Proportions & percentages", icon: Scale },
+      { id: "table", label: "Table", hint: "Data across rows & columns", icon: FileText },
+      { id: "process-diagram", label: "Process Diagram", hint: "Stages of a process or cycle", icon: Zap },
+      { id: "map", label: "Map", hint: "Changes to a place over time", icon: SplitSquareHorizontal },
+      { id: "multiple-charts", label: "Multiple Charts/Graphs", hint: "Two or more visuals combined", icon: HelpCircle },
     ],
     task2: task2Essays,
   },
