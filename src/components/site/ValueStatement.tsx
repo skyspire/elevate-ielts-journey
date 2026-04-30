@@ -14,10 +14,11 @@ import {
 import {
   CURRENCIES,
   CURRENCY_GROUPS,
-  PRICES,
   type CurrencyCode,
+  type PlanKey,
   detectCurrencyFromIP,
   formatPrice,
+  getPlanPrice,
   getStoredCurrency,
   setStoredCurrency,
 } from "@/lib/currency";
