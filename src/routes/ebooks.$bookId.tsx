@@ -19,6 +19,14 @@ import {
 import { getEbookById, flattenPages } from "@/data/ebooks";
 import { useReaderPrefs, useReaderState, type Highlight } from "@/lib/ebook-storage";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import {
+  EBOOKS_KEY,
+  EBOOKS_DEFAULT,
+  resolvePublicEbooks,
+  type EbooksStore,
+} from "@/lib/admin/ebooks-store";
+import { PdfReaderView } from "@/components/site/PdfReaderView";
 
 export const Route = createFileRoute("/ebooks/$bookId")({
   head: ({ params }) => {
@@ -83,7 +91,12 @@ const THEMES = {
 
 function ReaderPage() {
   const { bookId } = Route.useParams();
-  const book = getEbookById(bookId);
+  const store = useCmsSection<EbooksStore>(EBOOKS_KEY, EBOOKS_DEFAULT);
+  // Prefer the CMS-resolved book so admin-uploaded PDFs / overrides take effect.
+  const book = useMemo(
+    () => resolvePublicEbooks(store).find((b) => b.id === bookId) ?? getEbookById(bookId),
+    [store, bookId],
+  );
   const navigate = useNavigate();
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
@@ -98,6 +111,14 @@ function ReaderPage() {
     x: number;
     y: number;
   } | null>(null);
+
+  // ─── PDF branch ──────────────────────────────────────────────
+  // When the admin uploaded a PDF for this ebook, bypass the chapters reader
+  // and serve the file inside a polished viewer.
+  if (book?.pdfDataUrl) {
+    return <PdfReaderView book={book} userIsAuthed={!!user} />;
+  }
+
 
   const pageRef = useRef<HTMLDivElement>(null);
 

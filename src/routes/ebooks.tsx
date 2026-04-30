@@ -1,10 +1,17 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
 import { BookOpen } from "lucide-react";
-import { ebooks, type EbookCategory } from "@/data/ebooks";
+import { type EbookCategory } from "@/data/ebooks";
 import { useEffect, useMemo, useState } from "react";
 import { getReaderState } from "@/lib/ebook-storage";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { useCmsSection } from "@/lib/admin/cms-store";
+import {
+  EBOOKS_KEY,
+  EBOOKS_DEFAULT,
+  resolvePublicEbooks,
+  type EbooksStore,
+} from "@/lib/admin/ebooks-store";
 
 export const Route = createFileRoute("/ebooks")({
   head: () => ({
@@ -140,9 +147,11 @@ function CoverMotif({ category }: { category: EbookCategory }) {
 
 function EbooksPage() {
   const [category, setCategory] = useState<"All" | EbookCategory>("All");
+  const store = useCmsSection<EbooksStore>(EBOOKS_KEY, EBOOKS_DEFAULT);
+  const ebooks = useMemo(() => resolvePublicEbooks(store), [store]);
   const filtered = useMemo(
     () => (category === "All" ? ebooks : ebooks.filter((b) => b.category === category)),
-    [category],
+    [category, ebooks],
   );
   const matches = useMatches();
   const hasChildMatch = matches.some(
@@ -164,7 +173,7 @@ function EbooksPage() {
       }
     }
     setProgressMap(next);
-  }, [userId]);
+  }, [userId, ebooks]);
 
   if (hasChildMatch) {
     return <Outlet />;
@@ -284,8 +293,15 @@ function EbooksPage() {
                       backfaceVisibility: "hidden",
                     }}
                   >
-                    {/* abstract motif tied to category */}
-                    <CoverMotif category={book.category} />
+                    {book.coverImageDataUrl ? (
+                      <img
+                        src={book.coverImageDataUrl}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    ) : (
+                      <CoverMotif category={book.category} />
+                    )}
 
                     {/* spine shadow */}
                     <div

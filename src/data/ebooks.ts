@@ -20,7 +20,33 @@ export type Ebook = {
   description: string;
   freePages: number; // how many pages unlocked before paywall
   chapters: EbookChapter[];
+
+  // ───────── Optional admin-managed fields ─────────
+  /** Uploaded cover image (data URL). Renders on top of the gradient when set. */
+  coverImageDataUrl?: string;
+  /** Uploaded PDF file as data URL. When present, the reader serves the PDF instead of chapters. */
+  pdfDataUrl?: string;
+  /** Original PDF filename — shown in the reader and used for downloads. */
+  pdfFileName?: string;
+  /** Approx. PDF size in bytes (so the admin list can show it without re-decoding). */
+  pdfSizeBytes?: number;
+
+  // Marketing
+  tagline?: string;
+  whatsInside?: string[]; // bullet list shown on the detail page
+  featured?: boolean;
+  isNew?: boolean;
+  sortOrder?: number;
+
+  // Lifecycle / commerce / SEO
+  status?: "draft" | "published";
+  publishedAt?: string; // ISO date
+  price?: number; // 0 = free
+  currency?: string; // e.g. "USD"
+  seoTitle?: string;
+  seoDescription?: string;
 };
+
 
 const lorem = (seed: string, paragraphs = 3): string[] => {
   const base = [
