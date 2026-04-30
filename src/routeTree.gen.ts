@@ -36,6 +36,7 @@ import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 import { Route as AdminSpeakingRouteImport } from './routes/admin.speaking'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminOpsRouteImport } from './routes/admin.ops'
 import { Route as AdminOfferBarRouteImport } from './routes/admin.offer-bar'
 import { Route as AdminMonetizationRouteImport } from './routes/admin.monetization'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
@@ -195,6 +196,11 @@ const AdminPricingRoute = AdminPricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminOpsRoute = AdminOpsRouteImport.update({
+  id: '/ops',
+  path: '/ops',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminOfferBarRoute = AdminOfferBarRouteImport.update({
   id: '/offer-bar',
   path: '/offer-bar',
@@ -341,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
+  '/admin/ops': typeof AdminOpsRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -391,6 +398,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
+  '/admin/ops': typeof AdminOpsRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -443,6 +451,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
+  '/admin/ops': typeof AdminOpsRoute
   '/admin/pricing': typeof AdminPricingRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
@@ -496,6 +505,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/monetization'
     | '/admin/offer-bar'
+    | '/admin/ops'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -546,6 +556,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/monetization'
     | '/admin/offer-bar'
+    | '/admin/ops'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -597,6 +608,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/monetization'
     | '/admin/offer-bar'
+    | '/admin/ops'
     | '/admin/pricing'
     | '/admin/seo'
     | '/admin/speaking'
@@ -832,6 +844,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPricingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/ops': {
+      id: '/admin/ops'
+      path: '/ops'
+      fullPath: '/admin/ops'
+      preLoaderRoute: typeof AdminOpsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/offer-bar': {
       id: '/admin/offer-bar'
       path: '/offer-bar'
@@ -1004,6 +1023,7 @@ interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMonetizationRoute: typeof AdminMonetizationRoute
   AdminOfferBarRoute: typeof AdminOfferBarRoute
+  AdminOpsRoute: typeof AdminOpsRoute
   AdminPricingRoute: typeof AdminPricingRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminSpeakingRoute: typeof AdminSpeakingRoute
@@ -1036,6 +1056,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminMonetizationRoute: AdminMonetizationRoute,
   AdminOfferBarRoute: AdminOfferBarRoute,
+  AdminOpsRoute: AdminOpsRoute,
   AdminPricingRoute: AdminPricingRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminSpeakingRoute: AdminSpeakingRoute,
