@@ -9,7 +9,6 @@ import {
   Layout,
   BookOpen,
   MessageSquare,
-  BookOpen,
   Users,
   LogOut,
   ExternalLink,
