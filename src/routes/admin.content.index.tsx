@@ -117,7 +117,7 @@ function Header() {
       <Crumbs trail={[{ label: "Content" }]} />
       <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight">Content</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Pick a module — Academic or General Training — to manage Writing & Speaking content.
+        Manage IELTS modules (Academic & General Training) and everything that appears under the public Resources menu.
       </p>
     </div>
   );
