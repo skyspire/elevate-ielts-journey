@@ -46,6 +46,18 @@ export type PricingPlan = {
   days: string;
   popular: boolean;
   accent: string;
+  // Optional rich fields (admin-editable)
+  tagline?: string;
+  description?: string;
+  ctaLabel?: string;
+  badge?: string;
+  discountPercent?: number;
+  order?: number;
+  visible?: boolean;
+  // Per-currency price overrides (currency code -> amount). Empty / missing = use defaults from PRICES.
+  priceOverrides?: Record<string, number>;
+  // Per-currency original (strikethrough) price overrides.
+  originalPriceOverrides?: Record<string, number>;
 };
 export type PricingContent = {
   plans: PricingPlan[];
@@ -54,9 +66,9 @@ export type PricingContent = {
 };
 export const PRICING_DEFAULT: PricingContent = {
   plans: [
-    { key: "biweekly", name: "Bi-Weekly", days: "15", popular: false, accent: "oklch(0.55 0.18 30)" },
-    { key: "monthly", name: "Monthly", days: "30", popular: true, accent: "oklch(0.45 0.18 265)" },
-    { key: "quarterly", name: "3-Month", days: "90", popular: false, accent: "oklch(0.55 0.14 160)" },
+    { key: "biweekly", name: "Bi-Weekly", days: "15", popular: false, accent: "oklch(0.55 0.18 30)", order: 0, visible: true, ctaLabel: "Choose Bi-Weekly", priceOverrides: {}, originalPriceOverrides: {} },
+    { key: "monthly", name: "Monthly", days: "30", popular: true, accent: "oklch(0.45 0.18 265)", order: 1, visible: true, ctaLabel: "Choose Monthly", priceOverrides: {}, originalPriceOverrides: {} },
+    { key: "quarterly", name: "3-Month", days: "90", popular: false, accent: "oklch(0.55 0.14 160)", order: 2, visible: true, ctaLabel: "Choose 3-Month", priceOverrides: {}, originalPriceOverrides: {} },
   ],
   features: [
     "Academic + General",

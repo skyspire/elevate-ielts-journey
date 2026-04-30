@@ -14,10 +14,11 @@ import {
 import {
   CURRENCIES,
   CURRENCY_GROUPS,
-  PRICES,
   type CurrencyCode,
+  type PlanKey,
   detectCurrencyFromIP,
   formatPrice,
+  getPlanPrice,
   getStoredCurrency,
   setStoredCurrency,
 } from "@/lib/currency";
@@ -157,7 +158,17 @@ export function ValueStatement() {
 
         {/* === PRICING === */}
         <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:mt-10 sm:grid-cols-3">
-          {plans.map((p) => (
+          {plans
+            .filter((p) => p.visible !== false)
+            .slice()
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+            .map((p) => {
+              const planKey = p.key as PlanKey;
+              const price = getPlanPrice(planKey, currency, p.priceOverrides);
+              const original = getPlanPrice(planKey, currency, p.originalPriceOverrides);
+              const hasOriginal =
+                p.originalPriceOverrides && p.originalPriceOverrides[currency] && original > price;
+              return (
             <div
               key={p.name}
               className={`relative flex flex-col items-center rounded-3xl border p-6 text-center transition-all hover:-translate-y-1 ${
@@ -166,9 +177,9 @@ export function ValueStatement() {
                   : "border-border bg-card shadow-soft hover:shadow-card"
               }`}
             >
-              {p.popular && (
+              {(p.badge || p.popular) && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-brand-foreground shadow-soft">
-                  Most popular
+                  {p.badge || "Most popular"}
                 </span>
               )}
               <div className="flex flex-col items-center gap-1">
@@ -178,6 +189,11 @@ export function ValueStatement() {
                 >
                   {p.name}
                 </span>
+                {p.tagline && (
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {p.tagline}
+                  </span>
+                )}
                 <span
                   className="h-[3px] w-10 rounded-full"
                   style={{
@@ -185,9 +201,21 @@ export function ValueStatement() {
                   }}
                 />
               </div>
-              <div className="mt-4 flex items-baseline gap-1.5">
+              {hasOriginal && (
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-base font-bold text-muted-foreground line-through">
+                    {formatPrice(original, currency)}
+                  </span>
+                  {p.discountPercent ? (
+                    <span className="rounded-full bg-[oklch(0.55_0.18_30)] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-white">
+                      −{p.discountPercent}%
+                    </span>
+                  ) : null}
+                </div>
+              )}
+              <div className="mt-2 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl font-black tracking-tight text-foreground sm:text-6xl">
-                  {formatPrice(PRICES[p.key as "biweekly" | "monthly" | "quarterly"][currency], currency)}
+                  {formatPrice(price, currency)}
                 </span>
                 <span className="text-sm font-bold text-muted-foreground">
                   {currency}
@@ -202,6 +230,11 @@ export function ValueStatement() {
               >
                 {p.days} days access
               </div>
+              {p.description && (
+                <p className="mt-3 text-xs font-medium text-muted-foreground">
+                  {p.description}
+                </p>
+              )}
               <Button
                 className={`mt-6 h-11 w-full rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 ${
                   p.popular
@@ -209,10 +242,11 @@ export function ValueStatement() {
                     : "bg-[oklch(0.55_0.01_270)] text-white hover:bg-[oklch(0.48_0.01_270)] hover:shadow-[0_0_24px_oklch(0.55_0.01_270/0.55),0_0_48px_oklch(0.55_0.01_270/0.3)]"
                 }`}
               >
-                Choose {p.name}
+                {p.ctaLabel || `Choose ${p.name}`}
               </Button>
             </div>
-          ))}
+              );
+            })}
         </div>
 
         {/* === FEATURES — clean & professional === */}
