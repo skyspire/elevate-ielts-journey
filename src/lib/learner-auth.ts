@@ -92,6 +92,55 @@ export function logoutLearner() {
   window.dispatchEvent(new CustomEvent("learner:session-changed"));
 }
 
+// ───────── Admin-side management ─────────
+
+export function updateLearner(id: string, patch: Partial<Omit<LearnerUser, "id" | "createdAt">>) {
+  const next = getLearners().map((u) => (u.id === id ? { ...u, ...patch } : u));
+  saveLearners(next);
+}
+
+export function deleteLearner(id: string) {
+  saveLearners(getLearners().filter((u) => u.id !== id));
+  // If the deleted user is currently logged in, clear the session.
+  if (isBrowser()) {
+    try {
+      const raw = window.localStorage.getItem(SESSION_KEY);
+      if (raw && JSON.parse(raw) === id) {
+        window.localStorage.removeItem(SESSION_KEY);
+        window.dispatchEvent(new CustomEvent("learner:session-changed"));
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+/** Force-login as a learner (admin impersonation). Prototype only. */
+export function impersonateLearner(id: string) {
+  if (!isBrowser()) return;
+  window.localStorage.setItem(SESSION_KEY, JSON.stringify(id));
+  window.dispatchEvent(new CustomEvent("learner:session-changed"));
+}
+
+export function adminCreateLearner(input: {
+  email: string;
+  name: string;
+  password: string;
+}): { ok: true; user: LearnerUser } | { ok: false; error: string } {
+  const exists = getLearners().some((u) => u.email.toLowerCase() === input.email.toLowerCase());
+  if (exists) return { ok: false, error: "An account with that email already exists." };
+  const user: LearnerUser = {
+    id: `l_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    email: input.email,
+    name: input.name,
+    password: input.password,
+    createdAt: Date.now(),
+    provider: "email",
+  };
+  saveLearners([...getLearners(), user]);
+  return { ok: true, user };
+}
+
 export function useLearnerSession() {
   const [user, setUser] = useState<LearnerUser | null>(() => getLearnerSession());
 
