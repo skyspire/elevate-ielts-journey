@@ -1044,7 +1044,7 @@ function PredictionsPage() {
                 <div
                   key={tier.key}
                   data-tier-section={tier.key}
-                  className="relative -mx-3 overflow-hidden rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
+                  className="relative -mx-3 rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
                   style={{
                     background: isActive
                       ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
