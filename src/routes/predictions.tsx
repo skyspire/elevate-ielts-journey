@@ -506,6 +506,8 @@ const TIERS: {
   helper: string;
   icon: typeof Flame;
   accent: string;
+  /** Soft full-screen tint used when this tier is the active scroll section. */
+  tint: string;
 }[] = [
   {
     key: "hot",
@@ -513,6 +515,7 @@ const TIERS: {
     helper: "Top picks for the next sitting — start here.",
     icon: Flame,
     accent: "oklch(0.62 0.18 35)",
+    tint: "oklch(0.96 0.05 38)",
   },
   {
     key: "likely",
@@ -520,6 +523,7 @@ const TIERS: {
     helper: "Strong candidates worth a focused practice round.",
     icon: TrendingUp,
     accent: "oklch(0.55 0.14 250)",
+    tint: "oklch(0.96 0.04 248)",
   },
   {
     key: "review",
@@ -527,6 +531,7 @@ const TIERS: {
     helper: "Recurring themes — keep them warm in your prep.",
     icon: Lightbulb,
     accent: "oklch(0.55 0.10 100)",
+    tint: "oklch(0.96 0.05 105)",
   },
 ];
 
@@ -810,6 +815,36 @@ function PredictionsPage() {
   };
 
   const [showArchive, setShowArchive] = useState(false);
+  const [activeTier, setActiveTier] = useState<Tier | null>(null);
+
+  useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-tier-section]"),
+    );
+    if (sections.length === 0) {
+      setActiveTier(null);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the most visible tier section currently intersecting.
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) {
+          const t = (visible[0].target as HTMLElement).dataset.tierSection as Tier;
+          setActiveTier(t);
+        }
+      },
+      { rootMargin: "-35% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [skill, exam, taskType]);
+
+  const activeTint = activeTier
+    ? TIERS.find((t) => t.key === activeTier)?.tint
+    : undefined;
 
   const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
@@ -868,8 +903,17 @@ function PredictionsPage() {
        linear-gradient(180deg, oklch(0.97 0.04 50 / 0.65) 0%, oklch(0.985 0.020 55 / 0) 100%)`;
 
   return (
-    <div className="min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
-      <main className="relative py-10 sm:py-14">
+    <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
+      {/* Tier-driven full-screen tint — crossfades as the user scrolls between sections */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 transition-[background-color,opacity] duration-700 ease-out"
+        style={{
+          backgroundColor: activeTint ?? "transparent",
+          opacity: activeTint ? 0.55 : 0,
+        }}
+      />
+      <main className="relative z-10 py-10 sm:py-14">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-[720px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
@@ -1004,7 +1048,11 @@ function PredictionsPage() {
             {TIERS.map((tier) => {
               const items = current[tier.key];
               if (items.length === 0) return null;
-              return <TierSection key={tier.key} tier={tier} items={items} />;
+              return (
+                <div key={tier.key} data-tier-section={tier.key}>
+                  <TierSection tier={tier} items={items} />
+                </div>
+              );
             })}
 
             {current.hot.length === 0 &&
