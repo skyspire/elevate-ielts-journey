@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
+import { QuotaGate } from "@/components/site/QuotaGate";
 
 export const Route = createFileRoute("/predictions")({
   head: () => ({
@@ -29,8 +30,16 @@ export const Route = createFileRoute("/predictions")({
       },
     ],
   }),
-  component: PredictionsPage,
+  component: GatedPredictionsPage,
 });
+
+function GatedPredictionsPage() {
+  return (
+    <QuotaGate itemKey="predictions">
+      <PredictionsPage />
+    </QuotaGate>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Types & data                                                        */
