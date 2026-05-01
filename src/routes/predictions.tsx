@@ -522,6 +522,73 @@ function CountdownCard({ days }: { days: number }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Exam toggle — Academic vs General Training                          */
+/* ------------------------------------------------------------------ */
+
+function ExamToggle({
+  value,
+  onChange,
+}: {
+  value: ExamKey;
+  onChange: (e: ExamKey) => void;
+}) {
+  const options: { key: ExamKey; label: string; helper: string }[] = [
+    { key: "academic", label: "Academic", helper: "University & professional" },
+    { key: "general", label: "General Training", helper: "Migration & work" },
+  ];
+
+  return (
+    <div className="w-full max-w-md">
+      <p className="mb-2 text-center font-handwriting text-base text-foreground/55 sm:text-lg">
+        Which exam are you taking?
+      </p>
+      <div
+        role="radiogroup"
+        aria-label="IELTS exam track"
+        className="relative grid grid-cols-2 gap-1 rounded-2xl border border-border/80 p-1 shadow-soft"
+        style={{
+          background:
+            "linear-gradient(135deg, oklch(0.99 0.01 80) 0%, oklch(0.97 0.03 60) 100%)",
+        }}
+      >
+        {options.map((opt) => {
+          const active = value === opt.key;
+          return (
+            <button
+              key={opt.key}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(opt.key)}
+              className="relative z-10 flex flex-col items-center justify-center rounded-xl px-3 py-3 transition-all sm:py-3.5"
+              style={{
+                background: active
+                  ? "linear-gradient(135deg, oklch(0.62 0.18 35) 0%, oklch(0.55 0.18 30) 100%)"
+                  : "transparent",
+                color: active ? "oklch(0.99 0.01 80)" : "oklch(0.30 0.04 60)",
+                boxShadow: active
+                  ? "0 6px 18px -8px oklch(0.55 0.18 35 / 0.55)"
+                  : "none",
+              }}
+            >
+              <span className="font-display text-sm font-black tracking-tight sm:text-base">
+                {opt.label}
+              </span>
+              <span
+                className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-[11px]"
+                style={{ opacity: active ? 0.85 : 0.55 }}
+              >
+                {opt.helper}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Skill tabs — editorial, no pill chips                               */
 /* ------------------------------------------------------------------ */
 
