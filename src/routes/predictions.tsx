@@ -53,8 +53,8 @@ type Prediction = {
     | "Speaking Part 3"
     | "Listening"
     | "Reading";
-  /** Task-type slug within the skill (e.g. "task2", "part2", "multiple-choice"). */
-  taskType: string;
+  /** Task-type slug within the skill (e.g. "task2", "part2", "mcq"). Auto-derived from `type` when omitted. */
+  taskType?: string;
   title: string;
   date: string;
   tier: Tier;
