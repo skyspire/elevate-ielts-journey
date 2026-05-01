@@ -53,6 +53,8 @@ type Prediction = {
   title: string;
   date: string;
   tier: Tier;
+  confidence: number; // 0-100
+  seen: string; // e.g. "Seen 4× in last 6 months"
 };
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
