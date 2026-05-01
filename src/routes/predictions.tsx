@@ -368,22 +368,38 @@ function PredictionsPage() {
   const daysToNext = useDaysToNextSaturday();
 
   const isAcademic = exam === "academic";
-  const pageBg = isAcademic ? "oklch(0.985 0.014 240)" : "oklch(0.985 0.018 50)";
+  // Premium soft palettes — warm cream for General, cool pearl for Academic.
+  // Layered radial halos give a sunrise/atelier glow without overpowering content.
+  const pageBg = isAcademic ? "oklch(0.985 0.012 235)" : "oklch(0.985 0.020 55)";
   const heroGradient = isAcademic
-    ? `radial-gradient(ellipse 70% 80% at 16% 0%, oklch(0.90 0.09 245 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 75% at 86% 10%, oklch(0.92 0.07 260 / 0.45) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.95 0.04 245 / 0.55) 0%, transparent 100%)`
-    : `radial-gradient(ellipse 70% 80% at 16% 0%, oklch(0.92 0.09 55 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 75% at 86% 10%, oklch(0.92 0.10 30 / 0.50) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.04 40 / 0.55) 0%, transparent 100%)`;
+    ? `radial-gradient(ellipse 55% 70% at 12% -5%, oklch(0.88 0.10 245 / 0.65) 0%, transparent 55%),
+       radial-gradient(ellipse 50% 65% at 88% 0%, oklch(0.90 0.09 285 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 70% 50% at 50% 35%, oklch(0.94 0.05 220 / 0.45) 0%, transparent 70%),
+       radial-gradient(ellipse 40% 40% at 25% 60%, oklch(0.92 0.07 200 / 0.35) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.03 240 / 0.60) 0%, oklch(0.985 0.012 235 / 0) 100%)`
+    : `radial-gradient(ellipse 55% 70% at 10% -5%, oklch(0.91 0.11 50 / 0.70) 0%, transparent 55%),
+       radial-gradient(ellipse 55% 65% at 90% 0%, oklch(0.88 0.13 25 / 0.60) 0%, transparent 60%),
+       radial-gradient(ellipse 70% 55% at 50% 30%, oklch(0.94 0.08 70 / 0.50) 0%, transparent 70%),
+       radial-gradient(ellipse 45% 45% at 78% 55%, oklch(0.90 0.10 35 / 0.40) 0%, transparent 65%),
+       radial-gradient(ellipse 40% 40% at 18% 65%, oklch(0.93 0.08 85 / 0.35) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.97 0.04 50 / 0.65) 0%, oklch(0.985 0.020 55 / 0) 100%)`;
 
   return (
-    <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: pageBg }}>
+    <div className="min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
       <main className="relative py-10 sm:py-14">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[560px] transition-[background] duration-500 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[720px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
           style={{ background: heroGradient }}
+        />
+        {/* Subtle grain for premium paper feel */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[720px] opacity-[0.035] mix-blend-multiply [mask-image:linear-gradient(to_bottom,black_50%,transparent)]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>\")",
+          }}
         />
 
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
