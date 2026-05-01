@@ -9,6 +9,7 @@ import {
 import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
+import { QuotaGate } from "@/components/site/QuotaGate";
 
 
 type Module = "academic" | "general";
@@ -39,8 +40,16 @@ export const Route = createFileRoute("/recent-exam-questions")({
       },
     ],
   }),
-  component: RecentExamQuestionsPage,
+  component: GatedRecentExamQuestionsPage,
 });
+
+function GatedRecentExamQuestionsPage() {
+  return (
+    <QuotaGate itemKey="recent-exam-questions">
+      <RecentExamQuestionsPage />
+    </QuotaGate>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Question data                                                       */
