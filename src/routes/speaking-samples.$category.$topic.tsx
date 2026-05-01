@@ -15,6 +15,7 @@ import {
   type SpeakingQuestion,
 } from "@/data/speaking-questions";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
+import { QuotaGate } from "@/components/site/QuotaGate";
 
 export const Route = createFileRoute("/speaking-samples/$category/$topic")({
   loader: ({ params }) => {
@@ -41,7 +42,7 @@ export const Route = createFileRoute("/speaking-samples/$category/$topic")({
       ],
     };
   },
-  component: SpeakingTopicPage,
+  component: GatedSpeakingTopicPage,
   notFoundComponent: () => (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[oklch(0.985_0.014_165)] px-6 text-center">
       <p className="font-display text-2xl font-extrabold tracking-tight text-foreground">
@@ -72,6 +73,15 @@ export const Route = createFileRoute("/speaking-samples/$category/$topic")({
     </div>
   ),
 });
+
+function GatedSpeakingTopicPage() {
+  const { category, topic } = Route.useParams();
+  return (
+    <QuotaGate itemKey={`speaking:${category}:${topic}`}>
+      <SpeakingTopicPage />
+    </QuotaGate>
+  );
+}
 
 function SpeakingTopicPage() {
   const { topic, questions, isCue, categoryId } = Route.useLoaderData();

@@ -12,6 +12,7 @@ import {
 import { useCmsSection } from "@/lib/admin/cms-store";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import { BackButton } from "@/components/site/BackButton";
+import { QuotaGate } from "@/components/site/QuotaGate";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -34,8 +35,17 @@ export const Route = createFileRoute("/writing-samples/$questionId")({
       },
     ],
   }),
-  component: QuestionDetailPage,
+  component: GatedQuestionDetailPage,
 });
+
+function GatedQuestionDetailPage() {
+  const { questionId } = Route.useParams();
+  return (
+    <QuotaGate itemKey={`writing:${questionId}`}>
+      <QuestionDetailPage />
+    </QuotaGate>
+  );
+}
 
 function QuestionDetailPage() {
   const search = Route.useSearch();
