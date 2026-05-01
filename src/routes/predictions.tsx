@@ -67,6 +67,8 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Some people believe individuals can do little to protect the environment. To what extent do you agree?",
       date: "Predicted for May 2026",
       tier: "hot",
+      confidence: 92,
+      seen: "Seen 5× in last 6 months",
     },
     {
       tag: "Education",
@@ -76,6 +78,8 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Many universities now offer online courses. Are the benefits greater than the drawbacks?",
       date: "Predicted for May 2026",
       tier: "hot",
+      confidence: 88,
+      seen: "Seen 4× in last 6 months",
     },
     {
       tag: "Bar Chart",
@@ -85,6 +89,8 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "The chart compares household spending on leisure activities across four countries in 2024.",
       date: "Predicted for May 2026",
       tier: "hot",
+      confidence: 85,
+      seen: "Recurring chart format",
     },
     {
       tag: "Technology",
