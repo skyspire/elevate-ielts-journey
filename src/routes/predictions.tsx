@@ -58,7 +58,18 @@ type Prediction = {
   exam?: ExamScope; // defaults to "both"
   confidence?: number;
   seen?: string;
+  /** ISO YYYY-MM. Omit = current month. */
+  month?: string;
 };
+
+/** The "current" prediction cycle. Items with no month default to this. */
+const CURRENT_MONTH = "2026-05";
+
+function formatMonth(iso: string): string {
+  const [y, m] = iso.split("-").map(Number);
+  const d = new Date(y, (m ?? 1) - 1, 1);
+  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
   writing: [
