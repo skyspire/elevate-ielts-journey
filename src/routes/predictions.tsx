@@ -514,24 +514,24 @@ const TIERS: {
     label: "Highly likely",
     helper: "Top picks for the next sitting — start here.",
     icon: Flame,
-    accent: "oklch(0.62 0.18 35)",
-    tint: "oklch(0.96 0.05 38)",
+    accent: "oklch(0.55 0.16 38)", // burnt sienna
+    tint: "oklch(0.92 0.09 40)",
   },
   {
     key: "likely",
     label: "Likely to appear",
     helper: "Strong candidates worth a focused practice round.",
     icon: TrendingUp,
-    accent: "oklch(0.55 0.14 250)",
-    tint: "oklch(0.96 0.04 248)",
+    accent: "oklch(0.42 0.18 285)", // ink violet
+    tint: "oklch(0.90 0.09 285)",
   },
   {
     key: "review",
     label: "Worth reviewing",
     helper: "Recurring themes — keep them warm in your prep.",
     icon: Lightbulb,
-    accent: "oklch(0.55 0.10 100)",
-    tint: "oklch(0.96 0.05 105)",
+    accent: "oklch(0.58 0.13 145)", // pistachio depth
+    tint: "oklch(0.92 0.10 142)",
   },
 ];
 
