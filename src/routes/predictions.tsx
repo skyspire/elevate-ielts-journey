@@ -58,7 +58,18 @@ type Prediction = {
   exam?: ExamScope; // defaults to "both"
   confidence?: number;
   seen?: string;
+  /** ISO YYYY-MM. Omit = current month. */
+  month?: string;
 };
+
+/** The "current" prediction cycle. Items with no month default to this. */
+const CURRENT_MONTH = "2026-05";
+
+function formatMonth(iso: string): string {
+  const [y, m] = iso.split("-").map(Number);
+  const d = new Date(y, (m ?? 1) - 1, 1);
+  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
   writing: [
@@ -178,6 +189,52 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "review",
       exam: "general",
     },
+    /* ---------- Archive: April 2026 ---------- */
+    {
+      tag: "Crime",
+      tagTone: "blue",
+      type: "Writing Task 2",
+      title:
+        "Some believe prison is the best punishment; others prefer education and community work. Discuss both views.",
+      date: "Published April 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-04",
+    },
+    {
+      tag: "Line Graph",
+      tagTone: "peach",
+      type: "Writing Task 1",
+      title:
+        "The line graph shows electricity consumption in three countries between 1990 and 2020.",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "academic",
+      month: "2026-04",
+    },
+    {
+      tag: "Apology Letter",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to a neighbour apologising for a recent disturbance and explaining what happened.",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "general",
+      month: "2026-04",
+    },
+    /* ---------- Archive: March 2026 ---------- */
+    {
+      tag: "Globalisation",
+      tagTone: "mint",
+      type: "Writing Task 2",
+      title:
+        "Some say globalisation harms local cultures. To what extent do you agree or disagree?",
+      date: "Published March 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-03",
+    },
   ],
   speaking: [
     {
@@ -234,6 +291,27 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       date: "Worth reviewing",
       tier: "review",
       exam: "both",
+    },
+    /* ---------- Archive: April 2026 ---------- */
+    {
+      tag: "A Place",
+      tagTone: "blue",
+      type: "Speaking Part 2",
+      title: "Describe a place you like to visit on weekends. Say where, when and why.",
+      date: "Published April 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-04",
+    },
+    {
+      tag: "Education",
+      tagTone: "mint",
+      type: "Speaking Part 3",
+      title: "Do you think school subjects should change to match the modern job market?",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "both",
+      month: "2026-04",
     },
   ],
   reading: [
@@ -354,15 +432,34 @@ function PredictionsPage() {
     }
   };
 
-  const grouped = useMemo(() => {
+  const [showArchive, setShowArchive] = useState(false);
+
+  const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
       (p) => !p.exam || p.exam === "both" || p.exam === exam,
     );
-    return {
-      hot: list.filter((p) => p.tier === "hot"),
-      likely: list.filter((p) => p.tier === "likely"),
-      review: list.filter((p) => p.tier === "review"),
-    };
+    const isCurrent = (p: Prediction) => (p.month ?? CURRENT_MONTH) === CURRENT_MONTH;
+    const currentList = list.filter(isCurrent);
+    const archiveList = list.filter((p) => !isCurrent(p));
+
+    const grouped = (items: Prediction[]) => ({
+      hot: items.filter((p) => p.tier === "hot"),
+      likely: items.filter((p) => p.tier === "likely"),
+      review: items.filter((p) => p.tier === "review"),
+    });
+
+    // Group archive items by month, newest first
+    const byMonth = new Map<string, Prediction[]>();
+    for (const p of archiveList) {
+      const m = p.month ?? CURRENT_MONTH;
+      if (!byMonth.has(m)) byMonth.set(m, []);
+      byMonth.get(m)!.push(p);
+    }
+    const archiveMonths = Array.from(byMonth.entries())
+      .sort(([a], [b]) => (a < b ? 1 : -1))
+      .map(([month, items]) => ({ month, label: formatMonth(month), grouped: grouped(items) }));
+
+    return { current: grouped(currentList), archive: archiveMonths };
   }, [skill, exam]);
 
   const daysToNext = useDaysToNextSaturday();
@@ -495,29 +592,101 @@ function PredictionsPage() {
             <CountdownCard days={daysToNext} />
           </div>
 
+          {/* Honesty note — predictions are forecasts, not guarantees */}
+          <p className="mx-auto mt-5 max-w-2xl text-center text-[12.5px] leading-relaxed text-foreground/55 sm:text-[13px]">
+            Predictions are educated forecasts based on rotation patterns —
+            <span className="font-semibold text-foreground/70"> not guarantees</span>.
+            Use them to focus your practice, not to skip topics.
+          </p>
+
           {/* Skill tabs */}
           <div className="mt-12">
             <SkillTabs value={skill} onChange={setSkill} />
           </div>
 
-          {/* Tiered groups */}
+          {/* Tiered groups — current month */}
           <div className="mt-12 space-y-16">
             {TIERS.map((tier) => {
-              const items = grouped[tier.key];
+              const items = current[tier.key];
               if (items.length === 0) return null;
-              return (
-                <TierSection key={tier.key} tier={tier} items={items} />
-              );
+              return <TierSection key={tier.key} tier={tier} items={items} />;
             })}
 
-            {grouped.hot.length === 0 &&
-              grouped.likely.length === 0 &&
-              grouped.review.length === 0 && (
+            {current.hot.length === 0 &&
+              current.likely.length === 0 &&
+              current.review.length === 0 && (
                 <p className="text-center font-display text-lg font-bold text-foreground/60">
                   Fresh predictions land here every Monday.
                 </p>
               )}
           </div>
+
+          {/* Archive — collapsed by default */}
+          {archive.length > 0 && (
+            <div className="mt-20 border-t border-border/60 pt-10">
+              <div className="flex flex-col items-center gap-3 text-center">
+                <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
+                  Track record
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowArchive((v) => !v)}
+                  aria-expanded={showArchive}
+                  className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-5 py-2.5 font-display text-sm font-bold tracking-tight text-foreground/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-card hover:text-foreground"
+                >
+                  {showArchive ? "Hide previous months" : "See previous months"}
+                  <span
+                    aria-hidden
+                    className="inline-block transition-transform"
+                    style={{ transform: showArchive ? "rotate(180deg)" : "rotate(0deg)" }}
+                  >
+                    ▾
+                  </span>
+                </button>
+                <p className="max-w-md text-[12px] leading-relaxed text-foreground/50">
+                  These were our forecasts at the time — kept here for reference, not as a live guide.
+                </p>
+              </div>
+
+              {showArchive && (
+                <div className="mt-10 space-y-14">
+                  {archive.map((m) => {
+                    const empty =
+                      m.grouped.hot.length === 0 &&
+                      m.grouped.likely.length === 0 &&
+                      m.grouped.review.length === 0;
+                    if (empty) return null;
+                    return (
+                      <div key={m.month}>
+                        <header className="mb-6 flex items-center gap-3">
+                          <h3 className="font-display text-xl font-black tracking-tight text-foreground/70 sm:text-2xl">
+                            {m.label}
+                          </h3>
+                          <span className="rounded-full border border-border/60 bg-background/60 px-2.5 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+                            Archived
+                          </span>
+                        </header>
+                        <div className="space-y-12">
+                          {TIERS.map((tier) => {
+                            const items = m.grouped[tier.key];
+                            if (items.length === 0) return null;
+                            return (
+                              <TierSection
+                                key={`${m.month}-${tier.key}`}
+                                tier={tier}
+                                items={items}
+                                archived
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
@@ -714,30 +883,43 @@ function SkillTabs({
 function TierSection({
   tier,
   items,
+  archived = false,
 }: {
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
   items: Prediction[];
+  archived?: boolean;
 }) {
   const Icon = tier.icon;
+  const archivedLabel: Record<Tier, string> = {
+    hot: "Was: highly likely",
+    likely: "Was: likely",
+    review: "Was: worth a look",
+  };
   return (
-    <section>
+    <section className={archived ? "opacity-90" : undefined}>
       <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex items-center gap-3">
           <span
             className="flex h-10 w-10 items-center justify-center rounded-2xl"
             style={{
-              background: `color-mix(in oklab, ${tier.accent} 14%, transparent)`,
+              background: `color-mix(in oklab, ${tier.accent} ${archived ? 8 : 14}%, transparent)`,
               color: tier.accent,
+              filter: archived ? "saturate(0.7)" : undefined,
             }}
             aria-hidden
           >
             <Icon className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="font-display text-2xl font-black tracking-tight text-foreground sm:text-3xl">
-              {tier.label}
+            <h2
+              className="font-display text-2xl font-black tracking-tight sm:text-3xl"
+              style={{ color: archived ? "oklch(0.45 0.02 60)" : "oklch(var(--foreground))" }}
+            >
+              {archived ? archivedLabel[tier.key] : tier.label}
             </h2>
-            <p className="text-sm font-medium text-foreground/65">{tier.helper}</p>
+            <p className="text-sm font-medium text-foreground/55">
+              {archived ? "Forecast made at the time — for reference only." : tier.helper}
+            </p>
           </div>
         </div>
         <span className="font-handwriting text-xl text-foreground/45 sm:text-2xl">
@@ -747,7 +929,7 @@ function TierSection({
 
       <div className="mt-6 grid gap-5 md:grid-cols-2">
         {items.map((p) => (
-          <PredictionCard key={p.title} prediction={p} tier={tier} />
+          <PredictionCard key={p.title} prediction={p} tier={tier} archived={archived} />
         ))}
       </div>
     </section>
@@ -779,14 +961,16 @@ function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: 
 function PredictionCard({
   prediction,
   tier,
+  archived = false,
 }: {
   prediction: Prediction;
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  archived?: boolean;
 }) {
   const defaults = tierDefaults(prediction.tier);
   const confidence = prediction.confidence ?? defaults.confidence;
   const seen = prediction.seen ?? defaults.seen;
-  const verdict = defaults.verdict;
+  const verdict = archived ? `WAS ${defaults.verdict}` : defaults.verdict;
   const rotate = defaults.rotate;
   const accent = tier.accent;
 
@@ -796,6 +980,8 @@ function PredictionCard({
       style={{
         background:
           "linear-gradient(180deg, oklch(0.995 0.005 80) 0%, oklch(0.985 0.012 70) 100%)",
+        opacity: archived ? 0.78 : 1,
+        filter: archived ? "saturate(0.78)" : undefined,
       }}
     >
       {/* Stamp — top right */}
