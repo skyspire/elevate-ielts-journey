@@ -51,7 +51,7 @@ export function QuotaGate({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, itemKey]);
 
-  const redirectTo = useMemo(() => location.pathname + location.searchStr, [location]);
+  const redirectTo = useMemo(() => location.href ?? location.pathname, [location]);
 
   // Guest: hard block.
   if (!user) {
