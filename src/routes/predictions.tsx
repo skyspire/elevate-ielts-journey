@@ -938,28 +938,28 @@ function TierSection({
 }
 
 /* ------------------------------------------------------------------ */
-/* Prediction card — stamped verdict + big confidence %                */
+/* Prediction row — editorial briefing line                            */
 /* ------------------------------------------------------------------ */
 
-const TONE_BG: Record<NonNullable<Prediction["tagTone"]>, string> = {
-  blue: "bg-brand-soft text-brand",
-  mint: "bg-mint text-foreground",
-  peach: "bg-peach text-foreground",
-  lilac: "bg-lilac text-foreground",
+const TONE_DOT: Record<NonNullable<Prediction["tagTone"]>, string> = {
+  blue: "oklch(0.55 0.14 250)",
+  mint: "oklch(0.70 0.10 165)",
+  peach: "oklch(0.72 0.13 50)",
+  lilac: "oklch(0.65 0.12 305)",
 };
 
-function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: string; rotate: number } {
+function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: string } {
   switch (tier) {
     case "hot":
-      return { confidence: 90, seen: "Trending this cycle", verdict: "HIGHLY LIKELY", rotate: -8 };
+      return { confidence: 90, seen: "Trending this cycle", verdict: "HIGHLY LIKELY" };
     case "likely":
-      return { confidence: 72, seen: "Strong recurring pattern", verdict: "LIKELY", rotate: -5 };
+      return { confidence: 72, seen: "Strong recurring pattern", verdict: "LIKELY" };
     case "review":
-      return { confidence: 55, seen: "Worth a quick review", verdict: "WORTH A LOOK", rotate: -4 };
+      return { confidence: 55, seen: "Worth a quick review", verdict: "WORTH A LOOK" };
   }
 }
 
-function PredictionCard({
+function PredictionRow({
   prediction,
   tier,
   archived = false,
@@ -971,100 +971,88 @@ function PredictionCard({
   const defaults = tierDefaults(prediction.tier);
   const confidence = prediction.confidence ?? defaults.confidence;
   const seen = prediction.seen ?? defaults.seen;
-  const verdict = archived ? `WAS ${defaults.verdict}` : defaults.verdict;
-  const rotate = defaults.rotate;
   const accent = tier.accent;
+  const tagColor = TONE_DOT[prediction.tagTone];
 
   return (
     <article
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
+      className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-x-5 px-1 py-5 transition-colors hover:bg-foreground/[0.025] sm:gap-x-7 sm:py-6"
       style={{
-        background:
-          "linear-gradient(180deg, oklch(0.995 0.005 80) 0%, oklch(0.985 0.012 70) 100%)",
-        opacity: archived ? 0.78 : 1,
+        opacity: archived ? 0.72 : 1,
         filter: archived ? "saturate(0.78)" : undefined,
       }}
     >
-      {/* Stamp — top right */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-3 top-3 z-10 select-none sm:right-4 sm:top-4"
-        style={{ transform: `rotate(${rotate}deg)` }}
-      >
-        <div
-          className="flex flex-col items-center justify-center rounded-full border-[2.5px] px-3 py-2 sm:px-4 sm:py-2.5"
+      {/* Confidence number — the visual anchor */}
+      <div className="flex w-[72px] flex-col items-start sm:w-[96px]">
+        <span
+          className="font-display font-black leading-[0.85] tracking-[-0.04em]"
           style={{
-            borderColor: accent,
             color: accent,
-            background: `color-mix(in oklab, ${accent} 6%, transparent)`,
-            boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accent} 25%, transparent)`,
+            fontSize: "clamp(2rem, 5vw, 2.75rem)",
           }}
         >
-          <span
-            className="font-display text-2xl font-black leading-none tracking-tight sm:text-3xl"
-            style={{ color: accent, letterSpacing: "-0.02em" }}
-          >
-            {confidence}
-            <span className="text-base sm:text-lg">%</span>
+          {confidence}
+          <span className="text-base font-extrabold sm:text-lg" style={{ color: accent, opacity: 0.7 }}>
+            %
           </span>
-          <span
-            className="mt-1 font-display text-[8px] font-black uppercase leading-none tracking-[0.18em] sm:text-[9px]"
-            style={{ color: accent }}
-          >
-            {verdict}
+        </span>
+        <span
+          className="mt-0.5 font-display text-[9px] font-black uppercase tracking-[0.2em] sm:text-[10px]"
+          style={{ color: accent, opacity: 0.85 }}
+        >
+          {archived ? `Was ${defaults.verdict}` : defaults.verdict}
+        </span>
+      </div>
+
+      {/* Middle: tag + title + frequency note */}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span className="inline-flex items-center gap-1.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
+            <span
+              aria-hidden
+              className="inline-block h-1.5 w-1.5 rounded-full"
+              style={{ background: tagColor }}
+            />
+            {prediction.tag}
+          </span>
+          <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-foreground/40 sm:text-[11px]">
+            · {prediction.type}
           </span>
         </div>
-      </div>
 
-      {/* Tag banner — left aligned, leaves room for stamp */}
-      <div className={`flex items-center px-5 py-3 pr-28 sm:pr-32 ${TONE_BG[prediction.tagTone]}`}>
-        <span className="text-xs font-extrabold uppercase tracking-wide sm:text-sm">
-          {prediction.tag}
-        </span>
-        <span className="ml-2 rounded-full bg-background/60 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-          {prediction.type}
-        </span>
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
-        <h3 className="mt-1 max-w-[28ch] font-display text-lg font-extrabold leading-snug tracking-tight text-foreground sm:text-xl">
+        <h3 className="mt-2 font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground sm:text-base md:text-[17px]">
           {prediction.title}
         </h3>
 
-        {/* Frequency note — handwriting accent */}
         <p
-          className="font-handwriting text-base text-foreground/55 sm:text-lg"
-          style={{ transform: "rotate(-0.6deg)" }}
+          className="mt-1.5 font-handwriting text-base leading-tight text-foreground/55 sm:text-lg"
+          style={{ transform: "rotate(-0.4deg)", display: "inline-block" }}
         >
           {seen}
-        </p>
-
-        {/* Confidence bar */}
-        <div className="mt-1">
-          <div
-            className="h-[6px] w-full overflow-hidden rounded-full"
-            style={{ background: `color-mix(in oklab, ${accent} 12%, transparent)` }}
-          >
-            <div
-              className="h-full rounded-full transition-all"
-              style={{
-                width: `${confidence}%`,
-                background: `linear-gradient(90deg, ${accent} 0%, color-mix(in oklab, ${accent} 70%, white) 100%)`,
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
-            <Calendar className="h-3.5 w-3.5" />
+          <span className="mx-2 text-foreground/25">·</span>
+          <span className="font-display text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/45">
             {prediction.date}
-          </div>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
-            <Lock className="h-3.5 w-3.5" />
           </span>
-        </div>
+        </p>
       </div>
+
+      {/* Right arrow — disclosure affordance */}
+      <span
+        aria-hidden
+        className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/70 text-foreground/55 transition-all group-hover:-translate-y-0.5 group-hover:border-transparent group-hover:text-foreground sm:flex"
+        style={{
+          background: "transparent",
+        }}
+      >
+        <ArrowUpRight className="h-4 w-4" />
+      </span>
+
+      {/* Hover accent — left edge whisker in tier color */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-1/2 h-10 w-[3px] -translate-y-1/2 origin-left scale-y-0 rounded-r transition-transform duration-300 group-hover:scale-y-100"
+        style={{ background: accent }}
+      />
     </article>
   );
 }
