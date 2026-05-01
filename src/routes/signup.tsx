@@ -1,12 +1,18 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { AlertCircle, Check, Eye, EyeOff } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { AlertCircle, Check, Eye, EyeOff, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { AuthSplitLayout } from "@/components/site/AuthSplitLayout";
 import { SocialAuthButtons } from "@/components/site/SocialAuthButtons";
 import { signupLearner } from "@/lib/learner-auth";
+import {
+  getPendingCoupon,
+  setPendingCoupon,
+  validateCoupon,
+} from "@/lib/admin/money-store";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
@@ -39,6 +45,44 @@ function SignupPage() {
   const [showPw, setShowPw] = useState(false);
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [coupon, setCoupon] = useState("");
+  const [couponMsg, setCouponMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  // Capture ?coupon= from URL on first load
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const code = (url.searchParams.get("coupon") || "").toUpperCase().trim();
+    const stored = getPendingCoupon();
+    if (code) {
+      setCoupon(code);
+      setPendingCoupon(code);
+    } else if (stored) {
+      setCoupon(stored);
+    }
+  }, []);
+
+  const applyCoupon = () => {
+    const code = coupon.toUpperCase().trim();
+    if (!code) {
+      setCouponMsg({ ok: false, text: "Enter a code." });
+      return;
+    }
+    const r = validateCoupon(code, { plan: "monthly", email, isNewUser: true, hasPriorPurchase: false });
+    if (!r.ok) {
+      setCouponMsg({ ok: false, text: r.error });
+      return;
+    }
+    setPendingCoupon(code);
+    const c = r.coupon;
+    const desc =
+      c.type === "percent"
+        ? `${c.value}% off`
+        : c.type === "fixed"
+          ? `$${c.value} off`
+          : `+${c.value} trial days`;
+    setCouponMsg({ ok: true, text: `Code applied — ${desc}.` });
+  };
 
   const checks = useMemo(() => passwordChecks(password), [password]);
   const strong = checks.length && checks.upper && checks.number;
