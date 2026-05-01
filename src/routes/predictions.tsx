@@ -815,6 +815,36 @@ function PredictionsPage() {
   };
 
   const [showArchive, setShowArchive] = useState(false);
+  const [activeTier, setActiveTier] = useState<Tier | null>(null);
+
+  useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-tier-section]"),
+    );
+    if (sections.length === 0) {
+      setActiveTier(null);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the most visible tier section currently intersecting.
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) {
+          const t = (visible[0].target as HTMLElement).dataset.tierSection as Tier;
+          setActiveTier(t);
+        }
+      },
+      { rootMargin: "-35% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [skill, exam, taskType]);
+
+  const activeTint = activeTier
+    ? TIERS.find((t) => t.key === activeTier)?.tint
+    : undefined;
 
   const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
