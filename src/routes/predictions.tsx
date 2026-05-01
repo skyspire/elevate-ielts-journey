@@ -83,7 +83,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "hot",
       exam: "both",
       confidence: 92,
-      seen: "Seen 5× in last 6 months",
+      appearances: 24,
     },
     {
       tag: "Education",
@@ -95,7 +95,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "hot",
       exam: "both",
       confidence: 88,
-      seen: "Seen 4× in last 6 months",
+      appearances: 19,
     },
     {
       tag: "Bar Chart",
@@ -107,7 +107,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "hot",
       exam: "academic",
       confidence: 85,
-      seen: "Recurring chart format",
+      appearances: 17,
     },
     {
       tag: "Complaint Letter",
@@ -119,7 +119,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "hot",
       exam: "general",
       confidence: 87,
-      seen: "Common formal letter prompt",
+      appearances: 21,
     },
     {
       tag: "Technology",
