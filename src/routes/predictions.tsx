@@ -948,14 +948,16 @@ const TONE_DOT: Record<NonNullable<Prediction["tagTone"]>, string> = {
   lilac: "oklch(0.65 0.12 305)",
 };
 
-function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: string } {
+function tierDefaults(
+  tier: Tier,
+): { confidence: number; appearances: number; verdict: string } {
   switch (tier) {
     case "hot":
-      return { confidence: 90, seen: "Trending this cycle", verdict: "HIGHLY LIKELY" };
+      return { confidence: 90, appearances: 22, verdict: "HIGHLY LIKELY" };
     case "likely":
-      return { confidence: 72, seen: "Strong recurring pattern", verdict: "LIKELY" };
+      return { confidence: 72, appearances: 14, verdict: "LIKELY" };
     case "review":
-      return { confidence: 55, seen: "Worth a quick review", verdict: "WORTH A LOOK" };
+      return { confidence: 55, appearances: 8, verdict: "WORTH A LOOK" };
   }
 }
 
@@ -970,7 +972,7 @@ function PredictionRow({
 }) {
   const defaults = tierDefaults(prediction.tier);
   const confidence = prediction.confidence ?? defaults.confidence;
-  const seen = prediction.seen ?? defaults.seen;
+  const appearances = prediction.appearances ?? defaults.appearances;
   const accent = tier.accent;
   const tagColor = TONE_DOT[prediction.tagTone];
 
@@ -1004,35 +1006,27 @@ function PredictionRow({
         </span>
       </div>
 
-      {/* Middle: tag + title + frequency note */}
+      {/* Middle: tag · title · lifetime appearances */}
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="inline-flex items-center gap-1.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
-            <span
-              aria-hidden
-              className="inline-block h-1.5 w-1.5 rounded-full"
-              style={{ background: tagColor }}
-            />
-            {prediction.tag}
-          </span>
-          <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-foreground/40 sm:text-[11px]">
-            · {prediction.type}
-          </span>
-        </div>
+        <span className="inline-flex items-center gap-1.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
+          <span
+            aria-hidden
+            className="inline-block h-1.5 w-1.5 rounded-full"
+            style={{ background: tagColor }}
+          />
+          {prediction.tag}
+        </span>
 
         <h3 className="mt-2 font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground sm:text-base md:text-[17px]">
           {prediction.title}
         </h3>
 
-        <p
-          className="mt-1.5 font-handwriting text-base leading-tight text-foreground/55 sm:text-lg"
-          style={{ transform: "rotate(-0.4deg)", display: "inline-block" }}
-        >
-          {seen}
-          <span className="mx-2 text-foreground/25">·</span>
-          <span className="font-display text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/45">
-            {prediction.date}
-          </span>
+        <p className="mt-2 font-display text-[12px] font-bold tracking-tight text-foreground/65 sm:text-[13px]">
+          Appeared{" "}
+          <span className="font-black" style={{ color: accent }}>
+            {appearances} times
+          </span>{" "}
+          in past exams
         </p>
       </div>
 
@@ -1040,9 +1034,6 @@ function PredictionRow({
       <span
         aria-hidden
         className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/70 text-foreground/55 transition-all group-hover:-translate-y-0.5 group-hover:border-transparent group-hover:text-foreground sm:flex"
-        style={{
-          background: "transparent",
-        }}
       >
         <ArrowUpRight className="h-4 w-4" />
       </span>
