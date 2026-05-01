@@ -8,7 +8,6 @@ import {
   Flame,
   TrendingUp,
   Lightbulb,
-  ArrowUpRight,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
