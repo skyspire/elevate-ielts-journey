@@ -30,15 +30,19 @@ import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-s
 import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
 import { Route as EbooksBookIdRouteImport } from './routes/ebooks.$bookId'
 import { Route as AdminWritingRouteImport } from './routes/admin.writing'
+import { Route as AdminWorkflowRouteImport } from './routes/admin.workflow'
 import { Route as AdminVocabularyRouteImport } from './routes/admin.vocabulary'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminStatsRouteImport } from './routes/admin.stats'
 import { Route as AdminSpeakingRouteImport } from './routes/admin.speaking'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
+import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminPricingRouteImport } from './routes/admin.pricing'
+import { Route as AdminPermissionsRouteImport } from './routes/admin.permissions'
 import { Route as AdminOpsRouteImport } from './routes/admin.ops'
 import { Route as AdminOfferBarRouteImport } from './routes/admin.offer-bar'
 import { Route as AdminMonetizationRouteImport } from './routes/admin.monetization'
+import { Route as AdminMaintenanceRouteImport } from './routes/admin.maintenance'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHomepageRouteImport } from './routes/admin.homepage'
 import { Route as AdminHeroRouteImport } from './routes/admin.hero'
@@ -166,6 +170,11 @@ const AdminWritingRoute = AdminWritingRouteImport.update({
   path: '/writing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminWorkflowRoute = AdminWorkflowRouteImport.update({
+  id: '/workflow',
+  path: '/workflow',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminVocabularyRoute = AdminVocabularyRouteImport.update({
   id: '/vocabulary',
   path: '/vocabulary',
@@ -191,9 +200,19 @@ const AdminSeoRoute = AdminSeoRouteImport.update({
   path: '/seo',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPricingRoute = AdminPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPermissionsRoute = AdminPermissionsRouteImport.update({
+  id: '/permissions',
+  path: '/permissions',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminOpsRoute = AdminOpsRouteImport.update({
@@ -209,6 +228,11 @@ const AdminOfferBarRoute = AdminOfferBarRouteImport.update({
 const AdminMonetizationRoute = AdminMonetizationRouteImport.update({
   id: '/monetization',
   path: '/monetization',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMaintenanceRoute = AdminMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -345,15 +369,19 @@ export interface FileRoutesByFullPath {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/maintenance': typeof AdminMaintenanceRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/ops': typeof AdminOpsRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
+  '/admin/workflow': typeof AdminWorkflowRoute
   '/admin/writing': typeof AdminWritingRoute
   '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -396,15 +424,19 @@ export interface FileRoutesByTo {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/maintenance': typeof AdminMaintenanceRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/ops': typeof AdminOpsRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
+  '/admin/workflow': typeof AdminWorkflowRoute
   '/admin/writing': typeof AdminWritingRoute
   '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -449,15 +481,19 @@ export interface FileRoutesById {
   '/admin/hero': typeof AdminHeroRoute
   '/admin/homepage': typeof AdminHomepageRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/maintenance': typeof AdminMaintenanceRoute
   '/admin/monetization': typeof AdminMonetizationRoute
   '/admin/offer-bar': typeof AdminOfferBarRoute
   '/admin/ops': typeof AdminOpsRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/pricing': typeof AdminPricingRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/speaking': typeof AdminSpeakingRoute
   '/admin/stats': typeof AdminStatsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
+  '/admin/workflow': typeof AdminWorkflowRoute
   '/admin/writing': typeof AdminWritingRoute
   '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
@@ -503,15 +539,19 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/maintenance'
     | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/ops'
+    | '/admin/permissions'
     | '/admin/pricing'
+    | '/admin/referrals'
     | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
     | '/admin/vocabulary'
+    | '/admin/workflow'
     | '/admin/writing'
     | '/ebooks/$bookId'
     | '/vocabulary/$category'
@@ -554,15 +594,19 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/maintenance'
     | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/ops'
+    | '/admin/permissions'
     | '/admin/pricing'
+    | '/admin/referrals'
     | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
     | '/admin/vocabulary'
+    | '/admin/workflow'
     | '/admin/writing'
     | '/ebooks/$bookId'
     | '/vocabulary/$category'
@@ -606,15 +650,19 @@ export interface FileRouteTypes {
     | '/admin/hero'
     | '/admin/homepage'
     | '/admin/login'
+    | '/admin/maintenance'
     | '/admin/monetization'
     | '/admin/offer-bar'
     | '/admin/ops'
+    | '/admin/permissions'
     | '/admin/pricing'
+    | '/admin/referrals'
     | '/admin/seo'
     | '/admin/speaking'
     | '/admin/stats'
     | '/admin/users'
     | '/admin/vocabulary'
+    | '/admin/workflow'
     | '/admin/writing'
     | '/ebooks/$bookId'
     | '/vocabulary/$category'
@@ -802,6 +850,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWritingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/workflow': {
+      id: '/admin/workflow'
+      path: '/workflow'
+      fullPath: '/admin/workflow'
+      preLoaderRoute: typeof AdminWorkflowRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/vocabulary': {
       id: '/admin/vocabulary'
       path: '/vocabulary'
@@ -837,11 +892,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSeoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pricing': {
       id: '/admin/pricing'
       path: '/pricing'
       fullPath: '/admin/pricing'
       preLoaderRoute: typeof AdminPricingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/permissions': {
+      id: '/admin/permissions'
+      path: '/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AdminPermissionsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/ops': {
@@ -863,6 +932,13 @@ declare module '@tanstack/react-router' {
       path: '/monetization'
       fullPath: '/admin/monetization'
       preLoaderRoute: typeof AdminMonetizationRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/maintenance': {
+      id: '/admin/maintenance'
+      path: '/maintenance'
+      fullPath: '/admin/maintenance'
+      preLoaderRoute: typeof AdminMaintenanceRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/login': {
@@ -1021,15 +1097,19 @@ interface AdminRouteChildren {
   AdminHeroRoute: typeof AdminHeroRoute
   AdminHomepageRoute: typeof AdminHomepageRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminMaintenanceRoute: typeof AdminMaintenanceRoute
   AdminMonetizationRoute: typeof AdminMonetizationRoute
   AdminOfferBarRoute: typeof AdminOfferBarRoute
   AdminOpsRoute: typeof AdminOpsRoute
+  AdminPermissionsRoute: typeof AdminPermissionsRoute
   AdminPricingRoute: typeof AdminPricingRoute
+  AdminReferralsRoute: typeof AdminReferralsRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminSpeakingRoute: typeof AdminSpeakingRoute
   AdminStatsRoute: typeof AdminStatsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminVocabularyRoute: typeof AdminVocabularyRoute
+  AdminWorkflowRoute: typeof AdminWorkflowRoute
   AdminWritingRoute: typeof AdminWritingRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminContentIndexRoute: typeof AdminContentIndexRoute
@@ -1054,15 +1134,19 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminHeroRoute: AdminHeroRoute,
   AdminHomepageRoute: AdminHomepageRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminMaintenanceRoute: AdminMaintenanceRoute,
   AdminMonetizationRoute: AdminMonetizationRoute,
   AdminOfferBarRoute: AdminOfferBarRoute,
   AdminOpsRoute: AdminOpsRoute,
+  AdminPermissionsRoute: AdminPermissionsRoute,
   AdminPricingRoute: AdminPricingRoute,
+  AdminReferralsRoute: AdminReferralsRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminSpeakingRoute: AdminSpeakingRoute,
   AdminStatsRoute: AdminStatsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminVocabularyRoute: AdminVocabularyRoute,
+  AdminWorkflowRoute: AdminWorkflowRoute,
   AdminWritingRoute: AdminWritingRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminContentIndexRoute: AdminContentIndexRoute,

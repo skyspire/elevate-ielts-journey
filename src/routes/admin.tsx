@@ -245,6 +245,10 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
         <Leaf to="/admin/accounts" icon={Users} label="Accounts & Subscribers" />
         <Leaf to="/admin/communications" icon={Mail} label="Communications" />
         <Leaf to="/admin/monetization" icon={CreditCard} label="Monetization" />
+        <Leaf to="/admin/referrals" icon={Users} label="Referrals / Affiliates" />
+        <Leaf to="/admin/workflow" icon={SettingsIcon} label="Workflow & Versions" />
+        <Leaf to="/admin/maintenance" icon={SettingsIcon} label="Maintenance Mode" />
+        <Leaf to="/admin/permissions" icon={Users} label="Permissions & 2FA" />
         <Leaf to="/admin/ops" icon={Database} label="Operations" />
         <Leaf to="/admin/activity" icon={SettingsIcon} label="Activity Log" />
         {canUsers && <Leaf to="/admin/users" icon={Users} label="Admin Users" />}
@@ -292,7 +296,11 @@ type LeafProps = {
     | "/admin/accounts"
     | "/admin/communications"
     | "/admin/monetization"
-    | "/admin/ops";
+    | "/admin/ops"
+    | "/admin/referrals"
+    | "/admin/workflow"
+    | "/admin/maintenance"
+    | "/admin/permissions";
   icon: typeof LayoutDashboard;
   label: string;
   exact?: boolean;
