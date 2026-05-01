@@ -388,7 +388,7 @@ function PredictionsPage() {
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Exam track toggle — first decision the learner makes */}
-          <div className="mb-8 flex justify-center sm:mb-10">
+          <div className="mb-10 flex justify-center sm:mb-12">
             <ExamToggle value={exam} onChange={handleExamChange} />
           </div>
 
