@@ -418,11 +418,12 @@ const TIERS: {
 
 function PredictionsPage() {
   const [skill, setSkill] = useState<SkillKey>("writing");
-  const [exam, setExam] = useState<ExamKey>(() => {
-    if (typeof window === "undefined") return "academic";
+  // Hydrate exam from localStorage AFTER mount to keep SSR/CSR markup identical.
+  const [exam, setExam] = useState<ExamKey>("academic");
+  useEffect(() => {
     const saved = window.localStorage.getItem("ielts-exam-track");
-    return saved === "general" ? "general" : "academic";
-  });
+    if (saved === "general" || saved === "academic") setExam(saved);
+  }, []);
 
   const handleExamChange = (next: ExamKey) => {
     setExam(next);
