@@ -531,12 +531,26 @@ const TIERS: {
   },
 ];
 
+/** Derive a task-type slug from the legacy `type` field when not explicitly set. */
+function getTaskType(p: Prediction): string {
+  if (p.taskType) return p.taskType;
+  switch (p.type) {
+    case "Writing Task 1": return "task1";
+    case "Writing Task 2": return "task2";
+    case "Speaking Part 1": return "part1";
+    case "Speaking Part 2": return "part2";
+    case "Speaking Part 3": return "part3";
+    default: return "all";
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
 function PredictionsPage() {
   const [skill, setSkill] = useState<SkillKey>("writing");
+  const [taskType, setTaskType] = useState<string>("all");
   // Hydrate exam from localStorage AFTER mount to keep SSR/CSR markup identical.
   const [exam, setExam] = useState<ExamKey>("academic");
   useEffect(() => {
@@ -551,11 +565,18 @@ function PredictionsPage() {
     }
   };
 
+  const handleSkillChange = (next: SkillKey) => {
+    setSkill(next);
+    setTaskType("all"); // reset chip selection when switching modules
+  };
+
   const [showArchive, setShowArchive] = useState(false);
 
   const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
-      (p) => !p.exam || p.exam === "both" || p.exam === exam,
+      (p) =>
+        (!p.exam || p.exam === "both" || p.exam === exam) &&
+        (taskType === "all" || getTaskType(p) === taskType),
     );
     const isCurrent = (p: Prediction) => (p.month ?? CURRENT_MONTH) === CURRENT_MONTH;
     const currentList = list.filter(isCurrent);
