@@ -40,6 +40,8 @@ export const Route = createFileRoute("/predictions")({
 
 type SkillKey = "writing" | "speaking" | "reading" | "listening";
 type Tier = "hot" | "likely" | "review";
+type ExamKey = "academic" | "general";
+type ExamScope = ExamKey | "both";
 
 type Prediction = {
   tag: string;
@@ -53,8 +55,9 @@ type Prediction = {
   title: string;
   date: string;
   tier: Tier;
-  confidence?: number; // 0-100, optional override
-  seen?: string; // optional override, e.g. "Seen 4× in last 6 months"
+  exam?: ExamScope; // defaults to "both"
+  confidence?: number;
+  seen?: string;
 };
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
@@ -67,6 +70,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Some people believe individuals can do little to protect the environment. To what extent do you agree?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
       confidence: 92,
       seen: "Seen 5× in last 6 months",
     },
@@ -78,6 +82,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Many universities now offer online courses. Are the benefits greater than the drawbacks?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
       confidence: 88,
       seen: "Seen 4× in last 6 months",
     },
@@ -89,8 +94,21 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "The chart compares household spending on leisure activities across four countries in 2024.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "academic",
       confidence: 85,
       seen: "Recurring chart format",
+    },
+    {
+      tag: "Complaint Letter",
+      tagTone: "peach",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to a shop manager about a faulty product you bought recently. Explain the problem and what you want done.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "general",
+      confidence: 87,
+      seen: "Common formal letter prompt",
     },
     {
       tag: "Technology",
@@ -100,6 +118,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Some argue that smartphones harm face-to-face communication. Discuss both views and give your opinion.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Process",
@@ -108,6 +127,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "The diagram shows how recycled plastic bottles are turned into clothing fibres.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "academic",
+    },
+    {
+      tag: "Invitation Letter",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Write a letter inviting a friend to visit your new home. Describe the place and suggest things to do together.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "general",
     },
     {
       tag: "Society",
@@ -117,6 +147,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "In some countries the number of older people is rising. What problems does this cause and how can they be solved?",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Health",
@@ -126,6 +157,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Fast food is becoming increasingly popular. Do the disadvantages outweigh the advantages?",
       date: "Worth reviewing",
       tier: "review",
+      exam: "both",
     },
     {
       tag: "Map",
@@ -134,6 +166,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Two maps showing changes in a coastal town between 2000 and 2024.",
       date: "Worth reviewing",
       tier: "review",
+      exam: "academic",
+    },
+    {
+      tag: "Request Letter",
+      tagTone: "blue",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to your employer asking for time off to attend a family event. Explain why and suggest cover.",
+      date: "Worth reviewing",
+      tier: "review",
+      exam: "general",
     },
   ],
   speaking: [
@@ -144,6 +187,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Describe your hometown and what you like most about it.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Memorable Trip",
@@ -153,6 +197,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Describe a journey that did not go as planned. You should say where, when, who and why.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Technology",
@@ -161,6 +206,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "How has technology changed the way people communicate in your country?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Hobbies",
@@ -169,6 +215,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "What do you usually do in your free time? How long have you done it?",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "A Person",
@@ -177,6 +224,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Describe a person who inspires you. Say who they are, how you know them and why.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Food",
@@ -185,6 +233,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "What kind of food do you like to cook at home?",
       date: "Worth reviewing",
       tier: "review",
+      exam: "both",
     },
   ],
   reading: [
@@ -195,6 +244,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Long-form passage on coral reef bleaching and conservation responses.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "academic",
+    },
+    {
+      tag: "Workplace Notice",
+      tagTone: "blue",
+      type: "Writing Task 1",
+      title:
+        "Section 1: a set of staff notices about a new office relocation — true/false/not given.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "general",
     },
     {
       tag: "Urban History",
@@ -203,6 +263,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Article tracing how a 19th-century city redesigned its public transport network.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "academic",
+    },
+    {
+      tag: "Course Brochure",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Section 2: a community college brochure describing evening classes and enrolment rules.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "general",
     },
   ],
   listening: [
@@ -213,6 +284,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Guided tour of a community arts centre with map labelling.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Section 4 — Lecture",
@@ -221,6 +293,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Academic talk on sleep cycles and student performance.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
   ],
 };
@@ -268,15 +341,29 @@ const TIERS: {
 
 function PredictionsPage() {
   const [skill, setSkill] = useState<SkillKey>("writing");
+  const [exam, setExam] = useState<ExamKey>(() => {
+    if (typeof window === "undefined") return "academic";
+    const saved = window.localStorage.getItem("ielts-exam-track");
+    return saved === "general" ? "general" : "academic";
+  });
+
+  const handleExamChange = (next: ExamKey) => {
+    setExam(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("ielts-exam-track", next);
+    }
+  };
 
   const grouped = useMemo(() => {
-    const list = PREDICTIONS[skill];
+    const list = PREDICTIONS[skill].filter(
+      (p) => !p.exam || p.exam === "both" || p.exam === exam,
+    );
     return {
       hot: list.filter((p) => p.tier === "hot"),
       likely: list.filter((p) => p.tier === "likely"),
       review: list.filter((p) => p.tier === "review"),
     };
-  }, [skill]);
+  }, [skill, exam]);
 
   const daysToNext = useDaysToNextSaturday();
 
@@ -297,6 +384,11 @@ function PredictionsPage() {
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
+          {/* Exam track toggle — first decision the learner makes */}
+          <div className="mb-8 flex justify-center sm:mb-10">
+            <ExamToggle value={exam} onChange={handleExamChange} />
+          </div>
+
           {/* Hero */}
           <div className="text-center">
             <div className="relative inline-block">
@@ -424,6 +516,73 @@ function CountdownCard({ days }: { days: number }) {
             Focus your prep on the highly-likely topics first.
           </p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Exam toggle — Academic vs General Training                          */
+/* ------------------------------------------------------------------ */
+
+function ExamToggle({
+  value,
+  onChange,
+}: {
+  value: ExamKey;
+  onChange: (e: ExamKey) => void;
+}) {
+  const options: { key: ExamKey; label: string; helper: string }[] = [
+    { key: "academic", label: "Academic", helper: "University & professional" },
+    { key: "general", label: "General Training", helper: "Migration & work" },
+  ];
+
+  return (
+    <div className="w-full max-w-md">
+      <p className="mb-2 text-center font-handwriting text-base text-foreground/55 sm:text-lg">
+        Which exam are you taking?
+      </p>
+      <div
+        role="radiogroup"
+        aria-label="IELTS exam track"
+        className="relative grid grid-cols-2 gap-1 rounded-2xl border border-border/80 p-1 shadow-soft"
+        style={{
+          background:
+            "linear-gradient(135deg, oklch(0.99 0.01 80) 0%, oklch(0.97 0.03 60) 100%)",
+        }}
+      >
+        {options.map((opt) => {
+          const active = value === opt.key;
+          return (
+            <button
+              key={opt.key}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(opt.key)}
+              className="relative z-10 flex flex-col items-center justify-center rounded-xl px-3 py-3 transition-all sm:py-3.5"
+              style={{
+                background: active
+                  ? "linear-gradient(135deg, oklch(0.62 0.18 35) 0%, oklch(0.55 0.18 30) 100%)"
+                  : "transparent",
+                color: active ? "oklch(0.99 0.01 80)" : "oklch(0.30 0.04 60)",
+                boxShadow: active
+                  ? "0 6px 18px -8px oklch(0.55 0.18 35 / 0.55)"
+                  : "none",
+              }}
+            >
+              <span className="font-display text-sm font-black tracking-tight sm:text-base">
+                {opt.label}
+              </span>
+              <span
+                className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-[11px]"
+                style={{ opacity: active ? 0.85 : 0.55 }}
+              >
+                {opt.helper}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
