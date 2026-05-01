@@ -544,6 +544,246 @@ function getTaskType(p: Prediction): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Sample question bank — used to pad each tier to 30–50 items/month   */
+/* (Will be replaced by a real database later.)                        */
+/* ------------------------------------------------------------------ */
+
+const SAMPLE_BANK: Record<SkillKey, string[]> = {
+  writing: [
+    "Some people think governments should spend more on public transport than on roads. To what extent do you agree or disagree?",
+    "Many people believe that art should be a compulsory school subject. Discuss both views and give your opinion.",
+    "Working from home is becoming more common. Do the advantages outweigh the disadvantages?",
+    "Some argue that countries should produce all their own food. To what extent do you agree?",
+    "The bar chart shows the percentage of households owning electric cars in five countries between 2010 and 2024.",
+    "The line graph compares average monthly rainfall in three cities over a year.",
+    "The pie charts show how energy was generated in two countries in 2000 and 2024.",
+    "Write a letter to your landlord about repairs needed in your flat. Explain the problem and what you want done.",
+    "Write a letter to a friend inviting them to your wedding. Describe the plans and what they should bring.",
+    "Some believe schools should focus on practical skills rather than academic subjects. Discuss both views.",
+    "In many cities, people prefer to live alone. What are the causes and effects of this trend?",
+    "The map shows changes to a university campus between 2005 and 2025.",
+    "The diagram shows how chocolate is produced from cocoa beans.",
+    "Some say money is the most important motivator at work. To what extent do you agree?",
+    "Tourism brings both benefits and problems to local communities. Discuss both views.",
+    "Children today spend less time outdoors than previous generations. What are the causes and solutions?",
+    "Write a letter to a colleague who has been promoted. Congratulate them and suggest meeting up.",
+    "Some believe advertising should be banned for children under 12. Do you agree or disagree?",
+    "The table compares household expenditure on five categories in three countries in 2023.",
+    "Many old buildings are being demolished to make space for modern housing. Is this a positive or negative trend?",
+    "Some people think reading fiction is more useful than reading non-fiction. Discuss both views.",
+    "Public museums and art galleries should be free. To what extent do you agree?",
+    "Write a letter to a hotel manager complaining about your recent stay.",
+    "Some say university education should be free for everyone. Discuss both views.",
+    "Plastic packaging is causing serious environmental damage. What can governments and individuals do?",
+    "The chart shows the number of international students studying in four English-speaking countries from 2010 to 2024.",
+    "Many people choose to learn a foreign language as adults. What are the benefits and challenges?",
+    "Some believe that sports stars are paid too much. To what extent do you agree?",
+    "Write a letter to your local council suggesting a new community facility.",
+    "Cities are becoming overcrowded. What problems does this cause and how can they be solved?",
+    "The diagram shows the life cycle of a honeybee.",
+    "Some say children should start school at age four; others say age seven. Discuss both views.",
+    "Working hours should be reduced to four days a week. To what extent do you agree?",
+    "The map shows two proposed designs for a new town centre.",
+    "Write a letter to a friend recommending a book you recently enjoyed.",
+    "Many people travel for work. What are the advantages and disadvantages of frequent business travel?",
+    "Some argue that the internet has weakened family relationships. Do you agree?",
+    "The bar chart compares the most common reasons people give for moving house in three age groups.",
+    "Governments should invest more in renewable energy. To what extent do you agree?",
+    "Write a letter to your manager requesting flexible working hours.",
+    "Some believe handwriting is no longer important. Discuss both views and give your opinion.",
+    "The line graph shows changes in the population of three cities from 1950 to 2020.",
+    "Many young people leave their hometown for big cities. What are the effects on rural areas?",
+    "Some say zoos serve a useful purpose; others say they should be closed. Discuss both views.",
+    "Write a letter to a neighbour thanking them for help during a difficult time.",
+    "The diagram shows how rainwater is collected and reused in a modern home.",
+    "Some believe music education improves academic performance. To what extent do you agree?",
+    "Cycling should be encouraged in cities. What are the benefits and what could governments do?",
+    "Write a letter to a magazine editor responding to a recent article.",
+    "Some argue that fast fashion is harming the environment and workers. Discuss the problem and possible solutions.",
+  ],
+  speaking: [
+    "Tell me about your hometown. What do you like most about it?",
+    "Do you work or are you a student? Tell me about it.",
+    "Describe a person who has had a big influence on your life.",
+    "Describe a time you helped someone. Say who, when and what happened.",
+    "Describe a piece of technology you use every day.",
+    "Describe a memorable meal you had recently.",
+    "What kind of music do you listen to? Has it changed over the years?",
+    "Do you prefer reading books or watching films? Why?",
+    "Describe a place in your country you would recommend to tourists.",
+    "How important is family in your culture?",
+    "Describe a skill you would like to learn and why.",
+    "Do you think people are too dependent on smartphones?",
+    "Describe a recent celebration you took part in.",
+    "What kind of weather do you like best? Why?",
+    "Describe a teacher you remember from school.",
+    "How has shopping changed in your country in recent years?",
+    "Describe a gift you gave someone that made them happy.",
+    "Do young and older people in your country have similar interests?",
+    "Describe a long journey you have made.",
+    "What role do social media play in people's lives today?",
+    "Describe a film you enjoyed watching.",
+    "Do people in your country read enough? Why or why not?",
+    "Describe an item of clothing you wear often.",
+    "How do people relax in your country?",
+    "Describe an interesting building in your city.",
+    "Do you think it is important for children to learn about other cultures?",
+    "Describe an outdoor activity you enjoy.",
+    "How has the way people communicate changed in the last 20 years?",
+    "Describe a website or app you use regularly.",
+    "Should governments do more to protect the environment? How?",
+    "Describe a small business you would like to start.",
+    "Do you think traditional skills are dying out? Why?",
+    "Describe a difficult decision you had to make.",
+    "Are there any festivals from other countries you find interesting?",
+    "Describe a healthy habit you have.",
+    "How do people in your country balance work and family life?",
+    "Describe an article or news story you remember reading.",
+    "Should schools teach money management? Why?",
+    "Describe a sport you enjoy watching or playing.",
+    "How important is it to keep traditional foods alive?",
+    "Describe a time you tried something for the first time.",
+    "What changes would you like to see in your city in the next 10 years?",
+    "Describe an old photograph that has special meaning to you.",
+    "How do people in your country use public transport?",
+    "Describe a problem in your neighbourhood and how it could be solved.",
+    "Do you think life was better 50 years ago? Why?",
+    "Describe a book that influenced your thinking.",
+    "Should companies allow more remote work? Why?",
+    "Describe a hobby you would like to pick up again.",
+    "How do people make new friends in your country?",
+  ],
+  reading: [
+    "Long passage on the history and conservation of urban green spaces — match headings to paragraphs.",
+    "Article about the science of taste and how it changes with age — true / false / not given.",
+    "Workplace handbook excerpt on health and safety procedures — sentence completion.",
+    "Course catalogue for an evening adult education centre — multiple choice on enrolment rules.",
+    "Passage exploring early human migration patterns — matching information to paragraphs.",
+    "Notice from a city council about new parking regulations — short answer questions.",
+    "Article on the development of wind power in coastal regions — summary completion.",
+    "Tenancy agreement excerpt — true / false / not given on tenant responsibilities.",
+    "Passage on the role of bees in pollination and food security — yes / no / not given.",
+    "Booklet introducing a new community library — matching features to facilities.",
+    "Passage on the rise and decline of a 19th-century railway company — multiple choice.",
+    "Brochure for a series of weekend walking tours — sentence completion.",
+    "Passage examining the psychology of decision making — matching researchers to findings.",
+    "Workplace bulletin about a new email security policy — short answer.",
+    "Passage on the cultural history of tea — table completion.",
+    "Notice for new employees about company benefits — true / false / not given.",
+    "Passage on advances in prosthetic limb design — multiple choice.",
+    "Travel guide section on visiting the highlands — matching descriptions to places.",
+    "Passage on the discovery and study of deep-sea hydrothermal vents — yes / no / not given.",
+    "Form for booking a community hall — note completion.",
+    "Passage on changing patterns of book publishing in the digital age — summary completion.",
+    "Notice from a bank introducing a new savings product — short answer.",
+    "Passage on the science of sleep deprivation in students — matching paragraphs.",
+    "Brochure on a heritage railway museum — multiple choice on opening hours and exhibits.",
+    "Passage on the impact of light pollution on wildlife — true / false / not given.",
+    "Workplace memo about a new dress code — sentence completion.",
+    "Passage on the linguistics of endangered languages — matching headings.",
+    "Catalogue for a community gardening scheme — short answer.",
+    "Passage on the history of vaccination — yes / no / not given.",
+    "Holiday rental booking confirmation — table completion.",
+    "Passage on smart city technologies and urban planning — multiple choice.",
+    "Volunteer programme leaflet — matching opportunities to skills.",
+    "Passage on the evolution of bird flight — summary completion.",
+    "Notice about a public consultation on a new tram line — short answer.",
+    "Passage on the rise of plant-based diets — true / false / not given.",
+    "Brochure for an arts and crafts weekend course — sentence completion.",
+    "Passage on the chemistry of perfume making — matching paragraphs.",
+    "Workplace email chain about an upcoming office move — short answer.",
+    "Passage on the science of memory and forgetting — yes / no / not given.",
+    "Notice from a leisure centre about new opening hours — table completion.",
+  ],
+  listening: [
+    "Phone call to enrol in a community language class — form completion.",
+    "Tour of a new science museum — map labelling.",
+    "Two students plan a group presentation with their tutor — multiple choice.",
+    "Lecture on coastal erosion and protection methods — note completion.",
+    "Conversation between a customer and a travel agent about a holiday package — form completion.",
+    "Talk to new volunteers at an animal shelter — matching tasks to days.",
+    "Discussion between two students about a psychology assignment — multiple choice.",
+    "Lecture on the history of jazz in the 20th century — sentence completion.",
+    "Phone enquiry about gym membership options — table completion.",
+    "Walking tour of a historic market square — map labelling.",
+    "Tutorial on writing a literature review — short answer.",
+    "Lecture on the impact of urbanisation on bird populations — note completion.",
+    "Customer call about a faulty laptop — form completion.",
+    "Welcome talk for new university students — matching speakers to topics.",
+    "Two researchers discuss findings from a sleep study — multiple choice.",
+    "Lecture on renewable energy in remote communities — sentence completion.",
+    "Booking call for a wedding venue — form completion.",
+    "Tour of a community arts centre — map labelling.",
+    "Tutorial on planning a fieldwork project — short answer.",
+    "Lecture on the development of the internet — note completion.",
+    "Phone call to report a lost item on public transport — form completion.",
+    "Briefing for new library members about borrowing rules — matching items to rules.",
+    "Two students compare options for a study trip abroad — multiple choice.",
+    "Lecture on early childhood language development — sentence completion.",
+    "Customer service call about a delayed parcel — form completion.",
+    "Guided tour of a botanical garden — map labelling.",
+    "Tutorial on academic referencing — short answer.",
+    "Lecture on ocean currents and global climate — note completion.",
+    "Phone enquiry about adult swimming lessons — table completion.",
+    "Talk for new staff at a busy hotel — matching duties to roles.",
+    "Two students plan a charity fundraising event — multiple choice.",
+    "Lecture on the architecture of medieval cathedrals — sentence completion.",
+    "Booking call for a city walking tour — form completion.",
+    "Tour of a renovated train station — map labelling.",
+    "Tutorial on time management for postgraduate students — short answer.",
+    "Lecture on the cultural history of coffee — note completion.",
+    "Customer call about cancelling a magazine subscription — form completion.",
+    "Briefing for new exhibitors at a craft fair — matching stalls to areas.",
+    "Two students discuss feedback on their dissertation drafts — multiple choice.",
+    "Lecture on volcanoes and tectonic plate movement — sentence completion.",
+  ],
+};
+
+/** Pad a tier's curated list with sample-bank entries to reach a target count. */
+function padTier(
+  skill: SkillKey,
+  tier: Tier,
+  curated: Prediction[],
+): Prediction[] {
+  const target = tier === "hot" ? 32 : tier === "likely" ? 38 : 30;
+  if (curated.length >= target) return curated;
+
+  const bank = SAMPLE_BANK[skill];
+  const used = new Set(curated.map((p) => p.title));
+  const seed = skill.charCodeAt(0) * 13 + tier.charCodeAt(0) * 7;
+
+  const padded: Prediction[] = [...curated];
+  let i = 0;
+  while (padded.length < target && i < bank.length * 4) {
+    const idx = (i * 31 + seed) % bank.length;
+    const title = bank[idx];
+    i += 1;
+    if (used.has(title)) continue;
+    used.add(title);
+    const baseFreq = tier === "hot" ? 26 : tier === "likely" ? 16 : 9;
+    const jitter = ((idx * 7 + seed) % 7) - 3;
+    padded.push({
+      tag: "Topic",
+      tagTone: "blue",
+      type:
+        skill === "writing"
+          ? "Writing Task 2"
+          : skill === "speaking"
+            ? "Speaking Part 1"
+            : skill === "reading"
+              ? "Reading"
+              : "Listening",
+      title,
+      date: "Predicted for May 2026",
+      tier,
+      exam: "both",
+      appearances: Math.max(2, baseFreq + jitter - Math.floor(padded.length / 6)),
+    });
+  }
+  return padded;
+}
+
+/* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
