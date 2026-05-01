@@ -94,18 +94,18 @@ export function SignupGatePopup({ open, dismissible = false, onClose, redirectTo
         </p>
 
         <div className="mt-6 flex flex-col gap-2.5">
-          <Link
-            to={signupHref}
+          <a
+            href={signupHref}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-foreground px-5 text-sm font-bold text-background transition-opacity hover:opacity-90"
           >
             Create free account
-          </Link>
-          <Link
-            to={loginHref}
+          </a>
+          <a
+            href={loginHref}
             className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-card px-5 text-sm font-bold text-foreground transition-colors hover:bg-muted"
           >
             I already have an account
-          </Link>
+          </a>
         </div>
 
         <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
