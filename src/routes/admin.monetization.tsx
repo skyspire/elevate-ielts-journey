@@ -1,6 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Tag, Gift as GiftIcon, Percent, Trash2, Plus, Sparkles } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  Tag,
+  Gift as GiftIcon,
+  Percent,
+  Trash2,
+  Plus,
+  Sparkles,
+  Copy,
+  History,
+  Wand2,
+  Layers,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,12 +31,16 @@ import {
   type Coupon,
   type Gift,
   type SalePricing,
+  COUPON_PRESETS,
   blankCoupon,
+  buildCouponShareUrl,
+  bulkGenerateCoupons,
   createGift,
   deleteCoupon,
   deleteGift,
   getCoupons,
   getGifts,
+  getRedemptionsForCode,
   getSale,
   isSaleActive,
   saveSale,
