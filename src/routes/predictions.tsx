@@ -1048,7 +1048,11 @@ function PredictionsPage() {
             {TIERS.map((tier) => {
               const items = current[tier.key];
               if (items.length === 0) return null;
-              return <TierSection key={tier.key} tier={tier} items={items} />;
+              return (
+                <div key={tier.key} data-tier-section={tier.key}>
+                  <TierSection tier={tier} items={items} />
+                </div>
+              );
             })}
 
             {current.hot.length === 0 &&
