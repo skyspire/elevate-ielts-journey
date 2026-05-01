@@ -405,8 +405,6 @@ function PredictionsPage() {
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Eyebrow — small "Predictions" mark sits above the main question */}
-          <div className="flex justify-center">
           {/* MASSIVE EDITORIAL WORDMARK — page hero */}
           <div className="flex justify-center">
             <h2
