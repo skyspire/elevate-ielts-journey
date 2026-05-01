@@ -741,7 +741,16 @@ function PredictionsPage() {
 
           {/* Skill tabs */}
           <div className="mt-12">
-            <SkillTabs value={skill} onChange={setSkill} />
+            <SkillTabs value={skill} onChange={handleSkillChange} />
+          </div>
+
+          {/* Task-type chips for the active module */}
+          <div className="mt-6">
+            <TaskTypeChips
+              skill={skill}
+              value={taskType}
+              onChange={setTaskType}
+            />
           </div>
 
           {/* Tiered groups — current month */}
