@@ -1195,7 +1195,10 @@ function PredictionRow({
     >
       <p className="min-w-0 flex-1 font-display text-[14.5px] font-semibold leading-snug tracking-tight text-foreground sm:text-[15.5px]">
         {prediction.title}
-        <span className="ml-1.5 whitespace-nowrap text-[12.5px] font-medium text-foreground/45 sm:text-[13px]">
+        <span
+          className="ml-1.5 whitespace-nowrap text-[12.5px] font-semibold sm:text-[13px]"
+          style={{ color: `color-mix(in oklab, ${accent} 78%, transparent)` }}
+        >
           · appeared {appearances} times
         </span>
       </p>
