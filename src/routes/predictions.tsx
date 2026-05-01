@@ -838,8 +838,15 @@ function PredictionsPage() {
       .sort(([a], [b]) => (a < b ? 1 : -1))
       .map(([month, items]) => ({ month, label: formatMonth(month), grouped: grouped(items) }));
 
-    return { current: grouped(currentList), archive: archiveMonths };
-  }, [skill, exam]);
+    const currentGrouped = grouped(currentList);
+    const currentPadded = {
+      hot: padTier(skill, "hot", currentGrouped.hot),
+      likely: padTier(skill, "likely", currentGrouped.likely),
+      review: padTier(skill, "review", currentGrouped.review),
+    };
+
+    return { current: currentPadded, archive: archiveMonths };
+  }, [skill, exam, taskType]);
 
   const daysToNext = useDaysToNextSaturday();
 
