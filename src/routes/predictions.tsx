@@ -370,42 +370,42 @@ function PredictionsPage() {
 
   const daysToNext = useDaysToNextSaturday();
 
-  const pageBg = "oklch(0.985 0.018 60)";
-  const heroGradient = `radial-gradient(ellipse 70% 80% at 16% 0%, oklch(0.92 0.09 55 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 65% 75% at 86% 10%, oklch(0.92 0.08 30 / 0.45) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.03 50 / 0.55) 0%, transparent 100%)`;
+  const isAcademic = exam === "academic";
+  const pageBg = isAcademic ? "oklch(0.985 0.014 240)" : "oklch(0.985 0.018 50)";
+  const heroGradient = isAcademic
+    ? `radial-gradient(ellipse 70% 80% at 16% 0%, oklch(0.90 0.09 245 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 86% 10%, oklch(0.92 0.07 260 / 0.45) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.95 0.04 245 / 0.55) 0%, transparent 100%)`
+    : `radial-gradient(ellipse 70% 80% at 16% 0%, oklch(0.92 0.09 55 / 0.55) 0%, transparent 60%),
+       radial-gradient(ellipse 65% 75% at 86% 10%, oklch(0.92 0.10 30 / 0.50) 0%, transparent 65%),
+       linear-gradient(180deg, oklch(0.96 0.04 40 / 0.55) 0%, transparent 100%)`;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: pageBg }}>
+    <div className="min-h-screen transition-colors duration-500" style={{ backgroundColor: pageBg }}>
       <main className="relative py-10 sm:py-14">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[480px] [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[560px] transition-[background] duration-500 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
           style={{ background: heroGradient }}
         />
 
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Exam track toggle — first decision the learner makes */}
-          <div className="mb-10 flex justify-center sm:mb-12">
-            <ExamToggle value={exam} onChange={handleExamChange} />
-          </div>
-
-          {/* Hero */}
-          <div className="text-center">
+          {/* Eyebrow — small "Predictions" mark sits above the main question */}
+          <div className="flex justify-center">
             <div className="relative inline-block">
-              <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
-                style={{ transform: "rotate(-2deg)" }}
+              <span
+                className="font-handwriting text-2xl font-bold leading-none text-foreground/55 sm:text-3xl"
+                style={{ transform: "rotate(-2deg)", display: "inline-block" }}
               >
                 Predictions
-              </h1>
+              </span>
               <svg
                 aria-hidden
-                viewBox="0 0 300 14"
+                viewBox="0 0 200 10"
                 preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                className="absolute -bottom-1.5 left-0 h-2 w-full text-foreground/55"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2.2"
@@ -413,39 +413,40 @@ function PredictionsPage() {
                 strokeLinejoin="round"
                 style={{ transform: "rotate(-2deg)" }}
               >
-                <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
-                <path
-                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
-                  opacity="0.4"
-                  strokeWidth="1.4"
-                />
+                <path d="M 6 6 C 50 2, 110 9, 160 5 S 196 7, 196 5" />
               </svg>
-            </div>
-
-            <div className="mx-auto mt-6 max-w-xl space-y-2">
-              <p className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
-                Topics worth your time before the next sitting.
-              </p>
-              <p className="text-sm text-foreground/65 sm:text-[15px]">
-                Hand-picked by our{" "}
-                <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-[-2px] bottom-[2px] -z-0 h-[55%] -rotate-[1.5deg] rounded-[2px]"
-                    style={{
-                      background:
-                        "linear-gradient(100deg, oklch(0.92 0.16 95 / 0.85) 0%, oklch(0.88 0.18 90 / 0.85) 60%, oklch(0.92 0.16 95 / 0.7) 100%)",
-                    }}
-                  />
-                  <span className="relative">qualified IELTS team</span>
-                </span>{" "}
-                from twelve months of question rotation patterns — refreshed weekly.
-              </p>
             </div>
           </div>
 
+          {/* Main hero — the exam question is the headline of the page */}
+          <div className="mt-8 text-center sm:mt-10">
+            <h1 className="font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              Which exam are you taking?
+            </h1>
+            <p className="mx-auto mt-4 max-w-xl text-sm text-foreground/65 sm:text-[15px]">
+              Choose your track to see topics most likely to appear — hand-picked by our{" "}
+              <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-2px] bottom-[2px] -z-0 h-[55%] -rotate-[1.5deg] rounded-[2px]"
+                  style={{
+                    background:
+                      "linear-gradient(100deg, oklch(0.92 0.16 95 / 0.85) 0%, oklch(0.88 0.18 90 / 0.85) 60%, oklch(0.92 0.16 95 / 0.7) 100%)",
+                  }}
+                />
+                <span className="relative">qualified IELTS team</span>
+              </span>{" "}
+              and refreshed weekly.
+            </p>
+          </div>
+
+          {/* Exam track toggle */}
+          <div className="mt-8 flex justify-center sm:mt-10">
+            <ExamToggle value={exam} onChange={handleExamChange} />
+          </div>
+
           {/* Countdown card — editorial, paper feel */}
-          <div className="mt-10 flex justify-center">
+          <div className="mt-12 flex justify-center">
             <CountdownCard days={daysToNext} />
           </div>
 
