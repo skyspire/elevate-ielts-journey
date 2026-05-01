@@ -189,6 +189,34 @@ function SignupPage() {
           </ul>
         </div>
 
+        {/* Coupon code */}
+        <details className="rounded-md border border-border/60 bg-muted/20 px-3 py-2 text-xs" open={!!coupon}>
+          <summary className="flex cursor-pointer items-center gap-2 font-semibold text-foreground">
+            <Tag className="h-3.5 w-3.5" />
+            Have a code?
+            {couponMsg?.ok && <Badge className="ml-auto text-[9px]">Applied</Badge>}
+          </summary>
+          <div className="mt-2 flex gap-2">
+            <Input
+              value={coupon}
+              onChange={(e) => {
+                setCoupon(e.target.value.toUpperCase());
+                setCouponMsg(null);
+              }}
+              placeholder="WELCOME10"
+              className="h-9 font-mono uppercase"
+            />
+            <Button type="button" variant="outline" className="h-9" onClick={applyCoupon}>
+              Apply
+            </Button>
+          </div>
+          {couponMsg && (
+            <p className={`mt-1.5 text-[11px] ${couponMsg.ok ? "text-primary" : "text-destructive"}`}>
+              {couponMsg.text}
+            </p>
+          )}
+        </details>
+
         <label className="flex cursor-pointer select-none items-start gap-2 text-xs text-muted-foreground">
           <input
             type="checkbox"
