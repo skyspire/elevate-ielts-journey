@@ -225,21 +225,6 @@ function SidebarTree({ canUsers, currentPath }: { canUsers: boolean; currentPath
         </Group>
       </Section>
 
-      {/* Site / Homepage */}
-      <Section label="Site">
-        <Leaf to="/admin/hero" icon={Type} label="Hero Section" />
-        <Leaf to="/admin/homepage" icon={Layout} label="Homepage Layout" />
-        <Leaf to="/admin/stats" icon={BarChart3} label="Stats" />
-        <Leaf to="/admin/pricing" icon={CreditCard} label="Pricing" />
-        <Leaf to="/admin/faq" icon={HelpCircle} label="FAQ" />
-        <Leaf to="/admin/footer" icon={Layout} label="Footer" />
-        <Leaf to="/admin/contact" icon={Mail} label="Contact Page" />
-        <Leaf to="/admin/offer-bar" icon={SettingsIcon} label="Top Offer Bar" />
-        <Leaf to="/admin/banner" icon={SettingsIcon} label="Announcement Banner" />
-        <Leaf to="/admin/branding" icon={SettingsIcon} label="Theme & Branding" />
-        <Leaf to="/admin/seo" icon={SettingsIcon} label="Per-page SEO" />
-      </Section>
-
       {/* System */}
       <Section label="System">
         <Leaf to="/admin/accounts" icon={Users} label="Accounts & Subscribers" />
