@@ -296,7 +296,11 @@ type LeafProps = {
     | "/admin/accounts"
     | "/admin/communications"
     | "/admin/monetization"
-    | "/admin/ops";
+    | "/admin/ops"
+    | "/admin/referrals"
+    | "/admin/workflow"
+    | "/admin/maintenance"
+    | "/admin/permissions";
   icon: typeof LayoutDashboard;
   label: string;
   exact?: boolean;
