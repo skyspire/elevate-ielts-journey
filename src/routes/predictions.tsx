@@ -341,15 +341,29 @@ const TIERS: {
 
 function PredictionsPage() {
   const [skill, setSkill] = useState<SkillKey>("writing");
+  const [exam, setExam] = useState<ExamKey>(() => {
+    if (typeof window === "undefined") return "academic";
+    const saved = window.localStorage.getItem("ielts-exam-track");
+    return saved === "general" ? "general" : "academic";
+  });
+
+  const handleExamChange = (next: ExamKey) => {
+    setExam(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("ielts-exam-track", next);
+    }
+  };
 
   const grouped = useMemo(() => {
-    const list = PREDICTIONS[skill];
+    const list = PREDICTIONS[skill].filter(
+      (p) => !p.exam || p.exam === "both" || p.exam === exam,
+    );
     return {
       hot: list.filter((p) => p.tier === "hot"),
       likely: list.filter((p) => p.tier === "likely"),
       review: list.filter((p) => p.tier === "review"),
     };
-  }, [skill]);
+  }, [skill, exam]);
 
   const daysToNext = useDaysToNextSaturday();
 
