@@ -50,7 +50,11 @@ type Prediction = {
     | "Writing Task 2"
     | "Speaking Part 1"
     | "Speaking Part 2"
-    | "Speaking Part 3";
+    | "Speaking Part 3"
+    | "Listening"
+    | "Reading";
+  /** Task-type slug within the skill (e.g. "task2", "part2", "multiple-choice"). */
+  taskType: string;
   title: string;
   date: string;
   tier: Tier;
@@ -60,6 +64,39 @@ type Prediction = {
   appearances?: number;
   /** ISO YYYY-MM. Omit = current month. */
   month?: string;
+};
+
+/** Task types shown as chips under each module tab. */
+const TASK_TYPES_BY_SKILL: Record<SkillKey, { id: string; label: string }[]> = {
+  writing: [
+    { id: "task1", label: "Task 1" },
+    { id: "task2", label: "Task 2" },
+  ],
+  speaking: [
+    { id: "part1", label: "Part 1" },
+    { id: "part2", label: "Part 2 (Cue Card)" },
+    { id: "part3", label: "Part 3" },
+  ],
+  reading: [
+    { id: "tfng", label: "True / False / Not Given" },
+    { id: "ynng", label: "Yes / No / Not Given" },
+    { id: "headings", label: "Matching Headings" },
+    { id: "matching-info", label: "Matching Information" },
+    { id: "mcq", label: "Multiple Choice" },
+    { id: "summary", label: "Summary Completion" },
+    { id: "sentence", label: "Sentence Completion" },
+    { id: "short-answer", label: "Short Answer" },
+  ],
+  listening: [
+    { id: "mcq", label: "Multiple Choice" },
+    { id: "matching", label: "Matching" },
+    { id: "map", label: "Map / Plan Labelling" },
+    { id: "form", label: "Form Completion" },
+    { id: "note", label: "Note Completion" },
+    { id: "table", label: "Table Completion" },
+    { id: "sentence", label: "Sentence Completion" },
+    { id: "short-answer", label: "Short Answer" },
+  ],
 };
 
 /** The "current" prediction cycle. Items with no month default to this. */
