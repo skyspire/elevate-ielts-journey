@@ -70,6 +70,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Some people believe individuals can do little to protect the environment. To what extent do you agree?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
       confidence: 92,
       seen: "Seen 5× in last 6 months",
     },
@@ -81,6 +82,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Many universities now offer online courses. Are the benefits greater than the drawbacks?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
       confidence: 88,
       seen: "Seen 4× in last 6 months",
     },
@@ -92,8 +94,21 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "The chart compares household spending on leisure activities across four countries in 2024.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "academic",
       confidence: 85,
       seen: "Recurring chart format",
+    },
+    {
+      tag: "Complaint Letter",
+      tagTone: "peach",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to a shop manager about a faulty product you bought recently. Explain the problem and what you want done.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "general",
+      confidence: 87,
+      seen: "Common formal letter prompt",
     },
     {
       tag: "Technology",
@@ -103,6 +118,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Some argue that smartphones harm face-to-face communication. Discuss both views and give your opinion.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Process",
@@ -111,6 +127,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "The diagram shows how recycled plastic bottles are turned into clothing fibres.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "academic",
+    },
+    {
+      tag: "Invitation Letter",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Write a letter inviting a friend to visit your new home. Describe the place and suggest things to do together.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "general",
     },
     {
       tag: "Society",
@@ -120,6 +147,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "In some countries the number of older people is rising. What problems does this cause and how can they be solved?",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Health",
@@ -129,6 +157,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Fast food is becoming increasingly popular. Do the disadvantages outweigh the advantages?",
       date: "Worth reviewing",
       tier: "review",
+      exam: "both",
     },
     {
       tag: "Map",
@@ -137,6 +166,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Two maps showing changes in a coastal town between 2000 and 2024.",
       date: "Worth reviewing",
       tier: "review",
+      exam: "academic",
+    },
+    {
+      tag: "Request Letter",
+      tagTone: "blue",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to your employer asking for time off to attend a family event. Explain why and suggest cover.",
+      date: "Worth reviewing",
+      tier: "review",
+      exam: "general",
     },
   ],
   speaking: [
@@ -147,6 +187,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Describe your hometown and what you like most about it.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Memorable Trip",
@@ -156,6 +197,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
         "Describe a journey that did not go as planned. You should say where, when, who and why.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Technology",
@@ -164,6 +206,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "How has technology changed the way people communicate in your country?",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Hobbies",
@@ -172,6 +215,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "What do you usually do in your free time? How long have you done it?",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "A Person",
@@ -180,6 +224,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Describe a person who inspires you. Say who they are, how you know them and why.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
     {
       tag: "Food",
@@ -188,6 +233,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "What kind of food do you like to cook at home?",
       date: "Worth reviewing",
       tier: "review",
+      exam: "both",
     },
   ],
   reading: [
@@ -198,6 +244,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Long-form passage on coral reef bleaching and conservation responses.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "academic",
+    },
+    {
+      tag: "Workplace Notice",
+      tagTone: "blue",
+      type: "Writing Task 1",
+      title:
+        "Section 1: a set of staff notices about a new office relocation — true/false/not given.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "general",
     },
     {
       tag: "Urban History",
@@ -206,6 +263,17 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Article tracing how a 19th-century city redesigned its public transport network.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "academic",
+    },
+    {
+      tag: "Course Brochure",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Section 2: a community college brochure describing evening classes and enrolment rules.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "general",
     },
   ],
   listening: [
@@ -216,6 +284,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Guided tour of a community arts centre with map labelling.",
       date: "Predicted for May 2026",
       tier: "hot",
+      exam: "both",
     },
     {
       tag: "Section 4 — Lecture",
