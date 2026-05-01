@@ -56,7 +56,8 @@ type Prediction = {
   tier: Tier;
   exam?: ExamScope; // defaults to "both"
   confidence?: number;
-  seen?: string;
+  /** Lifetime exam appearances (not last 12 months). */
+  appearances?: number;
   /** ISO YYYY-MM. Omit = current month. */
   month?: string;
 };
