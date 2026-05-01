@@ -1026,6 +1026,56 @@ function SkillTabs({
 }
 
 /* ------------------------------------------------------------------ */
+/* Task-type chips — horizontal scrollable filter under module tabs    */
+/* ------------------------------------------------------------------ */
+
+function TaskTypeChips({
+  skill,
+  value,
+  onChange,
+}: {
+  skill: SkillKey;
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  const types = TASK_TYPES_BY_SKILL[skill];
+  const all = [{ id: "all", label: "All task types" }, ...types];
+
+  return (
+    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+      <div className="flex min-w-max items-center gap-2 sm:flex-wrap sm:justify-center">
+        {all.map((t) => {
+          const active = value === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onChange(t.id)}
+              aria-pressed={active}
+              className="group relative shrink-0 rounded-full border px-3.5 py-1.5 font-display text-[12px] font-bold tracking-tight transition-all sm:text-[13px]"
+              style={{
+                background: active
+                  ? "linear-gradient(135deg, oklch(0.25 0.02 60) 0%, oklch(0.18 0.02 60) 100%)"
+                  : "oklch(1 0 0 / 0.6)",
+                color: active ? "oklch(0.99 0.01 80)" : "oklch(0.30 0.03 60)",
+                borderColor: active
+                  ? "transparent"
+                  : "oklch(0.85 0.01 60 / 0.8)",
+                boxShadow: active
+                  ? "0 6px 16px -8px oklch(0.20 0.02 60 / 0.50)"
+                  : "0 1px 2px oklch(0 0 0 / 0.03)",
+              }}
+            >
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Tier section                                                        */
 /* ------------------------------------------------------------------ */
 
