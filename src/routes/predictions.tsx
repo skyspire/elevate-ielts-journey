@@ -961,14 +961,16 @@ function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: 
 function PredictionCard({
   prediction,
   tier,
+  archived = false,
 }: {
   prediction: Prediction;
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  archived?: boolean;
 }) {
   const defaults = tierDefaults(prediction.tier);
   const confidence = prediction.confidence ?? defaults.confidence;
   const seen = prediction.seen ?? defaults.seen;
-  const verdict = defaults.verdict;
+  const verdict = archived ? `WAS ${defaults.verdict}` : defaults.verdict;
   const rotate = defaults.rotate;
   const accent = tier.accent;
 
@@ -978,6 +980,8 @@ function PredictionCard({
       style={{
         background:
           "linear-gradient(180deg, oklch(0.995 0.005 80) 0%, oklch(0.985 0.012 70) 100%)",
+        opacity: archived ? 0.78 : 1,
+        filter: archived ? "saturate(0.78)" : undefined,
       }}
     >
       {/* Stamp — top right */}
