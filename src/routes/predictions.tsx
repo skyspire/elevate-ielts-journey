@@ -189,6 +189,52 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "review",
       exam: "general",
     },
+    /* ---------- Archive: April 2026 ---------- */
+    {
+      tag: "Crime",
+      tagTone: "blue",
+      type: "Writing Task 2",
+      title:
+        "Some believe prison is the best punishment; others prefer education and community work. Discuss both views.",
+      date: "Published April 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-04",
+    },
+    {
+      tag: "Line Graph",
+      tagTone: "peach",
+      type: "Writing Task 1",
+      title:
+        "The line graph shows electricity consumption in three countries between 1990 and 2020.",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "academic",
+      month: "2026-04",
+    },
+    {
+      tag: "Apology Letter",
+      tagTone: "lilac",
+      type: "Writing Task 1",
+      title:
+        "Write a letter to a neighbour apologising for a recent disturbance and explaining what happened.",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "general",
+      month: "2026-04",
+    },
+    /* ---------- Archive: March 2026 ---------- */
+    {
+      tag: "Globalisation",
+      tagTone: "mint",
+      type: "Writing Task 2",
+      title:
+        "Some say globalisation harms local cultures. To what extent do you agree or disagree?",
+      date: "Published March 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-03",
+    },
   ],
   speaking: [
     {
