@@ -514,24 +514,24 @@ const TIERS: {
     label: "Highly likely",
     helper: "Top picks for the next sitting — start here.",
     icon: Flame,
-    accent: "oklch(0.62 0.18 35)",
-    tint: "oklch(0.96 0.05 38)",
+    accent: "oklch(0.55 0.16 38)", // burnt sienna
+    tint: "oklch(0.92 0.09 40)",
   },
   {
     key: "likely",
     label: "Likely to appear",
     helper: "Strong candidates worth a focused practice round.",
     icon: TrendingUp,
-    accent: "oklch(0.55 0.14 250)",
-    tint: "oklch(0.96 0.04 248)",
+    accent: "oklch(0.42 0.18 285)", // ink violet
+    tint: "oklch(0.90 0.09 285)",
   },
   {
     key: "review",
     label: "Worth reviewing",
     helper: "Recurring themes — keep them warm in your prep.",
     icon: Lightbulb,
-    accent: "oklch(0.55 0.10 100)",
-    tint: "oklch(0.96 0.05 105)",
+    accent: "oklch(0.58 0.13 145)", // pistachio depth
+    tint: "oklch(0.92 0.10 142)",
   },
 ];
 
@@ -1044,11 +1044,14 @@ function PredictionsPage() {
                 <div
                   key={tier.key}
                   data-tier-section={tier.key}
-                  className="relative -mx-3 rounded-3xl px-3 py-6 transition-colors duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
+                  className="relative -mx-3 overflow-hidden rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
                   style={{
-                    backgroundColor: isActive
-                      ? `color-mix(in oklab, ${tier.tint} 55%, transparent)`
+                    background: isActive
+                      ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
                       : "transparent",
+                    boxShadow: isActive
+                      ? `inset 0 1px 0 0 color-mix(in oklab, ${tier.accent} 18%, transparent), 0 30px 60px -40px color-mix(in oklab, ${tier.accent} 35%, transparent)`
+                      : "none",
                   }}
                 >
                   <TierSection tier={tier} items={items} />
