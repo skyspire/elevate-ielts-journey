@@ -883,30 +883,43 @@ function SkillTabs({
 function TierSection({
   tier,
   items,
+  archived = false,
 }: {
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
   items: Prediction[];
+  archived?: boolean;
 }) {
   const Icon = tier.icon;
+  const archivedLabel: Record<Tier, string> = {
+    hot: "Was: highly likely",
+    likely: "Was: likely",
+    review: "Was: worth a look",
+  };
   return (
-    <section>
+    <section className={archived ? "opacity-90" : undefined}>
       <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex items-center gap-3">
           <span
             className="flex h-10 w-10 items-center justify-center rounded-2xl"
             style={{
-              background: `color-mix(in oklab, ${tier.accent} 14%, transparent)`,
+              background: `color-mix(in oklab, ${tier.accent} ${archived ? 8 : 14}%, transparent)`,
               color: tier.accent,
+              filter: archived ? "saturate(0.7)" : undefined,
             }}
             aria-hidden
           >
             <Icon className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="font-display text-2xl font-black tracking-tight text-foreground sm:text-3xl">
-              {tier.label}
+            <h2
+              className="font-display text-2xl font-black tracking-tight sm:text-3xl"
+              style={{ color: archived ? "oklch(0.45 0.02 60)" : "oklch(var(--foreground))" }}
+            >
+              {archived ? archivedLabel[tier.key] : tier.label}
             </h2>
-            <p className="text-sm font-medium text-foreground/65">{tier.helper}</p>
+            <p className="text-sm font-medium text-foreground/55">
+              {archived ? "Forecast made at the time — for reference only." : tier.helper}
+            </p>
           </div>
         </div>
         <span className="font-handwriting text-xl text-foreground/45 sm:text-2xl">
@@ -916,7 +929,7 @@ function TierSection({
 
       <div className="mt-6 grid gap-5 md:grid-cols-2">
         {items.map((p) => (
-          <PredictionCard key={p.title} prediction={p} tier={tier} />
+          <PredictionCard key={p.title} prediction={p} tier={tier} archived={archived} />
         ))}
       </div>
     </section>
