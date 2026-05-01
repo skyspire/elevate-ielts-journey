@@ -10,9 +10,6 @@ import {
   Lightbulb,
   Calendar,
   Lock,
-  GraduationCap,
-  Briefcase,
-  Check,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
