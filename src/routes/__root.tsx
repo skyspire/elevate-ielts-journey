@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from
 import { Header } from "@/components/site/Header";
 import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
 import { OfferBar } from "@/components/site/OfferBar";
+import { MaintenanceGate } from "@/components/site/MaintenanceGate";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
@@ -83,12 +84,12 @@ function RootComponent() {
   const isAuth = location.pathname === "/login" || location.pathname === "/signup";
   const hideChrome = isAdmin || isAuth;
   return (
-    <>
+    <MaintenanceGate>
       {!hideChrome && <OfferBar />}
       {!hideChrome && <AnnouncementBanner />}
       {!hideChrome && <Header />}
       <Outlet />
       <Toaster />
-    </>
+    </MaintenanceGate>
   );
 }
