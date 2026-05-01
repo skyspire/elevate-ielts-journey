@@ -506,6 +506,8 @@ const TIERS: {
   helper: string;
   icon: typeof Flame;
   accent: string;
+  /** Soft full-screen tint used when this tier is the active scroll section. */
+  tint: string;
 }[] = [
   {
     key: "hot",
@@ -513,6 +515,7 @@ const TIERS: {
     helper: "Top picks for the next sitting — start here.",
     icon: Flame,
     accent: "oklch(0.62 0.18 35)",
+    tint: "oklch(0.96 0.05 38)",
   },
   {
     key: "likely",
@@ -520,6 +523,7 @@ const TIERS: {
     helper: "Strong candidates worth a focused practice round.",
     icon: TrendingUp,
     accent: "oklch(0.55 0.14 250)",
+    tint: "oklch(0.96 0.04 248)",
   },
   {
     key: "review",
@@ -527,6 +531,7 @@ const TIERS: {
     helper: "Recurring themes — keep them warm in your prep.",
     icon: Lightbulb,
     accent: "oklch(0.55 0.10 100)",
+    tint: "oklch(0.96 0.05 105)",
   },
 ];
 
