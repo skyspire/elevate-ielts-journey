@@ -432,15 +432,34 @@ function PredictionsPage() {
     }
   };
 
-  const grouped = useMemo(() => {
+  const [showArchive, setShowArchive] = useState(false);
+
+  const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
       (p) => !p.exam || p.exam === "both" || p.exam === exam,
     );
-    return {
-      hot: list.filter((p) => p.tier === "hot"),
-      likely: list.filter((p) => p.tier === "likely"),
-      review: list.filter((p) => p.tier === "review"),
-    };
+    const isCurrent = (p: Prediction) => (p.month ?? CURRENT_MONTH) === CURRENT_MONTH;
+    const currentList = list.filter(isCurrent);
+    const archiveList = list.filter((p) => !isCurrent(p));
+
+    const grouped = (items: Prediction[]) => ({
+      hot: items.filter((p) => p.tier === "hot"),
+      likely: items.filter((p) => p.tier === "likely"),
+      review: items.filter((p) => p.tier === "review"),
+    });
+
+    // Group archive items by month, newest first
+    const byMonth = new Map<string, Prediction[]>();
+    for (const p of archiveList) {
+      const m = p.month ?? CURRENT_MONTH;
+      if (!byMonth.has(m)) byMonth.set(m, []);
+      byMonth.get(m)!.push(p);
+    }
+    const archiveMonths = Array.from(byMonth.entries())
+      .sort(([a], [b]) => (a < b ? 1 : -1))
+      .map(([month, items]) => ({ month, label: formatMonth(month), grouped: grouped(items) }));
+
+    return { current: grouped(currentList), archive: archiveMonths };
   }, [skill, exam]);
 
   const daysToNext = useDaysToNextSaturday();
