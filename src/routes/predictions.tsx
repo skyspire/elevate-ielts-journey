@@ -539,22 +539,14 @@ function ExamToggle({
   const options: {
     key: ExamKey;
     label: string;
-    helper: string;
-    icon: typeof GraduationCap;
-    /** active gradient (card background when selected) */
     activeBg: string;
-    /** inactive accent tint shown as a thin top stripe + icon color */
     accent: string;
-    /** soft tinted background when inactive (hover + idle) */
     idleTint: string;
-    /** glow shadow when active */
     glow: string;
   }[] = [
     {
       key: "academic",
       label: "Academic",
-      helper: "University & professional",
-      icon: GraduationCap,
       activeBg:
         "linear-gradient(135deg, oklch(0.55 0.16 250) 0%, oklch(0.48 0.18 245) 100%)",
       accent: "oklch(0.52 0.17 248)",
@@ -565,8 +557,6 @@ function ExamToggle({
     {
       key: "general",
       label: "General Training",
-      helper: "Migration & work",
-      icon: Briefcase,
       activeBg:
         "linear-gradient(135deg, oklch(0.62 0.19 32) 0%, oklch(0.55 0.20 25) 100%)",
       accent: "oklch(0.58 0.19 30)",
@@ -577,18 +567,14 @@ function ExamToggle({
   ];
 
   return (
-    <div className="w-full max-w-2xl">
-      <p className="mb-3 text-center font-handwriting text-base text-foreground/55 sm:text-lg">
-        Which exam are you taking?
-      </p>
+    <div className="w-full max-w-xl">
       <div
         role="radiogroup"
         aria-label="IELTS exam track"
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
+        className="grid grid-cols-2 gap-3 sm:gap-4"
       >
         {options.map((opt) => {
           const active = value === opt.key;
-          const Icon = opt.icon;
           return (
             <button
               key={opt.key}
@@ -596,17 +582,14 @@ function ExamToggle({
               role="radio"
               aria-checked={active}
               onClick={() => onChange(opt.key)}
-              className="group relative overflow-hidden rounded-2xl border text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="group relative overflow-hidden rounded-2xl border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{
                 background: active ? opt.activeBg : opt.idleTint,
-                borderColor: active
-                  ? "transparent"
-                  : "oklch(0.90 0.01 60)",
+                borderColor: active ? "transparent" : "oklch(0.90 0.01 60)",
                 boxShadow: active ? opt.glow : "0 1px 2px oklch(0 0 0 / 0.04)",
                 transform: active ? "translateY(-1px)" : "translateY(0)",
               }}
             >
-              {/* top accent stripe (visible when idle) */}
               {!active && (
                 <span
                   aria-hidden
@@ -615,55 +598,14 @@ function ExamToggle({
                 />
               )}
 
-              {/* check badge when active */}
-              {active && (
-                <span
-                  aria-hidden
-                  className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full"
-                  style={{
-                    background: "oklch(1 0 0 / 0.18)",
-                    backdropFilter: "blur(4px)",
-                  }}
-                >
-                  <Check className="h-3.5 w-3.5" style={{ color: "oklch(1 0 0)" }} strokeWidth={3} />
-                </span>
-              )}
-
-              <div className="flex items-center gap-3.5 px-4 py-4 sm:px-5 sm:py-5">
-                <span
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-                  style={{
-                    background: active
-                      ? "oklch(1 0 0 / 0.18)"
-                      : `color-mix(in oklab, ${opt.accent} 12%, transparent)`,
-                  }}
-                >
-                  <Icon
-                    className="h-5 w-5 sm:h-6 sm:w-6"
-                    style={{ color: active ? "oklch(1 0 0)" : opt.accent }}
-                    strokeWidth={2.2}
-                  />
-                </span>
-                <span className="flex min-w-0 flex-col">
-                  <span
-                    className="font-display text-base font-black tracking-tight sm:text-lg"
-                    style={{
-                      color: active ? "oklch(0.99 0.01 80)" : "oklch(0.22 0.03 60)",
-                    }}
-                  >
-                    {opt.label}
-                  </span>
-                  <span
-                    className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] sm:text-xs"
-                    style={{
-                      color: active ? "oklch(1 0 0 / 0.85)" : opt.accent,
-                      opacity: active ? 0.9 : 0.85,
-                    }}
-                  >
-                    {opt.helper}
-                  </span>
-                </span>
-              </div>
+              <span
+                className="block px-4 py-4 text-center font-display text-base font-black tracking-tight sm:px-5 sm:py-5 sm:text-lg"
+                style={{
+                  color: active ? "oklch(0.99 0.01 80)" : "oklch(0.22 0.03 60)",
+                }}
+              >
+                {opt.label}
+              </span>
             </button>
           );
         })}
