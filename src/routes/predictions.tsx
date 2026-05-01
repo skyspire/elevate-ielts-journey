@@ -408,14 +408,17 @@ function PredictionsPage() {
           {/* MASSIVE EDITORIAL WORDMARK — page hero */}
           <div className="flex justify-center">
             <h2
-              className="relative inline-block font-display font-black leading-[0.9] tracking-[-0.025em] text-foreground"
-              style={{ fontSize: "clamp(2.75rem, 9vw, 5.75rem)" }}
+              className="relative inline-block font-display font-black leading-[0.9] tracking-[-0.025em] transition-colors duration-700"
+              style={{
+                fontSize: "clamp(2.75rem, 9vw, 5.75rem)",
+                color: isAcademic ? "oklch(0.38 0.18 258)" : "oklch(0.46 0.21 30)",
+              }}
             >
               {/* Sparkle doodle (top-left) */}
               <svg
                 aria-hidden
                 viewBox="0 0 24 24"
-                className="absolute -left-6 -top-3 h-5 w-5 opacity-70 sm:-left-10 sm:-top-5 sm:h-7 sm:w-7"
+                className="absolute -left-6 -top-3 h-5 w-5 opacity-80 sm:-left-10 sm:-top-5 sm:h-7 sm:w-7"
                 style={{ color: isAcademic ? "oklch(0.55 0.16 250)" : "oklch(0.62 0.19 32)" }}
                 fill="none"
                 stroke="currentColor"
@@ -427,26 +430,27 @@ function PredictionsPage() {
               </svg>
 
               <span className="relative inline-block">
-                {/* Highlighter swipe behind the word — track-aware */}
+                {/* Tonal halo behind the word — softer than a highlighter */}
                 <span
                   aria-hidden
-                  className="absolute inset-x-[-8px] bottom-[6%] -z-10 h-[58%] -rotate-1 transition-colors duration-700"
+                  className="absolute inset-x-[-10px] bottom-[6%] -z-10 h-[62%] -rotate-1 transition-colors duration-700"
                   style={{
                     background: isAcademic
-                      ? "linear-gradient(100deg, oklch(0.90 0.10 240 / 0.75) 0%, oklch(0.86 0.12 250 / 0.85) 55%, oklch(0.90 0.10 245 / 0.70) 100%)"
-                      : "linear-gradient(100deg, oklch(0.92 0.14 80 / 0.80) 0%, oklch(0.88 0.16 50 / 0.90) 55%, oklch(0.92 0.14 75 / 0.75) 100%)",
+                      ? "linear-gradient(100deg, oklch(0.92 0.08 245 / 0.55) 0%, oklch(0.88 0.10 255 / 0.70) 55%, oklch(0.92 0.08 245 / 0.50) 100%)"
+                      : "linear-gradient(100deg, oklch(0.93 0.10 70 / 0.60) 0%, oklch(0.89 0.13 45 / 0.75) 55%, oklch(0.93 0.10 70 / 0.55) 100%)",
                     clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)",
+                    filter: "blur(2px)",
                   }}
                 />
                 <span className="relative">Predictions</span>
 
-                {/* Pencil underline swoosh */}
+                {/* Pencil underline swoosh — matches title color */}
                 <svg
                   aria-hidden
                   viewBox="0 0 300 22"
                   preserveAspectRatio="none"
                   className="absolute -bottom-3 left-0 h-3 w-full transition-colors duration-700 sm:-bottom-4 sm:h-4"
-                  style={{ color: isAcademic ? "oklch(0.50 0.17 248)" : "oklch(0.58 0.19 30)" }}
+                  style={{ color: isAcademic ? "oklch(0.45 0.18 255)" : "oklch(0.55 0.20 28)" }}
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="3"
