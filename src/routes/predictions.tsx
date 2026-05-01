@@ -292,6 +292,27 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       tier: "review",
       exam: "both",
     },
+    /* ---------- Archive: April 2026 ---------- */
+    {
+      tag: "A Place",
+      tagTone: "blue",
+      type: "Speaking Part 2",
+      title: "Describe a place you like to visit on weekends. Say where, when and why.",
+      date: "Published April 2026",
+      tier: "hot",
+      exam: "both",
+      month: "2026-04",
+    },
+    {
+      tag: "Education",
+      tagTone: "mint",
+      type: "Speaking Part 3",
+      title: "Do you think school subjects should change to match the modern job market?",
+      date: "Published April 2026",
+      tier: "likely",
+      exam: "both",
+      month: "2026-04",
+    },
   ],
   reading: [
     {
