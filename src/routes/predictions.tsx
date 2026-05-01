@@ -8,8 +8,6 @@ import {
   Flame,
   TrendingUp,
   Lightbulb,
-  Calendar,
-  Lock,
   ArrowUpRight,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
