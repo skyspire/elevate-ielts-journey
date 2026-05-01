@@ -1095,40 +1095,64 @@ function TierSection({
   };
   return (
     <section className={archived ? "opacity-90" : undefined}>
-      <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span
-            className="flex h-10 w-10 items-center justify-center rounded-2xl"
-            style={{
-              background: `color-mix(in oklab, ${tier.accent} ${archived ? 8 : 14}%, transparent)`,
-              color: tier.accent,
-              filter: archived ? "saturate(0.7)" : undefined,
-            }}
-            aria-hidden
-          >
-            <Icon className="h-5 w-5" />
-          </span>
-          <div>
+      {/* Mobile: sticky pill at top */}
+      <div className="sticky top-2 z-20 -mx-1 mb-3 flex items-center gap-2 rounded-full border border-border/60 bg-background/85 px-3 py-1.5 shadow-soft backdrop-blur sm:hidden">
+        <span
+          className="flex h-6 w-6 items-center justify-center rounded-full"
+          style={{
+            background: `color-mix(in oklab, ${tier.accent} ${archived ? 10 : 16}%, transparent)`,
+            color: tier.accent,
+          }}
+          aria-hidden
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </span>
+        <span
+          className="font-display text-[12px] font-black tracking-tight"
+          style={{ color: archived ? "oklch(0.45 0.02 60)" : tier.accent }}
+        >
+          {archived ? archivedLabel[tier.key] : tier.label}
+        </span>
+        <span className="ml-auto font-display text-[11px] font-bold text-foreground/55">
+          {items.length} {items.length === 1 ? "topic" : "topics"}
+        </span>
+      </div>
+
+      {/* Desktop: sticky left label, scrolling right list */}
+      <div className="grid gap-6 sm:grid-cols-[220px_1fr] sm:gap-10">
+        <aside className="hidden sm:block">
+          <div className="sticky top-6">
+            <span
+              className="flex h-10 w-10 items-center justify-center rounded-2xl"
+              style={{
+                background: `color-mix(in oklab, ${tier.accent} ${archived ? 8 : 14}%, transparent)`,
+                color: tier.accent,
+                filter: archived ? "saturate(0.7)" : undefined,
+              }}
+              aria-hidden
+            >
+              <Icon className="h-5 w-5" />
+            </span>
             <h2
-              className="font-display text-2xl font-black tracking-tight sm:text-3xl"
+              className="mt-3 font-display text-2xl font-black tracking-tight sm:text-[28px]"
               style={{ color: archived ? "oklch(0.45 0.02 60)" : "oklch(var(--foreground))" }}
             >
               {archived ? archivedLabel[tier.key] : tier.label}
             </h2>
-            <p className="text-sm font-medium text-foreground/55">
+            <p className="mt-2 text-[13px] font-medium leading-relaxed text-foreground/55">
               {archived ? "Forecast made at the time — for reference only." : tier.helper}
             </p>
+            <p className="mt-3 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/45">
+              {items.length} {items.length === 1 ? "topic" : "topics"}
+            </p>
           </div>
-        </div>
-        <span className="font-handwriting text-xl text-foreground/45 sm:text-2xl">
-          {items.length} {items.length === 1 ? "topic" : "topics"}
-        </span>
-      </header>
+        </aside>
 
-      <div className="mt-6 divide-y divide-border/50 border-y border-border/50">
-        {items.map((p) => (
-          <PredictionRow key={p.title} prediction={p} tier={tier} archived={archived} />
-        ))}
+        <div className="divide-y divide-border/50 border-y border-border/50">
+          {items.map((p) => (
+            <PredictionRow key={p.title} prediction={p} tier={tier} archived={archived} />
+          ))}
+        </div>
       </div>
     </section>
   );
