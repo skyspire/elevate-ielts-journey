@@ -293,6 +293,7 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
       title: "Academic talk on sleep cycles and student performance.",
       date: "Predicted for May–June",
       tier: "likely",
+      exam: "both",
     },
   ],
 };
