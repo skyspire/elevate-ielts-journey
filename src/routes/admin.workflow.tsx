@@ -5,7 +5,6 @@ import {
   addSchedule,
   deleteSchedule,
   deleteVersion,
-  getSection as _gs,
   getStatus,
   pushVersion,
   rollbackVersion,
@@ -14,7 +13,7 @@ import {
   useWorkflow,
   type WorkflowStatus,
 } from "@/lib/admin/workflow-store";
-import { getSection, setSection } from "@/lib/admin/cms-store";
+import { getSection } from "@/lib/admin/cms-store";
 import { useSession } from "@/lib/admin/auth";
 
 export const Route = createFileRoute("/admin/workflow")({
