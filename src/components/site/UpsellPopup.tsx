@@ -157,7 +157,8 @@ export function UpsellPopup({ open, onClose, countdown }: Props) {
                   </span>
                 </div>
                 <Link
-                  to="/#pricing"
+                  to="/"
+                  hash="pricing"
                   onClick={onClose}
                   className={`mt-4 inline-flex h-9 items-center justify-center rounded-full px-3 text-xs font-bold transition-opacity hover:opacity-90 ${
                     p.popular
