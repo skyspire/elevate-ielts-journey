@@ -927,9 +927,9 @@ function TierSection({
         </span>
       </header>
 
-      <div className="mt-6 grid gap-5 md:grid-cols-2">
+      <div className="mt-6 divide-y divide-border/60 border-y border-border/60">
         {items.map((p) => (
-          <PredictionCard key={p.title} prediction={p} tier={tier} archived={archived} />
+          <PredictionRow key={p.title} prediction={p} tier={tier} archived={archived} />
         ))}
       </div>
     </section>
