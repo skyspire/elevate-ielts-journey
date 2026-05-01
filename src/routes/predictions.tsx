@@ -1126,7 +1126,7 @@ function TierSection({
         </span>
       </header>
 
-      <div className="mt-6 divide-y divide-border/60 border-y border-border/60">
+      <div className="mt-6 divide-y divide-border/50 border-y border-border/50">
         {items.map((p) => (
           <PredictionRow key={p.title} prediction={p} tier={tier} archived={archived} />
         ))}
@@ -1136,26 +1136,17 @@ function TierSection({
 }
 
 /* ------------------------------------------------------------------ */
-/* Prediction row — editorial briefing line                            */
+/* Prediction row — compact single-line briefing                       */
 /* ------------------------------------------------------------------ */
 
-const TONE_DOT: Record<NonNullable<Prediction["tagTone"]>, string> = {
-  blue: "oklch(0.55 0.14 250)",
-  mint: "oklch(0.70 0.10 165)",
-  peach: "oklch(0.72 0.13 50)",
-  lilac: "oklch(0.65 0.12 305)",
-};
-
-function tierDefaults(
-  tier: Tier,
-): { confidence: number; appearances: number; verdict: string } {
+function tierDefaultAppearances(tier: Tier): number {
   switch (tier) {
     case "hot":
-      return { confidence: 90, appearances: 22, verdict: "HIGHLY LIKELY" };
+      return 22;
     case "likely":
-      return { confidence: 72, appearances: 14, verdict: "LIKELY" };
+      return 14;
     case "review":
-      return { confidence: 55, appearances: 8, verdict: "WORTH A LOOK" };
+      return 8;
   }
 }
 
@@ -1168,78 +1159,28 @@ function PredictionRow({
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
   archived?: boolean;
 }) {
-  const defaults = tierDefaults(prediction.tier);
-  const confidence = prediction.confidence ?? defaults.confidence;
-  const appearances = prediction.appearances ?? defaults.appearances;
+  const appearances = prediction.appearances ?? tierDefaultAppearances(prediction.tier);
   const accent = tier.accent;
-  const tagColor = TONE_DOT[prediction.tagTone];
 
   return (
     <article
-      className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-x-5 px-1 py-5 transition-colors hover:bg-foreground/[0.025] sm:gap-x-7 sm:py-6"
+      className="group relative flex items-baseline gap-3 px-1 py-3.5 transition-colors hover:bg-foreground/[0.025] sm:gap-4 sm:py-4"
       style={{
         opacity: archived ? 0.72 : 1,
         filter: archived ? "saturate(0.78)" : undefined,
       }}
     >
-      {/* Confidence number — the visual anchor */}
-      <div className="flex w-[72px] flex-col items-start sm:w-[96px]">
-        <span
-          className="font-display font-black leading-[0.85] tracking-[-0.04em]"
-          style={{
-            color: accent,
-            fontSize: "clamp(2rem, 5vw, 2.75rem)",
-          }}
-        >
-          {confidence}
-          <span className="text-base font-extrabold sm:text-lg" style={{ color: accent, opacity: 0.7 }}>
-            %
-          </span>
+      <p className="min-w-0 flex-1 font-display text-[14.5px] font-semibold leading-snug tracking-tight text-foreground sm:text-[15.5px]">
+        {prediction.title}
+        <span className="ml-1.5 whitespace-nowrap text-[12.5px] font-medium text-foreground/45 sm:text-[13px]">
+          · appeared {appearances} times
         </span>
-        <span
-          className="mt-0.5 font-display text-[9px] font-black uppercase tracking-[0.2em] sm:text-[10px]"
-          style={{ color: accent, opacity: 0.85 }}
-        >
-          {archived ? `Was ${defaults.verdict}` : defaults.verdict}
-        </span>
-      </div>
-
-      {/* Middle: tag · title · lifetime appearances */}
-      <div className="min-w-0">
-        <span className="inline-flex items-center gap-1.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
-          <span
-            aria-hidden
-            className="inline-block h-1.5 w-1.5 rounded-full"
-            style={{ background: tagColor }}
-          />
-          {prediction.tag}
-        </span>
-
-        <h3 className="mt-2 font-display text-[15px] font-extrabold leading-snug tracking-tight text-foreground sm:text-base md:text-[17px]">
-          {prediction.title}
-        </h3>
-
-        <p className="mt-2 font-display text-[12px] font-bold tracking-tight text-foreground/65 sm:text-[13px]">
-          Appeared{" "}
-          <span className="font-black" style={{ color: accent }}>
-            {appearances} times
-          </span>{" "}
-          in past exams
-        </p>
-      </div>
-
-      {/* Right arrow — disclosure affordance */}
-      <span
-        aria-hidden
-        className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/70 text-foreground/55 transition-all group-hover:-translate-y-0.5 group-hover:border-transparent group-hover:text-foreground sm:flex"
-      >
-        <ArrowUpRight className="h-4 w-4" />
-      </span>
+      </p>
 
       {/* Hover accent — left edge whisker in tier color */}
       <span
         aria-hidden
-        className="pointer-events-none absolute left-0 top-1/2 h-10 w-[3px] -translate-y-1/2 origin-left scale-y-0 rounded-r transition-transform duration-300 group-hover:scale-y-100"
+        className="pointer-events-none absolute left-0 top-1/2 h-8 w-[3px] -translate-y-1/2 origin-left scale-y-0 rounded-r transition-transform duration-300 group-hover:scale-y-100"
         style={{ background: accent }}
       />
     </article>
