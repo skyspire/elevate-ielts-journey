@@ -27,6 +27,7 @@ import {
   type EbooksStore,
 } from "@/lib/admin/ebooks-store";
 import { PdfReaderView } from "@/components/site/PdfReaderView";
+import { QuotaGate } from "@/components/site/QuotaGate";
 
 export const Route = createFileRoute("/ebooks/$bookId")({
   head: ({ params }) => {
@@ -52,8 +53,17 @@ export const Route = createFileRoute("/ebooks/$bookId")({
       </div>
     </div>
   ),
-  component: ReaderPage,
+  component: GatedReaderPage,
 });
+
+function GatedReaderPage() {
+  const { bookId } = Route.useParams();
+  return (
+    <QuotaGate itemKey={`ebook:${bookId}`}>
+      <ReaderPage />
+    </QuotaGate>
+  );
+}
 
 // Body font is Lora throughout for a soft, book-like read.
 const FONT_SIZES = {
