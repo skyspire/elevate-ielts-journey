@@ -515,19 +515,139 @@ function TierSection({
         </span>
       </header>
 
-      <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-5 md:grid-cols-2">
         {items.map((p) => (
-          <QuestionCard
-            key={p.title}
-            tag={p.tag}
-            tagTone={p.tagTone}
-            type={p.type}
-            title={p.title}
-            date={p.date}
-            band="High likelihood"
-          />
+          <PredictionCard key={p.title} prediction={p} tier={tier} />
         ))}
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Prediction card — stamped verdict + big confidence %                */
+/* ------------------------------------------------------------------ */
+
+const TONE_BG: Record<NonNullable<Prediction["tagTone"]>, string> = {
+  blue: "bg-brand-soft text-brand",
+  mint: "bg-mint text-foreground",
+  peach: "bg-peach text-foreground",
+  lilac: "bg-lilac text-foreground",
+};
+
+function tierDefaults(tier: Tier): { confidence: number; seen: string; verdict: string; rotate: number } {
+  switch (tier) {
+    case "hot":
+      return { confidence: 90, seen: "Trending this cycle", verdict: "HIGHLY LIKELY", rotate: -8 };
+    case "likely":
+      return { confidence: 72, seen: "Strong recurring pattern", verdict: "LIKELY", rotate: -5 };
+    case "review":
+      return { confidence: 55, seen: "Worth a quick review", verdict: "WORTH A LOOK", rotate: -4 };
+  }
+}
+
+function PredictionCard({
+  prediction,
+  tier,
+}: {
+  prediction: Prediction;
+  tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+}) {
+  const defaults = tierDefaults(prediction.tier);
+  const confidence = prediction.confidence ?? defaults.confidence;
+  const seen = prediction.seen ?? defaults.seen;
+  const verdict = defaults.verdict;
+  const rotate = defaults.rotate;
+  const accent = tier.accent;
+
+  return (
+    <article
+      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
+      style={{
+        background:
+          "linear-gradient(180deg, oklch(0.995 0.005 80) 0%, oklch(0.985 0.012 70) 100%)",
+      }}
+    >
+      {/* Stamp — top right */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-3 top-3 z-10 select-none sm:right-4 sm:top-4"
+        style={{ transform: `rotate(${rotate}deg)` }}
+      >
+        <div
+          className="flex flex-col items-center justify-center rounded-full border-[2.5px] px-3 py-2 sm:px-4 sm:py-2.5"
+          style={{
+            borderColor: accent,
+            color: accent,
+            background: `color-mix(in oklab, ${accent} 6%, transparent)`,
+            boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accent} 25%, transparent)`,
+          }}
+        >
+          <span
+            className="font-display text-2xl font-black leading-none tracking-tight sm:text-3xl"
+            style={{ color: accent, letterSpacing: "-0.02em" }}
+          >
+            {confidence}
+            <span className="text-base sm:text-lg">%</span>
+          </span>
+          <span
+            className="mt-1 font-display text-[8px] font-black uppercase leading-none tracking-[0.18em] sm:text-[9px]"
+            style={{ color: accent }}
+          >
+            {verdict}
+          </span>
+        </div>
+      </div>
+
+      {/* Tag banner — left aligned, leaves room for stamp */}
+      <div className={`flex items-center px-5 py-3 pr-28 sm:pr-32 ${TONE_BG[prediction.tagTone]}`}>
+        <span className="text-xs font-extrabold uppercase tracking-wide sm:text-sm">
+          {prediction.tag}
+        </span>
+        <span className="ml-2 rounded-full bg-background/60 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+          {prediction.type}
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+        <h3 className="mt-1 max-w-[28ch] font-display text-lg font-extrabold leading-snug tracking-tight text-foreground sm:text-xl">
+          {prediction.title}
+        </h3>
+
+        {/* Frequency note — handwriting accent */}
+        <p
+          className="font-handwriting text-base text-foreground/55 sm:text-lg"
+          style={{ transform: "rotate(-0.6deg)" }}
+        >
+          {seen}
+        </p>
+
+        {/* Confidence bar */}
+        <div className="mt-1">
+          <div
+            className="h-[6px] w-full overflow-hidden rounded-full"
+            style={{ background: `color-mix(in oklab, ${accent} 12%, transparent)` }}
+          >
+            <div
+              className="h-full rounded-full transition-all"
+              style={{
+                width: `${confidence}%`,
+                background: `linear-gradient(90deg, ${accent} 0%, color-mix(in oklab, ${accent} 70%, white) 100%)`,
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <Calendar className="h-3.5 w-3.5" />
+            {prediction.date}
+          </div>
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
+            <Lock className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+    </article>
   );
 }
