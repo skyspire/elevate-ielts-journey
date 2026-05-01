@@ -7,6 +7,8 @@ import type { PlanKey } from "@/lib/admin/subscribers-store";
 const COUPONS_KEY = "bigielts:money:coupons";
 const GIFTS_KEY = "bigielts:money:gifts";
 const SALE_KEY = "bigielts:money:sale";
+const REDEMPTIONS_KEY = "bigielts:money:redemptions";
+const PENDING_COUPON_KEY = "bigielts:money:pendingCoupon";
 
 const EVT = "money:changed";
 
@@ -23,6 +25,25 @@ export type Coupon = {
   redeemedCount: number;
   enabled: boolean;
   note?: string;
+  // ── Per-user / restriction rules ──
+  singleUse?: boolean;            // each code can only be redeemed once total
+  oncePerUser?: boolean;          // each user may redeem once
+  newUsersOnly?: boolean;         // only first-purchase / first-time subscribers
+  firstPurchaseOnly?: boolean;    // no prior billing entries for the user
+  stackableWithSale?: boolean;    // allow on top of active sale
+  minOrderAmount?: number;        // minimum subtotal required
+  allowedEmails?: string[];       // restrict to these emails (lowercased)
+};
+
+export type Redemption = {
+  id: string;
+  code: string;
+  email: string;
+  userId?: string;
+  plan: PlanKey;
+  amount?: number;       // discount amount applied (if known)
+  redeemedAt: number;
+  source: "admin" | "signup" | "manual";
 };
 
 export type Gift = {
