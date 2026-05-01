@@ -123,14 +123,118 @@ export function blankCoupon(): Coupon {
     appliesTo: "all",
     redeemedCount: 0,
     enabled: true,
+    oncePerUser: true,
+    stackableWithSale: false,
   };
 }
+
+// ── Coupon presets (one-click templates) ──
+export type CouponPreset = { label: string; description: string; build: () => Coupon };
+
+export const COUPON_PRESETS: CouponPreset[] = [
+  {
+    label: "WELCOME10",
+    description: "10% off, new users only, one per user.",
+    build: () => ({
+      ...blankCoupon(),
+      code: "WELCOME10",
+      type: "percent",
+      value: 10,
+      newUsersOnly: true,
+      oncePerUser: true,
+    }),
+  },
+  {
+    label: "FLASH50",
+    description: "50% off, expires in 7 days, max 100 redemptions.",
+    build: () => ({
+      ...blankCoupon(),
+      code: "FLASH50",
+      type: "percent",
+      value: 50,
+      expiresAt: Date.now() + 7 * 86400000,
+      maxRedemptions: 100,
+      stackableWithSale: false,
+    }),
+  },
+  {
+    label: "FREETRIAL14",
+    description: "Adds 14 free trial days.",
+    build: () => ({
+      ...blankCoupon(),
+      code: "FREETRIAL14",
+      type: "trial-extend",
+      value: 14,
+      newUsersOnly: true,
+    }),
+  },
+  {
+    label: "BLACKFRIDAY",
+    description: "30% off all plans, stackable with sale.",
+    build: () => ({
+      ...blankCoupon(),
+      code: "BLACKFRIDAY",
+      type: "percent",
+      value: 30,
+      stackableWithSale: true,
+    }),
+  },
+  {
+    label: "FIRST5",
+    description: "$5 off, first purchase only.",
+    build: () => ({
+      ...blankCoupon(),
+      code: "FIRST5",
+      type: "fixed",
+      value: 5,
+      firstPurchaseOnly: true,
+      oncePerUser: true,
+    }),
+  },
+];
+
+// ── Bulk generator: N unique single-use codes with a prefix ──
+export function bulkGenerateCoupons(opts: {
+  prefix: string;
+  count: number;
+  template: Omit<Coupon, "code" | "redeemedCount">;
+}): Coupon[] {
+  const created: Coupon[] = [];
+  const existing = new Set(getCoupons().map((c) => c.code));
+  const prefix = (opts.prefix || "CODE").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12);
+  let safety = 0;
+  while (created.length < opts.count && safety < opts.count * 10) {
+    safety++;
+    const suffix = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const code = `${prefix}-${suffix}`;
+    if (existing.has(code)) continue;
+    existing.add(code);
+    created.push({
+      ...opts.template,
+      code,
+      redeemedCount: 0,
+      singleUse: true,
+      maxRedemptions: 1,
+    });
+  }
+  if (created.length) saveCoupons([...created, ...getCoupons()]);
+  return created;
+}
+
+export type CouponContext = {
+  plan: PlanKey;
+  email?: string;
+  userId?: string;
+  isNewUser?: boolean;
+  hasPriorPurchase?: boolean;
+  orderAmount?: number;
+};
 
 export type CouponValidation =
   | { ok: true; coupon: Coupon }
   | { ok: false; error: string };
 
-export function validateCoupon(code: string, plan: PlanKey): CouponValidation {
+export function validateCoupon(code: string, ctx: CouponContext): CouponValidation {
   const c = getCoupons().find((x) => x.code === code.toUpperCase().trim());
   if (!c) return { ok: false, error: "Invalid code." };
   if (!c.enabled) return { ok: false, error: "This code is disabled." };
@@ -139,17 +243,78 @@ export function validateCoupon(code: string, plan: PlanKey): CouponValidation {
   if (c.expiresAt && now > c.expiresAt) return { ok: false, error: "This code has expired." };
   if (c.maxRedemptions && c.redeemedCount >= c.maxRedemptions)
     return { ok: false, error: "This code has reached its redemption limit." };
-  if (c.appliesTo !== "all" && c.appliesTo !== plan)
+  if (c.singleUse && c.redeemedCount >= 1)
+    return { ok: false, error: "This code has already been used." };
+  if (c.appliesTo !== "all" && c.appliesTo !== ctx.plan)
     return { ok: false, error: "This code does not apply to the selected plan." };
+  if (c.allowedEmails && c.allowedEmails.length > 0) {
+    const e = (ctx.email || "").toLowerCase().trim();
+    if (!e || !c.allowedEmails.includes(e))
+      return { ok: false, error: "This code is not valid for your email." };
+  }
+  if (c.newUsersOnly && ctx.isNewUser === false)
+    return { ok: false, error: "This code is for new users only." };
+  if (c.firstPurchaseOnly && ctx.hasPriorPurchase)
+    return { ok: false, error: "This code is for first purchases only." };
+  if (c.minOrderAmount && (ctx.orderAmount ?? 0) < c.minOrderAmount)
+    return { ok: false, error: `Minimum order of ${c.minOrderAmount} required.` };
+  if (ctx.userId && (c.oncePerUser || c.singleUse)) {
+    const used = getRedemptions().some(
+      (r) => r.code === c.code && (r.userId === ctx.userId || r.email === (ctx.email || "").toLowerCase()),
+    );
+    if (used) return { ok: false, error: "You have already used this code." };
+  }
   return { ok: true, coupon: c };
 }
 
-export function redeemCoupon(code: string) {
+export function redeemCoupon(code: string, ctx: CouponContext, amount?: number) {
   const list = getCoupons();
   const i = list.findIndex((x) => x.code === code.toUpperCase().trim());
   if (i < 0) return;
   list[i] = { ...list[i], redeemedCount: list[i].redeemedCount + 1 };
   saveCoupons(list);
+  const r: Redemption = {
+    id: `r_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    code: list[i].code,
+    email: (ctx.email || "").toLowerCase(),
+    userId: ctx.userId,
+    plan: ctx.plan,
+    amount,
+    redeemedAt: Date.now(),
+    source: "admin",
+  };
+  saveRedemptions([r, ...getRedemptions()]);
+}
+
+// ── Redemption history ──
+export function getRedemptions(): Redemption[] {
+  return read<Redemption[]>(REDEMPTIONS_KEY, []);
+}
+export function saveRedemptions(list: Redemption[]) {
+  write(REDEMPTIONS_KEY, list);
+}
+export function getRedemptionsForCode(code: string): Redemption[] {
+  return getRedemptions().filter((r) => r.code === code.toUpperCase());
+}
+
+// ── Pending coupon (from ?coupon= deep link) ──
+export function setPendingCoupon(code: string) {
+  if (!isBrowser()) return;
+  window.localStorage.setItem(PENDING_COUPON_KEY, code.toUpperCase().trim());
+}
+export function getPendingCoupon(): string | null {
+  if (!isBrowser()) return null;
+  return window.localStorage.getItem(PENDING_COUPON_KEY);
+}
+export function clearPendingCoupon() {
+  if (!isBrowser()) return;
+  window.localStorage.removeItem(PENDING_COUPON_KEY);
+}
+
+// Build a shareable signup link for a coupon
+export function buildCouponShareUrl(code: string): string {
+  if (!isBrowser()) return `/signup?coupon=${encodeURIComponent(code)}`;
+  return `${window.location.origin}/signup?coupon=${encodeURIComponent(code)}`;
 }
 
 // ───────── Gifts ─────────
