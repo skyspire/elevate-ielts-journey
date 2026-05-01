@@ -592,29 +592,101 @@ function PredictionsPage() {
             <CountdownCard days={daysToNext} />
           </div>
 
+          {/* Honesty note — predictions are forecasts, not guarantees */}
+          <p className="mx-auto mt-5 max-w-2xl text-center text-[12.5px] leading-relaxed text-foreground/55 sm:text-[13px]">
+            Predictions are educated forecasts based on rotation patterns —
+            <span className="font-semibold text-foreground/70"> not guarantees</span>.
+            Use them to focus your practice, not to skip topics.
+          </p>
+
           {/* Skill tabs */}
           <div className="mt-12">
             <SkillTabs value={skill} onChange={setSkill} />
           </div>
 
-          {/* Tiered groups */}
+          {/* Tiered groups — current month */}
           <div className="mt-12 space-y-16">
             {TIERS.map((tier) => {
-              const items = grouped[tier.key];
+              const items = current[tier.key];
               if (items.length === 0) return null;
-              return (
-                <TierSection key={tier.key} tier={tier} items={items} />
-              );
+              return <TierSection key={tier.key} tier={tier} items={items} />;
             })}
 
-            {grouped.hot.length === 0 &&
-              grouped.likely.length === 0 &&
-              grouped.review.length === 0 && (
+            {current.hot.length === 0 &&
+              current.likely.length === 0 &&
+              current.review.length === 0 && (
                 <p className="text-center font-display text-lg font-bold text-foreground/60">
                   Fresh predictions land here every Monday.
                 </p>
               )}
           </div>
+
+          {/* Archive — collapsed by default */}
+          {archive.length > 0 && (
+            <div className="mt-20 border-t border-border/60 pt-10">
+              <div className="flex flex-col items-center gap-3 text-center">
+                <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
+                  Track record
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowArchive((v) => !v)}
+                  aria-expanded={showArchive}
+                  className="group inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/60 px-5 py-2.5 font-display text-sm font-bold tracking-tight text-foreground/80 backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-card hover:text-foreground"
+                >
+                  {showArchive ? "Hide previous months" : "See previous months"}
+                  <span
+                    aria-hidden
+                    className="inline-block transition-transform"
+                    style={{ transform: showArchive ? "rotate(180deg)" : "rotate(0deg)" }}
+                  >
+                    ▾
+                  </span>
+                </button>
+                <p className="max-w-md text-[12px] leading-relaxed text-foreground/50">
+                  These were our forecasts at the time — kept here for reference, not as a live guide.
+                </p>
+              </div>
+
+              {showArchive && (
+                <div className="mt-10 space-y-14">
+                  {archive.map((m) => {
+                    const empty =
+                      m.grouped.hot.length === 0 &&
+                      m.grouped.likely.length === 0 &&
+                      m.grouped.review.length === 0;
+                    if (empty) return null;
+                    return (
+                      <div key={m.month}>
+                        <header className="mb-6 flex items-center gap-3">
+                          <h3 className="font-display text-xl font-black tracking-tight text-foreground/70 sm:text-2xl">
+                            {m.label}
+                          </h3>
+                          <span className="rounded-full border border-border/60 bg-background/60 px-2.5 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+                            Archived
+                          </span>
+                        </header>
+                        <div className="space-y-12">
+                          {TIERS.map((tier) => {
+                            const items = m.grouped[tier.key];
+                            if (items.length === 0) return null;
+                            return (
+                              <TierSection
+                                key={`${m.month}-${tier.key}`}
+                                tier={tier}
+                                items={items}
+                                archived
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
