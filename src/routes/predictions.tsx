@@ -40,6 +40,8 @@ export const Route = createFileRoute("/predictions")({
 
 type SkillKey = "writing" | "speaking" | "reading" | "listening";
 type Tier = "hot" | "likely" | "review";
+type ExamKey = "academic" | "general";
+type ExamScope = ExamKey | "both";
 
 type Prediction = {
   tag: string;
@@ -53,8 +55,9 @@ type Prediction = {
   title: string;
   date: string;
   tier: Tier;
-  confidence?: number; // 0-100, optional override
-  seen?: string; // optional override, e.g. "Seen 4× in last 6 months"
+  exam?: ExamScope; // defaults to "both"
+  confidence?: number;
+  seen?: string;
 };
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
