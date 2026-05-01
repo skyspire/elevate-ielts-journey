@@ -904,16 +904,7 @@ function PredictionsPage() {
 
   return (
     <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
-      {/* Tier-driven full-screen tint — crossfades as the user scrolls between sections */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 transition-[background-color,opacity] duration-700 ease-out"
-        style={{
-          backgroundColor: activeTint ?? "transparent",
-          opacity: activeTint ? 0.55 : 0,
-        }}
-      />
-      <main className="relative z-10 py-10 sm:py-14">
+      <main className="relative py-10 sm:py-14">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-[720px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
