@@ -407,28 +407,58 @@ function PredictionsPage() {
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
           {/* Eyebrow — small "Predictions" mark sits above the main question */}
           <div className="flex justify-center">
-            <div className="relative inline-block">
-              <span
-                className="font-handwriting text-2xl font-bold leading-none text-foreground/55 sm:text-3xl"
-                style={{ transform: "rotate(-2deg)", display: "inline-block" }}
-              >
-                Predictions
-              </span>
+          {/* MASSIVE EDITORIAL WORDMARK — page hero */}
+          <div className="flex justify-center">
+            <h2
+              className="relative inline-block font-display font-black leading-[0.9] tracking-[-0.025em] text-foreground"
+              style={{ fontSize: "clamp(2.75rem, 9vw, 5.75rem)" }}
+            >
+              {/* Sparkle doodle (top-left) */}
               <svg
                 aria-hidden
-                viewBox="0 0 200 10"
-                preserveAspectRatio="none"
-                className="absolute -bottom-1.5 left-0 h-2 w-full text-foreground/55"
+                viewBox="0 0 24 24"
+                className="absolute -left-6 -top-3 h-5 w-5 opacity-70 sm:-left-10 sm:-top-5 sm:h-7 sm:w-7"
+                style={{ color: isAcademic ? "oklch(0.55 0.16 250)" : "oklch(0.62 0.19 32)" }}
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.2"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ transform: "rotate(-2deg)" }}
               >
-                <path d="M 6 6 C 50 2, 110 9, 160 5 S 196 7, 196 5" />
+                <path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.5 5.5l3 3M15.5 15.5l3 3M5.5 18.5l3-3M15.5 8.5l3-3" />
               </svg>
-            </div>
+
+              <span className="relative inline-block">
+                {/* Highlighter swipe behind the word — track-aware */}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-8px] bottom-[6%] -z-10 h-[58%] -rotate-1 transition-colors duration-700"
+                  style={{
+                    background: isAcademic
+                      ? "linear-gradient(100deg, oklch(0.90 0.10 240 / 0.75) 0%, oklch(0.86 0.12 250 / 0.85) 55%, oklch(0.90 0.10 245 / 0.70) 100%)"
+                      : "linear-gradient(100deg, oklch(0.92 0.14 80 / 0.80) 0%, oklch(0.88 0.16 50 / 0.90) 55%, oklch(0.92 0.14 75 / 0.75) 100%)",
+                    clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)",
+                  }}
+                />
+                <span className="relative">Predictions</span>
+
+                {/* Pencil underline swoosh */}
+                <svg
+                  aria-hidden
+                  viewBox="0 0 300 22"
+                  preserveAspectRatio="none"
+                  className="absolute -bottom-3 left-0 h-3 w-full transition-colors duration-700 sm:-bottom-4 sm:h-4"
+                  style={{ color: isAcademic ? "oklch(0.50 0.17 248)" : "oklch(0.58 0.19 30)" }}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
+                </svg>
+              </span>
+            </h2>
           </div>
 
           {/* Main hero — the exam question is the headline of the page */}
