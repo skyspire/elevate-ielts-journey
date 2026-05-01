@@ -50,7 +50,11 @@ type Prediction = {
     | "Writing Task 2"
     | "Speaking Part 1"
     | "Speaking Part 2"
-    | "Speaking Part 3";
+    | "Speaking Part 3"
+    | "Listening"
+    | "Reading";
+  /** Task-type slug within the skill (e.g. "task2", "part2", "mcq"). Auto-derived from `type` when omitted. */
+  taskType?: string;
   title: string;
   date: string;
   tier: Tier;
@@ -60,6 +64,39 @@ type Prediction = {
   appearances?: number;
   /** ISO YYYY-MM. Omit = current month. */
   month?: string;
+};
+
+/** Task types shown as chips under each module tab. */
+const TASK_TYPES_BY_SKILL: Record<SkillKey, { id: string; label: string }[]> = {
+  writing: [
+    { id: "task1", label: "Task 1" },
+    { id: "task2", label: "Task 2" },
+  ],
+  speaking: [
+    { id: "part1", label: "Part 1" },
+    { id: "part2", label: "Part 2 (Cue Card)" },
+    { id: "part3", label: "Part 3" },
+  ],
+  reading: [
+    { id: "tfng", label: "True / False / Not Given" },
+    { id: "ynng", label: "Yes / No / Not Given" },
+    { id: "headings", label: "Matching Headings" },
+    { id: "matching-info", label: "Matching Information" },
+    { id: "mcq", label: "Multiple Choice" },
+    { id: "summary", label: "Summary Completion" },
+    { id: "sentence", label: "Sentence Completion" },
+    { id: "short-answer", label: "Short Answer" },
+  ],
+  listening: [
+    { id: "mcq", label: "Multiple Choice" },
+    { id: "matching", label: "Matching" },
+    { id: "map", label: "Map / Plan Labelling" },
+    { id: "form", label: "Form Completion" },
+    { id: "note", label: "Note Completion" },
+    { id: "table", label: "Table Completion" },
+    { id: "sentence", label: "Sentence Completion" },
+    { id: "short-answer", label: "Short Answer" },
+  ],
 };
 
 /** The "current" prediction cycle. Items with no month default to this. */
@@ -318,60 +355,141 @@ const PREDICTIONS: Record<SkillKey, Prediction[]> = {
     {
       tag: "Climate Science",
       tagTone: "mint",
-      type: "Writing Task 2",
-      title: "Long-form passage on coral reef bleaching and conservation responses.",
+      type: "Reading",
+      taskType: "headings",
+      title: "Long-form passage on coral reef bleaching and conservation responses — match headings to paragraphs.",
       date: "Predicted for May 2026",
       tier: "hot",
       exam: "academic",
+      confidence: 89,
+      appearances: 18,
     },
     {
       tag: "Workplace Notice",
       tagTone: "blue",
-      type: "Writing Task 1",
-      title:
-        "Section 1: a set of staff notices about a new office relocation — true/false/not given.",
+      type: "Reading",
+      taskType: "tfng",
+      title: "Section 1: a set of staff notices about a new office relocation — true / false / not given.",
       date: "Predicted for May 2026",
       tier: "hot",
       exam: "general",
+      confidence: 86,
+      appearances: 20,
     },
     {
       tag: "Urban History",
       tagTone: "blue",
-      type: "Writing Task 2",
-      title: "Article tracing how a 19th-century city redesigned its public transport network.",
+      type: "Reading",
+      taskType: "matching-info",
+      title: "Article tracing how a 19th-century city redesigned its public transport network — match information to paragraphs.",
       date: "Predicted for May–June",
       tier: "likely",
       exam: "academic",
+      appearances: 12,
     },
     {
       tag: "Course Brochure",
       tagTone: "lilac",
-      type: "Writing Task 1",
-      title:
-        "Section 2: a community college brochure describing evening classes and enrolment rules.",
+      type: "Reading",
+      taskType: "summary",
+      title: "Section 2: a community college brochure describing evening classes and enrolment rules — summary completion.",
       date: "Predicted for May–June",
       tier: "likely",
       exam: "general",
+      appearances: 10,
+    },
+    {
+      tag: "Scientific Study",
+      tagTone: "mint",
+      type: "Reading",
+      taskType: "mcq",
+      title: "Passage on memory and ageing — multiple choice questions on the writer's main argument.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "academic",
+      appearances: 11,
+    },
+    {
+      tag: "Recipe Card",
+      tagTone: "peach",
+      type: "Reading",
+      taskType: "sentence",
+      title: "Section 1: instructions for using a kitchen appliance — sentence completion (NO MORE THAN TWO WORDS).",
+      date: "Worth reviewing",
+      tier: "review",
+      exam: "general",
+      appearances: 7,
     },
   ],
   listening: [
     {
       tag: "Section 2 — Tour",
       tagTone: "peach",
-      type: "Speaking Part 2",
+      type: "Listening",
+      taskType: "map",
       title: "Guided tour of a community arts centre with map labelling.",
       date: "Predicted for May 2026",
       tier: "hot",
       exam: "both",
+      confidence: 91,
+      appearances: 23,
+    },
+    {
+      tag: "Section 1 — Booking",
+      tagTone: "blue",
+      type: "Listening",
+      taskType: "form",
+      title: "Phone call to book a holiday rental — fill in the booking form.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "both",
+      confidence: 88,
+      appearances: 26,
+    },
+    {
+      tag: "Section 3 — Tutorial",
+      tagTone: "blue",
+      type: "Listening",
+      taskType: "mcq",
+      title: "Two students discuss a research project with their tutor — multiple choice.",
+      date: "Predicted for May 2026",
+      tier: "hot",
+      exam: "both",
+      confidence: 84,
+      appearances: 19,
     },
     {
       tag: "Section 4 — Lecture",
       tagTone: "lilac",
-      type: "Speaking Part 3",
-      title: "Academic talk on sleep cycles and student performance.",
+      type: "Listening",
+      taskType: "note",
+      title: "Academic talk on sleep cycles and student performance — note completion.",
       date: "Predicted for May–June",
       tier: "likely",
       exam: "both",
+      appearances: 14,
+    },
+    {
+      tag: "Section 2 — Talk",
+      tagTone: "mint",
+      type: "Listening",
+      taskType: "matching",
+      title: "Local council talk about new recycling rules — match items to bin colours.",
+      date: "Predicted for May–June",
+      tier: "likely",
+      exam: "both",
+      appearances: 12,
+    },
+    {
+      tag: "Section 4 — Research",
+      tagTone: "peach",
+      type: "Listening",
+      taskType: "table",
+      title: "Lecturer summarises a study on city traffic patterns — table completion.",
+      date: "Worth reviewing",
+      tier: "review",
+      exam: "both",
+      appearances: 9,
     },
   ],
 };
@@ -413,12 +531,26 @@ const TIERS: {
   },
 ];
 
+/** Derive a task-type slug from the legacy `type` field when not explicitly set. */
+function getTaskType(p: Prediction): string {
+  if (p.taskType) return p.taskType;
+  switch (p.type) {
+    case "Writing Task 1": return "task1";
+    case "Writing Task 2": return "task2";
+    case "Speaking Part 1": return "part1";
+    case "Speaking Part 2": return "part2";
+    case "Speaking Part 3": return "part3";
+    default: return "all";
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
 function PredictionsPage() {
   const [skill, setSkill] = useState<SkillKey>("writing");
+  const [taskType, setTaskType] = useState<string>("all");
   // Hydrate exam from localStorage AFTER mount to keep SSR/CSR markup identical.
   const [exam, setExam] = useState<ExamKey>("academic");
   useEffect(() => {
@@ -433,11 +565,18 @@ function PredictionsPage() {
     }
   };
 
+  const handleSkillChange = (next: SkillKey) => {
+    setSkill(next);
+    setTaskType("all"); // reset chip selection when switching modules
+  };
+
   const [showArchive, setShowArchive] = useState(false);
 
   const { current, archive } = useMemo(() => {
     const list = PREDICTIONS[skill].filter(
-      (p) => !p.exam || p.exam === "both" || p.exam === exam,
+      (p) =>
+        (!p.exam || p.exam === "both" || p.exam === exam) &&
+        (taskType === "all" || getTaskType(p) === taskType),
     );
     const isCurrent = (p: Prediction) => (p.month ?? CURRENT_MONTH) === CURRENT_MONTH;
     const currentList = list.filter(isCurrent);
@@ -602,7 +741,16 @@ function PredictionsPage() {
 
           {/* Skill tabs */}
           <div className="mt-12">
-            <SkillTabs value={skill} onChange={setSkill} />
+            <SkillTabs value={skill} onChange={handleSkillChange} />
+          </div>
+
+          {/* Task-type chips for the active module */}
+          <div className="mt-6">
+            <TaskTypeChips
+              skill={skill}
+              value={taskType}
+              onChange={setTaskType}
+            />
           </div>
 
           {/* Tiered groups — current month */}
@@ -873,6 +1021,56 @@ function SkillTabs({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Task-type chips — horizontal scrollable filter under module tabs    */
+/* ------------------------------------------------------------------ */
+
+function TaskTypeChips({
+  skill,
+  value,
+  onChange,
+}: {
+  skill: SkillKey;
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  const types = TASK_TYPES_BY_SKILL[skill];
+  const all = [{ id: "all", label: "All task types" }, ...types];
+
+  return (
+    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+      <div className="flex min-w-max items-center gap-2 sm:flex-wrap sm:justify-center">
+        {all.map((t) => {
+          const active = value === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onChange(t.id)}
+              aria-pressed={active}
+              className="group relative shrink-0 rounded-full border px-3.5 py-1.5 font-display text-[12px] font-bold tracking-tight transition-all sm:text-[13px]"
+              style={{
+                background: active
+                  ? "linear-gradient(135deg, oklch(0.25 0.02 60) 0%, oklch(0.18 0.02 60) 100%)"
+                  : "oklch(1 0 0 / 0.6)",
+                color: active ? "oklch(0.99 0.01 80)" : "oklch(0.30 0.03 60)",
+                borderColor: active
+                  ? "transparent"
+                  : "oklch(0.85 0.01 60 / 0.8)",
+                boxShadow: active
+                  ? "0 6px 16px -8px oklch(0.20 0.02 60 / 0.50)"
+                  : "0 1px 2px oklch(0 0 0 / 0.03)",
+              }}
+            >
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
