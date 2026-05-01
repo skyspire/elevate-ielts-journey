@@ -1039,8 +1039,18 @@ function PredictionsPage() {
             {TIERS.map((tier) => {
               const items = current[tier.key];
               if (items.length === 0) return null;
+              const isActive = activeTier === tier.key;
               return (
-                <div key={tier.key} data-tier-section={tier.key}>
+                <div
+                  key={tier.key}
+                  data-tier-section={tier.key}
+                  className="relative -mx-3 rounded-3xl px-3 py-6 transition-colors duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
+                  style={{
+                    backgroundColor: isActive
+                      ? `color-mix(in oklab, ${tier.tint} 55%, transparent)`
+                      : "transparent",
+                  }}
+                >
                   <TierSection tier={tier} items={items} />
                 </div>
               );
