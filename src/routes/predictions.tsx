@@ -1,9 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { PenLine, Mic, BookOpen, Headphones, Flame, TrendingUp, Lightbulb } from "lucide-react";
+import {
+  PenLine,
+  Mic,
+  BookOpen,
+  Headphones,
+  Flame,
+  TrendingUp,
+  Lightbulb,
+  Calendar,
+  Lock,
+} from "lucide-react";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
-import { QuestionCard } from "@/components/site/QuestionCard";
 
 export const Route = createFileRoute("/predictions")({
   head: () => ({
