@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+// no Link import needed; using plain anchors so href can include query strings.
 import { GraduationCap, X } from "lucide-react";
 import { useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
