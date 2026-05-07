@@ -232,62 +232,66 @@ export function SpeakingTopicsEditor() {
             </div>
           )}
 
-          <ul className="space-y-1.5">
+          <ul className="space-y-2">
             {list.map((t, i) => (
               <li
                 key={t.id}
-                className="flex items-center gap-2 rounded-lg border border-border bg-card px-2 py-1.5"
+                className="group rounded-lg border border-border bg-card p-2 transition-colors hover:border-foreground/30 hover:bg-muted/30"
               >
-                <span className="w-8 text-center text-[11px] font-semibold text-muted-foreground">
-                  {i + 1}
-                </span>
-                <Input
-                  value={t.label}
-                  onChange={(e) => renameAt(i, e.target.value)}
-                  className="h-8 text-sm"
-                />
-                <span className="hidden text-[10px] text-muted-foreground sm:inline">
-                  {t.id}
-                </span>
-                <div className="flex shrink-0 gap-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 text-center text-[11px] font-semibold text-muted-foreground">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <Input
+                    value={t.label}
+                    onChange={(e) => renameAt(i, e.target.value)}
+                    className="h-9 text-sm font-medium"
+                    aria-label="Topic label (rename)"
+                  />
                   <Button
-                    variant="outline"
                     size="sm"
-                    className="h-7 px-2 text-[11px]"
+                    className="h-9 shrink-0 px-3 text-xs font-bold"
                     onClick={() => setEditingTopic({ id: t.id, label: t.label })}
                   >
-                    <FileText className="mr-1 h-3 w-3" />
-                    {isCueCat ? "Cue card" : "Q&A"}
+                    <FileText className="mr-1.5 h-3.5 w-3.5" />
+                    {isCueCat ? "Open cue card" : "Open Q&A"}
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => move(i, -1)}
-                    disabled={i === 0}
-                    aria-label="Move up"
-                  >
-                    <ArrowUp className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => move(i, 1)}
-                    disabled={i === list.length - 1}
-                    aria-label="Move down"
-                  >
-                    <ArrowDown className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-destructive hover:bg-destructive/10"
-                    onClick={() => removeAt(i)}
-                    aria-label="Delete"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                </div>
+                <div className="mt-1.5 flex items-center justify-between gap-2 pl-9">
+                  <span className="text-[10px] text-muted-foreground">
+                    slug: <code className="text-foreground/70">{t.id}</code>
+                  </span>
+                  <div className="flex gap-0.5">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => move(i, -1)}
+                      disabled={i === 0}
+                      aria-label="Move up"
+                    >
+                      <ArrowUp className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => move(i, 1)}
+                      disabled={i === list.length - 1}
+                      aria-label="Move down"
+                    >
+                      <ArrowDown className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-destructive hover:bg-destructive/10"
+                      onClick={() => removeAt(i)}
+                      aria-label="Delete"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
               </li>
             ))}
