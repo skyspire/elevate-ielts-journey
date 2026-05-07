@@ -21,12 +21,21 @@ export type Part2CueCard = {
   followUps: Part2FollowUp[];
 };
 
+export type TopicStatus = "draft" | "published";
+
 // One topic key carries either Part 1 Q&A list (general categories)
 // or Part 2 cue card content (cc-* categories).
+// `status` controls whether learners see the topic (drafts are admin-only).
 export type TopicContent = {
   part1?: Part1Qa[];
   part2?: Part2CueCard;
+  status?: TopicStatus; // defaults to "published" when missing
+  updatedAt?: number; // ms epoch — used for "Recently added" rows
 };
+
+export function isPublished(tc: TopicContent | undefined): boolean {
+  return (tc?.status ?? "published") === "published";
+}
 
 export type SpeakingContentMap = Record<string, TopicContent>;
 
