@@ -58,10 +58,15 @@ export function TopicContentEditor({
     () => JSON.stringify(draft) !== JSON.stringify(initial),
     [draft, initial],
   );
+  const status = draft.status ?? "published";
 
   const save = () => {
-    update({ ...value, [key]: draft });
+    update({ ...value, [key]: { ...draft, updatedAt: Date.now() } });
     onClose();
+  };
+
+  const togglePublish = () => {
+    setDraft((d) => ({ ...d, status: status === "published" ? "draft" : "published" }));
   };
 
   return (
@@ -78,6 +83,23 @@ export function TopicContentEditor({
             </h2>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={togglePublish}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors ${
+                status === "published"
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 dark:text-emerald-300"
+                  : "border-amber-500/40 bg-amber-500/10 text-amber-700 hover:bg-amber-500/20 dark:text-amber-300"
+              }`}
+              title={status === "published" ? "Click to move to draft" : "Click to publish"}
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  status === "published" ? "bg-emerald-500" : "bg-amber-500"
+                }`}
+              />
+              {status === "published" ? "Published" : "Draft"}
+            </button>
             <Button size="sm" onClick={save} disabled={!isDirty}>
               {isDirty ? "Save changes" : "Saved"}
             </Button>
