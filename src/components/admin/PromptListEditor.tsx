@@ -64,6 +64,7 @@ import {
 } from "@/lib/admin/prompt-meta";
 import { logActivity } from "@/lib/admin/activity-log";
 import { TextDiff } from "@/components/admin/TextDiff";
+import { TopicContentEditor } from "@/components/admin/TopicContentEditor";
 
 // ───────── Generic prompt list editor ─────────
 
@@ -673,6 +674,8 @@ export function TopicListEditor({
   const [draftLabel, setDraftLabel] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
+  const [contentTopic, setContentTopic] = useState<TopicItem | null>(null);
+  const isCueCardCategory = categoryKey.startsWith("cc-");
 
   useEffect(() => {
     setItems(record[categoryKey] ?? []);
@@ -801,14 +804,18 @@ export function TopicListEditor({
                       }}
                     />
                   ) : (
-                    <>
+                    <button
+                      type="button"
+                      onClick={() => setContentTopic(item)}
+                      className="block w-full rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
                       <div className="truncate text-sm font-semibold text-foreground">
                         {item.label}
                       </div>
                       <div className="truncate text-[11px] font-mono text-muted-foreground">
                         {item.id}
                       </div>
-                    </>
+                    </button>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
@@ -827,6 +834,15 @@ export function TopicListEditor({
                     </>
                   ) : (
                     <>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setContentTopic(item)}
+                        className="h-8 px-2 text-[11px] font-bold"
+                      >
+                        <FileText className="mr-1 h-3.5 w-3.5" />
+                        {isCueCardCategory ? "Open cue card" : "Open Q&A"}
+                      </Button>
                       <Button size="icon" variant="ghost" onClick={() => startEdit(i)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
@@ -841,6 +857,16 @@ export function TopicListEditor({
           })}
         </ul>
       </div>
+
+      {contentTopic && (
+        <TopicContentEditor
+          categoryId={categoryKey}
+          topicId={contentTopic.id}
+          topicLabel={contentTopic.label}
+          isCueCard={isCueCardCategory}
+          onClose={() => setContentTopic(null)}
+        />
+      )}
     </EditorShell>
   );
 }
