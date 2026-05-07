@@ -9,9 +9,11 @@ import {
   ArrowDown,
   ArrowUp,
   ClipboardPaste,
+  FileText,
   Plus,
   Trash2,
 } from "lucide-react";
+import { TopicContentEditor } from "@/components/admin/TopicContentEditor";
 import { EditorShell } from "@/components/admin/EditorShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,6 +82,8 @@ export function SpeakingTopicsEditor() {
   const [activeCat, setActiveCat] = useState<string>(ALL_CATS[0].id);
   const [bulkOpen, setBulkOpen] = useState(false);
   const [bulkText, setBulkText] = useState("");
+  const [editingTopic, setEditingTopic] = useState<{ id: string; label: string } | null>(null);
+  const isCueCat = activeCat.startsWith("cc-");
 
   const isDirty = useMemo(
     () => JSON.stringify(draft) !== JSON.stringify(value),
@@ -247,6 +251,15 @@ export function SpeakingTopicsEditor() {
                 </span>
                 <div className="flex shrink-0 gap-1">
                   <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-[11px]"
+                    onClick={() => setEditingTopic({ id: t.id, label: t.label })}
+                  >
+                    <FileText className="mr-1 h-3 w-3" />
+                    {isCueCat ? "Cue card" : "Q&A"}
+                  </Button>
+                  <Button
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7"
@@ -286,6 +299,15 @@ export function SpeakingTopicsEditor() {
           </ul>
         </div>
       </div>
+      {editingTopic && (
+        <TopicContentEditor
+          categoryId={activeCat}
+          topicId={editingTopic.id}
+          topicLabel={editingTopic.label}
+          isCueCard={isCueCat}
+          onClose={() => setEditingTopic(null)}
+        />
+      )}
     </EditorShell>
   );
 }

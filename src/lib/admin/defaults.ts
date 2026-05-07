@@ -199,3 +199,4 @@ export const PRICES_DEFAULT: PricesOverride = {};
 export const WRITING_PROMPTS_KEY = "writing-prompts";
 export const SPEAKING_TOPICS_KEY = "speaking-topics";
 export const VOCABULARY_KEY = "vocabulary";
+export { SPEAKING_CONTENT_KEY } from "@/data/speaking-content";
