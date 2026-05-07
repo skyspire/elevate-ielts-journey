@@ -32,6 +32,7 @@ import {
   History,
   GitCompare,
   Eye,
+  ArrowRightLeft,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { EditorShell } from "@/components/admin/EditorShell";
