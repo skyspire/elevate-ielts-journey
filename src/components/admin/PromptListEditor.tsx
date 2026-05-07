@@ -103,10 +103,11 @@ export function PromptListEditor({
   previewModule = "academic",
   previewTask = "task2",
 }: StringListEditorProps) {
-  const { value: record, update, reset } = useCmsEditor<Record<string, string[]>>(
-    storageKey,
-    defaultRecord,
-  );
+  const {
+    value: record,
+    update,
+    reset,
+  } = useCmsEditor<Record<string, string[]>>(storageKey, defaultRecord);
   const answerOverrides = useCmsSection<WritingAnswersOverrides>(
     WRITING_ANSWERS_KEY,
     WRITING_ANSWERS_DEFAULT,
@@ -123,7 +124,11 @@ export function PromptListEditor({
   const isTask1 = enableAnswers && showAnswerImage;
 
   // Modals
-  const [diffFor, setDiffFor] = useState<{ index: number; current: string; original: string } | null>(null);
+  const [diffFor, setDiffFor] = useState<{
+    index: number;
+    current: string;
+    original: string;
+  } | null>(null);
   const [historyFor, setHistoryFor] = useState<{ index: number; id: string } | null>(null);
 
   const areaPath = breadcrumb.join(" / ");
@@ -310,7 +315,9 @@ export function PromptListEditor({
               upload the chart / map image
             </strong>
             and
-            <strong className="mx-1 font-semibold text-foreground">write the full model answer</strong>
+            <strong className="mx-1 font-semibold text-foreground">
+              write the full model answer
+            </strong>
             in one flow.
           </p>
         )}
@@ -354,8 +361,8 @@ export function PromptListEditor({
             const answerStatus: "custom" | "default" | "missing" = hasOverride
               ? "custom"
               : hasDefault
-              ? "default"
-              : "missing";
+                ? "default"
+                : "missing";
             const defaultPrompt = defaults[i];
             const hasDefaultPrompt = typeof defaultPrompt === "string";
             const promptDiffers = hasDefaultPrompt && defaultPrompt !== item;
@@ -480,9 +487,7 @@ export function PromptListEditor({
                             <Button
                               size="sm"
                               variant={answerOpen ? "default" : "outline"}
-                              onClick={() =>
-                                setOpenAnswerIndex((cur) => (cur === i ? null : i))
-                              }
+                              onClick={() => setOpenAnswerIndex((cur) => (cur === i ? null : i))}
                               title={answerOpen ? "Hide answer editor" : "Edit model answer"}
                               className="h-7"
                             >
@@ -599,8 +604,8 @@ export function PromptListEditor({
           <DialogHeader>
             <DialogTitle>Version history</DialogTitle>
             <DialogDescription>
-              Last {(historyFor && metaStore[historyFor.id]?.history.length) || 0} edits — pick
-              one to restore the prompt to that revision.
+              Last {(historyFor && metaStore[historyFor.id]?.history.length) || 0} edits — pick one
+              to restore the prompt to that revision.
             </DialogDescription>
           </DialogHeader>
           {historyFor && (
@@ -624,9 +629,7 @@ export function PromptListEditor({
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() =>
-                      restoreFromHistory(historyFor.id, { prompt: h.prompt })
-                    }
+                    onClick={() => restoreFromHistory(historyFor.id, { prompt: h.prompt })}
                   >
                     <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
                     Restore
@@ -665,10 +668,11 @@ export function TopicListEditor({
   categoryKey,
   defaultRecord,
 }: TopicListEditorProps) {
-  const { value: record, update, reset } = useCmsEditor<Record<string, TopicItem[]>>(
-    storageKey,
-    defaultRecord,
-  );
+  const {
+    value: record,
+    update,
+    reset,
+  } = useCmsEditor<Record<string, TopicItem[]>>(storageKey, defaultRecord);
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<TopicItem[]>(original);
   const [draftLabel, setDraftLabel] = useState("");
@@ -824,11 +828,7 @@ export function TopicListEditor({
                       <Button size="icon" variant="ghost" onClick={commitEdit}>
                         <Check className="h-4 w-4 text-emerald-600" />
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setEditingIndex(null)}
-                      >
+                      <Button size="icon" variant="ghost" onClick={() => setEditingIndex(null)}>
                         <X className="h-4 w-4" />
                       </Button>
                     </>
@@ -873,15 +873,7 @@ export function TopicListEditor({
 
 // ───────── Shared bits ─────────
 
-function Breadcrumb({
-  path,
-  count,
-  unit,
-}: {
-  path: string[];
-  count: number;
-  unit: string;
-}) {
+function Breadcrumb({ path, count, unit }: { path: string[]; count: number; unit: string }) {
   return (
     <div className="mb-5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2">
       <div className="flex flex-wrap items-center gap-1.5 text-xs">
@@ -889,9 +881,7 @@ function Breadcrumb({
           <span key={i} className="flex items-center gap-1.5">
             <span
               className={
-                i === path.length - 1
-                  ? "font-bold text-foreground"
-                  : "text-muted-foreground"
+                i === path.length - 1 ? "font-bold text-foreground" : "text-muted-foreground"
               }
             >
               {seg}
