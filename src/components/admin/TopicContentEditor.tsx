@@ -4,15 +4,7 @@
 // Bulk paste + CSV/JSON import for fast data entry.
 
 import { useMemo, useRef, useState } from "react";
-import {
-  ArrowDown,
-  ArrowUp,
-  ClipboardPaste,
-  FileUp,
-  Plus,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, ClipboardPaste, FileUp, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,13 +29,7 @@ type Props = {
   onClose: () => void;
 };
 
-export function TopicContentEditor({
-  categoryId,
-  topicId,
-  topicLabel,
-  isCueCard,
-  onClose,
-}: Props) {
+export function TopicContentEditor({ categoryId, topicId, topicLabel, isCueCard, onClose }: Props) {
   const { value, update } = useCmsEditor<SpeakingContentMap>(
     SPEAKING_CONTENT_KEY,
     SPEAKING_CONTENT_DEFAULT,
@@ -51,9 +37,7 @@ export function TopicContentEditor({
   const key = contentKey(categoryId, topicId);
   const initial: TopicContent = value[key] ?? {};
 
-  const [draft, setDraft] = useState<TopicContent>(() =>
-    JSON.parse(JSON.stringify(initial)),
-  );
+  const [draft, setDraft] = useState<TopicContent>(() => JSON.parse(JSON.stringify(initial)));
   const isDirty = useMemo(
     () => JSON.stringify(draft) !== JSON.stringify(initial),
     [draft, initial],
@@ -78,9 +62,7 @@ export function TopicContentEditor({
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               {isCueCard ? "Part 2 Cue Card" : "Part 1 Topic"} · {categoryId}
             </p>
-            <h2 className="font-display text-lg font-extrabold tracking-tight">
-              {topicLabel}
-            </h2>
+            <h2 className="font-display text-lg font-extrabold tracking-tight">{topicLabel}</h2>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -146,10 +128,7 @@ function Part1Editor({
   const fileRef = useRef<HTMLInputElement>(null);
 
   const add = () =>
-    onChange([
-      ...value,
-      { id: makeId("q"), question: "", answer: "", vocab: [], tip: "" },
-    ]);
+    onChange([...value, { id: makeId("q"), question: "", answer: "", vocab: [], tip: "" }]);
 
   const updateAt = (i: number, patch: Partial<Part1Qa>) => {
     const next = value.slice();
@@ -199,7 +178,11 @@ function Part1Editor({
       }
       qa.question = buf.q.join(" ").trim();
       qa.answer = buf.a.join("\n").trim();
-      qa.vocab = buf.v.join(",").split(",").map((s) => s.trim()).filter(Boolean);
+      qa.vocab = buf.v
+        .join(",")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
       qa.tip = buf.t.join(" ").trim();
       if (qa.question || qa.answer) additions.push(qa);
     }
@@ -222,7 +205,10 @@ function Part1Editor({
             vocab: Array.isArray(r.vocab)
               ? r.vocab.map(String)
               : typeof r.vocab === "string"
-                ? r.vocab.split(",").map((s: string) => s.trim()).filter(Boolean)
+                ? r.vocab
+                    .split(",")
+                    .map((s: string) => s.trim())
+                    .filter(Boolean)
                 : [],
             tip: String(r.tip ?? ""),
           }));
@@ -287,8 +273,8 @@ function Part1Editor({
       {bulkOpen && (
         <div className="mb-4 rounded-lg border border-border bg-muted/30 p-3">
           <p className="mb-2 text-xs font-semibold text-muted-foreground">
-            Paste blocks separated by <code>---</code>. Each block uses Q:, A:, V:
-            (comma-separated vocab), T: (tip).
+            Paste blocks separated by <code>---</code>. Each block uses Q:, A:, V: (comma-separated
+            vocab), T: (tip).
           </p>
           <Textarea
             value={bulkText}
@@ -318,11 +304,7 @@ function Part1Editor({
                 <IconBtn onClick={() => move(i, -1)} disabled={i === 0} label="Up">
                   <ArrowUp className="h-3.5 w-3.5" />
                 </IconBtn>
-                <IconBtn
-                  onClick={() => move(i, 1)}
-                  disabled={i === value.length - 1}
-                  label="Down"
-                >
+                <IconBtn onClick={() => move(i, 1)} disabled={i === value.length - 1} label="Down">
                   <ArrowDown className="h-3.5 w-3.5" />
                 </IconBtn>
                 <IconBtn onClick={() => remove(i)} label="Delete" danger>
@@ -350,7 +332,10 @@ function Part1Editor({
                 value={qa.vocab.join(", ")}
                 onChange={(e) =>
                   updateAt(i, {
-                    vocab: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                    vocab: e.target.value
+                      .split(",")
+                      .map((s) => s.trim())
+                      .filter(Boolean),
                   })
                 }
                 placeholder="time-piece, statement accessory, sentimental value"

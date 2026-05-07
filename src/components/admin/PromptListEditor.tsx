@@ -676,9 +676,7 @@ export function TopicListEditor({
   } = useCmsEditor<Record<string, TopicItem[]>>(storageKey, defaultRecord);
   // Read speaking content store so we can show status badges and migrate
   // content when topics are duplicated or moved across categories.
-  const speakingContent = useCmsSection<
-    import("@/data/speaking-content").SpeakingContentMap
-  >(
+  const speakingContent = useCmsSection<import("@/data/speaking-content").SpeakingContentMap>(
     "speaking-content",
     {} as import("@/data/speaking-content").SpeakingContentMap,
   );
@@ -695,9 +693,7 @@ export function TopicListEditor({
   // destinations for "Move to category". Falls back to all keys if unknown.
   const siblingCategories = useMemo(() => {
     const allKeys = Object.keys({ ...defaultRecord, ...record });
-    return allKeys.filter(
-      (k) => k !== categoryKey && k.startsWith("cc-") === isCueCardCategory,
-    );
+    return allKeys.filter((k) => k !== categoryKey && k.startsWith("cc-") === isCueCardCategory);
   }, [defaultRecord, record, categoryKey, isCueCardCategory]);
 
   useEffect(() => {
@@ -956,10 +952,20 @@ export function TopicListEditor({
                       >
                         <ArrowRightLeft className="h-3.5 w-3.5" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => startEdit(i)} className="h-7 w-7">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => startEdit(i)}
+                        className="h-7 w-7"
+                      >
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => removeItem(i)} className="h-7 w-7">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => removeItem(i)}
+                        className="h-7 w-7"
+                      >
                         <Trash2 className="h-3.5 w-3.5 text-destructive" />
                       </Button>
                     </>
