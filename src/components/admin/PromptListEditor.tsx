@@ -673,13 +673,31 @@ export function TopicListEditor({
     update,
     reset,
   } = useCmsEditor<Record<string, TopicItem[]>>(storageKey, defaultRecord);
+  // Read speaking content store so we can show status badges and migrate
+  // content when topics are duplicated or moved across categories.
+  const speakingContent = useCmsSection<
+    import("@/data/speaking-content").SpeakingContentMap
+  >(
+    "speaking-content",
+    {} as import("@/data/speaking-content").SpeakingContentMap,
+  );
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<TopicItem[]>(original);
   const [draftLabel, setDraftLabel] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
   const [contentTopic, setContentTopic] = useState<TopicItem | null>(null);
+  const [moveSourceIndex, setMoveSourceIndex] = useState<number | null>(null);
   const isCueCardCategory = categoryKey.startsWith("cc-");
+
+  // All sibling categories of the same kind (Part 1 vs Cue cards) — used as
+  // destinations for "Move to category". Falls back to all keys if unknown.
+  const siblingCategories = useMemo(() => {
+    const allKeys = Object.keys({ ...defaultRecord, ...record });
+    return allKeys.filter(
+      (k) => k !== categoryKey && k.startsWith("cc-") === isCueCardCategory,
+    );
+  }, [defaultRecord, record, categoryKey, isCueCardCategory]);
 
   useEffect(() => {
     setItems(record[categoryKey] ?? []);
@@ -697,6 +715,14 @@ export function TopicListEditor({
 
   const ensureUniqueId = (id: string, ignoreIndex?: number) => {
     const existing = new Set(items.filter((_, i) => i !== ignoreIndex).map((t) => t.id));
+    let candidate = id || "topic";
+    let n = 2;
+    while (existing.has(candidate)) candidate = `${id}-${n++}`;
+    return candidate;
+  };
+
+  const ensureUniqueIdIn = (id: string, list: TopicItem[]) => {
+    const existing = new Set(list.map((t) => t.id));
     let candidate = id || "topic";
     let n = 2;
     while (existing.has(candidate)) candidate = `${id}-${n++}`;
@@ -734,6 +760,58 @@ export function TopicListEditor({
       [next[i], next[j]] = [next[j], next[i]];
       return next;
     });
+  };
+
+  // Duplicate within the same category. Copies the underlying speaking content
+  // (cue card / Q&A list) so admins don't have to re-author from scratch.
+  const duplicateTopic = (i: number) => {
+    const src = items[i];
+    const newId = ensureUniqueId(slugify(`${src.label} copy`));
+    const copy: TopicItem = { id: newId, label: `${src.label} (copy)` };
+    const nextItems = [...items.slice(0, i + 1), copy, ...items.slice(i + 1)];
+    setItems(nextItems);
+    update({ ...record, [categoryKey]: nextItems });
+    const srcKey = `${categoryKey}:${src.id}`;
+    const dstKey = `${categoryKey}:${newId}`;
+    if (speakingContent[srcKey]) {
+      setSection("speaking-content", {
+        ...speakingContent,
+        [dstKey]: {
+          ...JSON.parse(JSON.stringify(speakingContent[srcKey])),
+          status: "draft",
+          updatedAt: Date.now(),
+        },
+      });
+    }
+  };
+
+  // Move to another category — removes here, inserts there, migrates content.
+  const moveToCategory = (i: number, destCategory: string) => {
+    if (!destCategory || destCategory === categoryKey) return;
+    const src = items[i];
+    const destList = record[destCategory] ?? [];
+    const newId = ensureUniqueIdIn(src.id, destList);
+    const moved: TopicItem = { id: newId, label: src.label };
+    const nextSrcList = items.filter((_, idx) => idx !== i);
+    const nextDestList = [...destList, moved];
+    setItems(nextSrcList);
+    update({
+      ...record,
+      [categoryKey]: nextSrcList,
+      [destCategory]: nextDestList,
+    });
+    const srcKey = `${categoryKey}:${src.id}`;
+    const dstKey = `${destCategory}:${newId}`;
+    if (speakingContent[srcKey]) {
+      const nextContent = { ...speakingContent };
+      nextContent[dstKey] = {
+        ...nextContent[srcKey],
+        updatedAt: Date.now(),
+      };
+      delete nextContent[srcKey];
+      setSection("speaking-content", nextContent);
+    }
+    setMoveSourceIndex(null);
   };
 
   const save = () => update({ ...record, [categoryKey]: items });
