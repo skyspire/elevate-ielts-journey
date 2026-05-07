@@ -32,6 +32,7 @@ import {
   History,
   GitCompare,
   Eye,
+  ArrowRightLeft,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { EditorShell } from "@/components/admin/EditorShell";
@@ -673,13 +674,27 @@ export function TopicListEditor({
     update,
     reset,
   } = useCmsEditor<Record<string, TopicItem[]>>(storageKey, defaultRecord);
+  // Read speaking content store so we can show status badges and migrate
+  // content when topics are duplicated or moved across categories.
+  const speakingContent = useCmsSection<import("@/data/speaking-content").SpeakingContentMap>(
+    "speaking-content",
+    {} as import("@/data/speaking-content").SpeakingContentMap,
+  );
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<TopicItem[]>(original);
   const [draftLabel, setDraftLabel] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
   const [contentTopic, setContentTopic] = useState<TopicItem | null>(null);
+  const [moveSourceIndex, setMoveSourceIndex] = useState<number | null>(null);
   const isCueCardCategory = categoryKey.startsWith("cc-");
+
+  // All sibling categories of the same kind (Part 1 vs Cue cards) — used as
+  // destinations for "Move to category". Falls back to all keys if unknown.
+  const siblingCategories = useMemo(() => {
+    const allKeys = Object.keys({ ...defaultRecord, ...record });
+    return allKeys.filter((k) => k !== categoryKey && k.startsWith("cc-") === isCueCardCategory);
+  }, [defaultRecord, record, categoryKey, isCueCardCategory]);
 
   useEffect(() => {
     setItems(record[categoryKey] ?? []);
@@ -697,6 +712,14 @@ export function TopicListEditor({
 
   const ensureUniqueId = (id: string, ignoreIndex?: number) => {
     const existing = new Set(items.filter((_, i) => i !== ignoreIndex).map((t) => t.id));
+    let candidate = id || "topic";
+    let n = 2;
+    while (existing.has(candidate)) candidate = `${id}-${n++}`;
+    return candidate;
+  };
+
+  const ensureUniqueIdIn = (id: string, list: TopicItem[]) => {
+    const existing = new Set(list.map((t) => t.id));
     let candidate = id || "topic";
     let n = 2;
     while (existing.has(candidate)) candidate = `${id}-${n++}`;
@@ -734,6 +757,58 @@ export function TopicListEditor({
       [next[i], next[j]] = [next[j], next[i]];
       return next;
     });
+  };
+
+  // Duplicate within the same category. Copies the underlying speaking content
+  // (cue card / Q&A list) so admins don't have to re-author from scratch.
+  const duplicateTopic = (i: number) => {
+    const src = items[i];
+    const newId = ensureUniqueId(slugify(`${src.label} copy`));
+    const copy: TopicItem = { id: newId, label: `${src.label} (copy)` };
+    const nextItems = [...items.slice(0, i + 1), copy, ...items.slice(i + 1)];
+    setItems(nextItems);
+    update({ ...record, [categoryKey]: nextItems });
+    const srcKey = `${categoryKey}:${src.id}`;
+    const dstKey = `${categoryKey}:${newId}`;
+    if (speakingContent[srcKey]) {
+      setSection("speaking-content", {
+        ...speakingContent,
+        [dstKey]: {
+          ...JSON.parse(JSON.stringify(speakingContent[srcKey])),
+          status: "draft",
+          updatedAt: Date.now(),
+        },
+      });
+    }
+  };
+
+  // Move to another category — removes here, inserts there, migrates content.
+  const moveToCategory = (i: number, destCategory: string) => {
+    if (!destCategory || destCategory === categoryKey) return;
+    const src = items[i];
+    const destList = record[destCategory] ?? [];
+    const newId = ensureUniqueIdIn(src.id, destList);
+    const moved: TopicItem = { id: newId, label: src.label };
+    const nextSrcList = items.filter((_, idx) => idx !== i);
+    const nextDestList = [...destList, moved];
+    setItems(nextSrcList);
+    update({
+      ...record,
+      [categoryKey]: nextSrcList,
+      [destCategory]: nextDestList,
+    });
+    const srcKey = `${categoryKey}:${src.id}`;
+    const dstKey = `${destCategory}:${newId}`;
+    if (speakingContent[srcKey]) {
+      const nextContent = { ...speakingContent };
+      nextContent[dstKey] = {
+        ...nextContent[srcKey],
+        updatedAt: Date.now(),
+      };
+      delete nextContent[srcKey];
+      setSection("speaking-content", nextContent);
+    }
+    setMoveSourceIndex(null);
   };
 
   const save = () => update({ ...record, [categoryKey]: items });
@@ -785,44 +860,60 @@ export function TopicListEditor({
         <ul className="grid gap-2 sm:grid-cols-2">
           {items.map((item, i) => {
             const editing = editingIndex === i;
+            const tc = speakingContent[`${categoryKey}:${item.id}`];
+            const isDraft = (tc?.status ?? "published") === "draft";
+            const moveOpen = moveSourceIndex === i;
             return (
               <li
                 key={item.id}
-                className="group flex items-center gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:border-foreground/20"
+                className={`group relative flex flex-col gap-2 rounded-lg border bg-card p-3 transition-colors hover:border-foreground/20 ${
+                  isDraft ? "border-amber-400/60" : "border-border"
+                }`}
               >
-                <ReorderHandle
-                  index={i}
-                  total={items.length}
-                  onUp={() => move(i, -1)}
-                  onDown={() => move(i, 1)}
-                />
-                <div className="min-w-0 flex-1">
-                  {editing ? (
-                    <Input
-                      value={editLabel}
-                      onChange={(e) => setEditLabel(e.target.value)}
-                      autoFocus
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") commitEdit();
-                        if (e.key === "Escape") setEditingIndex(null);
-                      }}
-                    />
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setContentTopic(item)}
-                      className="block w-full rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                      <div className="truncate text-sm font-semibold text-foreground">
-                        {item.label}
-                      </div>
-                      <div className="truncate text-[11px] font-mono text-muted-foreground">
-                        {item.id}
-                      </div>
-                    </button>
-                  )}
+                <div className="flex items-center gap-2">
+                  <ReorderHandle
+                    index={i}
+                    total={items.length}
+                    onUp={() => move(i, -1)}
+                    onDown={() => move(i, 1)}
+                  />
+                  <div className="min-w-0 flex-1">
+                    {editing ? (
+                      <Input
+                        value={editLabel}
+                        onChange={(e) => setEditLabel(e.target.value)}
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") commitEdit();
+                          if (e.key === "Escape") setEditingIndex(null);
+                        }}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setContentTopic(item)}
+                        className="block w-full rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <span className="truncate text-sm font-semibold text-foreground">
+                            {item.label}
+                          </span>
+                          {isDraft && (
+                            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                              <span className="h-1 w-1 rounded-full bg-amber-500" />
+                              Draft
+                            </span>
+                          )}
+                        </div>
+                        <div className="truncate text-[11px] font-mono text-muted-foreground">
+                          {item.id}
+                        </div>
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+
+                <div className="flex flex-wrap items-center justify-end gap-1">
                   {editing ? (
                     <>
                       <Button size="icon" variant="ghost" onClick={commitEdit}>
@@ -843,15 +934,68 @@ export function TopicListEditor({
                         <FileText className="mr-1 h-3.5 w-3.5" />
                         {isCueCardCategory ? "Open cue card" : "Open Q&A"}
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => startEdit(i)}>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        title="Duplicate (creates a draft copy)"
+                        onClick={() => duplicateTopic(i)}
+                        className="h-7 w-7"
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        title="Move to another category"
+                        onClick={() => setMoveSourceIndex(moveOpen ? null : i)}
+                        className="h-7 w-7"
+                      >
+                        <ArrowRightLeft className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => startEdit(i)}
+                        className="h-7 w-7"
+                      >
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => removeItem(i)}>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => removeItem(i)}
+                        className="h-7 w-7"
+                      >
                         <Trash2 className="h-3.5 w-3.5 text-destructive" />
                       </Button>
                     </>
                   )}
                 </div>
+
+                {moveOpen && (
+                  <div className="rounded-md border border-border bg-muted/40 p-2">
+                    <div className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Move "{item.label}" to:
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {siblingCategories.length === 0 && (
+                        <span className="text-[11px] text-muted-foreground">
+                          No other categories available.
+                        </span>
+                      )}
+                      {siblingCategories.map((dest) => (
+                        <button
+                          key={dest}
+                          type="button"
+                          onClick={() => moveToCategory(i, dest)}
+                          className="rounded-md border border-border bg-background px-2 py-1 text-[11px] font-semibold text-foreground hover:border-foreground/40 hover:bg-muted"
+                        >
+                          {dest}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </li>
             );
           })}
