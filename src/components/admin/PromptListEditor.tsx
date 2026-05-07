@@ -64,6 +64,7 @@ import {
 } from "@/lib/admin/prompt-meta";
 import { logActivity } from "@/lib/admin/activity-log";
 import { TextDiff } from "@/components/admin/TextDiff";
+import { TopicContentEditor } from "@/components/admin/TopicContentEditor";
 
 // ───────── Generic prompt list editor ─────────
 
@@ -102,10 +103,11 @@ export function PromptListEditor({
   previewModule = "academic",
   previewTask = "task2",
 }: StringListEditorProps) {
-  const { value: record, update, reset } = useCmsEditor<Record<string, string[]>>(
-    storageKey,
-    defaultRecord,
-  );
+  const {
+    value: record,
+    update,
+    reset,
+  } = useCmsEditor<Record<string, string[]>>(storageKey, defaultRecord);
   const answerOverrides = useCmsSection<WritingAnswersOverrides>(
     WRITING_ANSWERS_KEY,
     WRITING_ANSWERS_DEFAULT,
@@ -122,7 +124,11 @@ export function PromptListEditor({
   const isTask1 = enableAnswers && showAnswerImage;
 
   // Modals
-  const [diffFor, setDiffFor] = useState<{ index: number; current: string; original: string } | null>(null);
+  const [diffFor, setDiffFor] = useState<{
+    index: number;
+    current: string;
+    original: string;
+  } | null>(null);
   const [historyFor, setHistoryFor] = useState<{ index: number; id: string } | null>(null);
 
   const areaPath = breadcrumb.join(" / ");
@@ -309,7 +315,9 @@ export function PromptListEditor({
               upload the chart / map image
             </strong>
             and
-            <strong className="mx-1 font-semibold text-foreground">write the full model answer</strong>
+            <strong className="mx-1 font-semibold text-foreground">
+              write the full model answer
+            </strong>
             in one flow.
           </p>
         )}
@@ -353,8 +361,8 @@ export function PromptListEditor({
             const answerStatus: "custom" | "default" | "missing" = hasOverride
               ? "custom"
               : hasDefault
-              ? "default"
-              : "missing";
+                ? "default"
+                : "missing";
             const defaultPrompt = defaults[i];
             const hasDefaultPrompt = typeof defaultPrompt === "string";
             const promptDiffers = hasDefaultPrompt && defaultPrompt !== item;
@@ -479,9 +487,7 @@ export function PromptListEditor({
                             <Button
                               size="sm"
                               variant={answerOpen ? "default" : "outline"}
-                              onClick={() =>
-                                setOpenAnswerIndex((cur) => (cur === i ? null : i))
-                              }
+                              onClick={() => setOpenAnswerIndex((cur) => (cur === i ? null : i))}
                               title={answerOpen ? "Hide answer editor" : "Edit model answer"}
                               className="h-7"
                             >
@@ -598,8 +604,8 @@ export function PromptListEditor({
           <DialogHeader>
             <DialogTitle>Version history</DialogTitle>
             <DialogDescription>
-              Last {(historyFor && metaStore[historyFor.id]?.history.length) || 0} edits — pick
-              one to restore the prompt to that revision.
+              Last {(historyFor && metaStore[historyFor.id]?.history.length) || 0} edits — pick one
+              to restore the prompt to that revision.
             </DialogDescription>
           </DialogHeader>
           {historyFor && (
@@ -623,9 +629,7 @@ export function PromptListEditor({
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() =>
-                      restoreFromHistory(historyFor.id, { prompt: h.prompt })
-                    }
+                    onClick={() => restoreFromHistory(historyFor.id, { prompt: h.prompt })}
                   >
                     <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
                     Restore
@@ -664,15 +668,18 @@ export function TopicListEditor({
   categoryKey,
   defaultRecord,
 }: TopicListEditorProps) {
-  const { value: record, update, reset } = useCmsEditor<Record<string, TopicItem[]>>(
-    storageKey,
-    defaultRecord,
-  );
+  const {
+    value: record,
+    update,
+    reset,
+  } = useCmsEditor<Record<string, TopicItem[]>>(storageKey, defaultRecord);
   const original = useMemo(() => record[categoryKey] ?? [], [record, categoryKey]);
   const [items, setItems] = useState<TopicItem[]>(original);
   const [draftLabel, setDraftLabel] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
+  const [contentTopic, setContentTopic] = useState<TopicItem | null>(null);
+  const isCueCardCategory = categoryKey.startsWith("cc-");
 
   useEffect(() => {
     setItems(record[categoryKey] ?? []);
@@ -801,14 +808,18 @@ export function TopicListEditor({
                       }}
                     />
                   ) : (
-                    <>
+                    <button
+                      type="button"
+                      onClick={() => setContentTopic(item)}
+                      className="block w-full rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
                       <div className="truncate text-sm font-semibold text-foreground">
                         {item.label}
                       </div>
                       <div className="truncate text-[11px] font-mono text-muted-foreground">
                         {item.id}
                       </div>
-                    </>
+                    </button>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
@@ -817,16 +828,21 @@ export function TopicListEditor({
                       <Button size="icon" variant="ghost" onClick={commitEdit}>
                         <Check className="h-4 w-4 text-emerald-600" />
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => setEditingIndex(null)}
-                      >
+                      <Button size="icon" variant="ghost" onClick={() => setEditingIndex(null)}>
                         <X className="h-4 w-4" />
                       </Button>
                     </>
                   ) : (
                     <>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setContentTopic(item)}
+                        className="h-8 px-2 text-[11px] font-bold"
+                      >
+                        <FileText className="mr-1 h-3.5 w-3.5" />
+                        {isCueCardCategory ? "Open cue card" : "Open Q&A"}
+                      </Button>
                       <Button size="icon" variant="ghost" onClick={() => startEdit(i)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
@@ -841,21 +857,23 @@ export function TopicListEditor({
           })}
         </ul>
       </div>
+
+      {contentTopic && (
+        <TopicContentEditor
+          categoryId={categoryKey}
+          topicId={contentTopic.id}
+          topicLabel={contentTopic.label}
+          isCueCard={isCueCardCategory}
+          onClose={() => setContentTopic(null)}
+        />
+      )}
     </EditorShell>
   );
 }
 
 // ───────── Shared bits ─────────
 
-function Breadcrumb({
-  path,
-  count,
-  unit,
-}: {
-  path: string[];
-  count: number;
-  unit: string;
-}) {
+function Breadcrumb({ path, count, unit }: { path: string[]; count: number; unit: string }) {
   return (
     <div className="mb-5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2">
       <div className="flex flex-wrap items-center gap-1.5 text-xs">
@@ -863,9 +881,7 @@ function Breadcrumb({
           <span key={i} className="flex items-center gap-1.5">
             <span
               className={
-                i === path.length - 1
-                  ? "font-bold text-foreground"
-                  : "text-muted-foreground"
+                i === path.length - 1 ? "font-bold text-foreground" : "text-muted-foreground"
               }
             >
               {seg}
