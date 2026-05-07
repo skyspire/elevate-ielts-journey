@@ -299,6 +299,15 @@ export function SpeakingTopicsEditor() {
           </ul>
         </div>
       </div>
+      {editingTopic && (
+        <TopicContentEditor
+          categoryId={activeCat}
+          topicId={editingTopic.id}
+          topicLabel={editingTopic.label}
+          isCueCard={isCueCat}
+          onClose={() => setEditingTopic(null)}
+        />
+      )}
     </EditorShell>
   );
 }
