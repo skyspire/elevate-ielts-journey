@@ -207,25 +207,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     pinchRef.current = null;
   };
 
-  // Pre-render adjacent pages (offscreen) for instant flips.
-  const adjacentPages = useMemo(() => {
-    const arr: number[] = [];
-    if (page - 1 >= 1) arr.push(page - 1);
-    if (page + 1 <= numPages) arr.push(page + 1);
-    return arr;
-  }, [page, numPages]);
-
-  // Thumbnail strip — show ~9 nearby pages
-  const thumbWindow = useMemo(() => {
-    if (!numPages) return [] as number[];
-    const w = 9;
-    const start = Math.max(1, Math.min(numPages - w + 1, page - Math.floor(w / 2)));
-    const end = Math.min(numPages, start + w - 1);
-    const arr: number[] = [];
-    for (let i = start; i <= end; i++) arr.push(i);
-    return arr;
-  }, [page, numPages]);
-
   if (isLocked) return <LockedView book={book} />;
 
   const pct = (page / totalPages) * 100;
