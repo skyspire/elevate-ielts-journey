@@ -77,7 +77,7 @@ const FONT_SIZES = {
 // Modern paperback palette — pure white default, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.985 0 0)",
+    bg: "oklch(0.94 0.005 250)",
     page: "oklch(1 0 0)",
     text: "oklch(0.2 0.015 260)",
     muted: "oklch(0.5 0.015 260)",
@@ -419,11 +419,11 @@ function ReaderPage() {
             />
           </div>
 
-          {/* Edge overlay arrows — auto-hide with chrome */}
+          {/* Edge overlay arrows — always visible (not auto-hide) */}
           <ArrowButton
             side="left"
             theme={theme}
-            visible={chromeVisible && current !== 0}
+            visible={current !== 0}
             onClick={goPrev}
             disabled={current === 0}
             ariaLabel="Previous page"
@@ -431,7 +431,7 @@ function ReaderPage() {
           <ArrowButton
             side="right"
             theme={theme}
-            visible={chromeVisible && current < total - 1 && !isLocked}
+            visible={current < total - 1 && !isLocked}
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
             ariaLabel="Next page"
@@ -613,6 +613,58 @@ function ReaderPage() {
           )}
         </SidePanel>
       )}
+
+      {/* Footer — scrubbable progress + page x/y (always visible) */}
+      <footer
+        className="fixed inset-x-0 bottom-0 z-30 border-t px-4 py-3"
+        style={{
+          background: `${theme.page}f2`,
+          borderColor: theme.border,
+          backdropFilter: "blur(8px)",
+        }}
+      >
+        <div className="mx-auto flex max-w-3xl items-center gap-3">
+          <button
+            onClick={goPrev}
+            disabled={current === 0}
+            className="rounded-md p-1.5 transition hover:bg-black/5 disabled:opacity-30"
+            aria-label="Previous"
+            style={{ color: theme.text }}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <input
+            type="range"
+            min={1}
+            max={Math.max(1, total)}
+            value={current + 1}
+            onChange={(e) => {
+              const next = Number(e.target.value) - 1;
+              const clamped = !user && !devBypass ? Math.min(next, freePages - 1) : next;
+              setState((s) => ({ ...s, currentPage: clamped }));
+            }}
+            className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full"
+            style={{
+              background: `linear-gradient(to right, oklch(0.55 0.18 30) 0%, oklch(0.55 0.18 30) ${progressPct}%, ${theme.border} ${progressPct}%, ${theme.border} 100%)`,
+            }}
+          />
+          <button
+            onClick={goNext}
+            disabled={current >= total - 1 || isLocked}
+            className="rounded-md p-1.5 transition hover:bg-black/5 disabled:opacity-30"
+            aria-label="Next"
+            style={{ color: theme.text }}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div
+            className="min-w-[64px] text-right text-xs font-bold tabular-nums"
+            style={{ color: theme.muted }}
+          >
+            {current + 1} / {total}
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
