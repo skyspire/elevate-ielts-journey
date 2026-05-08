@@ -202,7 +202,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const goPrev = useCallback(() => setPage(page - 1, "prev"), [page, setPage]);
   const goNext = useCallback(() => setPage(page + 1, "next"), [page, setPage]);
   const jumpTo = (n: number) => {
-    if (!numPages) return;
     setPage(n);
   };
 
@@ -277,7 +276,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
   if (isLocked) return <LockedView book={book} />;
 
-  const pct = numPages > 0 ? (page / numPages) * 100 : 0;
+  const pct = (page / totalPages) * 100;
   const theme = prefs.theme;
   const stageBg =
     theme === "sepia" ? SEPIA_BG : theme === "dark" ? NIGHT_BG : PAPER_BG;
@@ -285,6 +284,10 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const chromeBg = isDark ? "oklch(0.20 0.01 260 / 0.85)" : "oklch(0.97 0.003 250 / 0.92)";
   const chromeBorder = isDark ? "oklch(0.32 0.01 260)" : "oklch(0.82 0.005 250)";
   const chromeText = isDark ? "oklch(0.92 0.005 250)" : "oklch(0.2 0.015 260)";
+  const viewerMode = fitMode === "width" ? "FitH" : "Fit";
+  const viewerSrc = pdfSrc
+    ? `${pdfSrc}#page=${page}&view=${viewerMode}&zoom=${Math.round(scale * 100)}&toolbar=0&navpanes=0&scrollbar=1`
+    : "";
 
   return (
     <div
