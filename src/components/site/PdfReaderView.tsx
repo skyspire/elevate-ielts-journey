@@ -358,11 +358,11 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
         }}
       >
-        <div className="mx-auto flex max-w-5xl items-center gap-2 sm:gap-3">
-          <button onClick={goPrev} disabled={page <= 1} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Previous">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <button onClick={goPrev} disabled={page <= 1} className="rounded-md p-1.5 text-cyan-200 shadow-[0_0_16px_oklch(0.75_0.22_210_/_0.3)] hover:bg-cyan-400/20 disabled:opacity-30" aria-label="Previous">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <button onClick={goNext} disabled={page >= totalPages} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Next">
+          <button onClick={goNext} disabled={page >= totalPages} className="rounded-md p-1.5 text-fuchsia-200 shadow-[0_0_16px_oklch(0.72_0.25_315_/_0.3)] hover:bg-fuchsia-400/20 disabled:opacity-30" aria-label="Next">
             <ChevronRight className="h-4 w-4" />
           </button>
 
@@ -372,7 +372,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
             max={totalPages}
             value={page}
             onChange={(e) => setPage(Number(e.target.value))}
-            className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full"
+            className="h-1.5 min-w-28 flex-1 cursor-pointer appearance-none rounded-full"
             style={{
               background: `linear-gradient(to right, oklch(0.78 0.22 150) 0%, oklch(0.70 0.23 205) 35%, oklch(0.72 0.24 315) ${pct}%, oklch(0.95 0 0 / 0.22) ${pct}%, oklch(0.95 0 0 / 0.22) 100%)`,
             }}
@@ -390,7 +390,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
               if (!isNaN(n)) jumpTo(n);
               setPageInput("");
             }}
-            className="hidden items-center gap-1 sm:flex"
+            className="flex items-center gap-1"
           >
             <input
               value={pageInput}
@@ -403,7 +403,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           </form>
 
           {/* Zoom */}
-          <div className="hidden items-center gap-0.5 rounded-md border bg-white/5 sm:flex" style={{ borderColor: "oklch(0.95 0 0 / 0.2)" }}>
+          <div className="flex items-center gap-0.5 rounded-md border bg-white/5" style={{ borderColor: "oklch(0.95 0 0 / 0.2)" }}>
             <button onClick={() => { setFitMode("manual"); setScale((s) => Math.max(0.6, s - 0.15)); }} className="rounded-md p-1.5 text-cyan-200 hover:bg-cyan-400/20" aria-label="Zoom out">
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
@@ -413,7 +413,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
             </button>
           </div>
 
-          <div className="hidden items-center gap-1 sm:flex">
+          <div className="flex items-center gap-1">
             <button onClick={() => setFitMode("page")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-lime-100 hover:bg-lime-400/20" style={{ background: fitMode === "page" ? "oklch(0.74 0.22 145 / 0.32)" : undefined }}>Fit</button>
             <button onClick={() => setFitMode("width")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-cyan-100 hover:bg-cyan-400/20" style={{ background: fitMode === "width" ? "oklch(0.72 0.2 210 / 0.32)" : undefined }}>Wide</button>
             <button onClick={() => { setFitMode("page"); setScale(1); }} className="rounded-md p-1.5 text-amber-100 hover:bg-amber-400/20" aria-label="Reset view" title="Reset view">
