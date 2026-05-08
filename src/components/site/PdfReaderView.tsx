@@ -408,49 +408,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
       </div>
 
-      {/* Thumbnail scrub strip — sits above footer, auto-hide with chrome */}
-      <div
-        className="fixed inset-x-0 z-30 flex justify-center px-4 transition-all duration-300"
-        style={{
-          bottom: 76,
-          opacity: chromeVisible && numPages > 0 ? 1 : 0,
-          pointerEvents: chromeVisible ? "auto" : "none",
-          transform: chromeVisible ? "translateY(0)" : "translateY(8px)",
-        }}
-      >
-        <div
-          className="flex items-end gap-2 rounded-xl border px-3 py-2 shadow-2xl backdrop-blur"
-          style={{
-            background: "oklch(0.18 0.012 260 / 0.7)",
-            borderColor: "oklch(0.32 0.012 260 / 0.8)",
-          }}
-        >
-          <PdfDocument file={pdfFile} loading={null} error={null}>
-            {thumbWindow.map((n) => {
-              const active = n === page;
-              return (
-                <button
-                  key={`thumb-${n}`}
-                  onClick={() => jumpTo(n)}
-                  className="relative shrink-0 overflow-hidden rounded-sm transition-transform"
-                  style={{
-                    outline: active ? "2px solid oklch(0.78 0.16 50)" : "1px solid oklch(0.45 0.012 260)",
-                    transform: active ? "translateY(-4px) scale(1.05)" : "none",
-                  }}
-                  title={`Page ${n}`}
-                  aria-label={`Go to page ${n}`}
-                >
-                  <PdfPage pageNumber={n} width={48} renderTextLayer={false} renderAnnotationLayer={false} />
-                  <span className="absolute inset-x-0 bottom-0 bg-black/60 text-[8px] font-bold tabular-nums text-white">
-                    {n}
-                  </span>
-                </button>
-              );
-            })}
-          </PdfDocument>
-        </div>
-      </div>
-
       {/* Footer — dark grey translucent, full controls */}
       <footer
         className="fixed inset-x-0 bottom-0 z-30 border-t px-3 py-2.5 text-white transition-all duration-300"
