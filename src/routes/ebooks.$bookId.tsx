@@ -666,6 +666,10 @@ function ReaderPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function IconBtn({
   children,
   onClick,
   title,
