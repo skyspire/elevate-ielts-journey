@@ -9,13 +9,22 @@ type Props = {
   dismissible?: boolean;
   onClose?: () => void;
   redirectTo?: string;
+  canDevBypass?: boolean;
+  onDevBypass?: () => void;
 };
 
 /**
  * Signed-out gate popup. Minimal copy. Hard-block variant blurs the page behind.
  * Bottom sheet on mobile, centered modal on desktop.
  */
-export function SignupGatePopup({ open, dismissible = false, onClose, redirectTo }: Props) {
+export function SignupGatePopup({
+  open,
+  dismissible = false,
+  onClose,
+  redirectTo,
+  canDevBypass = false,
+  onDevBypass,
+}: Props) {
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -106,6 +115,15 @@ export function SignupGatePopup({ open, dismissible = false, onClose, redirectTo
           >
             I already have an account
           </a>
+          {canDevBypass && onDevBypass && (
+            <button
+              type="button"
+              onClick={onDevBypass}
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-dashed border-border bg-muted px-5 text-sm font-bold text-foreground transition-colors hover:bg-accent"
+            >
+              Continue as admin/dev
+            </button>
+          )}
         </div>
 
         <p className="mt-4 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
