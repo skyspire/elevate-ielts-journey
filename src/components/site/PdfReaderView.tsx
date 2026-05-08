@@ -375,31 +375,19 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
         {/* Page column */}
         <div className="flex flex-1 items-stretch justify-center px-2 py-3 sm:px-0">
-          <object
-            data={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
-            type="application/pdf"
-            aria-label={`${book.title} PDF`}
+          <iframe
+            key={viewerSrc}
+            src={viewerSrc}
+            title={`${book.title} PDF`}
             className="h-[calc(100vh-7rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
             style={{ filter: THEME_FILTER[theme] }}
-          >
-            <iframe
-              src={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
-              title={`${book.title} PDF`}
-              className="h-[calc(100vh-7rem)] w-full rounded-md bg-white"
-            />
-            <div className="flex h-[calc(100vh-7rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
-              <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
-              <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
-                Download PDF
-              </a>
-            </div>
-          </object>
+          />
         </div>
 
         {/* Right clickable strip — always visible */}
         <button
           onClick={goNext}
-          disabled={page >= numPages}
+          disabled={page >= totalPages}
           aria-label="Next page"
           className="group fixed right-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border bg-white/95 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 sm:flex"
           style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
@@ -419,7 +407,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
         <button
           onClick={goNext}
-          disabled={page >= numPages}
+          disabled={page >= totalPages}
           aria-label="Next"
           className="fixed right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border bg-white/90 p-2.5 shadow-lg backdrop-blur disabled:opacity-30 sm:hidden"
           style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
