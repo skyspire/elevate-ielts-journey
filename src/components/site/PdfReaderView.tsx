@@ -44,27 +44,6 @@ type Props = {
   userIsAuthed: boolean;
 };
 
-type PdfRuntime = {
-  Document: React.ComponentType<any>;
-  Page: React.ComponentType<any>;
-};
-
-function dataUrlToBytes(dataUrl?: string): Uint8Array | null {
-  if (!dataUrl) return null;
-  const comma = dataUrl.indexOf(",");
-  if (!dataUrl.startsWith("data:") || comma === -1) return null;
-  try {
-    const meta = dataUrl.slice(0, comma);
-    const body = dataUrl.slice(comma + 1);
-    const binary = meta.includes(";base64") ? atob(body) : decodeURIComponent(body);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return bytes;
-  } catch {
-    return null;
-  }
-}
-
 const PAPER_BG = `
   radial-gradient(oklch(0.78 0.005 250 / 0.18) 1px, transparent 1px),
   radial-gradient(oklch(0.65 0.005 250 / 0.10) 1px, transparent 1px),
@@ -93,10 +72,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
   const [savedState, setSavedState] = useReaderState(user?.id ?? null, book.id);
-  const pdfFile = useMemo(() => {
-    const bytes = dataUrlToBytes(book.pdfDataUrl);
-    return bytes ? { data: bytes } : book.pdfDataUrl;
-  }, [book.pdfDataUrl]);
+  const pdfSrc = book.pdfDataUrl ?? "";
 
   const [numPages, setNumPages] = useState(0);
   const [page, setPageState] = useState(Math.max(1, savedState.currentPage + 1));
@@ -108,27 +84,10 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chromeVisible, setChromeVisible] = useState(true);
   const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
-  const [pdfRuntime, setPdfRuntime] = useState<PdfRuntime | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isLocked = !userIsAuthed && (book.freePages ?? 0) === 0;
-
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all([
-      import("react-pdf"),
-      import("pdfjs-dist/build/pdf.worker.min.mjs?url"),
-      import("react-pdf/dist/Page/AnnotationLayer.css"),
-      import("react-pdf/dist/Page/TextLayer.css"),
-    ]).then(([mod, worker]) => {
-      mod.pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-      if (!cancelled) setPdfRuntime({ Document: mod.Document, Page: mod.Page });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // Persist progress
   const setPage = useCallback(
@@ -293,16 +252,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   }, [page, numPages]);
 
   if (isLocked) return <LockedView book={book} />;
-  if (!pdfRuntime) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
-        <LoadingSkeleton />
-      </div>
-    );
-  }
-
-  const PdfDocument = pdfRuntime.Document;
-  const PdfPage = pdfRuntime.Page;
 
   const pct = numPages > 0 ? (page / numPages) * 100 : 0;
   const theme = prefs.theme;
@@ -401,49 +350,26 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
 
         {/* Page column */}
-        <div className="flex flex-1 items-start justify-center px-3 py-6 sm:px-0" style={{ perspective: "2400px" }}>
-          <PdfDocument
-            file={pdfFile}
-            onLoadSuccess={onLoad}
-            loading={<LoadingSkeleton />}
-            error={
-              <div className="py-20 text-sm font-semibold opacity-70">Couldn't load this PDF.</div>
-            }
+        <div className="flex flex-1 items-stretch justify-center px-3 py-6 sm:px-0">
+          <object
+            data={pdfSrc}
+            type="application/pdf"
+            aria-label={`${book.title} PDF`}
+            className="min-h-[calc(100vh-12rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
+            style={{ filter: THEME_FILTER[theme] }}
           >
-            {numPages > 0 && containerWidth > 0 && (
-              <>
-                {/* Visible page with curl animation */}
-                <div
-                  key={`p-${page}-${flipDir}`}
-                  className="relative overflow-hidden rounded-md bg-white"
-                  style={{
-                    boxShadow:
-                      "0 22px 60px -22px oklch(0.2 0.02 260 / 0.55), 0 6px 16px oklch(0.2 0.02 260 / 0.18)",
-                    filter: THEME_FILTER[theme],
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                    animation: flipDir
-                      ? `${flipDir === "next" ? "pdf-curl-next" : "pdf-curl-prev"} 650ms cubic-bezier(0.22,0.61,0.36,1) both`
-                      : undefined,
-                  }}
-                  onAnimationEnd={() => setFlipDir(null)}
-                >
-                  <PdfPage
-                    pageNumber={page}
-                    width={containerWidth * scale}
-                    renderAnnotationLayer
-                    renderTextLayer
-                  />
-                </div>
-                {/* Pre-render adjacent pages off-screen for instant flips */}
-                <div aria-hidden style={{ position: "absolute", left: -99999, top: -99999, opacity: 0, pointerEvents: "none" }}>
-                  {adjacentPages.map((n) => (
-                    <PdfPage key={`pre-${n}`} pageNumber={n} width={containerWidth * scale} renderTextLayer={false} renderAnnotationLayer={false} />
-                  ))}
-                </div>
-              </>
-            )}
-          </PdfDocument>
+            <iframe
+              src={pdfSrc}
+              title={`${book.title} PDF`}
+              className="min-h-[calc(100vh-12rem)] w-full rounded-md bg-white"
+            />
+            <div className="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
+              <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
+              <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
+                Download PDF
+              </a>
+            </div>
+          </object>
         </div>
 
         {/* Right clickable strip */}
@@ -480,49 +406,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         >
           <ChevronRight className="h-4 w-4" />
         </button>
-      </div>
-
-      {/* Thumbnail scrub strip — sits above footer, auto-hide with chrome */}
-      <div
-        className="fixed inset-x-0 z-30 flex justify-center px-4 transition-all duration-300"
-        style={{
-          bottom: 76,
-          opacity: chromeVisible && numPages > 0 ? 1 : 0,
-          pointerEvents: chromeVisible ? "auto" : "none",
-          transform: chromeVisible ? "translateY(0)" : "translateY(8px)",
-        }}
-      >
-        <div
-          className="flex items-end gap-2 rounded-xl border px-3 py-2 shadow-2xl backdrop-blur"
-          style={{
-            background: "oklch(0.18 0.012 260 / 0.7)",
-            borderColor: "oklch(0.32 0.012 260 / 0.8)",
-          }}
-        >
-          <PdfDocument file={pdfFile} loading={null} error={null}>
-            {thumbWindow.map((n) => {
-              const active = n === page;
-              return (
-                <button
-                  key={`thumb-${n}`}
-                  onClick={() => jumpTo(n)}
-                  className="relative shrink-0 overflow-hidden rounded-sm transition-transform"
-                  style={{
-                    outline: active ? "2px solid oklch(0.78 0.16 50)" : "1px solid oklch(0.45 0.012 260)",
-                    transform: active ? "translateY(-4px) scale(1.05)" : "none",
-                  }}
-                  title={`Page ${n}`}
-                  aria-label={`Go to page ${n}`}
-                >
-                  <PdfPage pageNumber={n} width={48} renderTextLayer={false} renderAnnotationLayer={false} />
-                  <span className="absolute inset-x-0 bottom-0 bg-black/60 text-[8px] font-bold tabular-nums text-white">
-                    {n}
-                  </span>
-                </button>
-              );
-            })}
-          </PdfDocument>
-        </div>
       </div>
 
       {/* Footer — dark grey translucent, full controls */}
