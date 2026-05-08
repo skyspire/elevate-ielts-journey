@@ -334,19 +334,15 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* Left clickable strip */}
+        {/* Left clickable strip — always visible */}
         <button
           onClick={goPrev}
           disabled={page <= 1}
           aria-label="Previous page"
-          className="group sticky top-14 z-10 hidden h-[calc(100vh-200px)] w-[70px] shrink-0 items-center justify-center self-start transition disabled:cursor-not-allowed disabled:opacity-30 sm:flex"
+          className="group fixed left-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border bg-white/95 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 sm:flex"
+          style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
         >
-          <span
-            className="flex h-12 w-12 items-center justify-center rounded-full border bg-white/80 shadow-md backdrop-blur transition group-hover:bg-white group-hover:shadow-lg group-active:scale-95"
-            style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </span>
+          <ChevronLeft className="h-5 w-5" />
         </button>
 
         {/* Page column */}
