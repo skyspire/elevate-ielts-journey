@@ -400,17 +400,15 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
       </div>
 
-      {/* Footer — dark grey translucent, full controls */}
+      {/* Footer — always visible, dark grey translucent, sans-serif heavy */}
       <footer
-        className="fixed inset-x-0 bottom-0 z-30 border-t px-3 py-2.5 text-white transition-all duration-300"
+        className="fixed inset-x-0 bottom-0 z-30 border-t px-3 py-2.5 font-sans font-extrabold tracking-tight text-white"
         style={{
-          background: "oklch(0.22 0.012 260 / 0.55)",
-          borderColor: "oklch(0.16 0.012 260 / 0.5)",
+          background: "oklch(0.18 0.012 260 / 0.92)",
+          borderColor: "oklch(0.16 0.012 260 / 0.7)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          transform: chromeVisible ? "translateY(0)" : "translateY(100%)",
-          opacity: chromeVisible ? 1 : 0,
-          pointerEvents: chromeVisible ? "auto" : "none",
+          fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
         }}
       >
         <div className="mx-auto flex max-w-5xl items-center gap-2 sm:gap-3">
