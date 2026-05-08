@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useFreeQuota } from "@/lib/free-quota";
+import { useSession as useAdminSession } from "@/lib/admin/auth";
 import { SignupGatePopup } from "./SignupGatePopup";
 import { UpsellPopup } from "./UpsellPopup";
 
@@ -23,6 +24,8 @@ export function QuotaGate({
   children: React.ReactNode;
 }) {
   const { user } = useLearnerSession();
+  const { user: adminUser } = useAdminSession();
+  const isAdmin = !!adminUser;
   const location = useLocation();
   const quota = useFreeQuota(user?.id);
 
@@ -52,6 +55,11 @@ export function QuotaGate({
   }, [user?.id, itemKey]);
 
   const redirectTo = useMemo(() => location.href ?? location.pathname, [location]);
+
+  // Admin bypass: signed-in admins skip the quota gate entirely.
+  if (isAdmin) {
+    return <>{children}</>;
+  }
 
   // Guest: hard block.
   if (!user) {
