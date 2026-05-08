@@ -29,15 +29,10 @@ import {
   ZoomOut,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import type { Ebook } from "@/data/ebooks";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useReaderPrefs, useReaderState } from "@/lib/ebook-storage";
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 type OutlineItem = {
   title: string;
@@ -48,6 +43,11 @@ type OutlineItem = {
 type Props = {
   book: Ebook;
   userIsAuthed: boolean;
+};
+
+type PdfRuntime = {
+  Document: React.ComponentType<any>;
+  Page: React.ComponentType<any>;
 };
 
 function dataUrlToBytes(dataUrl?: string): Uint8Array | null {
@@ -109,10 +109,29 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chromeVisible, setChromeVisible] = useState(true);
   const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
+  const [pdfRuntime, setPdfRuntime] = useState<PdfRuntime | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isLocked = !userIsAuthed && (book.freePages ?? 0) === 0;
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      import("react-pdf"),
+      import("react-pdf/dist/Page/AnnotationLayer.css"),
+      import("react-pdf/dist/Page/TextLayer.css"),
+    ]).then(([mod]) => {
+      mod.pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+      if (!cancelled) setPdfRuntime({ Document: mod.Document, Page: mod.Page });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const Document = pdfRuntime?.Document;
+  const Page = pdfRuntime?.Page;
 
   // Persist progress
   const setPage = useCallback(
