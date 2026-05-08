@@ -28,6 +28,7 @@ import {
 } from "@/lib/admin/ebooks-store";
 import { PdfReaderView } from "@/components/site/PdfReaderView";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { useDevBypass } from "@/lib/dev-bypass";
 
 export const Route = createFileRoute("/ebooks/$bookId")({
   head: ({ params }) => {
@@ -109,6 +110,7 @@ function ReaderPage() {
   );
   const navigate = useNavigate();
   const { user } = useLearnerSession();
+  const { enabled: devBypass } = useDevBypass();
   const [prefs, setPrefs] = useReaderPrefs();
   const [state, setState] = useReaderState(user?.id ?? null, bookId);
 
@@ -126,7 +128,7 @@ function ReaderPage() {
   // When the admin uploaded a PDF for this ebook, bypass the chapters reader
   // and serve the file inside a polished viewer.
   if (book?.pdfDataUrl) {
-    return <PdfReaderView book={book} userIsAuthed={!!user} />;
+    return <PdfReaderView book={book} userIsAuthed={!!user || devBypass} />;
   }
 
 
@@ -163,7 +165,7 @@ function ReaderPage() {
   const savedPage = total > 0 ? Math.min(Math.max(state.currentPage, 0), total - 1) : 0;
   const current = mounted ? savedPage : 0;
   const freePages = Math.max(1, Math.min(book?.freePages ?? 0, total || 1));
-  const isLocked = !!book && !user && current >= freePages;
+  const isLocked = !!book && !user && !devBypass && current >= freePages;
 
   // Self-heal stale localStorage if the saved page is out of range for the new book content.
   useEffect(() => {
@@ -187,12 +189,12 @@ function ReaderPage() {
     setFlipDir("next");
     setState((s) => {
       const next = total > 0 ? Math.min(total - 1, s.currentPage + 1) : 0;
-      if (!user && next >= freePages) {
+      if (!user && !devBypass && next >= freePages) {
         return { ...s, currentPage: Math.max(0, freePages - 1) };
       }
       return { ...s, currentPage: next };
     });
-  }, [setState, total, user, freePages]);
+  }, [setState, total, user, devBypass, freePages]);
 
   // Keyboard navigation
   useEffect(() => {
