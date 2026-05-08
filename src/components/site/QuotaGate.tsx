@@ -3,6 +3,7 @@ import { useLocation } from "@tanstack/react-router";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useFreeQuota } from "@/lib/free-quota";
 import { useSession as useAdminSession } from "@/lib/admin/auth";
+import { useDevBypass } from "@/lib/dev-bypass";
 import { SignupGatePopup } from "./SignupGatePopup";
 import { UpsellPopup } from "./UpsellPopup";
 
@@ -27,23 +28,7 @@ export function QuotaGate({
   const { user: adminUser } = useAdminSession();
   const location = useLocation();
   const quota = useFreeQuota(user?.id);
-
-  // Dev bypass: ?bypass=1 in URL (sticky), or localStorage flag, or signed-in admin.
-  const [devBypass, setDevBypass] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get("bypass") === "1") {
-        window.localStorage.setItem("bigielts:dev-bypass", "1");
-      } else if (params.get("bypass") === "0") {
-        window.localStorage.removeItem("bigielts:dev-bypass");
-      }
-      setDevBypass(window.localStorage.getItem("bigielts:dev-bypass") === "1");
-    } catch {
-      /* ignore */
-    }
-  }, [location.pathname, location.search]);
+  const { enabled: devBypass, canToggle, enable: enableDevBypass } = useDevBypass();
 
   const isAdmin = !!adminUser || devBypass;
 
@@ -86,7 +71,13 @@ export function QuotaGate({
         <div aria-hidden="true" className="pointer-events-none select-none blur-sm">
           {children}
         </div>
-        <SignupGatePopup open dismissible={false} redirectTo={redirectTo} />
+        <SignupGatePopup
+          open
+          dismissible={false}
+          redirectTo={redirectTo}
+          canDevBypass={canToggle}
+          onDevBypass={enableDevBypass}
+        />
       </>
     );
   }
