@@ -287,9 +287,8 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const chromeBorder = isDark ? "oklch(0.32 0.01 260)" : "oklch(0.82 0.005 250)";
   const chromeText = isDark ? "oklch(0.92 0.005 250)" : "oklch(0.2 0.015 260)";
   const viewerMode = fitMode === "width" ? "FitH" : "Fit";
-  const viewerSrc = pdfSrc
-    ? `${pdfSrc}#page=${page}&view=${viewerMode}&zoom=${Math.round(scale * 100)}&toolbar=0&navpanes=0&scrollbar=1`
-    : "";
+  const viewParams = fitMode === "manual" ? `zoom=${Math.round(scale * 100)}` : `view=${viewerMode}`;
+  const viewerSrc = pdfSrc ? `${pdfSrc}#page=${page}&${viewParams}&toolbar=0&navpanes=0&scrollbar=1` : "";
 
   return (
     <div
