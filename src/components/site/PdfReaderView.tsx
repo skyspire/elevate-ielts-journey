@@ -44,27 +44,6 @@ type Props = {
   userIsAuthed: boolean;
 };
 
-type PdfRuntime = {
-  Document: React.ComponentType<any>;
-  Page: React.ComponentType<any>;
-};
-
-function dataUrlToBytes(dataUrl?: string): Uint8Array | null {
-  if (!dataUrl) return null;
-  const comma = dataUrl.indexOf(",");
-  if (!dataUrl.startsWith("data:") || comma === -1) return null;
-  try {
-    const meta = dataUrl.slice(0, comma);
-    const body = dataUrl.slice(comma + 1);
-    const binary = meta.includes(";base64") ? atob(body) : decodeURIComponent(body);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return bytes;
-  } catch {
-    return null;
-  }
-}
-
 const PAPER_BG = `
   radial-gradient(oklch(0.78 0.005 250 / 0.18) 1px, transparent 1px),
   radial-gradient(oklch(0.65 0.005 250 / 0.10) 1px, transparent 1px),
@@ -93,10 +72,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
   const [savedState, setSavedState] = useReaderState(user?.id ?? null, book.id);
-  const pdfFile = useMemo(() => {
-    const bytes = dataUrlToBytes(book.pdfDataUrl);
-    return bytes ? { data: bytes } : book.pdfDataUrl;
-  }, [book.pdfDataUrl]);
+  const pdfSrc = book.pdfDataUrl ?? "";
 
   const [numPages, setNumPages] = useState(0);
   const [page, setPageState] = useState(Math.max(1, savedState.currentPage + 1));
@@ -108,27 +84,10 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chromeVisible, setChromeVisible] = useState(true);
   const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
-  const [pdfRuntime, setPdfRuntime] = useState<PdfRuntime | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isLocked = !userIsAuthed && (book.freePages ?? 0) === 0;
-
-  useEffect(() => {
-    let cancelled = false;
-    Promise.all([
-      import("react-pdf"),
-      import("pdfjs-dist/build/pdf.worker.min.mjs?url"),
-      import("react-pdf/dist/Page/AnnotationLayer.css"),
-      import("react-pdf/dist/Page/TextLayer.css"),
-    ]).then(([mod, worker]) => {
-      mod.pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-      if (!cancelled) setPdfRuntime({ Document: mod.Document, Page: mod.Page });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // Persist progress
   const setPage = useCallback(
