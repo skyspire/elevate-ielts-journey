@@ -402,7 +402,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
         {/* Page column */}
         <div className="flex flex-1 items-start justify-center px-3 py-6 sm:px-0" style={{ perspective: "2400px" }}>
-          <Document
+          <PdfDocument
             file={pdfFile}
             onLoadSuccess={onLoad}
             loading={<LoadingSkeleton />}
@@ -428,7 +428,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
                   }}
                   onAnimationEnd={() => setFlipDir(null)}
                 >
-                  <Page
+                  <PdfPage
                     pageNumber={page}
                     width={containerWidth * scale}
                     renderAnnotationLayer
@@ -438,12 +438,12 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
                 {/* Pre-render adjacent pages off-screen for instant flips */}
                 <div aria-hidden style={{ position: "absolute", left: -99999, top: -99999, opacity: 0, pointerEvents: "none" }}>
                   {adjacentPages.map((n) => (
-                    <Page key={`pre-${n}`} pageNumber={n} width={containerWidth * scale} renderTextLayer={false} renderAnnotationLayer={false} />
+                    <PdfPage key={`pre-${n}`} pageNumber={n} width={containerWidth * scale} renderTextLayer={false} renderAnnotationLayer={false} />
                   ))}
                 </div>
               </>
             )}
-          </Document>
+          </PdfDocument>
         </div>
 
         {/* Right clickable strip */}
@@ -499,7 +499,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
             borderColor: "oklch(0.32 0.012 260 / 0.8)",
           }}
         >
-          <Document file={pdfFile} loading={null} error={null}>
+          <PdfDocument file={pdfFile} loading={null} error={null}>
             {thumbWindow.map((n) => {
               const active = n === page;
               return (
@@ -514,14 +514,14 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
                   title={`Page ${n}`}
                   aria-label={`Go to page ${n}`}
                 >
-                  <Page pageNumber={n} width={48} renderTextLayer={false} renderAnnotationLayer={false} />
+                  <PdfPage pageNumber={n} width={48} renderTextLayer={false} renderAnnotationLayer={false} />
                   <span className="absolute inset-x-0 bottom-0 bg-black/60 text-[8px] font-bold tabular-nums text-white">
                     {n}
                   </span>
                 </button>
               );
             })}
-          </Document>
+          </PdfDocument>
         </div>
       </div>
 
