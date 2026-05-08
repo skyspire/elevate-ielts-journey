@@ -29,7 +29,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Ebook } from "@/data/ebooks";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useReaderPrefs, useReaderState } from "@/lib/ebook-storage";
@@ -82,11 +82,9 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const [fitMode, setFitMode] = useState<"page" | "width" | "manual">("page");
   const [showToc, setShowToc] = useState(false);
   const [outline, setOutline] = useState<OutlineItem[]>([]);
-  const [containerWidth, setContainerWidth] = useState<number>(0);
   const [pageInput, setPageInput] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chromeVisible, setChromeVisible] = useState(true);
-  const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -120,7 +118,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     (next: number, dir?: "next" | "prev") => {
       setPageState((p) => {
         const n = Math.max(1, Math.min(totalPages, next));
-        if (dir && n !== p) setFlipDir(dir);
         return n;
       });
     },
@@ -130,18 +127,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     setSavedState((s) => ({ ...s, currentPage: page - 1 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
-  // Stage size
-  useEffect(() => {
-    if (!stageRef.current) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const e of entries) {
-        setContainerWidth(Math.min(e.contentRect.width - 140, 920));
-      }
-    });
-    ro.observe(stageRef.current);
-    return () => ro.disconnect();
-  }, []);
 
   useEffect(() => {
     const onFs = () => setIsFullscreen(!!document.fullscreenElement);
@@ -164,41 +149,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
       clearTimeout(timer);
       events.forEach((e) => window.removeEventListener(e, show));
     };
-  }, []);
-
-  const onLoad = useCallback(async (pdf: any) => {
-    setNumPages(pdf.numPages);
-    try {
-      const raw = await pdf.getOutline();
-      if (raw && raw.length > 0) {
-        const flatten = async (items: any[]): Promise<OutlineItem[]> => {
-          const out: OutlineItem[] = [];
-          for (const it of items) {
-            let pageNumber: number | null = null;
-            try {
-              if (it.dest) {
-                const dest = typeof it.dest === "string" ? await pdf.getDestination(it.dest) : it.dest;
-                if (dest) {
-                  const idx = await pdf.getPageIndex(dest[0]);
-                  pageNumber = idx + 1;
-                }
-              }
-            } catch {
-              /* skip */
-            }
-            out.push({
-              title: it.title,
-              pageNumber,
-              items: it.items?.length ? await flatten(it.items) : [],
-            });
-          }
-          return out;
-        };
-        setOutline(await flatten(raw));
-      }
-    } catch {
-      /* outline optional */
-    }
   }, []);
 
   const goPrev = useCallback(() => setPage(page - 1, "prev"), [page, setPage]);
