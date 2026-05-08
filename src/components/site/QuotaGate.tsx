@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useFreeQuota } from "@/lib/free-quota";
+import { useSession as useAdminSession } from "@/lib/admin/auth";
 import { SignupGatePopup } from "./SignupGatePopup";
 import { UpsellPopup } from "./UpsellPopup";
 
