@@ -115,7 +115,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
   // Persist progress
   const setPage = useCallback(
-    (next: number, dir?: "next" | "prev") => {
+    (next: number, _dir?: "next" | "prev") => {
       setPageState((p) => {
         const n = Math.max(1, Math.min(totalPages, next));
         return n;
@@ -311,7 +311,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
             src={viewerSrc}
             title={`${book.title} PDF`}
             className="h-[calc(100vh-7rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
-            style={{ filter: THEME_FILTER[theme] }}
+            style={{ background: "white" }}
           />
         </div>
 
