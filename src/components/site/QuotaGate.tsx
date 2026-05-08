@@ -56,6 +56,11 @@ export function QuotaGate({
 
   const redirectTo = useMemo(() => location.href ?? location.pathname, [location]);
 
+  // Admin bypass: signed-in admins skip the quota gate entirely.
+  if (isAdmin) {
+    return <>{children}</>;
+  }
+
   // Guest: hard block.
   if (!user) {
     return (
