@@ -50,6 +50,22 @@ type Props = {
   userIsAuthed: boolean;
 };
 
+function dataUrlToBytes(dataUrl?: string): Uint8Array | null {
+  if (!dataUrl) return null;
+  const comma = dataUrl.indexOf(",");
+  if (!dataUrl.startsWith("data:") || comma === -1) return null;
+  try {
+    const meta = dataUrl.slice(0, comma);
+    const body = dataUrl.slice(comma + 1);
+    const binary = meta.includes(";base64") ? atob(body) : decodeURIComponent(body);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  } catch {
+    return null;
+  }
+}
+
 const PAPER_BG = `
   radial-gradient(oklch(0.78 0.005 250 / 0.18) 1px, transparent 1px),
   radial-gradient(oklch(0.65 0.005 250 / 0.10) 1px, transparent 1px),
@@ -78,6 +94,10 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
   const [savedState, setSavedState] = useReaderState(user?.id ?? null, book.id);
+  const pdfFile = useMemo(() => {
+    const bytes = dataUrlToBytes(book.pdfDataUrl);
+    return bytes ? { data: bytes } : book.pdfDataUrl;
+  }, [book.pdfDataUrl]);
 
   const [numPages, setNumPages] = useState(0);
   const [page, setPageState] = useState(Math.max(1, savedState.currentPage + 1));
@@ -357,7 +377,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         {/* Page column */}
         <div className="flex flex-1 items-start justify-center px-3 py-6 sm:px-0" style={{ perspective: "2400px" }}>
           <Document
-            file={book.pdfDataUrl}
+            file={pdfFile}
             onLoadSuccess={onLoad}
             loading={<LoadingSkeleton />}
             error={
@@ -453,7 +473,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
             borderColor: "oklch(0.32 0.012 260 / 0.8)",
           }}
         >
-          <Document file={book.pdfDataUrl} loading={null} error={null}>
+          <Document file={pdfFile} loading={null} error={null}>
             {thumbWindow.map((n) => {
               const active = n === page;
               return (
