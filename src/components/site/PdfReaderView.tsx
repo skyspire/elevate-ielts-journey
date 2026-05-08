@@ -239,17 +239,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     pinchRef.current = null;
   };
 
-  if (isLocked) return <LockedView book={book} />;
-
-  const pct = numPages > 0 ? (page / numPages) * 100 : 0;
-  const theme = prefs.theme;
-  const stageBg =
-    theme === "sepia" ? SEPIA_BG : theme === "dark" ? NIGHT_BG : PAPER_BG;
-  const isDark = theme === "dark";
-  const chromeBg = isDark ? "oklch(0.20 0.01 260 / 0.85)" : "oklch(0.97 0.003 250 / 0.92)";
-  const chromeBorder = isDark ? "oklch(0.32 0.01 260)" : "oklch(0.82 0.005 250)";
-  const chromeText = isDark ? "oklch(0.92 0.005 250)" : "oklch(0.2 0.015 260)";
-
   // Pre-render adjacent pages (offscreen) for instant flips.
   const adjacentPages = useMemo(() => {
     const arr: number[] = [];
@@ -268,6 +257,17 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     for (let i = start; i <= end; i++) arr.push(i);
     return arr;
   }, [page, numPages]);
+
+  if (isLocked) return <LockedView book={book} />;
+
+  const pct = numPages > 0 ? (page / numPages) * 100 : 0;
+  const theme = prefs.theme;
+  const stageBg =
+    theme === "sepia" ? SEPIA_BG : theme === "dark" ? NIGHT_BG : PAPER_BG;
+  const isDark = theme === "dark";
+  const chromeBg = isDark ? "oklch(0.20 0.01 260 / 0.85)" : "oklch(0.97 0.003 250 / 0.92)";
+  const chromeBorder = isDark ? "oklch(0.32 0.01 260)" : "oklch(0.82 0.005 250)";
+  const chromeText = isDark ? "oklch(0.92 0.005 250)" : "oklch(0.2 0.015 260)";
 
   return (
     <div
