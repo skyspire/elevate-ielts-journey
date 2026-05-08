@@ -324,7 +324,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
       {/* Stage */}
       <div
         ref={stageRef}
-        className="relative flex flex-1 overflow-auto pb-32 pt-14"
+        className="relative flex flex-1 overflow-hidden pb-16 pt-14"
         style={{
           backgroundImage: stageBg,
           backgroundSize: theme === "light" ? PAPER_BG_SIZE : "8px 8px, 100% 100%",
@@ -334,36 +334,32 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* Left clickable strip */}
+        {/* Left clickable strip — always visible */}
         <button
           onClick={goPrev}
           disabled={page <= 1}
           aria-label="Previous page"
-          className="group sticky top-14 z-10 hidden h-[calc(100vh-200px)] w-[70px] shrink-0 items-center justify-center self-start transition disabled:cursor-not-allowed disabled:opacity-30 sm:flex"
+          className="group fixed left-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border bg-white/95 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 sm:flex"
+          style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
         >
-          <span
-            className="flex h-12 w-12 items-center justify-center rounded-full border bg-white/80 shadow-md backdrop-blur transition group-hover:bg-white group-hover:shadow-lg group-active:scale-95"
-            style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </span>
+          <ChevronLeft className="h-5 w-5" />
         </button>
 
         {/* Page column */}
-        <div className="flex flex-1 items-stretch justify-center px-3 py-6 sm:px-0">
+        <div className="flex flex-1 items-stretch justify-center px-2 py-3 sm:px-0">
           <object
-            data={pdfSrc}
+            data={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
             type="application/pdf"
             aria-label={`${book.title} PDF`}
-            className="min-h-[calc(100vh-12rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
+            className="h-[calc(100vh-7rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
             style={{ filter: THEME_FILTER[theme] }}
           >
             <iframe
-              src={pdfSrc}
+              src={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
               title={`${book.title} PDF`}
-              className="min-h-[calc(100vh-12rem)] w-full rounded-md bg-white"
+              className="h-[calc(100vh-7rem)] w-full rounded-md bg-white"
             />
-            <div className="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
+            <div className="flex h-[calc(100vh-7rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
               <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
               <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
                 Download PDF
@@ -372,19 +368,15 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           </object>
         </div>
 
-        {/* Right clickable strip */}
+        {/* Right clickable strip — always visible */}
         <button
           onClick={goNext}
           disabled={page >= numPages}
           aria-label="Next page"
-          className="group sticky top-14 z-10 hidden h-[calc(100vh-200px)] w-[70px] shrink-0 items-center justify-center self-start transition disabled:cursor-not-allowed disabled:opacity-30 sm:flex"
+          className="group fixed right-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border bg-white/95 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 sm:flex"
+          style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
         >
-          <span
-            className="flex h-12 w-12 items-center justify-center rounded-full border bg-white/80 shadow-md backdrop-blur transition group-hover:bg-white group-hover:shadow-lg group-active:scale-95"
-            style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </span>
+          <ChevronRight className="h-5 w-5" />
         </button>
 
         {/* Mobile floating arrows */}
@@ -408,17 +400,15 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
       </div>
 
-      {/* Footer — dark grey translucent, full controls */}
+      {/* Footer — always visible, dark grey translucent, sans-serif heavy */}
       <footer
-        className="fixed inset-x-0 bottom-0 z-30 border-t px-3 py-2.5 text-white transition-all duration-300"
+        className="fixed inset-x-0 bottom-0 z-30 border-t px-3 py-2.5 font-sans font-extrabold tracking-tight text-white"
         style={{
-          background: "oklch(0.22 0.012 260 / 0.55)",
-          borderColor: "oklch(0.16 0.012 260 / 0.5)",
+          background: "oklch(0.18 0.012 260 / 0.92)",
+          borderColor: "oklch(0.16 0.012 260 / 0.7)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          transform: chromeVisible ? "translateY(0)" : "translateY(100%)",
-          opacity: chromeVisible ? 1 : 0,
-          pointerEvents: chromeVisible ? "auto" : "none",
+          fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
         }}
       >
         <div className="mx-auto flex max-w-5xl items-center gap-2 sm:gap-3">
