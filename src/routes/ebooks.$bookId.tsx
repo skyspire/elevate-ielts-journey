@@ -124,14 +124,6 @@ function ReaderPage() {
     y: number;
   } | null>(null);
 
-  // ─── PDF branch ──────────────────────────────────────────────
-  // When the admin uploaded a PDF for this ebook, bypass the chapters reader
-  // and serve the file inside a polished viewer.
-  if (book?.pdfDataUrl) {
-    return <PdfReaderView book={book} userIsAuthed={!!user || devBypass} />;
-  }
-
-
   const pageRef = useRef<HTMLDivElement>(null);
 
   // Avoid SSR/CSR hydration mismatch from localStorage-driven state.
@@ -262,6 +254,12 @@ function ReaderPage() {
   const fs = FONT_SIZES[prefs.fontSize];
 
   if (!book) return null;
+  // ─── PDF branch ──────────────────────────────────────────────
+  // Keep this after all hooks so switching from chapter data to an uploaded PDF
+  // never changes the hook order during hydration/localStorage load.
+  if (book.pdfDataUrl) {
+    return <PdfReaderView book={book} userIsAuthed={!!user || devBypass} />;
+  }
   if (!leftPage) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6 text-center text-foreground">
