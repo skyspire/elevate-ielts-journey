@@ -431,24 +431,25 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           <button onClick={goPrev} disabled={page <= 1} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Previous">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <button onClick={goNext} disabled={page >= numPages} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Next">
+          <button onClick={goNext} disabled={page >= totalPages} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Next">
             <ChevronRight className="h-4 w-4" />
           </button>
 
           <input
             type="range"
             min={1}
-            max={Math.max(1, numPages)}
+            max={totalPages}
             value={page}
             onChange={(e) => setPage(Number(e.target.value))}
             className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full"
             style={{
-              background: `linear-gradient(to right, oklch(0.78 0.16 50) 0%, oklch(0.78 0.16 50) ${pct}%, oklch(0.95 0 0 / 0.25) ${pct}%, oklch(0.95 0 0 / 0.25) 100%)`,
+              background: `linear-gradient(to right, oklch(0.78 0.22 150) 0%, oklch(0.70 0.23 205) 35%, oklch(0.72 0.24 315) ${pct}%, oklch(0.95 0 0 / 0.22) ${pct}%, oklch(0.95 0 0 / 0.22) 100%)`,
             }}
           />
 
-          {/* Mini progress ring + page x/y */}
-          <ProgressRing pct={pct} label={`${page}`} sub={`/ ${numPages || "—"}`} />
+          <div className="flex min-w-[4.5rem] items-center justify-center rounded-md px-2.5 py-1 text-xs font-black tabular-nums text-white shadow-lg" style={{ background: "linear-gradient(135deg, oklch(0.70 0.24 205), oklch(0.72 0.25 315))", boxShadow: "0 0 22px oklch(0.70 0.24 205 / 0.35)" }}>
+            {page}<span className="px-1 text-white/65">/</span>{totalPages}
+          </div>
 
           {/* Jump-to-page */}
           <form
@@ -471,13 +472,21 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           </form>
 
           {/* Zoom */}
-          <div className="flex items-center gap-0.5 rounded-md border bg-white/5" style={{ borderColor: "oklch(0.95 0 0 / 0.2)" }}>
-            <button onClick={() => setScale((s) => Math.max(0.6, s - 0.15))} className="rounded-md p-1.5 hover:bg-white/15" aria-label="Zoom out">
+          <div className="hidden items-center gap-0.5 rounded-md border bg-white/5 sm:flex" style={{ borderColor: "oklch(0.95 0 0 / 0.2)" }}>
+            <button onClick={() => { setFitMode("manual"); setScale((s) => Math.max(0.6, s - 0.15)); }} className="rounded-md p-1.5 text-cyan-200 hover:bg-cyan-400/20" aria-label="Zoom out">
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
             <span className="w-9 text-center text-[10px] font-bold tabular-nums text-white/85">{Math.round(scale * 100)}%</span>
-            <button onClick={() => setScale((s) => Math.min(2.4, s + 0.15))} className="rounded-md p-1.5 hover:bg-white/15" aria-label="Zoom in">
+            <button onClick={() => { setFitMode("manual"); setScale((s) => Math.min(2.4, s + 0.15)); }} className="rounded-md p-1.5 text-fuchsia-200 hover:bg-fuchsia-400/20" aria-label="Zoom in">
               <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="hidden items-center gap-1 sm:flex">
+            <button onClick={() => setFitMode("page")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-lime-100 hover:bg-lime-400/20" style={{ background: fitMode === "page" ? "oklch(0.74 0.22 145 / 0.32)" : undefined }}>Fit</button>
+            <button onClick={() => setFitMode("width")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-cyan-100 hover:bg-cyan-400/20" style={{ background: fitMode === "width" ? "oklch(0.72 0.2 210 / 0.32)" : undefined }}>Wide</button>
+            <button onClick={() => { setFitMode("page"); setScale(1); }} className="rounded-md p-1.5 text-amber-100 hover:bg-amber-400/20" aria-label="Reset view" title="Reset view">
+              <RotateCcw className="h-3.5 w-3.5" />
             </button>
           </div>
 
