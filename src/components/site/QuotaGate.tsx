@@ -24,6 +24,8 @@ export function QuotaGate({
   children: React.ReactNode;
 }) {
   const { user } = useLearnerSession();
+  const { user: adminUser } = useAdminSession();
+  const isAdmin = !!adminUser;
   const location = useLocation();
   const quota = useFreeQuota(user?.id);
 
