@@ -77,7 +77,7 @@ const FONT_SIZES = {
 // Modern paperback palette — pure white default, warm sepia option, soft dark.
 const THEMES = {
   light: {
-    bg: "oklch(0.985 0 0)",
+    bg: "oklch(0.94 0.005 250)",
     page: "oklch(1 0 0)",
     text: "oklch(0.2 0.015 260)",
     muted: "oklch(0.5 0.015 260)",
