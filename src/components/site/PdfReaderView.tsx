@@ -324,7 +324,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
       {/* Stage */}
       <div
         ref={stageRef}
-        className="relative flex flex-1 overflow-auto pb-32 pt-14"
+        className="relative flex flex-1 overflow-hidden pb-16 pt-14"
         style={{
           backgroundImage: stageBg,
           backgroundSize: theme === "light" ? PAPER_BG_SIZE : "8px 8px, 100% 100%",
