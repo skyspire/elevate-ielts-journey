@@ -23,6 +23,7 @@ import {
   Maximize2,
   Minimize2,
   Moon,
+  RotateCcw,
   Sun,
   X,
   ZoomIn,
@@ -72,11 +73,13 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
   const [savedState, setSavedState] = useReaderState(user?.id ?? null, book.id);
-  const pdfSrc = book.pdfDataUrl ?? "";
+  const [blobSrc, setBlobSrc] = useState("");
+  const pdfSrc = blobSrc || book.pdfDataUrl || "";
 
   const [numPages, setNumPages] = useState(0);
   const [page, setPageState] = useState(Math.max(1, savedState.currentPage + 1));
   const [scale, setScale] = useState(1);
+  const [fitMode, setFitMode] = useState<"page" | "width" | "manual">("page");
   const [showToc, setShowToc] = useState(false);
   const [outline, setOutline] = useState<OutlineItem[]>([]);
   const [containerWidth, setContainerWidth] = useState<number>(0);
@@ -88,17 +91,38 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isLocked = !userIsAuthed && (book.freePages ?? 0) === 0;
+  const totalPages = Math.max(1, numPages || book.pageCount || 1);
+
+  useEffect(() => {
+    if (!book.pdfDataUrl?.startsWith("data:application/pdf")) {
+      setBlobSrc("");
+      return;
+    }
+
+    try {
+      const [meta, base64 = ""] = book.pdfDataUrl.split(",");
+      const mime = meta.match(/^data:([^;]+)/)?.[1] || "application/pdf";
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      setBlobSrc(url);
+      return () => URL.revokeObjectURL(url);
+    } catch {
+      setBlobSrc("");
+    }
+  }, [book.pdfDataUrl]);
 
   // Persist progress
   const setPage = useCallback(
     (next: number, dir?: "next" | "prev") => {
       setPageState((p) => {
-        const n = Math.max(1, Math.min(numPages || p, next));
+        const n = Math.max(1, Math.min(totalPages, next));
         if (dir && n !== p) setFlipDir(dir);
         return n;
       });
     },
-    [numPages],
+    [totalPages],
   );
   useEffect(() => {
     setSavedState((s) => ({ ...s, currentPage: page - 1 }));
