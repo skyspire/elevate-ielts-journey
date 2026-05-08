@@ -103,6 +103,8 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
       const [meta, base64 = ""] = book.pdfDataUrl.split(",");
       const mime = meta.match(/^data:([^;]+)/)?.[1] || "application/pdf";
       const binary = atob(base64);
+      const detectedPages = binary.match(/\/Type\s*\/Page\b/g)?.length;
+      if (detectedPages && detectedPages > 0) setNumPages(detectedPages);
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
       const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
