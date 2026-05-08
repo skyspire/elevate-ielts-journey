@@ -419,11 +419,11 @@ function ReaderPage() {
             />
           </div>
 
-          {/* Edge overlay arrows — auto-hide with chrome */}
+          {/* Edge overlay arrows — always visible (not auto-hide) */}
           <ArrowButton
             side="left"
             theme={theme}
-            visible={chromeVisible && current !== 0}
+            visible={current !== 0}
             onClick={goPrev}
             disabled={current === 0}
             ariaLabel="Previous page"
@@ -431,7 +431,7 @@ function ReaderPage() {
           <ArrowButton
             side="right"
             theme={theme}
-            visible={chromeVisible && current < total - 1 && !isLocked}
+            visible={current < total - 1 && !isLocked}
             onClick={goNext}
             disabled={current >= total - 1 || isLocked}
             ariaLabel="Next page"
