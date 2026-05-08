@@ -252,16 +252,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   }, [page, numPages]);
 
   if (isLocked) return <LockedView book={book} />;
-  if (!pdfRuntime) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
-        <LoadingSkeleton />
-      </div>
-    );
-  }
-
-  const PdfDocument = pdfRuntime.Document;
-  const PdfPage = pdfRuntime.Page;
 
   const pct = numPages > 0 ? (page / numPages) * 100 : 0;
   const theme = prefs.theme;
@@ -360,49 +350,26 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
 
         {/* Page column */}
-        <div className="flex flex-1 items-start justify-center px-3 py-6 sm:px-0" style={{ perspective: "2400px" }}>
-          <PdfDocument
-            file={pdfFile}
-            onLoadSuccess={onLoad}
-            loading={<LoadingSkeleton />}
-            error={
-              <div className="py-20 text-sm font-semibold opacity-70">Couldn't load this PDF.</div>
-            }
+        <div className="flex flex-1 items-stretch justify-center px-3 py-6 sm:px-0">
+          <object
+            data={pdfSrc}
+            type="application/pdf"
+            aria-label={`${book.title} PDF`}
+            className="min-h-[calc(100vh-12rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
+            style={{ filter: THEME_FILTER[theme] }}
           >
-            {numPages > 0 && containerWidth > 0 && (
-              <>
-                {/* Visible page with curl animation */}
-                <div
-                  key={`p-${page}-${flipDir}`}
-                  className="relative overflow-hidden rounded-md bg-white"
-                  style={{
-                    boxShadow:
-                      "0 22px 60px -22px oklch(0.2 0.02 260 / 0.55), 0 6px 16px oklch(0.2 0.02 260 / 0.18)",
-                    filter: THEME_FILTER[theme],
-                    transformStyle: "preserve-3d",
-                    backfaceVisibility: "hidden",
-                    animation: flipDir
-                      ? `${flipDir === "next" ? "pdf-curl-next" : "pdf-curl-prev"} 650ms cubic-bezier(0.22,0.61,0.36,1) both`
-                      : undefined,
-                  }}
-                  onAnimationEnd={() => setFlipDir(null)}
-                >
-                  <PdfPage
-                    pageNumber={page}
-                    width={containerWidth * scale}
-                    renderAnnotationLayer
-                    renderTextLayer
-                  />
-                </div>
-                {/* Pre-render adjacent pages off-screen for instant flips */}
-                <div aria-hidden style={{ position: "absolute", left: -99999, top: -99999, opacity: 0, pointerEvents: "none" }}>
-                  {adjacentPages.map((n) => (
-                    <PdfPage key={`pre-${n}`} pageNumber={n} width={containerWidth * scale} renderTextLayer={false} renderAnnotationLayer={false} />
-                  ))}
-                </div>
-              </>
-            )}
-          </PdfDocument>
+            <iframe
+              src={pdfSrc}
+              title={`${book.title} PDF`}
+              className="min-h-[calc(100vh-12rem)] w-full rounded-md bg-white"
+            />
+            <div className="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
+              <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
+              <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
+                Download PDF
+              </a>
+            </div>
+          </object>
         </div>
 
         {/* Right clickable strip */}
