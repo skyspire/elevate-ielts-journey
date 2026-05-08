@@ -28,7 +28,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import type { Ebook } from "@/data/ebooks";
 import { useLearnerSession } from "@/lib/learner-auth";
@@ -129,9 +129,6 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
       cancelled = true;
     };
   }, []);
-
-  const Document = pdfRuntime?.Document;
-  const Page = pdfRuntime?.Page;
 
   // Persist progress
   const setPage = useCallback(
