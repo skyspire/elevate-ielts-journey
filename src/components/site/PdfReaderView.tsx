@@ -499,53 +499,6 @@ function ThemeBtn({
   );
 }
 
-function ProgressRing({ pct, label, sub }: { pct: number; label: string; sub: string }) {
-  const r = 14;
-  const c = 2 * Math.PI * r;
-  const offset = c - (pct / 100) * c;
-  return (
-    <div className="relative flex items-center">
-      <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
-        <circle cx="18" cy="18" r={r} fill="none" stroke="oklch(0.95 0 0 / 0.2)" strokeWidth="3" />
-        <circle
-          cx="18"
-          cy="18"
-          r={r}
-          fill="none"
-          stroke="oklch(0.78 0.16 50)"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={offset}
-          transform="rotate(-90 18 18)"
-          style={{ transition: "stroke-dashoffset 0.4s ease" }}
-        />
-      </svg>
-      <div className="ml-1.5 flex flex-col leading-tight">
-        <span className="text-[11px] font-black tabular-nums">{label}</span>
-        <span className="text-[9px] font-bold tabular-nums text-white/60">{sub}</span>
-      </div>
-    </div>
-  );
-}
-
-function LoadingSkeleton() {
-  return (
-    <div className="flex flex-col items-center gap-4 py-20">
-      <div
-        className="relative h-16 w-16 animate-pulse rounded-2xl"
-        style={{
-          background: "linear-gradient(135deg, oklch(0.55 0.18 30), oklch(0.7 0.15 50))",
-          boxShadow: "0 12px 32px -12px oklch(0.55 0.18 30 / 0.6)",
-        }}
-      >
-        <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-white">B</span>
-      </div>
-      <p className="text-sm font-bold opacity-70">Preparing your book…</p>
-    </div>
-  );
-}
-
 function OutlineList({
   items,
   currentPage,
