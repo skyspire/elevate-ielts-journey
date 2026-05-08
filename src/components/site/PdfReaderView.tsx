@@ -350,20 +350,20 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
 
         {/* Page column */}
-        <div className="flex flex-1 items-stretch justify-center px-3 py-6 sm:px-0">
+        <div className="flex flex-1 items-stretch justify-center px-2 py-3 sm:px-0">
           <object
-            data={pdfSrc}
+            data={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
             type="application/pdf"
             aria-label={`${book.title} PDF`}
-            className="min-h-[calc(100vh-12rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
+            className="h-[calc(100vh-7rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
             style={{ filter: THEME_FILTER[theme] }}
           >
             <iframe
-              src={pdfSrc}
+              src={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
               title={`${book.title} PDF`}
-              className="min-h-[calc(100vh-12rem)] w-full rounded-md bg-white"
+              className="h-[calc(100vh-7rem)] w-full rounded-md bg-white"
             />
-            <div className="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
+            <div className="flex h-[calc(100vh-7rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
               <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
               <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
                 Download PDF
