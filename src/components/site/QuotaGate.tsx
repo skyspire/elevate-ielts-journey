@@ -25,9 +25,27 @@ export function QuotaGate({
 }) {
   const { user } = useLearnerSession();
   const { user: adminUser } = useAdminSession();
-  const isAdmin = !!adminUser;
   const location = useLocation();
   const quota = useFreeQuota(user?.id);
+
+  // Dev bypass: ?bypass=1 in URL (sticky), or localStorage flag, or signed-in admin.
+  const [devBypass, setDevBypass] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("bypass") === "1") {
+        window.localStorage.setItem("bigielts:dev-bypass", "1");
+      } else if (params.get("bypass") === "0") {
+        window.localStorage.removeItem("bigielts:dev-bypass");
+      }
+      setDevBypass(window.localStorage.getItem("bigielts:dev-bypass") === "1");
+    } catch {
+      /* ignore */
+    }
+  }, [location.pathname, location.search]);
+
+  const isAdmin = !!adminUser || devBypass;
 
   // Track whether THIS mount has been granted access.
   const [granted, setGranted] = useState(false);
