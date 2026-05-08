@@ -62,13 +62,6 @@ const NIGHT_BG = `
   linear-gradient(180deg, oklch(0.16 0.01 260), oklch(0.12 0.01 260))
 `;
 
-// CSS filter applied to the rendered PDF page so themes affect the canvas, not just the chrome.
-const THEME_FILTER: Record<string, string> = {
-  light: "none",
-  sepia: "sepia(0.45) saturate(0.9) brightness(0.97)",
-  dark: "invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.95)",
-};
-
 export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
