@@ -23,12 +23,13 @@ import {
   Maximize2,
   Minimize2,
   Moon,
+  RotateCcw,
   Sun,
   X,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Ebook } from "@/data/ebooks";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useReaderPrefs, useReaderState } from "@/lib/ebook-storage";
@@ -61,61 +62,64 @@ const NIGHT_BG = `
   linear-gradient(180deg, oklch(0.16 0.01 260), oklch(0.12 0.01 260))
 `;
 
-// CSS filter applied to the rendered PDF page so themes affect the canvas, not just the chrome.
-const THEME_FILTER: Record<string, string> = {
-  light: "none",
-  sepia: "sepia(0.45) saturate(0.9) brightness(0.97)",
-  dark: "invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.95)",
-};
-
 export function PdfReaderView({ book, userIsAuthed }: Props) {
   const { user } = useLearnerSession();
   const [prefs, setPrefs] = useReaderPrefs();
   const [savedState, setSavedState] = useReaderState(user?.id ?? null, book.id);
-  const pdfSrc = book.pdfDataUrl ?? "";
+  const [blobSrc, setBlobSrc] = useState("");
+  const pdfSrc = blobSrc || book.pdfDataUrl || "";
 
   const [numPages, setNumPages] = useState(0);
   const [page, setPageState] = useState(Math.max(1, savedState.currentPage + 1));
   const [scale, setScale] = useState(1);
+  const [fitMode, setFitMode] = useState<"page" | "width" | "manual">("page");
   const [showToc, setShowToc] = useState(false);
   const [outline, setOutline] = useState<OutlineItem[]>([]);
-  const [containerWidth, setContainerWidth] = useState<number>(0);
   const [pageInput, setPageInput] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [chromeVisible, setChromeVisible] = useState(true);
-  const [flipDir, setFlipDir] = useState<"next" | "prev" | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isLocked = !userIsAuthed && (book.freePages ?? 0) === 0;
+  const totalPages = Math.max(1, numPages || book.pageCount || 1);
+
+  useEffect(() => {
+    if (!book.pdfDataUrl?.startsWith("data:application/pdf")) {
+      setBlobSrc("");
+      return;
+    }
+
+    try {
+      const [meta, base64 = ""] = book.pdfDataUrl.split(",");
+      const mime = meta.match(/^data:([^;]+)/)?.[1] || "application/pdf";
+      const binary = atob(base64);
+      const detectedPages = binary.match(/\/Type\s*\/Page\b/g)?.length;
+      if (detectedPages && detectedPages > 0) setNumPages(detectedPages);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      setBlobSrc(url);
+      return () => URL.revokeObjectURL(url);
+    } catch {
+      setBlobSrc("");
+    }
+  }, [book.pdfDataUrl]);
 
   // Persist progress
   const setPage = useCallback(
-    (next: number, dir?: "next" | "prev") => {
+    (next: number, _dir?: "next" | "prev") => {
       setPageState((p) => {
-        const n = Math.max(1, Math.min(numPages || p, next));
-        if (dir && n !== p) setFlipDir(dir);
+        const n = Math.max(1, Math.min(totalPages, next));
         return n;
       });
     },
-    [numPages],
+    [totalPages],
   );
   useEffect(() => {
     setSavedState((s) => ({ ...s, currentPage: page - 1 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
-  // Stage size
-  useEffect(() => {
-    if (!stageRef.current) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const e of entries) {
-        setContainerWidth(Math.min(e.contentRect.width - 140, 920));
-      }
-    });
-    ro.observe(stageRef.current);
-    return () => ro.disconnect();
-  }, []);
 
   useEffect(() => {
     const onFs = () => setIsFullscreen(!!document.fullscreenElement);
@@ -140,45 +144,9 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     };
   }, []);
 
-  const onLoad = useCallback(async (pdf: any) => {
-    setNumPages(pdf.numPages);
-    try {
-      const raw = await pdf.getOutline();
-      if (raw && raw.length > 0) {
-        const flatten = async (items: any[]): Promise<OutlineItem[]> => {
-          const out: OutlineItem[] = [];
-          for (const it of items) {
-            let pageNumber: number | null = null;
-            try {
-              if (it.dest) {
-                const dest = typeof it.dest === "string" ? await pdf.getDestination(it.dest) : it.dest;
-                if (dest) {
-                  const idx = await pdf.getPageIndex(dest[0]);
-                  pageNumber = idx + 1;
-                }
-              }
-            } catch {
-              /* skip */
-            }
-            out.push({
-              title: it.title,
-              pageNumber,
-              items: it.items?.length ? await flatten(it.items) : [],
-            });
-          }
-          return out;
-        };
-        setOutline(await flatten(raw));
-      }
-    } catch {
-      /* outline optional */
-    }
-  }, []);
-
   const goPrev = useCallback(() => setPage(page - 1, "prev"), [page, setPage]);
   const goNext = useCallback(() => setPage(page + 1, "next"), [page, setPage]);
   const jumpTo = (n: number) => {
-    if (!numPages) return;
     setPage(n);
   };
 
@@ -232,28 +200,9 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
     pinchRef.current = null;
   };
 
-  // Pre-render adjacent pages (offscreen) for instant flips.
-  const adjacentPages = useMemo(() => {
-    const arr: number[] = [];
-    if (page - 1 >= 1) arr.push(page - 1);
-    if (page + 1 <= numPages) arr.push(page + 1);
-    return arr;
-  }, [page, numPages]);
-
-  // Thumbnail strip — show ~9 nearby pages
-  const thumbWindow = useMemo(() => {
-    if (!numPages) return [] as number[];
-    const w = 9;
-    const start = Math.max(1, Math.min(numPages - w + 1, page - Math.floor(w / 2)));
-    const end = Math.min(numPages, start + w - 1);
-    const arr: number[] = [];
-    for (let i = start; i <= end; i++) arr.push(i);
-    return arr;
-  }, [page, numPages]);
-
   if (isLocked) return <LockedView book={book} />;
 
-  const pct = numPages > 0 ? (page / numPages) * 100 : 0;
+  const pct = (page / totalPages) * 100;
   const theme = prefs.theme;
   const stageBg =
     theme === "sepia" ? SEPIA_BG : theme === "dark" ? NIGHT_BG : PAPER_BG;
@@ -261,6 +210,9 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const chromeBg = isDark ? "oklch(0.20 0.01 260 / 0.85)" : "oklch(0.97 0.003 250 / 0.92)";
   const chromeBorder = isDark ? "oklch(0.32 0.01 260)" : "oklch(0.82 0.005 250)";
   const chromeText = isDark ? "oklch(0.92 0.005 250)" : "oklch(0.2 0.015 260)";
+  const viewerMode = fitMode === "width" ? "FitH" : "Fit";
+  const viewParams = fitMode === "manual" ? `zoom=${Math.round(scale * 100)}` : `view=${viewerMode}`;
+  const viewerSrc = pdfSrc ? `${pdfSrc}#page=${page}&${viewParams}&toolbar=0&navpanes=0&scrollbar=1` : "";
 
   return (
     <div
@@ -347,31 +299,19 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
         {/* Page column */}
         <div className="flex flex-1 items-stretch justify-center px-2 py-3 sm:px-0">
-          <object
-            data={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
-            type="application/pdf"
-            aria-label={`${book.title} PDF`}
+          <iframe
+            key={viewerSrc}
+            src={viewerSrc}
+            title={`${book.title} PDF`}
             className="h-[calc(100vh-7rem)] w-full max-w-5xl rounded-md bg-white shadow-2xl"
-            style={{ filter: THEME_FILTER[theme] }}
-          >
-            <iframe
-              src={`${pdfSrc}#view=Fit&toolbar=0&navpanes=0`}
-              title={`${book.title} PDF`}
-              className="h-[calc(100vh-7rem)] w-full rounded-md bg-white"
-            />
-            <div className="flex h-[calc(100vh-7rem)] flex-col items-center justify-center gap-3 rounded-md bg-white px-6 text-center text-slate-900">
-              <p className="text-sm font-bold">Your browser could not preview this PDF inline.</p>
-              <a href={pdfSrc} download={book.pdfFileName ?? `${book.title}.pdf`} className="rounded-md px-4 py-2 text-sm font-black text-white" style={{ background: "oklch(0.55 0.18 30)" }}>
-                Download PDF
-              </a>
-            </div>
-          </object>
+            style={{ background: "white" }}
+          />
         </div>
 
         {/* Right clickable strip — always visible */}
         <button
           onClick={goNext}
-          disabled={page >= numPages}
+          disabled={page >= totalPages}
           aria-label="Next page"
           className="group fixed right-2 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border bg-white/95 shadow-xl backdrop-blur transition hover:scale-105 hover:bg-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 sm:flex"
           style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
@@ -391,7 +331,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
         </button>
         <button
           onClick={goNext}
-          disabled={page >= numPages}
+          disabled={page >= totalPages}
           aria-label="Next"
           className="fixed right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border bg-white/90 p-2.5 shadow-lg backdrop-blur disabled:opacity-30 sm:hidden"
           style={{ borderColor: "oklch(0.85 0.005 250)", color: "oklch(0.2 0.015 260)" }}
@@ -411,28 +351,29 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
           fontFamily: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
         }}
       >
-        <div className="mx-auto flex max-w-5xl items-center gap-2 sm:gap-3">
-          <button onClick={goPrev} disabled={page <= 1} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Previous">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <button onClick={goPrev} disabled={page <= 1} className="rounded-md p-1.5 text-cyan-200 shadow-[0_0_16px_oklch(0.75_0.22_210_/_0.3)] hover:bg-cyan-400/20 disabled:opacity-30" aria-label="Previous">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <button onClick={goNext} disabled={page >= numPages} className="rounded-md p-1.5 hover:bg-white/15 disabled:opacity-30" aria-label="Next">
+          <button onClick={goNext} disabled={page >= totalPages} className="rounded-md p-1.5 text-fuchsia-200 shadow-[0_0_16px_oklch(0.72_0.25_315_/_0.3)] hover:bg-fuchsia-400/20 disabled:opacity-30" aria-label="Next">
             <ChevronRight className="h-4 w-4" />
           </button>
 
           <input
             type="range"
             min={1}
-            max={Math.max(1, numPages)}
+            max={totalPages}
             value={page}
             onChange={(e) => setPage(Number(e.target.value))}
-            className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full"
+            className="h-1.5 min-w-28 flex-1 cursor-pointer appearance-none rounded-full"
             style={{
-              background: `linear-gradient(to right, oklch(0.78 0.16 50) 0%, oklch(0.78 0.16 50) ${pct}%, oklch(0.95 0 0 / 0.25) ${pct}%, oklch(0.95 0 0 / 0.25) 100%)`,
+              background: `linear-gradient(to right, oklch(0.78 0.22 150) 0%, oklch(0.70 0.23 205) 35%, oklch(0.72 0.24 315) ${pct}%, oklch(0.95 0 0 / 0.22) ${pct}%, oklch(0.95 0 0 / 0.22) 100%)`,
             }}
           />
 
-          {/* Mini progress ring + page x/y */}
-          <ProgressRing pct={pct} label={`${page}`} sub={`/ ${numPages || "—"}`} />
+          <div className="flex min-w-[4.5rem] items-center justify-center rounded-md px-2.5 py-1 text-xs font-black tabular-nums text-white shadow-lg" style={{ background: "linear-gradient(135deg, oklch(0.70 0.24 205), oklch(0.72 0.25 315))", boxShadow: "0 0 22px oklch(0.70 0.24 205 / 0.35)" }}>
+            {page}<span className="px-1 text-white/65">/</span>{totalPages}
+          </div>
 
           {/* Jump-to-page */}
           <form
@@ -442,7 +383,7 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
               if (!isNaN(n)) jumpTo(n);
               setPageInput("");
             }}
-            className="hidden items-center gap-1 sm:flex"
+            className="flex items-center gap-1"
           >
             <input
               value={pageInput}
@@ -456,12 +397,20 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
 
           {/* Zoom */}
           <div className="flex items-center gap-0.5 rounded-md border bg-white/5" style={{ borderColor: "oklch(0.95 0 0 / 0.2)" }}>
-            <button onClick={() => setScale((s) => Math.max(0.6, s - 0.15))} className="rounded-md p-1.5 hover:bg-white/15" aria-label="Zoom out">
+            <button onClick={() => { setFitMode("manual"); setScale((s) => Math.max(0.6, s - 0.15)); }} className="rounded-md p-1.5 text-cyan-200 hover:bg-cyan-400/20" aria-label="Zoom out">
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
             <span className="w-9 text-center text-[10px] font-bold tabular-nums text-white/85">{Math.round(scale * 100)}%</span>
-            <button onClick={() => setScale((s) => Math.min(2.4, s + 0.15))} className="rounded-md p-1.5 hover:bg-white/15" aria-label="Zoom in">
+            <button onClick={() => { setFitMode("manual"); setScale((s) => Math.min(2.4, s + 0.15)); }} className="rounded-md p-1.5 text-fuchsia-200 hover:bg-fuchsia-400/20" aria-label="Zoom in">
               <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button onClick={() => setFitMode("page")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-lime-100 hover:bg-lime-400/20" style={{ background: fitMode === "page" ? "oklch(0.74 0.22 145 / 0.32)" : undefined }}>Fit</button>
+            <button onClick={() => setFitMode("width")} className="rounded-md px-2 py-1 text-[10px] font-black uppercase text-cyan-100 hover:bg-cyan-400/20" style={{ background: fitMode === "width" ? "oklch(0.72 0.2 210 / 0.32)" : undefined }}>Wide</button>
+            <button onClick={() => { setFitMode("page"); setScale(1); }} className="rounded-md p-1.5 text-amber-100 hover:bg-amber-400/20" aria-label="Reset view" title="Reset view">
+              <RotateCcw className="h-3.5 w-3.5" />
             </button>
           </div>
 
@@ -540,53 +489,6 @@ function ThemeBtn({
     >
       {icon}
     </button>
-  );
-}
-
-function ProgressRing({ pct, label, sub }: { pct: number; label: string; sub: string }) {
-  const r = 14;
-  const c = 2 * Math.PI * r;
-  const offset = c - (pct / 100) * c;
-  return (
-    <div className="relative flex items-center">
-      <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
-        <circle cx="18" cy="18" r={r} fill="none" stroke="oklch(0.95 0 0 / 0.2)" strokeWidth="3" />
-        <circle
-          cx="18"
-          cy="18"
-          r={r}
-          fill="none"
-          stroke="oklch(0.78 0.16 50)"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={offset}
-          transform="rotate(-90 18 18)"
-          style={{ transition: "stroke-dashoffset 0.4s ease" }}
-        />
-      </svg>
-      <div className="ml-1.5 flex flex-col leading-tight">
-        <span className="text-[11px] font-black tabular-nums">{label}</span>
-        <span className="text-[9px] font-bold tabular-nums text-white/60">{sub}</span>
-      </div>
-    </div>
-  );
-}
-
-function LoadingSkeleton() {
-  return (
-    <div className="flex flex-col items-center gap-4 py-20">
-      <div
-        className="relative h-16 w-16 animate-pulse rounded-2xl"
-        style={{
-          background: "linear-gradient(135deg, oklch(0.55 0.18 30), oklch(0.7 0.15 50))",
-          boxShadow: "0 12px 32px -12px oklch(0.55 0.18 30 / 0.6)",
-        }}
-      >
-        <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-white">B</span>
-      </div>
-      <p className="text-sm font-bold opacity-70">Preparing your book…</p>
-    </div>
   );
 }
 
