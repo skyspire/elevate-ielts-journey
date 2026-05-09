@@ -85,20 +85,22 @@ export function PdfReaderView({ book, userIsAuthed }: Props) {
   const totalPages = Math.max(1, numPages || book.pageCount || 1);
 
   useEffect(() => {
-    if (!book.pdfDataUrl?.startsWith("data:application/pdf")) {
+    if (!book.pdfDataUrl) {
       setBlobSrc("");
       return;
     }
 
     try {
-      const [meta, base64 = ""] = book.pdfDataUrl.split(",");
-      const mime = meta.match(/^data:([^;]+)/)?.[1] || "application/pdf";
+      // Treat every uploaded book file as a PDF, regardless of the original
+      // mime declared in the data URL (some uploads come through as
+      // application/octet-stream or generic binary types).
+      const [, base64 = ""] = book.pdfDataUrl.split(",");
       const binary = atob(base64);
       const detectedPages = binary.match(/\/Type\s*\/Page\b/g)?.length;
       if (detectedPages && detectedPages > 0) setNumPages(detectedPages);
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-      const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+      const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
       setBlobSrc(url);
       return () => URL.revokeObjectURL(url);
     } catch {
