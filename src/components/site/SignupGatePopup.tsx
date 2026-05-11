@@ -205,7 +205,7 @@ export function SignupGatePopup({
             </button>
           )}
           <a
-            href={`/admin.login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
+            href={`/admin/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ""}`}
             className={`mt-1 inline-flex h-10 items-center justify-center rounded-xl px-5 text-xs font-bold uppercase tracking-wider underline-offset-4 hover:underline ${v.cardText} opacity-80`}
           >
             Admin? Sign in to bypass
