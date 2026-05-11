@@ -10,6 +10,7 @@ function isPreviewOrExplicitBypassHost() {
     host === "localhost" ||
     host === "127.0.0.1" ||
     host.includes("preview--") ||
+    host.includes("lovable.app") ||
     host.includes("-dev.") ||
     window.location.search.includes("bypass=")
   );
