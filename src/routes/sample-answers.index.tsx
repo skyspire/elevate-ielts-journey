@@ -325,14 +325,13 @@ function SampleAnswersHubPage() {
             </p>
           </div>
 
-          {/* Compass needle toggle */}
-          <div className="mt-14 sm:mt-20">
-            <CompassTypeToggle
-              type={module}
-              ownsAcademic={ownsAcademic}
-              ownsGeneral={ownsGeneral}
-              isGuest={isGuest}
+          {/* IELTS type selector — universal */}
+          <div className="mt-14 flex justify-center sm:mt-20">
+            <IeltsTypeSelector
+              value={module}
               onChange={(t) => select(t)}
+              lockedAcademic={!isGuest && !ownsAcademic}
+              lockedGeneral={!isGuest && !ownsGeneral}
             />
           </div>
 
