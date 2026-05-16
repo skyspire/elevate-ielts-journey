@@ -108,10 +108,10 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
           {/* Copy — cream body, bright white keywords */}
           <div className="min-w-0 flex-1" style={{ color: CREAM }}>
-            <h3 className="font-display text-[16px] font-bold leading-tight tracking-tight sm:text-xl md:text-[22px]">
+            <h3 className="font-display text-[15px] font-bold leading-snug tracking-tight sm:text-[17px] md:text-[18px]">
               <Key>One subscription.</Key> The <Key>entire {wantedLabel}</Key> library.
             </h3>
-            <p className="mt-1.5 hidden text-[13px] font-semibold leading-snug sm:block sm:text-[14px]">
+            <p className="mt-1 hidden text-[12.5px] font-medium leading-snug sm:block sm:text-[13px]">
               {currentType ? (
                 <>
                   Not just one page or module — <Key>every {wantedLabel} resource</Key> is sold
@@ -129,7 +129,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="group mt-2 inline-flex items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-[0.12em] text-white/95 underline-offset-4 hover:underline sm:text-[13px]"
+              className="group mt-2 inline-flex items-center gap-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-white/90 underline-offset-4 hover:underline sm:text-[12px]"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
@@ -140,22 +140,15 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             </button>
           </div>
 
-          {/* CTA + price chip */}
-          <div className="flex shrink-0 flex-col items-end gap-1">
-            <Link
-              to={ctaTo}
-              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
-              style={{ color: solid }}
-            >
-              {ctaText}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            {!guest && (
-              <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10.5px] font-bold tracking-tight text-white ring-1 ring-white/30">
-                From $9 / 2 weeks
-              </span>
-            )}
-          </div>
+          {/* CTA */}
+          <Link
+            to={ctaTo}
+            className="group inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
+            style={{ color: solid }}
+          >
+            {ctaText}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
 
