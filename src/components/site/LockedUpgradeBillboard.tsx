@@ -48,12 +48,9 @@ const ACCENTS = {
 const CREAM = "#FFF6E0";
 
 function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  // Bright white + heavier weight = max contrast emphasis on the solid dark card.
+  // Shimmer-sweep keyword on warm dark cards.
   return (
-    <span
-      className={`font-black text-white ${className}`}
-      style={{ textShadow: "0 1px 0 rgba(0,0,0,0.18)" }}
-    >
+    <span className={`text-shimmer-white font-black ${className}`}>
       {children}
     </span>
   );
