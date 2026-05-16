@@ -1037,6 +1037,14 @@ function PredictionsPage() {
             <SkillTabs value={skill} onChange={handleSkillChange} />
           </div>
 
+          {/* Month caption — tells users which sitting these predictions target */}
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <Calendar className="h-3.5 w-3.5 text-foreground/50" />
+            <span className="text-xs font-medium tracking-wide text-foreground/50">
+              Predictions for {formatMonth(CURRENT_MONTH)}
+            </span>
+          </div>
+
           {/* Task-type chips for the active module */}
           <div className="mt-6">
             <TaskTypeChips
