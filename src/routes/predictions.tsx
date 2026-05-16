@@ -13,6 +13,7 @@ import {
   Check,
   X,
   Pencil,
+  Calendar,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
@@ -1034,6 +1035,14 @@ function PredictionsPage() {
           {/* Skill tabs */}
           <div className="mt-12">
             <SkillTabs value={skill} onChange={handleSkillChange} />
+          </div>
+
+          {/* Month caption — tells users which sitting these predictions target */}
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <Calendar className="h-3.5 w-3.5 text-foreground/50" />
+            <span className="text-xs font-medium tracking-wide text-foreground/50">
+              Predictions for {formatMonth(CURRENT_MONTH)}
+            </span>
           </div>
 
           {/* Task-type chips for the active module */}
