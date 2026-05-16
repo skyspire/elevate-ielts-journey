@@ -24,10 +24,15 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Footer bar — warm, soothing tones that still match the IELTS type hue
+// Footer bar — matte grey for both IELTS types (calm, neutral background).
 const SOLID = {
-  academic: "oklch(0.38 0.09 258)", // warm muted indigo
-  general: "oklch(0.42 0.11 32)", // warm muted terracotta
+  academic: "oklch(0.30 0.005 250)",
+  general: "oklch(0.30 0.005 250)",
+} as const;
+// IELTS-type accent colors used only for the action buttons.
+const ACCENT_BY_TYPE = {
+  academic: "oklch(0.55 0.18 258)", // indigo
+  general: "oklch(0.60 0.18 32)", // terracotta
 } as const;
 
 // Popup — warm, soothing earthy tone (same for both types) so the fullscreen
