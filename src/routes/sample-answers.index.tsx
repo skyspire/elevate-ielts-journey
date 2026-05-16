@@ -646,6 +646,7 @@ function WritingInline({
         onLeft={() => setTask("task1")}
         onRight={() => setTask("task2")}
         accentColor={accent.solid}
+        triggerRef={triggerRef}
         pills={cats.map((c) => ({
           id: c.id,
           label: c.label,
