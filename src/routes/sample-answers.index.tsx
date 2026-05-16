@@ -6,7 +6,6 @@ import {
   PenLine,
   Mic,
   GraduationCap,
-  Briefcase,
   Lock,
   ArrowUpRight,
   ChevronRight,
