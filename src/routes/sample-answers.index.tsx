@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Headphones,
   BookOpen,
@@ -9,6 +9,8 @@ import {
   Briefcase,
   Lock,
   ArrowUpRight,
+  ChevronRight,
+  Clock,
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
@@ -20,10 +22,68 @@ import {
   type IeltsType,
 } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional(),
+  selected: z.enum(["listening", "reading", "writing", "speaking"]).optional(),
 });
+
+// ───────── Writing types/categories (mirror writing-samples) ─────────
+const WRITING_TASK1_ACADEMIC = [
+  { id: "line-graph", label: "Line Graph" },
+  { id: "bar-chart", label: "Bar Chart" },
+  { id: "pie-chart", label: "Pie Chart" },
+  { id: "table", label: "Table" },
+  { id: "process-diagram", label: "Process Diagram" },
+  { id: "map", label: "Map" },
+  { id: "multiple-charts", label: "Multiple Charts" },
+];
+const WRITING_TASK1_GENERAL = [
+  { id: "formal", label: "Formal Letters" },
+  { id: "informal", label: "Informal Letters" },
+];
+const WRITING_TASK2 = [
+  { id: "opinion", label: "Opinion" },
+  { id: "discussion", label: "Discussion" },
+  { id: "advdis", label: "Advantages & Disadvantages" },
+  { id: "problem", label: "Problem & Solution" },
+  { id: "direct", label: "Direct Question" },
+  { id: "posneg", label: "Positive or Negative" },
+  { id: "cause", label: "Cause and Effect" },
+];
+
+const ALL_WRITING_PROMPTS: Record<string, string[]> = {
+  ...task2Prompts,
+  ...task1GeneralPrompts,
+};
+
+// ───────── Speaking parts/categories (mirror speaking-samples) ─────────
+const SPEAKING_GENERAL_CATS = [
+  { id: "things", label: "Things" },
+  { id: "activities", label: "Activities" },
+  { id: "places", label: "Places" },
+  { id: "people", label: "People" },
+  { id: "experiences", label: "Experiences" },
+  { id: "future-plans", label: "Future Plans" },
+];
+const SPEAKING_CUECARD_CATS = [
+  { id: "cc-people", label: "People" },
+  { id: "cc-places", label: "Places & Locations" },
+  { id: "cc-buildings", label: "Buildings & Structures" },
+  { id: "cc-objects", label: "Objects & Things" },
+  { id: "cc-events", label: "Events & Experiences" },
+  { id: "cc-activities", label: "Activities" },
+  { id: "cc-study-work", label: "Study & Work" },
+  { id: "cc-opinions", label: "Opinions & Abstract" },
+  { id: "cc-future", label: "Future & Hypothetical" },
+  { id: "cc-media", label: "Media & Entertainment" },
+  { id: "cc-travel", label: "Travel & Tourism" },
+  { id: "cc-lifestyle", label: "Habits & Lifestyle" },
+  { id: "cc-tech", label: "Technology & Innovation" },
+  { id: "cc-society", label: "Society & Culture" },
+];
 
 export const Route = createFileRoute("/sample-answers/")({
   validateSearch: searchSchema,
@@ -143,6 +203,26 @@ function SampleAnswersHubPage() {
   const typeLocked = !isGuest && !ownsCurrent;
 
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const navigate = useNavigate({ from: "/sample-answers" });
+  const selected = search.selected ?? null;
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  const onSelectModule = (id: ModuleId) => {
+    if (typeLocked) {
+      setShowUpgrade(true);
+      return;
+    }
+    navigate({
+      search: (prev: z.infer<typeof searchSchema>) => ({
+        ...prev,
+        selected: prev.selected === id ? undefined : id,
+      }),
+      replace: true,
+    });
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   const pageBg = "oklch(0.985 0.005 95)";
   const grain =
@@ -285,9 +365,9 @@ function SampleAnswersHubPage() {
             </div>
           ) : null}
 
-          {/* Module tiles */}
+          {/* Module tiles — flat 4-up strip */}
           <div
-            className={`mt-12 grid gap-5 pb-20 sm:mt-14 sm:grid-cols-2 sm:pb-28 transition-[filter,opacity] duration-300 ${
+            className={`mt-12 grid grid-cols-2 gap-3 sm:mt-14 sm:grid-cols-4 sm:gap-4 transition-[filter,opacity] duration-300 ${
               typeLocked ? "blur-[2px] opacity-80" : ""
             }`}
           >
@@ -295,13 +375,29 @@ function SampleAnswersHubPage() {
               <ModuleTile
                 key={m.id}
                 module={m}
-                ieltsType={module}
                 accent={accent}
-                typeLocked={typeLocked}
-                onLockedClick={() => setShowUpgrade(true)}
+                active={selected === m.id}
+                onClick={() => onSelectModule(m.id)}
               />
             ))}
           </div>
+
+          {/* Inline content reveal */}
+          <div ref={contentRef} className="scroll-mt-24">
+            {selected ? (
+              <ModuleContent
+                moduleId={selected}
+                ieltsType={module}
+                accent={accent}
+              />
+            ) : (
+              <p className="mt-10 text-center text-[13px] font-medium text-foreground/45">
+                Pick a module above to see its sample answers.
+              </p>
+            )}
+          </div>
+
+          <div className="pb-20 sm:pb-28" />
         </div>
       </main>
 
@@ -512,101 +608,285 @@ function CompassTypeToggle({
   );
 }
 
+// ───────── Flat module tile (icon + label, no body) ─────────
 function ModuleTile({
   module,
-  ieltsType,
   accent,
-  typeLocked,
-  onLockedClick,
+  active,
+  onClick,
 }: {
   module: ModuleCard;
-  ieltsType: IeltsType;
   accent: (typeof TYPE_ACCENT)[IeltsType];
-  typeLocked: boolean;
-  onLockedClick: () => void;
+  active: boolean;
+  onClick: () => void;
 }) {
   const Icon = module.icon;
   const comingSoon = !!module.comingSoon;
 
-  const Inner = (
-    <>
-      <div className="flex items-start justify-between gap-4">
-        <span
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-soft transition-colors"
-          style={{ backgroundColor: accent.solid }}
-        >
-          <Icon className="h-6 w-6" strokeWidth={2.4} />
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border bg-white px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 sm:py-5 ${
+        active ? "ring-2" : ""
+      }`}
+      style={{
+        borderColor: active ? accent.solid : accent.ring,
+        boxShadow: active
+          ? `0 6px 24px -8px ${accent.ring}`
+          : undefined,
+        ...(active ? ({ "--tw-ring-color": accent.solid } as React.CSSProperties) : {}),
+      }}
+    >
+      <span
+        className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-soft sm:h-12 sm:w-12"
+        style={{ backgroundColor: active ? accent.solid : `color-mix(in oklab, ${accent.solid} 70%, white)` }}
+      >
+        <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.4} />
+      </span>
+      <span className="font-display text-[13px] font-extrabold tracking-tight text-foreground sm:text-[15px]">
+        {module.label}
+      </span>
+      {comingSoon ? (
+        <span className="inline-flex items-center gap-1 rounded-full bg-foreground/8 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
+          <Clock className="h-2.5 w-2.5" strokeWidth={2.8} />
+          Soon
         </span>
-        {comingSoon ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-foreground/8 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
-            Soon
-          </span>
-        ) : typeLocked ? (
-          <span
-            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white"
-            style={{ backgroundColor: accent.solid }}
-          >
-            <Lock className="h-3 w-3" strokeWidth={2.8} />
-            Locked
-          </span>
-        ) : (
-          <ArrowUpRight className="h-5 w-5 text-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        )}
-      </div>
-
-      <div className="mt-5">
-        <h3 className="font-display text-2xl font-extrabold tracking-tight text-foreground">
-          {module.label}
-        </h3>
-        <p className="mt-2 text-[14px] font-medium leading-relaxed text-foreground/65">
-          {module.blurb}
-        </p>
-      </div>
-
-      <div className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/45">
-        <span className="h-px w-5" style={{ backgroundColor: accent.solid, opacity: 0.7 }} />
-        {module.meta}
-      </div>
-    </>
+      ) : (
+        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/45">
+          {module.meta}
+        </span>
+      )}
+    </button>
   );
+}
 
-  const baseClass =
-    "group relative flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-white p-6 text-left shadow-soft transition-all";
-  const style = { borderColor: accent.ring } as React.CSSProperties;
-
-  if (comingSoon) {
+// ───────── Inline content panel: question types → categories → questions ─────────
+function ModuleContent({
+  moduleId,
+  ieltsType,
+  accent,
+}: {
+  moduleId: ModuleId;
+  ieltsType: IeltsType;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+}) {
+  if (moduleId === "listening" || moduleId === "reading") {
     return (
       <div
-        className={`${baseClass} cursor-not-allowed opacity-75`}
-        style={style}
-        aria-disabled="true"
+        className="mt-10 rounded-2xl border-2 border-dashed p-8 text-center"
+        style={{ borderColor: accent.ring, backgroundColor: accent.soft }}
       >
-        {Inner}
+        <Clock className="mx-auto h-7 w-7 text-foreground/45" strokeWidth={2.2} />
+        <h3 className="mt-3 font-display text-xl font-extrabold tracking-tight text-foreground">
+          {moduleId === "listening" ? "Listening" : "Reading"} samples — coming soon
+        </h3>
+        <p className="mx-auto mt-2 max-w-md text-[14px] font-medium text-foreground/60">
+          Our team is finalising Band 8+ transcripts, key-word highlights and worked solutions. Sit tight — they'll appear here first.
+        </p>
       </div>
     );
   }
 
-  if (typeLocked) {
-    return (
-      <button
-        type="button"
-        onClick={onLockedClick}
-        className={`${baseClass} cursor-pointer hover:-translate-y-0.5`}
-        style={style}
-      >
-        {Inner}
-      </button>
-    );
+  if (moduleId === "writing") {
+    return <WritingInline ieltsType={ieltsType} accent={accent} />;
   }
 
+  return <SpeakingInline accent={accent} />;
+}
+
+// ───────── Writing inline drilldown ─────────
+function WritingInline({
+  ieltsType,
+  accent,
+}: {
+  ieltsType: IeltsType;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+}) {
+  type Task = "task1" | "task2";
+  const [task, setTask] = useState<Task>("task2");
+  const task1Cats = ieltsType === "academic" ? WRITING_TASK1_ACADEMIC : WRITING_TASK1_GENERAL;
+  const cats = task === "task1" ? task1Cats : WRITING_TASK2;
+  const [catId, setCatId] = useState<string>(cats[0].id);
+
+  useEffect(() => {
+    setCatId((task === "task1" ? task1Cats : WRITING_TASK2)[0].id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task, ieltsType]);
+
+  const prompts = ALL_WRITING_PROMPTS[catId] ?? [];
+
   return (
-    <Link
-      to={module.to!}
-      search={{ module: ieltsType }}
-      className={`${baseClass} hover:-translate-y-0.5 hover:shadow-card`}
-      style={style}
+    <div className="mt-10">
+      <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
+
+      {/* Task pills */}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {(["task1", "task2"] as Task[]).map((t) => (
+          <Pill key={t} active={task === t} accent={accent} onClick={() => setTask(t)}>
+            {t === "task1" ? "Task 1" : "Task 2"}
+          </Pill>
+        ))}
+      </div>
+
+      {/* Category chips */}
+      <div className="mt-5 flex flex-wrap gap-2">
+        {cats.map((c) => (
+          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)} subtle>
+            {c.label}
+          </Pill>
+        ))}
+      </div>
+
+      {/* Questions list */}
+      <ul className="mt-6 divide-y divide-foreground/8 overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
+        {prompts.length === 0 ? (
+          <li className="p-5 text-center text-[13px] font-medium text-foreground/50">
+            Prompts coming soon for this category.
+          </li>
+        ) : (
+          prompts.map((statement, i) => {
+            const qId = `${catId}-${i + 1}`;
+            return (
+              <li key={qId}>
+                <Link
+                  to="/writing-samples/$questionId"
+                  params={{ questionId: qId }}
+                  search={{ module: ieltsType }}
+                  className="group flex items-start gap-3 px-4 py-3.5 transition-colors hover:bg-foreground/[0.03] sm:px-5"
+                >
+                  <span
+                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
+                    style={{ backgroundColor: accent.solid }}
+                  >
+                    {i + 1}
+                  </span>
+                  <span className="flex-1 text-[13.5px] font-medium leading-snug text-foreground/85 sm:text-[14px]">
+                    {statement}
+                  </span>
+                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </li>
+            );
+          })
+        )}
+      </ul>
+    </div>
+  );
+}
+
+// ───────── Speaking inline drilldown ─────────
+function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] }) {
+  type Mode = "general" | "cuecards";
+  const [mode, setMode] = useState<Mode>("general");
+  const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
+  const [catId, setCatId] = useState<string>(cats[0].id);
+
+  useEffect(() => {
+    setCatId((mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS)[0].id);
+  }, [mode]);
+
+  const topics = speakingTopicsByCategory[catId] ?? [];
+
+  return (
+    <div className="mt-10">
+      <SectionEyebrow accent={accent} label="Speaking" />
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Pill active={mode === "general"} accent={accent} onClick={() => setMode("general")}>
+          General (Part 1 & 3)
+        </Pill>
+        <Pill active={mode === "cuecards"} accent={accent} onClick={() => setMode("cuecards")}>
+          Cue Cards (Part 2)
+        </Pill>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {cats.map((c) => (
+          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)} subtle>
+            {c.label}
+          </Pill>
+        ))}
+      </div>
+
+      <ul className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/8 shadow-soft sm:grid-cols-2">
+        {topics.length === 0 ? (
+          <li className="bg-white p-5 text-center text-[13px] font-medium text-foreground/50 sm:col-span-2">
+            Topics coming soon.
+          </li>
+        ) : (
+          topics.map((t, i) => (
+            <li key={t.id} className="bg-white">
+              <Link
+                to="/speaking-samples/$category/$topic"
+                params={{ category: catId, topic: t.id }}
+                className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-foreground/[0.03] sm:px-5"
+              >
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
+                  style={{ backgroundColor: accent.solid }}
+                >
+                  {i + 1}
+                </span>
+                <span className="flex-1 text-[13.5px] font-semibold leading-snug text-foreground/85">
+                  {t.label}
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </li>
+          ))
+        )}
+      </ul>
+    </div>
+  );
+}
+
+function Pill({
+  children,
+  active,
+  accent,
+  onClick,
+  subtle = false,
+}: {
+  children: React.ReactNode;
+  active: boolean;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+  onClick: () => void;
+  subtle?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`rounded-full border px-3.5 py-1.5 font-display text-[12px] font-extrabold tracking-tight transition-all ${
+        subtle ? "text-[11.5px]" : ""
+      }`}
+      style={{
+        backgroundColor: active ? accent.solid : "white",
+        color: active ? "white" : "oklch(0.30 0 0)",
+        borderColor: active ? accent.solid : "oklch(0.85 0 0)",
+      }}
     >
-      {Inner}
-    </Link>
+      {children}
+    </button>
+  );
+}
+
+function SectionEyebrow({
+  accent,
+  label,
+}: {
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="h-px w-8" style={{ backgroundColor: accent.solid }} />
+      <span className="font-display text-[10px] font-black uppercase tracking-[0.22em] text-foreground/60">
+        {label}
+      </span>
+    </div>
   );
 }
