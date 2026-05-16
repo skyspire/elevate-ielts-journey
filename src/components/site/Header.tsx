@@ -347,7 +347,6 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <TypeSwitcher />
           <FreeQuotaPill />
           <Button
             asChild
