@@ -732,6 +732,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         onLeft={() => setMode("general")}
         onRight={() => setMode("cuecards")}
         accentColor={accent.solid}
+        triggerRef={triggerRef}
         pills={cats.map((c) => ({
           id: c.id,
           label: c.label,
@@ -742,26 +743,28 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
 
       <SectionEyebrow accent={accent} label="Speaking" />
 
-      {/* Format compass toggle (pic-2 style) */}
-      <div className="mt-6">
-        <MiniCompassToggle
-          options={[
-            { id: "general", label: "General (Part 1 & 3)" },
-            { id: "cuecards", label: "Cue Cards (Part 2)" },
-          ] as const}
-          value={mode}
-          onChange={(v) => setMode(v)}
-          accent={accent}
-          caption="Pick format"
-        />
-      </div>
+      <div ref={triggerRef}>
+        {/* Format compass toggle (pic-2 style) */}
+        <div className="mt-6">
+          <MiniCompassToggle
+            options={[
+              { id: "general", label: "General (Part 1 & 3)" },
+              { id: "cuecards", label: "Cue Cards (Part 2)" },
+            ] as const}
+            value={mode}
+            onChange={(v) => setMode(v)}
+            accent={accent}
+            caption="Pick format"
+          />
+        </div>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-        {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
-            {c.label}
-          </Pill>
-        ))}
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          {cats.map((c) => (
+            <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
+              {c.label}
+            </Pill>
+          ))}
+        </div>
       </div>
 
       {topics.length === 0 ? (
