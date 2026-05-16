@@ -341,17 +341,21 @@ function RecentExamQuestionsPage() {
             <SectionTabs section={section} setSection={setSection} />
           </div>
 
-          {/* Content */}
+          {/* Content — Writing & Reading are gated per IELTS type; Speaking is shared */}
           <div className="mt-10">
             {section === "writing" ? (
-              <WritingSection
-                data={isAcademic ? academicWriting : generalWriting}
-                isAcademic={isAcademic}
-              />
+              <TypeGate contentType={module}>
+                <WritingSection
+                  data={isAcademic ? academicWriting : generalWriting}
+                  isAcademic={isAcademic}
+                />
+              </TypeGate>
             ) : section === "speaking" ? (
               <SpeakingSection data={speakingData} />
             ) : (
-              <ReadingSection />
+              <TypeGate contentType={module}>
+                <ReadingSection />
+              </TypeGate>
             )}
           </div>
 

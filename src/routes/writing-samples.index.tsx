@@ -22,6 +22,7 @@ import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
+import { TypeGate } from "@/components/site/TypeGate";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -264,65 +265,67 @@ function WritingSamplesPage() {
             </p>
           </div>
 
-          {/* Step 1 — Task selector */}
-          <div className="mt-16 sm:mt-20">
-            <TaskEnvelopeScroll
-              task={task}
-              onTaskChange={onTaskChange}
-              isAcademic={isAcademic}
-            />
-            <ThinkingRetriever selectedTask={task} />
-          </div>
+          {/* Step 1 — Task selector (locked when user doesn't own this IELTS type) */}
+          <TypeGate contentType={module}>
+            <div className="mt-16 sm:mt-20">
+              <TaskEnvelopeScroll
+                task={task}
+                onTaskChange={onTaskChange}
+                isAcademic={isAcademic}
+              />
+              <ThinkingRetriever selectedTask={task} />
+            </div>
 
-          {/* Steps 2 & 3 — gated until a task is selected */}
-          {task && (
-            <>
-              {/* Step 2 — Category chips (monochrome + single module accent on active) */}
-              <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
-                {categories.map((c) => {
-                  const active = categoryId === c.id;
-                  const Icon = c.icon;
-                  const activeClasses = isAcademic
-                    ? "bg-brand text-brand-foreground border-brand shadow-soft"
-                    : "bg-[oklch(0.50_0.16_28)] text-white border-[oklch(0.50_0.16_28)] shadow-soft";
-                  const restingClasses =
-                    "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => setCategoryId(c.id)}
-                      aria-pressed={active}
-                      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
-                        active ? activeClasses : restingClasses
-                      }`}
-                    >
-                      <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
-                      {c.label}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Steps 2 & 3 — gated until a task is selected */}
+            {task && (
+              <>
+                {/* Step 2 — Category chips (monochrome + single module accent on active) */}
+                <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
+                  {categories.map((c) => {
+                    const active = categoryId === c.id;
+                    const Icon = c.icon;
+                    const activeClasses = isAcademic
+                      ? "bg-brand text-brand-foreground border-brand shadow-soft"
+                      : "bg-[oklch(0.50_0.16_28)] text-white border-[oklch(0.50_0.16_28)] shadow-soft";
+                    const restingClasses =
+                      "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setCategoryId(c.id)}
+                        aria-pressed={active}
+                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                          active ? activeClasses : restingClasses
+                        }`}
+                      >
+                        <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+                        {c.label}
+                      </button>
+                    );
+                  })}
+                </div>
 
-              {/* Step 3 — Questions list — sits over the page-wide ambient gradient */}
-              <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
-                <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
-                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {questions.map((q, i) => (
-                      <QuestionRowCard
-                        key={q.id}
-                        index={i + 1}
-                        q={q}
-                        module={module}
-                        task={task}
-                        category={activeCategory.label}
-                      />
-                    ))}
+                {/* Step 3 — Questions list — sits over the page-wide ambient gradient */}
+                <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
+                  <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                      {questions.map((q, i) => (
+                        <QuestionRowCard
+                          key={q.id}
+                          index={i + 1}
+                          q={q}
+                          module={module}
+                          task={task}
+                          category={activeCategory.label}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </TypeGate>
         </div>
       </main>
       <Footer />
