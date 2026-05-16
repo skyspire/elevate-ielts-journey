@@ -755,26 +755,24 @@ function Pill({
   active,
   accent,
   onClick,
-  subtle = false,
 }: {
   children: React.ReactNode;
   active: boolean;
   accent: (typeof TYPE_ACCENT)[IeltsType];
   onClick: () => void;
-  subtle?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full border px-3.5 py-1.5 font-display text-[12px] font-extrabold tracking-tight transition-all ${
-        subtle ? "text-[11.5px]" : ""
-      }`}
+      className="rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all"
       style={{
+        minWidth: 120,
         backgroundColor: active ? accent.solid : "white",
         color: active ? "white" : "oklch(0.30 0 0)",
         borderColor: active ? accent.solid : "oklch(0.85 0 0)",
+        boxShadow: active ? "0 4px 12px -4px oklch(0 0 0 / 0.18)" : undefined,
       }}
     >
       {children}
