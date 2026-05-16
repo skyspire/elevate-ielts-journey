@@ -13,7 +13,6 @@ import {
   Check,
   X,
   Pencil,
-  Calendar,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
@@ -130,6 +129,63 @@ function formatMonth(iso: string): string {
   const d = new Date(y, (m ?? 1) - 1, 1);
   return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
 }
+
+function MonthHeadline({ iso, accent }: { iso: string; accent: string }) {
+  const [y, m] = iso.split("-").map(Number);
+  const d = new Date(y, (m ?? 1) - 1, 1);
+  const monthFull = d.toLocaleDateString("en-GB", { month: "long" }).toUpperCase();
+  const monthShort = d.toLocaleDateString("en-GB", { month: "short" }).toUpperCase();
+  const year = String(y);
+
+  return (
+    <div className="mt-8 flex flex-col items-center">
+      <div className="flex items-center gap-4 sm:gap-6">
+        <span
+          aria-hidden
+          className="h-px w-10 sm:w-16"
+          style={{ background: `color-mix(in oklab, ${accent} 35%, transparent)` }}
+        />
+        <span
+          className="text-[10px] font-bold uppercase tracking-[0.32em] text-foreground/55"
+        >
+          The {monthShort} {year} sitting
+        </span>
+        <span
+          aria-hidden
+          className="h-px w-10 sm:w-16"
+          style={{ background: `color-mix(in oklab, ${accent} 35%, transparent)` }}
+        />
+      </div>
+
+      <h2
+        className="mt-3 font-display font-black leading-[0.85] tracking-[-0.04em] transition-colors duration-700"
+        style={{
+          fontSize: "clamp(3.5rem, 14vw, 7.5rem)",
+          color: accent,
+        }}
+      >
+        {monthFull}
+      </h2>
+
+      <div className="mt-1 flex items-baseline gap-3">
+        <span
+          className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl"
+          style={{ color: accent, opacity: 0.85 }}
+        >
+          {year}
+        </span>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-foreground/50">
+          predictions
+        </span>
+      </div>
+
+      <p className="mt-3 max-w-md text-center text-[12px] text-foreground/50 sm:text-[13px]">
+        Refreshed every Monday by our qualified IELTS team.
+      </p>
+    </div>
+  );
+}
+
 
 const PREDICTIONS: Record<SkillKey, Prediction[]> = {
   writing: [
@@ -1037,13 +1093,8 @@ function PredictionsPage() {
             <SkillTabs value={skill} onChange={handleSkillChange} />
           </div>
 
-          {/* Month caption — tells users which sitting these predictions target */}
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <Calendar className="h-3.5 w-3.5 text-foreground/50" />
-            <span className="text-xs font-medium tracking-wide text-foreground/50">
-              Predictions for {formatMonth(CURRENT_MONTH)}
-            </span>
-          </div>
+          {/* Month headline — big editorial date block */}
+          <MonthHeadline iso={CURRENT_MONTH} accent={isAcademic ? "oklch(0.38 0.18 258)" : "oklch(0.46 0.21 30)"} />
 
           {/* Task-type chips for the active module */}
           <div className="mt-6">
