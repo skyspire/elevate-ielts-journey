@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Headphones,
   BookOpen,
@@ -9,6 +9,8 @@ import {
   Briefcase,
   Lock,
   ArrowUpRight,
+  ChevronRight,
+  Clock,
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
@@ -20,10 +22,68 @@ import {
   type IeltsType,
 } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
+import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
+import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional(),
+  selected: z.enum(["listening", "reading", "writing", "speaking"]).optional(),
 });
+
+// ───────── Writing types/categories (mirror writing-samples) ─────────
+const WRITING_TASK1_ACADEMIC = [
+  { id: "line-graph", label: "Line Graph" },
+  { id: "bar-chart", label: "Bar Chart" },
+  { id: "pie-chart", label: "Pie Chart" },
+  { id: "table", label: "Table" },
+  { id: "process-diagram", label: "Process Diagram" },
+  { id: "map", label: "Map" },
+  { id: "multiple-charts", label: "Multiple Charts" },
+];
+const WRITING_TASK1_GENERAL = [
+  { id: "formal", label: "Formal Letters" },
+  { id: "informal", label: "Informal Letters" },
+];
+const WRITING_TASK2 = [
+  { id: "opinion", label: "Opinion" },
+  { id: "discussion", label: "Discussion" },
+  { id: "advdis", label: "Advantages & Disadvantages" },
+  { id: "problem", label: "Problem & Solution" },
+  { id: "direct", label: "Direct Question" },
+  { id: "posneg", label: "Positive or Negative" },
+  { id: "cause", label: "Cause and Effect" },
+];
+
+const ALL_WRITING_PROMPTS: Record<string, string[]> = {
+  ...task2Prompts,
+  ...task1GeneralPrompts,
+};
+
+// ───────── Speaking parts/categories (mirror speaking-samples) ─────────
+const SPEAKING_GENERAL_CATS = [
+  { id: "things", label: "Things" },
+  { id: "activities", label: "Activities" },
+  { id: "places", label: "Places" },
+  { id: "people", label: "People" },
+  { id: "experiences", label: "Experiences" },
+  { id: "future-plans", label: "Future Plans" },
+];
+const SPEAKING_CUECARD_CATS = [
+  { id: "cc-people", label: "People" },
+  { id: "cc-places", label: "Places & Locations" },
+  { id: "cc-buildings", label: "Buildings & Structures" },
+  { id: "cc-objects", label: "Objects & Things" },
+  { id: "cc-events", label: "Events & Experiences" },
+  { id: "cc-activities", label: "Activities" },
+  { id: "cc-study-work", label: "Study & Work" },
+  { id: "cc-opinions", label: "Opinions & Abstract" },
+  { id: "cc-future", label: "Future & Hypothetical" },
+  { id: "cc-media", label: "Media & Entertainment" },
+  { id: "cc-travel", label: "Travel & Tourism" },
+  { id: "cc-lifestyle", label: "Habits & Lifestyle" },
+  { id: "cc-tech", label: "Technology & Innovation" },
+  { id: "cc-society", label: "Society & Culture" },
+];
 
 export const Route = createFileRoute("/sample-answers/")({
   validateSearch: searchSchema,
