@@ -608,57 +608,171 @@ function CompassTypeToggle({
   );
 }
 
-// ───────── Flat module tile (icon + label, no body) ─────────
-function ModuleTile({
-  module,
+// ───────── Module tabs row (icon + label + accent underline, pic-1 style) ─────────
+function ModuleTabs({
+  value,
   accent,
-  active,
-  onClick,
+  onChange,
 }: {
-  module: ModuleCard;
+  value: ModuleId | null;
   accent: (typeof TYPE_ACCENT)[IeltsType];
-  active: boolean;
-  onClick: () => void;
+  onChange: (id: ModuleId) => void;
 }) {
-  const Icon = module.icon;
-  const comingSoon = !!module.comingSoon;
-
   return (
+    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+      <div className="flex min-w-max items-end justify-center gap-x-7 gap-y-3 border-b border-border/70 pb-3 sm:min-w-0 sm:flex-wrap sm:gap-x-12">
+        {MODULE_CARDS.map(({ id, label, icon: Icon, comingSoon }) => {
+          const active = value === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onChange(id)}
+              aria-pressed={active}
+              className="group relative flex shrink-0 items-center gap-2 pb-1 transition-opacity"
+              style={{ opacity: active ? 1 : 0.5 }}
+            >
+              <Icon
+                className="h-4 w-4 sm:h-5 sm:w-5"
+                strokeWidth={2.4}
+                style={{ color: active ? accent.solid : "currentColor" }}
+              />
+              <span className="font-display text-lg font-black tracking-tight text-foreground sm:text-2xl">
+                {label}
+              </span>
+              {comingSoon ? (
+                <span className="ml-1 inline-flex items-center rounded-full bg-foreground/8 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
+                  Soon
+                </span>
+              ) : null}
+              {active && (
+                <span
+                  aria-hidden
+                  className="absolute -bottom-[14px] left-0 right-0 h-[3px] rounded-full"
+                  style={{ backgroundColor: accent.solid }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ───────── Mini compass toggle for two question types (pic-2 style, compact) ─────────
+function MiniCompassToggle<T extends string>({
+  options,
+  value,
+  onChange,
+  accent,
+  caption = "Pick type",
+}: {
+  options: readonly [{ id: T; label: string }, { id: T; label: string }];
+  value: T;
+  onChange: (v: T) => void;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+  caption?: string;
+}) {
+  const [left, right] = options;
+  const isLeft = value === left.id;
+  const isRight = value === right.id;
+  const needleDeg = isLeft ? -90 : isRight ? 90 : 0;
+
+  const item = (active: boolean, onClick: () => void, label: string, align: "left" | "right") => (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`group relative flex flex-col items-center justify-center gap-2 rounded-2xl border bg-white px-3 py-4 text-center shadow-soft transition-all hover:-translate-y-0.5 sm:py-5 ${
-        active ? "ring-2" : ""
-      }`}
-      style={{
-        borderColor: active ? accent.solid : accent.ring,
-        boxShadow: active
-          ? `0 6px 24px -8px ${accent.ring}`
-          : undefined,
-        ...(active ? ({ "--tw-ring-color": accent.solid } as React.CSSProperties) : {}),
-      }}
+      className={`group block bg-transparent p-1 sm:p-2 ${
+        align === "left" ? "text-left" : "text-right"
+      } transition-opacity duration-300 ${active ? "opacity-100" : "opacity-50 hover:opacity-80"}`}
     >
-      <span
-        className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-soft sm:h-12 sm:w-12"
-        style={{ backgroundColor: active ? accent.solid : `color-mix(in oklab, ${accent.solid} 70%, white)` }}
-      >
-        <Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.4} />
-      </span>
-      <span className="font-display text-[13px] font-extrabold tracking-tight text-foreground sm:text-[15px]">
-        {module.label}
-      </span>
-      {comingSoon ? (
-        <span className="inline-flex items-center gap-1 rounded-full bg-foreground/8 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
-          <Clock className="h-2.5 w-2.5" strokeWidth={2.8} />
-          Soon
-        </span>
-      ) : (
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/45">
-          {module.meta}
-        </span>
-      )}
+      <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-1.5`}>
+        <h4
+          className={`font-display font-extrabold leading-tight tracking-tight ${
+            active ? "text-foreground" : "text-foreground/70"
+          }`}
+          style={{ fontSize: "clamp(0.95rem, 2.1vw, 1.15rem)" }}
+        >
+          {label}
+        </h4>
+        <span
+          aria-hidden
+          className={`block h-px transition-all duration-500 ${active ? "w-10 sm:w-12" : "w-5 bg-foreground/15"}`}
+          style={active ? { backgroundColor: accent.solid } : undefined}
+        />
+      </div>
     </button>
+  );
+
+  return (
+    <div className="relative mx-auto max-w-2xl">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-6">
+        <div className="flex justify-end">{item(isLeft, () => onChange(left.id), left.label, "right")}</div>
+
+        <div className="relative flex flex-col items-center justify-center" style={{ width: "clamp(54px, 8vw, 72px)" }}>
+          <svg
+            viewBox="0 0 100 100"
+            className="h-full w-full drop-shadow-[0_3px_6px_oklch(0.30_0.06_45_/_0.30)]"
+            style={{ width: "clamp(54px, 8vw, 72px)", height: "clamp(54px, 8vw, 72px)" }}
+            aria-label="Question type compass"
+          >
+            <defs>
+              <radialGradient id="brassRimMini" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="oklch(0.88 0.12 80)" />
+                <stop offset="45%" stopColor="oklch(0.72 0.13 70)" />
+                <stop offset="80%" stopColor="oklch(0.52 0.11 55)" />
+                <stop offset="100%" stopColor="oklch(0.38 0.08 45)" />
+              </radialGradient>
+              <radialGradient id="compassFaceMini" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.96 0.03 85)" />
+                <stop offset="70%" stopColor="oklch(0.90 0.05 80)" />
+                <stop offset="100%" stopColor="oklch(0.80 0.07 70)" />
+              </radialGradient>
+              <linearGradient id="needleNMini" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.55 0.20 30)" />
+                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
+              </linearGradient>
+              <linearGradient id="needleSMini" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.45 0.04 60)" />
+                <stop offset="100%" stopColor="oklch(0.30 0.03 55)" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="48" fill="url(#brassRimMini)" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="oklch(0.38 0.08 45)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="40" fill="url(#compassFaceMini)" />
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.sin(a) * 36;
+              const y1 = 50 - Math.cos(a) * 36;
+              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
+              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              return (
+                <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="oklch(0.30 0.05 45)" strokeWidth={i % 3 === 0 ? 1.2 : 0.6} strokeLinecap="round" />
+              );
+            })}
+            <g
+              style={{
+                transformOrigin: "50px 50px",
+                transform: `rotate(${needleDeg}deg)`,
+                transition: "transform 750ms cubic-bezier(0.34, 1.3, 0.64, 1)",
+              }}
+            >
+              <polygon points="50,12 46,50 54,50" fill="url(#needleNMini)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.4" />
+              <polygon points="50,88 46,50 54,50" fill="url(#needleSMini)" stroke="oklch(0.22 0.02 55)" strokeWidth="0.4" />
+            </g>
+            <circle cx="50" cy="50" r="3.2" fill="oklch(0.75 0.13 75)" stroke="oklch(0.38 0.08 45)" strokeWidth="0.6" />
+            <circle cx="49.2" cy="49.2" r="1" fill="oklch(0.95 0.06 85)" opacity="0.85" />
+          </svg>
+          <span className="relative z-10 mt-1.5 font-display text-[8px] font-black uppercase tracking-[0.18em] text-foreground/55 sm:text-[9px]">
+            {caption}
+          </span>
+        </div>
+
+        <div className="flex justify-start">{item(isRight, () => onChange(right.id), right.label, "left")}</div>
+      </div>
+    </div>
   );
 }
 
