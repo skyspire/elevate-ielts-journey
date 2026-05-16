@@ -92,14 +92,10 @@ function useScramble(target: string, intervalMs = 8000) {
   return text;
 }
 
-function Key({ children, className = "" }: { children: string; className?: string }) {
-  const text = useScramble(children);
+function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <span
-      className={`font-mono font-black tracking-tight text-white ${className}`}
-      style={{ textShadow: "0 0 12px rgba(255,255,255,0.25)" }}
-    >
-      {text}
+    <span className={`font-bold text-white ${className}`}>
+      {children}
     </span>
   );
 }
