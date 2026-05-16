@@ -32,24 +32,42 @@ export function TypeGate({
 
   const allowed = canAccessType(contentType);
   const planType = user ? getUserPlanType(user.id) : null;
+  const isGuest = !user;
 
   useEffect(() => {
-    setShowUpgrade(!allowed);
+    setShowUpgrade(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allowed, location.pathname, tick]);
+  }, [location.pathname, tick]);
 
   if (allowed) return <>{children}</>;
 
   return (
     <>
-      <div aria-hidden="true" className="pointer-events-none select-none blur-sm">
-        {children}
-      </div>
+      <button
+        type="button"
+        aria-label="Locked content — click to unlock"
+        onClick={() => setShowUpgrade(true)}
+        className="group relative block w-full cursor-pointer text-left"
+      >
+        <div aria-hidden="true" className="pointer-events-none select-none blur-sm">
+          {children}
+        </div>
+        <span
+          className="pointer-events-none absolute right-2 top-2 z-10 flex items-center gap-1 rounded-full bg-black/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white shadow-lg"
+        >
+          <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          {isGuest ? "Login" : contentType === "academic" ? "Academic" : "General"}
+        </span>
+      </button>
       <UpgradeToAllAccessPopup
         open={showUpgrade}
         onClose={() => setShowUpgrade(false)}
-        currentType={planType === "academic" ? "academic" : "general"}
+        currentType={planType === "academic" || planType === "general" ? planType : null}
         wantedType={contentType}
+        guest={isGuest}
       />
     </>
   );

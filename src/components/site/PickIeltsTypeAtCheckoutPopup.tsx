@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GraduationCap, Briefcase, Crown, X, Check, Sparkles } from "lucide-react";
-import { setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
+import { addPurchasedType, setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
