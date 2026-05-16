@@ -276,6 +276,7 @@ function WritingSamplesPage() {
               onLeft={() => onTaskChange("task1")}
               onRight={() => onTaskChange("task2")}
               accentColor={module === "academic" ? "oklch(0.50 0.18 255)" : "oklch(0.55 0.18 28)"}
+              triggerRef={triggerRef}
               pills={categories.map((c) => ({
                 id: c.id,
                 label: c.label,
