@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Lock,
@@ -47,12 +47,91 @@ const ACCENTS = {
 // Cream body for ambient readability on dark cards.
 const CREAM = "#FFF6E0";
 
-function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  // Shimmer-sweep keyword on warm dark cards.
+// Kinetic scramble: briefly cycles letters then settles on the target word.
+function useScramble(target: string, intervalMs = 8000) {
+  const [text, setText] = useState(target);
+  useEffect(() => {
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+    let raf = 0;
+    let timer = 0;
+    const run = () => {
+      const total = 22; // frames
+      let frame = 0;
+      const tick = () => {
+        frame++;
+        const progress = frame / total;
+        const out = target
+          .split("")
+          .map((ch, i) => {
+            if (ch === " ") return " ";
+            const settled = i / target.length < progress;
+            return settled ? ch : CHARS[Math.floor(Math.random() * CHARS.length)];
+          })
+          .join("");
+        setText(out);
+        if (frame < total) {
+          raf = window.requestAnimationFrame(tick);
+        } else {
+          setText(target);
+          timer = window.setTimeout(run, intervalMs);
+        }
+      };
+      raf = window.requestAnimationFrame(tick);
+    };
+    timer = window.setTimeout(run, 1200);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
+    };
+  }, [target, intervalMs]);
+  return text;
+}
+
+function Key({ children, className = "" }: { children: string; className?: string }) {
+  const text = useScramble(children);
   return (
-    <span className={`text-shimmer-white font-black ${className}`}>
-      {children}
+    <span
+      className={`font-mono font-black tracking-tight text-white ${className}`}
+      style={{ textShadow: "0 0 12px rgba(255,255,255,0.25)" }}
+    >
+      {text}
     </span>
+  );
+}
+
+function MagneticCta({
+  to,
+  color,
+  label,
+}: {
+  to: string;
+  color: string;
+  label: string;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+  };
+  const onLeave = () => {
+    if (ref.current) ref.current.style.transform = "translate(0,0)";
+  };
+  return (
+    <Link
+      to={to}
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform duration-200 ease-out will-change-transform sm:h-10 sm:px-5 sm:text-[13px]"
+      style={{ color }}
+    >
+      {label}
+      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+    </Link>
   );
 }
 
@@ -98,9 +177,9 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
         aria-label={`${wantedLabel} subscription required`}
       >
         <div className="relative mx-auto flex w-full max-w-6xl items-center gap-2.5 px-3 py-2 sm:gap-4 sm:px-6 sm:py-2.5">
-          {/* Lock badge */}
-          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
-            <span aria-hidden className="absolute inset-0 rounded-xl bg-white/20 animate-ping" />
+          {/* Lock badge with scanline */}
+          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
+            <span aria-hidden className="scanline-overlay" />
             <Lock className="relative h-4 w-4" strokeWidth={2.5} />
           </span>
 
@@ -129,15 +208,8 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <Maximize2 className="h-4 w-4" />
           </button>
 
-          {/* CTA */}
-          <Link
-            to={ctaTo}
-            className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-10 sm:px-5 sm:text-[13px]"
-            style={{ color: solid }}
-          >
-            {ctaText}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-          </Link>
+          {/* Magnetic CTA */}
+          <MagneticCta to={ctaTo} color={solid} label={ctaText} />
         </div>
       </div>
 
@@ -193,7 +265,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
               >
                 <Key>One subscription.</Key>
                 <br />
-                The <Key>entire {wantedLabel}</Key>
+                The <Key>{`entire ${wantedLabel}`}</Key>
                 <br />
                 library, unlocked.
               </h2>

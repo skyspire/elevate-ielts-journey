@@ -216,6 +216,33 @@
   background-size: 22px 22px;
 }
 
+@keyframes scanline-sweep {
+  0% { transform: translateY(-120%); }
+  100% { transform: translateY(220%); }
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.scanline-overlay::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 100%
+  );
+  animation: scanline-sweep 2.6s linear infinite;
+}
+
 /* Paper & Ink background system */
 @utility bg-paper-cream {
   background-color: oklch(0.985 0.012 75);
