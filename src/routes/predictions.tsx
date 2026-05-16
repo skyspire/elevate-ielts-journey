@@ -1076,25 +1076,18 @@ function PredictionsPage() {
             <ExamToggle value={exam} onChange={handleExamChange} />
           </div>
 
-          {/* Countdown card — editorial, paper feel */}
+          {/* May 2026 date card — replaces the countdown */}
           <div className="mt-12 flex justify-center">
-            <CountdownCard days={daysToNext} />
+            <MonthDateCard
+              iso={CURRENT_MONTH}
+              accent={isAcademic ? "oklch(0.38 0.18 258)" : "oklch(0.46 0.21 30)"}
+            />
           </div>
-
-          {/* Honesty note — predictions are forecasts, not guarantees */}
-          <p className="mx-auto mt-5 max-w-2xl text-center text-[12.5px] leading-relaxed text-foreground/55 sm:text-[13px]">
-            Predictions are educated forecasts based on rotation patterns —
-            <span className="font-semibold text-foreground/70"> not guarantees</span>.
-            Use them to focus your practice, not to skip topics.
-          </p>
 
           {/* Skill tabs */}
           <div className="mt-12">
             <SkillTabs value={skill} onChange={handleSkillChange} />
           </div>
-
-          {/* Month headline — big editorial date block */}
-          <MonthHeadline iso={CURRENT_MONTH} accent={isAcademic ? "oklch(0.38 0.18 258)" : "oklch(0.46 0.21 30)"} />
 
           {/* Task-type chips for the active module */}
           <div className="mt-6">
