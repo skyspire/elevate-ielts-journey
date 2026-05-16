@@ -657,27 +657,29 @@ function WritingInline({
 
       <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
 
-      {/* Task compass toggle (pic-2 style) */}
-      <div className="mt-6">
-        <MiniCompassToggle
-          options={[
-            { id: "task1", label: "Task 1" },
-            { id: "task2", label: "Task 2" },
-          ] as const}
-          value={task}
-          onChange={(v) => setTask(v)}
-          accent={accent}
-          caption="Pick task"
-        />
-      </div>
+      <div ref={triggerRef}>
+        {/* Task compass toggle (pic-2 style) */}
+        <div className="mt-6">
+          <MiniCompassToggle
+            options={[
+              { id: "task1", label: "Task 1" },
+              { id: "task2", label: "Task 2" },
+            ] as const}
+            value={task}
+            onChange={(v) => setTask(v)}
+            accent={accent}
+            caption="Pick task"
+          />
+        </div>
 
-      {/* Category chips — centered, equal-width */}
-      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-        {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
-            {c.label}
-          </Pill>
-        ))}
+        {/* Category chips — centered, equal-width */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          {cats.map((c) => (
+            <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
+              {c.label}
+            </Pill>
+          ))}
+        </div>
       </div>
 
       {/* Questions grid — numbered tiles */}
