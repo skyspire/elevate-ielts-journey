@@ -1549,7 +1549,9 @@ function PredictionRow({
   index: number;
 }) {
   const appearances = prediction.appearances ?? tierDefaultAppearances(prediction.tier);
-  const accent = tier.accent;
+  const pastel = PASTEL_CYCLE[(index - 1) % PASTEL_CYCLE.length];
+  const accent = pastel.rail;
+  const ink = pastel.ink;
   const answer = usePredictionAnswer(prediction.title);
   const { user } = useSession();
   const isAdmin = canEdit(user);
@@ -1560,8 +1562,9 @@ function PredictionRow({
 
   return (
     <article
-      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-border hover:shadow-[0_8px_28px_-12px_rgba(0,0,0,0.18)]"
+      className="group relative overflow-hidden rounded-2xl border border-black/5 transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-18px_rgba(0,0,0,0.25)]"
       style={{
+        background: pastel.bg,
         opacity: archived ? 0.78 : 1,
         filter: archived ? "saturate(0.82)" : undefined,
       }}
@@ -1569,7 +1572,7 @@ function PredictionRow({
       {/* Colored left rail */}
       <span
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-full w-[3px]"
+        className="pointer-events-none absolute left-0 top-0 h-full w-[4px]"
         style={{ background: accent }}
       />
 
@@ -1581,30 +1584,34 @@ function PredictionRow({
         {/* Large editorial numeral */}
         <span
           className="shrink-0 font-display text-[40px] font-black leading-none tracking-tight tabular-nums sm:text-[52px]"
-          style={{ color: `color-mix(in oklab, ${accent} 28%, transparent)` }}
+          style={{ color: `color-mix(in oklab, ${ink} 55%, transparent)` }}
           aria-hidden
         >
           {num}
         </span>
 
         <div className="min-w-0 flex-1">
-          <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-[16.5px]">
+          <p
+            className="font-display text-[15px] font-semibold leading-snug tracking-tight sm:text-[16.5px]"
+            style={{ color: ink }}
+          >
             {prediction.title}
           </p>
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-bold uppercase tracking-[0.12em] text-foreground/55">
-            <span style={{ color: `color-mix(in oklab, ${accent} 80%, var(--foreground))` }}>
-              {prediction.type}
-            </span>
-            <span aria-hidden className="text-foreground/25">·</span>
+          <div
+            className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-bold uppercase tracking-[0.12em]"
+            style={{ color: `color-mix(in oklab, ${ink} 70%, transparent)` }}
+          >
+            <span style={{ color: ink }}>{prediction.type}</span>
+            <span aria-hidden style={{ color: `color-mix(in oklab, ${ink} 30%, transparent)` }}>·</span>
             <span>Appeared {appearances}×</span>
             {hasAnswer && (
               <>
-                <span aria-hidden className="text-foreground/25">·</span>
+                <span aria-hidden style={{ color: `color-mix(in oklab, ${ink} 30%, transparent)` }}>·</span>
                 <span
                   className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px]"
                   style={{
-                    background: `color-mix(in oklab, ${accent} 14%, transparent)`,
-                    color: accent,
+                    background: `color-mix(in oklab, ${accent} 22%, white)`,
+                    color: ink,
                   }}
                 >
                   <Check className="h-3 w-3" /> Model answer
