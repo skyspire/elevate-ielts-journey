@@ -14,6 +14,7 @@ import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { UpgradeToAllAccessPopup } from "@/components/site/UpgradeToAllAccessPopup";
+import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { IeltsTypeSelector } from "@/components/site/IeltsTypeSelector";
 import {
   useIeltsType,
@@ -637,6 +638,21 @@ function WritingInline({
 
   return (
     <div className="mt-10">
+      <StickyTrackBar
+        leftLabel="Task 1"
+        rightLabel="Task 2"
+        needleDeg={task === "task1" ? -90 : 90}
+        onLeft={() => setTask("task1")}
+        onRight={() => setTask("task2")}
+        accentColor={accent.solid}
+        pills={cats.map((c) => ({
+          id: c.id,
+          label: c.label,
+          active: catId === c.id,
+          onClick: () => setCatId(c.id),
+        }))}
+      />
+
       <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
 
       {/* Task compass toggle (pic-2 style) */}
@@ -704,6 +720,21 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
 
   return (
     <div className="mt-10">
+      <StickyTrackBar
+        leftLabel="General"
+        rightLabel="Cue Cards"
+        needleDeg={mode === "general" ? -90 : 90}
+        onLeft={() => setMode("general")}
+        onRight={() => setMode("cuecards")}
+        accentColor={accent.solid}
+        pills={cats.map((c) => ({
+          id: c.id,
+          label: c.label,
+          active: catId === c.id,
+          onClick: () => setCatId(c.id),
+        }))}
+      />
+
       <SectionEyebrow accent={accent} label="Speaking" />
 
       {/* Format compass toggle (pic-2 style) */}
