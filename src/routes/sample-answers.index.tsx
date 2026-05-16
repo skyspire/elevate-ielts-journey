@@ -8,7 +8,7 @@ import {
   GraduationCap,
   Lock,
   ArrowUpRight,
-  ChevronRight,
+  ArrowUpRight,
   Clock,
 } from "lucide-react";
 import { z } from "zod";
