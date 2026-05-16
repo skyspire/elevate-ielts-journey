@@ -229,6 +229,23 @@ function SpeakingSamplesPage() {
             </p>
           </div>
 
+          {mode && (
+            <StickyTrackBar
+              leftLabel="General"
+              rightLabel="Cue Cards"
+              needleDeg={mode === "general" ? -90 : 90}
+              onLeft={() => onModeChange("general")}
+              onRight={() => onModeChange("cuecards")}
+              accentColor="oklch(0.50 0.10 165)"
+              pills={categories.map((c) => ({
+                id: c.id,
+                label: c.label,
+                active: categoryId === c.id,
+                onClick: () => setCategoryId(c.id),
+              }))}
+            />
+          )}
+
           {/* Step 1 — Big format toggle (General vs Cue Cards) */}
           <div className="mt-14 sm:mt-20">
             <FormatTogglePair mode={mode} onChange={onModeChange} />
