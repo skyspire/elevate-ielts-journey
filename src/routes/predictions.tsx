@@ -978,13 +978,13 @@ function PredictionsPage() {
           className="pointer-events-none absolute inset-x-0 top-0 h-[720px] transition-[background] duration-700 ease-out [mask-image:linear-gradient(to_bottom,black_60%,transparent)]"
           style={{ background: heroGradient }}
         />
-        {/* Subtle grain for premium paper feel */}
+        {/* Soft paper grain — covers the entire page, fixed so it feels like real paper */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[720px] opacity-[0.035] mix-blend-multiply [mask-image:linear-gradient(to_bottom,black_50%,transparent)]"
+          className="pointer-events-none fixed inset-0 z-0 opacity-[0.05] mix-blend-multiply"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>\")",
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
           }}
         />
 
