@@ -265,6 +265,24 @@ function WritingSamplesPage() {
             </p>
           </div>
 
+          {/* Sticky compact track bar — appears on scroll */}
+          {task && (
+            <StickyTrackBar
+              leftLabel="Task 1"
+              rightLabel="Task 2"
+              needleDeg={task === "task1" ? -90 : 90}
+              onLeft={() => onTaskChange("task1")}
+              onRight={() => onTaskChange("task2")}
+              accentColor={module === "academic" ? "oklch(0.50 0.18 255)" : "oklch(0.55 0.18 28)"}
+              pills={categories.map((c) => ({
+                id: c.id,
+                label: c.label,
+                active: categoryId === c.id,
+                onClick: () => setCategoryId(c.id),
+              }))}
+            />
+          )}
+
           {/* Step 1 — Task selector (locked when user doesn't own this IELTS type) */}
           <TypeGate contentType={module}>
             <div className="mt-16 sm:mt-20">
