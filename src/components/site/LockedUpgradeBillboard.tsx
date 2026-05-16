@@ -18,16 +18,16 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
   const wantedLabel = LABEL[wantedType];
 
   const headline = guest
-    ? `Log in to unlock ${wantedLabel}`
+    ? `One subscription. The entire ${wantedLabel} library.`
     : currentType
-      ? `Add ${wantedLabel} to your plan`
-      : `Unlock ${wantedLabel} content`;
+      ? `Add the full ${wantedLabel} library to your plan.`
+      : `One subscription. The entire ${wantedLabel} library.`;
 
   const sub = guest
-    ? "Create your free account to open every Writing, Reading, ebook & prediction."
+    ? `Not a single page or module — every Writing Task 1, Reading, ebook, recent exam and weekly prediction in ${wantedLabel}, written by our IELTS specialists.`
     : currentType
-      ? `Your subscription covers ${LABEL[currentType]} only — ${wantedLabel} is sold separately.`
-      : `Real questions, ebooks, recent exams & weekly predictions.`;
+      ? `Your plan covers ${LABEL[currentType]} only. ${wantedLabel} is sold separately — full library, same pricing.`
+      : `Not a single page or module — every Writing Task 1, Reading, ebook, recent exam and weekly prediction in ${wantedLabel}, in one place.`;
 
   const ctaTo = guest ? "/login" : "/pricing";
   const ctaText = guest ? "Log in" : `Get ${wantedLabel}`;
