@@ -36,13 +36,30 @@ export function StickyTrackBar({
   showAfter?: number;
 }) {
   const [show, setShow] = useState(false);
+  const [topOffset, setTopOffset] = useState(headerOffset);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > showAfter);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [showAfter]);
+    // Measure the bottom edge of the topmost sticky chrome (OfferBar + Header)
+    // so the track bar sits flush under it even when the promo banner is shown.
+    const measure = () => {
+      let bottom = headerOffset;
+      const header = document.querySelector("header");
+      if (header) {
+        const rect = header.getBoundingClientRect();
+        // Only trust it when the header is actually pinned near the top.
+        if (rect.top <= 4) bottom = Math.max(bottom, rect.bottom);
+      }
+      setTopOffset(bottom);
+      setShow(window.scrollY > showAfter);
+    };
+    measure();
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+    };
+  }, [showAfter, headerOffset]);
 
   const leftActive = needleDeg < 0;
   const rightActive = needleDeg > 0;
