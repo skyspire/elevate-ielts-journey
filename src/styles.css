@@ -221,14 +221,14 @@
   100% { transform: translateY(220%); }
 }
 
-@utility scanline-overlay {
+.scanline-overlay {
   position: absolute;
   inset: 0;
   overflow: hidden;
   border-radius: inherit;
   pointer-events: none;
 }
-@utility scanline-overlay::after {
+.scanline-overlay::after {
   content: "";
   position: absolute;
   left: 0;
@@ -237,7 +237,7 @@
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.22) 50%,
     transparent 100%
   );
   animation: scanline-sweep 2.6s linear infinite;
