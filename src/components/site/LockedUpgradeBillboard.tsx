@@ -86,15 +86,22 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             </p>
           </div>
 
-          {/* CTA */}
-          <Link
-            to={ctaTo}
-            className="group inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
-            style={{ color: accent }}
-          >
-            {ctaText}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          {/* CTA + price chip */}
+          <div className="flex shrink-0 flex-col items-end gap-1">
+            <Link
+              to={ctaTo}
+              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
+              style={{ color: accent }}
+            >
+              {ctaText}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            {!guest && (
+              <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10.5px] font-bold tracking-tight text-white ring-1 ring-white/25">
+                From $9 / 2 weeks
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </>
