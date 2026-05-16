@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GraduationCap, Briefcase, Crown, X, Check, Sparkles } from "lucide-react";
-import { setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
+import { addPurchasedType, setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -79,7 +79,11 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
       onClose();
       return;
     }
-    setUserPlanType(user.id, plan);
+    if (plan === "both") {
+      setUserPlanType(user.id, "both");
+    } else {
+      addPurchasedType(user.id, plan);
+    }
     toast.success(
       plan === "both"
         ? "All Access activated — both IELTS types unlocked."

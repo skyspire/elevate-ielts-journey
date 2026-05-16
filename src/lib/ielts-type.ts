@@ -1,5 +1,6 @@
-// IELTS type (Academic vs General Training) preference + plan lock.
-// Prototype: stored in localStorage alongside the existing learner-auth module.
+// IELTS type (Academic vs General Training) preference + per-type plan lock.
+// User answer: types are purchased separately. No prorated upgrade; to access
+// the other type, the user buys a second standalone subscription.
 
 import { useEffect, useState, useCallback } from "react";
 import { getLearnerSession } from "./learner-auth";
@@ -8,8 +9,8 @@ export type IeltsType = "academic" | "general";
 export type IeltsPlanType = IeltsType | "both";
 
 const TYPE_KEY = "bigielts:ielts-type";
-const PLAN_KEY = "bigielts:ielts-plan"; // per-user plan lock map: { [userId]: 'academic'|'general'|'both' }
-const PICKED_KEY = "bigielts:ielts-type-picked"; // has guest been shown the picker?
+const PLAN_KEY = "bigielts:ielts-plan"; // { [userId]: IeltsType[] }  (legacy values 'academic'|'general'|'both' migrated on read)
+const PICKED_KEY = "bigielts:ielts-type-picked";
 
 function isBrowser() {
   return typeof window !== "undefined";
@@ -18,11 +19,11 @@ function isBrowser() {
 export function getActiveType(): IeltsType {
   if (!isBrowser()) return "academic";
   const raw = window.localStorage.getItem(TYPE_KEY);
-  return raw === "general" ? "general" : raw === "academic" ? "academic" : "academic";
+  return raw === "general" ? "general" : "academic";
 }
 
 export function hasPickedType(): boolean {
-  if (!isBrowser()) return true; // SSR: don't show modal
+  if (!isBrowser()) return true;
   return window.localStorage.getItem(PICKED_KEY) === "1";
 }
 
@@ -33,45 +34,71 @@ export function setActiveType(t: IeltsType, markPicked = true) {
   window.dispatchEvent(new CustomEvent("bigielts:type-changed"));
 }
 
-function readPlanMap(): Record<string, IeltsPlanType> {
+type RawPlanMap = Record<string, IeltsType[] | "academic" | "general" | "both">;
+
+function readPlanMap(): Record<string, IeltsType[]> {
   if (!isBrowser()) return {};
   try {
     const raw = window.localStorage.getItem(PLAN_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, IeltsPlanType>) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as RawPlanMap;
+    const out: Record<string, IeltsType[]> = {};
+    for (const [k, v] of Object.entries(parsed)) {
+      if (Array.isArray(v)) out[k] = v.filter((x) => x === "academic" || x === "general");
+      else if (v === "both") out[k] = ["academic", "general"];
+      else if (v === "academic" || v === "general") out[k] = [v];
+    }
+    return out;
   } catch {
     return {};
   }
 }
 
-function writePlanMap(map: Record<string, IeltsPlanType>) {
+function writePlanMap(map: Record<string, IeltsType[]>) {
   if (!isBrowser()) return;
   window.localStorage.setItem(PLAN_KEY, JSON.stringify(map));
   window.dispatchEvent(new CustomEvent("bigielts:type-changed"));
 }
 
-export function getUserPlanType(userId: string | undefined): IeltsPlanType | null {
-  if (!userId) return null;
-  return readPlanMap()[userId] ?? null;
+export function getPurchasedTypes(userId: string | undefined): IeltsType[] {
+  if (!userId) return [];
+  return readPlanMap()[userId] ?? [];
 }
 
+/** Backwards-compat: returns a plan label for UI ("academic"|"general"|"both") or null. */
+export function getUserPlanType(userId: string | undefined): IeltsPlanType | null {
+  const types = getPurchasedTypes(userId);
+  if (types.length === 0) return null;
+  if (types.length >= 2) return "both";
+  return types[0];
+}
+
+/** Add a purchased type (idempotent). Use when user completes a subscription. */
+export function addPurchasedType(userId: string, t: IeltsType) {
+  const map = readPlanMap();
+  const cur = new Set(map[userId] ?? []);
+  cur.add(t);
+  map[userId] = Array.from(cur) as IeltsType[];
+  writePlanMap(map);
+}
+
+/** Set the plan explicitly (replaces). 'both' grants both types. */
 export function setUserPlanType(userId: string, plan: IeltsPlanType) {
   const map = readPlanMap();
-  map[userId] = plan;
+  map[userId] = plan === "both" ? ["academic", "general"] : [plan];
   writePlanMap(map);
 }
 
 /**
  * Can the current user access content tagged as `contentType`?
- * - Guests: yes (gated separately via QuotaGate/SignupGate).
- * - Logged-in: only if their plan covers it (matching type OR 'both').
+ * - Guests: NO — they must log in first (forced-login flow).
+ * - Logged-in with no plan: NO — must subscribe.
+ * - Logged-in: only types they've purchased.
  */
 export function canAccessType(contentType: IeltsType): boolean {
   const user = getLearnerSession();
-  if (!user) return true;
-  const plan = getUserPlanType(user.id);
-  if (!plan) return true; // no plan yet → free preview, defer to other gates
-  if (plan === "both") return true;
-  return plan === contentType;
+  if (!user) return false;
+  return getPurchasedTypes(user.id).includes(contentType);
 }
 
 export function useIeltsType() {
