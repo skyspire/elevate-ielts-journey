@@ -10,6 +10,7 @@ import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { TypeGate } from "@/components/site/TypeGate";
 
 
 type Module = "academic" | "general";
