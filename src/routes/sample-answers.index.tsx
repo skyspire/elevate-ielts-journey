@@ -628,6 +628,7 @@ function WritingInline({
   const task1Cats = ieltsType === "academic" ? WRITING_TASK1_ACADEMIC : WRITING_TASK1_GENERAL;
   const cats = task === "task1" ? task1Cats : WRITING_TASK2;
   const [catId, setCatId] = useState<string>(cats[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCatId((task === "task1" ? task1Cats : WRITING_TASK2)[0].id);
