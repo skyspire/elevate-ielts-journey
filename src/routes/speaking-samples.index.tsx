@@ -370,12 +370,12 @@ function FormatTogglePair({
         {/* Vintage brass compass */}
         <div
           className="relative flex flex-col items-center justify-center"
-          style={{ width: "clamp(72px, 11vw, 96px)" }}
+          style={{ width: "clamp(88px, 12vw, 112px)" }}
         >
           <svg
             viewBox="0 0 100 100"
             className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
-            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            style={{ width: "clamp(88px, 12vw, 112px)", height: "clamp(88px, 12vw, 112px)" }}
             aria-label="Compass selector"
           >
             <defs>
