@@ -258,7 +258,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
               {/* Trust row */}
               <ul className="mt-6 grid gap-2 text-[13.5px] font-bold text-white/90 sm:grid-cols-3 sm:text-sm">
-                <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.emerald }} /> Instant access</li>
+                <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.sage }} /> Instant access</li>
                 <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.amber }} /> Cancel anytime</li>
                 <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.sky }} /> Updated monthly</li>
               </ul>
