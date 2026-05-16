@@ -515,11 +515,11 @@ function MiniCompassToggle<T extends string>({
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-6">
         <div className="flex justify-end">{item(isLeft, () => onChange(left.id), left.label, "right")}</div>
 
-        <div className="relative flex flex-col items-center justify-center" style={{ width: "clamp(54px, 8vw, 72px)" }}>
+        <div className="relative flex flex-col items-center justify-center" style={{ width: "clamp(88px, 12vw, 112px)" }}>
           <svg
             viewBox="0 0 100 100"
-            className="h-full w-full drop-shadow-[0_3px_6px_oklch(0.30_0.06_45_/_0.30)]"
-            style={{ width: "clamp(54px, 8vw, 72px)", height: "clamp(54px, 8vw, 72px)" }}
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(88px, 12vw, 112px)", height: "clamp(88px, 12vw, 112px)" }}
             aria-label="Question type compass"
           >
             <defs>
