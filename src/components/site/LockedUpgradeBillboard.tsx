@@ -200,24 +200,25 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
                 <Lock className="h-3.5 w-3.5" /> {wantedLabel} subscription
               </div>
 
-              {/* Headline */}
-              <h2 className="mt-5 font-display text-[34px] font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-                <Highlight color={ACCENTS.amber} className="text-[34px] sm:text-5xl md:text-6xl">
-                  One subscription.
-                </Highlight>
+              {/* Headline — cream body, bright white keywords */}
+              <h2
+                className="mt-5 font-display text-[34px] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl"
+                style={{ color: CREAM }}
+              >
+                <Key>One subscription.</Key>
                 <br />
-                <span className="text-white">The </span>
-                <Highlight color={ACCENTS.emerald} className="text-[34px] sm:text-5xl md:text-6xl">
-                  entire {wantedLabel}
-                </Highlight>
+                The <Key>entire {wantedLabel}</Key>
                 <br />
-                <span className="text-white">library, unlocked.</span>
+                library, unlocked.
               </h2>
 
-              <p className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed text-white/90 sm:text-lg">
+              <p
+                className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed sm:text-lg"
+                style={{ color: CREAM }}
+              >
                 Not a single page. Not a single module. Every IELTS{" "}
-                <Highlight color={ACCENTS.sky}>{wantedLabel}</Highlight> resource we publish — written
-                and updated by our <Highlight color={ACCENTS.pink}>IELTS specialists</Highlight>.
+                <Key>{wantedLabel}</Key> resource we publish — written and updated by our{" "}
+                <Key>IELTS specialists</Key>.
               </p>
 
               {/* Feature grid */}
