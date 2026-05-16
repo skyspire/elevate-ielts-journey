@@ -236,7 +236,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
               >
                 <Key>One subscription.</Key>
                 <br />
-                The <Key>entire {wantedLabel}</Key>
+                The <Key>{`entire ${wantedLabel}`}</Key>
                 <br />
                 library, unlocked.
               </h2>
