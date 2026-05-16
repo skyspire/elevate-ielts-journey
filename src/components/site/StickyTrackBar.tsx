@@ -69,7 +69,7 @@ export function StickyTrackBar({
       className={`pointer-events-none fixed inset-x-0 z-40 transition-all duration-300 ${
         show ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
       }`}
-      style={{ top: headerOffset }}
+      style={{ top: topOffset }}
       aria-hidden={!show}
     >
       <div
