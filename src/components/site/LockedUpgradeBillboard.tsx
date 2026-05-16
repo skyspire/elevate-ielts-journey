@@ -257,17 +257,13 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
               </ul>
             </div>
 
-            {/* Sticky CTA footer inside popup */}
-            <div className="relative flex flex-col items-stretch gap-2 border-t border-white/15 bg-white/5 px-6 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-12 sm:py-5">
-              <div className="flex items-baseline gap-2">
-                <span className="font-display text-2xl font-black tracking-tight text-white">$9</span>
-                <span className="text-[12px] font-bold uppercase tracking-wider text-white/75">/ 2 weeks · CAD</span>
-              </div>
+            {/* Sticky CTA footer inside popup — no price pill */}
+            <div className="relative flex items-center justify-end border-t border-white/15 bg-white/5 px-6 py-4 backdrop-blur sm:px-12 sm:py-5">
               <Link
                 to={ctaTo}
                 onClick={() => setOpen(false)}
                 className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-sm font-extrabold tracking-tight shadow-xl transition-transform hover:-translate-y-0.5"
-                style={{ color: solid }}
+                style={{ color: POPUP_BG }}
               >
                 {ctaText}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
