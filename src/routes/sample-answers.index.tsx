@@ -497,13 +497,13 @@ function MiniCompassToggle<T extends string>({
           className={`font-display font-extrabold leading-tight tracking-tight ${
             active ? "text-foreground" : "text-foreground/70"
           }`}
-          style={{ fontSize: "clamp(0.95rem, 2.1vw, 1.15rem)" }}
+          style={{ fontSize: "clamp(1.15rem, 2.8vw, 1.5rem)" }}
         >
           {label}
         </h4>
         <span
           aria-hidden
-          className={`block h-px transition-all duration-500 ${active ? "w-10 sm:w-12" : "w-5 bg-foreground/15"}`}
+          className={`block h-px transition-all duration-500 ${active ? "w-12 sm:w-16" : "w-6 bg-foreground/15"}`}
           style={active ? { backgroundColor: accent.solid } : undefined}
         />
       </div>
@@ -515,11 +515,11 @@ function MiniCompassToggle<T extends string>({
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-6">
         <div className="flex justify-end">{item(isLeft, () => onChange(left.id), left.label, "right")}</div>
 
-        <div className="relative flex flex-col items-center justify-center" style={{ width: "clamp(54px, 8vw, 72px)" }}>
+        <div className="relative flex flex-col items-center justify-center" style={{ width: "clamp(88px, 12vw, 112px)" }}>
           <svg
             viewBox="0 0 100 100"
-            className="h-full w-full drop-shadow-[0_3px_6px_oklch(0.30_0.06_45_/_0.30)]"
-            style={{ width: "clamp(54px, 8vw, 72px)", height: "clamp(54px, 8vw, 72px)" }}
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(88px, 12vw, 112px)", height: "clamp(88px, 12vw, 112px)" }}
             aria-label="Question type compass"
           >
             <defs>
@@ -653,10 +653,10 @@ function WritingInline({
         />
       </div>
 
-      {/* Category chips */}
-      <div className="mt-5 flex flex-wrap gap-2">
+      {/* Category chips — centered, equal-width */}
+      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
         {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)} subtle>
+          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
             {c.label}
           </Pill>
         ))}
@@ -720,9 +720,9 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         />
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
         {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)} subtle>
+          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
             {c.label}
           </Pill>
         ))}
@@ -755,26 +755,24 @@ function Pill({
   active,
   accent,
   onClick,
-  subtle = false,
 }: {
   children: React.ReactNode;
   active: boolean;
   accent: (typeof TYPE_ACCENT)[IeltsType];
   onClick: () => void;
-  subtle?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full border px-3.5 py-1.5 font-display text-[12px] font-extrabold tracking-tight transition-all ${
-        subtle ? "text-[11.5px]" : ""
-      }`}
+      className="rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all"
       style={{
+        minWidth: 120,
         backgroundColor: active ? accent.solid : "white",
         color: active ? "white" : "oklch(0.30 0 0)",
         borderColor: active ? accent.solid : "oklch(0.85 0 0)",
+        boxShadow: active ? "0 4px 12px -4px oklch(0 0 0 / 0.18)" : undefined,
       }}
     >
       {children}

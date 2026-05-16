@@ -295,9 +295,10 @@ function WritingSamplesPage() {
                         type="button"
                         onClick={() => setCategoryId(c.id)}
                         aria-pressed={active}
-                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                        className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
                           active ? activeClasses : restingClasses
                         }`}
+                        style={{ minWidth: 120 }}
                       >
                         <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
                         {c.label}
@@ -441,7 +442,7 @@ function TaskEnvelopeScroll({
             className={`font-display font-bold leading-tight tracking-tight ${
               active ? "text-foreground" : "text-foreground/70"
             }`}
-            style={{ fontSize: "clamp(1.25rem, 3.4vw, 1.875rem)" }}
+            style={{ fontSize: "clamp(1.15rem, 2.8vw, 1.5rem)" }}
           >
             <span>{taskNum}</span>
             <span className="mx-2 text-foreground/30">·</span>
@@ -476,12 +477,12 @@ function TaskEnvelopeScroll({
         {/* Vintage brass compass */}
         <div
           className="relative flex flex-col items-center justify-center"
-          style={{ width: "clamp(72px, 11vw, 96px)" }}
+          style={{ width: "clamp(88px, 12vw, 112px)" }}
         >
           <svg
             viewBox="0 0 100 100"
             className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
-            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            style={{ width: "clamp(88px, 12vw, 112px)", height: "clamp(88px, 12vw, 112px)" }}
             aria-label="Compass selector"
           >
             <defs>
