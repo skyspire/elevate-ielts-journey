@@ -497,13 +497,13 @@ function MiniCompassToggle<T extends string>({
           className={`font-display font-extrabold leading-tight tracking-tight ${
             active ? "text-foreground" : "text-foreground/70"
           }`}
-          style={{ fontSize: "clamp(0.95rem, 2.1vw, 1.15rem)" }}
+          style={{ fontSize: "clamp(1.1rem, 2.6vw, 1.35rem)" }}
         >
           {label}
         </h4>
         <span
           aria-hidden
-          className={`block h-px transition-all duration-500 ${active ? "w-10 sm:w-12" : "w-5 bg-foreground/15"}`}
+          className={`block h-px transition-all duration-500 ${active ? "w-12 sm:w-16" : "w-6 bg-foreground/15"}`}
           style={active ? { backgroundColor: accent.solid } : undefined}
         />
       </div>
