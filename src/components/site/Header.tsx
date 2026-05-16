@@ -270,19 +270,22 @@ export function Header() {
             E-books
           </Link>
 
-          {/* Pricing (homepage anchor) + FAQ */}
+          {/* Pricing (dedicated route) + FAQ */}
           <Link
-            to="/"
-            hash="pricing"
+            to="/pricing"
             className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
             style={{ color: INK_SOFT }}
+            activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = INK;
-              e.currentTarget.style.backgroundColor = HOVER_BG;
+              if (e.currentTarget.getAttribute("data-status") !== "active") {
+                e.currentTarget.style.backgroundColor = HOVER_BG;
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = INK_SOFT;
-              e.currentTarget.style.backgroundColor = "transparent";
+              const isActive = e.currentTarget.getAttribute("data-status") === "active";
+              e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+              if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
             }}
           >
             Pricing
