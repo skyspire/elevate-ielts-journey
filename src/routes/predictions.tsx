@@ -19,6 +19,7 @@ import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import { IeltsTypeSelector } from "@/components/site/IeltsTypeSelector";
 import {
   usePredictionAnswer,
   savePredictionAnswer,
