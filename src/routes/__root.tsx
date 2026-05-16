@@ -91,6 +91,7 @@ function RootComponent() {
       {!hideChrome && <Header />}
       <Outlet />
       <Toaster />
+      {!hideChrome && <TypePickerModal />}
     </MaintenanceGate>
   );
 }
