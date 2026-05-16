@@ -729,32 +729,24 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         ))}
       </div>
 
-      <ul className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/8 shadow-soft sm:grid-cols-2">
-        {topics.length === 0 ? (
-          <li className="bg-white p-5 text-center text-[13px] font-medium text-foreground/50 sm:col-span-2">
-            Topics coming soon.
-          </li>
-        ) : (
-          topics.map((t, i) => (
-            <li key={t.id} className="bg-white">
-              <Link
-                to="/speaking-samples/$category/$topic"
-                params={{ category: catId, topic: t.id }}
-                className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-foreground/[0.03] sm:px-5"
-              >
-                <span
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
-                  style={{ backgroundColor: accent.solid }}
-                >
-                  {i + 1}
-                </span>
-                <span className="flex-1 text-[13.5px] font-semibold leading-snug text-foreground/85">
-                  {t.label}
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </li>
-          ))
+      {topics.length === 0 ? (
+        <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
+          Topics coming soon.
+        </p>
+      ) : (
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {topics.map((t, i) => (
+            <NumberedTile
+              key={t.id}
+              index={i + 1}
+              label={t.label}
+              accent={accent}
+              to="/speaking-samples/$category/$topic"
+              params={{ category: catId, topic: t.id }}
+            />
+          ))}
+        </div>
+      )}
         )}
       </ul>
     </div>
