@@ -99,6 +99,7 @@ function SpeakingSamplesPage() {
   const fallbackCategories = categoriesByMode["general"];
   const categories = mode ? categoriesByMode[mode] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   // Flip Expansion state
   const [flipOpen, setFlipOpen] = useState(false);
