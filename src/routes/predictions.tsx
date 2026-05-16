@@ -130,58 +130,38 @@ function formatMonth(iso: string): string {
   return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
 }
 
-function MonthHeadline({ iso, accent }: { iso: string; accent: string }) {
+function MonthDateCard({ iso, accent }: { iso: string; accent: string }) {
   const [y, m] = iso.split("-").map(Number);
   const d = new Date(y, (m ?? 1) - 1, 1);
   const monthFull = d.toLocaleDateString("en-GB", { month: "long" }).toUpperCase();
-  const monthShort = d.toLocaleDateString("en-GB", { month: "short" }).toUpperCase();
   const year = String(y);
 
   return (
-    <div className="mt-8 flex flex-col items-center">
-      <div className="flex items-center gap-4 sm:gap-6">
-        <span
-          aria-hidden
-          className="h-px w-10 sm:w-16"
-          style={{ background: `color-mix(in oklab, ${accent} 35%, transparent)` }}
-        />
-        <span
-          className="text-[10px] font-bold uppercase tracking-[0.32em] text-foreground/55"
-        >
-          The {monthShort} {year} sitting
-        </span>
-        <span
-          aria-hidden
-          className="h-px w-10 sm:w-16"
-          style={{ background: `color-mix(in oklab, ${accent} 35%, transparent)` }}
-        />
-      </div>
+    <div
+      className="relative w-full max-w-md rounded-3xl border bg-white px-8 py-10 text-center shadow-[0_30px_60px_-30px_rgba(15,23,42,0.18),0_8px_20px_-12px_rgba(15,23,42,0.10)] sm:px-12 sm:py-12"
+      style={{ borderColor: `color-mix(in oklab, ${accent} 18%, transparent)` }}
+    >
+      {/* Corner ticks — paper-tile flourish */}
+      <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l-2 border-t-2 rounded-tl-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
+      <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r-2 border-t-2 rounded-tr-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
+      <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l-2 border-b-2 rounded-bl-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
+      <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r-2 border-b-2 rounded-br-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
 
       <h2
-        className="mt-3 font-display font-black leading-[0.85] tracking-[-0.04em] transition-colors duration-700"
+        className="font-display font-black leading-[0.85] tracking-[-0.04em] transition-colors duration-700"
         style={{
-          fontSize: "clamp(3.5rem, 14vw, 7.5rem)",
+          fontSize: "clamp(3rem, 12vw, 6rem)",
           color: accent,
         }}
       >
         {monthFull}
       </h2>
-
-      <div className="mt-1 flex items-baseline gap-3">
-        <span
-          className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl"
-          style={{ color: accent, opacity: 0.85 }}
-        >
-          {year}
-        </span>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-foreground/50">
-          predictions
-        </span>
+      <div
+        className="mt-2 font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
+        style={{ color: accent, opacity: 0.85 }}
+      >
+        {year}
       </div>
-
-      <p className="mt-3 max-w-md text-center text-[12px] text-foreground/50 sm:text-[13px]">
-        Refreshed every Monday by our qualified IELTS team.
-      </p>
     </div>
   );
 }
