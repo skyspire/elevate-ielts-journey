@@ -208,15 +208,8 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <Maximize2 className="h-4 w-4" />
           </button>
 
-          {/* CTA */}
-          <Link
-            to={ctaTo}
-            className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-10 sm:px-5 sm:text-[13px]"
-            style={{ color: solid }}
-          >
-            {ctaText}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-          </Link>
+          {/* Magnetic CTA */}
+          <MagneticCta to={ctaTo} color={solid} label={ctaText} />
         </div>
       </div>
 
