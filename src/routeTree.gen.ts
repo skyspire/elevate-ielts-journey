@@ -14,6 +14,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-questions'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -87,6 +88,11 @@ const RecentExamQuestionsRoute = RecentExamQuestionsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PredictionsRoute = PredictionsRouteImport.update({
@@ -352,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/signup': typeof SignupRoute
@@ -407,6 +414,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/signup': typeof SignupRoute
@@ -464,6 +472,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
   '/predictions': typeof PredictionsRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/recent-exam-questions': typeof RecentExamQuestionsRoute
   '/signup': typeof SignupRoute
@@ -522,6 +531,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/login'
     | '/predictions'
+    | '/pricing'
     | '/privacy'
     | '/recent-exam-questions'
     | '/signup'
@@ -577,6 +587,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/login'
     | '/predictions'
+    | '/pricing'
     | '/privacy'
     | '/recent-exam-questions'
     | '/signup'
@@ -633,6 +644,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/login'
     | '/predictions'
+    | '/pricing'
     | '/privacy'
     | '/recent-exam-questions'
     | '/signup'
@@ -690,6 +702,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   LoginRoute: typeof LoginRoute
   PredictionsRoute: typeof PredictionsRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RecentExamQuestionsRoute: typeof RecentExamQuestionsRoute
   SignupRoute: typeof SignupRoute
@@ -736,6 +749,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/predictions': {
@@ -1195,6 +1215,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   LoginRoute: LoginRoute,
   PredictionsRoute: PredictionsRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RecentExamQuestionsRoute: RecentExamQuestionsRoute,
   SignupRoute: SignupRoute,
@@ -1208,12 +1229,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

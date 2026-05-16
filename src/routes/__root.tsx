@@ -3,6 +3,7 @@ import { Header } from "@/components/site/Header";
 import { AnnouncementBanner } from "@/components/site/AnnouncementBanner";
 import { OfferBar } from "@/components/site/OfferBar";
 import { MaintenanceGate } from "@/components/site/MaintenanceGate";
+import { TypePickerModal } from "@/components/site/TypePickerModal";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
@@ -90,6 +91,7 @@ function RootComponent() {
       {!hideChrome && <Header />}
       <Outlet />
       <Toaster />
+      {!hideChrome && <TypePickerModal />}
     </MaintenanceGate>
   );
 }

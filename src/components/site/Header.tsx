@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useBranding, LOGO_SIZE_PX } from "@/lib/admin/site-settings";
 import { FreeQuotaPill } from "@/components/site/FreeQuotaPill";
+import { TypeSwitcher } from "@/components/site/TypeSwitcher";
 import logoWheel from "@/assets/logo-wheel.png";
 
 const INK = "oklch(0.20 0.01 250)";
@@ -269,19 +270,22 @@ export function Header() {
             E-books
           </Link>
 
-          {/* Pricing (homepage anchor) + FAQ */}
+          {/* Pricing (dedicated route) + FAQ */}
           <Link
-            to="/"
-            hash="pricing"
+            to="/pricing"
             className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
             style={{ color: INK_SOFT }}
+            activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = INK;
-              e.currentTarget.style.backgroundColor = HOVER_BG;
+              if (e.currentTarget.getAttribute("data-status") !== "active") {
+                e.currentTarget.style.backgroundColor = HOVER_BG;
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = INK_SOFT;
-              e.currentTarget.style.backgroundColor = "transparent";
+              const isActive = e.currentTarget.getAttribute("data-status") === "active";
+              e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+              if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
             }}
           >
             Pricing
@@ -344,6 +348,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <TypeSwitcher />
           <FreeQuotaPill />
           <Button
             asChild
