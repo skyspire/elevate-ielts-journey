@@ -8,7 +8,6 @@ import {
   GraduationCap,
   Lock,
   ArrowUpRight,
-  ChevronRight,
   Clock,
 } from "lucide-react";
 import { z } from "zod";
@@ -663,39 +662,29 @@ function WritingInline({
         ))}
       </div>
 
-      {/* Questions list */}
-      <ul className="mt-6 divide-y divide-foreground/8 overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-        {prompts.length === 0 ? (
-          <li className="p-5 text-center text-[13px] font-medium text-foreground/50">
-            Prompts coming soon for this category.
-          </li>
-        ) : (
-          prompts.map((statement, i) => {
+      {/* Questions grid — numbered tiles */}
+      {prompts.length === 0 ? (
+        <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
+          Prompts coming soon for this category.
+        </p>
+      ) : (
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {prompts.map((statement, i) => {
             const qId = `${catId}-${i + 1}`;
             return (
-              <li key={qId}>
-                <Link
-                  to="/writing-samples/$questionId"
-                  params={{ questionId: qId }}
-                  search={{ module: ieltsType }}
-                  className="group flex items-start gap-3 px-4 py-3.5 transition-colors hover:bg-foreground/[0.03] sm:px-5"
-                >
-                  <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
-                    style={{ backgroundColor: accent.solid }}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="flex-1 text-[13.5px] font-medium leading-snug text-foreground/85 sm:text-[14px]">
-                    {statement}
-                  </span>
-                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </li>
+              <NumberedTile
+                key={qId}
+                index={i + 1}
+                label={statement}
+                accent={accent}
+                to="/writing-samples/$questionId"
+                params={{ questionId: qId }}
+                search={{ module: ieltsType }}
+              />
             );
-          })
-        )}
-      </ul>
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -739,34 +728,24 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         ))}
       </div>
 
-      <ul className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/8 shadow-soft sm:grid-cols-2">
-        {topics.length === 0 ? (
-          <li className="bg-white p-5 text-center text-[13px] font-medium text-foreground/50 sm:col-span-2">
-            Topics coming soon.
-          </li>
-        ) : (
-          topics.map((t, i) => (
-            <li key={t.id} className="bg-white">
-              <Link
-                to="/speaking-samples/$category/$topic"
-                params={{ category: catId, topic: t.id }}
-                className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-foreground/[0.03] sm:px-5"
-              >
-                <span
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
-                  style={{ backgroundColor: accent.solid }}
-                >
-                  {i + 1}
-                </span>
-                <span className="flex-1 text-[13.5px] font-semibold leading-snug text-foreground/85">
-                  {t.label}
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </li>
-          ))
-        )}
-      </ul>
+      {topics.length === 0 ? (
+        <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
+          Topics coming soon.
+        </p>
+      ) : (
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {topics.map((t, i) => (
+            <NumberedTile
+              key={t.id}
+              index={i + 1}
+              label={t.label}
+              accent={accent}
+              to="/speaking-samples/$category/$topic"
+              params={{ category: catId, topic: t.id }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -817,5 +796,50 @@ function SectionEyebrow({
         {label}
       </span>
     </div>
+  );
+}
+
+// ───────── Numbered tile (matches speaking-samples Pick-a-topic style) ─────────
+function NumberedTile({
+  index,
+  label,
+  accent,
+  to,
+  params,
+  search,
+}: {
+  index: number;
+  label: string;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  to: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  search?: any;
+}) {
+  const idx = String(index).padStart(2, "0");
+  return (
+    <Link
+      to={to}
+      params={params}
+      search={search}
+      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      style={{ ['--tw-ring-color' as never]: accent.solid }}
+    >
+      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-4 sm:w-16 sm:pt-6">
+        <span className="font-display text-xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-2xl">
+          {idx}
+        </span>
+      </div>
+      <div className="flex min-w-0 flex-1 items-center px-4 py-5 sm:px-5">
+        <p
+          className="font-display font-black leading-snug tracking-tight"
+          style={{ color: accent.solid, fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+        >
+          {label}
+        </p>
+      </div>
+    </Link>
   );
 }
