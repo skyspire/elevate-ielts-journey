@@ -1515,6 +1515,17 @@ function TierSection({
 /* Prediction row — compact single-line briefing                       */
 /* ------------------------------------------------------------------ */
 
+// Rotating pastel palette — cycles as the user scrolls the list.
+// Each entry: { bg, ink, rail } tuned for white-page contrast.
+const PASTEL_CYCLE = [
+  { bg: "oklch(0.96 0.045 155)", ink: "oklch(0.42 0.13 155)", rail: "oklch(0.68 0.14 155)" }, // mint
+  { bg: "oklch(0.95 0.055 55)",  ink: "oklch(0.48 0.16 45)",  rail: "oklch(0.72 0.16 45)"  }, // peach
+  { bg: "oklch(0.95 0.045 295)", ink: "oklch(0.44 0.16 295)", rail: "oklch(0.68 0.16 295)" }, // lavender
+  { bg: "oklch(0.96 0.045 230)", ink: "oklch(0.44 0.14 245)", rail: "oklch(0.70 0.14 240)" }, // sky
+  { bg: "oklch(0.97 0.060 95)",  ink: "oklch(0.46 0.13 80)",  rail: "oklch(0.78 0.15 90)"  }, // butter
+  { bg: "oklch(0.96 0.040 10)",  ink: "oklch(0.48 0.16 15)",  rail: "oklch(0.74 0.16 15)"  }, // blush
+];
+
 function tierDefaultAppearances(tier: Tier): number {
   switch (tier) {
     case "hot":
