@@ -663,39 +663,29 @@ function WritingInline({
         ))}
       </div>
 
-      {/* Questions list */}
-      <ul className="mt-6 divide-y divide-foreground/8 overflow-hidden rounded-2xl border border-foreground/10 bg-white shadow-soft">
-        {prompts.length === 0 ? (
-          <li className="p-5 text-center text-[13px] font-medium text-foreground/50">
-            Prompts coming soon for this category.
-          </li>
-        ) : (
-          prompts.map((statement, i) => {
+      {/* Questions grid — numbered tiles */}
+      {prompts.length === 0 ? (
+        <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
+          Prompts coming soon for this category.
+        </p>
+      ) : (
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {prompts.map((statement, i) => {
             const qId = `${catId}-${i + 1}`;
             return (
-              <li key={qId}>
-                <Link
-                  to="/writing-samples/$questionId"
-                  params={{ questionId: qId }}
-                  search={{ module: ieltsType }}
-                  className="group flex items-start gap-3 px-4 py-3.5 transition-colors hover:bg-foreground/[0.03] sm:px-5"
-                >
-                  <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-extrabold text-white"
-                    style={{ backgroundColor: accent.solid }}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="flex-1 text-[13.5px] font-medium leading-snug text-foreground/85 sm:text-[14px]">
-                    {statement}
-                  </span>
-                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-foreground/35 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </li>
+              <NumberedTile
+                key={qId}
+                index={i + 1}
+                label={statement}
+                accent={accent}
+                to="/writing-samples/$questionId"
+                params={{ questionId: qId }}
+                search={{ module: ieltsType }}
+              />
             );
-          })
-        )}
-      </ul>
+          })}
+        </div>
+      )}
     </div>
   );
 }
