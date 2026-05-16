@@ -441,7 +441,7 @@ function TaskEnvelopeScroll({
             className={`font-display font-bold leading-tight tracking-tight ${
               active ? "text-foreground" : "text-foreground/70"
             }`}
-            style={{ fontSize: "clamp(1.25rem, 3.4vw, 1.875rem)" }}
+            style={{ fontSize: "clamp(1.15rem, 2.8vw, 1.5rem)" }}
           >
             <span>{taskNum}</span>
             <span className="mx-2 text-foreground/30">·</span>
