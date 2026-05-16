@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { GraduationCap, Briefcase, Crown, Check, Sparkles } from "lucide-react";
+import { Calendar, Sparkles, Check, Lock, GraduationCap, Briefcase, Crown } from "lucide-react";
 import { useLearnerSession } from "@/lib/learner-auth";
-import { setUserPlanType, useIeltsType, type IeltsPlanType } from "@/lib/ielts-type";
-import { toast } from "sonner";
+import { useIeltsType } from "@/lib/ielts-type";
+import { PickIeltsTypeAtCheckoutPopup } from "@/components/site/PickIeltsTypeAtCheckoutPopup";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -12,12 +12,12 @@ export const Route = createFileRoute("/pricing")({
       {
         name: "description",
         content:
-          "Choose Academic, General Training, or All Access. Bi-weekly, monthly, and 3-month plans in CAD.",
+          "Bi-weekly, monthly, and 3-month subscriptions in CAD. Pick Academic, General Training, or All Access at checkout.",
       },
-      { property: "og:title", content: "BigIELTS Pricing — Academic, General, or All Access" },
+      { property: "og:title", content: "BigIELTS Pricing" },
       {
         property: "og:description",
-        content: "Three plans, three billing cycles. Pay only for the IELTS type you're preparing for.",
+        content: "Simple CAD pricing. Choose your IELTS type when you subscribe.",
       },
     ],
   }),
@@ -26,168 +26,89 @@ export const Route = createFileRoute("/pricing")({
 
 type Cycle = "biweekly" | "monthly" | "quarterly";
 
-const CYCLES: Record<Cycle, { label: string; sub: string; price: number; days: number }> = {
-  biweekly: { label: "Bi-weekly", sub: "15 days access", price: 9, days: 15 },
-  monthly: { label: "Monthly", sub: "30 days access", price: 14, days: 30 },
-  quarterly: { label: "3 months", sub: "90 days access — best value", price: 29, days: 90 },
-};
-
-const TYPE_MULTIPLIER: Record<IeltsPlanType, number> = {
-  academic: 1,
-  general: 1,
-  both: 1.5,
-};
-
-const PLAN_CARDS: {
-  key: IeltsPlanType;
-  name: string;
-  tag: string;
-  icon: typeof GraduationCap;
-  accent: string;
-  popular?: boolean;
-  features: string[];
-}[] = [
+const CYCLES: { key: Cycle; label: string; sub: string; price: number; badge?: string; accent: string }[] = [
   {
-    key: "academic",
-    name: "Academic",
-    tag: "For university & professional registration",
-    icon: GraduationCap,
-    accent: "oklch(0.55 0.2 255)",
-    features: [
-      "Writing Task 1 (charts & graphs)",
-      "Academic reading passages",
-      "Academic recent exams & predictions",
-      "Academic sample answers & ebooks",
-      "Shared Speaking, Listening & Vocabulary",
-    ],
+    key: "biweekly",
+    label: "Bi-weekly",
+    sub: "15 days access",
+    price: 9,
+    accent: "oklch(0.6 0.16 230)",
   },
   {
-    key: "general",
-    name: "General Training",
-    tag: "For migration, work & secondary ed",
-    icon: Briefcase,
-    accent: "oklch(0.6 0.18 30)",
-    features: [
-      "Writing Task 1 (letters)",
-      "Everyday & workplace reading",
-      "General Training recent exams & predictions",
-      "General Training sample answers & ebooks",
-      "Shared Speaking, Listening & Vocabulary",
-    ],
+    key: "monthly",
+    label: "Monthly",
+    sub: "30 days access",
+    price: 14,
+    badge: "Most popular",
+    accent: "oklch(0.55 0.18 30)",
   },
   {
-    key: "both",
-    name: "All Access",
-    tag: "Academic + General Training together",
-    icon: Crown,
-    accent: "oklch(0.65 0.18 60)",
-    popular: true,
-    features: [
-      "Everything in Academic",
-      "Everything in General Training",
-      "Switch types anytime",
-      "Best for tutors & undecided learners",
-      "Save vs. buying both separately",
-    ],
+    key: "quarterly",
+    label: "3 months",
+    sub: "90 days access",
+    price: 29,
+    badge: "Best value",
+    accent: "oklch(0.55 0.14 165)",
   },
 ];
 
 function PricingPage() {
   const { user } = useLearnerSession();
   const { planType } = useIeltsType();
-  const [cycle, setCycle] = useState<Cycle>("monthly");
+  const [openCycle, setOpenCycle] = useState<Cycle | null>(null);
 
-  const handleChoose = (plan: IeltsPlanType) => {
-    if (!user) {
-      toast.error("Please sign up or log in first to subscribe.");
-      return;
-    }
-    setUserPlanType(user.id, plan);
-    toast.success(
-      plan === "both"
-        ? "All Access activated — both IELTS types unlocked."
-        : `${plan === "academic" ? "Academic" : "General Training"} plan activated.`,
-    );
-  };
+  const cycle = openCycle ? CYCLES.find((c) => c.key === openCycle)! : null;
 
   return (
     <div className="bg-background">
       <section className="container-page py-12 sm:py-16">
+        {/* Header */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-amber-700">
             <Sparkles className="h-3.5 w-3.5" /> Simple, fair pricing
           </div>
           <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">
-            Pay only for the IELTS you're taking.
+            Choose your subscription
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-muted-foreground sm:text-lg">
-            Academic and General Training are sold separately. Need both? Choose{" "}
-            <span className="font-bold text-foreground">All Access</span>. All prices in CAD.
+            All prices in CAD. You'll pick your IELTS type (Academic, General, or both) right at checkout.
           </p>
 
-          {/* Cycle toggle */}
-          <div
-            className="mx-auto mt-7 inline-flex items-center rounded-full border bg-card p-1"
-            style={{ borderColor: "oklch(0.9 0.01 250)" }}
-            role="group"
-          >
-            {(Object.keys(CYCLES) as Cycle[]).map((c) => {
-              const active = cycle === c;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCycle(c)}
-                  className="rounded-full px-4 py-1.5 text-[13px] font-bold transition-all sm:px-5 sm:py-2"
-                  style={{
-                    background: active
-                      ? "linear-gradient(140deg, oklch(0.25 0.01 250), oklch(0.15 0.01 250))"
-                      : "transparent",
-                    color: active ? "white" : "oklch(0.4 0.01 250)",
-                    boxShadow: active ? "0 6px 14px -6px oklch(0.25 0.01 250 / 0.5)" : "none",
-                  }}
-                >
-                  {CYCLES[c].label}
-                  {c === "quarterly" && (
-                    <span className="ml-1.5 rounded-full bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-extrabold text-emerald-700">
-                      Save
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          {planType && (
+            <div className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full border bg-emerald-50 px-4 py-1.5 text-[12px] font-bold text-emerald-700" style={{ borderColor: "oklch(0.85 0.1 150)" }}>
+              <Check className="h-3.5 w-3.5" />
+              You're currently on the{" "}
+              {planType === "both" ? "All Access" : planType === "academic" ? "Academic" : "General Training"}{" "}
+              plan
+            </div>
+          )}
         </div>
 
-        {/* Plan cards */}
+        {/* Cycle cards */}
         <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {PLAN_CARDS.map((card) => {
-            const Icon = card.icon;
-            const base = CYCLES[cycle].price;
-            const price = Math.round(base * TYPE_MULTIPLIER[card.key]);
-            const isCurrent = planType === card.key;
+          {CYCLES.map((c) => {
+            const isPopular = c.key === "monthly";
             return (
               <div
-                key={card.key}
+                key={c.key}
                 className="relative flex flex-col rounded-3xl bg-card p-6 shadow-sm transition-all sm:p-7"
                 style={{
-                  border: card.popular ? "2px solid transparent" : "1px solid oklch(0.9 0.01 250)",
-                  boxShadow: card.popular
-                    ? `0 22px 50px -18px ${card.accent}55, 0 0 0 2px ${card.accent}`
+                  border: isPopular ? "2px solid transparent" : "1px solid oklch(0.9 0.01 250)",
+                  boxShadow: isPopular
+                    ? `0 22px 50px -18px ${c.accent}55, 0 0 0 2px ${c.accent}`
                     : undefined,
-                  transform: card.popular ? "translateY(-4px)" : "none",
+                  transform: isPopular ? "translateY(-4px)" : "none",
                 }}
               >
-                {card.popular && (
+                {c.badge && (
                   <span
                     className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white"
                     style={{
-                      background:
-                        "linear-gradient(140deg, oklch(0.7 0.18 75), oklch(0.55 0.18 50))",
-                      boxShadow: "0 8px 18px -6px oklch(0.65 0.18 60 / 0.6)",
+                      background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 60%, black))`,
+                      boxShadow: `0 8px 18px -6px ${c.accent}66`,
                     }}
                   >
-                    Best value
+                    {c.badge}
                   </span>
                 )}
 
@@ -195,79 +116,72 @@ function PricingPage() {
                   <span
                     className="flex h-12 w-12 items-center justify-center rounded-xl"
                     style={{
-                      background: `linear-gradient(140deg, ${card.accent}, color-mix(in oklab, ${card.accent} 65%, black))`,
-                      boxShadow: `0 10px 20px -8px ${card.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                      background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
+                      boxShadow: `0 10px 20px -8px ${c.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
                     }}
                   >
-                    <Icon className="h-6 w-6 text-white" strokeWidth={2.4} />
+                    <Calendar className="h-6 w-6 text-white" strokeWidth={2.4} />
                   </span>
                   <div>
                     <div className="font-display text-xl font-black tracking-tight text-foreground">
-                      {card.name}
+                      {c.label}
                     </div>
-                    <div className="text-[12px] font-semibold text-muted-foreground">{card.tag}</div>
+                    <div className="text-[12px] font-semibold text-muted-foreground">{c.sub}</div>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-baseline gap-2">
                   <span className="font-display text-5xl font-black tracking-tight text-foreground">
-                    ${price}
+                    ${c.price}
                   </span>
                   <span className="text-sm font-bold text-muted-foreground">CAD</span>
                 </div>
                 <div className="text-[12px] font-semibold text-muted-foreground">
-                  {CYCLES[cycle].sub}
+                  Single type · All Access {Math.round(c.price * 1.5)} CAD
                 </div>
 
                 <ul className="mt-5 space-y-2 text-[13px] font-semibold text-foreground">
-                  {card.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: card.accent }} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
+                    Unlimited access for {c.sub.split(" ")[0]} days
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
+                    Shared Speaking, Listening & Vocabulary
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
+                    Choose Academic, General, or All Access at next step
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
+                    Cancel anytime
+                  </li>
                 </ul>
 
                 <div className="mt-6">
-                  {isCurrent ? (
+                  {user ? (
                     <button
                       type="button"
-                      disabled
-                      className="inline-flex h-11 w-full items-center justify-center rounded-full border-2 border-dashed px-5 text-sm font-bold text-muted-foreground"
-                      style={{ borderColor: "oklch(0.85 0.01 250)" }}
-                    >
-                      Your current plan
-                    </button>
-                  ) : user ? (
-                    <button
-                      type="button"
-                      onClick={() => handleChoose(card.key)}
+                      onClick={() => setOpenCycle(c.key)}
                       className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
                       style={{
-                        background: card.popular
-                          ? "linear-gradient(140deg, oklch(0.7 0.18 75), oklch(0.55 0.18 50))"
-                          : `linear-gradient(140deg, ${card.accent}, color-mix(in oklab, ${card.accent} 70%, black))`,
-                        boxShadow: card.popular
-                          ? "0 10px 20px -8px oklch(0.65 0.18 60 / 0.55)"
-                          : `0 10px 20px -8px ${card.accent}80`,
+                        background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
+                        boxShadow: `0 10px 20px -8px ${c.accent}80`,
                       }}
                     >
-                      Choose {card.name}
+                      Subscribe
                     </button>
                   ) : (
                     <Link
                       to="/signup"
                       className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
                       style={{
-                        background: card.popular
-                          ? "linear-gradient(140deg, oklch(0.7 0.18 75), oklch(0.55 0.18 50))"
-                          : `linear-gradient(140deg, ${card.accent}, color-mix(in oklab, ${card.accent} 70%, black))`,
-                        boxShadow: card.popular
-                          ? "0 10px 20px -8px oklch(0.65 0.18 60 / 0.55)"
-                          : `0 10px 20px -8px ${card.accent}80`,
+                        background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
+                        boxShadow: `0 10px 20px -8px ${c.accent}80`,
                       }}
                     >
-                      Sign up to choose
+                      Sign up to subscribe
                     </Link>
                   )}
                 </div>
@@ -276,18 +190,107 @@ function PricingPage() {
           })}
         </div>
 
-        {/* Foot notes */}
+        {/* What unlocks per type — explainer */}
+        <div className="mt-12">
+          <h2 className="font-display text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
+            What each IELTS type unlocks
+          </h2>
+          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            {[
+              {
+                k: "academic" as const,
+                name: "Academic",
+                icon: GraduationCap,
+                accent: "oklch(0.55 0.2 255)",
+                unlocks: ["Writing Task 1 (charts & graphs)", "Academic reading passages", "Academic recent exams", "Academic predictions", "Academic sample answers & ebooks"],
+                locks: ["General Training writing letters", "Workplace / everyday reading", "GT ebooks & samples"],
+              },
+              {
+                k: "general" as const,
+                name: "General Training",
+                icon: Briefcase,
+                accent: "oklch(0.6 0.18 30)",
+                unlocks: ["Writing Task 1 (letters)", "Everyday & workplace reading", "GT recent exams", "GT predictions", "GT sample answers & ebooks"],
+                locks: ["Academic charts & graphs", "Academic reading passages", "Academic ebooks & samples"],
+              },
+              {
+                k: "both" as const,
+                name: "All Access",
+                icon: Crown,
+                accent: "oklch(0.65 0.18 60)",
+                unlocks: ["Everything in Academic", "Everything in General Training", "Switch focus anytime"],
+                locks: [],
+              },
+            ].map((row) => {
+              const Icon = row.icon;
+              return (
+                <div
+                  key={row.k}
+                  className="rounded-2xl border bg-card p-5"
+                  style={{ borderColor: "oklch(0.9 0.01 250)" }}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="flex h-10 w-10 items-center justify-center rounded-xl"
+                      style={{
+                        background: `linear-gradient(140deg, ${row.accent}, color-mix(in oklab, ${row.accent} 65%, black))`,
+                        boxShadow: `0 8px 18px -6px ${row.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
+                      }}
+                    >
+                      <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+                    </span>
+                    <span className="font-display text-lg font-black tracking-tight text-foreground">
+                      {row.name}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 text-[11px] font-extrabold uppercase tracking-wider text-emerald-700">
+                    Unlocks
+                  </div>
+                  <ul className="mt-1.5 space-y-1 text-[13px] font-semibold text-foreground">
+                    {row.unlocks.map((u) => (
+                      <li key={u} className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                        <span>{u}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {row.locks.length > 0 && (
+                    <>
+                      <div className="mt-4 text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
+                        Stays locked
+                      </div>
+                      <ul className="mt-1.5 space-y-1 text-[13px] font-medium text-muted-foreground">
+                        {row.locks.map((u) => (
+                          <li key={u} className="flex items-start gap-2">
+                            <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                            <span>{u}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="mx-auto mt-10 max-w-3xl rounded-2xl border bg-muted/30 p-5 text-center text-[13px] font-medium text-muted-foreground" style={{ borderColor: "oklch(0.9 0.01 250)" }}>
           <p>
-            <span className="font-bold text-foreground">No mid-plan switching.</span> Academic and
-            General Training are separate subscriptions. If you need both, choose{" "}
+            <span className="font-bold text-foreground">No mid-plan switching.</span> Switching between
+            Academic and General Training requires upgrading to{" "}
             <span className="font-bold text-foreground">All Access</span>.
-          </p>
-          <p className="mt-2">
-            Cancel anytime. Your free daily quota (3 opens) still works without a plan.
           </p>
         </div>
       </section>
+
+      <PickIeltsTypeAtCheckoutPopup
+        open={!!cycle}
+        onClose={() => setOpenCycle(null)}
+        cycleLabel={cycle ? `${cycle.label} · $${cycle.price} CAD` : undefined}
+      />
     </div>
   );
 }

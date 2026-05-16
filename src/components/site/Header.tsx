@@ -25,7 +25,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useBranding, LOGO_SIZE_PX } from "@/lib/admin/site-settings";
 import { FreeQuotaPill } from "@/components/site/FreeQuotaPill";
-import { TypeSwitcher } from "@/components/site/TypeSwitcher";
 import logoWheel from "@/assets/logo-wheel.png";
 
 const INK = "oklch(0.20 0.01 250)";
@@ -348,7 +347,6 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <TypeSwitcher />
           <FreeQuotaPill />
           <Button
             asChild
