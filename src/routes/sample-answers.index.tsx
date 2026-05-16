@@ -637,6 +637,21 @@ function WritingInline({
 
   return (
     <div className="mt-10">
+      <StickyTrackBar
+        leftLabel="Task 1"
+        rightLabel="Task 2"
+        needleDeg={task === "task1" ? -90 : 90}
+        onLeft={() => setTask("task1")}
+        onRight={() => setTask("task2")}
+        accentColor={accent.solid}
+        pills={cats.map((c) => ({
+          id: c.id,
+          label: c.label,
+          active: catId === c.id,
+          onClick: () => setCatId(c.id),
+        }))}
+      />
+
       <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
 
       {/* Task compass toggle (pic-2 style) */}
