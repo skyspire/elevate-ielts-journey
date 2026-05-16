@@ -835,13 +835,18 @@ function WritingInline({
     <div className="mt-10">
       <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
 
-      {/* Task pills */}
-      <div className="mt-4 flex flex-wrap gap-2">
-        {(["task1", "task2"] as Task[]).map((t) => (
-          <Pill key={t} active={task === t} accent={accent} onClick={() => setTask(t)}>
-            {t === "task1" ? "Task 1" : "Task 2"}
-          </Pill>
-        ))}
+      {/* Task compass toggle (pic-2 style) */}
+      <div className="mt-6">
+        <MiniCompassToggle
+          options={[
+            { id: "task1", label: "Task 1" },
+            { id: "task2", label: "Task 2" },
+          ] as const}
+          value={task}
+          onChange={(v) => setTask(v)}
+          accent={accent}
+          caption="Pick task"
+        />
       </div>
 
       {/* Category chips */}
