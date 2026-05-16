@@ -203,6 +203,23 @@ function SampleAnswersHubPage() {
   const typeLocked = !isGuest && !ownsCurrent;
 
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const navigate = useNavigate({ from: "/sample-answers" });
+  const selected = search.selected ?? null;
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  const onSelectModule = (id: ModuleId) => {
+    if (typeLocked) {
+      setShowUpgrade(true);
+      return;
+    }
+    navigate({
+      search: (prev) => ({ ...prev, selected: prev.selected === id ? undefined : id }),
+      replace: true,
+    });
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   const pageBg = "oklch(0.985 0.005 95)";
   const grain =
