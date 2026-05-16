@@ -24,10 +24,10 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Footer bar — warm, soothing solid tones per type
+// Footer bar — warm, soothing tones that still match the IELTS type hue
 const SOLID = {
-  academic: "oklch(0.36 0.07 50)", // warm deep mocha
-  general: "oklch(0.40 0.09 40)", // warm cinnamon
+  academic: "oklch(0.38 0.09 258)", // warm muted indigo
+  general: "oklch(0.42 0.11 32)", // warm muted terracotta
 } as const;
 
 // Popup — warm, soothing earthy tone (same for both types) so the fullscreen
