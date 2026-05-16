@@ -12,6 +12,7 @@ import {
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { TypeGate } from "@/components/site/TypeGate";
 
 export const Route = createFileRoute("/predictions")({
   head: () => ({
@@ -1043,39 +1044,76 @@ function PredictionsPage() {
             />
           </div>
 
-          {/* Tiered groups — current month */}
-          <div className="mt-12 space-y-16">
-            {TIERS.map((tier) => {
-              const items = current[tier.key];
-              if (items.length === 0) return null;
-              const isActive = activeTier === tier.key;
-              return (
-                <div
-                  key={tier.key}
-                  data-tier-section={tier.key}
-                  className="relative -mx-3 rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
-                  style={{
-                    background: isActive
-                      ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
-                      : "transparent",
-                    boxShadow: isActive
-                      ? `inset 0 1px 0 0 color-mix(in oklab, ${tier.accent} 18%, transparent), 0 30px 60px -40px color-mix(in oklab, ${tier.accent} 35%, transparent)`
-                      : "none",
-                  }}
-                >
-                  <TierSection tier={tier} items={items} />
-                </div>
-              );
-            })}
+          {/* Tiered groups — current month. Writing & Reading are gated per IELTS type; Speaking/Listening stay open. */}
+          {(skill === "writing" || skill === "reading") ? (
+            <TypeGate contentType={exam}>
+              <div className="mt-12 space-y-16">
+                {TIERS.map((tier) => {
+                  const items = current[tier.key];
+                  if (items.length === 0) return null;
+                  const isActive = activeTier === tier.key;
+                  return (
+                    <div
+                      key={tier.key}
+                      data-tier-section={tier.key}
+                      className="relative -mx-3 rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
+                      style={{
+                        background: isActive
+                          ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
+                          : "transparent",
+                        boxShadow: isActive
+                          ? `inset 0 1px 0 0 color-mix(in oklab, ${tier.accent} 18%, transparent), 0 30px 60px -40px color-mix(in oklab, ${tier.accent} 35%, transparent)`
+                          : "none",
+                      }}
+                    >
+                      <TierSection tier={tier} items={items} />
+                    </div>
+                  );
+                })}
 
-            {current.hot.length === 0 &&
-              current.likely.length === 0 &&
-              current.review.length === 0 && (
-                <p className="text-center font-display text-lg font-bold text-foreground/60">
-                  Fresh predictions land here every Monday.
-                </p>
-              )}
-          </div>
+                {current.hot.length === 0 &&
+                  current.likely.length === 0 &&
+                  current.review.length === 0 && (
+                    <p className="text-center font-display text-lg font-bold text-foreground/60">
+                      Fresh predictions land here every Monday.
+                    </p>
+                  )}
+              </div>
+            </TypeGate>
+          ) : (
+            <div className="mt-12 space-y-16">
+              {TIERS.map((tier) => {
+                const items = current[tier.key];
+                if (items.length === 0) return null;
+                const isActive = activeTier === tier.key;
+                return (
+                  <div
+                    key={tier.key}
+                    data-tier-section={tier.key}
+                    className="relative -mx-3 rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
+                    style={{
+                      background: isActive
+                        ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
+                        : "transparent",
+                      boxShadow: isActive
+                        ? `inset 0 1px 0 0 color-mix(in oklab, ${tier.accent} 18%, transparent), 0 30px 60px -40px color-mix(in oklab, ${tier.accent} 35%, transparent)`
+                        : "none",
+                    }}
+                  >
+                    <TierSection tier={tier} items={items} />
+                  </div>
+                );
+              })}
+
+              {current.hot.length === 0 &&
+                current.likely.length === 0 &&
+                current.review.length === 0 && (
+                  <p className="text-center font-display text-lg font-bold text-foreground/60">
+                    Fresh predictions land here every Monday.
+                  </p>
+                )}
+            </div>
+          )}
 
           {/* Archive — collapsed by default */}
           {archive.length > 0 && (

@@ -10,6 +10,7 @@ import { Footer } from "@/components/site/Footer";
 import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { TypeGate } from "@/components/site/TypeGate";
 
 
 type Module = "academic" | "general";
@@ -341,17 +342,21 @@ function RecentExamQuestionsPage() {
             <SectionTabs section={section} setSection={setSection} />
           </div>
 
-          {/* Content */}
+          {/* Content — Writing & Reading are gated per IELTS type; Speaking is shared */}
           <div className="mt-10">
             {section === "writing" ? (
-              <WritingSection
-                data={isAcademic ? academicWriting : generalWriting}
-                isAcademic={isAcademic}
-              />
+              <TypeGate contentType={module}>
+                <WritingSection
+                  data={isAcademic ? academicWriting : generalWriting}
+                  isAcademic={isAcademic}
+                />
+              </TypeGate>
             ) : section === "speaking" ? (
               <SpeakingSection data={speakingData} />
             ) : (
-              <ReadingSection />
+              <TypeGate contentType={module}>
+                <ReadingSection />
+              </TypeGate>
             )}
           </div>
 
