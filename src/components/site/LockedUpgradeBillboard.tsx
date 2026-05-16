@@ -24,20 +24,24 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Bold solid colors (no gradient)
+// Footer bar — bold solid colors per type
 const SOLID = {
   academic: "oklch(0.35 0.18 258)", // deep indigo
   general: "oklch(0.45 0.20 28)", // deep terracotta
 } as const;
 
-// Accent palette used for highlighting different words in the copy
+// Popup — warm, soothing earthy tone (same for both types) so the fullscreen
+// experience reads as calm and premium, not loud.
+const POPUP_BG = "oklch(0.32 0.05 55)"; // warm deep mocha / espresso
+const POPUP_ACCENT = "oklch(0.78 0.10 70)"; // soft warm sand for icon chips
+
 const ACCENTS = {
-  amber: "oklch(0.85 0.18 85)",
-  emerald: "oklch(0.78 0.16 155)",
-  pink: "oklch(0.78 0.18 0)",
-  sky: "oklch(0.80 0.13 230)",
-  lime: "oklch(0.86 0.18 125)",
-  violet: "oklch(0.78 0.14 305)",
+  amber: "oklch(0.85 0.10 75)",
+  sand: "oklch(0.82 0.07 80)",
+  rose: "oklch(0.78 0.09 30)",
+  sage: "oklch(0.78 0.07 145)",
+  sky: "oklch(0.78 0.08 230)",
+  clay: "oklch(0.75 0.10 50)",
 } as const;
 
 // Cream body for ambient readability on dark cards.
@@ -79,10 +83,10 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
   const features = [
     { icon: PenLine, label: "Writing Task 1", color: ACCENTS.amber, desc: "Every real prompt + Band 9 model answers" },
     { icon: BookOpen, label: "Reading", color: ACCENTS.sky, desc: "Full passages, all question types, explained" },
-    { icon: FileText, label: "Ebooks library", color: ACCENTS.emerald, desc: "Strategy & vocabulary PDFs you can read in-app" },
-    { icon: CalendarDays, label: "Recent exams", color: ACCENTS.pink, desc: "Verified questions reported by real test-takers" },
-    { icon: Sparkles, label: "Weekly predictions", color: ACCENTS.violet, desc: "Fresh forecasts every Saturday by our IELTS specialists" },
-    { icon: Icon, label: "Sample answers", color: ACCENTS.lime, desc: `${wantedLabel}-specific model responses, fully annotated` },
+    { icon: FileText, label: "Ebooks library", color: ACCENTS.sage, desc: "Strategy & vocabulary PDFs you can read in-app" },
+    { icon: CalendarDays, label: "Recent exams", color: ACCENTS.rose, desc: "Verified questions reported by real test-takers" },
+    { icon: Sparkles, label: "Weekly predictions", color: ACCENTS.clay, desc: "Fresh forecasts every Saturday by our IELTS specialists" },
+    { icon: Icon, label: "Sample answers", color: ACCENTS.sand, desc: `${wantedLabel}-specific model responses, fully annotated` },
   ];
 
   return (
@@ -104,10 +108,10 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
           {/* Copy — cream body, bright white keywords */}
           <div className="min-w-0 flex-1" style={{ color: CREAM }}>
-            <h3 className="font-display text-[16px] font-bold leading-tight tracking-tight sm:text-xl md:text-[22px]">
+            <h3 className="font-display text-[15px] font-bold leading-snug tracking-tight sm:text-[17px] md:text-[18px]">
               <Key>One subscription.</Key> The <Key>entire {wantedLabel}</Key> library.
             </h3>
-            <p className="mt-1.5 hidden text-[13px] font-semibold leading-snug sm:block sm:text-[14px]">
+            <p className="mt-1 hidden text-[12.5px] font-medium leading-snug sm:block sm:text-[13px]">
               {currentType ? (
                 <>
                   Not just one page or module — <Key>every {wantedLabel} resource</Key> is sold
@@ -125,7 +129,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="group mt-2 inline-flex items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-[0.12em] text-white/95 underline-offset-4 hover:underline sm:text-[13px]"
+              className="group mt-2 inline-flex items-center gap-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-white/90 underline-offset-4 hover:underline sm:text-[12px]"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
@@ -136,22 +140,15 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             </button>
           </div>
 
-          {/* CTA + price chip */}
-          <div className="flex shrink-0 flex-col items-end gap-1">
-            <Link
-              to={ctaTo}
-              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
-              style={{ color: solid }}
-            >
-              {ctaText}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            {!guest && (
-              <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10.5px] font-bold tracking-tight text-white ring-1 ring-white/30">
-                From $9 / 2 weeks
-              </span>
-            )}
-          </div>
+          {/* CTA */}
+          <Link
+            to={ctaTo}
+            className="group inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
+            style={{ color: solid }}
+          >
+            {ctaText}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
 
@@ -171,38 +168,38 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
           <div
             className="relative flex h-full w-full max-w-4xl flex-col overflow-hidden rounded-3xl text-white shadow-2xl animate-in zoom-in-95 fade-in duration-300"
-            style={{ backgroundColor: solid }}
+            style={{ backgroundColor: POPUP_BG }}
           >
-            {/* Decorative halos */}
+            {/* Decorative warm halos */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-30 blur-3xl"
-              style={{ background: "white" }}
+              className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-25 blur-3xl"
+              style={{ background: POPUP_ACCENT }}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full opacity-25 blur-3xl"
-              style={{ background: ACCENTS.amber }}
+              className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full opacity-20 blur-3xl"
+              style={{ background: ACCENTS.clay }}
             />
 
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute right-4 top-4 z-10 rounded-full bg-white/15 p-2 ring-1 ring-white/30 transition-colors hover:bg-white/25"
+              className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 ring-1 ring-white/20 transition-colors hover:bg-white/20"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="relative flex-1 overflow-y-auto px-6 py-10 sm:px-12 sm:py-14">
               {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] ring-1 ring-white/25">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] ring-1 ring-white/20">
                 <Lock className="h-3.5 w-3.5" /> {wantedLabel} subscription
               </div>
 
-              {/* Headline — cream body, bright white keywords */}
+              {/* Headline — readable size, warm cream body, white keywords */}
               <h2
-                className="mt-5 font-display text-[34px] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl"
+                className="mt-5 font-display text-[26px] font-bold leading-[1.1] tracking-tight sm:text-[34px] md:text-[40px]"
                 style={{ color: CREAM }}
               >
                 <Key>One subscription.</Key>
@@ -213,7 +210,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
               </h2>
 
               <p
-                className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed sm:text-lg"
+                className="mt-4 max-w-2xl text-[14.5px] font-medium leading-relaxed sm:text-[15.5px]"
                 style={{ color: CREAM }}
               >
                 Not a single page. Not a single module. Every IELTS{" "}
@@ -254,23 +251,19 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
               {/* Trust row */}
               <ul className="mt-6 grid gap-2 text-[13.5px] font-bold text-white/90 sm:grid-cols-3 sm:text-sm">
-                <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.emerald }} /> Instant access</li>
+                <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.sage }} /> Instant access</li>
                 <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.amber }} /> Cancel anytime</li>
                 <li className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0" style={{ color: ACCENTS.sky }} /> Updated monthly</li>
               </ul>
             </div>
 
-            {/* Sticky CTA footer inside popup */}
-            <div className="relative flex flex-col items-stretch gap-2 border-t border-white/15 bg-white/5 px-6 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-12 sm:py-5">
-              <div className="flex items-baseline gap-2">
-                <span className="font-display text-2xl font-black tracking-tight text-white">$9</span>
-                <span className="text-[12px] font-bold uppercase tracking-wider text-white/75">/ 2 weeks · CAD</span>
-              </div>
+            {/* Sticky CTA footer inside popup — no price pill */}
+            <div className="relative flex items-center justify-end border-t border-white/15 bg-white/5 px-6 py-4 backdrop-blur sm:px-12 sm:py-5">
               <Link
                 to={ctaTo}
                 onClick={() => setOpen(false)}
                 className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-7 text-sm font-extrabold tracking-tight shadow-xl transition-transform hover:-translate-y-0.5"
-                style={{ color: solid }}
+                style={{ color: POPUP_BG }}
               >
                 {ctaText}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
