@@ -258,7 +258,7 @@ function SpeakingSamplesPage() {
           {mode && (
             <>
               {/* Step 2 — Theme chips */}
-              <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
+              <div ref={triggerRef} className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
                 {categories.map((c) => {
                   const active = categoryId === c.id;
                   const Icon = c.icon;
