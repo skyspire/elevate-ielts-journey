@@ -168,38 +168,38 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
 
           <div
             className="relative flex h-full w-full max-w-4xl flex-col overflow-hidden rounded-3xl text-white shadow-2xl animate-in zoom-in-95 fade-in duration-300"
-            style={{ backgroundColor: solid }}
+            style={{ backgroundColor: POPUP_BG }}
           >
-            {/* Decorative halos */}
+            {/* Decorative warm halos */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-30 blur-3xl"
-              style={{ background: "white" }}
+              className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-25 blur-3xl"
+              style={{ background: POPUP_ACCENT }}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full opacity-25 blur-3xl"
-              style={{ background: ACCENTS.amber }}
+              className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full opacity-20 blur-3xl"
+              style={{ background: ACCENTS.clay }}
             />
 
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute right-4 top-4 z-10 rounded-full bg-white/15 p-2 ring-1 ring-white/30 transition-colors hover:bg-white/25"
+              className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 ring-1 ring-white/20 transition-colors hover:bg-white/20"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="relative flex-1 overflow-y-auto px-6 py-10 sm:px-12 sm:py-14">
               {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] ring-1 ring-white/25">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] ring-1 ring-white/20">
                 <Lock className="h-3.5 w-3.5" /> {wantedLabel} subscription
               </div>
 
-              {/* Headline — cream body, bright white keywords */}
+              {/* Headline — readable size, warm cream body, white keywords */}
               <h2
-                className="mt-5 font-display text-[34px] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl"
+                className="mt-5 font-display text-[26px] font-bold leading-[1.1] tracking-tight sm:text-[34px] md:text-[40px]"
                 style={{ color: CREAM }}
               >
                 <Key>One subscription.</Key>
@@ -210,7 +210,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
               </h2>
 
               <p
-                className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed sm:text-lg"
+                className="mt-4 max-w-2xl text-[14.5px] font-medium leading-relaxed sm:text-[15.5px]"
                 style={{ color: CREAM }}
               >
                 Not a single page. Not a single module. Every IELTS{" "}
