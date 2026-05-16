@@ -343,7 +343,7 @@ function FormatTogglePair({
           className={`font-display font-bold leading-tight tracking-tight ${
             active ? "text-foreground" : "text-foreground/70"
           }`}
-          style={{ fontSize: "clamp(1.1rem, 2.6vw, 1.35rem)" }}
+          style={{ fontSize: "clamp(1.15rem, 2.8vw, 1.5rem)" }}
         >
           {label}
         </h3>
