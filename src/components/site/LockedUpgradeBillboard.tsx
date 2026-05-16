@@ -24,20 +24,24 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Bold solid colors (no gradient)
+// Footer bar — bold solid colors per type
 const SOLID = {
   academic: "oklch(0.35 0.18 258)", // deep indigo
   general: "oklch(0.45 0.20 28)", // deep terracotta
 } as const;
 
-// Accent palette used for highlighting different words in the copy
+// Popup — warm, soothing earthy tone (same for both types) so the fullscreen
+// experience reads as calm and premium, not loud.
+const POPUP_BG = "oklch(0.32 0.05 55)"; // warm deep mocha / espresso
+const POPUP_ACCENT = "oklch(0.78 0.10 70)"; // soft warm sand for icon chips
+
 const ACCENTS = {
-  amber: "oklch(0.85 0.18 85)",
-  emerald: "oklch(0.78 0.16 155)",
-  pink: "oklch(0.78 0.18 0)",
-  sky: "oklch(0.80 0.13 230)",
-  lime: "oklch(0.86 0.18 125)",
-  violet: "oklch(0.78 0.14 305)",
+  amber: "oklch(0.85 0.10 75)",
+  sand: "oklch(0.82 0.07 80)",
+  rose: "oklch(0.78 0.09 30)",
+  sage: "oklch(0.78 0.07 145)",
+  sky: "oklch(0.78 0.08 230)",
+  clay: "oklch(0.75 0.10 50)",
 } as const;
 
 // Cream body for ambient readability on dark cards.
