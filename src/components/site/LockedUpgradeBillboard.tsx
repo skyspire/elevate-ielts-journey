@@ -102,30 +102,21 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <Lock className="h-5 w-5" strokeWidth={2.5} />
           </span>
 
-          {/* Copy */}
-          <div className="min-w-0 flex-1">
-            <h3 className="font-display text-[16px] font-black leading-tight tracking-tight sm:text-xl md:text-[22px]">
-              <Highlight color={ACCENTS.amber}>One subscription.</Highlight>{" "}
-              <span className="text-white">The </span>
-              <Highlight color={ACCENTS.emerald}>entire {wantedLabel}</Highlight>{" "}
-              <span className="text-white">library.</span>
+          {/* Copy — cream body, bright white keywords */}
+          <div className="min-w-0 flex-1" style={{ color: CREAM }}>
+            <h3 className="font-display text-[16px] font-bold leading-tight tracking-tight sm:text-xl md:text-[22px]">
+              <Key>One subscription.</Key> The <Key>entire {wantedLabel}</Key> library.
             </h3>
-            <p className="mt-1.5 hidden text-[13px] font-bold leading-snug text-white/90 sm:block sm:text-[14px]">
+            <p className="mt-1.5 hidden text-[13px] font-semibold leading-snug sm:block sm:text-[14px]">
               {currentType ? (
                 <>
-                  Not just one page or module —{" "}
-                  <Highlight color={ACCENTS.sky} className="text-[13px] sm:text-[14px]">
-                    every {wantedLabel} resource
-                  </Highlight>{" "}
-                  is sold separately. Same pricing as your current plan.
+                  Not just one page or module — <Key>every {wantedLabel} resource</Key> is sold
+                  separately. Same pricing as your current plan.
                 </>
               ) : (
                 <>
-                  Not a single page. Not a single module.{" "}
-                  <Highlight color={ACCENTS.pink} className="text-[13px] sm:text-[14px]">
-                    Everything {wantedLabel}
-                  </Highlight>{" "}
-                  — Writing, Reading, Ebooks, Exams & Predictions.
+                  Not a single page. Not a single module. <Key>Everything {wantedLabel}</Key> —
+                  Writing, Reading, Ebooks, Exams &amp; Predictions.
                 </>
               )}
             </p>
