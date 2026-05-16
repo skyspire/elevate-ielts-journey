@@ -14,6 +14,7 @@ import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { UpgradeToAllAccessPopup } from "@/components/site/UpgradeToAllAccessPopup";
+import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { IeltsTypeSelector } from "@/components/site/IeltsTypeSelector";
 import {
   useIeltsType,
