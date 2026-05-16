@@ -747,8 +747,6 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
           ))}
         </div>
       )}
-        )}
-      </ul>
     </div>
   );
 }
