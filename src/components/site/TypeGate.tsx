@@ -3,6 +3,7 @@ import { useLocation } from "@tanstack/react-router";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { canAccessType, getUserPlanType, type IeltsType } from "@/lib/ielts-type";
 import { UpgradeToAllAccessPopup } from "./UpgradeToAllAccessPopup";
+import { LockedUpgradeBillboard } from "./LockedUpgradeBillboard";
 
 /**
  * Blocks content tagged for the OTHER IELTS type when the user is on a single-type plan.
@@ -41,8 +42,11 @@ export function TypeGate({
 
   if (allowed) return <>{children}</>;
 
+  const currentPlan = planType === "academic" || planType === "general" ? planType : null;
+
   return (
     <>
+      <LockedUpgradeBillboard wantedType={contentType} currentType={currentPlan} guest={isGuest} />
       <button
         type="button"
         aria-label="Locked content — click to unlock"
