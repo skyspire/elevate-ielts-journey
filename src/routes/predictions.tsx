@@ -909,21 +909,9 @@ function PredictionsPage() {
   const daysToNext = useDaysToNextSaturday();
 
   const isAcademic = exam === "academic";
-  // Premium soft palettes — warm cream for General, cool pearl for Academic.
-  // Layered radial halos give a sunrise/atelier glow without overpowering content.
-  const pageBg = isAcademic ? "oklch(0.985 0.012 235)" : "oklch(0.985 0.020 55)";
-  const heroGradient = isAcademic
-    ? `radial-gradient(ellipse 55% 70% at 12% -5%, oklch(0.88 0.10 245 / 0.65) 0%, transparent 55%),
-       radial-gradient(ellipse 50% 65% at 88% 0%, oklch(0.90 0.09 285 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 70% 50% at 50% 35%, oklch(0.94 0.05 220 / 0.45) 0%, transparent 70%),
-       radial-gradient(ellipse 40% 40% at 25% 60%, oklch(0.92 0.07 200 / 0.35) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.03 240 / 0.60) 0%, oklch(0.985 0.012 235 / 0) 100%)`
-    : `radial-gradient(ellipse 55% 70% at 10% -5%, oklch(0.91 0.11 50 / 0.70) 0%, transparent 55%),
-       radial-gradient(ellipse 55% 65% at 90% 0%, oklch(0.88 0.13 25 / 0.60) 0%, transparent 60%),
-       radial-gradient(ellipse 70% 55% at 50% 30%, oklch(0.94 0.08 70 / 0.50) 0%, transparent 70%),
-       radial-gradient(ellipse 45% 45% at 78% 55%, oklch(0.90 0.10 35 / 0.40) 0%, transparent 65%),
-       radial-gradient(ellipse 40% 40% at 18% 65%, oklch(0.93 0.08 85 / 0.35) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.97 0.04 50 / 0.65) 0%, oklch(0.985 0.020 55 / 0) 100%)`;
+  // Clean white page — rotating pastel card tints carry the color story.
+  const pageBg = "#ffffff";
+  const heroGradient = "transparent";
 
   return (
     <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
@@ -1527,6 +1515,17 @@ function TierSection({
 /* Prediction row — compact single-line briefing                       */
 /* ------------------------------------------------------------------ */
 
+// Rotating pastel palette — cycles as the user scrolls the list.
+// Each entry: { bg, ink, rail } tuned for white-page contrast.
+const PASTEL_CYCLE = [
+  { bg: "oklch(0.96 0.045 155)", ink: "oklch(0.42 0.13 155)", rail: "oklch(0.68 0.14 155)" }, // mint
+  { bg: "oklch(0.95 0.055 55)",  ink: "oklch(0.48 0.16 45)",  rail: "oklch(0.72 0.16 45)"  }, // peach
+  { bg: "oklch(0.95 0.045 295)", ink: "oklch(0.44 0.16 295)", rail: "oklch(0.68 0.16 295)" }, // lavender
+  { bg: "oklch(0.96 0.045 230)", ink: "oklch(0.44 0.14 245)", rail: "oklch(0.70 0.14 240)" }, // sky
+  { bg: "oklch(0.97 0.060 95)",  ink: "oklch(0.46 0.13 80)",  rail: "oklch(0.78 0.15 90)"  }, // butter
+  { bg: "oklch(0.96 0.040 10)",  ink: "oklch(0.48 0.16 15)",  rail: "oklch(0.74 0.16 15)"  }, // blush
+];
+
 function tierDefaultAppearances(tier: Tier): number {
   switch (tier) {
     case "hot":
@@ -1550,7 +1549,9 @@ function PredictionRow({
   index: number;
 }) {
   const appearances = prediction.appearances ?? tierDefaultAppearances(prediction.tier);
-  const accent = tier.accent;
+  const pastel = PASTEL_CYCLE[(index - 1) % PASTEL_CYCLE.length];
+  const accent = pastel.rail;
+  const ink = pastel.ink;
   const answer = usePredictionAnswer(prediction.title);
   const { user } = useSession();
   const isAdmin = canEdit(user);
@@ -1561,8 +1562,9 @@ function PredictionRow({
 
   return (
     <article
-      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-border hover:shadow-[0_8px_28px_-12px_rgba(0,0,0,0.18)]"
+      className="group relative overflow-hidden rounded-2xl border border-black/5 transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-18px_rgba(0,0,0,0.25)]"
       style={{
+        background: pastel.bg,
         opacity: archived ? 0.78 : 1,
         filter: archived ? "saturate(0.82)" : undefined,
       }}
@@ -1570,7 +1572,7 @@ function PredictionRow({
       {/* Colored left rail */}
       <span
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-full w-[3px]"
+        className="pointer-events-none absolute left-0 top-0 h-full w-[4px]"
         style={{ background: accent }}
       />
 
@@ -1582,30 +1584,34 @@ function PredictionRow({
         {/* Large editorial numeral */}
         <span
           className="shrink-0 font-display text-[40px] font-black leading-none tracking-tight tabular-nums sm:text-[52px]"
-          style={{ color: `color-mix(in oklab, ${accent} 28%, transparent)` }}
+          style={{ color: `color-mix(in oklab, ${ink} 55%, transparent)` }}
           aria-hidden
         >
           {num}
         </span>
 
         <div className="min-w-0 flex-1">
-          <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-[16.5px]">
+          <p
+            className="font-display text-[15px] font-semibold leading-snug tracking-tight sm:text-[16.5px]"
+            style={{ color: ink }}
+          >
             {prediction.title}
           </p>
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-bold uppercase tracking-[0.12em] text-foreground/55">
-            <span style={{ color: `color-mix(in oklab, ${accent} 80%, var(--foreground))` }}>
-              {prediction.type}
-            </span>
-            <span aria-hidden className="text-foreground/25">·</span>
+          <div
+            className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-bold uppercase tracking-[0.12em]"
+            style={{ color: `color-mix(in oklab, ${ink} 70%, transparent)` }}
+          >
+            <span style={{ color: ink }}>{prediction.type}</span>
+            <span aria-hidden style={{ color: `color-mix(in oklab, ${ink} 30%, transparent)` }}>·</span>
             <span>Appeared {appearances}×</span>
             {hasAnswer && (
               <>
-                <span aria-hidden className="text-foreground/25">·</span>
+                <span aria-hidden style={{ color: `color-mix(in oklab, ${ink} 30%, transparent)` }}>·</span>
                 <span
                   className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px]"
                   style={{
-                    background: `color-mix(in oklab, ${accent} 14%, transparent)`,
-                    color: accent,
+                    background: `color-mix(in oklab, ${accent} 22%, white)`,
+                    color: ink,
                   }}
                 >
                   <Check className="h-3 w-3" /> Model answer
