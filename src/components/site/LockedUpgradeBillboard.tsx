@@ -24,10 +24,10 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Footer bar — bold solid colors per type
+// Footer bar — warm, soothing solid tones per type
 const SOLID = {
-  academic: "oklch(0.35 0.18 258)", // deep indigo
-  general: "oklch(0.45 0.20 28)", // deep terracotta
+  academic: "oklch(0.36 0.07 50)", // warm deep mocha
+  general: "oklch(0.40 0.09 40)", // warm cinnamon
 } as const;
 
 // Popup — warm, soothing earthy tone (same for both types) so the fullscreen
