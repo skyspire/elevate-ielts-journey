@@ -40,23 +40,17 @@ const ACCENTS = {
   violet: "oklch(0.78 0.14 305)",
 } as const;
 
-function Highlight({
-  children,
-  color,
-  className = "",
-}: {
-  children: React.ReactNode;
-  color: string;
-  className?: string;
-}) {
+// Cream body for ambient readability on dark cards.
+const CREAM = "#FFF6E0";
+
+function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  // Bright white + heavier weight = max contrast emphasis on the solid dark card.
   return (
-    <span className={`relative inline-block whitespace-nowrap font-extrabold text-white ${className}`}>
-      <span
-        aria-hidden
-        className="absolute inset-x-[-4px] bottom-[3%] -z-0 h-[62%] -rotate-1 rounded-[3px]"
-        style={{ background: color, opacity: 0.85 }}
-      />
-      <span className="relative">{children}</span>
+    <span
+      className={`font-black text-white ${className}`}
+      style={{ textShadow: "0 1px 0 rgba(0,0,0,0.18)" }}
+    >
+      {children}
     </span>
   );
 }
