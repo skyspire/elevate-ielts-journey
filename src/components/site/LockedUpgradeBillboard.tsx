@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Lock,
@@ -24,10 +24,15 @@ type Props = {
 
 const LABEL = { academic: "Academic", general: "General Training" } as const;
 const ICONS = { academic: GraduationCap, general: Briefcase } as const;
-// Footer bar — warm, soothing tones that still match the IELTS type hue
+// Footer bar — matte grey for both IELTS types (calm, neutral background).
 const SOLID = {
-  academic: "oklch(0.38 0.09 258)", // warm muted indigo
-  general: "oklch(0.42 0.11 32)", // warm muted terracotta
+  academic: "oklch(0.30 0.005 250)",
+  general: "oklch(0.30 0.005 250)",
+} as const;
+// IELTS-type accent colors used only for the action buttons.
+const ACCENT_BY_TYPE = {
+  academic: "oklch(0.55 0.18 258)", // indigo
+  general: "oklch(0.60 0.18 32)", // terracotta
 } as const;
 
 // Popup — warm, soothing earthy tone (same for both types) so the fullscreen
@@ -47,97 +52,19 @@ const ACCENTS = {
 // Cream body for ambient readability on dark cards.
 const CREAM = "#FFF6E0";
 
-// Kinetic scramble: briefly cycles letters then settles on the target word.
-function useScramble(target: string, intervalMs = 8000) {
-  const [text, setText] = useState(target);
-  useEffect(() => {
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
-    let raf = 0;
-    let timer = 0;
-    const run = () => {
-      const total = 22; // frames
-      let frame = 0;
-      const tick = () => {
-        frame++;
-        const progress = frame / total;
-        const out = target
-          .split("")
-          .map((ch, i) => {
-            if (ch === " ") return " ";
-            const settled = i / target.length < progress;
-            return settled ? ch : CHARS[Math.floor(Math.random() * CHARS.length)];
-          })
-          .join("");
-        setText(out);
-        if (frame < total) {
-          raf = window.requestAnimationFrame(tick);
-        } else {
-          setText(target);
-          timer = window.setTimeout(run, intervalMs);
-        }
-      };
-      raf = window.requestAnimationFrame(tick);
-    };
-    timer = window.setTimeout(run, 1200);
-    return () => {
-      window.cancelAnimationFrame(raf);
-      window.clearTimeout(timer);
-    };
-  }, [target, intervalMs]);
-  return text;
-}
-
-function Key({ children, className = "" }: { children: string; className?: string }) {
-  const text = useScramble(children);
+function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <span
-      className={`font-mono font-black tracking-tight text-white ${className}`}
-      style={{ textShadow: "0 0 12px rgba(255,255,255,0.25)" }}
-    >
-      {text}
+    <span className={`font-bold text-white ${className}`}>
+      {children}
     </span>
   );
 }
 
-function MagneticCta({
-  to,
-  color,
-  label,
-}: {
-  to: string;
-  color: string;
-  label: string;
-}) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = e.clientX - r.left - r.width / 2;
-    const y = e.clientY - r.top - r.height / 2;
-    el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-  };
-  const onLeave = () => {
-    if (ref.current) ref.current.style.transform = "translate(0,0)";
-  };
-  return (
-    <Link
-      to={to}
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform duration-200 ease-out will-change-transform sm:h-10 sm:px-5 sm:text-[13px]"
-      style={{ color }}
-    >
-      {label}
-      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-    </Link>
-  );
-}
 
 export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props) {
   const Icon = ICONS[wantedType];
   const solid = SOLID[wantedType];
+  const accent = ACCENT_BY_TYPE[wantedType];
   const wantedLabel = LABEL[wantedType];
   const [open, setOpen] = useState(false);
 
@@ -177,24 +104,24 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
         aria-label={`${wantedLabel} subscription required`}
       >
         <div className="relative mx-auto flex w-full max-w-6xl items-center gap-2.5 px-3 py-2 sm:gap-4 sm:px-6 sm:py-2.5">
-          {/* Lock badge with scanline */}
-          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
-            <span aria-hidden className="scanline-overlay" />
-            <Lock className="relative h-4 w-4" strokeWidth={2.5} />
+          {/* Lock badge */}
+          <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15 sm:flex">
+            <Lock className="h-4 w-4" strokeWidth={2.5} />
           </span>
 
-          {/* Single-line copy */}
+          {/* Single-line copy — clean white/cream */}
           <div className="min-w-0 flex-1 truncate" style={{ color: CREAM }}>
-            <h3 className="truncate font-display text-[13.5px] font-bold leading-tight tracking-tight sm:text-[15px]">
+            <h3 className="truncate font-display text-[13.5px] font-medium leading-tight tracking-tight sm:text-[15px]">
               <Key>One subscription</Key> · entire <Key>{wantedLabel}</Key> library
             </h3>
           </div>
 
-          {/* See what's included — compact trigger */}
+          {/* See what's included — colored to match IELTS type */}
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="group hidden shrink-0 items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.08em] text-white/90 ring-1 ring-white/20 hover:bg-white/15 sm:inline-flex"
+            className="group hidden shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-white transition-opacity hover:opacity-90 sm:inline-flex"
+            style={{ backgroundColor: accent }}
           >
             What's included
             <Maximize2 className="h-3 w-3 transition-transform group-hover:scale-110" />
@@ -203,13 +130,21 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             type="button"
             aria-label="What's included"
             onClick={() => setOpen(true)}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 sm:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white sm:hidden"
+            style={{ backgroundColor: accent }}
           >
             <Maximize2 className="h-4 w-4" />
           </button>
 
-          {/* Magnetic CTA */}
-          <MagneticCta to={ctaTo} color={solid} label={ctaText} />
+          {/* CTA — colored to match IELTS type */}
+          <Link
+            to={ctaTo}
+            className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-3.5 text-[12px] font-extrabold tracking-tight text-white shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-10 sm:px-5 sm:text-[13px]"
+            style={{ backgroundColor: accent }}
+          >
+            {ctaText}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
 
