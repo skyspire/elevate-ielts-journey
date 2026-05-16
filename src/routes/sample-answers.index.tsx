@@ -835,7 +835,7 @@ function NumberedTile({
       <div className="flex min-w-0 flex-1 items-center px-4 py-5 sm:px-5">
         <p
           className="font-display font-black leading-snug tracking-tight"
-          style={{ color: "oklch(0.42 0.10 165)", fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+          style={{ color: "oklch(0.28 0.01 250)", fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
         >
           {label}
         </p>
