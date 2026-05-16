@@ -715,6 +715,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
   const [mode, setMode] = useState<Mode>("general");
   const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
   const [catId, setCatId] = useState<string>(cats[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCatId((mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS)[0].id);
