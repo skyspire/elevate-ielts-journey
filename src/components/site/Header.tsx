@@ -37,6 +37,7 @@ type ResourceLink =
   | "/predictions"
   | "/ebooks"
   | "/writing-samples"
+  | "/sample-answers"
   | "/vocabulary";
 
 type ResourceItem = {
