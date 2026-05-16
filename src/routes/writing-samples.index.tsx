@@ -134,6 +134,7 @@ function WritingSamplesPage() {
   const fallbackCategories = categoriesByModuleTask[module]["task1"];
   const categories = task ? categoriesByModuleTask[module][task] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   // Reset category when task changes
   const onTaskChange = (next: Task) => {
