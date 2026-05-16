@@ -912,13 +912,18 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
     <div className="mt-10">
       <SectionEyebrow accent={accent} label="Speaking" />
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Pill active={mode === "general"} accent={accent} onClick={() => setMode("general")}>
-          General (Part 1 & 3)
-        </Pill>
-        <Pill active={mode === "cuecards"} accent={accent} onClick={() => setMode("cuecards")}>
-          Cue Cards (Part 2)
-        </Pill>
+      {/* Format compass toggle (pic-2 style) */}
+      <div className="mt-6">
+        <MiniCompassToggle
+          options={[
+            { id: "general", label: "General (Part 1 & 3)" },
+            { id: "cuecards", label: "Cue Cards (Part 2)" },
+          ] as const}
+          value={mode}
+          onChange={(v) => setMode(v)}
+          accent={accent}
+          caption="Pick format"
+        />
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
