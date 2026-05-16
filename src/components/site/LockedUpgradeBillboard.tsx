@@ -83,10 +83,10 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
   const features = [
     { icon: PenLine, label: "Writing Task 1", color: ACCENTS.amber, desc: "Every real prompt + Band 9 model answers" },
     { icon: BookOpen, label: "Reading", color: ACCENTS.sky, desc: "Full passages, all question types, explained" },
-    { icon: FileText, label: "Ebooks library", color: ACCENTS.emerald, desc: "Strategy & vocabulary PDFs you can read in-app" },
-    { icon: CalendarDays, label: "Recent exams", color: ACCENTS.pink, desc: "Verified questions reported by real test-takers" },
-    { icon: Sparkles, label: "Weekly predictions", color: ACCENTS.violet, desc: "Fresh forecasts every Saturday by our IELTS specialists" },
-    { icon: Icon, label: "Sample answers", color: ACCENTS.lime, desc: `${wantedLabel}-specific model responses, fully annotated` },
+    { icon: FileText, label: "Ebooks library", color: ACCENTS.sage, desc: "Strategy & vocabulary PDFs you can read in-app" },
+    { icon: CalendarDays, label: "Recent exams", color: ACCENTS.rose, desc: "Verified questions reported by real test-takers" },
+    { icon: Sparkles, label: "Weekly predictions", color: ACCENTS.clay, desc: "Fresh forecasts every Saturday by our IELTS specialists" },
+    { icon: Icon, label: "Sample answers", color: ACCENTS.sand, desc: `${wantedLabel}-specific model responses, fully annotated` },
   ];
 
   return (
