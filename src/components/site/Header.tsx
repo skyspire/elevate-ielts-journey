@@ -37,6 +37,7 @@ type ResourceLink =
   | "/predictions"
   | "/ebooks"
   | "/writing-samples"
+  | "/sample-answers"
   | "/vocabulary";
 
 type ResourceItem = {
@@ -74,7 +75,7 @@ const resourceItems: ResourceItem[] = [
   },
   {
     label: "Band 8+ Sample Answers",
-    to: "/writing-samples",
+    to: "/sample-answers",
     description: "Annotated Writing & Speaking models with expert notes.",
     icon: PenLine,
     accent: "oklch(0.55 0.14 165)",

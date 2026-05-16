@@ -26,6 +26,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WritingSamplesIndexRouteImport } from './routes/writing-samples.index'
 import { Route as SpeakingSamplesIndexRouteImport } from './routes/speaking-samples.index'
+import { Route as SampleAnswersIndexRouteImport } from './routes/sample-answers.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
@@ -148,6 +149,11 @@ const WritingSamplesIndexRoute = WritingSamplesIndexRouteImport.update({
 const SpeakingSamplesIndexRoute = SpeakingSamplesIndexRouteImport.update({
   id: '/speaking-samples/',
   path: '/speaking-samples/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SampleAnswersIndexRoute = SampleAnswersIndexRouteImport.update({
+  id: '/sample-answers/',
+  path: '/sample-answers/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -394,6 +400,7 @@ export interface FileRoutesByFullPath {
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/sample-answers/': typeof SampleAnswersIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -450,6 +457,7 @@ export interface FileRoutesByTo {
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin': typeof AdminIndexRoute
+  '/sample-answers': typeof SampleAnswersIndexRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -508,6 +516,7 @@ export interface FileRoutesById {
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/sample-answers/': typeof SampleAnswersIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
   '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
@@ -567,6 +576,7 @@ export interface FileRouteTypes {
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin/'
+    | '/sample-answers/'
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
@@ -623,6 +633,7 @@ export interface FileRouteTypes {
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin'
+    | '/sample-answers'
     | '/speaking-samples'
     | '/writing-samples'
     | '/speaking-samples/$category/$topic'
@@ -680,6 +691,7 @@ export interface FileRouteTypes {
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
     | '/admin/'
+    | '/sample-answers/'
     | '/speaking-samples/'
     | '/writing-samples/'
     | '/speaking-samples/$category/$topic'
@@ -709,6 +721,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
+  SampleAnswersIndexRoute: typeof SampleAnswersIndexRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
   SpeakingSamplesCategoryTopicRoute: typeof SpeakingSamplesCategoryTopicRoute
@@ -833,6 +846,13 @@ declare module '@tanstack/react-router' {
       path: '/speaking-samples'
       fullPath: '/speaking-samples/'
       preLoaderRoute: typeof SpeakingSamplesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sample-answers/': {
+      id: '/sample-answers/'
+      path: '/sample-answers'
+      fullPath: '/sample-answers/'
+      preLoaderRoute: typeof SampleAnswersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -1222,6 +1242,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
+  SampleAnswersIndexRoute: SampleAnswersIndexRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
   SpeakingSamplesCategoryTopicRoute: SpeakingSamplesCategoryTopicRoute,
@@ -1229,12 +1250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
