@@ -182,6 +182,10 @@ function SampleAnswersHubPage() {
   const ownsAcademic = purchased.includes("academic");
   const ownsGeneral = purchased.includes("general");
 
+  // SSR-safe: render a stable default until mounted to avoid hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // On mount, default the compass to the user's purchased type.
   useEffect(() => {
     if (search.module) return;
@@ -190,7 +194,7 @@ function SampleAnswersHubPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
-  const module: IeltsType = search.module ?? activeType;
+  const module: IeltsType = search.module ?? (mounted ? activeType : "academic");
 
   useEffect(() => {
     if (search.module && search.module !== activeType) select(search.module);
