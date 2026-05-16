@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   GraduationCap,
@@ -134,6 +134,7 @@ function WritingSamplesPage() {
   const fallbackCategories = categoriesByModuleTask[module]["task1"];
   const categories = task ? categoriesByModuleTask[module][task] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   // Reset category when task changes
   const onTaskChange = (next: Task) => {
@@ -275,6 +276,7 @@ function WritingSamplesPage() {
               onLeft={() => onTaskChange("task1")}
               onRight={() => onTaskChange("task2")}
               accentColor={module === "academic" ? "oklch(0.50 0.18 255)" : "oklch(0.55 0.18 28)"}
+              triggerRef={triggerRef}
               pills={categories.map((c) => ({
                 id: c.id,
                 label: c.label,
@@ -299,7 +301,7 @@ function WritingSamplesPage() {
             {task && (
               <>
                 {/* Step 2 — Category chips (monochrome + single module accent on active) */}
-                <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
+                <div ref={triggerRef} className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
                   {categories.map((c) => {
                     const active = categoryId === c.id;
                     const Icon = c.icon;

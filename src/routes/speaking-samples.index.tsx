@@ -99,6 +99,7 @@ function SpeakingSamplesPage() {
   const fallbackCategories = categoriesByMode["general"];
   const categories = mode ? categoriesByMode[mode] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   // Flip Expansion state
   const [flipOpen, setFlipOpen] = useState(false);
@@ -238,6 +239,7 @@ function SpeakingSamplesPage() {
               onLeft={() => onModeChange("general")}
               onRight={() => onModeChange("cuecards")}
               accentColor="oklch(0.50 0.10 165)"
+              triggerRef={triggerRef}
               pills={categories.map((c) => ({
                 id: c.id,
                 label: c.label,
@@ -256,7 +258,7 @@ function SpeakingSamplesPage() {
           {mode && (
             <>
               {/* Step 2 — Theme chips */}
-              <div className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
+              <div ref={triggerRef} className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
                 {categories.map((c) => {
                   const active = categoryId === c.id;
                   const Icon = c.icon;

@@ -628,6 +628,7 @@ function WritingInline({
   const task1Cats = ieltsType === "academic" ? WRITING_TASK1_ACADEMIC : WRITING_TASK1_GENERAL;
   const cats = task === "task1" ? task1Cats : WRITING_TASK2;
   const [catId, setCatId] = useState<string>(cats[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCatId((task === "task1" ? task1Cats : WRITING_TASK2)[0].id);
@@ -645,6 +646,7 @@ function WritingInline({
         onLeft={() => setTask("task1")}
         onRight={() => setTask("task2")}
         accentColor={accent.solid}
+        triggerRef={triggerRef}
         pills={cats.map((c) => ({
           id: c.id,
           label: c.label,
@@ -655,27 +657,29 @@ function WritingInline({
 
       <SectionEyebrow accent={accent} label={`Writing · ${ieltsType === "academic" ? "Academic" : "General Training"}`} />
 
-      {/* Task compass toggle (pic-2 style) */}
-      <div className="mt-6">
-        <MiniCompassToggle
-          options={[
-            { id: "task1", label: "Task 1" },
-            { id: "task2", label: "Task 2" },
-          ] as const}
-          value={task}
-          onChange={(v) => setTask(v)}
-          accent={accent}
-          caption="Pick task"
-        />
-      </div>
+      <div ref={triggerRef}>
+        {/* Task compass toggle (pic-2 style) */}
+        <div className="mt-6">
+          <MiniCompassToggle
+            options={[
+              { id: "task1", label: "Task 1" },
+              { id: "task2", label: "Task 2" },
+            ] as const}
+            value={task}
+            onChange={(v) => setTask(v)}
+            accent={accent}
+            caption="Pick task"
+          />
+        </div>
 
-      {/* Category chips — centered, equal-width */}
-      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-        {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
-            {c.label}
-          </Pill>
-        ))}
+        {/* Category chips — centered, equal-width */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          {cats.map((c) => (
+            <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
+              {c.label}
+            </Pill>
+          ))}
+        </div>
       </div>
 
       {/* Questions grid — numbered tiles */}
@@ -711,6 +715,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
   const [mode, setMode] = useState<Mode>("general");
   const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
   const [catId, setCatId] = useState<string>(cats[0].id);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCatId((mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS)[0].id);
@@ -727,6 +732,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         onLeft={() => setMode("general")}
         onRight={() => setMode("cuecards")}
         accentColor={accent.solid}
+        triggerRef={triggerRef}
         pills={cats.map((c) => ({
           id: c.id,
           label: c.label,
@@ -737,26 +743,28 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
 
       <SectionEyebrow accent={accent} label="Speaking" />
 
-      {/* Format compass toggle (pic-2 style) */}
-      <div className="mt-6">
-        <MiniCompassToggle
-          options={[
-            { id: "general", label: "General (Part 1 & 3)" },
-            { id: "cuecards", label: "Cue Cards (Part 2)" },
-          ] as const}
-          value={mode}
-          onChange={(v) => setMode(v)}
-          accent={accent}
-          caption="Pick format"
-        />
-      </div>
+      <div ref={triggerRef}>
+        {/* Format compass toggle (pic-2 style) */}
+        <div className="mt-6">
+          <MiniCompassToggle
+            options={[
+              { id: "general", label: "General (Part 1 & 3)" },
+              { id: "cuecards", label: "Cue Cards (Part 2)" },
+            ] as const}
+            value={mode}
+            onChange={(v) => setMode(v)}
+            accent={accent}
+            caption="Pick format"
+          />
+        </div>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-        {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
-            {c.label}
-          </Pill>
-        ))}
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          {cats.map((c) => (
+            <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
+              {c.label}
+            </Pill>
+          ))}
+        </div>
       </div>
 
       {topics.length === 0 ? (

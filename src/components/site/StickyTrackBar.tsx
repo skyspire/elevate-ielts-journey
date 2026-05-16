@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type RefObject } from "react";
 
 export type StickyPill = {
   id: string;
@@ -24,6 +24,7 @@ export function StickyTrackBar({
   accentColor,
   headerOffset = 68,
   showAfter = 260,
+  triggerRef,
 }: {
   leftLabel: string;
   rightLabel: string;
@@ -34,23 +35,29 @@ export function StickyTrackBar({
   accentColor: string;
   headerOffset?: number;
   showAfter?: number;
+  /** When provided, the bar appears only once the bottom of this element has scrolled past the sticky header. */
+  triggerRef?: RefObject<HTMLElement | null>;
 }) {
   const [show, setShow] = useState(false);
   const [topOffset, setTopOffset] = useState(headerOffset);
 
   useEffect(() => {
-    // Measure the bottom edge of the topmost sticky chrome (OfferBar + Header)
-    // so the track bar sits flush under it even when the promo banner is shown.
     const measure = () => {
       let bottom = headerOffset;
       const header = document.querySelector("header");
       if (header) {
         const rect = header.getBoundingClientRect();
-        // Only trust it when the header is actually pinned near the top.
         if (rect.top <= 4) bottom = Math.max(bottom, rect.bottom);
       }
       setTopOffset(bottom);
-      setShow(window.scrollY > showAfter);
+
+      if (triggerRef?.current) {
+        const t = triggerRef.current.getBoundingClientRect();
+        // Show when the trigger element's bottom edge has scrolled above the sticky chrome.
+        setShow(t.bottom < bottom - 2);
+      } else {
+        setShow(window.scrollY > showAfter);
+      }
     };
     measure();
     window.addEventListener("scroll", measure, { passive: true });
@@ -59,7 +66,7 @@ export function StickyTrackBar({
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
     };
-  }, [showAfter, headerOffset]);
+  }, [showAfter, headerOffset, triggerRef]);
 
   const leftActive = needleDeg < 0;
   const rightActive = needleDeg > 0;
