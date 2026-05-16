@@ -720,6 +720,21 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
 
   return (
     <div className="mt-10">
+      <StickyTrackBar
+        leftLabel="General"
+        rightLabel="Cue Cards"
+        needleDeg={mode === "general" ? -90 : 90}
+        onLeft={() => setMode("general")}
+        onRight={() => setMode("cuecards")}
+        accentColor={accent.solid}
+        pills={cats.map((c) => ({
+          id: c.id,
+          label: c.label,
+          active: catId === c.id,
+          onClick: () => setCatId(c.id),
+        }))}
+      />
+
       <SectionEyebrow accent={accent} label="Speaking" />
 
       {/* Format compass toggle (pic-2 style) */}
