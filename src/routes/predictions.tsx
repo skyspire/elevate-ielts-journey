@@ -8,11 +8,24 @@ import {
   Flame,
   TrendingUp,
   Lightbulb,
+  Lock,
+  ChevronDown,
+  Check,
+  X,
+  Pencil,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import {
+  usePredictionAnswer,
+  savePredictionAnswer,
+  answerParagraphs,
+  type PredictionAnswer,
+} from "@/lib/admin/predictions-answers";
+import { useSession, canEdit } from "@/lib/admin/auth";
 
 export const Route = createFileRoute("/predictions")({
   head: () => ({
