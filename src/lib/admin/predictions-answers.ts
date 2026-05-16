@@ -43,19 +43,17 @@ export function savePredictionAnswer(
   patch: PredictionAnswer | null,
 ) {
   const slug = predictionSlug(title);
-  setCmsSection<PredictionsAnswers>(
+  const prev = getSection<PredictionsAnswers>(
     PREDICTIONS_ANSWERS_KEY,
     PREDICTIONS_ANSWERS_DEFAULT,
-    (prev) => {
-      const next = { ...prev };
-      if (patch == null || !patch.body?.trim()) {
-        delete next[slug];
-      } else {
-        next[slug] = { ...patch, updatedAt: new Date().toISOString() };
-      }
-      return next;
-    },
   );
+  const next = { ...prev };
+  if (patch == null || !patch.body?.trim()) {
+    delete next[slug];
+  } else {
+    next[slug] = { ...patch, updatedAt: new Date().toISOString() };
+  }
+  setSection<PredictionsAnswers>(PREDICTIONS_ANSWERS_KEY, next);
 }
 
 /** Split body into paragraphs on blank lines. */
