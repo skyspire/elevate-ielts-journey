@@ -369,21 +369,17 @@ function SampleAnswersHubPage() {
             </div>
           ) : null}
 
-          {/* Module tiles — flat 4-up strip */}
+          {/* Module tabs — editorial underline style (pic-1) */}
           <div
-            className={`mt-12 grid grid-cols-2 gap-3 sm:mt-14 sm:grid-cols-4 sm:gap-4 transition-[filter,opacity] duration-300 ${
+            className={`mt-12 sm:mt-14 transition-[filter,opacity] duration-300 ${
               typeLocked ? "blur-[2px] opacity-80" : ""
             }`}
           >
-            {MODULE_CARDS.map((m) => (
-              <ModuleTile
-                key={m.id}
-                module={m}
-                accent={accent}
-                active={selected === m.id}
-                onClick={() => onSelectModule(m.id)}
-              />
-            ))}
+            <ModuleTabs
+              value={selected}
+              accent={accent}
+              onChange={onSelectModule}
+            />
           </div>
 
           {/* Inline content reveal */}
