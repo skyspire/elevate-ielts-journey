@@ -47,11 +47,54 @@ const ACCENTS = {
 // Cream body for ambient readability on dark cards.
 const CREAM = "#FFF6E0";
 
-function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  // Shimmer-sweep keyword on warm dark cards.
+// Kinetic scramble: briefly cycles letters then settles on the target word.
+function useScramble(target: string, intervalMs = 8000) {
+  const [text, setText] = useState(target);
+  useEffect(() => {
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+    let raf = 0;
+    let timer = 0;
+    const run = () => {
+      const total = 22; // frames
+      let frame = 0;
+      const tick = () => {
+        frame++;
+        const progress = frame / total;
+        const out = target
+          .split("")
+          .map((ch, i) => {
+            if (ch === " ") return " ";
+            const settled = i / target.length < progress;
+            return settled ? ch : CHARS[Math.floor(Math.random() * CHARS.length)];
+          })
+          .join("");
+        setText(out);
+        if (frame < total) {
+          raf = window.requestAnimationFrame(tick);
+        } else {
+          setText(target);
+          timer = window.setTimeout(run, intervalMs);
+        }
+      };
+      raf = window.requestAnimationFrame(tick);
+    };
+    timer = window.setTimeout(run, 1200);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.clearTimeout(timer);
+    };
+  }, [target, intervalMs]);
+  return text;
+}
+
+function Key({ children, className = "" }: { children: string; className?: string }) {
+  const text = useScramble(children);
   return (
-    <span className={`text-shimmer-white font-black ${className}`}>
-      {children}
+    <span
+      className={`font-mono font-black tracking-tight text-white ${className}`}
+      style={{ textShadow: "0 0 12px rgba(255,255,255,0.25)" }}
+    >
+      {text}
     </span>
   );
 }
