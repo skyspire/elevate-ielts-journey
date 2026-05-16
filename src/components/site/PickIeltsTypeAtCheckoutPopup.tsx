@@ -79,7 +79,11 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
       onClose();
       return;
     }
-    setUserPlanType(user.id, plan);
+    if (plan === "both") {
+      setUserPlanType(user.id, "both");
+    } else {
+      addPurchasedType(user.id, plan);
+    }
     toast.success(
       plan === "both"
         ? "All Access activated — both IELTS types unlocked."
