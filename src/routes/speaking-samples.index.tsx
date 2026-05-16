@@ -239,6 +239,7 @@ function SpeakingSamplesPage() {
               onLeft={() => onModeChange("general")}
               onRight={() => onModeChange("cuecards")}
               accentColor="oklch(0.50 0.10 165)"
+              triggerRef={triggerRef}
               pills={categories.map((c) => ({
                 id: c.id,
                 label: c.label,
