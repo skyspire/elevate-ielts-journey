@@ -295,9 +295,10 @@ function WritingSamplesPage() {
                         type="button"
                         onClick={() => setCategoryId(c.id)}
                         aria-pressed={active}
-                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                        className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
                           active ? activeClasses : restingClasses
                         }`}
+                        style={{ minWidth: 120 }}
                       >
                         <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
                         {c.label}
