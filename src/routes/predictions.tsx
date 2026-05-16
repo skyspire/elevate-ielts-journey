@@ -1117,15 +1117,7 @@ function PredictionsPage() {
                     <div
                       key={tier.key}
                       data-tier-section={tier.key}
-                      className="relative -mx-3 rounded-3xl px-3 py-6 transition-all duration-700 ease-out sm:-mx-6 sm:px-6 sm:py-8"
-                      style={{
-                        background: isActive
-                          ? `radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in oklab, ${tier.tint} 95%, transparent) 0%, color-mix(in oklab, ${tier.tint} 70%, transparent) 60%, color-mix(in oklab, ${tier.tint} 45%, transparent) 100%)`
-                          : "transparent",
-                        boxShadow: isActive
-                          ? `inset 0 1px 0 0 color-mix(in oklab, ${tier.accent} 18%, transparent), 0 30px 60px -40px color-mix(in oklab, ${tier.accent} 35%, transparent)`
-                          : "none",
-                      }}
+                      className="relative -mx-3 rounded-3xl px-3 py-6 sm:-mx-6 sm:px-6 sm:py-8"
                     >
                       <TierSection tier={tier} items={items} />
                     </div>
