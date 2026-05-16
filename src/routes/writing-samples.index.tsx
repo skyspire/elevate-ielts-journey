@@ -21,6 +21,7 @@ import {
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
+import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
 import { TypeGate } from "@/components/site/TypeGate";
 
