@@ -52,46 +52,6 @@ const ACCENTS = {
 // Cream body for ambient readability on dark cards.
 const CREAM = "#FFF6E0";
 
-// Kinetic scramble: briefly cycles letters then settles on the target word.
-function useScramble(target: string, intervalMs = 8000) {
-  const [text, setText] = useState(target);
-  useEffect(() => {
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
-    let raf = 0;
-    let timer = 0;
-    const run = () => {
-      const total = 22; // frames
-      let frame = 0;
-      const tick = () => {
-        frame++;
-        const progress = frame / total;
-        const out = target
-          .split("")
-          .map((ch, i) => {
-            if (ch === " ") return " ";
-            const settled = i / target.length < progress;
-            return settled ? ch : CHARS[Math.floor(Math.random() * CHARS.length)];
-          })
-          .join("");
-        setText(out);
-        if (frame < total) {
-          raf = window.requestAnimationFrame(tick);
-        } else {
-          setText(target);
-          timer = window.setTimeout(run, intervalMs);
-        }
-      };
-      raf = window.requestAnimationFrame(tick);
-    };
-    timer = window.setTimeout(run, 1200);
-    return () => {
-      window.cancelAnimationFrame(raf);
-      window.clearTimeout(timer);
-    };
-  }, [target, intervalMs]);
-  return text;
-}
-
 function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <span className={`font-bold text-white ${className}`}>
