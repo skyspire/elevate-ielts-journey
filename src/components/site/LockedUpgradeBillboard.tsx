@@ -92,7 +92,7 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
   return (
     <>
       {/* spacer so fixed bar never covers content */}
-      <div aria-hidden className="h-28 sm:h-24" />
+      <div aria-hidden className="h-14 sm:h-16" />
 
       <div
         className="fixed inset-x-0 bottom-0 z-[90] text-white shadow-[0_-12px_40px_-12px_rgba(0,0,0,0.45)]"
@@ -100,54 +100,45 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
         role="region"
         aria-label={`${wantedLabel} subscription required`}
       >
-        <div className="relative mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-3 sm:gap-5 sm:px-6 sm:py-4">
+        <div className="relative mx-auto flex w-full max-w-6xl items-center gap-2.5 px-3 py-2 sm:gap-4 sm:px-6 sm:py-2.5">
           {/* Lock badge */}
-          <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 sm:flex">
-            <Lock className="h-5 w-5" strokeWidth={2.5} />
+          <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
+            <Lock className="h-4 w-4" strokeWidth={2.5} />
           </span>
 
-          {/* Copy — cream body, bright white keywords */}
-          <div className="min-w-0 flex-1" style={{ color: CREAM }}>
-            <h3 className="font-display text-[15px] font-bold leading-snug tracking-tight sm:text-[17px] md:text-[18px]">
-              <Key>One subscription.</Key> The <Key>entire {wantedLabel}</Key> library.
+          {/* Single-line copy */}
+          <div className="min-w-0 flex-1 truncate" style={{ color: CREAM }}>
+            <h3 className="truncate font-display text-[13.5px] font-bold leading-tight tracking-tight sm:text-[15px]">
+              <Key>One subscription</Key> · entire <Key>{wantedLabel}</Key> library
             </h3>
-            <p className="mt-1 hidden text-[12.5px] font-medium leading-snug sm:block sm:text-[13px]">
-              {currentType ? (
-                <>
-                  Not just one page or module — <Key>every {wantedLabel} resource</Key> is sold
-                  separately. Same pricing as your current plan.
-                </>
-              ) : (
-                <>
-                  Not a single page. Not a single module. <Key>Everything {wantedLabel}</Key> —
-                  Writing, Reading, Ebooks, Exams &amp; Predictions.
-                </>
-              )}
-            </p>
-
-            {/* See what's included — animated trigger */}
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="group mt-2 inline-flex items-center gap-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-white/90 underline-offset-4 hover:underline sm:text-[12px]"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-              </span>
-              See what's included
-              <Maximize2 className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
-            </button>
           </div>
+
+          {/* See what's included — compact trigger */}
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="group hidden shrink-0 items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.08em] text-white/90 ring-1 ring-white/20 hover:bg-white/15 sm:inline-flex"
+          >
+            What's included
+            <Maximize2 className="h-3 w-3 transition-transform group-hover:scale-110" />
+          </button>
+          <button
+            type="button"
+            aria-label="What's included"
+            onClick={() => setOpen(true)}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 sm:hidden"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </button>
 
           {/* CTA */}
           <Link
             to={ctaTo}
-            className="group inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
+            className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-10 sm:px-5 sm:text-[13px]"
             style={{ color: solid }}
           >
             {ctaText}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
