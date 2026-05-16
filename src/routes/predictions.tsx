@@ -8,11 +8,24 @@ import {
   Flame,
   TrendingUp,
   Lightbulb,
+  Lock,
+  ChevronDown,
+  Check,
+  X,
+  Pencil,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import {
+  usePredictionAnswer,
+  savePredictionAnswer,
+  answerParagraphs,
+  type PredictionAnswer,
+} from "@/lib/admin/predictions-answers";
+import { useSession, canEdit } from "@/lib/admin/auth";
 
 export const Route = createFileRoute("/predictions")({
   head: () => ({
@@ -1494,9 +1507,15 @@ function TierSection({
           </div>
         </aside>
 
-        <div className="divide-y divide-border/50 border-y border-border/50">
-          {items.map((p) => (
-            <PredictionRow key={p.title} prediction={p} tier={tier} archived={archived} />
+        <div className="space-y-3 sm:space-y-3.5">
+          {items.map((p, i) => (
+            <PredictionRow
+              key={p.title}
+              prediction={p}
+              tier={tier}
+              archived={archived}
+              index={i + 1}
+            />
           ))}
         </div>
       </div>
@@ -1523,38 +1542,291 @@ function PredictionRow({
   prediction,
   tier,
   archived = false,
+  index,
 }: {
   prediction: Prediction;
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
   archived?: boolean;
+  index: number;
 }) {
   const appearances = prediction.appearances ?? tierDefaultAppearances(prediction.tier);
   const accent = tier.accent;
+  const answer = usePredictionAnswer(prediction.title);
+  const { user } = useSession();
+  const isAdmin = canEdit(user);
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const hasAnswer = !!answer?.body?.trim();
+  const num = String(index).padStart(2, "0");
 
   return (
     <article
-      className="group relative flex items-baseline gap-3 px-1 py-3.5 transition-colors hover:bg-foreground/[0.025] sm:gap-4 sm:py-4"
+      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-border hover:shadow-[0_8px_28px_-12px_rgba(0,0,0,0.18)]"
       style={{
-        opacity: archived ? 0.72 : 1,
-        filter: archived ? "saturate(0.78)" : undefined,
+        opacity: archived ? 0.78 : 1,
+        filter: archived ? "saturate(0.82)" : undefined,
       }}
     >
-      <p className="min-w-0 flex-1 font-display text-[14.5px] font-semibold leading-snug tracking-tight text-foreground sm:text-[15.5px]">
-        {prediction.title}
-        <span
-          className="ml-1.5 whitespace-nowrap text-[12.5px] font-semibold sm:text-[13px]"
-          style={{ color: `color-mix(in oklab, ${accent} 78%, transparent)` }}
-        >
-          · appeared {appearances} times
-        </span>
-      </p>
-
-      {/* Hover accent — left edge whisker in tier color */}
+      {/* Colored left rail */}
       <span
         aria-hidden
-        className="pointer-events-none absolute left-0 top-1/2 h-8 w-[3px] -translate-y-1/2 origin-left scale-y-0 rounded-r transition-transform duration-300 group-hover:scale-y-100"
+        className="pointer-events-none absolute left-0 top-0 h-full w-[3px]"
         style={{ background: accent }}
       />
+
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-start gap-4 px-4 py-4 text-left sm:gap-6 sm:px-6 sm:py-5"
+      >
+        {/* Large editorial numeral */}
+        <span
+          className="shrink-0 font-display text-[40px] font-black leading-none tracking-tight tabular-nums sm:text-[52px]"
+          style={{ color: `color-mix(in oklab, ${accent} 28%, transparent)` }}
+          aria-hidden
+        >
+          {num}
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground sm:text-[16.5px]">
+            {prediction.title}
+          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-bold uppercase tracking-[0.12em] text-foreground/55">
+            <span style={{ color: `color-mix(in oklab, ${accent} 80%, var(--foreground))` }}>
+              {prediction.type}
+            </span>
+            <span aria-hidden className="text-foreground/25">·</span>
+            <span>Appeared {appearances}×</span>
+            {hasAnswer && (
+              <>
+                <span aria-hidden className="text-foreground/25">·</span>
+                <span
+                  className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px]"
+                  style={{
+                    background: `color-mix(in oklab, ${accent} 14%, transparent)`,
+                    color: accent,
+                  }}
+                >
+                  <Check className="h-3 w-3" /> Model answer
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <ChevronDown
+          className={`mt-1 h-5 w-5 shrink-0 text-foreground/40 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {open && (
+        <div className="border-t border-border/60 bg-foreground/[0.015] px-4 pb-5 pt-4 sm:px-6">
+          {isAdmin && editing ? (
+            <AnswerEditor
+              title={prediction.title}
+              initial={answer}
+              onClose={() => setEditing(false)}
+            />
+          ) : (
+            <AnswerView
+              answer={answer}
+              accent={accent}
+              isAdmin={isAdmin}
+              onEdit={() => setEditing(true)}
+            />
+          )}
+        </div>
+      )}
     </article>
+  );
+}
+
+/* ---------------------- Answer view (preview + paywall) ----------------------- */
+
+function AnswerView({
+  answer,
+  accent,
+  isAdmin,
+  onEdit,
+}: {
+  answer?: PredictionAnswer;
+  accent: string;
+  isAdmin: boolean;
+  onEdit: () => void;
+}) {
+  if (!answer?.body?.trim()) {
+    return (
+      <div className="rounded-xl border border-dashed border-border/70 bg-card p-5 text-center">
+        <p className="text-[13px] font-medium text-foreground/60">
+          Model answer coming soon — our IELTS specialists are finalising it.
+        </p>
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={onEdit}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-background"
+          >
+            <Pencil className="h-3 w-3" /> Add answer
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  const paragraphs = answerParagraphs(answer.body);
+  const [first, ...rest] = paragraphs;
+
+  return (
+    <div>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        {answer.bandScore && (
+          <span
+            className="inline-flex items-center rounded-full px-2.5 py-1 text-[10.5px] font-extrabold uppercase tracking-[0.12em]"
+            style={{
+              background: `color-mix(in oklab, ${accent} 18%, transparent)`,
+              color: accent,
+            }}
+          >
+            {answer.bandScore}
+          </span>
+        )}
+        {answer.note && (
+          <p className="text-[12px] italic text-foreground/60">{answer.note}</p>
+        )}
+        <div className="ml-auto" />
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={onEdit}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.1em] text-foreground/70 hover:bg-foreground/5"
+          >
+            <Pencil className="h-3 w-3" /> Edit
+          </button>
+        )}
+      </div>
+
+      {/* Free preview — first paragraph */}
+      <p className="whitespace-pre-wrap text-[14px] leading-relaxed text-foreground/85 sm:text-[14.5px]">
+        {first}
+      </p>
+
+      {rest.length > 0 && (
+        <div className="relative mt-3">
+          {/* Blurred teaser of next paragraph */}
+          <p
+            aria-hidden
+            className="pointer-events-none select-none whitespace-pre-wrap text-[14px] leading-relaxed text-foreground/85 blur-[5px] sm:text-[14.5px]"
+          >
+            {rest[0]?.slice(0, 380)}
+          </p>
+
+          {/* Paywall overlay */}
+          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-end gap-3 bg-gradient-to-t from-card via-card/95 to-card/0 px-3 pb-1 pt-12 text-center">
+            <span
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full"
+              style={{
+                background: `color-mix(in oklab, ${accent} 18%, transparent)`,
+                color: accent,
+              }}
+            >
+              <Lock className="h-4 w-4" strokeWidth={2.5} />
+            </span>
+            <p className="max-w-md text-[12.5px] font-medium text-foreground/70">
+              Unlock the full Band 9 answer + structure, vocabulary and tips.
+            </p>
+            <Link
+              to="/pricing"
+              className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-extrabold tracking-tight text-white shadow-md transition-transform hover:-translate-y-0.5"
+              style={{ background: accent }}
+            >
+              Unlock full answer
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------------------- Admin inline editor ----------------------- */
+
+function AnswerEditor({
+  title,
+  initial,
+  onClose,
+}: {
+  title: string;
+  initial?: PredictionAnswer;
+  onClose: () => void;
+}) {
+  const [body, setBody] = useState(initial?.body ?? "");
+  const [bandScore, setBandScore] = useState(initial?.bandScore ?? "Band 9");
+  const [note, setNote] = useState(initial?.note ?? "");
+
+  const save = () => {
+    savePredictionAnswer(title, { body, bandScore, note });
+    onClose();
+  };
+  const remove = () => {
+    savePredictionAnswer(title, null);
+    onClose();
+  };
+
+  return (
+    <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <input
+          value={bandScore}
+          onChange={(e) => setBandScore(e.target.value)}
+          placeholder="Band score (e.g. Band 9)"
+          className="w-40 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-semibold text-foreground"
+        />
+        <input
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Optional note (shown above answer)"
+          className="min-w-0 flex-1 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] text-foreground"
+        />
+      </div>
+      <textarea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        rows={10}
+        placeholder="Paste the model answer here. Separate paragraphs with a blank line."
+        className="w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-[12.5px] leading-relaxed text-foreground"
+      />
+      <div className="flex items-center justify-between gap-2">
+        {initial?.body ? (
+          <button
+            type="button"
+            onClick={remove}
+            className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-destructive hover:bg-destructive/10"
+          >
+            <X className="h-3 w-3" /> Delete
+          </button>
+        ) : (
+          <span />
+        )}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/70 hover:bg-foreground/5"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={save}
+            className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-background hover:opacity-90"
+          >
+            <Check className="h-3 w-3" /> Save answer
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
