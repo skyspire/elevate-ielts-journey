@@ -9,7 +9,6 @@ import {
   Briefcase,
   Lock,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
@@ -55,7 +54,7 @@ type ModuleCard = {
   blurb: string;
   meta: string;
   icon: typeof PenLine;
-  to?: string; // existing destination
+  to?: string;
   comingSoon?: boolean;
 };
 
@@ -94,19 +93,23 @@ const MODULE_CARDS: ModuleCard[] = [
   },
 ];
 
-// Per-type accent palette — drives tile tint when that type is active.
-const TYPE_ACCENT: Record<IeltsType, { solid: string; soft: string; ring: string; chip: string }> = {
+const TYPE_ACCENT: Record<
+  IeltsType,
+  { solid: string; soft: string; ring: string; highlight: string; text: string }
+> = {
   academic: {
-    solid: "oklch(0.55 0.2 255)",
-    soft: "oklch(0.94 0.06 255)",
-    ring: "oklch(0.55 0.2 255 / 0.35)",
-    chip: "oklch(0.92 0.13 85)",
+    solid: "oklch(0.50 0.18 255)",
+    soft: "oklch(0.95 0.05 255)",
+    ring: "oklch(0.50 0.18 255 / 0.35)",
+    highlight: "oklch(0.88 0.10 250)",
+    text: "text-[oklch(0.42_0.18_255)]",
   },
   general: {
     solid: "oklch(0.55 0.18 28)",
     soft: "oklch(0.95 0.05 30)",
     ring: "oklch(0.55 0.18 28 / 0.35)",
-    chip: "oklch(0.88 0.14 30)",
+    highlight: "oklch(0.88 0.12 30)",
+    text: "text-[oklch(0.45_0.16_28)]",
   },
 };
 
@@ -119,30 +122,24 @@ function SampleAnswersHubPage() {
   const ownsAcademic = purchased.includes("academic");
   const ownsGeneral = purchased.includes("general");
 
-  // Default the toggle to a purchased type on mount (paid side unlocked by default).
+  // On mount, default the compass to the user's purchased type.
   useEffect(() => {
     if (search.module) return;
     if (purchased.length === 0) return;
-    if (!purchased.includes(activeType)) {
-      select(purchased[0]);
-    }
+    if (!purchased.includes(activeType)) select(purchased[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const module: IeltsType = search.module ?? activeType;
 
   useEffect(() => {
-    if (search.module && search.module !== activeType) {
-      select(search.module);
-    }
+    if (search.module && search.module !== activeType) select(search.module);
   }, [search.module, activeType, select]);
 
   const isAcademic = module === "academic";
   const accent = TYPE_ACCENT[module];
   const isGuest = !user;
   const ownsCurrent = isAcademic ? ownsAcademic : ownsGeneral;
-  // Locked-state: signed-in user who hasn't purchased this side. Guests stay unlocked
-  // for browsing (they get gated deeper at the answer/quota layer).
   const typeLocked = !isGuest && !ownsCurrent;
 
   const [showUpgrade, setShowUpgrade] = useState(false);
@@ -182,62 +179,83 @@ function SampleAnswersHubPage() {
 
       <main className="relative z-[1] pt-10 sm:pt-14">
         <div className="mx-auto w-full max-w-5xl px-5 sm:px-6">
-          {/* Hero */}
-          <div className="mt-4 text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-white px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.18em] text-foreground/60 shadow-soft">
-              <Sparkles className="h-3 w-3" />
-              Band 8+ Sample Answers
-            </span>
+          {/* Hero — mirrors speaking-samples */}
+          <div className="text-center">
+            <h2
+              className={`relative mt-4 inline-block font-display font-black leading-[0.95] tracking-[-0.02em] ${accent.text}`}
+              style={{ fontSize: "clamp(2.25rem, 8vw, 5rem)" }}
+            >
+              <svg
+                aria-hidden
+                viewBox="0 0 24 24"
+                className={`absolute -left-5 -top-2 h-5 w-5 sm:-left-10 sm:-top-4 sm:h-7 sm:w-7 ${accent.text} opacity-70`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 3v18M3 12h18" />
+                <circle cx="12" cy="12" r="9" />
+              </svg>
 
-            <h1 className="mt-7 font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Choose your IELTS,
+              IELTS{" "}
+              <span className="relative inline-block">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-6px] bottom-[6%] -z-10 h-[58%] -rotate-1 opacity-70"
+                  style={{
+                    backgroundColor: accent.highlight,
+                    clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)",
+                  }}
+                />
+                <span className="relative">
+                  {isAcademic ? "Academic" : "General"}
+                </span>
+
+                <svg
+                  aria-hidden
+                  viewBox="0 0 300 22"
+                  preserveAspectRatio="none"
+                  className={`absolute -bottom-3 left-0 h-3 w-full ${accent.text}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
+                </svg>
+              </span>
+            </h2>
+
+            <h1 className="mt-8 font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              Sample Answers
               <br />
-              <span className="text-foreground/55">then pick a module.</span>
+              <span className="text-foreground/55">Choose your IELTS.</span>
             </h1>
+            <p className="mx-auto mt-5 max-w-xl text-[15px] font-medium leading-relaxed text-foreground/65 sm:text-base">
+              Pick your IELTS type, then a module. We'll show you Band 8+ model
+              answers written by our qualified IELTS team.
+            </p>
+          </div>
 
-            {/* Compass toggle */}
-            <div className="mt-7 inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-white p-1 shadow-soft">
-              {(["academic", "general"] as const).map((t) => {
-                const active = module === t;
-                const owns = t === "academic" ? ownsAcademic : ownsGeneral;
-                const showLock = !isGuest && !owns;
-                const Icon = t === "academic" ? GraduationCap : Briefcase;
-                const tAccent = TYPE_ACCENT[t];
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => select(t)}
-                    className={`relative inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-[12px] font-extrabold tracking-tight transition-colors ${
-                      active
-                        ? "text-white"
-                        : "text-foreground/60 hover:text-foreground"
-                    }`}
-                    style={active ? { backgroundColor: tAccent.solid } : undefined}
-                    aria-pressed={active}
-                  >
-                    <Icon className="h-3.5 w-3.5" strokeWidth={2.6} />
-                    {t === "academic" ? "Academic" : "General"}
-                    {showLock ? (
-                      <Lock
-                        className={`h-3 w-3 ${active ? "text-white/90" : "text-foreground/40"}`}
-                        strokeWidth={2.6}
-                      />
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
+          {/* Compass needle toggle */}
+          <div className="mt-14 sm:mt-20">
+            <CompassTypeToggle
+              type={module}
+              ownsAcademic={ownsAcademic}
+              ownsGeneral={ownsGeneral}
+              isGuest={isGuest}
+              onChange={(t) => select(t)}
+            />
           </div>
 
           {/* Locked-type unlock bar */}
           {typeLocked ? (
             <div
-              className="mt-10 flex flex-col items-start gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5"
-              style={{
-                borderColor: accent.ring,
-                backgroundColor: accent.soft,
-              }}
+              className="mt-12 flex flex-col items-start gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5"
+              style={{ borderColor: accent.ring, backgroundColor: accent.soft }}
             >
               <div className="flex items-start gap-3">
                 <span
@@ -267,9 +285,10 @@ function SampleAnswersHubPage() {
             </div>
           ) : null}
 
+          {/* Module tiles */}
           <div
-            className={`mt-10 grid gap-5 sm:mt-12 sm:grid-cols-2 transition-[filter,opacity] duration-300 ${
-              typeLocked ? "pointer-events-auto blur-[2px] opacity-80" : ""
+            className={`mt-12 grid gap-5 pb-20 sm:mt-14 sm:grid-cols-2 sm:pb-28 transition-[filter,opacity] duration-300 ${
+              typeLocked ? "blur-[2px] opacity-80" : ""
             }`}
           >
             {MODULE_CARDS.map((m) => (
@@ -286,9 +305,7 @@ function SampleAnswersHubPage() {
         </div>
       </main>
 
-      <div className="mt-16">
-        <Footer />
-      </div>
+      <Footer />
 
       <UpgradeToAllAccessPopup
         open={showUpgrade}
@@ -297,6 +314,200 @@ function SampleAnswersHubPage() {
         wantedType={module}
         guest={isGuest}
       />
+    </div>
+  );
+}
+
+// ───────── Compass type toggle — Academic ◀ compass ▶ General ─────────
+function CompassTypeToggle({
+  type,
+  ownsAcademic,
+  ownsGeneral,
+  isGuest,
+  onChange,
+}: {
+  type: IeltsType;
+  ownsAcademic: boolean;
+  ownsGeneral: boolean;
+  isGuest: boolean;
+  onChange: (t: IeltsType) => void;
+}) {
+  const isAcademic = type === "academic";
+  const isGeneral = type === "general";
+
+  const renderItem = (
+    active: boolean,
+    locked: boolean,
+    onClick: () => void,
+    label: string,
+    Icon: typeof GraduationCap,
+    align: "left" | "right",
+    accentClass: string,
+    accentRule: string,
+  ) => (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`group block bg-transparent p-2 sm:p-4 ${
+        align === "left" ? "text-left" : "text-right"
+      } transition-opacity duration-300 ${
+        active ? "opacity-100" : "opacity-50 hover:opacity-80"
+      }`}
+    >
+      <div className={`flex flex-col ${align === "left" ? "items-start" : "items-end"} gap-2`}>
+        <div className="flex items-center gap-2">
+          {align === "right" ? (
+            <>
+              {locked ? <Lock className="h-3.5 w-3.5 text-foreground/45" strokeWidth={2.6} /> : null}
+              <Icon
+                className={`h-4 w-4 sm:h-5 sm:w-5 ${active ? accentClass : "text-foreground/55"}`}
+                strokeWidth={2.4}
+              />
+            </>
+          ) : (
+            <>
+              <Icon
+                className={`h-4 w-4 sm:h-5 sm:w-5 ${active ? accentClass : "text-foreground/55"}`}
+                strokeWidth={2.4}
+              />
+              {locked ? <Lock className="h-3.5 w-3.5 text-foreground/45" strokeWidth={2.6} /> : null}
+            </>
+          )}
+        </div>
+        <h3
+          className={`font-display font-bold leading-tight tracking-tight ${
+            active ? "text-foreground" : "text-foreground/70"
+          }`}
+          style={{ fontSize: "clamp(1.05rem, 2.8vw, 1.6rem)" }}
+        >
+          {label}
+        </h3>
+        <span
+          aria-hidden
+          className={`block h-px transition-all duration-500 ${
+            active ? `w-12 sm:w-16 ${accentRule}` : "w-6 bg-foreground/15"
+          }`}
+        />
+      </div>
+    </button>
+  );
+
+  // -90° = Academic (left), +90° = General (right)
+  const needleDeg = isAcademic ? -90 : isGeneral ? 90 : 0;
+
+  return (
+    <div className="relative mx-auto max-w-3xl">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 sm:gap-10">
+        <div className="flex justify-end">
+          {renderItem(
+            isAcademic,
+            !isGuest && !ownsAcademic,
+            () => onChange("academic"),
+            "Academic",
+            GraduationCap,
+            "right",
+            "text-[oklch(0.42_0.18_255)]",
+            "bg-[oklch(0.50_0.18_255)]",
+          )}
+        </div>
+
+        {/* Vintage brass compass */}
+        <div
+          className="relative flex flex-col items-center justify-center"
+          style={{ width: "clamp(72px, 11vw, 96px)" }}
+        >
+          <svg
+            viewBox="0 0 100 100"
+            className="h-full w-full drop-shadow-[0_4px_8px_oklch(0.30_0.06_45_/_0.35)]"
+            style={{ width: "clamp(72px, 11vw, 96px)", height: "clamp(72px, 11vw, 96px)" }}
+            aria-label="IELTS type compass"
+          >
+            <defs>
+              <radialGradient id="brassRimSA" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="oklch(0.88 0.12 80)" />
+                <stop offset="45%" stopColor="oklch(0.72 0.13 70)" />
+                <stop offset="80%" stopColor="oklch(0.52 0.11 55)" />
+                <stop offset="100%" stopColor="oklch(0.38 0.08 45)" />
+              </radialGradient>
+              <radialGradient id="compassFaceSA" cx="50%" cy="40%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.96 0.03 85)" />
+                <stop offset="70%" stopColor="oklch(0.90 0.05 80)" />
+                <stop offset="100%" stopColor="oklch(0.80 0.07 70)" />
+              </radialGradient>
+              <linearGradient id="needleNSA" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.55 0.20 30)" />
+                <stop offset="100%" stopColor="oklch(0.40 0.16 25)" />
+              </linearGradient>
+              <linearGradient id="needleSSA" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor="oklch(0.45 0.04 60)" />
+                <stop offset="100%" stopColor="oklch(0.30 0.03 55)" />
+              </linearGradient>
+            </defs>
+
+            <circle cx="50" cy="50" r="48" fill="url(#brassRimSA)" />
+            <circle cx="50" cy="50" r="48" fill="none" stroke="oklch(0.32 0.06 40)" strokeWidth="0.6" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="oklch(0.38 0.08 45)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="40" fill="url(#compassFaceSA)" />
+
+            {Array.from({ length: 12 }).map((_, i) => {
+              const a = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.sin(a) * 36;
+              const y1 = 50 - Math.cos(a) * 36;
+              const x2 = 50 + Math.sin(a) * (i % 3 === 0 ? 30 : 33);
+              const y2 = 50 - Math.cos(a) * (i % 3 === 0 ? 30 : 33);
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="oklch(0.30 0.05 45)"
+                  strokeWidth={i % 3 === 0 ? 1.2 : 0.6}
+                  strokeLinecap="round"
+                />
+              );
+            })}
+
+            <text x="50" y="18" textAnchor="middle" fontSize="7" fontWeight="800" fill="oklch(0.30 0.05 45)" fontFamily="serif">N</text>
+            <text x="84" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">E</text>
+            <text x="50" y="88" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">S</text>
+            <text x="16" y="53" textAnchor="middle" fontSize="6" fontWeight="700" fill="oklch(0.35 0.05 45)" fontFamily="serif">W</text>
+
+            <g
+              style={{
+                transformOrigin: "50px 50px",
+                transform: `rotate(${needleDeg}deg)`,
+                transition: "transform 850ms cubic-bezier(0.34, 1.3, 0.64, 1)",
+              }}
+            >
+              <polygon points="50,12 46,50 54,50" fill="url(#needleNSA)" stroke="oklch(0.30 0.12 25)" strokeWidth="0.4" />
+              <polygon points="50,88 46,50 54,50" fill="url(#needleSSA)" stroke="oklch(0.22 0.02 55)" strokeWidth="0.4" />
+            </g>
+
+            <circle cx="50" cy="50" r="3.2" fill="oklch(0.75 0.13 75)" stroke="oklch(0.38 0.08 45)" strokeWidth="0.6" />
+            <circle cx="49.2" cy="49.2" r="1" fill="oklch(0.95 0.06 85)" opacity="0.85" />
+          </svg>
+
+          <span className="relative z-10 mt-2 font-display text-[9px] font-black uppercase tracking-[0.18em] text-foreground/55 sm:text-[10px]">
+            Pick IELTS
+          </span>
+        </div>
+
+        <div className="flex justify-start">
+          {renderItem(
+            isGeneral,
+            !isGuest && !ownsGeneral,
+            () => onChange("general"),
+            "General",
+            Briefcase,
+            "left",
+            "text-[oklch(0.45_0.16_28)]",
+            "bg-[oklch(0.55_0.18_28)]",
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -361,7 +572,6 @@ function ModuleTile({
 
   const baseClass =
     "group relative flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-white p-6 text-left shadow-soft transition-all";
-
   const style = { borderColor: accent.ring } as React.CSSProperties;
 
   if (comingSoon) {
