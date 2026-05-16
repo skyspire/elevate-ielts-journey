@@ -1,7 +1,7 @@
 // CMS-backed model answers for prediction questions.
 // Keyed by a slug derived from the question title.
 
-import { useCmsSection, setCmsSection } from "@/lib/admin/cms-store";
+import { getSection, setSection, useCmsSection } from "@/lib/admin/cms-store";
 
 export const PREDICTIONS_ANSWERS_KEY = "predictions-answers";
 
