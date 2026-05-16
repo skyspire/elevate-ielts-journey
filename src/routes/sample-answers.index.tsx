@@ -799,3 +799,48 @@ function SectionEyebrow({
     </div>
   );
 }
+
+// ───────── Numbered tile (matches speaking-samples Pick-a-topic style) ─────────
+function NumberedTile({
+  index,
+  label,
+  accent,
+  to,
+  params,
+  search,
+}: {
+  index: number;
+  label: string;
+  accent: (typeof TYPE_ACCENT)[IeltsType];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  to: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  search?: any;
+}) {
+  const idx = String(index).padStart(2, "0");
+  return (
+    <Link
+      to={to}
+      params={params}
+      search={search}
+      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      style={{ ['--tw-ring-color' as never]: accent.solid }}
+    >
+      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-4 sm:w-16 sm:pt-6">
+        <span className="font-display text-xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-2xl">
+          {idx}
+        </span>
+      </div>
+      <div className="flex min-w-0 flex-1 items-center px-4 py-5 sm:px-5">
+        <p
+          className="font-display font-black leading-snug tracking-tight"
+          style={{ color: accent.solid, fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+        >
+          {label}
+        </p>
+      </div>
+    </Link>
+  );
+}
