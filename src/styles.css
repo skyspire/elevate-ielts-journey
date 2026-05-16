@@ -208,7 +208,7 @@
   background-clip: text;
   color: transparent;
   animation: shimmer-slide 3.5s linear infinite;
-  text-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.35));
 }
 
 @utility bg-dot-grid {
