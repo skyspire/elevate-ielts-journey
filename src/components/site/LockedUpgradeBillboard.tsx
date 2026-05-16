@@ -48,12 +48,9 @@ const ACCENTS = {
 const CREAM = "#FFF6E0";
 
 function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  // Bright white + heavier weight = max contrast emphasis on the solid dark card.
+  // Shimmer-sweep keyword on warm dark cards.
   return (
-    <span
-      className={`font-black text-white ${className}`}
-      style={{ textShadow: "0 1px 0 rgba(0,0,0,0.18)" }}
-    >
+    <span className={`text-shimmer-white font-black ${className}`}>
       {children}
     </span>
   );
@@ -102,8 +99,9 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
       >
         <div className="relative mx-auto flex w-full max-w-6xl items-center gap-2.5 px-3 py-2 sm:gap-4 sm:px-6 sm:py-2.5">
           {/* Lock badge */}
-          <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
-            <Lock className="h-4 w-4" strokeWidth={2.5} />
+          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
+            <span aria-hidden className="absolute inset-0 rounded-xl bg-white/20 animate-ping" />
+            <Lock className="relative h-4 w-4" strokeWidth={2.5} />
           </span>
 
           {/* Single-line copy */}
