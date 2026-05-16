@@ -213,7 +213,10 @@ function SampleAnswersHubPage() {
       return;
     }
     navigate({
-      search: (prev) => ({ ...prev, selected: prev.selected === id ? undefined : id }),
+      search: (prev: z.infer<typeof searchSchema>) => ({
+        ...prev,
+        selected: prev.selected === id ? undefined : id,
+      }),
       replace: true,
     });
     requestAnimationFrame(() => {
