@@ -362,9 +362,9 @@ function SampleAnswersHubPage() {
             </div>
           ) : null}
 
-          {/* Module tiles */}
+          {/* Module tiles — flat 4-up strip */}
           <div
-            className={`mt-12 grid gap-5 pb-20 sm:mt-14 sm:grid-cols-2 sm:pb-28 transition-[filter,opacity] duration-300 ${
+            className={`mt-12 grid grid-cols-2 gap-3 sm:mt-14 sm:grid-cols-4 sm:gap-4 transition-[filter,opacity] duration-300 ${
               typeLocked ? "blur-[2px] opacity-80" : ""
             }`}
           >
@@ -372,13 +372,29 @@ function SampleAnswersHubPage() {
               <ModuleTile
                 key={m.id}
                 module={m}
-                ieltsType={module}
                 accent={accent}
-                typeLocked={typeLocked}
-                onLockedClick={() => setShowUpgrade(true)}
+                active={selected === m.id}
+                onClick={() => onSelectModule(m.id)}
               />
             ))}
           </div>
+
+          {/* Inline content reveal */}
+          <div ref={contentRef} className="scroll-mt-24">
+            {selected ? (
+              <ModuleContent
+                moduleId={selected}
+                ieltsType={module}
+                accent={accent}
+              />
+            ) : (
+              <p className="mt-10 text-center text-[13px] font-medium text-foreground/45">
+                Pick a module above to see its sample answers.
+              </p>
+            )}
+          </div>
+
+          <div className="pb-20 sm:pb-28" />
         </div>
       </main>
 
