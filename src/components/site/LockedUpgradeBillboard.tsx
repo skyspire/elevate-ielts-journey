@@ -141,9 +141,9 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
         aria-label={`${wantedLabel} subscription required`}
       >
         <div className="relative mx-auto flex w-full max-w-6xl items-center gap-2.5 px-3 py-2 sm:gap-4 sm:px-6 sm:py-2.5">
-          {/* Lock badge */}
-          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
-            <span aria-hidden className="absolute inset-0 rounded-xl bg-white/20 animate-ping" />
+          {/* Lock badge with scanline */}
+          <span className="relative hidden h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/15 ring-1 ring-white/30 sm:flex">
+            <span aria-hidden className="scanline-overlay" />
             <Lock className="relative h-4 w-4" strokeWidth={2.5} />
           </span>
 
