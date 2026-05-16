@@ -720,9 +720,9 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
         />
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
         {cats.map((c) => (
-          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)} subtle>
+          <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
             {c.label}
           </Pill>
         ))}
