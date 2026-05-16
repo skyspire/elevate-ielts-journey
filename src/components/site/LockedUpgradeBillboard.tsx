@@ -18,16 +18,16 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
   const wantedLabel = LABEL[wantedType];
 
   const headline = guest
-    ? `Log in to unlock ${wantedLabel}`
+    ? `One subscription. The entire ${wantedLabel} library.`
     : currentType
-      ? `Add ${wantedLabel} to your plan`
-      : `Unlock ${wantedLabel} content`;
+      ? `Add the full ${wantedLabel} library to your plan.`
+      : `One subscription. The entire ${wantedLabel} library.`;
 
   const sub = guest
-    ? "Create your free account to open every Writing, Reading, ebook & prediction."
+    ? `Not a single page or module — every Writing Task 1, Reading, ebook, recent exam and weekly prediction in ${wantedLabel}, written by our IELTS specialists.`
     : currentType
-      ? `Your subscription covers ${LABEL[currentType]} only — ${wantedLabel} is sold separately.`
-      : `Real questions, ebooks, recent exams & weekly predictions.`;
+      ? `Your plan covers ${LABEL[currentType]} only. ${wantedLabel} is sold separately — full library, same pricing.`
+      : `Not a single page or module — every Writing Task 1, Reading, ebook, recent exam and weekly prediction in ${wantedLabel}, in one place.`;
 
   const ctaTo = guest ? "/login" : "/pricing";
   const ctaText = guest ? "Log in" : `Get ${wantedLabel}`;
@@ -86,15 +86,22 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             </p>
           </div>
 
-          {/* CTA */}
-          <Link
-            to={ctaTo}
-            className="group inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
-            style={{ color: accent }}
-          >
-            {ctaText}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          {/* CTA + price chip */}
+          <div className="flex shrink-0 flex-col items-end gap-1">
+            <Link
+              to={ctaTo}
+              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[13px] font-extrabold tracking-tight shadow-lg transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:h-12 sm:px-6 sm:text-sm"
+              style={{ color: accent }}
+            >
+              {ctaText}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            {!guest && (
+              <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10.5px] font-bold tracking-tight text-white ring-1 ring-white/25">
+                From $9 / 2 weeks
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </>
