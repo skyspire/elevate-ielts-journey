@@ -279,40 +279,65 @@ function RecentExamQuestionsPage() {
 
         <div className="relative mx-auto w-full max-w-5xl px-5 sm:px-6">
 
-          {/* Hero */}
-          <div className="text-center">
-            
-            <div className="relative inline-block">
-              <h1
-                className="font-handwriting text-5xl font-bold leading-[0.95] text-foreground/55 sm:text-6xl md:text-7xl"
-                style={{ transform: "rotate(-2deg)" }}
-              >
-                Recent Exam Questions
-              </h1>
+          {/* MASSIVE EDITORIAL WORDMARK — matches Predictions hero */}
+          <div className="flex justify-center">
+            <h2
+              className="relative inline-block font-display font-black leading-[0.9] tracking-[-0.025em] transition-colors duration-700"
+              style={{
+                fontSize: "clamp(2.5rem, 8.5vw, 5.5rem)",
+                color: isAcademic ? "oklch(0.38 0.18 258)" : "oklch(0.46 0.21 30)",
+              }}
+            >
               <svg
                 aria-hidden
-                viewBox="0 0 300 14"
-                preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3 w-full text-foreground/55 sm:-bottom-4 sm:h-4"
+                viewBox="0 0 24 24"
+                className="absolute -left-6 -top-3 h-5 w-5 opacity-80 sm:-left-10 sm:-top-5 sm:h-7 sm:w-7"
+                style={{ color: isAcademic ? "oklch(0.55 0.16 250)" : "oklch(0.62 0.19 32)" }}
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.2"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ transform: "rotate(-2deg)" }}
               >
-                <path d="M 6 9 C 50 4, 110 12, 160 7 S 250 11, 294 6" />
-                <path
-                  d="M 14 12 C 70 8, 130 13, 180 10 S 260 13, 286 11"
-                  opacity="0.4"
-                  strokeWidth="1.4"
-                />
+                <path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.5 5.5l3 3M15.5 15.5l3 3M5.5 18.5l3-3M15.5 8.5l3-3" />
               </svg>
-            </div>
-            <div className="mx-auto mt-6 max-w-xl space-y-2">
-              <p className="font-display text-lg font-black tracking-tight text-foreground sm:text-xl">
-                Real questions. Real test-takers.
-              </p>
+              <span className="relative inline-block">
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-10px] bottom-[6%] -z-10 h-[62%] -rotate-1 transition-colors duration-700"
+                  style={{
+                    background: isAcademic
+                      ? "linear-gradient(100deg, oklch(0.92 0.08 245 / 0.55) 0%, oklch(0.88 0.10 255 / 0.70) 55%, oklch(0.92 0.08 245 / 0.50) 100%)"
+                      : "linear-gradient(100deg, oklch(0.93 0.10 70 / 0.60) 0%, oklch(0.89 0.13 45 / 0.75) 55%, oklch(0.93 0.10 70 / 0.55) 100%)",
+                    clipPath: "polygon(1% 8%, 99% 2%, 100% 92%, 0% 98%)",
+                    filter: "blur(2px)",
+                  }}
+                />
+                <span className="relative">Recent Exams</span>
+                <svg
+                  aria-hidden
+                  viewBox="0 0 300 22"
+                  preserveAspectRatio="none"
+                  className="absolute -bottom-3 left-0 h-3 w-full transition-colors duration-700 sm:-bottom-4 sm:h-4"
+                  style={{ color: isAcademic ? "oklch(0.45 0.18 255)" : "oklch(0.55 0.20 28)" }}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 14 C 60 4, 140 20, 210 8 S 290 14, 296 10" />
+                </svg>
+              </span>
+            </h2>
+          </div>
+
+          {/* Main hero */}
+          <div className="mt-8 text-center sm:mt-10">
+            <h1 className="font-display text-3xl font-black tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              Real questions. Real test-takers.
+            </h1>
+            <div className="mx-auto mt-4 max-w-xl space-y-2">
               <p className="text-sm text-foreground/65 sm:text-[15px]">
                 Verified Writing &amp; Speaking questions reported by{" "}
                 <span className="relative inline-block whitespace-nowrap font-semibold text-foreground">
