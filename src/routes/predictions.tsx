@@ -909,21 +909,9 @@ function PredictionsPage() {
   const daysToNext = useDaysToNextSaturday();
 
   const isAcademic = exam === "academic";
-  // Premium soft palettes — warm cream for General, cool pearl for Academic.
-  // Layered radial halos give a sunrise/atelier glow without overpowering content.
-  const pageBg = isAcademic ? "oklch(0.985 0.012 235)" : "oklch(0.985 0.020 55)";
-  const heroGradient = isAcademic
-    ? `radial-gradient(ellipse 55% 70% at 12% -5%, oklch(0.88 0.10 245 / 0.65) 0%, transparent 55%),
-       radial-gradient(ellipse 50% 65% at 88% 0%, oklch(0.90 0.09 285 / 0.55) 0%, transparent 60%),
-       radial-gradient(ellipse 70% 50% at 50% 35%, oklch(0.94 0.05 220 / 0.45) 0%, transparent 70%),
-       radial-gradient(ellipse 40% 40% at 25% 60%, oklch(0.92 0.07 200 / 0.35) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.96 0.03 240 / 0.60) 0%, oklch(0.985 0.012 235 / 0) 100%)`
-    : `radial-gradient(ellipse 55% 70% at 10% -5%, oklch(0.91 0.11 50 / 0.70) 0%, transparent 55%),
-       radial-gradient(ellipse 55% 65% at 90% 0%, oklch(0.88 0.13 25 / 0.60) 0%, transparent 60%),
-       radial-gradient(ellipse 70% 55% at 50% 30%, oklch(0.94 0.08 70 / 0.50) 0%, transparent 70%),
-       radial-gradient(ellipse 45% 45% at 78% 55%, oklch(0.90 0.10 35 / 0.40) 0%, transparent 65%),
-       radial-gradient(ellipse 40% 40% at 18% 65%, oklch(0.93 0.08 85 / 0.35) 0%, transparent 65%),
-       linear-gradient(180deg, oklch(0.97 0.04 50 / 0.65) 0%, oklch(0.985 0.020 55 / 0) 100%)`;
+  // Clean white page — rotating pastel card tints carry the color story.
+  const pageBg = "#ffffff";
+  const heroGradient = "transparent";
 
   return (
     <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
