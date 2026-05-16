@@ -1054,7 +1054,7 @@ function PredictionsPage() {
 
           {/* Exam track toggle */}
           <div className="mt-8 flex justify-center sm:mt-10">
-            <ExamToggle value={exam} onChange={handleExamChange} />
+            <IeltsTypeSelector value={exam} onChange={handleExamChange} />
           </div>
 
           {/* May 2026 date card — replaces the countdown */}
