@@ -99,6 +99,7 @@ function MagneticCta({
 export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props) {
   const Icon = ICONS[wantedType];
   const solid = SOLID[wantedType];
+  const accent = ACCENT_BY_TYPE[wantedType];
   const wantedLabel = LABEL[wantedType];
   const [open, setOpen] = useState(false);
 
