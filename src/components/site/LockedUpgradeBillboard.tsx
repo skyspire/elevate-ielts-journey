@@ -40,23 +40,17 @@ const ACCENTS = {
   violet: "oklch(0.78 0.14 305)",
 } as const;
 
-function Highlight({
-  children,
-  color,
-  className = "",
-}: {
-  children: React.ReactNode;
-  color: string;
-  className?: string;
-}) {
+// Cream body for ambient readability on dark cards.
+const CREAM = "#FFF6E0";
+
+function Key({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  // Bright white + heavier weight = max contrast emphasis on the solid dark card.
   return (
-    <span className={`relative inline-block whitespace-nowrap font-extrabold text-white ${className}`}>
-      <span
-        aria-hidden
-        className="absolute inset-x-[-4px] bottom-[3%] -z-0 h-[62%] -rotate-1 rounded-[3px]"
-        style={{ background: color, opacity: 0.85 }}
-      />
-      <span className="relative">{children}</span>
+    <span
+      className={`font-black text-white ${className}`}
+      style={{ textShadow: "0 1px 0 rgba(0,0,0,0.18)" }}
+    >
+      {children}
     </span>
   );
 }
@@ -108,30 +102,21 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
             <Lock className="h-5 w-5" strokeWidth={2.5} />
           </span>
 
-          {/* Copy */}
-          <div className="min-w-0 flex-1">
-            <h3 className="font-display text-[16px] font-black leading-tight tracking-tight sm:text-xl md:text-[22px]">
-              <Highlight color={ACCENTS.amber}>One subscription.</Highlight>{" "}
-              <span className="text-white">The </span>
-              <Highlight color={ACCENTS.emerald}>entire {wantedLabel}</Highlight>{" "}
-              <span className="text-white">library.</span>
+          {/* Copy — cream body, bright white keywords */}
+          <div className="min-w-0 flex-1" style={{ color: CREAM }}>
+            <h3 className="font-display text-[16px] font-bold leading-tight tracking-tight sm:text-xl md:text-[22px]">
+              <Key>One subscription.</Key> The <Key>entire {wantedLabel}</Key> library.
             </h3>
-            <p className="mt-1.5 hidden text-[13px] font-bold leading-snug text-white/90 sm:block sm:text-[14px]">
+            <p className="mt-1.5 hidden text-[13px] font-semibold leading-snug sm:block sm:text-[14px]">
               {currentType ? (
                 <>
-                  Not just one page or module —{" "}
-                  <Highlight color={ACCENTS.sky} className="text-[13px] sm:text-[14px]">
-                    every {wantedLabel} resource
-                  </Highlight>{" "}
-                  is sold separately. Same pricing as your current plan.
+                  Not just one page or module — <Key>every {wantedLabel} resource</Key> is sold
+                  separately. Same pricing as your current plan.
                 </>
               ) : (
                 <>
-                  Not a single page. Not a single module.{" "}
-                  <Highlight color={ACCENTS.pink} className="text-[13px] sm:text-[14px]">
-                    Everything {wantedLabel}
-                  </Highlight>{" "}
-                  — Writing, Reading, Ebooks, Exams & Predictions.
+                  Not a single page. Not a single module. <Key>Everything {wantedLabel}</Key> —
+                  Writing, Reading, Ebooks, Exams &amp; Predictions.
                 </>
               )}
             </p>
@@ -215,24 +200,25 @@ export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props
                 <Lock className="h-3.5 w-3.5" /> {wantedLabel} subscription
               </div>
 
-              {/* Headline */}
-              <h2 className="mt-5 font-display text-[34px] font-black leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
-                <Highlight color={ACCENTS.amber} className="text-[34px] sm:text-5xl md:text-6xl">
-                  One subscription.
-                </Highlight>
+              {/* Headline — cream body, bright white keywords */}
+              <h2
+                className="mt-5 font-display text-[34px] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl"
+                style={{ color: CREAM }}
+              >
+                <Key>One subscription.</Key>
                 <br />
-                <span className="text-white">The </span>
-                <Highlight color={ACCENTS.emerald} className="text-[34px] sm:text-5xl md:text-6xl">
-                  entire {wantedLabel}
-                </Highlight>
+                The <Key>entire {wantedLabel}</Key>
                 <br />
-                <span className="text-white">library, unlocked.</span>
+                library, unlocked.
               </h2>
 
-              <p className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed text-white/90 sm:text-lg">
+              <p
+                className="mt-5 max-w-2xl text-[15px] font-semibold leading-relaxed sm:text-lg"
+                style={{ color: CREAM }}
+              >
                 Not a single page. Not a single module. Every IELTS{" "}
-                <Highlight color={ACCENTS.sky}>{wantedLabel}</Highlight> resource we publish — written
-                and updated by our <Highlight color={ACCENTS.pink}>IELTS specialists</Highlight>.
+                <Key>{wantedLabel}</Key> resource we publish — written and updated by our{" "}
+                <Key>IELTS specialists</Key>.
               </p>
 
               {/* Feature grid */}
