@@ -99,6 +99,42 @@ function Key({ children, className = "" }: { children: string; className?: strin
   );
 }
 
+function MagneticCta({
+  to,
+  color,
+  label,
+}: {
+  to: string;
+  color: string;
+  label: string;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    el.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+  };
+  const onLeave = () => {
+    if (ref.current) ref.current.style.transform = "translate(0,0)";
+  };
+  return (
+    <Link
+      to={to}
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="group inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3.5 text-[12px] font-extrabold tracking-tight shadow-lg transition-transform duration-200 ease-out will-change-transform sm:h-10 sm:px-5 sm:text-[13px]"
+      style={{ color }}
+    >
+      {label}
+      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+    </Link>
+  );
+}
+
 export function LockedUpgradeBillboard({ wantedType, currentType, guest }: Props) {
   const Icon = ICONS[wantedType];
   const solid = SOLID[wantedType];
