@@ -739,23 +739,26 @@ function QuestionRowCard({
   module,
   task,
   category,
+  onOpen,
 }: {
   q: Question;
   index: number;
   module: Module;
   task: Task;
   category: string;
+  onOpen: () => void;
 }) {
   const idx = String(index).padStart(2, "0");
   const palette = HIGHLIGHT_PALETTES[(index - 1) % HIGHLIGHT_PALETTES.length];
   const segments = segmentStatement(q.title);
 
   return (
-    <Link
-      to="/writing-samples/$questionId"
-      params={{ questionId: q.id }}
-      search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
-      className="group relative flex h-full overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
+    <button
+      type="button"
+      onClick={onOpen}
+      // Right-click / cmd-click users can still deep-link via the hidden anchor below.
+      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
+      aria-label={`Open sample answer: ${q.title}`}
     >
       {/* Left column — index */}
       <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20">
@@ -778,6 +781,18 @@ function QuestionRowCard({
           })}
         </p>
       </div>
-    </Link>
+
+      {/* Hidden deep-link for SEO + right-click "open in new tab" */}
+      <Link
+        to="/writing-samples/$questionId"
+        params={{ questionId: q.id }}
+        search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden
+      >
+        Open {q.title}
+      </Link>
+    </button>
   );
 }
