@@ -51,7 +51,7 @@ function GatedQuestionDetailPage() {
 function QuestionDetailPage() {
   const search = Route.useSearch();
   const { questionId } = Route.useParams();
-  const [modalOpen, setModalOpen] = useState(true);
+  const navigate = useNavigate();
   const module = search.module ?? "general";
   const title = search.title || "Sample Question";
 
@@ -62,21 +62,20 @@ function QuestionDetailPage() {
   );
   const questionImage = overrides[questionId]?.imageDataUrl;
 
-  // 1-based question index within its category — drives the big numeral
-  // shown in the billboard's left column.
   const questionNumber = useMemo(() => {
     const parsed = parseQuestionId(questionId);
     return parsed ? parsed.index + 1 : 1;
   }, [questionId]);
 
-  // Always start at the top when this page opens
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [questionId]);
 
+  const closeToList = () =>
+    navigate({ to: "/writing-samples", search: { module } });
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-paper-cream">
-      {/* Floating back button — circular, top-right */}
       <BackButton
         to="/writing-samples"
         search={{ module }}
@@ -93,19 +92,9 @@ function QuestionDetailPage() {
             fullScreen
           />
 
-          {/* "View full" trigger — opens the new full-screen popup reader */}
-          <button
-            type="button"
-            onClick={() => setModalOpen(true)}
-            className="fixed bottom-6 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-foreground/15 bg-white/95 px-5 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground shadow-card backdrop-blur transition hover:-translate-x-1/2 hover:-translate-y-0.5 hover:bg-white"
-          >
-            <Maximize2 className="h-3.5 w-3.5" strokeWidth={2.6} />
-            View full sample
-          </button>
-
           <SampleAnswerModal
-            open={modalOpen}
-            onClose={() => setModalOpen(false)}
+            open={true}
+            onClose={closeToList}
             title={title}
             questionNumber={questionNumber}
             answer={answer}
