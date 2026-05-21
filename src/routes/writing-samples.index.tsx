@@ -341,8 +341,9 @@ function WritingSamplesPage() {
                           index={i + 1}
                           q={q}
                           module={module}
-                          task={task}
+                          task={task ?? "task1"}
                           category={activeCategory.label}
+                          onOpen={() => setOpenQ(q)}
                         />
                       ))}
                     </div>
