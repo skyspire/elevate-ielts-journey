@@ -51,6 +51,7 @@ function GatedQuestionDetailPage() {
 function QuestionDetailPage() {
   const search = Route.useSearch();
   const { questionId } = Route.useParams();
+  const [modalOpen, setModalOpen] = useState(false);
   const module = search.module ?? "general";
   const title = search.title || "Sample Question";
 
