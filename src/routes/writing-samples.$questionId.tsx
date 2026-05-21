@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Sparkles } from "lucide-react";
+import { Maximize2, Sparkles } from "lucide-react";
 import { z } from "zod";
 import { parseQuestionId } from "@/data/question-helpers";
 import {
@@ -13,6 +13,7 @@ import { useCmsSection } from "@/lib/admin/cms-store";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
