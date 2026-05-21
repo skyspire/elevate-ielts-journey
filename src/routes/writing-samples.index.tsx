@@ -354,8 +354,44 @@ function WritingSamplesPage() {
           </TypeGate>
         </div>
       </main>
+      <WritingAnswerModalHost
+        q={openQ}
+        category={activeCategory.label}
+        onClose={() => setOpenQ(null)}
+      />
       <Footer />
     </div>
+  );
+}
+
+function WritingAnswerModalHost({
+  q,
+  category,
+  onClose,
+}: {
+  q: Question | null;
+  category: string;
+  onClose: () => void;
+}) {
+  const answer = useWritingAnswer(q?.id ?? "");
+  if (!q || !answer) {
+    return (
+      <SampleAnswerModal
+        open={false}
+        onClose={onClose}
+        title=""
+        answer={{ bandScore: "", wordCount: 0, paragraphs: [], structure: [], vocabulary: [], tips: [] }}
+      />
+    );
+  }
+  return (
+    <SampleAnswerModal
+      open={!!q}
+      onClose={onClose}
+      title={q.title}
+      eyebrow={`${category} · ${q.difficulty}`}
+      answer={answer}
+    />
   );
 }
 
