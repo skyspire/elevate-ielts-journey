@@ -84,13 +84,34 @@ function QuestionDetailPage() {
       />
 
       {answer ? (
-        <WritingAnswerBillboard
-          questionTitle={title}
-          questionNumber={questionNumber}
-          answer={answer}
-          questionImage={questionImage}
-          fullScreen
-        />
+        <>
+          <WritingAnswerBillboard
+            questionTitle={title}
+            questionNumber={questionNumber}
+            answer={answer}
+            questionImage={questionImage}
+            fullScreen
+          />
+
+          {/* "View full" trigger — opens the new full-screen popup reader */}
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            className="fixed bottom-6 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-foreground/15 bg-white/95 px-5 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground shadow-card backdrop-blur transition hover:-translate-x-1/2 hover:-translate-y-0.5 hover:bg-white"
+          >
+            <Maximize2 className="h-3.5 w-3.5" strokeWidth={2.6} />
+            View full sample
+          </button>
+
+          <SampleAnswerModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title={title}
+            questionNumber={questionNumber}
+            answer={answer}
+            eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
+          />
+        </>
       ) : (
         <div className="flex h-full items-center justify-center px-6">
           <div className="rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-8 text-center">
