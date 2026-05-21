@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
+import { useWritingAnswer } from "@/lib/admin/writing-answers";
 import {
   GraduationCap,
   PenLine,
@@ -131,6 +133,7 @@ function WritingSamplesPage() {
   const search = Route.useSearch();
   const module: Module = search.module ?? "general";
   const [task, setTask] = useState<Task | null>(null);
+  const [openQ, setOpenQ] = useState<Question | null>(null);
   const fallbackCategories = categoriesByModuleTask[module]["task1"];
   const categories = task ? categoriesByModuleTask[module][task] : fallbackCategories;
   const [categoryId, setCategoryId] = useState<string>(fallbackCategories[0].id);
@@ -338,8 +341,9 @@ function WritingSamplesPage() {
                           index={i + 1}
                           q={q}
                           module={module}
-                          task={task}
+                          task={task ?? "task1"}
                           category={activeCategory.label}
+                          onOpen={() => setOpenQ(q)}
                         />
                       ))}
                     </div>
@@ -350,8 +354,44 @@ function WritingSamplesPage() {
           </TypeGate>
         </div>
       </main>
+      <WritingAnswerModalHost
+        q={openQ}
+        category={activeCategory.label}
+        onClose={() => setOpenQ(null)}
+      />
       <Footer />
     </div>
+  );
+}
+
+function WritingAnswerModalHost({
+  q,
+  category,
+  onClose,
+}: {
+  q: Question | null;
+  category: string;
+  onClose: () => void;
+}) {
+  const answer = useWritingAnswer(q?.id ?? "");
+  if (!q || !answer) {
+    return (
+      <SampleAnswerModal
+        open={false}
+        onClose={onClose}
+        title=""
+        answer={{ bandScore: "", wordCount: 0, paragraphs: [], structure: [], vocabulary: [], tips: [] }}
+      />
+    );
+  }
+  return (
+    <SampleAnswerModal
+      open={!!q}
+      onClose={onClose}
+      title={q.title}
+      eyebrow={`${category} · ${q.difficulty}`}
+      answer={answer}
+    />
   );
 }
 
@@ -699,23 +739,26 @@ function QuestionRowCard({
   module,
   task,
   category,
+  onOpen,
 }: {
   q: Question;
   index: number;
   module: Module;
   task: Task;
   category: string;
+  onOpen: () => void;
 }) {
   const idx = String(index).padStart(2, "0");
   const palette = HIGHLIGHT_PALETTES[(index - 1) % HIGHLIGHT_PALETTES.length];
   const segments = segmentStatement(q.title);
 
   return (
-    <Link
-      to="/writing-samples/$questionId"
-      params={{ questionId: q.id }}
-      search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
-      className="group relative flex h-full overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
+    <button
+      type="button"
+      onClick={onOpen}
+      // Right-click / cmd-click users can still deep-link via the hidden anchor below.
+      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card"
+      aria-label={`Open sample answer: ${q.title}`}
     >
       {/* Left column — index */}
       <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20">
@@ -738,6 +781,18 @@ function QuestionRowCard({
           })}
         </p>
       </div>
-    </Link>
+
+      {/* Hidden deep-link for SEO + right-click "open in new tab" */}
+      <Link
+        to="/writing-samples/$questionId"
+        params={{ questionId: q.id }}
+        search={{ module, task, category, title: q.title, topic: q.topic, difficulty: q.difficulty }}
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden
+      >
+        Open {q.title}
+      </Link>
+    </button>
   );
 }

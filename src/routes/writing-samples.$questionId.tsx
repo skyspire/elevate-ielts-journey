@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Sparkles } from "lucide-react";
+import { Maximize2, Sparkles } from "lucide-react";
 import { z } from "zod";
 import { parseQuestionId } from "@/data/question-helpers";
 import {
@@ -13,6 +13,7 @@ import { useCmsSection } from "@/lib/admin/cms-store";
 import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -50,6 +51,7 @@ function GatedQuestionDetailPage() {
 function QuestionDetailPage() {
   const search = Route.useSearch();
   const { questionId } = Route.useParams();
+  const [modalOpen, setModalOpen] = useState(false);
   const module = search.module ?? "general";
   const title = search.title || "Sample Question";
 
@@ -82,13 +84,34 @@ function QuestionDetailPage() {
       />
 
       {answer ? (
-        <WritingAnswerBillboard
-          questionTitle={title}
-          questionNumber={questionNumber}
-          answer={answer}
-          questionImage={questionImage}
-          fullScreen
-        />
+        <>
+          <WritingAnswerBillboard
+            questionTitle={title}
+            questionNumber={questionNumber}
+            answer={answer}
+            questionImage={questionImage}
+            fullScreen
+          />
+
+          {/* "View full" trigger — opens the new full-screen popup reader */}
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            className="fixed bottom-6 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-foreground/15 bg-white/95 px-5 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.18em] text-foreground shadow-card backdrop-blur transition hover:-translate-x-1/2 hover:-translate-y-0.5 hover:bg-white"
+          >
+            <Maximize2 className="h-3.5 w-3.5" strokeWidth={2.6} />
+            View full sample
+          </button>
+
+          <SampleAnswerModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title={title}
+            questionNumber={questionNumber}
+            answer={answer}
+            eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
+          />
+        </>
       ) : (
         <div className="flex h-full items-center justify-center px-6">
           <div className="rounded-2xl border border-dashed border-foreground/15 bg-white/60 p-8 text-center">
