@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Maximize2, Sparkles } from "lucide-react";
 import { z } from "zod";
 import { parseQuestionId } from "@/data/question-helpers";
