@@ -347,7 +347,11 @@ export function SampleAnswerModal({
 
 
         {/* Sticky FOOTER — three full-width color blocks, big rounded labels */}
-        <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
+        <div
+          role="tablist"
+          aria-label="Band score variants"
+          className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]"
+        >
           {BAND_LABELS.map((label, i) => {
             const active = i === variant;
             const color = BAND_COLORS[i];
@@ -357,9 +361,35 @@ export function SampleAnswerModal({
               <button
                 key={label}
                 type="button"
+                role="tab"
+                id={`band-tab-${i}`}
+                aria-selected={active}
+                aria-label={`Show ${label} sample answer`}
+                tabIndex={active ? 0 : -1}
                 onClick={() => selectVariant(i)}
-                aria-pressed={active}
-                className="group relative flex items-center justify-center px-3 py-5 transition-all sm:py-6"
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                    e.preventDefault();
+                    const next = (i + 1) % BAND_LABELS.length;
+                    selectVariant(next);
+                    document.getElementById(`band-tab-${next}`)?.focus();
+                  } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    const prev = (i - 1 + BAND_LABELS.length) % BAND_LABELS.length;
+                    selectVariant(prev);
+                    document.getElementById(`band-tab-${prev}`)?.focus();
+                  } else if (e.key === "Home") {
+                    e.preventDefault();
+                    selectVariant(0);
+                    document.getElementById(`band-tab-0`)?.focus();
+                  } else if (e.key === "End") {
+                    e.preventDefault();
+                    const last = BAND_LABELS.length - 1;
+                    selectVariant(last);
+                    document.getElementById(`band-tab-${last}`)?.focus();
+                  }
+                }}
+                className="group relative flex items-center justify-center px-3 py-5 transition-all focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-foreground sm:py-6"
                 style={{
                   backgroundColor: active ? color : tint,
                   color: "#ffffff",
@@ -371,6 +401,7 @@ export function SampleAnswerModal({
                 }}
               >
                 <span
+                  aria-hidden="true"
                   className="absolute inset-x-0 top-0 h-[3px] transition-all"
                   style={{
                     backgroundColor: active
@@ -395,6 +426,7 @@ export function SampleAnswerModal({
             );
           })}
         </div>
+
       </div>
     </div>
   );
