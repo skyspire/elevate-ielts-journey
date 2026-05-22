@@ -1,46 +1,33 @@
 import type { ReactNode } from "react";
 
 /**
- * Full-bleed dotted paper background with an active color wash on top.
- * Mirrors the Recent Exam Questions "Browse by month" panel design:
+ * Full-bleed dotted cream paper background panel.
  * - bg-paper-dots canvas runs edge-to-edge under the content
- * - a soft tint wash (mix-blend-multiply) recolors as the active accent changes
- * - a hairline top divider separates it from the cream area above
- *
- * Use to wrap a category-pills + question-cards region so the whole panel
- * breathes the active selection's color.
+ * - extends a configurable distance below the content so it bridges
+ *   seamlessly into the footer with no visible gap
+ * - hairline top divider separates it from the cream area above
  */
 export function DottedTintPanel({
   children,
-  tint,
   topDivider = true,
+  /** Extra pixels the background bleeds below the content. Set high enough
+   *  to bridge into the footer with no gap. */
+  bleedBottom = 600,
   className = "",
 }: {
   children: ReactNode;
-  /** Soft tint color (e.g. accent.soft). Pass null/undefined to render neutral dots. */
-  tint?: string | null;
   topDivider?: boolean;
+  bleedBottom?: number;
   className?: string;
 }) {
   return (
     <div className={`relative ${className}`}>
-      {/* Full-bleed dotted background */}
+      {/* Full-bleed dotted background — bleeds below content to meet the footer */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 bg-paper-dots"
+        className="pointer-events-none absolute left-1/2 top-0 w-screen -translate-x-1/2 bg-paper-dots"
+        style={{ height: `calc(100% + ${bleedBottom}px)` }}
       />
-      {/* Tinted wash that matches the active accent — blends with the dots */}
-      {tint && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-full w-screen -translate-x-1/2 transition-colors duration-500"
-          style={{
-            background: tint,
-            mixBlendMode: "multiply",
-            opacity: 0.85,
-          }}
-        />
-      )}
       {/* Hairline top divider */}
       {topDivider && (
         <div
