@@ -1295,9 +1295,6 @@ function TierFlipCard({
     </button>
   );
 }
-    </button>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* Selected tier view — single tier's questions + matching archive     */
