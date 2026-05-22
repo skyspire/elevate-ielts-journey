@@ -29,6 +29,7 @@ import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
+import { TopTypeGradient } from "@/components/site/TopTypeGradient";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -132,28 +133,15 @@ function SpeakingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
-  // Page cream base + soft green top gradient that fades into cream
-  const pageBg = "oklch(0.985 0.005 95)";
-  const topTint = "oklch(0.94 0.06 165)"; // pale sage/mint green
-
   return (
-    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: pageBg }}>
-      {/* Wrapper for header + main — gradient lives here so the Footer stays plain */}
+    <div className="relative flex min-h-screen flex-col">
+      {/* Full-page jade silk gradient */}
+      <TopTypeGradient variant="general" />
       <div className="relative flex-1">
-        {/* Soft green top gradient — fades into cream */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 z-0 w-screen -translate-x-1/2"
-          style={{
-            height: 720,
-            background: `linear-gradient(to bottom, ${topTint} 0%, ${pageBg} 100%)`,
-          }}
-        />
-
         {/* Top bar */}
         <header
           className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
-          style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+          style={{ backgroundColor: "color-mix(in oklab, oklch(0.98 0.005 95) 85%, transparent)" }}
         >
           <div className="container-page flex h-16 items-center justify-between">
             <Link to="/" className="flex items-center gap-2">

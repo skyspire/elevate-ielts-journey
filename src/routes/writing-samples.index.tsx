@@ -29,6 +29,7 @@ import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
 import { TypeGate } from "@/components/site/TypeGate";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
+import { TopTypeGradient } from "@/components/site/TopTypeGradient";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -167,33 +168,15 @@ function WritingSamplesPage() {
   const questions = makeQuestions(activeCategory.id, activeCategory.label);
 
   // Module-tinted page + ambient gradient — swaps with Academic ⇄ General.
-  // Page cream base + soft top gradient band reflecting IELTS type
-  // (academic = blue, general = green). Fades into cream so it blends
-  // seamlessly with the dotted panel below.
-  const pageBg = "oklch(0.985 0.005 95)";
-  const topTint = isAcademic
-    ? "oklch(0.94 0.06 255)" // pale sky blue
-    : "oklch(0.94 0.06 165)"; // pale sage/mint green
-
   return (
-    <div
-      className="relative min-h-screen transition-colors duration-700"
-      style={{ backgroundColor: pageBg }}
-    >
-      {/* Soft top gradient — reflects IELTS type, fades to cream */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 z-0 w-screen -translate-x-1/2 transition-[background] duration-700 ease-out"
-        style={{
-          height: 720,
-          background: `linear-gradient(to bottom, ${topTint} 0%, ${pageBg} 100%)`,
-        }}
-      />
+    <div className="relative min-h-screen transition-colors duration-700">
+      {/* Full-page silk gradient — academic = blue, general = green */}
+      <TopTypeGradient variant={module} />
 
       {/* Top bar */}
       <header
         className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl transition-colors duration-700"
-        style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+        style={{ backgroundColor: "color-mix(in oklab, oklch(0.98 0.005 95) 85%, transparent)" }}
       >
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
