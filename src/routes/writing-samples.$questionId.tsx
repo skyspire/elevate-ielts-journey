@@ -94,14 +94,24 @@ function QuestionDetailPage() {
             fullScreen
           />
 
-          <SampleAnswerModal
-            open={true}
-            onClose={closeToList}
-            title={title}
-            questionNumber={questionNumber}
-            answer={answer}
-            eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
-          />
+          {writingTask1Charts[questionId] ? (
+            <WritingTask1Modal
+              open={true}
+              onClose={closeToList}
+              title={title}
+              answer={answer}
+              chart={writingTask1Charts[questionId]}
+            />
+          ) : (
+            <SampleAnswerModal
+              open={true}
+              onClose={closeToList}
+              title={title}
+              questionNumber={questionNumber}
+              answer={answer}
+              eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
+            />
+          )}
         </>
       ) : (
         <div className="flex h-full items-center justify-center px-6">
