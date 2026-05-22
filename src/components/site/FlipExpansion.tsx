@@ -104,10 +104,8 @@ export function FlipExpansion({
       }
       return;
     }
-    // Opening: flip → expanded
-    setPhase("flipping");
-    const flipTimer = setTimeout(() => setPhase("expanded"), 620);
-    return () => clearTimeout(flipTimer);
+    // Opening: paper uncrumple → expanded (skip flip phase entirely).
+    setPhase("expanded");
   }, [open]);
 
   // Reveal answer sections: gentle stagger on first open, instant on variant
