@@ -709,6 +709,7 @@ function WritingInline({
             )}
           </div>
         </DottedTintPanel>
+      </div>
     </div>
   );
 }
