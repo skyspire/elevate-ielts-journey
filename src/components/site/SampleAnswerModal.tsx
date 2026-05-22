@@ -155,12 +155,12 @@ export function SampleAnswerModal({
         >
           <div className="min-w-0 flex-1">
             <h2
-              className={`font-semibold tracking-[-0.005em] text-[#1d4ed8] ${collapsed ? "truncate whitespace-nowrap" : ""}`}
+              className="font-bold tracking-[-0.01em] text-[#1d4ed8]"
               style={{
                 fontFamily:
                   '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 fontSize: collapsed ? 15 : undefined,
-                lineHeight: collapsed ? "1.3" : "1.5",
+                lineHeight: collapsed ? "1.4" : "1.5",
                 transition: "font-size 220ms ease, line-height 220ms ease",
               }}
             >
@@ -169,6 +169,7 @@ export function SampleAnswerModal({
               </span>
             </h2>
           </div>
+
           <button
             type="button"
             onClick={onClose}
