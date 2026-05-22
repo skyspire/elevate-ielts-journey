@@ -1243,54 +1243,74 @@ function TierFlipCard({
   onSelect: () => void;
 }) {
   const surface = TIER_SURFACE[tier.key];
+  // Short, single-line label for compact cards
+  const shortLabel =
+    tier.key === "hot" ? "Highly Likely"
+    : tier.key === "likely" ? "Likely"
+    : "Worth Review";
   return (
     <button
       type="button"
       onClick={onSelect}
-      className="group relative flex h-[440px] w-full flex-col justify-between overflow-hidden rounded-[28px] text-left transition-all duration-500 ease-out hover:-translate-y-1.5 sm:h-[520px]"
+      className="group relative flex h-44 w-full flex-col justify-between overflow-hidden rounded-2xl text-left transition-all duration-500 ease-out hover:-translate-y-1 sm:h-64 md:h-72"
       style={{
         background: surface.bg,
         color: "#FDFCF5",
-        boxShadow: `0 30px 60px -25px ${surface.shadow}, 0 8px 20px -12px ${surface.shadow}`,
+        boxShadow: `0 18px 40px -22px ${surface.shadow}, 0 6px 14px -10px ${surface.shadow}`,
       }}
       aria-label={`Open ${tier.label} predictions`}
     >
-      {/* Top: eyebrow + huge title */}
-      <div className="flex flex-col gap-5 p-8 sm:gap-6 sm:p-10">
-        <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] opacity-65">
+      {/* Subtle diagonal hairline pattern */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(135deg, #FDFCF5 0 1px, transparent 1px 9px)",
+        }}
+      />
+      {/* Soft corner glow */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-30 blur-2xl sm:h-40 sm:w-40"
+        style={{ background: "rgba(255,255,255,0.45)" }}
+      />
+
+      {/* Top row: eyebrow + count badge */}
+      <div className="relative flex items-start justify-between gap-2 px-3 pt-3 sm:px-5 sm:pt-5">
+        <span className="font-display text-[8.5px] font-bold uppercase tracking-[0.18em] opacity-65 sm:text-[10px] sm:tracking-[0.22em]">
           {surface.eyebrow}
         </span>
-        <h3
-          className="font-display font-extrabold leading-[0.85] tracking-[-0.03em]"
-          style={{ fontSize: "clamp(3rem, 7.5vw, 5.25rem)" }}
+        <span
+          className="rounded-full border border-white/25 bg-black/15 px-2 py-0.5 font-display text-[11px] font-bold tabular-nums leading-none sm:px-2.5 sm:py-1 sm:text-sm"
         >
-          {tier.label.split(" ").map((word, i, arr) => (
-            <span key={i}>
-              {word}
-              {i < arr.length - 1 && <br />}
-            </span>
-          ))}
+          {count}
+        </span>
+      </div>
+
+      {/* Title — single line, scales with width */}
+      <div className="relative px-3 sm:px-5">
+        <h3
+          className="font-display font-extrabold leading-[0.95] tracking-[-0.02em] [text-wrap:balance]"
+          style={{ fontSize: "clamp(0.95rem, 3.2vw, 1.75rem)" }}
+        >
+          {shortLabel}
         </h3>
       </div>
 
-      {/* Footer band */}
+      {/* Footer band — slim */}
       <div
-        className="flex items-end justify-between border-t border-white/5 px-8 py-7 sm:px-10 sm:py-8"
-        style={{ background: "rgba(0,0,0,0.12)" }}
+        className="relative flex items-center justify-between border-t border-white/10 px-3 py-2.5 sm:px-5 sm:py-3.5"
+        style={{ background: "rgba(0,0,0,0.14)" }}
       >
-        <div>
-          <div className="font-display text-4xl font-bold leading-none sm:text-5xl">
-            {count}
-          </div>
-          <div className="mt-1.5 font-display text-[10.5px] font-semibold uppercase tracking-[0.16em] opacity-65">
-            Potential topics
-          </div>
-        </div>
+        <span className="font-display text-[9px] font-semibold uppercase tracking-[0.14em] opacity-65 sm:text-[10.5px] sm:tracking-[0.16em]">
+          Topics
+        </span>
         <span
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 transition-transform duration-500 group-hover:translate-x-1 group-hover:border-white/50"
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/25 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:border-white/50 sm:h-8 sm:w-8"
           aria-hidden
         >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M13 6l6 6-6 6" />
           </svg>
         </span>
@@ -1298,6 +1318,7 @@ function TierFlipCard({
     </button>
   );
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Selected tier view — single tier's questions + matching archive     */
