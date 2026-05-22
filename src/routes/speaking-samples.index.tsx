@@ -316,12 +316,11 @@ function SpeakingSamplesPage() {
       <Footer />
 
       {flipTopic && (
-        <FlipExpansion
+        <SpeakingSampleModal
           open={flipOpen}
           onClose={() => setFlipOpen(false)}
           categoryId={flipCategoryId}
           topic={flipTopic}
-          anchorRect={flipAnchor}
         />
       )}
     </div>
