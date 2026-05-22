@@ -148,11 +148,23 @@ export function SampleAnswerModal({
             100% { transform: translate3d(var(--sa-dust-dx, 0px), -110vh, 0); opacity: 0; }
           }
         `}</style>
-        {Array.from({ length: 38 }).map((_, i) => {
+        {Array.from({ length: 42 }).map((_, i) => {
           // deterministic pseudo-random positions/sizes
           const seed = (n: number) => ((Math.sin(i * 12.9898 + n) + 1) / 2);
           const size = 3 + seed(1) * 6;          // 3–9px
-          const left = seed(2) * 100;            // 0–100%
+          // 80% of particles bias to the LEFT/RIGHT side gutters next to the
+          // popup; the remaining 20% spawn anywhere — they cross behind the
+          // (opaque) sheet so they appear only in the top/bottom gutters.
+          const bucket = seed(2);
+          let left: number;
+          if (bucket < 0.4) {
+            left = seed(7) * 10;            // left strip 0–10%
+          } else if (bucket < 0.8) {
+            left = 90 + seed(7) * 10;       // right strip 90–100%
+          } else {
+            left = seed(7) * 100;           // anywhere (top/bottom visible)
+          }
+
           const dur = 22 + seed(3) * 26;         // 22–48s
           const delay = -seed(4) * dur;          // negative to start mid-flight
           const dx = (seed(5) - 0.5) * 100;      // -50 to 50px horizontal drift
