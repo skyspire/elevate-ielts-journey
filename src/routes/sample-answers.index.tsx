@@ -674,39 +674,41 @@ function WritingInline({
           />
         </div>
 
-        {/* Category chips — centered, equal-width */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-          {cats.map((c) => (
-            <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
-              {c.label}
-            </Pill>
-          ))}
-        </div>
-      </div>
+        {/* Category chips + question grid sit on a tinted dotted panel */}
+        <DottedTintPanel tint={accent.soft} className="mt-6 py-10 sm:py-12">
+          <div className="container-page">
+            <div className="flex flex-wrap justify-center gap-2.5">
+              {cats.map((c) => (
+                <Pill key={c.id} active={catId === c.id} accent={accent} onClick={() => setCatId(c.id)}>
+                  {c.label}
+                </Pill>
+              ))}
+            </div>
 
-      {/* Questions grid — numbered tiles */}
-      {prompts.length === 0 ? (
-        <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
-          Prompts coming soon for this category.
-        </p>
-      ) : (
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {prompts.map((statement, i) => {
-            const qId = `${catId}-${i + 1}`;
-            return (
-              <NumberedTile
-                key={qId}
-                index={i + 1}
-                label={statement}
-                accent={accent}
-                to="/writing-samples/$questionId"
-                params={{ questionId: qId }}
-                search={{ module: ieltsType }}
-              />
-            );
-          })}
-        </div>
-      )}
+            {prompts.length === 0 ? (
+              <p className="mt-6 rounded-2xl border border-foreground/10 bg-white p-5 text-center text-[13px] font-medium text-foreground/50 shadow-soft">
+                Prompts coming soon for this category.
+              </p>
+            ) : (
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {prompts.map((statement, i) => {
+                  const qId = `${catId}-${i + 1}`;
+                  return (
+                    <NumberedTile
+                      key={qId}
+                      index={i + 1}
+                      label={statement}
+                      accent={accent}
+                      to="/writing-samples/$questionId"
+                      params={{ questionId: qId }}
+                      search={{ module: ieltsType }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </DottedTintPanel>
     </div>
   );
 }
