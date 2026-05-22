@@ -143,32 +143,57 @@ export function SampleAnswerModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — question statement only, large grey rounded sans */}
-        <div className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 pb-6 pt-6 sm:px-12 sm:pb-8 sm:pt-9">
+        {/* Header — collapses to compact one-line on scroll */}
+        <div
+          className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 sm:px-12"
+          style={{
+            paddingTop: collapsed ? 14 : 28,
+            paddingBottom: collapsed ? 14 : 28,
+            boxShadow: collapsed ? "0 6px 18px -12px rgba(15,23,42,0.18)" : "none",
+            transition: "padding 220ms ease, box-shadow 220ms ease",
+          }}
+        >
           <div className="min-w-0 flex-1">
             <h2
-              className="text-[20px] font-semibold leading-[1.45] tracking-[-0.005em] text-slate-500 sm:text-[24px] sm:leading-[1.5]"
+              className={`font-semibold tracking-[-0.005em] text-[#1d4ed8] ${collapsed ? "truncate whitespace-nowrap" : ""}`}
               style={{
                 fontFamily:
                   '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                fontSize: collapsed ? 15 : undefined,
+                lineHeight: collapsed ? "1.3" : "1.5",
+                transition: "font-size 220ms ease, line-height 220ms ease",
               }}
             >
-              {title}
+              <span className={collapsed ? "" : "text-[20px] sm:text-[24px]"}>
+                {title}
+              </span>
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/70 transition hover:border-foreground/30 hover:bg-foreground/[0.04] hover:text-foreground"
+            className="group -mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#1d4ed8] transition-all hover:scale-105 active:scale-95"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(219,234,254,0.95), rgba(191,219,254,0.85))",
+              boxShadow:
+                "0 0 0 1.5px rgba(29,78,216,0.45), 0 0 0 4px rgba(29,78,216,0.08), 0 6px 18px -6px rgba(29,78,216,0.35)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
           >
-            <X className="h-4 w-4" strokeWidth={2.4} />
+            <X className="h-[18px] w-[18px]" strokeWidth={3} />
           </button>
         </div>
 
         {/* Scroll body — single column, gallery whitespace */}
         <div
           ref={scrollRef}
+          onScroll={(e) => {
+            const top = (e.target as HTMLDivElement).scrollTop;
+            setCollapsed(top > 24);
+          }}
           className="min-h-0 flex-1 overflow-y-auto px-6 py-8 sm:px-12 sm:py-12"
         >
           <div
@@ -182,7 +207,15 @@ export function SampleAnswerModal({
             {activeParagraphs.paragraphs.map((p, i) => (
               <div key={i} className="mb-8 last:mb-2">
                 {p.heading && (
-                  <h3 className="mb-2.5 font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/55">
+                  <h3
+                    className="mb-3 text-[17px] font-bold leading-snug sm:text-[18px]"
+                    style={{
+                      fontFamily:
+                        '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                      color: BAND_COLORS[variant],
+                      letterSpacing: "-0.005em",
+                    }}
+                  >
                     {p.heading}
                   </h3>
                 )}
@@ -193,6 +226,7 @@ export function SampleAnswerModal({
             ))}
           </div>
         </div>
+
 
         {/* Sticky FOOTER — three full-width color blocks, big rounded labels */}
         <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
