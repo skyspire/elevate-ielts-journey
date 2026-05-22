@@ -57,6 +57,7 @@ const WRITING_TASK2 = [
 const ALL_WRITING_PROMPTS: Record<string, string[]> = {
   ...task2Prompts,
   ...task1GeneralPrompts,
+  ...task1AcademicPrompts,
 };
 
 // ───────── Speaking parts/categories (mirror speaking-samples) ─────────
