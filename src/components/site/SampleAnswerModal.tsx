@@ -27,18 +27,6 @@ const BAND_COLORS = [
   "#0f766e", // deep teal
   "#b45309", // bronze
 ];
-// Slightly darker text-on-color for readable inactive labels
-const BAND_COLORS_DEEP = [
-  "#64748b",
-  "#115e59",
-  "#92400e",
-];
-
-function difficultyFromEyebrow(eyebrow?: string): string | null {
-  if (!eyebrow) return null;
-  const m = eyebrow.match(/(Easy|Medium|Hard)/i);
-  return m ? m[1] : null;
-}
 
 export function SampleAnswerModal({
   open,
