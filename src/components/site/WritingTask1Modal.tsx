@@ -293,7 +293,12 @@ export function WritingTask1Modal({
             >
               The chart
             </div>
-            <div className="flex min-h-0 flex-1">
+            <button
+              type="button"
+              onClick={() => setZoomOpen(true)}
+              aria-label="Enlarge chart"
+              className="group/zoom relative flex min-h-0 flex-1 cursor-zoom-in items-stretch rounded-md outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+            >
               {chart.kind === "line" && (
                 <LineGraphChart
                   caption={chart.caption}
@@ -304,7 +309,23 @@ export function WritingTask1Modal({
                   yUnit={chart.yUnit}
                 />
               )}
-            </div>
+              {/* Hover overlay with magnifier */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-foreground/0 opacity-0 transition-all duration-200 group-hover/zoom:bg-foreground/35 group-hover/zoom:opacity-100 group-focus-visible/zoom:bg-foreground/35 group-focus-visible/zoom:opacity-100"
+              >
+                <span
+                  className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-1.5 text-[12px] font-semibold tracking-tight text-foreground shadow-lg"
+                  style={{
+                    fontFamily:
+                      '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  <ZoomIn className="h-3.5 w-3.5" strokeWidth={2.4} />
+                  Click to enlarge
+                </span>
+              </span>
+            </button>
           </div>
 
           {/* RIGHT — scrollable answer */}
