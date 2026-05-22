@@ -5,7 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Mic,
-  Sparkles,
+  
   ArrowUpRight,
   Link as LinkIcon,
   MessageCircleQuestion,
