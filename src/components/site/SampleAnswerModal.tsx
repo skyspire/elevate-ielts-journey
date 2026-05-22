@@ -120,12 +120,6 @@ export function SampleAnswerModal({
 
   if (!mounted) return null;
 
-  void difficultyFromEyebrow;
-  void BAND_COLORS_DEEP;
-  void eyebrow;
-  void questionNumber;
-  void activeParagraphs.bandScore;
-  void activeParagraphs.wordCount;
 
   return (
     <div
