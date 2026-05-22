@@ -120,8 +120,12 @@ export function SampleAnswerModal({
 
   if (!mounted) return null;
 
-  const difficulty = difficultyFromEyebrow(eyebrow);
-  const accent = BAND_COLORS[variant];
+  void difficultyFromEyebrow;
+  void BAND_COLORS_DEEP;
+  void eyebrow;
+  void questionNumber;
+  void activeParagraphs.bandScore;
+  void activeParagraphs.wordCount;
 
   return (
     <div
