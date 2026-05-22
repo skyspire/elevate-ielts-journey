@@ -14,6 +14,8 @@ import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
+import { WritingTask1Modal } from "@/components/site/WritingTask1Modal";
+import { writingTask1Charts } from "@/data/writing-task1-charts";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
