@@ -29,6 +29,7 @@ import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
+import { TopTypeGradient } from "@/components/site/TopTypeGradient";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
