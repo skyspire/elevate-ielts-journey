@@ -25,6 +25,7 @@ import { useLearnerSession } from "@/lib/learner-auth";
 import { task2Prompts, task1GeneralPrompts, task1AcademicPrompts } from "@/data/writing-prompts";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
+import { TopTypeGradient } from "@/components/site/TopTypeGradient";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional(),
@@ -241,6 +242,7 @@ function SampleAnswersHubPage() {
         className="pointer-events-none fixed inset-0 z-0 opacity-60"
         style={{ backgroundImage: grain, backgroundSize: "3px 3px" }}
       />
+      <TopTypeGradient variant={module} />
 
       <header
         className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"

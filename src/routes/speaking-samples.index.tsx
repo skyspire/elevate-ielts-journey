@@ -132,23 +132,22 @@ function SpeakingSamplesPage() {
   const activeCategory = categories.find((c) => c.id === categoryId) ?? categories[0];
   const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
-  // Full-page sage/teal ambient gradient — matches the page's accent identity.
-  const pageBg = "oklch(0.985 0.014 165)";
-  const pageGradient = `radial-gradient(ellipse 70% 45% at 18% 0%, oklch(0.90 0.07 165 / 0.55) 0%, transparent 60%),
-    radial-gradient(ellipse 65% 40% at 88% 8%, oklch(0.91 0.08 175 / 0.45) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 35% at 0% 55%, oklch(0.92 0.06 155 / 0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 30% at 100% 70%, oklch(0.91 0.07 180 / 0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 25% at 50% 100%, oklch(0.92 0.05 165 / 0.30) 0%, transparent 70%)`;
+  // Page cream base + soft green top gradient that fades into cream
+  const pageBg = "oklch(0.985 0.005 95)";
+  const topTint = "oklch(0.94 0.06 165)"; // pale sage/mint green
 
   return (
     <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: pageBg }}>
       {/* Wrapper for header + main — gradient lives here so the Footer stays plain */}
       <div className="relative flex-1">
-        {/* Ambient sage gradient wash — bounded to this wrapper (excludes footer) */}
+        {/* Soft green top gradient — fades into cream */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{ background: pageGradient }}
+          className="pointer-events-none absolute left-1/2 top-0 z-0 w-screen -translate-x-1/2"
+          style={{
+            height: 720,
+            background: `linear-gradient(to bottom, ${topTint} 0%, ${pageBg} 100%)`,
+          }}
         />
 
         {/* Top bar */}
