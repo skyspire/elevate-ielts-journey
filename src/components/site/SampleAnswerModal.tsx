@@ -208,8 +208,11 @@ export function SampleAnswerModal({
           style={{
             paddingTop: collapsed ? 14 : 28,
             paddingBottom: collapsed ? 14 : 28,
-            boxShadow: collapsed ? "0 6px 18px -12px rgba(15,23,42,0.18)" : "none",
-            transition: "padding 220ms ease, box-shadow 220ms ease",
+            boxShadow: collapsed
+              ? "0 6px 18px -12px rgba(15,23,42,0.18)"
+              : "0 0 0 0 rgba(15,23,42,0)",
+            transition:
+              "padding-top 450ms cubic-bezier(0.22, 1, 0.36, 1), padding-bottom 450ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 450ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <div className="min-w-0 flex-1">
@@ -219,16 +222,16 @@ export function SampleAnswerModal({
                 fontFamily:
                   '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 fontWeight: 900,
-                fontSize: collapsed ? 15 : undefined,
-                lineHeight: collapsed ? "1.4" : "1.45",
-                transition: "font-size 220ms ease, line-height 220ms ease",
+                fontSize: collapsed ? 15 : 22,
+                lineHeight: collapsed ? 1.4 : 1.45,
+                transition:
+                  "font-size 450ms cubic-bezier(0.22, 1, 0.36, 1), line-height 450ms cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             >
-              <span className={collapsed ? "" : "text-[20px] sm:text-[24px]"}>
-                {title}
-              </span>
+              {title}
             </h2>
           </div>
+
 
           <button
             type="button"
