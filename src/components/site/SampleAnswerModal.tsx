@@ -239,31 +239,25 @@ export function SampleAnswerModal({
         onClick={(e) => e.stopPropagation()}
       >
 
-        {/* Header — collapses to compact one-line on scroll */}
+        {/* Header — always compact one-line */}
         <div
           className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 sm:px-12"
           style={{
-            paddingTop: collapsed ? 14 : 28,
-            paddingBottom: collapsed ? 14 : 28,
-            boxShadow: collapsed
-              ? "0 6px 18px -12px rgba(15,23,42,0.18)"
-              : "0 0 0 0 rgba(15,23,42,0)",
-            transition:
-              "padding-top 450ms cubic-bezier(0.22, 1, 0.36, 1), padding-bottom 450ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 450ms cubic-bezier(0.22, 1, 0.36, 1)",
+            paddingTop: 14,
+            paddingBottom: 14,
+            boxShadow: "0 6px 18px -12px rgba(15,23,42,0.18)",
           }}
         >
           <div className="min-w-0 flex-1">
             <h2
-              className="tracking-[-0.015em]"
+              className="tracking-[-0.01em]"
               style={{
                 fontFamily:
-                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                fontWeight: 900,
+                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                fontWeight: 600,
                 color: "#0a0a0a",
-                fontSize: collapsed ? 18 : 22,
-                lineHeight: collapsed ? 1.4 : 1.45,
-                transition:
-                  "font-size 450ms cubic-bezier(0.22, 1, 0.36, 1), line-height 450ms cubic-bezier(0.22, 1, 0.36, 1)",
+                fontSize: 18,
+                lineHeight: 1.4,
               }}
             >
               {title}
