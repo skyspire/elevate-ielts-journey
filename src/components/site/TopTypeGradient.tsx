@@ -1,29 +1,27 @@
 /**
- * Soft vertical gradient wash that sits at the top of a page to reflect the
- * IELTS type (academic = blue, general = green). Fades from a pale tint at
- * the top down to the page cream so it blends seamlessly into whatever is
- * below (including the cream paper-dots panel).
+ * Full-page silk gradient — a single smooth top-to-bottom vertical gradient
+ * that runs the entire page height. Saturated at the top in the IELTS-type
+ * accent, fading to warm cream at the bottom. No patterns, no blobs.
+ *
+ * Rendered as a fixed layer so it covers the whole viewport regardless of
+ * scroll, giving every page a single continuous premium wash.
  */
 export function TopTypeGradient({
   variant,
-  /** Height of the gradient band in viewport pixels. Should cover the hero. */
-  height = 720,
 }: {
   variant: "academic" | "general";
-  height?: number;
 }) {
   const top =
     variant === "academic"
-      ? "oklch(0.94 0.06 255)" // pale sky blue
-      : "oklch(0.94 0.06 165)"; // pale sage/mint green
-  const bottom = "oklch(0.985 0.005 95)"; // page cream
+      ? "oklch(0.90 0.08 250)" // deep sky blue
+      : "oklch(0.88 0.09 160)"; // rich jade green
+  const bottom = "oklch(0.98 0.005 95)"; // warm off-white
 
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute left-1/2 top-0 z-0 w-screen -translate-x-1/2"
+      className="pointer-events-none fixed inset-0 z-0 transition-[background] duration-700 ease-out"
       style={{
-        height,
         background: `linear-gradient(to bottom, ${top} 0%, ${bottom} 100%)`,
       }}
     />
