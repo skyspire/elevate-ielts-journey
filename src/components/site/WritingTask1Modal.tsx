@@ -34,6 +34,7 @@ export function WritingTask1Modal({
   const [variant, setVariant] = useState(0);
   const [laneIn, setLaneIn] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
