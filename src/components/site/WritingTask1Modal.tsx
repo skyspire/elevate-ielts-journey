@@ -20,7 +20,7 @@ export type WritingTask1ModalProps = {
 };
 
 const BAND_LABELS = ["Band 7", "Band 8", "Band 9"] as const;
-const BAND_COLORS = ["#94a3b8", "#0f766e", "#b45309"];
+const BAND_COLORS = ["#1e3a5f", "#9b2c2c", "#b8860b"]; // navy, burgundy, gold
 
 export function WritingTask1Modal({
   open,
@@ -268,10 +268,12 @@ export function WritingTask1Modal({
         <div className="flex min-h-0 flex-1 flex-row">
           {/* LEFT — chart panel (sticky / non-scroll) */}
           <div
-            className="flex w-[44%] shrink-0 flex-col gap-3 overflow-hidden border-r border-foreground/[0.08] bg-[oklch(0.985_0.008_240)] px-3 py-4 sm:w-[46%] sm:px-6 sm:py-6"
+            className="relative flex w-[44%] shrink-0 flex-col gap-3 overflow-hidden bg-[oklch(0.985_0.008_240)] px-3 py-4 sm:w-[46%] sm:px-6 sm:py-6"
             style={{
               backgroundImage:
                 "radial-gradient(circle at 20% 0%, rgba(15,118,110,0.05), transparent 55%), radial-gradient(circle at 100% 100%, rgba(180,83,9,0.04), transparent 55%)",
+              boxShadow:
+                "inset -10px 0 14px -10px rgba(15,23,42,0.14), 6px 0 14px -10px rgba(15,23,42,0.10)",
             }}
           >
             <div
@@ -400,21 +402,12 @@ export function WritingTask1Modal({
                   backgroundColor: isActive ? color : tint,
                   color: "#ffffff",
                   boxShadow: isActive
-                    ? `inset 0 2px 0 rgba(255,255,255,0.28), 0 0 0 1px ${color} inset, 0 -10px 28px -8px ${color}, 0 -2px 14px -4px ${color}`
-                    : "inset 0 1px 0 rgba(255,255,255,0.18)",
+                    ? `inset 0 1px 0 rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.10)`
+                    : "inset 0 1px 0 rgba(0,0,0,0.08)",
                   fontFamily:
                     '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 }}
               >
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-[3px] transition-all"
-                  style={{
-                    backgroundColor: isActive
-                      ? "rgba(255,255,255,0.9)"
-                      : "transparent",
-                  }}
-                />
                 <span
                   className="font-bold tracking-tight"
                   style={{
