@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
+import { WritingTask1Modal } from "@/components/site/WritingTask1Modal";
+import { writingTask1Charts } from "@/data/writing-task1-charts";
 import { useWritingAnswer } from "@/lib/admin/writing-answers";
 import {
   GraduationCap,
@@ -389,6 +391,19 @@ function WritingAnswerModalHost({
       />
     );
   }
+  // Academic Task 1 questions get the two-column chart-aware reader.
+  const chart = writingTask1Charts[q.id];
+  if (chart) {
+    return (
+      <WritingTask1Modal
+        open={!!q}
+        onClose={onClose}
+        title={q.title}
+        answer={answer}
+        chart={chart}
+      />
+    );
+  }
   return (
     <SampleAnswerModal
       open={!!q}
@@ -399,6 +414,7 @@ function WritingAnswerModalHost({
     />
   );
 }
+
 
 // ───────── Subcomponents ─────────
 function StepLabel({ index, label }: { index: number; label: string }) {
