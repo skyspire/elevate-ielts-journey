@@ -242,6 +242,7 @@ function SampleAnswersHubPage() {
         className="pointer-events-none fixed inset-0 z-0 opacity-60"
         style={{ backgroundImage: grain, backgroundSize: "3px 3px" }}
       />
+      <TopTypeGradient variant={module} />
 
       <header
         className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
