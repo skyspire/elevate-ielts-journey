@@ -1437,6 +1437,41 @@ function TierSection({
 }
 
 /* ------------------------------------------------------------------ */
+/* Tier rows — wraps PredictionRow with paywall for free users         */
+/* ------------------------------------------------------------------ */
+
+function TierRows({
+  tier,
+  items,
+  archived,
+}: {
+  tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  items: Prediction[];
+  archived: boolean;
+}) {
+  const hasPaid = useHasPaidPlan();
+  return (
+    <div className="space-y-3 sm:space-y-3.5">
+      {items.map((p, i) => {
+        // Free users: archived months fully locked; current month shows first N per tier.
+        const locked =
+          !hasPaid && (archived || i >= FREE_PREVIEW_PER_TIER);
+        return (
+          <FreeTeaseCard key={p.title} locked={locked}>
+            <PredictionRow
+              prediction={p}
+              tier={tier}
+              archived={archived}
+              index={i + 1}
+            />
+          </FreeTeaseCard>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Prediction row — compact single-line briefing                       */
 /* ------------------------------------------------------------------ */
 
