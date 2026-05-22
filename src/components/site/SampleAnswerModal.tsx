@@ -4,24 +4,10 @@ import type { SampleAnswer } from "@/data/sample-answers";
 
 /**
  * SampleAnswerModal — near-fullscreen popup reader for a single sample
- * answer. Opens with a crossfade + light backdrop blur over the page that
- * launched it; the page underneath stays in place and stays blurred until
- * the modal closes. Sticky Band 7 / Band 8 / Band 9 tabs ride the top edge
- * so the learner can switch between three variants of the same answer at
- * any scroll depth.
- *
- * Design decisions (locked via Q&A):
- *   • Near-fullscreen sheet (~92vh, max 880px wide) — generous reading lane.
- *   • Single column reading body — no side panels.
- *   • Sticky band tabs at top of the modal scroll container.
- *   • Crossfade only (no scale) + ~8px backdrop blur, 220ms ease.
- *   • Background page stays mounted; backdrop dims to 35% black.
- *
- * Behaviour:
- *   • ESC closes. Backdrop click closes.
- *   • Body scroll is locked while open.
- *   • If `answer.variants` is present (triple), each tab renders its own
- *     variant; otherwise all three tabs render the same source paragraphs.
+ * answer. "Minimal museum" polish: pure white card, hairline borders,
+ * generous whitespace, tiny uppercase metadata. Three band variants live
+ * behind a sticky FOOTER bar made of three full-width colored blocks
+ * (muted premium palette: slate / deep teal / bronze).
  */
 export type SampleAnswerModalProps = {
   open: boolean;
@@ -35,11 +21,24 @@ export type SampleAnswerModalProps = {
 };
 
 const BAND_LABELS = ["Band 7", "Band 8", "Band 9"] as const;
-const BAND_ACCENTS = [
-  "oklch(0.62 0.135 70)", // saffron
-  "oklch(0.40 0.080 155)", // forest
-  "oklch(0.45 0.140 280)", // royal
+// Muted premium palette
+const BAND_COLORS = [
+  "#94a3b8", // slate
+  "#0f766e", // deep teal
+  "#b45309", // bronze
 ];
+// Slightly darker text-on-color for readable inactive labels
+const BAND_COLORS_DEEP = [
+  "#64748b",
+  "#115e59",
+  "#92400e",
+];
+
+function difficultyFromEyebrow(eyebrow?: string): string | null {
+  if (!eyebrow) return null;
+  const m = eyebrow.match(/(Easy|Medium|Hard)/i);
+  return m ? m[1] : null;
+}
 
 export function SampleAnswerModal({
   open,
@@ -55,11 +54,9 @@ export function SampleAnswerModal({
   const [laneIn, setLaneIn] = useState(true);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Mount + crossfade choreography
   useEffect(() => {
     if (open) {
       setMounted(true);
-      // next frame → trigger fade-in
       const r = requestAnimationFrame(() =>
         requestAnimationFrame(() => setVisible(true)),
       );
@@ -70,7 +67,6 @@ export function SampleAnswerModal({
     return () => window.clearTimeout(t);
   }, [open]);
 
-  // Reset variant + scroll when freshly opened
   useEffect(() => {
     if (open) {
       setVariant(0);
@@ -79,7 +75,6 @@ export function SampleAnswerModal({
     }
   }, [open]);
 
-  // Lock body scroll while open
   useEffect(() => {
     if (!mounted) return;
     const prev = document.body.style.overflow;
@@ -89,7 +84,6 @@ export function SampleAnswerModal({
     };
   }, [mounted]);
 
-  // ESC closes
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -126,7 +120,8 @@ export function SampleAnswerModal({
 
   if (!mounted) return null;
 
-  const accent = BAND_ACCENTS[variant];
+  const difficulty = difficultyFromEyebrow(eyebrow);
+  const accent = BAND_COLORS[variant];
 
   return (
     <div
@@ -135,7 +130,7 @@ export function SampleAnswerModal({
       role="dialog"
       aria-label={`${title} — sample answer`}
     >
-      {/* Backdrop — crossfade + soft blur */}
+      {/* Backdrop */}
       <button
         type="button"
         aria-label="Close"
@@ -157,112 +152,123 @@ export function SampleAnswerModal({
           height: "min(92vh, 980px)",
           opacity: visible ? 1 : 0,
           transition: "opacity 220ms ease",
-          borderTop: `4px solid ${accent}`,
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Sticky header + tabs (one sticky element, two rows) */}
-        <div className="sticky top-0 z-10 border-b border-foreground/10 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-          {/* Row 1 — eyebrow / title / close */}
-          <div className="flex items-start gap-3 px-5 pt-4 sm:px-7 sm:pt-5">
-            <div className="min-w-0 flex-1">
-              {eyebrow && (
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/55 sm:text-[11px]">
-                  {eyebrow}
-                </p>
+        {/* Header — minimal museum: just title + difficulty chip + close */}
+        <div className="flex items-start gap-3 border-b border-foreground/[0.08] px-6 pb-5 pt-5 sm:px-10 sm:pb-6 sm:pt-7">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              {difficulty && (
+                <span className="inline-flex items-center rounded-full border border-foreground/15 bg-white px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/65">
+                  {difficulty}
+                </span>
               )}
-              <h2 className="mt-1 font-display text-[17px] font-extrabold leading-tight tracking-tight text-foreground sm:text-[20px]">
-                {questionNumber ? (
-                  <span className="mr-2 text-foreground/35">
-                    {String(questionNumber).padStart(2, "0")}
-                  </span>
-                ) : null}
-                {title}
-              </h2>
+              {questionNumber ? (
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
+                  No. {String(questionNumber).padStart(2, "0")}
+                </span>
+              ) : null}
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              className="-mr-1 mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/70 transition hover:border-foreground/30 hover:bg-foreground/[0.04] hover:text-foreground"
-            >
-              <X className="h-4 w-4" strokeWidth={2.4} />
-            </button>
+            <h2 className="mt-2.5 font-display text-[19px] font-extrabold leading-[1.25] tracking-tight text-foreground sm:text-[22px]">
+              {title}
+            </h2>
           </div>
-
-          {/* Row 2 — Band 7 / 8 / 9 tabs */}
-          <div className="mt-3 flex items-end gap-1.5 overflow-x-auto px-5 sm:gap-2 sm:px-7">
-            {BAND_LABELS.map((label, i) => {
-              const active = i === variant;
-              return (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => selectVariant(i)}
-                  className="relative shrink-0 px-3.5 pb-3 pt-2 text-[12px] font-extrabold uppercase tracking-[0.16em] transition-colors sm:px-4 sm:text-[13px]"
-                  style={{
-                    color: active ? BAND_ACCENTS[i] : "oklch(0.45 0.02 250)",
-                  }}
-                >
-                  {label}
-                  <span
-                    className="absolute inset-x-2 -bottom-px h-[3px] rounded-full transition-all"
-                    style={{
-                      backgroundColor: active ? BAND_ACCENTS[i] : "transparent",
-                    }}
-                  />
-                </button>
-              );
-            })}
-
-            <div className="ml-auto hidden items-center gap-3 pb-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55 sm:flex">
-              <span>Band {activeParagraphs.bandScore}</span>
-              <span className="h-3 w-px bg-foreground/20" />
-              <span>{activeParagraphs.wordCount} words</span>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="-mr-1 mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-foreground/15 bg-white text-foreground/70 transition hover:border-foreground/30 hover:bg-foreground/[0.04] hover:text-foreground"
+          >
+            <X className="h-4 w-4" strokeWidth={2.4} />
+          </button>
         </div>
 
-        {/* Scroll body — single column */}
+        {/* Scroll body — single column, gallery whitespace */}
         <div
           ref={scrollRef}
-          className="min-h-0 flex-1 overflow-y-auto px-5 py-6 sm:px-10 sm:py-8"
+          className="min-h-0 flex-1 overflow-y-auto px-6 py-8 sm:px-12 sm:py-12"
         >
           <div
-            className="mx-auto max-w-[680px]"
+            className="mx-auto max-w-[640px]"
             style={{
               opacity: laneIn ? 1 : 0,
               transform: laneIn ? "translateY(0)" : "translateY(6px)",
               transition: "opacity 180ms ease, transform 180ms ease",
             }}
           >
-            {/* Mobile-only meta strip */}
-            <div className="mb-5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/55 sm:hidden">
+            {/* Tiny meta strip */}
+            <div className="mb-8 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/50">
+              <span style={{ color: accent }}>{BAND_LABELS[variant]}</span>
+              <span className="h-3 w-px bg-foreground/15" />
               <span>Band {activeParagraphs.bandScore}</span>
-              <span className="h-3 w-px bg-foreground/20" />
+              <span className="h-3 w-px bg-foreground/15" />
               <span>{activeParagraphs.wordCount} words</span>
             </div>
 
             {activeParagraphs.paragraphs.map((p, i) => (
-              <div key={i} className="mb-7 last:mb-2">
+              <div key={i} className="mb-8 last:mb-2">
                 {p.heading && (
-                  <h3
-                    className="mb-2 font-display text-[13px] font-extrabold uppercase tracking-[0.18em]"
-                    style={{ color: accent }}
-                  >
+                  <h3 className="mb-2.5 font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/55">
                     {p.heading}
                   </h3>
                 )}
-                <p className="text-[15.5px] leading-[1.75] text-foreground/85 sm:text-[16px]">
+                <p className="text-[15.5px] leading-[1.8] text-foreground/85 sm:text-[16.5px]">
                   {p.body}
                 </p>
               </div>
             ))}
 
-            <div className="mt-10 border-t border-foreground/10 pt-5 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/45">
+            <div className="mt-12 border-t border-foreground/[0.08] pt-5 text-center text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
               End of {BAND_LABELS[variant]} sample
             </div>
           </div>
+        </div>
+
+        {/* Sticky FOOTER — three full-width color blocks */}
+        <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
+          {BAND_LABELS.map((label, i) => {
+            const active = i === variant;
+            const color = BAND_COLORS[i];
+            const deep = BAND_COLORS_DEEP[i];
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => selectVariant(i)}
+                aria-pressed={active}
+                className="group relative flex flex-col items-center justify-center gap-0.5 px-3 py-4 transition-all sm:py-5"
+                style={{
+                  backgroundColor: active ? color : "#ffffff",
+                  color: active ? "#ffffff" : deep,
+                  opacity: active ? 1 : 0.55,
+                  boxShadow: active
+                    ? "inset 0 2px 0 rgba(255,255,255,0.25), 0 -6px 18px -10px rgba(0,0,0,0.25)"
+                    : "none",
+                }}
+                onMouseEnter={(e) => {
+                  if (!active) e.currentTarget.style.opacity = "0.9";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) e.currentTarget.style.opacity = "0.55";
+                }}
+              >
+                <span
+                  className="absolute inset-x-0 top-0 h-[3px] transition-all"
+                  style={{ backgroundColor: active ? color : "transparent" }}
+                />
+                <span className="text-[12px] font-extrabold uppercase tracking-[0.22em] sm:text-[13px]">
+                  {label}
+                </span>
+                <span
+                  className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
+                  style={{ opacity: active ? 0.85 : 0.7 }}
+                >
+                  {i === 0 ? "Solid" : i === 1 ? "Strong" : "Expert"}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
