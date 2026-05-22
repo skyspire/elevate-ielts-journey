@@ -14,7 +14,7 @@ export function TopTypeGradient({
   const top =
     variant === "academic"
       ? "oklch(0.90 0.08 250)" // deep sky blue
-      : "oklch(0.88 0.09 160)"; // rich jade green
+      : "oklch(0.62 0.11 22)"; // rosewood maroon
   const bottom = "oklch(0.98 0.005 95)"; // warm off-white
 
   return (
