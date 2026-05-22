@@ -231,22 +231,13 @@ function SampleAnswersHubPage() {
     });
   };
 
-  const pageBg = "oklch(0.985 0.005 95)";
-  const grain =
-    "radial-gradient(circle at 1px 1px, oklch(0.20 0 0 / 0.06) 1px, transparent 0)";
-
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: pageBg }}>
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-60"
-        style={{ backgroundImage: grain, backgroundSize: "3px 3px" }}
-      />
+    <div className="relative min-h-screen">
       <TopTypeGradient variant={module} />
 
       <header
         className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
-        style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+        style={{ backgroundColor: "color-mix(in oklab, oklch(0.98 0.005 95) 85%, transparent)" }}
       >
         <div className="container-page flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
