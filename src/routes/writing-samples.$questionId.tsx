@@ -14,6 +14,8 @@ import { WritingAnswerBillboard } from "@/components/site/WritingAnswerBillboard
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
+import { WritingTask1Modal } from "@/components/site/WritingTask1Modal";
+import { writingTask1Charts } from "@/data/writing-task1-charts";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -92,14 +94,24 @@ function QuestionDetailPage() {
             fullScreen
           />
 
-          <SampleAnswerModal
-            open={true}
-            onClose={closeToList}
-            title={title}
-            questionNumber={questionNumber}
-            answer={answer}
-            eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
-          />
+          {writingTask1Charts[questionId] ? (
+            <WritingTask1Modal
+              open={true}
+              onClose={closeToList}
+              title={title}
+              answer={answer}
+              chart={writingTask1Charts[questionId]}
+            />
+          ) : (
+            <SampleAnswerModal
+              open={true}
+              onClose={closeToList}
+              title={title}
+              questionNumber={questionNumber}
+              answer={answer}
+              eyebrow={`${search.category || "Writing"} · ${search.difficulty}`}
+            />
+          )}
         </>
       ) : (
         <div className="flex h-full items-center justify-center px-6">

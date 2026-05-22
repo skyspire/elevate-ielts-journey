@@ -808,7 +808,7 @@ function Pill({
       className="relative overflow-hidden rounded-full px-5 py-2.5 text-center font-sans text-[13.5px] font-bold uppercase tracking-[0.08em] transition-all duration-200"
       style={{
         minWidth: 120,
-        backgroundColor: active ? accent.solid : "oklch(0.18 0.01 250)",
+        backgroundColor: active ? accent.solid : "oklch(0.62 0.008 250)",
         color: "white",
         border: "none",
         transform: active ? "translateY(-1px)" : "translateY(0)",
