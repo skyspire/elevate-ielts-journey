@@ -26,11 +26,11 @@ export type SpeakingSampleModalProps = {
   categoryId: string;
 };
 
-// Same muted premium palette as the Writing modal — three slots.
+// Editorial / Oxford prestige palette — matches Writing modals.
 const BAND_COLORS = [
-  "#94a3b8", // slate
-  "#0f766e", // deep teal
-  "#b45309", // bronze
+  "#1e3a5f", // navy
+  "#9b2c2c", // burgundy
+  "#b8860b", // gold
 ];
 
 export function SpeakingSampleModal({
