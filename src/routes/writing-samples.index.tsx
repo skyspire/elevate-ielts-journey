@@ -96,11 +96,16 @@ const categoriesByModuleTask: Record<Module, Record<Task, Category[]>> = {
 };
 
 // ───────── Questions ─────────
-import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
+import {
+  task2Prompts,
+  task1GeneralPrompts,
+  task1AcademicPrompts,
+} from "@/data/writing-prompts";
 
 const ALL_PROMPTS: Record<string, string[]> = {
   ...task2Prompts,
   ...task1GeneralPrompts,
+  ...task1AcademicPrompts,
 };
 
 type Tone = "blue" | "mint" | "peach" | "lilac";

@@ -325,4 +325,128 @@ export const sampleAnswers: Record<string, SampleAnswer> = {
       "Sign off warmly: 'Lots of love', 'Take care', 'See you soon' + your first name only.",
     ],
   },
+
+  // ───────── Academic Task 1 — Line Graph sample (with 3 band-tier variants) ─────────
+  // Prompt: Average weekly coffee consumption per person in Italy, Germany,
+  // the UK and Sweden, 1995–2020.
+  "line-graph-1": {
+    bandScore: "9.0",
+    wordCount: 188,
+    paragraphs: [
+      {
+        heading: "Introduction",
+        body: "The line graph illustrates the average weekly coffee consumption per person, measured in cups, in four European countries — Italy, Germany, the United Kingdom and Sweden — over a twenty-five-year period from 1995 to 2020.",
+      },
+      {
+        heading: "Overview",
+        body: "Overall, weekly coffee consumption rose in all four countries, but the rate of growth varied sharply. Sweden remained the heaviest coffee-drinking nation throughout the period, whereas the United Kingdom, which started from the lowest base, recorded by far the steepest increase.",
+      },
+      {
+        heading: "Sweden and Italy",
+        body: "In 1995, Swedes drank roughly 24 cups per week per person, comfortably ahead of Italians on around 18 cups. Swedish consumption climbed gradually, peaking at approximately 28 cups in 2010 before easing back to 26 cups by 2020. Italian figures, by contrast, fluctuated narrowly and finished the period only marginally higher than they began, at about 20 cups.",
+      },
+      {
+        heading: "United Kingdom and Germany",
+        body: "The most striking change was seen in the UK. From a low of just 7 cups in 1995, weekly consumption rose steadily, accelerating after 2005 and reaching around 18 cups by 2020 — almost a threefold increase. German consumption, meanwhile, grew more modestly but consistently, climbing from 15 to roughly 20 cups over the same period.",
+      },
+    ],
+    variants: [
+      // ── Variant 1 — Band 7.0 (clear but simpler range) ────────────────
+      {
+        bandScore: "7.0",
+        wordCount: 162,
+        paragraphs: [
+          {
+            heading: "Introduction",
+            body: "The line graph shows how many cups of coffee people drank each week, on average, in four European countries — Italy, Germany, the UK and Sweden — from 1995 to 2020.",
+          },
+          {
+            heading: "Overview",
+            body: "Overall, coffee consumption went up in all four countries during this time. Sweden had the highest figures throughout, while the UK started the lowest but increased the most by the end of the period.",
+          },
+          {
+            heading: "Sweden and Italy",
+            body: "In 1995, people in Sweden drank about 24 cups of coffee a week, more than people in Italy, who drank around 18 cups. Swedish consumption then went up slowly and reached about 28 cups in 2010 before falling a little to 26 cups in 2020. Italian consumption stayed quite stable and finished at about 20 cups.",
+          },
+          {
+            heading: "UK and Germany",
+            body: "The biggest change was in the UK. People drank only 7 cups a week in 1995, but this number rose to around 18 cups by 2020. German consumption also grew, going from 15 to about 20 cups over the same years.",
+          },
+        ],
+      },
+      // ── Variant 2 — Band 8.0 (richer range, accurate features) ────────
+      {
+        bandScore: "8.0",
+        wordCount: 178,
+        paragraphs: [
+          {
+            heading: "Introduction",
+            body: "The line graph compares the average weekly coffee consumption per person, in cups, in four European countries — Italy, Germany, the United Kingdom and Sweden — between 1995 and 2020.",
+          },
+          {
+            heading: "Overview",
+            body: "Overall, consumption increased in every country, though to very different extents. Sweden remained the largest consumer across the whole period, while the UK saw the most dramatic rise, almost catching up with Germany by 2020.",
+          },
+          {
+            heading: "Sweden and Italy",
+            body: "Swedes drank around 24 cups per week in 1995, well above the Italian figure of roughly 18 cups. Swedish consumption rose steadily to a peak of about 28 cups in 2010 and then dipped slightly to 26 cups by 2020. Italian consumption, by contrast, remained fairly flat, edging up to around 20 cups over the period.",
+          },
+          {
+            heading: "UK and Germany",
+            body: "The UK recorded the most striking change, with consumption climbing from just 7 cups per week in 1995 to roughly 18 cups in 2020 — more than doubling. Germany followed a gentler upward trend, rising gradually from 15 to around 20 cups.",
+          },
+        ],
+      },
+      // ── Variant 3 — Band 9.0 (full range + precision) ─────────────────
+      {
+        bandScore: "9.0",
+        wordCount: 188,
+        paragraphs: [
+          {
+            heading: "Introduction",
+            body: "The line graph illustrates the average weekly coffee consumption per person, measured in cups, in four European countries — Italy, Germany, the United Kingdom and Sweden — over a twenty-five-year period from 1995 to 2020.",
+          },
+          {
+            heading: "Overview",
+            body: "Overall, weekly coffee consumption rose in all four countries, but the rate of growth varied sharply. Sweden remained the heaviest coffee-drinking nation throughout the period, whereas the United Kingdom, which started from the lowest base, recorded by far the steepest increase.",
+          },
+          {
+            heading: "Sweden and Italy",
+            body: "In 1995, Swedes drank roughly 24 cups per week per person, comfortably ahead of Italians on around 18 cups. Swedish consumption climbed gradually, peaking at approximately 28 cups in 2010 before easing back to 26 cups by 2020. Italian figures, by contrast, fluctuated narrowly and finished the period only marginally higher than they began, at about 20 cups.",
+          },
+          {
+            heading: "United Kingdom and Germany",
+            body: "The most striking change was seen in the UK. From a low of just 7 cups in 1995, weekly consumption rose steadily, accelerating after 2005 and reaching around 18 cups by 2020 — almost a threefold increase. German consumption, meanwhile, grew more modestly but consistently, climbing from 15 to roughly 20 cups over the same period.",
+          },
+        ],
+      },
+    ],
+    structure: [
+      { label: "Introduction", detail: "Paraphrase the prompt — change wording but keep the meaning (what the graph shows, who, where, what units, and the time period)." },
+      { label: "Overview", detail: "State 2–3 key features without exact figures. Examiners look for this as a separate paragraph — usually the highest, lowest, biggest change, and overall trend." },
+      { label: "Detail 1 — group A", detail: "Group two related lines (e.g. the steady or high consumers) and describe their movement with accurate figures." },
+      { label: "Detail 2 — group B", detail: "Describe the remaining lines, focusing on contrast — biggest riser, smallest change, any crossover or peak." },
+    ],
+    vocabulary: [
+      { term: "rose steadily / climbed gradually", meaning: "went up at a slow, even pace" },
+      { term: "peaked at", meaning: "reached its highest point of" },
+      { term: "fluctuated narrowly", meaning: "moved up and down within a small range" },
+      { term: "dipped / eased back to", meaning: "fell slightly" },
+      { term: "a threefold increase", meaning: "rose to three times the original amount" },
+      { term: "comfortably ahead of", meaning: "clearly higher than" },
+      { term: "from the lowest base", meaning: "starting from the smallest figure" },
+      { term: "by contrast", meaning: "linking phrase showing opposite trends" },
+      { term: "marginally higher", meaning: "only a little higher" },
+      { term: "the most striking change", meaning: "the biggest / most noticeable change" },
+    ],
+    tips: [
+      "Always include a separate overview paragraph — without it, Task Achievement is capped at Band 5.",
+      "Never copy the question word-for-word. Paraphrase the title, units, and time period.",
+      "Don't describe every data point. Group similar trends and select the key features.",
+      "Use a range of trend verbs (rose, climbed, peaked, dipped, fluctuated) with adverbs (steadily, sharply, gradually, marginally).",
+      "Use past tense throughout — line graphs from a past period are described as completed history.",
+      "Aim for around 170–190 words. Going far over costs time without earning extra marks.",
+    ],
+  },
 };
+
