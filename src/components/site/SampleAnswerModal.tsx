@@ -27,18 +27,6 @@ const BAND_COLORS = [
   "#0f766e", // deep teal
   "#b45309", // bronze
 ];
-// Slightly darker text-on-color for readable inactive labels
-const BAND_COLORS_DEEP = [
-  "#64748b",
-  "#115e59",
-  "#92400e",
-];
-
-function difficultyFromEyebrow(eyebrow?: string): string | null {
-  if (!eyebrow) return null;
-  const m = eyebrow.match(/(Easy|Medium|Hard)/i);
-  return m ? m[1] : null;
-}
 
 export function SampleAnswerModal({
   open,
@@ -120,8 +108,6 @@ export function SampleAnswerModal({
 
   if (!mounted) return null;
 
-  const difficulty = difficultyFromEyebrow(eyebrow);
-  const accent = BAND_COLORS[variant];
 
   return (
     <div
@@ -155,22 +141,16 @@ export function SampleAnswerModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — minimal museum: just title + difficulty chip + close */}
-        <div className="flex items-start gap-3 border-b border-foreground/[0.08] px-6 pb-5 pt-5 sm:px-10 sm:pb-6 sm:pt-7">
+        {/* Header — question statement only, large grey rounded sans */}
+        <div className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 pb-6 pt-6 sm:px-12 sm:pb-8 sm:pt-9">
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              {difficulty && (
-                <span className="inline-flex items-center rounded-full border border-foreground/15 bg-white px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/65">
-                  {difficulty}
-                </span>
-              )}
-              {questionNumber ? (
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-                  No. {String(questionNumber).padStart(2, "0")}
-                </span>
-              ) : null}
-            </div>
-            <h2 className="mt-2.5 font-display text-[19px] font-extrabold leading-[1.25] tracking-tight text-foreground sm:text-[22px]">
+            <h2
+              className="text-[20px] font-semibold leading-[1.45] tracking-[-0.005em] text-slate-500 sm:text-[24px] sm:leading-[1.5]"
+              style={{
+                fontFamily:
+                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+              }}
+            >
               {title}
             </h2>
           </div>
@@ -197,15 +177,6 @@ export function SampleAnswerModal({
               transition: "opacity 180ms ease, transform 180ms ease",
             }}
           >
-            {/* Tiny meta strip */}
-            <div className="mb-8 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/50">
-              <span style={{ color: accent }}>{BAND_LABELS[variant]}</span>
-              <span className="h-3 w-px bg-foreground/15" />
-              <span>Band {activeParagraphs.bandScore}</span>
-              <span className="h-3 w-px bg-foreground/15" />
-              <span>{activeParagraphs.wordCount} words</span>
-            </div>
-
             {activeParagraphs.paragraphs.map((p, i) => (
               <div key={i} className="mb-8 last:mb-2">
                 {p.heading && (
@@ -218,53 +189,53 @@ export function SampleAnswerModal({
                 </p>
               </div>
             ))}
-
-            <div className="mt-12 border-t border-foreground/[0.08] pt-5 text-center text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-              End of {BAND_LABELS[variant]} sample
-            </div>
           </div>
         </div>
 
-        {/* Sticky FOOTER — three full-width color blocks */}
+        {/* Sticky FOOTER — three full-width color blocks, big rounded labels */}
         <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
           {BAND_LABELS.map((label, i) => {
             const active = i === variant;
             const color = BAND_COLORS[i];
-            const deep = BAND_COLORS_DEEP[i];
+            // mix color with white for medium tint at ~50% saturation
+            const tint = `color-mix(in oklab, ${color} 55%, white)`;
             return (
               <button
                 key={label}
                 type="button"
                 onClick={() => selectVariant(i)}
                 aria-pressed={active}
-                className="group relative flex flex-col items-center justify-center gap-0.5 px-3 py-4 transition-all sm:py-5"
+                className="group relative flex items-center justify-center px-3 py-5 transition-all sm:py-6"
                 style={{
-                  backgroundColor: active ? color : "#ffffff",
-                  color: active ? "#ffffff" : deep,
-                  opacity: active ? 1 : 0.55,
+                  backgroundColor: active ? color : tint,
+                  color: "#ffffff",
                   boxShadow: active
-                    ? "inset 0 2px 0 rgba(255,255,255,0.25), 0 -6px 18px -10px rgba(0,0,0,0.25)"
-                    : "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.opacity = "0.9";
-                }}
-                onMouseLeave={(e) => {
-                  if (!active) e.currentTarget.style.opacity = "0.55";
+                    ? `inset 0 2px 0 rgba(255,255,255,0.28), 0 0 0 1px ${color} inset, 0 -10px 28px -8px ${color}, 0 -2px 14px -4px ${color}`
+                    : "inset 0 1px 0 rgba(255,255,255,0.18)",
+                  fontFamily:
+                    '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 }}
               >
                 <span
                   className="absolute inset-x-0 top-0 h-[3px] transition-all"
-                  style={{ backgroundColor: active ? color : "transparent" }}
+                  style={{
+                    backgroundColor: active
+                      ? "rgba(255,255,255,0.9)"
+                      : "transparent",
+                  }}
                 />
-                <span className="text-[12px] font-extrabold uppercase tracking-[0.22em] sm:text-[13px]">
-                  {label}
-                </span>
                 <span
-                  className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
-                  style={{ opacity: active ? 0.85 : 0.7 }}
+                  className="font-bold tracking-tight"
+                  style={{
+                    fontSize: active ? "22px" : "20px",
+                    letterSpacing: "-0.01em",
+                    textShadow: active
+                      ? "0 1px 0 rgba(0,0,0,0.18)"
+                      : "none",
+                    transition: "font-size 180ms ease",
+                  }}
                 >
-                  {i === 0 ? "Solid" : i === 1 ? "Strong" : "Expert"}
+                  {label}
                 </span>
               </button>
             );
