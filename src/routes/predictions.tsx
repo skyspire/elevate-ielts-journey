@@ -19,7 +19,13 @@ import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import { FreeTeaseCard } from "@/components/site/FreeTeaseCard";
+import { FreePlanBillboard } from "@/components/site/FreePlanBillboard";
+import { useHasPaidPlan } from "@/lib/plan-access";
 import { IeltsTypeSelector } from "@/components/site/IeltsTypeSelector";
+
+/** Free users see this many predictions per tier; archived months are fully locked. */
+const FREE_PREVIEW_PER_TIER = 1;
 import {
   usePredictionAnswer,
   savePredictionAnswer,
