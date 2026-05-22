@@ -453,6 +453,68 @@ export function WritingTask1Modal({
           })}
         </div>
       </div>
+
+      {/* Fullscreen chart lightbox */}
+      {zoomOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enlarged chart"
+          onClick={() => setZoomOpen(false)}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-10"
+          style={{
+            animation: "t1ZoomFade 180ms ease-out both",
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomOpen(false);
+            }}
+            aria-label="Close enlarged chart"
+            className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-foreground shadow-xl transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-6"
+          >
+            <X className="h-5 w-5" strokeWidth={2.4} />
+          </button>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-full w-full max-w-[1100px] flex-col gap-3 overflow-auto rounded-xl bg-white p-4 shadow-2xl sm:p-8"
+            style={{
+              animation: "t1ZoomIn 240ms cubic-bezier(0.22, 1, 0.36, 1) both",
+            }}
+          >
+            <div
+              className="text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground/55"
+              style={{
+                fontFamily:
+                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+              }}
+            >
+              The chart · enlarged
+            </div>
+            <div className="flex min-h-[420px] flex-1 items-stretch sm:min-h-[520px]">
+              {chart.kind === "line" && (
+                <LineGraphChart
+                  caption={chart.caption}
+                  xLabels={chart.xLabels}
+                  series={chart.series}
+                  yMax={chart.yMax}
+                  yStep={chart.yStep}
+                  yUnit={chart.yUnit}
+                />
+              )}
+            </div>
+          </div>
+          <style>{`
+            @keyframes t1ZoomFade { from { opacity: 0 } to { opacity: 1 } }
+            @keyframes t1ZoomIn {
+              from { opacity: 0; transform: scale(0.94) }
+              to   { opacity: 1; transform: scale(1) }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 }
