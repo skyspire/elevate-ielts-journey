@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SampleAnswerModal } from "@/components/site/SampleAnswerModal";
+import { WritingTask1Modal } from "@/components/site/WritingTask1Modal";
+import { writingTask1Charts } from "@/data/writing-task1-charts";
 import { useWritingAnswer } from "@/lib/admin/writing-answers";
 import {
   GraduationCap,
