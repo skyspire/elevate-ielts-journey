@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FlipExpansion } from "@/components/site/FlipExpansion";
+import { SpeakingSampleModal } from "@/components/site/SpeakingSampleModal";
 import {
   GraduationCap,
   MessageCircle,
