@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FlipExpansion } from "@/components/site/FlipExpansion";
+import { SpeakingSampleModal } from "@/components/site/SpeakingSampleModal";
 import {
   GraduationCap,
   MessageCircle,
@@ -105,16 +105,14 @@ function SpeakingSamplesPage() {
   const [flipOpen, setFlipOpen] = useState(false);
   const [flipTopic, setFlipTopic] = useState<{ id: string; label: string } | null>(null);
   const [flipCategoryId, setFlipCategoryId] = useState<string>(fallbackCategories[0].id);
-  const [flipAnchor, setFlipAnchor] = useState<DOMRect | null>(null);
 
   const handleOpenFlip = (
     topic: { id: string; label: string },
     catId: string,
-    rect: DOMRect,
+    _rect: DOMRect,
   ) => {
     setFlipTopic(topic);
     setFlipCategoryId(catId);
-    setFlipAnchor(rect);
     setFlipOpen(true);
   };
 
@@ -316,12 +314,11 @@ function SpeakingSamplesPage() {
       <Footer />
 
       {flipTopic && (
-        <FlipExpansion
+        <SpeakingSampleModal
           open={flipOpen}
           onClose={() => setFlipOpen(false)}
           categoryId={flipCategoryId}
           topic={flipTopic}
-          anchorRect={flipAnchor}
         />
       )}
     </div>
