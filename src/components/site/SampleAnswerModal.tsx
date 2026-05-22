@@ -186,16 +186,22 @@ export function SampleAnswerModal({
 
 
 
-      {/* Sheet */}
+      {/* Sheet — slightly translucent so particles fog through, with soft outer halo */}
       <div
-        className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:rounded-3xl"
+        className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
         style={{
           height: "min(92vh, 980px)",
           opacity: visible ? 1 : 0,
+          backgroundColor: "rgba(255,255,255,0.93)",
+          backdropFilter: "blur(14px) saturate(1.05)",
+          WebkitBackdropFilter: "blur(14px) saturate(1.05)",
+          boxShadow:
+            "0 0 0 1px rgba(255,255,255,0.4), 0 0 48px 6px rgba(255,255,255,0.18), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
           transition: "opacity 220ms ease",
         }}
         onClick={(e) => e.stopPropagation()}
       >
+
         {/* Header — collapses to compact one-line on scroll */}
         <div
           className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 sm:px-12"
