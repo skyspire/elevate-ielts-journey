@@ -883,6 +883,12 @@ function PredictionsPage() {
 
   const [showArchive, setShowArchive] = useState(false);
   const [activeTier, setActiveTier] = useState<Tier | null>(null);
+  const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
+
+  // Reset tier selection when user changes module/exam/task filter.
+  useEffect(() => {
+    setSelectedTier(null);
+  }, [skill, exam, taskType]);
 
   useEffect(() => {
     const sections = Array.from(
@@ -1088,63 +1094,31 @@ function PredictionsPage() {
           {/* Free-plan billboard — visible only when current user has no paid plan. */}
           <CurrentMonthBillboard current={current} />
 
-          {/* Tiered groups — current month. Writing & Reading are gated per IELTS type; Speaking/Listening stay open. */}
-          {(skill === "writing" || skill === "reading") ? (
-            <TypeGate contentType={exam}>
-              <div className="mt-12 space-y-16">
-                {TIERS.map((tier) => {
-                  const items = current[tier.key];
-                  if (items.length === 0) return null;
-                  const isActive = activeTier === tier.key;
-                  return (
-                    <div
-                      key={tier.key}
-                      data-tier-section={tier.key}
-                      className="relative -mx-3 rounded-3xl px-3 py-6 sm:-mx-6 sm:px-6 sm:py-8"
-                    >
-                      <TierSection tier={tier} items={items} />
-                    </div>
-                  );
-                })}
+          {/* Tier picker — three big flip cards. Selecting one opens its question list. */}
+          {(() => {
+            const tierContent = selectedTier ? (
+              <SelectedTierView
+                tier={TIERS.find((t) => t.key === selectedTier)!}
+                items={current[selectedTier]}
+                archive={archive.map((m) => ({
+                  month: m.month,
+                  label: m.label,
+                  items: m.grouped[selectedTier],
+                }))}
+                onBack={() => setSelectedTier(null)}
+              />
+            ) : (
+              <TierTrio current={current} onSelect={setSelectedTier} />
+            );
 
-                {current.hot.length === 0 &&
-                  current.likely.length === 0 &&
-                  current.review.length === 0 && (
-                    <p className="text-center font-display text-lg font-bold text-foreground/60">
-                      Fresh predictions land here every Monday.
-                    </p>
-                  )}
-              </div>
-            </TypeGate>
-          ) : (
-            <div className="mt-12 space-y-16">
-              {TIERS.map((tier) => {
-                const items = current[tier.key];
-                if (items.length === 0) return null;
-                const isActive = activeTier === tier.key;
-                return (
-                  <div
-                    key={tier.key}
-                    data-tier-section={tier.key}
-                    className="relative -mx-3 rounded-3xl px-3 py-6 sm:-mx-6 sm:px-6 sm:py-8"
-                  >
-                    <TierSection tier={tier} items={items} />
-                  </div>
-                );
-              })}
-
-              {current.hot.length === 0 &&
-                current.likely.length === 0 &&
-                current.review.length === 0 && (
-                  <p className="text-center font-display text-lg font-bold text-foreground/60">
-                    Fresh predictions land here every Monday.
-                  </p>
-                )}
-            </div>
-          )}
+            if (skill === "writing" || skill === "reading") {
+              return <TypeGate contentType={exam}>{tierContent}</TypeGate>;
+            }
+            return tierContent;
+          })()}
 
           {/* Archive — collapsed by default */}
-          {archive.length > 0 && (
+          {archive.length > 0 && selectedTier === null && (
             <div className="mt-20 border-t border-border/60 pt-10">
               <div className="flex flex-col items-center gap-3 text-center">
                 <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
@@ -1212,6 +1186,235 @@ function PredictionsPage() {
         </div>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Tier trio — three big flip cards (Tarot style)                      */
+/* ------------------------------------------------------------------ */
+
+function TierTrio({
+  current,
+  onSelect,
+}: {
+  current: Record<Tier, Prediction[]>;
+  onSelect: (t: Tier) => void;
+}) {
+  return (
+    <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
+      {TIERS.map((tier) => {
+        const items = current[tier.key];
+        const count = items.length;
+        const peek = items[0]?.title;
+        return (
+          <TierFlipCard
+            key={tier.key}
+            tier={tier}
+            count={count}
+            peek={peek}
+            onSelect={() => onSelect(tier.key)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function TierFlipCard({
+  tier,
+  count,
+  peek,
+  onSelect,
+}: {
+  tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  count: number;
+  peek?: string;
+  onSelect: () => void;
+}) {
+  const [flipped, setFlipped] = useState(false);
+  const Icon = tier.icon;
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      onFocus={() => setFlipped(true)}
+      onBlur={() => setFlipped(false)}
+      className="group relative h-[340px] w-full text-left [perspective:1200px] sm:h-[420px]"
+      aria-label={`Open ${tier.label} predictions`}
+    >
+      <div
+        className="relative h-full w-full rounded-[28px] transition-transform duration-700 ease-out [transform-style:preserve-3d]"
+        style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+      >
+        {/* FRONT */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-between overflow-hidden rounded-[28px] border p-6 [backface-visibility:hidden] sm:p-7"
+          style={{
+            background: `linear-gradient(160deg, color-mix(in oklab, ${tier.accent} 12%, white) 0%, color-mix(in oklab, ${tier.accent} 5%, white) 100%)`,
+            borderColor: `color-mix(in oklab, ${tier.accent} 25%, transparent)`,
+            boxShadow: `0 24px 50px -28px color-mix(in oklab, ${tier.accent} 55%, transparent), 0 4px 12px -8px rgba(15,23,42,0.08)`,
+          }}
+        >
+          {/* Decorative corner ticks */}
+          <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l-2 border-t-2 rounded-tl-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
+          <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r-2 border-t-2 rounded-tr-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
+          <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l-2 border-b-2 rounded-bl-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
+          <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r-2 border-b-2 rounded-br-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
+
+          <span
+            className="flex h-16 w-16 items-center justify-center rounded-2xl sm:h-20 sm:w-20"
+            style={{
+              background: `color-mix(in oklab, ${tier.accent} 18%, white)`,
+              color: tier.accent,
+            }}
+            aria-hidden
+          >
+            <Icon className="h-8 w-8 sm:h-10 sm:w-10" />
+          </span>
+
+          <div className="text-center">
+            <div
+              className="font-display font-black leading-none tracking-[-0.03em] tabular-nums"
+              style={{ fontSize: "clamp(3.5rem, 9vw, 5.5rem)", color: tier.accent }}
+            >
+              {count}
+            </div>
+            <div className="mt-1 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/55">
+              {count === 1 ? "topic" : "topics"}
+            </div>
+          </div>
+
+          <div className="text-center">
+            <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
+              {tier.label}
+            </h3>
+            <p className="mt-1.5 text-[12.5px] font-medium leading-snug text-foreground/60 sm:text-[13px]">
+              {tier.helper}
+            </p>
+          </div>
+        </div>
+
+        {/* BACK */}
+        <div
+          className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[28px] border p-6 [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-7"
+          style={{
+            background: `linear-gradient(160deg, ${tier.accent} 0%, color-mix(in oklab, ${tier.accent} 80%, black) 100%)`,
+            borderColor: "transparent",
+            boxShadow: `0 30px 60px -28px color-mix(in oklab, ${tier.accent} 70%, transparent)`,
+          }}
+        >
+          <div className="flex items-center gap-2 text-white/90">
+            <Icon className="h-4 w-4" aria-hidden />
+            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em]">
+              Peek inside
+            </span>
+          </div>
+
+          {peek ? (
+            <p className="font-display text-[15px] font-semibold leading-snug text-white sm:text-[17px]">
+              "{peek}"
+            </p>
+          ) : (
+            <p className="font-display text-[14px] font-medium italic text-white/80">
+              Fresh picks land here every week.
+            </p>
+          )}
+
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-white/75">
+              {count} {count === 1 ? "topic" : "topics"}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-display text-[12px] font-extrabold uppercase tracking-[0.12em]" style={{ color: tier.accent }}>
+              Open →
+            </span>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Selected tier view — single tier's questions + matching archive     */
+/* ------------------------------------------------------------------ */
+
+function SelectedTierView({
+  tier,
+  items,
+  archive,
+  onBack,
+}: {
+  tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  items: Prediction[];
+  archive: { month: string; label: string; items: Prediction[] }[];
+  onBack: () => void;
+}) {
+  const Icon = tier.icon;
+  const archiveWithItems = archive.filter((a) => a.items.length > 0);
+  return (
+    <div className="mt-10 animate-fade-in">
+      <button
+        type="button"
+        onClick={onBack}
+        className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-card/60 px-4 py-2 font-display text-[12px] font-bold tracking-tight text-foreground/75 backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-card hover:text-foreground"
+      >
+        ← All tiers
+      </button>
+
+      <header className="mt-6 flex items-center gap-4">
+        <span
+          className="flex h-12 w-12 items-center justify-center rounded-2xl"
+          style={{
+            background: `color-mix(in oklab, ${tier.accent} 16%, transparent)`,
+            color: tier.accent,
+          }}
+          aria-hidden
+        >
+          <Icon className="h-6 w-6" />
+        </span>
+        <div>
+          <h2 className="font-display text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+            {tier.label}
+          </h2>
+          <p className="mt-0.5 text-[13px] font-medium text-foreground/60">{tier.helper}</p>
+        </div>
+      </header>
+
+      <div className="mt-8">
+        {items.length === 0 ? (
+          <p className="text-center font-display text-base font-bold text-foreground/55">
+            Fresh predictions land here every Monday.
+          </p>
+        ) : (
+          <TierRows tier={tier} items={items} archived={false} />
+        )}
+      </div>
+
+      {archiveWithItems.length > 0 && (
+        <div className="mt-16 border-t border-border/60 pt-10">
+          <h3 className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
+            Previous months · {tier.label}
+          </h3>
+          <div className="mt-6 space-y-12">
+            {archiveWithItems.map((m) => (
+              <div key={m.month}>
+                <header className="mb-4 flex items-center gap-3">
+                  <h4 className="font-display text-lg font-black tracking-tight text-foreground/70 sm:text-xl">
+                    {m.label}
+                  </h4>
+                  <span className="rounded-full border border-border/60 bg-background/60 px-2.5 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/55">
+                    Archived
+                  </span>
+                </header>
+                <TierRows tier={tier} items={m.items} archived={true} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
