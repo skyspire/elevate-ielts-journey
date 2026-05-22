@@ -1205,7 +1205,7 @@ function TierTrio({
   onSelect: (t: Tier) => void;
 }) {
   return (
-    <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3 sm:gap-6">
+    <div className="mt-10 grid grid-cols-3 gap-2.5 sm:gap-5">
       {TIERS.map((tier) => {
         const items = current[tier.key];
         const count = items.length;
