@@ -675,7 +675,7 @@ function WritingInline({
         </div>
 
         {/* Category chips + question grid sit on a tinted dotted panel */}
-        <DottedTintPanel tint={accent.soft} className="mt-6 py-10 sm:py-12">
+        <DottedTintPanel className="mt-6 py-10 sm:py-12">
           <div className="container-page">
             <div className="flex flex-wrap justify-center gap-2.5">
               {cats.map((c) => (
@@ -763,7 +763,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
           />
         </div>
 
-        <DottedTintPanel tint={accent.soft} className="mt-6 py-10 sm:py-12">
+        <DottedTintPanel className="mt-6 py-10 sm:py-12">
           <div className="container-page">
             <div className="flex flex-wrap justify-center gap-2.5">
               {cats.map((c) => (
