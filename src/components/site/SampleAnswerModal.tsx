@@ -206,46 +206,50 @@ export function SampleAnswerModal({
           </div>
         </div>
 
-        {/* Sticky FOOTER — three full-width color blocks */}
+        {/* Sticky FOOTER — three full-width color blocks, big rounded labels */}
         <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
           {BAND_LABELS.map((label, i) => {
             const active = i === variant;
             const color = BAND_COLORS[i];
-            const deep = BAND_COLORS_DEEP[i];
+            // mix color with white for medium tint at ~50% saturation
+            const tint = `color-mix(in oklab, ${color} 55%, white)`;
             return (
               <button
                 key={label}
                 type="button"
                 onClick={() => selectVariant(i)}
                 aria-pressed={active}
-                className="group relative flex flex-col items-center justify-center gap-0.5 px-3 py-4 transition-all sm:py-5"
+                className="group relative flex items-center justify-center px-3 py-5 transition-all sm:py-6"
                 style={{
-                  backgroundColor: active ? color : "#ffffff",
-                  color: active ? "#ffffff" : deep,
-                  opacity: active ? 1 : 0.55,
+                  backgroundColor: active ? color : tint,
+                  color: "#ffffff",
                   boxShadow: active
-                    ? "inset 0 2px 0 rgba(255,255,255,0.25), 0 -6px 18px -10px rgba(0,0,0,0.25)"
-                    : "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.opacity = "0.9";
-                }}
-                onMouseLeave={(e) => {
-                  if (!active) e.currentTarget.style.opacity = "0.55";
+                    ? `inset 0 2px 0 rgba(255,255,255,0.28), 0 0 0 1px ${color} inset, 0 -10px 28px -8px ${color}, 0 -2px 14px -4px ${color}`
+                    : "inset 0 1px 0 rgba(255,255,255,0.18)",
+                  fontFamily:
+                    '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 }}
               >
                 <span
                   className="absolute inset-x-0 top-0 h-[3px] transition-all"
-                  style={{ backgroundColor: active ? color : "transparent" }}
+                  style={{
+                    backgroundColor: active
+                      ? "rgba(255,255,255,0.9)"
+                      : "transparent",
+                  }}
                 />
-                <span className="text-[12px] font-extrabold uppercase tracking-[0.22em] sm:text-[13px]">
-                  {label}
-                </span>
                 <span
-                  className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
-                  style={{ opacity: active ? 0.85 : 0.7 }}
+                  className="font-bold tracking-tight"
+                  style={{
+                    fontSize: active ? "22px" : "20px",
+                    letterSpacing: "-0.01em",
+                    textShadow: active
+                      ? "0 1px 0 rgba(0,0,0,0.18)"
+                      : "none",
+                    transition: "font-size 180ms ease",
+                  }}
                 >
-                  {i === 0 ? "Solid" : i === 1 ? "Strong" : "Expert"}
+                  {label}
                 </span>
               </button>
             );
