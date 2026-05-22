@@ -187,17 +187,54 @@ export function SampleAnswerModal({
 
 
       {/* Sheet — slightly translucent so particles fog through, with soft outer halo */}
+      <style>{`
+        @keyframes saPaperUncrumple {
+          0% {
+            transform: scale(0.18) rotate(-14deg) skew(6deg, -4deg);
+            filter: blur(6px) contrast(1.15) brightness(0.92);
+            border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+            opacity: 0;
+          }
+          25% {
+            transform: scale(0.45) rotate(8deg) skew(-3deg, 2deg);
+            filter: blur(3px) contrast(1.08) brightness(0.96);
+            border-radius: 30% 45% 35% 50% / 40% 35% 50% 40%;
+            opacity: 0.85;
+          }
+          55% {
+            transform: scale(0.92) rotate(-2deg) skew(1deg, -0.5deg);
+            filter: blur(1px) contrast(1.02) brightness(0.99);
+            border-radius: 18px;
+            opacity: 1;
+          }
+          78% {
+            transform: scale(1.015) rotate(0.4deg);
+            filter: blur(0) contrast(1) brightness(1);
+            border-radius: 18px;
+          }
+          100% {
+            transform: scale(1) rotate(0);
+            filter: blur(0) contrast(1) brightness(1);
+            border-radius: 18px;
+            opacity: 1;
+          }
+        }
+      `}</style>
       <div
         className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
         style={{
           height: "min(92vh, 980px)",
-          opacity: visible ? 1 : 0,
           backgroundColor: "rgba(255,255,255,0.93)",
           backdropFilter: "blur(14px) saturate(1.05)",
           WebkitBackdropFilter: "blur(14px) saturate(1.05)",
           boxShadow:
             "0 0 0 1px rgba(255,255,255,0.4), 0 0 48px 6px rgba(255,255,255,0.18), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
-          transition: "opacity 220ms ease",
+          transformOrigin: "50% 55%",
+          animation: visible
+            ? "saPaperUncrumple 640ms cubic-bezier(0.22, 1, 0.36, 1) both"
+            : "none",
+          opacity: visible ? 1 : 0,
+          transition: visible ? undefined : "opacity 200ms ease",
         }}
         onClick={(e) => e.stopPropagation()}
       >
