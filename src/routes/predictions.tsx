@@ -1118,7 +1118,7 @@ function PredictionsPage() {
           })()}
 
           {/* Archive — collapsed by default */}
-          {archive.length > 0 && (
+          {archive.length > 0 && selectedTier === null && (
             <div className="mt-20 border-t border-border/60 pt-10">
               <div className="flex flex-col items-center gap-3 text-center">
                 <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-foreground/45">
