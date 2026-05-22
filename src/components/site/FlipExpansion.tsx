@@ -216,16 +216,6 @@ export function FlipExpansion({
   const isFlipping = phase === "flipping";
   const isCollapsing = phase === "collapsing";
 
-  // Anchor-derived starting transform for the card (so it grows from origin)
-  const anchorStyle: React.CSSProperties | undefined = anchorRect
-    ? {
-        position: "fixed",
-        top: anchorRect.top,
-        left: anchorRect.left,
-        width: anchorRect.width,
-        height: anchorRect.height,
-      }
-    : undefined;
 
   const accentText = "text-[oklch(0.42_0.10_165)]";
   const accentChip =
