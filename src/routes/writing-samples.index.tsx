@@ -29,6 +29,7 @@ import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
 import { TypeGate } from "@/components/site/TypeGate";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
+import { TopTypeGradient } from "@/components/site/TopTypeGradient";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
