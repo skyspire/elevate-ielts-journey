@@ -140,7 +140,7 @@ function SpeakingSamplesPage() {
         {/* Top bar */}
         <header
           className="sticky top-0 z-40 border-b border-foreground/8 backdrop-blur-xl"
-          style={{ backgroundColor: `color-mix(in oklab, ${pageBg} 85%, transparent)` }}
+          style={{ backgroundColor: "color-mix(in oklab, oklch(0.98 0.005 95) 85%, transparent)" }}
         >
           <div className="container-page flex h-16 items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
