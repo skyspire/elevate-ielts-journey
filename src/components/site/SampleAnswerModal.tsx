@@ -155,22 +155,16 @@ export function SampleAnswerModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — minimal museum: just title + difficulty chip + close */}
-        <div className="flex items-start gap-3 border-b border-foreground/[0.08] px-6 pb-5 pt-5 sm:px-10 sm:pb-6 sm:pt-7">
+        {/* Header — question statement only, large grey rounded sans */}
+        <div className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 pb-6 pt-6 sm:px-12 sm:pb-8 sm:pt-9">
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              {difficulty && (
-                <span className="inline-flex items-center rounded-full border border-foreground/15 bg-white px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-foreground/65">
-                  {difficulty}
-                </span>
-              )}
-              {questionNumber ? (
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-                  No. {String(questionNumber).padStart(2, "0")}
-                </span>
-              ) : null}
-            </div>
-            <h2 className="mt-2.5 font-display text-[19px] font-extrabold leading-[1.25] tracking-tight text-foreground sm:text-[22px]">
+            <h2
+              className="text-[20px] font-semibold leading-[1.45] tracking-[-0.005em] text-slate-500 sm:text-[24px] sm:leading-[1.5]"
+              style={{
+                fontFamily:
+                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+              }}
+            >
               {title}
             </h2>
           </div>
@@ -197,15 +191,6 @@ export function SampleAnswerModal({
               transition: "opacity 180ms ease, transform 180ms ease",
             }}
           >
-            {/* Tiny meta strip */}
-            <div className="mb-8 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/50">
-              <span style={{ color: accent }}>{BAND_LABELS[variant]}</span>
-              <span className="h-3 w-px bg-foreground/15" />
-              <span>Band {activeParagraphs.bandScore}</span>
-              <span className="h-3 w-px bg-foreground/15" />
-              <span>{activeParagraphs.wordCount} words</span>
-            </div>
-
             {activeParagraphs.paragraphs.map((p, i) => (
               <div key={i} className="mb-8 last:mb-2">
                 {p.heading && (
@@ -218,10 +203,6 @@ export function SampleAnswerModal({
                 </p>
               </div>
             ))}
-
-            <div className="mt-12 border-t border-foreground/[0.08] pt-5 text-center text-[10px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
-              End of {BAND_LABELS[variant]} sample
-            </div>
           </div>
         </div>
 
