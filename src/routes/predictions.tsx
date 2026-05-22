@@ -959,12 +959,15 @@ function PredictionsPage() {
   const daysToNext = useDaysToNextSaturday();
 
   const isAcademic = exam === "academic";
-  // Clean white page — rotating pastel card tints carry the color story.
-  const pageBg = "#ffffff";
-  const heroGradient = "transparent";
+  // Sage study — pale sage → mint → cream lively wash across the entire page.
+  const pageBg =
+    "linear-gradient(180deg, #F2F5EE 0%, #E4EEDC 32%, #CFE0C2 64%, #F5F0E0 100%)";
+  const heroGradient =
+    "radial-gradient(60% 80% at 50% 0%, rgba(207, 224, 194, 0.55) 0%, rgba(228, 238, 220, 0.25) 45%, transparent 75%)";
 
   return (
-    <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ backgroundColor: pageBg }}>
+    <div className="relative min-h-screen transition-colors duration-700 ease-out" style={{ background: pageBg, backgroundAttachment: "fixed" }}>
+
       <main className="relative py-10 sm:py-14">
         <div
           aria-hidden
