@@ -21,11 +21,11 @@ export type SampleAnswerModalProps = {
 };
 
 const BAND_LABELS = ["Band 7", "Band 8", "Band 9"] as const;
-// Muted premium palette
+// Editorial / Oxford prestige palette
 const BAND_COLORS = [
-  "#94a3b8", // slate
-  "#0f766e", // deep teal
-  "#b45309", // bronze
+  "#1e3a5f", // navy
+  "#9b2c2c", // burgundy
+  "#b8860b", // gold
 ];
 
 export function SampleAnswerModal({
