@@ -1430,17 +1430,7 @@ function TierSection({
           </div>
         </aside>
 
-        <div className="space-y-3 sm:space-y-3.5">
-          {items.map((p, i) => (
-            <PredictionRow
-              key={p.title}
-              prediction={p}
-              tier={tier}
-              archived={archived}
-              index={i + 1}
-            />
-          ))}
-        </div>
+        <TierRows tier={tier} items={items} archived={archived} />
       </div>
     </section>
   );
