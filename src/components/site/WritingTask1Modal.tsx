@@ -268,10 +268,12 @@ export function WritingTask1Modal({
         <div className="flex min-h-0 flex-1 flex-row">
           {/* LEFT — chart panel (sticky / non-scroll) */}
           <div
-            className="flex w-[44%] shrink-0 flex-col gap-3 overflow-hidden border-r border-foreground/[0.08] bg-[oklch(0.985_0.008_240)] px-3 py-4 sm:w-[46%] sm:px-6 sm:py-6"
+            className="relative flex w-[44%] shrink-0 flex-col gap-3 overflow-hidden bg-[oklch(0.985_0.008_240)] px-3 py-4 sm:w-[46%] sm:px-6 sm:py-6"
             style={{
               backgroundImage:
                 "radial-gradient(circle at 20% 0%, rgba(15,118,110,0.05), transparent 55%), radial-gradient(circle at 100% 100%, rgba(180,83,9,0.04), transparent 55%)",
+              boxShadow:
+                "inset -10px 0 14px -10px rgba(15,23,42,0.14), 6px 0 14px -10px rgba(15,23,42,0.10)",
             }}
           >
             <div
