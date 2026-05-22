@@ -133,6 +133,54 @@ export function SampleAnswerModal({
         }}
       />
 
+      {/* Floating dust particles — ambient cozy layer above backdrop, below sheet */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ opacity: visible ? 1 : 0, transition: "opacity 600ms ease" }}
+      >
+        <style>{`
+          @keyframes saDustFloat {
+            0%   { transform: translate3d(0, 12vh, 0); opacity: 0; }
+            12%  { opacity: var(--sa-dust-op, 0.55); }
+            88%  { opacity: var(--sa-dust-op, 0.55); }
+            100% { transform: translate3d(var(--sa-dust-dx, 0px), -110vh, 0); opacity: 0; }
+          }
+        `}</style>
+        {Array.from({ length: 22 }).map((_, i) => {
+          // deterministic pseudo-random positions/sizes
+          const seed = (n: number) => ((Math.sin(i * 12.9898 + n) + 1) / 2);
+          const size = 2 + seed(1) * 4;          // 2–6px
+          const left = seed(2) * 100;            // 0–100%
+          const dur = 22 + seed(3) * 26;         // 22–48s
+          const delay = -seed(4) * dur;          // negative to start mid-flight
+          const dx = (seed(5) - 0.5) * 80;       // -40 to 40px horizontal drift
+          const opacity = 0.35 + seed(6) * 0.35; // 0.35–0.7
+          return (
+            <span
+              key={i}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: `${left}%`,
+                width: size,
+                height: size,
+                borderRadius: "9999px",
+                backgroundColor: "rgba(255,255,255,0.9)",
+                boxShadow: "0 0 6px rgba(255,255,255,0.5)",
+                filter: "blur(0.4px)",
+                ["--sa-dust-op" as never]: String(opacity),
+                ["--sa-dust-dx" as never]: `${dx}px`,
+                animation: `saDustFloat ${dur}s linear ${delay}s infinite`,
+                willChange: "transform, opacity",
+              }}
+            />
+          );
+        })}
+      </div>
+
+
+
       {/* Sheet */}
       <div
         className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:rounded-3xl"
