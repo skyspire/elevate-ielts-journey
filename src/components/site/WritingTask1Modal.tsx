@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { X, Maximize2, ZoomIn } from "lucide-react";
 import type { SampleAnswer } from "@/data/sample-answers";
 import { LineGraphChart } from "@/components/site/charts/LineGraphChart";
 import type { Task1ChartData } from "@/data/writing-task1-charts";
