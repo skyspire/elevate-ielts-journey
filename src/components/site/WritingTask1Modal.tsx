@@ -70,11 +70,18 @@ export function WritingTask1Modal({
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (zoomOpen) setZoomOpen(false);
+        else onClose();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, onClose, zoomOpen]);
+
+  useEffect(() => {
+    if (!open) setZoomOpen(false);
+  }, [open]);
 
   const active = useMemo(() => {
     if (answer.variants && answer.variants[variant]) {
