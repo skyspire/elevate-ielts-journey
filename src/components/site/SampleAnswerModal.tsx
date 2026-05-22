@@ -40,7 +40,9 @@ export function SampleAnswerModal({
   const [visible, setVisible] = useState(false);
   const [variant, setVariant] = useState(0);
   const [laneIn, setLaneIn] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
 
   useEffect(() => {
     if (open) {
