@@ -155,12 +155,13 @@ export function SampleAnswerModal({
         >
           <div className="min-w-0 flex-1">
             <h2
-              className="font-bold tracking-[-0.01em] text-[#1d4ed8]"
+              className="tracking-[-0.015em] text-[#1d4ed8]"
               style={{
                 fontFamily:
                   '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                fontWeight: 900,
                 fontSize: collapsed ? 15 : undefined,
-                lineHeight: collapsed ? "1.4" : "1.5",
+                lineHeight: collapsed ? "1.4" : "1.45",
                 transition: "font-size 220ms ease, line-height 220ms ease",
               }}
             >
@@ -174,19 +175,17 @@ export function SampleAnswerModal({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="group -mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#1d4ed8] transition-all hover:scale-105 active:scale-95"
+            className="-mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition-all hover:scale-105 active:scale-95"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(219,234,254,0.95), rgba(191,219,254,0.85))",
+              backgroundColor: "#1d4ed8",
               boxShadow:
-                "0 0 0 1.5px rgba(29,78,216,0.45), 0 0 0 4px rgba(29,78,216,0.08), 0 6px 18px -6px rgba(29,78,216,0.35)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
+                "0 8px 20px -6px rgba(29,78,216,0.55), 0 2px 6px -2px rgba(29,78,216,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
             }}
           >
-            <X className="h-[18px] w-[18px]" strokeWidth={3} />
+            <X className="h-[18px] w-[18px]" strokeWidth={3.2} />
           </button>
         </div>
+
 
         {/* Scroll body — single column, gallery whitespace */}
         <div
