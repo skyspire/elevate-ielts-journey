@@ -28,6 +28,7 @@ import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
+import { DottedTintPanel } from "@/components/site/DottedTintPanel";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
