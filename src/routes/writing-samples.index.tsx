@@ -391,6 +391,19 @@ function WritingAnswerModalHost({
       />
     );
   }
+  // Academic Task 1 questions get the two-column chart-aware reader.
+  const chart = writingTask1Charts[q.id];
+  if (chart) {
+    return (
+      <WritingTask1Modal
+        open={!!q}
+        onClose={onClose}
+        title={q.title}
+        answer={answer}
+        chart={chart}
+      />
+    );
+  }
   return (
     <SampleAnswerModal
       open={!!q}
@@ -401,6 +414,7 @@ function WritingAnswerModalHost({
     />
   );
 }
+
 
 // ───────── Subcomponents ─────────
 function StepLabel({ index, label }: { index: number; label: string }) {
