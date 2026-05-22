@@ -228,6 +228,23 @@ export function SampleAnswerModal({
           </div>
         </div>
 
+        {/* Corner watermark — fixed inside sheet, just above footer tabs */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-[88px] right-4 select-none sm:bottom-[100px] sm:right-6"
+          style={{
+            fontFamily:
+              '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+            fontWeight: 700,
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            color: "rgba(15, 23, 42, 0.28)",
+            textTransform: "uppercase",
+          }}
+        >
+          BigIELTS.com
+        </div>
+
 
         {/* Sticky FOOTER — three full-width color blocks, big rounded labels */}
         <div className="grid shrink-0 grid-cols-3 border-t border-foreground/[0.08]">
