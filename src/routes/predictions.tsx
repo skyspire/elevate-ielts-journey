@@ -1669,7 +1669,7 @@ function TierRows({
 }) {
   const hasPaid = useHasPaidPlan();
   return (
-    <div className="space-y-3 sm:space-y-3.5">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
       {items.map((p, i) => {
         // Free users: archived months fully locked; current month shows first N per tier.
         const locked =
