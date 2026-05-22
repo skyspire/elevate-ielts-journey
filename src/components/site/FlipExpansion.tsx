@@ -257,103 +257,110 @@ export function FlipExpansion({
 
       {/* Stage */}
       <div className="pointer-events-none absolute inset-0 flex items-start justify-center p-4 sm:p-8">
-        {/* Phase A — anchored flipping card */}
-        {(isFlipping || (isCollapsing && anchorRect)) && anchorStyle && (
-          <div
-            className="pointer-events-auto"
-            style={{
-              ...anchorStyle,
-              perspective: "1200px",
-            }}
-          >
-            <div
-              className="h-full w-full"
-              style={{
-                transformStyle: "preserve-3d",
-                transition: "transform 600ms cubic-bezier(0.7, 0, 0.3, 1)",
-                transform: isFlipping ? "rotateY(180deg)" : "rotateY(0deg)",
-              }}
-            >
-              {/* Front (original card look) */}
-              <div
-                className="absolute inset-0 flex overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-card"
-                style={{ backfaceVisibility: "hidden" }}
-              >
-                <div className="flex w-16 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-3 pt-6 pb-5 sm:w-20" />
-                <div className="flex min-w-0 flex-1 items-center px-5 py-6 sm:px-6">
-                  <p
-                    className="font-display font-black leading-tight tracking-tight"
-                    style={{
-                      color: "oklch(0.42 0.10 165)",
-                      fontSize: "clamp(1.2rem, 2.56vw, 1.5rem)",
-                    }}
-                  >
-                    {topic.label}
-                  </p>
-                </div>
-              </div>
-
-              {/* Back (sage face that previews the panel) */}
-              <div
-                className="absolute inset-0 flex items-center justify-center rounded-2xl border border-[oklch(0.50_0.10_165)] bg-[oklch(0.50_0.10_165)] text-white shadow-card"
-                style={{
-                  backfaceVisibility: "hidden",
-                  transform: "rotateY(180deg)",
-                }}
-              >
-                <Sparkles className="h-6 w-6 opacity-80" strokeWidth={2.4} />
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Paper uncrumple keyframes — same opener as Writing sample modal */}
+        <style>{`
+          @keyframes flipPaperUncrumple {
+            0% {
+              transform: scale(0.18) rotate(-14deg) skew(8deg, -6deg);
+              filter: blur(6px);
+              border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
+              opacity: 0;
+            }
+            35% {
+              transform: scale(0.55) rotate(-6deg) skew(3deg, -2deg);
+              filter: blur(3px);
+              border-radius: 30% 40% 35% 30% / 35% 30% 40% 35%;
+              opacity: 1;
+            }
+            70% {
+              transform: scale(1.02) rotate(1deg) skew(-1deg, 0deg);
+              filter: blur(0.5px);
+              border-radius: 22px;
+              opacity: 1;
+            }
+            100% {
+              transform: scale(1) rotate(0deg) skew(0, 0);
+              filter: blur(0);
+              border-radius: 18px;
+              opacity: 1;
+            }
+          }
+        `}</style>
 
         {/* Phase B — expanded reading space.
             For cue cards we use a wide, airy full-screen reading lane with
             an atmospheric backdrop. For non-cue (general questions) we keep
             the previous compact panel. */}
-        {isCue ? (
-          <CueCardReader
-            isExpanded={isExpanded}
-            scrollRef={scrollRef}
-            onClose={onClose}
-            topic={topic}
-            categoryId={categoryId}
-            headerQuestion={headerQuestion}
-            currentVariant={currentVariant}
-            variants={variants}
-            variantIndex={variantIndex}
-            goToVariant={goToVariant}
-            variantTransitioning={variantTransitioning}
-            gravityPhase={gravityPhase}
-            switchDir={switchDir}
-            sections={sections}
-            revealedSections={revealedSections}
-            scrollProgress={scrollProgress}
-            headerScale={headerScale}
-            headerOpacity={headerOpacity}
-            followUps={followUps}
-            accentText={accentText}
-            accentChip={accentChip}
-            onOpenFollowUp={(question, origin, index, total) =>
-              setFollowUpReader({ question, origin, index, total })
-            }
-          />
-        ) : (
-          <CompactPanel
-            isExpanded={isExpanded}
-            scrollRef={scrollRef}
-            onClose={onClose}
-            topic={topic}
-            categoryId={categoryId}
-            headerQuestion={headerQuestion}
-            answerBand={currentVariant.bandScore}
-            sections={sections}
-            revealedSections={revealedSections}
-            accentText={accentText}
-            accentChip={accentChip}
-          />
-        )}
+        <div
+          key={`paper-${phase}-${topic.id}`}
+          className="pointer-events-auto contents"
+          style={
+            isExpanded
+              ? {
+                  // animation applied via wrapper below
+                }
+              : undefined
+          }
+        >
+          <div
+            style={{
+              transformOrigin: "50% 55%",
+              animation: isExpanded
+                ? "flipPaperUncrumple 640ms cubic-bezier(0.22, 1, 0.36, 1) both"
+                : undefined,
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              pointerEvents: "auto",
+            }}
+          >
+            {isCue ? (
+              <CueCardReader
+                isExpanded={isExpanded}
+                scrollRef={scrollRef}
+                onClose={onClose}
+                topic={topic}
+                categoryId={categoryId}
+                headerQuestion={headerQuestion}
+                currentVariant={currentVariant}
+                variants={variants}
+                variantIndex={variantIndex}
+                goToVariant={goToVariant}
+                variantTransitioning={variantTransitioning}
+                gravityPhase={gravityPhase}
+                switchDir={switchDir}
+                sections={sections}
+                revealedSections={revealedSections}
+                scrollProgress={scrollProgress}
+                headerScale={headerScale}
+                headerOpacity={headerOpacity}
+                followUps={followUps}
+                accentText={accentText}
+                accentChip={accentChip}
+                onOpenFollowUp={(question, origin, index, total) =>
+                  setFollowUpReader({ question, origin, index, total })
+                }
+              />
+            ) : (
+              <CompactPanel
+                isExpanded={isExpanded}
+                scrollRef={scrollRef}
+                onClose={onClose}
+                topic={topic}
+                categoryId={categoryId}
+                headerQuestion={headerQuestion}
+                answerBand={currentVariant.bandScore}
+                sections={sections}
+                revealedSections={revealedSections}
+                accentText={accentText}
+                accentChip={accentChip}
+              />
+            )}
+          </div>
+        </div>
       </div>
+
 
       {/* Follow-up genie reader — opens above the cue-card stage when the
           user taps any follow-up question. Burst & split entrance from the
