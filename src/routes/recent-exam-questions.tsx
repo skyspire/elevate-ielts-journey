@@ -11,6 +11,12 @@ import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import { FreeTeaseCard } from "@/components/site/FreeTeaseCard";
+import { FreePlanBillboard } from "@/components/site/FreePlanBillboard";
+import { useHasPaidPlan } from "@/lib/plan-access";
+
+/** How many questions a free user sees per sub-section before locking kicks in. */
+const FREE_PREVIEW_PER_SECTION = 2;
 
 
 type Module = "academic" | "general";
@@ -1181,14 +1187,37 @@ function SubSection({
               Every question below is worth practising.
             </p>
           </div>
-          <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-            {questions.map((q) => (
-              <ExamQuestionCard key={q.title} q={q} sectionLabel={sectionLabel} />
-            ))}
-          </div>
+          <SubSectionGrid questions={questions} sectionLabel={sectionLabel} />
         </>
       )}
     </section>
+  );
+}
+
+function SubSectionGrid({
+  questions,
+  sectionLabel,
+}: {
+  questions: Question[];
+  sectionLabel: QuestionType;
+}) {
+  const hasPaid = useHasPaidPlan();
+  const freeCount = Math.min(FREE_PREVIEW_PER_SECTION, questions.length);
+  const showBillboard = !hasPaid && questions.length > freeCount;
+
+  return (
+    <>
+      {showBillboard && (
+        <FreePlanBillboard totalCount={questions.length} freeCount={freeCount} />
+      )}
+      <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+        {questions.map((q, i) => (
+          <FreeTeaseCard key={q.title} locked={!hasPaid && i >= freeCount}>
+            <ExamQuestionCard q={q} sectionLabel={sectionLabel} />
+          </FreeTeaseCard>
+        ))}
+      </div>
+    </>
   );
 }
 

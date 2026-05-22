@@ -19,7 +19,13 @@ import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
+import { FreeTeaseCard } from "@/components/site/FreeTeaseCard";
+import { FreePlanBillboard } from "@/components/site/FreePlanBillboard";
+import { useHasPaidPlan } from "@/lib/plan-access";
 import { IeltsTypeSelector } from "@/components/site/IeltsTypeSelector";
+
+/** Free users see this many predictions per tier; archived months are fully locked. */
+const FREE_PREVIEW_PER_TIER = 1;
 import {
   usePredictionAnswer,
   savePredictionAnswer,
@@ -1079,6 +1085,9 @@ function PredictionsPage() {
             />
           </div>
 
+          {/* Free-plan billboard — visible only when current user has no paid plan. */}
+          <CurrentMonthBillboard current={current} />
+
           {/* Tiered groups — current month. Writing & Reading are gated per IELTS type; Speaking/Listening stay open. */}
           {(skill === "writing" || skill === "reading") ? (
             <TypeGate contentType={exam}>
@@ -1424,19 +1433,69 @@ function TierSection({
           </div>
         </aside>
 
-        <div className="space-y-3 sm:space-y-3.5">
-          {items.map((p, i) => (
+        <TierRows tier={tier} items={items} archived={archived} />
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Free-plan billboard for current-month predictions                   */
+/* ------------------------------------------------------------------ */
+
+function CurrentMonthBillboard({
+  current,
+}: {
+  current: Record<Tier, Prediction[]>;
+}) {
+  const hasPaid = useHasPaidPlan();
+  if (hasPaid) return null;
+  const total = current.hot.length + current.likely.length + current.review.length;
+  if (total === 0) return null;
+  const tiersWithItems = (["hot", "likely", "review"] as Tier[]).filter(
+    (k) => current[k].length > 0,
+  ).length;
+  const freeCount = Math.min(total, tiersWithItems * FREE_PREVIEW_PER_TIER);
+  if (total <= freeCount) return null;
+  return (
+    <div className="mt-10">
+      <FreePlanBillboard totalCount={total} freeCount={freeCount} />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Tier rows — wraps PredictionRow with paywall for free users         */
+/* ------------------------------------------------------------------ */
+
+function TierRows({
+  tier,
+  items,
+  archived,
+}: {
+  tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
+  items: Prediction[];
+  archived: boolean;
+}) {
+  const hasPaid = useHasPaidPlan();
+  return (
+    <div className="space-y-3 sm:space-y-3.5">
+      {items.map((p, i) => {
+        // Free users: archived months fully locked; current month shows first N per tier.
+        const locked =
+          !hasPaid && (archived || i >= FREE_PREVIEW_PER_TIER);
+        return (
+          <FreeTeaseCard key={p.title} locked={locked}>
             <PredictionRow
-              key={p.title}
               prediction={p}
               tier={tier}
               archived={archived}
               index={i + 1}
             />
-          ))}
-        </div>
-      </div>
-    </section>
+          </FreeTeaseCard>
+        );
+      })}
+    </div>
   );
 }
 
