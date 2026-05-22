@@ -217,12 +217,13 @@ export function SampleAnswerModal({
         >
           <div className="min-w-0 flex-1">
             <h2
-              className="tracking-[-0.015em] text-[#1d4ed8]"
+              className="tracking-[-0.015em]"
               style={{
                 fontFamily:
                   '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
                 fontWeight: 900,
-                fontSize: collapsed ? 15 : 22,
+                color: "#0a0a0a",
+                fontSize: collapsed ? 18 : 22,
                 lineHeight: collapsed ? 1.4 : 1.45,
                 transition:
                   "font-size 450ms cubic-bezier(0.22, 1, 0.36, 1), line-height 450ms cubic-bezier(0.22, 1, 0.36, 1)",
@@ -237,14 +238,15 @@ export function SampleAnswerModal({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition-all hover:scale-105 active:scale-95"
+            className="-mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 hover:text-foreground"
             style={{
-              backgroundColor: "#1d4ed8",
+              backgroundColor: "#f1f1f3",
+              color: "#6b7280",
               boxShadow:
-                "0 8px 20px -6px rgba(29,78,216,0.55), 0 2px 6px -2px rgba(29,78,216,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
+                "0 1px 2px rgba(15,23,42,0.06), inset 0 0 0 1px rgba(15,23,42,0.06)",
             }}
           >
-            <X className="h-[18px] w-[18px]" strokeWidth={3.2} />
+            <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
         </div>
 
