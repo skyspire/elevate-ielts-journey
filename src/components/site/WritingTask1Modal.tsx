@@ -20,7 +20,7 @@ export type WritingTask1ModalProps = {
 };
 
 const BAND_LABELS = ["Band 7", "Band 8", "Band 9"] as const;
-const BAND_COLORS = ["#94a3b8", "#0f766e", "#b45309"];
+const BAND_COLORS = ["#1e3a5f", "#9b2c2c", "#b8860b"]; // navy, burgundy, gold
 
 export function WritingTask1Modal({
   open,
