@@ -883,6 +883,12 @@ function PredictionsPage() {
 
   const [showArchive, setShowArchive] = useState(false);
   const [activeTier, setActiveTier] = useState<Tier | null>(null);
+  const [selectedTier, setSelectedTier] = useState<Tier | null>(null);
+
+  // Reset tier selection when user changes module/exam/task filter.
+  useEffect(() => {
+    setSelectedTier(null);
+  }, [skill, exam, taskType]);
 
   useEffect(() => {
     const sections = Array.from(
