@@ -1094,60 +1094,28 @@ function PredictionsPage() {
           {/* Free-plan billboard — visible only when current user has no paid plan. */}
           <CurrentMonthBillboard current={current} />
 
-          {/* Tiered groups — current month. Writing & Reading are gated per IELTS type; Speaking/Listening stay open. */}
-          {(skill === "writing" || skill === "reading") ? (
-            <TypeGate contentType={exam}>
-              <div className="mt-12 space-y-16">
-                {TIERS.map((tier) => {
-                  const items = current[tier.key];
-                  if (items.length === 0) return null;
-                  const isActive = activeTier === tier.key;
-                  return (
-                    <div
-                      key={tier.key}
-                      data-tier-section={tier.key}
-                      className="relative -mx-3 rounded-3xl px-3 py-6 sm:-mx-6 sm:px-6 sm:py-8"
-                    >
-                      <TierSection tier={tier} items={items} />
-                    </div>
-                  );
-                })}
+          {/* Tier picker — three big flip cards. Selecting one opens its question list. */}
+          {(() => {
+            const tierContent = selectedTier ? (
+              <SelectedTierView
+                tier={TIERS.find((t) => t.key === selectedTier)!}
+                items={current[selectedTier]}
+                archive={archive.map((m) => ({
+                  month: m.month,
+                  label: m.label,
+                  items: m.grouped[selectedTier],
+                }))}
+                onBack={() => setSelectedTier(null)}
+              />
+            ) : (
+              <TierTrio current={current} onSelect={setSelectedTier} />
+            );
 
-                {current.hot.length === 0 &&
-                  current.likely.length === 0 &&
-                  current.review.length === 0 && (
-                    <p className="text-center font-display text-lg font-bold text-foreground/60">
-                      Fresh predictions land here every Monday.
-                    </p>
-                  )}
-              </div>
-            </TypeGate>
-          ) : (
-            <div className="mt-12 space-y-16">
-              {TIERS.map((tier) => {
-                const items = current[tier.key];
-                if (items.length === 0) return null;
-                const isActive = activeTier === tier.key;
-                return (
-                  <div
-                    key={tier.key}
-                    data-tier-section={tier.key}
-                    className="relative -mx-3 rounded-3xl px-3 py-6 sm:-mx-6 sm:px-6 sm:py-8"
-                  >
-                    <TierSection tier={tier} items={items} />
-                  </div>
-                );
-              })}
-
-              {current.hot.length === 0 &&
-                current.likely.length === 0 &&
-                current.review.length === 0 && (
-                  <p className="text-center font-display text-lg font-bold text-foreground/60">
-                    Fresh predictions land here every Monday.
-                  </p>
-                )}
-            </div>
-          )}
+            if (skill === "writing" || skill === "reading") {
+              return <TypeGate contentType={exam}>{tierContent}</TypeGate>;
+            }
+            return tierContent;
+          })()}
 
           {/* Archive — collapsed by default */}
           {archive.length > 0 && (
