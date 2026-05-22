@@ -160,3 +160,19 @@ export const task1GeneralPrompts: Record<string, string[]> = {
     "You attended your friend's wedding recently. Write a letter to your friend. In your letter: thank them for inviting you, describe what you enjoyed most, wish them well for the future.",
   ],
 };
+
+// Real IELTS Academic Task 1 prompts.
+// Keys MUST match the category ids in writing-samples.index.tsx
+// (line-graph / bar-chart / pie-chart / table / process-diagram / map / multiple-charts).
+export const task1AcademicPrompts: Record<string, string[]> = {
+  "line-graph": [
+    "The line graph below shows the average weekly consumption of coffee, in cups per person, in four European countries — Italy, Germany, the United Kingdom and Sweden — between 1995 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+  ],
+  "bar-chart": [],
+  "pie-chart": [],
+  table: [],
+  "process-diagram": [],
+  map: [],
+  "multiple-charts": [],
+};
+
