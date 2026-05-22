@@ -145,9 +145,13 @@ function MonthDateCard({ iso, accent }: { iso: string; accent: string }) {
 
   return (
     <div
-      className="relative w-full max-w-md rounded-3xl border bg-white px-8 py-10 text-center shadow-[0_30px_60px_-30px_rgba(15,23,42,0.18),0_8px_20px_-12px_rgba(15,23,42,0.10)] sm:px-12 sm:py-12"
-      style={{ borderColor: `color-mix(in oklab, ${accent} 18%, transparent)` }}
+      className="relative w-full max-w-md rounded-3xl border px-8 py-10 text-center shadow-[0_30px_60px_-30px_rgba(15,23,42,0.18),0_8px_20px_-12px_rgba(15,23,42,0.10)] sm:px-12 sm:py-12"
+      style={{
+        background: "#BFD4AE",
+        borderColor: `color-mix(in oklab, ${accent} 18%, transparent)`,
+      }}
     >
+
       {/* Corner ticks — paper-tile flourish */}
       <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l-2 border-t-2 rounded-tl-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
       <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r-2 border-t-2 rounded-tr-sm" style={{ borderColor: `color-mix(in oklab, ${accent} 35%, transparent)` }} />
