@@ -1440,6 +1440,31 @@ function TierSection({
 }
 
 /* ------------------------------------------------------------------ */
+/* Free-plan billboard for current-month predictions                   */
+/* ------------------------------------------------------------------ */
+
+function CurrentMonthBillboard({
+  current,
+}: {
+  current: Record<Tier, Prediction[]>;
+}) {
+  const hasPaid = useHasPaidPlan();
+  if (hasPaid) return null;
+  const total = current.hot.length + current.likely.length + current.review.length;
+  if (total === 0) return null;
+  const tiersWithItems = (["hot", "likely", "review"] as Tier[]).filter(
+    (k) => current[k].length > 0,
+  ).length;
+  const freeCount = Math.min(total, tiersWithItems * FREE_PREVIEW_PER_TIER);
+  if (total <= freeCount) return null;
+  return (
+    <div className="mt-10">
+      <FreePlanBillboard totalCount={total} freeCount={freeCount} />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Tier rows — wraps PredictionRow with paywall for free users         */
 /* ------------------------------------------------------------------ */
 
