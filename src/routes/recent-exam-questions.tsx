@@ -1194,6 +1194,33 @@ function SubSection({
   );
 }
 
+function SubSectionGrid({
+  questions,
+  sectionLabel,
+}: {
+  questions: Question[];
+  sectionLabel: QuestionType;
+}) {
+  const hasPaid = useHasPaidPlan();
+  const freeCount = Math.min(FREE_PREVIEW_PER_SECTION, questions.length);
+  const showBillboard = !hasPaid && questions.length > freeCount;
+
+  return (
+    <>
+      {showBillboard && (
+        <FreePlanBillboard totalCount={questions.length} freeCount={freeCount} />
+      )}
+      <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+        {questions.map((q, i) => (
+          <FreeTeaseCard key={q.title} locked={!hasPaid && i >= freeCount}>
+            <ExamQuestionCard q={q} sectionLabel={sectionLabel} />
+          </FreeTeaseCard>
+        ))}
+      </div>
+    </>
+  );
+}
+
 /* Tag → tone mapping for the homepage QuestionCard */
 type Tone = "blue" | "mint" | "peach" | "lilac";
 
