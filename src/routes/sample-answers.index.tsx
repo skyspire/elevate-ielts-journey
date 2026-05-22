@@ -805,16 +805,27 @@ function Pill({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className="rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all"
+      className="relative overflow-hidden rounded-full px-5 py-2.5 text-center font-sans text-[13.5px] font-bold uppercase tracking-[0.08em] transition-all duration-200"
       style={{
         minWidth: 120,
-        backgroundColor: active ? accent.solid : "white",
-        color: active ? "white" : "oklch(0.30 0 0)",
-        borderColor: active ? accent.solid : "oklch(0.85 0 0)",
-        boxShadow: active ? "0 4px 12px -4px oklch(0 0 0 / 0.18)" : undefined,
+        backgroundColor: active ? accent.solid : "oklch(0.18 0.01 250)",
+        color: "white",
+        border: "none",
+        transform: active ? "translateY(-1px)" : "translateY(0)",
+        boxShadow: active
+          ? `0 10px 22px -10px ${accent.solid}, 0 2px 0 0 oklch(0 0 0 / 0.25)`
+          : "0 2px 0 0 oklch(0 0 0 / 0.35), 0 6px 14px -8px oklch(0 0 0 / 0.35)",
       }}
     >
-      {children}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-3 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, rgba(255,255,255,0.55), transparent)",
+        }}
+      />
+      <span className="relative">{children}</span>
     </button>
   );
 }
