@@ -1221,10 +1221,17 @@ function TierTrio({
   );
 }
 
+/** Deep saturated surface colors per tier — premium educational palette. */
+const TIER_SURFACE: Record<Tier, { bg: string; shadow: string; eyebrow: string }> = {
+  hot:    { bg: "oklch(0.40 0.13 38)",  shadow: "oklch(0.40 0.13 38 / 0.22)",  eyebrow: "Priority Alpha" },
+  likely: { bg: "oklch(0.32 0.12 285)", shadow: "oklch(0.32 0.12 285 / 0.22)", eyebrow: "Priority Beta"  },
+  review: { bg: "oklch(0.36 0.09 145)", shadow: "oklch(0.36 0.09 145 / 0.22)", eyebrow: "Priority Gamma" },
+};
+
 function TierFlipCard({
   tier,
   count,
-  peek,
+  peek: _peek,
   onSelect,
 }: {
   tier: { key: Tier; label: string; helper: string; icon: typeof Flame; accent: string };
@@ -1232,106 +1239,58 @@ function TierFlipCard({
   peek?: string;
   onSelect: () => void;
 }) {
-  const [flipped, setFlipped] = useState(false);
-  const Icon = tier.icon;
+  const surface = TIER_SURFACE[tier.key];
   return (
     <button
       type="button"
       onClick={onSelect}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onFocus={() => setFlipped(true)}
-      onBlur={() => setFlipped(false)}
-      className="group relative h-[340px] w-full text-left [perspective:1200px] sm:h-[420px]"
+      className="group relative flex h-[440px] w-full flex-col justify-between overflow-hidden rounded-[28px] text-left transition-all duration-500 ease-out hover:-translate-y-1.5 sm:h-[520px]"
+      style={{
+        background: surface.bg,
+        color: "#FDFCF5",
+        boxShadow: `0 30px 60px -25px ${surface.shadow}, 0 8px 20px -12px ${surface.shadow}`,
+      }}
       aria-label={`Open ${tier.label} predictions`}
     >
+      {/* Top: eyebrow + huge title */}
+      <div className="flex flex-col gap-5 p-8 sm:gap-6 sm:p-10">
+        <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] opacity-65">
+          {surface.eyebrow}
+        </span>
+        <h3
+          className="font-display font-extrabold leading-[0.85] tracking-[-0.03em]"
+          style={{ fontSize: "clamp(3rem, 7.5vw, 5.25rem)" }}
+        >
+          {tier.label.split(" ").map((word, i, arr) => (
+            <span key={i}>
+              {word}
+              {i < arr.length - 1 && <br />}
+            </span>
+          ))}
+        </h3>
+      </div>
+
+      {/* Footer band */}
       <div
-        className="relative h-full w-full rounded-[28px] transition-transform duration-700 ease-out [transform-style:preserve-3d]"
-        style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+        className="flex items-end justify-between border-t border-white/5 px-8 py-7 sm:px-10 sm:py-8"
+        style={{ background: "rgba(0,0,0,0.12)" }}
       >
-        {/* FRONT */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-between overflow-hidden rounded-[28px] border p-6 [backface-visibility:hidden] sm:p-7"
-          style={{
-            background: `linear-gradient(160deg, color-mix(in oklab, ${tier.accent} 12%, white) 0%, color-mix(in oklab, ${tier.accent} 5%, white) 100%)`,
-            borderColor: `color-mix(in oklab, ${tier.accent} 25%, transparent)`,
-            boxShadow: `0 24px 50px -28px color-mix(in oklab, ${tier.accent} 55%, transparent), 0 4px 12px -8px rgba(15,23,42,0.08)`,
-          }}
-        >
-          {/* Decorative corner ticks */}
-          <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l-2 border-t-2 rounded-tl-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
-          <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r-2 border-t-2 rounded-tr-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
-          <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l-2 border-b-2 rounded-bl-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
-          <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r-2 border-b-2 rounded-br-sm" style={{ borderColor: `color-mix(in oklab, ${tier.accent} 45%, transparent)` }} />
-
-          <span
-            className="flex h-16 w-16 items-center justify-center rounded-2xl sm:h-20 sm:w-20"
-            style={{
-              background: `color-mix(in oklab, ${tier.accent} 18%, white)`,
-              color: tier.accent,
-            }}
-            aria-hidden
-          >
-            <Icon className="h-8 w-8 sm:h-10 sm:w-10" />
-          </span>
-
-          <div className="text-center">
-            <div
-              className="font-display font-black leading-none tracking-[-0.03em] tabular-nums"
-              style={{ fontSize: "clamp(3.5rem, 9vw, 5.5rem)", color: tier.accent }}
-            >
-              {count}
-            </div>
-            <div className="mt-1 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-foreground/55">
-              {count === 1 ? "topic" : "topics"}
-            </div>
+        <div>
+          <div className="font-display text-4xl font-bold leading-none sm:text-5xl">
+            {count}
           </div>
-
-          <div className="text-center">
-            <h3 className="font-display text-xl font-black tracking-tight text-foreground sm:text-2xl">
-              {tier.label}
-            </h3>
-            <p className="mt-1.5 text-[12.5px] font-medium leading-snug text-foreground/60 sm:text-[13px]">
-              {tier.helper}
-            </p>
+          <div className="mt-1.5 font-display text-[10.5px] font-semibold uppercase tracking-[0.16em] opacity-65">
+            Potential topics
           </div>
         </div>
-
-        {/* BACK */}
-        <div
-          className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[28px] border p-6 [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-7"
-          style={{
-            background: `linear-gradient(160deg, ${tier.accent} 0%, color-mix(in oklab, ${tier.accent} 80%, black) 100%)`,
-            borderColor: "transparent",
-            boxShadow: `0 30px 60px -28px color-mix(in oklab, ${tier.accent} 70%, transparent)`,
-          }}
+        <span
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 transition-transform duration-500 group-hover:translate-x-1 group-hover:border-white/50"
+          aria-hidden
         >
-          <div className="flex items-center gap-2 text-white/90">
-            <Icon className="h-4 w-4" aria-hidden />
-            <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em]">
-              Peek inside
-            </span>
-          </div>
-
-          {peek ? (
-            <p className="font-display text-[15px] font-semibold leading-snug text-white sm:text-[17px]">
-              "{peek}"
-            </p>
-          ) : (
-            <p className="font-display text-[14px] font-medium italic text-white/80">
-              Fresh picks land here every week.
-            </p>
-          )}
-
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-white/75">
-              {count} {count === 1 ? "topic" : "topics"}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-display text-[12px] font-extrabold uppercase tracking-[0.12em]" style={{ color: tier.accent }}>
-              Open →
-            </span>
-          </div>
-        </div>
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </span>
       </div>
     </button>
   );
