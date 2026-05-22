@@ -1,11 +1,13 @@
 // Reactive helper: does the current learner have ANY paid IELTS-type plan?
 // A "free" user = guest OR signed-in with zero purchased types.
+//
+// NOTE: admin / dev-bypass intentionally do NOT count as paid here — they
+// should still see the locked tease on these pages so it can be previewed
+// and QA-ed. Real bypass is only for content gates (TypeGate / QuotaGate).
 
 import { useEffect, useState } from "react";
 import { getLearnerSession } from "./learner-auth";
 import { getPurchasedTypes } from "./ielts-type";
-import { useSession as useAdminSession } from "./admin/auth";
-import { useDevBypass } from "./dev-bypass";
 
 function compute(): boolean {
   const user = getLearnerSession();
@@ -13,14 +15,9 @@ function compute(): boolean {
   return getPurchasedTypes(user.id).length > 0;
 }
 
-/**
- * `true` if the user has any paid plan (academic, general, or both),
- * OR is an admin / has dev bypass enabled.
- */
+/** `true` only if the signed-in learner has at least one purchased plan. */
 export function useHasPaidPlan(): boolean {
   const [paid, setPaid] = useState<boolean>(() => compute());
-  const { user: adminUser } = useAdminSession();
-  const { enabled: devBypass } = useDevBypass();
 
   useEffect(() => {
     const refresh = () => setPaid(compute());
@@ -35,5 +32,5 @@ export function useHasPaidPlan(): boolean {
     };
   }, []);
 
-  return paid || !!adminUser || devBypass;
+  return paid;
 }
