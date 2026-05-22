@@ -22,7 +22,7 @@ import {
   type IeltsType,
 } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
-import { task2Prompts, task1GeneralPrompts } from "@/data/writing-prompts";
+import { task2Prompts, task1GeneralPrompts, task1AcademicPrompts } from "@/data/writing-prompts";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 
 const searchSchema = z.object({
