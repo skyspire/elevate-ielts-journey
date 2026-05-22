@@ -28,6 +28,7 @@ import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
 import { TypeGate } from "@/components/site/TypeGate";
+import { DottedTintPanel } from "@/components/site/DottedTintPanel";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -309,54 +310,59 @@ function WritingSamplesPage() {
 
             {/* Steps 2 & 3 — gated until a task is selected */}
             {task && (
-              <>
-                {/* Step 2 — Category chips (monochrome + single module accent on active) */}
-                <div ref={triggerRef} className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
-                  {categories.map((c) => {
-                    const active = categoryId === c.id;
-                    const Icon = c.icon;
-                    const activeClasses = isAcademic
-                      ? "bg-brand text-brand-foreground border-brand shadow-soft"
-                      : "bg-[oklch(0.50_0.16_28)] text-white border-[oklch(0.50_0.16_28)] shadow-soft";
-                    const restingClasses =
-                      "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => setCategoryId(c.id)}
-                        aria-pressed={active}
-                        className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
-                          active ? activeClasses : restingClasses
-                        }`}
-                        style={{ minWidth: 120 }}
-                      >
-                        <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
-                        {c.label}
-                      </button>
-                    );
-                  })}
-                </div>
+              <DottedTintPanel
+                tint={isAcademic ? "oklch(0.95 0.05 255)" : "oklch(0.95 0.05 30)"}
+                className="mt-16 sm:mt-20"
+              >
+                <div className="container-page py-10 sm:py-14">
+                  {/* Step 2 — Category chips (monochrome + single module accent on active) */}
+                  <div ref={triggerRef} className="flex flex-wrap justify-center gap-2.5">
+                    {categories.map((c) => {
+                      const active = categoryId === c.id;
+                      const Icon = c.icon;
+                      const activeClasses = isAcademic
+                        ? "bg-brand text-brand-foreground border-brand shadow-soft"
+                        : "bg-[oklch(0.50_0.16_28)] text-white border-[oklch(0.50_0.16_28)] shadow-soft";
+                      const restingClasses =
+                        "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
+                      return (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => setCategoryId(c.id)}
+                          aria-pressed={active}
+                          className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                            active ? activeClasses : restingClasses
+                          }`}
+                          style={{ minWidth: 120 }}
+                        >
+                          <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+                          {c.label}
+                        </button>
+                      );
+                    })}
+                  </div>
 
-                {/* Step 3 — Questions list — sits over the page-wide ambient gradient */}
-                <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
-                  <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                      {questions.map((q, i) => (
-                        <QuestionRowCard
-                          key={q.id}
-                          index={i + 1}
-                          q={q}
-                          module={module}
-                          task={task ?? "task1"}
-                          category={activeCategory.label}
-                          onOpen={() => setOpenQ(q)}
-                        />
-                      ))}
+                  {/* Step 3 — Questions list */}
+                  <div className="relative mt-12 sm:mt-16">
+                    <div className="mx-auto w-full max-w-5xl">
+                      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        {questions.map((q, i) => (
+                          <QuestionRowCard
+                            key={q.id}
+                            index={i + 1}
+                            q={q}
+                            module={module}
+                            task={task ?? "task1"}
+                            category={activeCategory.label}
+                            onOpen={() => setOpenQ(q)}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </>
+              </DottedTintPanel>
             )}
           </TypeGate>
         </div>

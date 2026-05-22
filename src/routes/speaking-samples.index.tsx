@@ -28,6 +28,7 @@ import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
+import { DottedTintPanel } from "@/components/site/DottedTintPanel";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional().default("general"),
@@ -254,59 +255,61 @@ function SpeakingSamplesPage() {
 
           {/* Steps 2 & 3 — gated until format is chosen */}
           {mode && (
-            <>
-              {/* Step 2 — Theme chips */}
-              <div ref={triggerRef} className="mt-16 flex flex-wrap justify-center gap-2.5 sm:mt-20">
-                {categories.map((c) => {
-                  const active = categoryId === c.id;
-                  const Icon = c.icon;
-                  const activeClasses =
-                    "bg-[oklch(0.50_0.10_165)] text-white border-[oklch(0.50_0.10_165)] shadow-soft";
-                  const restingClasses =
-                    "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => setCategoryId(c.id)}
-                      aria-pressed={active}
-                      className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
-                        active ? activeClasses : restingClasses
-                      }`}
-                      style={{ minWidth: 120 }}
-                    >
-                      <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
-                      {c.label}
-                    </button>
-                  );
-                })}
-              </div>
+            <DottedTintPanel tint="oklch(0.95 0.04 165)" className="mt-16 sm:mt-20">
+              <div className="container-page py-10 sm:py-14">
+                {/* Step 2 — Theme chips */}
+                <div ref={triggerRef} className="flex flex-wrap justify-center gap-2.5">
+                  {categories.map((c) => {
+                    const active = categoryId === c.id;
+                    const Icon = c.icon;
+                    const activeClasses =
+                      "bg-[oklch(0.50_0.10_165)] text-white border-[oklch(0.50_0.10_165)] shadow-soft";
+                    const restingClasses =
+                      "bg-card text-foreground/75 border-border hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-soft";
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setCategoryId(c.id)}
+                        aria-pressed={active}
+                        className={`inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center font-display text-[14px] font-bold tracking-tight transition-all duration-200 ${
+                          active ? activeClasses : restingClasses
+                        }`}
+                        style={{ minWidth: 120 }}
+                      >
+                        <Icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+                        {c.label}
+                      </button>
+                    );
+                  })}
+                </div>
 
-              {/* Step 3 — Topic cards — sit over the page-wide ambient gradient */}
-              <div className="relative mt-16 pb-20 sm:mt-20 sm:pb-28">
-                <div className="relative mx-auto w-full max-w-5xl py-12 sm:py-16">
-                  <div className="mb-8 text-center">
-                    <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
-                      {activeCategory.label} · {topics.length} topics
-                    </p>
-                    <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-                      Pick a topic to explore
-                    </h3>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {topics.map((t, i) => (
-                      <TopicCard
-                        key={t.id}
-                        index={i + 1}
-                        topic={t}
-                        categoryId={activeCategory.id}
-                        onOpen={handleOpenFlip}
-                      />
-                    ))}
+                {/* Step 3 — Topic cards */}
+                <div className="relative mt-12 sm:mt-16">
+                  <div className="mx-auto w-full max-w-5xl">
+                    <div className="mb-8 text-center">
+                      <p className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/45">
+                        {activeCategory.label} · {topics.length} topics
+                      </p>
+                      <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                        Pick a topic to explore
+                      </h3>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {topics.map((t, i) => (
+                        <TopicCard
+                          key={t.id}
+                          index={i + 1}
+                          topic={t}
+                          categoryId={activeCategory.id}
+                          onOpen={handleOpenFlip}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </>
+            </DottedTintPanel>
           )}
         </div>
       </main>
