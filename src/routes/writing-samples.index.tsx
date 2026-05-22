@@ -311,7 +311,7 @@ function WritingSamplesPage() {
             {/* Steps 2 & 3 — gated until a task is selected */}
             {task && (
               <DottedTintPanel
-                tint={isAcademic ? "oklch(0.95 0.05 255)" : "oklch(0.95 0.05 30)"}
+                
                 className="mt-16 sm:mt-20"
               >
                 <div className="container-page py-10 sm:py-14">

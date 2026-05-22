@@ -255,7 +255,7 @@ function SpeakingSamplesPage() {
 
           {/* Steps 2 & 3 — gated until format is chosen */}
           {mode && (
-            <DottedTintPanel tint="oklch(0.95 0.04 165)" className="mt-16 sm:mt-20">
+            <DottedTintPanel className="mt-16 sm:mt-20">
               <div className="container-page py-10 sm:py-14">
                 {/* Step 2 — Theme chips */}
                 <div ref={triggerRef} className="flex flex-wrap justify-center gap-2.5">
