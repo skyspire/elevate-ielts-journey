@@ -1085,6 +1085,9 @@ function PredictionsPage() {
             />
           </div>
 
+          {/* Free-plan billboard — visible only when current user has no paid plan. */}
+          <CurrentMonthBillboard current={current} />
+
           {/* Tiered groups — current month. Writing & Reading are gated per IELTS type; Speaking/Listening stay open. */}
           {(skill === "writing" || skill === "reading") ? (
             <TypeGate contentType={exam}>
