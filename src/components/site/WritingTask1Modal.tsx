@@ -213,40 +213,34 @@ export function WritingTask1Modal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — collapses on right-column scroll */}
+        {/* Header — always compact one-line */}
         <div
           className="flex items-start gap-3 border-b border-foreground/[0.06] px-4 sm:px-10"
           style={{
-            paddingTop: collapsed ? 12 : 24,
-            paddingBottom: collapsed ? 12 : 24,
-            boxShadow: collapsed
-              ? "0 6px 18px -12px rgba(15,23,42,0.18)"
-              : "0 0 0 0 rgba(15,23,42,0)",
-            transition:
-              "padding-top 450ms cubic-bezier(0.22, 1, 0.36, 1), padding-bottom 450ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 450ms cubic-bezier(0.22, 1, 0.36, 1)",
+            paddingTop: 12,
+            paddingBottom: 12,
+            boxShadow: "0 6px 18px -12px rgba(15,23,42,0.18)",
           }}
         >
           <div className="min-w-0 flex-1">
             <div
-              className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-foreground/55"
+              className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/55"
               style={{
                 fontFamily:
-                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
               }}
             >
               Academic · Writing Task 1
             </div>
             <h2
-              className="tracking-[-0.015em]"
+              className="tracking-[-0.01em]"
               style={{
                 fontFamily:
-                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                fontWeight: 900,
+                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                fontWeight: 600,
                 color: "#0a0a0a",
-                fontSize: collapsed ? 15 : 18,
-                lineHeight: collapsed ? 1.35 : 1.45,
-                transition:
-                  "font-size 450ms cubic-bezier(0.22, 1, 0.36, 1), line-height 450ms cubic-bezier(0.22, 1, 0.36, 1)",
+                fontSize: 15,
+                lineHeight: 1.35,
               }}
             >
               {title}
