@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { X, ZoomIn } from "lucide-react";
 import type { SampleAnswer } from "@/data/sample-answers";
 import { LineGraphChart } from "@/components/site/charts/LineGraphChart";
 import type { Task1ChartData } from "@/data/writing-task1-charts";
@@ -34,6 +34,7 @@ export function WritingTask1Modal({
   const [variant, setVariant] = useState(0);
   const [laneIn, setLaneIn] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -69,11 +70,18 @@ export function WritingTask1Modal({
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (zoomOpen) setZoomOpen(false);
+        else onClose();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, onClose, zoomOpen]);
+
+  useEffect(() => {
+    if (!open) setZoomOpen(false);
+  }, [open]);
 
   const active = useMemo(() => {
     if (answer.variants && answer.variants[variant]) {
@@ -285,7 +293,12 @@ export function WritingTask1Modal({
             >
               The chart
             </div>
-            <div className="flex min-h-0 flex-1">
+            <button
+              type="button"
+              onClick={() => setZoomOpen(true)}
+              aria-label="Enlarge chart"
+              className="group/zoom relative flex min-h-0 flex-1 cursor-zoom-in items-stretch rounded-md outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+            >
               {chart.kind === "line" && (
                 <LineGraphChart
                   caption={chart.caption}
@@ -296,7 +309,23 @@ export function WritingTask1Modal({
                   yUnit={chart.yUnit}
                 />
               )}
-            </div>
+              {/* Hover overlay with magnifier */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-foreground/0 opacity-0 transition-all duration-200 group-hover/zoom:bg-foreground/35 group-hover/zoom:opacity-100 group-focus-visible/zoom:bg-foreground/35 group-focus-visible/zoom:opacity-100"
+              >
+                <span
+                  className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-1.5 text-[12px] font-semibold tracking-tight text-foreground shadow-lg"
+                  style={{
+                    fontFamily:
+                      '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  <ZoomIn className="h-3.5 w-3.5" strokeWidth={2.4} />
+                  Click to enlarge
+                </span>
+              </span>
+            </button>
           </div>
 
           {/* RIGHT — scrollable answer */}
@@ -424,6 +453,68 @@ export function WritingTask1Modal({
           })}
         </div>
       </div>
+
+      {/* Fullscreen chart lightbox */}
+      {zoomOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enlarged chart"
+          onClick={() => setZoomOpen(false)}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-10"
+          style={{
+            animation: "t1ZoomFade 180ms ease-out both",
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomOpen(false);
+            }}
+            aria-label="Close enlarged chart"
+            className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-foreground shadow-xl transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-6"
+          >
+            <X className="h-5 w-5" strokeWidth={2.4} />
+          </button>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-full w-full max-w-[1100px] flex-col gap-3 overflow-auto rounded-xl bg-white p-4 shadow-2xl sm:p-8"
+            style={{
+              animation: "t1ZoomIn 240ms cubic-bezier(0.22, 1, 0.36, 1) both",
+            }}
+          >
+            <div
+              className="text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground/55"
+              style={{
+                fontFamily:
+                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+              }}
+            >
+              The chart · enlarged
+            </div>
+            <div className="flex min-h-[420px] flex-1 items-stretch sm:min-h-[520px]">
+              {chart.kind === "line" && (
+                <LineGraphChart
+                  caption={chart.caption}
+                  xLabels={chart.xLabels}
+                  series={chart.series}
+                  yMax={chart.yMax}
+                  yStep={chart.yStep}
+                  yUnit={chart.yUnit}
+                />
+              )}
+            </div>
+          </div>
+          <style>{`
+            @keyframes t1ZoomFade { from { opacity: 0 } to { opacity: 1 } }
+            @keyframes t1ZoomIn {
+              from { opacity: 0; transform: scale(0.94) }
+              to   { opacity: 1; transform: scale(1) }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 }
