@@ -88,6 +88,9 @@ function GatedSpeakingTopicPage() {
 
 function SpeakingTopicPage() {
   const { topic, questions, isCue, categoryId } = Route.useLoaderData();
+  const [modalOpen, setModalOpen] = useState(false);
+
+
 
   // Find which category this topic belongs to (already known via param)
   const allTopicsInCategory = speakingTopicsByCategory[categoryId] ?? [];
