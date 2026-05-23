@@ -26,6 +26,7 @@ import { task2Prompts, task1GeneralPrompts, task1AcademicPrompts } from "@/data/
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
 import { TopTypeGradient } from "@/components/site/TopTypeGradient";
+import { SpeakingSampleModal } from "@/components/site/SpeakingSampleModal";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional(),
