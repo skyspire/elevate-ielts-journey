@@ -60,6 +60,7 @@ export function SpeakingSampleModal({
   const [collapsed, setCollapsed] = useState(false);
   const [phase, setPhase] = useState<"title" | "answer">("title");
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [pressedFollowUpId, setPressedFollowUpId] = useState<string | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
   const questions = useMemo(
