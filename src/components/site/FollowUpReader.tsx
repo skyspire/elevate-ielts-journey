@@ -337,10 +337,6 @@ export function FollowUpReader({
           { label: "Help", icon: HelpCircle, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/faq" }); } },
           { label: "Home", icon: Home, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/" }); } },
         ];
-        // Fan items in a wide arc sweeping down-left from the trigger
-        const radius = 150;
-        const startAngle = 110; // degrees
-        const endAngle = 250;
         return (
           <>
             {/* Full-screen dim + blur backdrop behind the menu */}
@@ -359,59 +355,14 @@ export function FollowUpReader({
                   "background-color 260ms ease, backdrop-filter 260ms ease, -webkit-backdrop-filter 260ms ease, opacity 220ms ease",
               }}
             />
-            <div className="absolute right-6 top-6 z-[120] sm:right-8 sm:top-8">
-              <div className="relative">
-
-              {/* Fan items */}
-              {navItems.map((item, idx) => {
-                const t = navItems.length === 1 ? 0.5 : idx / (navItems.length - 1);
-                const angle = (startAngle + (endAngle - startAngle) * t) * (Math.PI / 180);
-                const dx = Math.cos(angle) * radius;
-                const dy = Math.sin(angle) * radius;
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={item.onClick}
-                    aria-label={item.label}
-                    title={item.label}
-                    className="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-lg backdrop-blur transition-all hover:scale-110"
-                    style={{
-                      backgroundColor: "rgba(15, 23, 42, 0.88)",
-                      transform: navOpen
-                        ? `translate(${dx}px, ${dy}px) scale(1)`
-                        : "translate(0px, 0px) scale(0.4)",
-                      opacity: navOpen ? 1 : 0,
-                      pointerEvents: navOpen ? "auto" : "none",
-                      transitionProperty: "transform, opacity",
-                      transitionDuration: "320ms",
-                      transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-                      transitionDelay: navOpen ? `${idx * 40}ms` : `${(navItems.length - 1 - idx) * 30}ms`,
-                    }}
-                  >
-                    <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
-                    <span
-                      className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white"
-                      style={{
-                        backgroundColor: "rgba(15, 23, 42, 0.88)",
-                        opacity: navOpen ? 1 : 0,
-                        transition: "opacity 200ms ease",
-                        transitionDelay: navOpen ? `${200 + idx * 40}ms` : "0ms",
-                      }}
-                    >
-                      {item.label}
-                    </span>
-                  </button>
-                );
-              })}
+            <div className="absolute right-6 top-6 z-[120] flex flex-col items-end gap-3 sm:right-8 sm:top-8">
               {/* Trigger */}
               <button
                 type="button"
                 onClick={() => setNavOpen((v) => !v)}
                 aria-label={navOpen ? "Close menu" : "Open menu"}
                 aria-expanded={navOpen}
-                className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-xl transition-all hover:scale-105 active:scale-95"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-xl transition-all hover:scale-105 active:scale-95"
                 style={{
                   backgroundColor: navOpen ? "rgba(220, 38, 38, 0.92)" : "rgba(15, 23, 42, 0.9)",
                   transform: navOpen ? "rotate(90deg)" : "rotate(0deg)",
@@ -420,11 +371,68 @@ export function FollowUpReader({
               >
                 {navOpen ? <X className="h-5 w-5" strokeWidth={2.4} /> : <Menu className="h-5 w-5" strokeWidth={2.4} />}
               </button>
+              {/* Vertical drop-down list */}
+              <div
+                role="menu"
+                aria-hidden={!navOpen}
+                className="flex w-56 flex-col overflow-hidden rounded-2xl p-2 shadow-2xl"
+                style={{
+                  backgroundColor: "rgba(15, 23, 42, 0.94)",
+                  backdropFilter: "blur(14px) saturate(1.2)",
+                  WebkitBackdropFilter: "blur(14px) saturate(1.2)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  opacity: navOpen ? 1 : 0,
+                  transform: navOpen ? "translateY(0) scale(1)" : "translateY(-8px) scale(0.96)",
+                  transformOrigin: "top right",
+                  pointerEvents: navOpen ? "auto" : "none",
+                  transition:
+                    "opacity 220ms ease, transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  maxHeight: "calc(100vh - 120px)",
+                  overflowY: "auto",
+                }}
+              >
+                {navItems.map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      role="menuitem"
+                      onClick={item.onClick}
+                      className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-white/90 transition-all hover:bg-white/10 hover:text-white"
+                      style={{
+                        opacity: navOpen ? 1 : 0,
+                        transform: navOpen ? "translateX(0)" : "translateX(8px)",
+                        transition: "opacity 220ms ease, transform 280ms ease, background-color 180ms ease",
+                        transitionDelay: navOpen ? `${80 + idx * 30}ms` : "0ms",
+                      }}
+                    >
+                      <span
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                        style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                      >
+                        <Icon className="h-[16px] w-[16px]" strokeWidth={2.2} />
+                      </span>
+                      <span
+                        style={{
+                          fontFamily:
+                            '"Nunito", "Quicksand", ui-rounded, system-ui, sans-serif',
+                          fontWeight: 600,
+                          fontSize: 14,
+                          letterSpacing: "-0.005em",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
           </>
         );
       })()}
+
 
 
       {/* Glass sheet */}
