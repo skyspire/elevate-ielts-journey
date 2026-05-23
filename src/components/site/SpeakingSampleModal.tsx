@@ -362,37 +362,55 @@ export function SpeakingSampleModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — solid royal blue, question-only */}
+        {/* Header — solid royal blue: logo · question (centered) · close */}
         <div
-          className="flex items-start gap-3 px-6 sm:px-12"
+          className="grid items-center gap-3 px-4 sm:px-8"
           style={{
-            paddingTop: 16,
-            paddingBottom: 16,
+            gridTemplateColumns: "auto 1fr auto",
+            paddingTop: 14,
+            paddingBottom: 14,
             backgroundColor: "#1e40af",
             boxShadow: "0 6px 18px -12px rgba(15,23,42,0.35)",
           }}
         >
-          <div className="min-w-0 flex-1">
-            <h2
-              className="tracking-[-0.01em]"
-              style={{
-                fontFamily:
-                  '"Poppins", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-                fontWeight: 700,
-                color: "#ffffff",
-                fontSize: 18,
-                lineHeight: 1.4,
-              }}
-            >
-              {mainQuestion}
-            </h2>
+          {/* Logo */}
+          <div
+            aria-label="BigIELTS.com"
+            className="shrink-0"
+            style={{
+              fontFamily:
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+              fontWeight: 800,
+              fontSize: 15,
+              letterSpacing: "-0.01em",
+              color: "#ffffff",
+            }}
+          >
+            <span>BigIELTS</span>
+            <span style={{ color: "#bfdbfe" }}>.com</span>
           </div>
 
+          {/* Question — centered */}
+          <h2
+            className="min-w-0 truncate text-center tracking-[-0.01em] sm:whitespace-normal sm:overflow-visible"
+            style={{
+              fontFamily:
+                '"Poppins", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+              fontWeight: 700,
+              color: "#ffffff",
+              fontSize: 16,
+              lineHeight: 1.4,
+            }}
+          >
+            {mainQuestion}
+          </h2>
+
+          {/* Close */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
             style={{
               backgroundColor: "rgba(255,255,255,0.18)",
               color: "#ffffff",
@@ -401,6 +419,7 @@ export function SpeakingSampleModal({
             <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
         </div>
+
 
 
         {/* Scroll body */}
