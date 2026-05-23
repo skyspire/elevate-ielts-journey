@@ -60,6 +60,7 @@ const CARDS: {
  * Used by the pricing page and any other Subscribe/Upgrade entry-point.
  */
 export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConfirmed }: Props) {
+  usePopupActive(open);
   const { user } = useLearnerSession();
   const [hover, setHover] = useState<IeltsPlanType | null>(null);
 
