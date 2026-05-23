@@ -362,13 +362,14 @@ export function SpeakingSampleModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — always compact one-line */}
+        {/* Header — solid royal blue, question-only */}
         <div
-          className="flex items-start gap-3 border-b border-foreground/[0.06] px-6 sm:px-12"
+          className="flex items-start gap-3 px-6 sm:px-12"
           style={{
-            paddingTop: 14,
-            paddingBottom: 14,
-            boxShadow: "0 6px 18px -12px rgba(15,23,42,0.18)",
+            paddingTop: 16,
+            paddingBottom: 16,
+            backgroundColor: "#1e40af",
+            boxShadow: "0 6px 18px -12px rgba(15,23,42,0.35)",
           }}
         >
           <div className="min-w-0 flex-1">
@@ -376,9 +377,9 @@ export function SpeakingSampleModal({
               className="tracking-[-0.01em]"
               style={{
                 fontFamily:
-                  '"Space Grotesk", "DM Sans", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-                fontWeight: 600,
-                color: "#0a0a0a",
+                  '"Poppins", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                fontWeight: 700,
+                color: "#ffffff",
                 fontSize: 18,
                 lineHeight: 1.4,
               }}
@@ -391,17 +392,16 @@ export function SpeakingSampleModal({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 hover:text-foreground"
+            className="-mr-1 mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
             style={{
-              backgroundColor: "#f1f1f3",
-              color: "#6b7280",
-              boxShadow:
-                "0 1px 2px rgba(15,23,42,0.06), inset 0 0 0 1px rgba(15,23,42,0.06)",
+              backgroundColor: "rgba(255,255,255,0.18)",
+              color: "#ffffff",
             }}
           >
             <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
         </div>
+
 
         {/* Scroll body */}
         <div
