@@ -547,10 +547,11 @@ export function SpeakingSampleModal({
                           });
 
                         }}
-                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left transition-all hover:brightness-105 hover:shadow-md"
+                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left transition-all duration-150 ease-out hover:brightness-105 hover:shadow-md active:scale-[0.97] active:brightness-95 active:shadow-sm motion-reduce:active:scale-100"
                         style={{
                           backgroundColor: p.bg,
                           color: p.ink,
+                          transformOrigin: "center",
                         }}
                       >
                         <div
