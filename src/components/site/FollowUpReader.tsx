@@ -605,26 +605,15 @@ export function FollowUpReader({
           >
             <div className="mx-auto max-w-[640px]">
               {currentVariant.sections.map((s, i) => (
-                <div key={i} className="mb-8 last:mb-2">
-                  {s.heading && (
-                    <h3
-                      className="mb-3 text-[17px] font-bold leading-snug sm:text-[18px]"
-                      style={{
-                        fontFamily:
-                          '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                        color: activeBand,
-                        letterSpacing: "-0.005em",
-                      }}
-                    >
-                      {s.heading}
-                    </h3>
-                  )}
-                  <p className="text-[15.5px] leading-[1.8] text-foreground/85 sm:text-[16.5px]">
-                    {s.body}
-                  </p>
-                </div>
+                <p
+                  key={i}
+                  className="mb-5 text-[15.5px] leading-[1.8] text-foreground/85 last:mb-0 sm:text-[16.5px]"
+                >
+                  {s.body}
+                </p>
               ))}
             </div>
+
           </article>
         </div>
 
