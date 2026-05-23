@@ -145,7 +145,7 @@ export function SpeakingSampleModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 sm:px-10 sm:py-12"
+      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-10 sm:px-10 sm:py-16"
       aria-modal="true"
       role="dialog"
       aria-label={`${topic.label} — sample answer`}
