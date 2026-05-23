@@ -22,6 +22,7 @@ const CARDS: {
   tag: string;
   icon: typeof GraduationCap;
   accent: string;
+  accentDark: string;
   bullets: string[];
 }[] = [
   {
@@ -29,7 +30,8 @@ const CARDS: {
     name: "Academic",
     tag: "University & professional registration",
     icon: GraduationCap,
-    accent: "oklch(0.55 0.2 255)",
+    accent: "oklch(0.58 0.2 255)",
+    accentDark: "oklch(0.42 0.21 265)",
     bullets: ["Writing T1 charts & graphs", "Academic reading", "Academic ebooks & samples"],
   },
   {
@@ -37,7 +39,8 @@ const CARDS: {
     name: "General Training",
     tag: "Migration, work & secondary ed",
     icon: Briefcase,
-    accent: "oklch(0.6 0.18 30)",
+    accent: "oklch(0.6 0.22 25)",
+    accentDark: "oklch(0.45 0.22 25)",
     bullets: ["Writing T1 letters", "Workplace / everyday reading", "General ebooks & samples"],
   },
 ];
