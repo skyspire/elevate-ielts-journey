@@ -610,7 +610,16 @@ export function FollowUpReader({
           from { transform: translate3d(var(--fu-lane-from, 24px), 0, 0); opacity: 0; }
           to   { transform: translate3d(0, 0, 0); opacity: 1; }
         }
+        @keyframes fu-q-in-right {
+          from { transform: translateX(40px); opacity: 0; }
+          to   { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fu-q-in-left {
+          from { transform: translateX(-40px); opacity: 0; }
+          to   { transform: translateX(0); opacity: 1; }
+        }
       `}</style>
+
     </div>
   );
 }
