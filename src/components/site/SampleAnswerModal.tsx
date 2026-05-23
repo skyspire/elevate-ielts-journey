@@ -37,6 +37,7 @@ export function SampleAnswerModal({
   answer,
   eyebrow,
 }: SampleAnswerModalProps) {
+  usePopupActive(open);
   const [mounted, setMounted] = useState(open);
   const [visible, setVisible] = useState(false);
   const [variant, setVariant] = useState(0);
