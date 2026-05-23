@@ -44,16 +44,13 @@ function AdminLayout() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Redirect to login if not authenticated
+  // Auth disabled — redirect away from login page straight to admin.
   useEffect(() => {
-    if (mounted && !user && location.pathname !== "/admin/login") {
-      navigate({ to: "/admin/login" });
+    if (mounted && location.pathname === "/admin/login") {
+      navigate({ to: "/admin" });
     }
-  }, [mounted, user, location.pathname, navigate]);
+  }, [mounted, location.pathname, navigate]);
 
-  if (location.pathname === "/admin/login") {
-    return <Outlet />;
-  }
 
   if (!mounted || !user) {
     return (
