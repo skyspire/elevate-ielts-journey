@@ -360,11 +360,8 @@ export function FollowUpReader({
               }}
             />
             <div className="absolute right-6 top-6 z-[120] sm:right-8 sm:top-8">
+              <div className="relative">
 
-
-        return (
-          <div className="absolute right-4 top-4 z-[120] sm:right-6 sm:top-6">
-            <div className="relative">
               {/* Fan items */}
               {navItems.map((item, idx) => {
                 const t = navItems.length === 1 ? 0.5 : idx / (navItems.length - 1);
