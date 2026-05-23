@@ -6,6 +6,7 @@ import {
   type SpeakingAnswerVariant,
 } from "@/data/speaking-model-answers";
 import { Highlight, annotateText } from "./StudyPaper";
+import { DustParticles } from "@/components/site/DustParticles";
 
 
 
