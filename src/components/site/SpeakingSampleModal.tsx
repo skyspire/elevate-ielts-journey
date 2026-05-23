@@ -458,8 +458,15 @@ export function SpeakingSampleModal({
                 </div>
                 <ul className="grid gap-2.5">
                   {followUps.map((q, i) => {
-                    const accents = ["#f59e0b", "#3b82f6", "#10b981", "#ef4444", "#8b5cf6", "#ec4899"];
-                    const accent = accents[i % accents.length];
+                    const palettes = [
+                      { bg: "#f59e0b", ink: "#78350f" }, // amber
+                      { bg: "#3b82f6", ink: "#1e3a8a" }, // blue
+                      { bg: "#10b981", ink: "#064e3b" }, // emerald
+                      { bg: "#ef4444", ink: "#7f1d1d" }, // red
+                      { bg: "#8b5cf6", ink: "#4c1d95" }, // violet
+                      { bg: "#ec4899", ink: "#831843" }, // pink
+                    ];
+                    const p = palettes[i % palettes.length];
                     return (
                     <li key={q.id}>
                       <button
@@ -478,36 +485,33 @@ export function SpeakingSampleModal({
                             total: followUps.length,
                           });
                         }}
-                        className="group relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-xl border border-foreground/10 bg-white/70 px-4 py-3 pl-5 text-left transition-all hover:border-foreground/20 hover:bg-white hover:shadow-sm"
+                        className="group relative flex w-full items-center gap-3 overflow-hidden rounded-xl px-5 py-4 text-left transition-all hover:brightness-110 hover:shadow-md"
                         style={{
-                          boxShadow: `inset 5px 0 0 0 ${accent}`,
+                          backgroundColor: p.bg,
+                          color: p.ink,
                         }}
                       >
                         <span
-                          className="min-w-0 flex-1 text-[14.5px] leading-snug text-foreground/85"
+                          className="text-[15px] leading-snug"
                           style={{
                             fontFamily:
                               '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                            fontWeight: 600,
+                            fontWeight: 700,
+                            color: p.ink,
                           }}
                         >
                           <span
                             className="mr-2 inline-block tabular-nums"
-                            style={{ color: accent, fontWeight: 800 }}
+                            style={{ color: p.ink, fontWeight: 900, opacity: 0.85 }}
                           >
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           {q.title}
                         </span>
-                        <ArrowUpRight
-                          className="h-4 w-4 shrink-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          strokeWidth={2.4}
-                          style={{ color: accent }}
-                        />
-
                       </button>
                     </li>
                   );})}
+
                 </ul>
               </div>
             )}
