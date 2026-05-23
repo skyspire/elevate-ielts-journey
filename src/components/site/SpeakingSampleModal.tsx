@@ -152,20 +152,35 @@ export function SpeakingSampleModal({
       role="dialog"
       aria-label={`${topic.label} — sample answer`}
     >
-      {/* Backdrop */}
+      {/* Backdrop — band-tinted glossy radial with heavy blur */}
       <button
         type="button"
         aria-label="Close"
         onClick={onClose}
         className="absolute inset-0 cursor-default"
         style={{
-          backgroundColor: visible ? "rgba(8, 10, 20, 0.55)" : "rgba(8, 10, 20, 0)",
-          backdropFilter: visible ? "blur(20px)" : "blur(0px)",
-          WebkitBackdropFilter: visible ? "blur(20px)" : "blur(0px)",
+          background: visible
+            ? `radial-gradient(120% 90% at 50% 35%, ${BAND_COLORS[variant]}cc 0%, ${BAND_COLORS[variant]}99 35%, rgba(8,10,20,0.75) 75%, rgba(8,10,20,0.92) 100%)`
+            : "rgba(8, 10, 20, 0)",
+          backdropFilter: visible ? "blur(24px) saturate(1.4)" : "blur(0px)",
+          WebkitBackdropFilter: visible ? "blur(24px) saturate(1.4)" : "blur(0px)",
           transition:
-            "background-color 240ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
+            "background 360ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
         }}
       />
+
+      {/* Glossy highlight sheen — soft top-light to give a smooth glassy feel */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity: visible ? 1 : 0,
+          background:
+            "radial-gradient(60% 35% at 50% 0%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%)",
+          transition: "opacity 360ms ease",
+        }}
+      />
+
 
       {/* Floating dust particles */}
       <div
