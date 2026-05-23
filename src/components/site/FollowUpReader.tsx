@@ -317,9 +317,88 @@ export function FollowUpReader({
         }}
       />
 
+      {/* Floating radial nav — top-right, outside the popup card */}
+      {visible && (() => {
+        const navItems = [
+          { label: "Back", icon: ArrowLeft, onClick: () => { setNavOpen(false); onClose(); } },
+          { label: "Dashboard", icon: LayoutDashboard, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/dashboard" }); } },
+          { label: "Homepage", icon: Home, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/" }); } },
+          { label: "Modules", icon: Grid3x3, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/sample-answers" }); } },
+        ];
+        // Fan items in an arc sweeping down-left from the trigger
+        const radius = 92;
+        const startAngle = 135; // degrees
+        const endAngle = 225;
+        return (
+          <div className="absolute right-4 top-4 z-[120] sm:right-6 sm:top-6">
+            <div className="relative">
+              {/* Fan items */}
+              {navItems.map((item, idx) => {
+                const t = navItems.length === 1 ? 0.5 : idx / (navItems.length - 1);
+                const angle = (startAngle + (endAngle - startAngle) * t) * (Math.PI / 180);
+                const dx = Math.cos(angle) * radius;
+                const dy = Math.sin(angle) * radius;
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={item.onClick}
+                    aria-label={item.label}
+                    title={item.label}
+                    className="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-lg backdrop-blur transition-all hover:scale-110"
+                    style={{
+                      backgroundColor: "rgba(15, 23, 42, 0.88)",
+                      transform: navOpen
+                        ? `translate(${dx}px, ${dy}px) scale(1)`
+                        : "translate(0px, 0px) scale(0.4)",
+                      opacity: navOpen ? 1 : 0,
+                      pointerEvents: navOpen ? "auto" : "none",
+                      transitionProperty: "transform, opacity",
+                      transitionDuration: "320ms",
+                      transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                      transitionDelay: navOpen ? `${idx * 40}ms` : `${(navItems.length - 1 - idx) * 30}ms`,
+                    }}
+                  >
+                    <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
+                    <span
+                      className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white"
+                      style={{
+                        backgroundColor: "rgba(15, 23, 42, 0.88)",
+                        opacity: navOpen ? 1 : 0,
+                        transition: "opacity 200ms ease",
+                        transitionDelay: navOpen ? `${200 + idx * 40}ms` : "0ms",
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+              {/* Trigger */}
+              <button
+                type="button"
+                onClick={() => setNavOpen((v) => !v)}
+                aria-label={navOpen ? "Close menu" : "Open menu"}
+                aria-expanded={navOpen}
+                className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-xl transition-all hover:scale-105 active:scale-95"
+                style={{
+                  backgroundColor: navOpen ? "rgba(220, 38, 38, 0.92)" : "rgba(15, 23, 42, 0.9)",
+                  transform: navOpen ? "rotate(90deg)" : "rotate(0deg)",
+                  transition: "transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1), background-color 220ms ease",
+                }}
+              >
+                {navOpen ? <X className="h-5 w-5" strokeWidth={2.4} /> : <Menu className="h-5 w-5" strokeWidth={2.4} />}
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Glass sheet */}
       <div
         className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
+
         style={{
           height: "min(92vh, 980px)",
           backgroundColor: "rgba(255,255,255,0.93)",
