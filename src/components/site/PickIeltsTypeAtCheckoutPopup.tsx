@@ -72,10 +72,13 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
   usePopupActive(open);
   const { user } = useLearnerSession();
   const [selected, setSelected] = useState<SingleType | null>(null);
+  const [selectedPreview, setSelectedPreview] = useState<PreviewStyle>("flat");
+  const currentPreview = PREVIEW_STYLES.find((style) => style.key === selectedPreview) ?? PREVIEW_STYLES[0];
 
   useEffect(() => {
     if (!open) {
       setSelected(null);
+      setSelectedPreview("flat");
       return;
     }
     const original = document.body.style.overflow;
