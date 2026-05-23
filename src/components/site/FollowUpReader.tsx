@@ -363,7 +363,17 @@ export function FollowUpReader({
               letterSpacing: "-0.01em",
               color: "#ffffff",
               maxWidth: "44ch",
+              transform:
+                qAnim === "out-left"
+                  ? "translateX(-24px)"
+                  : qAnim === "out-right"
+                  ? "translateX(24px)"
+                  : "translateX(0)",
+              opacity: qAnim === "out-left" || qAnim === "out-right" ? 0 : 1,
+              transition:
+                "transform 200ms cubic-bezier(0.4,0,1,1), opacity 200ms ease",
             }}
+            key={`q-${currentIndex}`}
           >
             <span
               aria-hidden
@@ -381,6 +391,44 @@ export function FollowUpReader({
             </span>
             {question.title}
           </h2>
+
+          {/* Dots indicator — tap to jump between follow-up questions */}
+          {total > 1 && (
+            <div
+              className="mt-1 flex items-center justify-center gap-1.5"
+              role="tablist"
+              aria-label="Follow-up questions"
+            >
+              {questions.map((q, i) => {
+                const isActive = i === currentIndex;
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`Question ${i + 1}: ${q.title}`}
+                    onClick={() => goToQuestion(i)}
+                    className="group inline-flex items-center justify-center rounded-full p-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
+                    <span
+                      style={{
+                        display: "block",
+                        width: isActive ? 22 : 7,
+                        height: 7,
+                        borderRadius: 999,
+                        backgroundColor: isActive
+                          ? "#ffffff"
+                          : "rgba(255,255,255,0.45)",
+                        transition: "width 220ms ease, background-color 220ms ease",
+                      }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={onClose}
@@ -390,6 +438,7 @@ export function FollowUpReader({
             <X className="h-4 w-4" strokeWidth={2.4} />
           </button>
         </div>
+
 
         {/* Scrollable answer body */}
         <div
