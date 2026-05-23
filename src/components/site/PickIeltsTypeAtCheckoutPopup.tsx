@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { GraduationCap, Briefcase, Crown, X, Check, Sparkles } from "lucide-react";
 import { addPurchasedType, setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
@@ -59,6 +60,7 @@ const CARDS: {
  * Used by the pricing page and any other Subscribe/Upgrade entry-point.
  */
 export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConfirmed }: Props) {
+  usePopupActive(open);
   const { user } = useLearnerSession();
   const [hover, setHover] = useState<IeltsPlanType | null>(null);
 

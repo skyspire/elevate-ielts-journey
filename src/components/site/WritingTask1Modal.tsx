@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { X, ZoomIn } from "lucide-react";
 import type { SampleAnswer } from "@/data/sample-answers";
 import { LineGraphChart } from "@/components/site/charts/LineGraphChart";
@@ -29,6 +30,7 @@ export function WritingTask1Modal({
   answer,
   chart,
 }: WritingTask1ModalProps) {
+  usePopupActive(open);
   const [mounted, setMounted] = useState(open);
   const [visible, setVisible] = useState(false);
   const [variant, setVariant] = useState(0);

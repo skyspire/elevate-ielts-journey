@@ -228,8 +228,10 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     if (phase === "closed") return;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("popup-open");
     return () => {
       document.body.style.overflow = original;
+      document.body.classList.remove("popup-open");
     };
   }, [phase]);
 
@@ -285,7 +287,7 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="absolute inset-0 bg-foreground/55 backdrop-blur-md transition-opacity duration-500"
+        className="absolute inset-0 bg-foreground/60 backdrop-blur-[20px] transition-opacity duration-500"
         style={{ opacity: isSettled ? 1 : 0.0 }}
       />
 

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { Sparkles, X, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -25,6 +26,7 @@ type Props = {
  * Uses the homepage pricing plans (CMS-driven). Bottom sheet on mobile, modal on desktop.
  */
 export function UpsellPopup({ open, onClose, countdown }: Props) {
+  usePopupActive(open);
   const isMobile = useIsMobile();
   const { plans } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("INR");

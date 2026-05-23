@@ -1,4 +1,5 @@
 import { GraduationCap, X, Sparkles } from "lucide-react";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -92,6 +93,7 @@ export function SignupGatePopup({
   onDevBypass,
   variant = "sunshine",
 }: Props) {
+  usePopupActive(open);
   const isMobile = useIsMobile();
   const [active, setActive] = useState<GateVariant>(variant);
 

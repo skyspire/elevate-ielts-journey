@@ -103,8 +103,10 @@ export function SpeakingSampleModal({
     if (!mounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("popup-open");
     return () => {
       document.body.style.overflow = prev;
+      document.body.classList.remove("popup-open");
     };
   }, [mounted]);
 
@@ -157,9 +159,9 @@ export function SpeakingSampleModal({
         onClick={onClose}
         className="absolute inset-0 cursor-default"
         style={{
-          backgroundColor: visible ? "rgba(8, 10, 20, 0.42)" : "rgba(8, 10, 20, 0)",
-          backdropFilter: visible ? "blur(8px)" : "blur(0px)",
-          WebkitBackdropFilter: visible ? "blur(8px)" : "blur(0px)",
+          backgroundColor: visible ? "rgba(8, 10, 20, 0.55)" : "rgba(8, 10, 20, 0)",
+          backdropFilter: visible ? "blur(20px)" : "blur(0px)",
+          WebkitBackdropFilter: visible ? "blur(20px)" : "blur(0px)",
           transition:
             "background-color 240ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
         }}
