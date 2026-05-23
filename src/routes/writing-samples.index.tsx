@@ -169,7 +169,7 @@ function WritingSamplesPage() {
 
   // Module-tinted page + ambient gradient — swaps with Academic ⇄ General.
   return (
-    <div className="relative min-h-screen transition-colors duration-700" style={{ backgroundColor: "#D8B4C8", color: "oklch(0.25 0.08 350)", ["--foreground" as any]: "oklch(0.22 0.09 350)", ["--muted-foreground" as any]: "oklch(0.38 0.08 350)" }}>
+    <div className="relative min-h-screen transition-colors duration-700" style={{ backgroundColor: "oklch(0.93 0.025 350)", color: "oklch(0.20 0.04 350)", ["--foreground" as any]: "oklch(0.20 0.04 350)", ["--muted-foreground" as any]: "oklch(0.40 0.03 350)" }}>
       {/* Bold solid page background */}
 
 
