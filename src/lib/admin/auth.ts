@@ -71,16 +71,11 @@ export function saveUsers(users: AdminUser[]) {
 }
 
 export function getSession(): AdminUser | null {
-  if (!isBrowser()) return null;
-  try {
-    const raw = window.localStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const sessionId = JSON.parse(raw) as string;
-    return getUsers().find((u) => u.id === sessionId) ?? null;
-  } catch {
-    return null;
-  }
+  // Auth disabled — always return the owner so admin is accessible without login.
+  const users = getUsers();
+  return users.find((u) => u.role === "owner") ?? users[0] ?? DEFAULT_USERS[0];
 }
+
 
 export function login(email: string, password: string): AdminUser | null {
   const user = getUsers().find(
