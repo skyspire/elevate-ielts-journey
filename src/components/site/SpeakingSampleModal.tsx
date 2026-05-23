@@ -26,12 +26,19 @@ export type SpeakingSampleModalProps = {
   categoryId: string;
 };
 
-// Editorial / Oxford prestige palette — matches Writing modals.
+// Ocean ladder — teal → ocean blue → deep indigo (cohesive, modern)
 const BAND_COLORS = [
-  "#1e3a5f", // navy
-  "#9b2c2c", // burgundy
-  "#b8860b", // gold
+  "#0f766e", // teal
+  "#1d4ed8", // ocean blue
+  "#312e81", // deep indigo
 ];
+// Deeper companion shades for the band-tinted modal halo
+const BAND_SHADOW_COLORS = [
+  "rgba(6, 60, 56, 0.7)",   // deep teal
+  "rgba(15, 36, 110, 0.7)", // deep ocean
+  "rgba(20, 18, 70, 0.75)", // deep indigo
+];
+
 
 export function SpeakingSampleModal({
   open,
@@ -380,7 +387,8 @@ export function SpeakingSampleModal({
           backdropFilter: "blur(14px) saturate(1.05)",
           WebkitBackdropFilter: "blur(14px) saturate(1.05)",
           boxShadow:
-            "0 0 0 1px rgba(255,255,255,0.4), 0 0 48px 6px rgba(255,255,255,0.18), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
+            `0 30px 90px -20px ${BAND_SHADOW_COLORS[variant]}, 0 12px 36px -12px ${BAND_SHADOW_COLORS[variant]}`,
+
           transformOrigin: "50% 55%",
           animation: visible && phase === "answer"
             ? "spPaperUncrumple 640ms cubic-bezier(0.22, 1, 0.36, 1) both"
