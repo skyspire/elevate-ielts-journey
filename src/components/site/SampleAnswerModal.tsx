@@ -139,55 +139,7 @@ export function SampleAnswerModal({
       />
       {visible && <PopupNavMenu onClose={onClose} />}
 
-      {/* Floating dust particles — ambient cozy layer above backdrop, below sheet */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ opacity: visible ? 1 : 0, transition: "opacity 600ms ease" }}
-      >
-        <style>{`
-          @keyframes saDustFloat {
-            0%   { transform: translate3d(0, 12vh, 0); opacity: 0; }
-            12%  { opacity: var(--sa-dust-op, 0.55); }
-            88%  { opacity: var(--sa-dust-op, 0.55); }
-            100% { transform: translate3d(var(--sa-dust-dx, 0px), -110vh, 0); opacity: 0; }
-          }
-        `}</style>
-        {Array.from({ length: 55 }).map((_, i) => {
-          // deterministic pseudo-random positions/sizes — feels random but stable
-          const seed = (n: number) => ((Math.sin(i * 12.9898 + n) + 1) / 2);
-          const size = 2 + seed(1) * 7;          // 2–9px (varied)
-          const left = seed(2) * 100;            // 0–100%, fully random
-
-
-          const dur = 22 + seed(3) * 26;         // 22–48s
-          const delay = -seed(4) * dur;          // negative to start mid-flight
-          const dx = (seed(5) - 0.5) * 100;      // -50 to 50px horizontal drift
-          const opacity = 0.6 + seed(6) * 0.35;  // 0.6–0.95 (bright on dark blur)
-          return (
-            <span
-              key={i}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: `${left}%`,
-                width: size,
-                height: size,
-                borderRadius: "9999px",
-                backgroundColor: "rgba(255,255,255,0.95)",
-                boxShadow:
-                  "0 0 8px rgba(255,255,255,0.65), 0 0 16px rgba(191,219,254,0.35)",
-                filter: "blur(0.3px)",
-                ["--sa-dust-op" as never]: String(opacity),
-                ["--sa-dust-dx" as never]: `${dx}px`,
-                animation: `saDustFloat ${dur}s linear ${delay}s infinite`,
-                willChange: "transform, opacity",
-              }}
-            />
-          );
-        })}
-
-      </div>
+      {/* Dust particles rendered by PopupNavMenu */}
 
 
 

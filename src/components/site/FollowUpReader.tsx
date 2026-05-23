@@ -6,6 +6,7 @@ import {
   type SpeakingAnswerVariant,
 } from "@/data/speaking-model-answers";
 import { Highlight, annotateText } from "./StudyPaper";
+import { DustParticles } from "@/components/site/DustParticles";
 
 
 
@@ -316,6 +317,10 @@ export function FollowUpReader({
           transition: "opacity 360ms ease",
         }}
       />
+
+      {/* Ambient dust particles rising from bottom (behind popup card) */}
+      <DustParticles visible={visible} />
+
 
       {/* Floating radial nav — top-right, outside the popup card */}
       {visible && (() => {
