@@ -132,7 +132,7 @@ function CategoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: "#D96E8A" }}>
       <main className="relative">
         <BackButton
           to="/vocabulary"
