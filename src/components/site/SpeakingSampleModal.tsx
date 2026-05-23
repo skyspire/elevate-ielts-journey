@@ -85,11 +85,10 @@ export function SpeakingSampleModal({
   }, [answer]);
 
   const [followUpReader, setFollowUpReader] = useState<{
-    question: { id: string; title: string };
-    origin: { x: number; y: number };
     index: number;
-    total: number;
+    origin: { x: number; y: number };
   } | null>(null);
+
 
   useEffect(() => {
     if (open) {
