@@ -230,6 +230,14 @@ function SpeakingTopicPage() {
         </div>
       </main>
       <Footer />
+
+      <SpeakingSampleModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        categoryId={categoryId}
+        topic={topic}
+      />
     </div>
   );
+
 }
