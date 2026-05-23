@@ -232,7 +232,7 @@ function SampleAnswersHubPage() {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen" style={{ backgroundColor: "#9CB8D8" }}>
       <TopTypeGradient variant={module} />
 
       <header

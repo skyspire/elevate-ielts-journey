@@ -134,7 +134,7 @@ function SpeakingSamplesPage() {
   const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: "#7FB8B0" }}>
       {/* Full-page jade silk gradient */}
       <TopTypeGradient variant="general" />
       <div className="relative flex-1">

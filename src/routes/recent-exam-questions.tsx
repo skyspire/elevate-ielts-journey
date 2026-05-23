@@ -260,7 +260,7 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   // Module-tinted page background — cool ivory for Academic, warm cream for General
-  const pageBg = isAcademic ? "oklch(0.985 0.014 235)" : "oklch(0.985 0.018 30)";
+  const pageBg = "#88B5AC";
   // Hero gradient wash — swaps softly with the Academic ⇄ General toggle.
   // Two corner halos blend into the page color for a clean, texture-free top.
   const heroGradient = isAcademic

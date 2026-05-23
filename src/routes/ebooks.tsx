@@ -180,7 +180,7 @@ function EbooksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen text-foreground" style={{ backgroundColor: "#BFA470" }}>
       <main className="container-page pb-24 pt-12 sm:pt-16">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
