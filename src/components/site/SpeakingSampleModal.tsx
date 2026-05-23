@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X, MessageCircleQuestion, ArrowUpRight } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
