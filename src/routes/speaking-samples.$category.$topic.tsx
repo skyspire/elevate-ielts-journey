@@ -158,7 +158,22 @@ function SpeakingTopicPage() {
                   return (
                     <article
                       key={q.id}
-                      className="group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white pb-0 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card"
+                      role={isUnlocked ? "button" : undefined}
+                      tabIndex={isUnlocked ? 0 : undefined}
+                      onClick={isUnlocked ? () => setModalOpen(true) : undefined}
+                      onKeyDown={
+                        isUnlocked
+                          ? (e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setModalOpen(true);
+                              }
+                            }
+                          : undefined
+                      }
+                      className={`group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-foreground/10 bg-white pb-0 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-card ${
+                        isUnlocked ? "cursor-pointer" : ""
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-3 px-5 pt-5">
                         <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-foreground/40">
@@ -189,6 +204,10 @@ function SpeakingTopicPage() {
                         {isUnlocked ? (
                           <button
                             type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalOpen(true);
+                            }}
                             className="inline-flex items-center gap-1 rounded-full bg-[oklch(0.55_0.12_165)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-soft transition-transform hover:-translate-y-0.5"
                           >
                             View answer
@@ -203,6 +222,7 @@ function SpeakingTopicPage() {
                       </div>
                     </article>
                   );
+
                 })}
               </div>
             </div>
