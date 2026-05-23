@@ -20,6 +20,7 @@ const ICONS = { academic: GraduationCap, general: Briefcase } as const;
 const ACCENT = { academic: "oklch(0.55 0.2 255)", general: "oklch(0.6 0.18 30)" } as const;
 
 export function UpgradeToAllAccessPopup({ open, onClose, currentType, wantedType, guest }: Props) {
+  usePopupActive(open);
   useEffect(() => {
     if (!open) return;
     const original = document.body.style.overflow;
