@@ -134,7 +134,7 @@ function SpeakingSamplesPage() {
   const topics = speakingTopicsByCategory[activeCategory.id] ?? [];
 
   return (
-    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: "#7FB8B0" }}>
+    <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: "#7FB8B0", color: "oklch(0.25 0.06 195)", ["--foreground" as any]: "oklch(0.22 0.07 195)", ["--muted-foreground" as any]: "oklch(0.36 0.06 195)" }}>
       {/* Bold solid page background */}
 
       <div className="relative flex-1">
