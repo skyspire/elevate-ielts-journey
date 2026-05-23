@@ -274,11 +274,11 @@ export function SpeakingSampleModal({
             style={{
               fontFamily:
                 '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(72px, 14vw, 160px)",
-              lineHeight: 0.8,
+              fontSize: "clamp(64px, 12vw, 140px)",
+              lineHeight: 0.7,
               color: "oklch(0.45 0.17 30)",
-              opacity: 0.55,
-              marginBottom: 8,
+              opacity: 0.5,
+              marginBottom: 4,
             }}
           >
             “
@@ -288,43 +288,65 @@ export function SpeakingSampleModal({
               fontFamily:
                 '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
               fontWeight: 400,
-              fontSize: "clamp(28px, 5.2vw, 52px)",
-              lineHeight: 1.18,
-              letterSpacing: "-0.01em",
-              maxWidth: "22ch",
-              color: "oklch(0.20 0.04 70)",
+              fontSize: "clamp(30px, 5.6vw, 58px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.015em",
+              maxWidth: "20ch",
+              color: "oklch(0.18 0.04 70)",
             }}
           >
-            {title}
+            {mainQuestion}
           </h2>
           <div
             aria-hidden="true"
             style={{
               fontFamily:
                 '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(72px, 14vw, 160px)",
-              lineHeight: 0.4,
+              fontSize: "clamp(64px, 12vw, 140px)",
+              lineHeight: 0.3,
               color: "oklch(0.45 0.17 30)",
-              opacity: 0.55,
-              marginTop: 16,
+              opacity: 0.5,
+              marginTop: 12,
             }}
           >
             ”
           </div>
+
+          {/* BigIELTS.com wordmark — bold serif, perfectly symmetrical */}
+          <div
+            aria-label="BigIELTS.com"
+            style={{
+              marginTop: "clamp(40px, 7vw, 72px)",
+              fontFamily:
+                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
+              fontWeight: 700,
+              fontSize: "clamp(40px, 7.5vw, 78px)",
+              lineHeight: 1,
+              letterSpacing: "-0.02em",
+              color: "oklch(0.22 0.05 70)",
+              textAlign: "center",
+            }}
+          >
+            <span>Big</span>
+            <span style={{ color: "oklch(0.48 0.18 30)" }}>IELTS</span>
+            <span style={{ opacity: 0.55, fontWeight: 400 }}>.com</span>
+          </div>
+
           <div
             style={{
-              marginTop: 40,
+              marginTop: 28,
               fontFamily:
                 '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "oklch(0.40 0.03 70)",
+              color: "oklch(0.42 0.03 70)",
             }}
           >
             Tap anywhere to reveal the sample answer
           </div>
+
 
           <button
             type="button"
