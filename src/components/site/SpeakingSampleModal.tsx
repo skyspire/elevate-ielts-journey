@@ -26,24 +26,25 @@ export type SpeakingSampleModalProps = {
   categoryId: string;
 };
 
-// Ocean ladder — teal → ocean blue → deep indigo (cohesive, modern)
+// Forest & Navy ladder — deep, premium, easy on the eyes
 const BAND_COLORS = [
-  "#0f766e", // teal
-  "#1d4ed8", // ocean blue
-  "#312e81", // deep indigo
+  "#1e3a8a", // navy
+  "#065f46", // forest
+  "#7c2d12", // chestnut
 ];
 // Deeper companion shades for the band-tinted modal halo
 const BAND_SHADOW_COLORS = [
-  "rgba(6, 60, 56, 0.7)",   // deep teal
-  "rgba(15, 36, 110, 0.7)", // deep ocean
-  "rgba(20, 18, 70, 0.75)", // deep indigo
+  "rgba(15, 30, 90, 0.7)",  // deep navy
+  "rgba(5, 60, 50, 0.7)",   // deep forest
+  "rgba(70, 25, 12, 0.72)", // deep chestnut
 ];
 // Darker bar shades (used by the question header bar)
 const BAND_BAR_COLORS = [
-  "#0a534d", // darker teal
-  "#1e3a8a", // darker ocean
-  "#1e1b5e", // darker indigo
+  "#1e2f6b", // darker navy
+  "#064a36", // darker forest
+  "#5c200d", // darker chestnut
 ];
+
 
 
 
@@ -524,13 +525,13 @@ export function SpeakingSampleModal({
                 </div>
                 <ul className="grid gap-2.5">
                   {followUps.map((q, i) => {
-                    // Cycle through a deep, eye-friendly trio per follow-up
-                    const ANSWER_PALETTE = ["#1e3a8a", "#065f46", "#7c2d12"];
-                    const activeColor = ANSWER_PALETTE[i % ANSWER_PALETTE.length];
+                    // Uniform pastel tint of the active band tab color
+                    const activeColor = BAND_COLORS[variant];
                     const p = {
                       bg: `${activeColor}1f`,   // ~12% tint
-                      ink: activeColor,          // deep shade for text
+                      ink: BAND_BAR_COLORS[variant], // deep band shade for text
                     };
+
 
 
                     return (
