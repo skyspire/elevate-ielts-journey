@@ -26,6 +26,7 @@ import { task2Prompts, task1GeneralPrompts, task1AcademicPrompts } from "@/data/
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { DottedTintPanel } from "@/components/site/DottedTintPanel";
 import { TopTypeGradient } from "@/components/site/TopTypeGradient";
+import { SpeakingSampleModal } from "@/components/site/SpeakingSampleModal";
 
 const searchSchema = z.object({
   module: z.enum(["academic", "general"]).optional(),
@@ -714,6 +715,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
   const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
   const [catId, setCatId] = useState<string>(cats[0].id);
   const triggerRef = useRef<HTMLDivElement>(null);
+  const [modalTopic, setModalTopic] = useState<{ id: string; label: string } | null>(null);
 
   useEffect(() => {
     setCatId((mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS)[0].id);
@@ -778,8 +780,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
                     index={i + 1}
                     label={t.label}
                     accent={accent}
-                    to="/speaking-samples/$category/$topic"
-                    params={{ category: catId, topic: t.id }}
+                    onClick={() => setModalTopic({ id: t.id, label: t.label })}
                   />
                 ))}
               </div>
@@ -787,6 +788,15 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
           </div>
         </DottedTintPanel>
       </div>
+
+      {modalTopic && (
+        <SpeakingSampleModal
+          open={!!modalTopic}
+          onClose={() => setModalTopic(null)}
+          categoryId={catId}
+          topic={modalTopic}
+        />
+      )}
     </div>
   );
 }
@@ -857,26 +867,25 @@ function NumberedTile({
   to,
   params,
   search,
+  onClick,
 }: {
   index: number;
   label: string;
   accent: (typeof TYPE_ACCENT)[IeltsType];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  to: any;
+  to?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   search?: any;
+  onClick?: () => void;
 }) {
   const idx = String(index).padStart(2, "0");
-  return (
-    <Link
-      to={to}
-      params={params}
-      search={search}
-      className="group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-      style={{ ['--tw-ring-color' as never]: accent.solid }}
-    >
+  const cls =
+    "group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  const style = { ['--tw-ring-color' as never]: accent.solid };
+  const inner = (
+    <>
       <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-4 sm:w-16 sm:pt-6">
         <span className="font-display text-xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-2xl">
           {idx}
@@ -890,6 +899,18 @@ function NumberedTile({
           {label}
         </p>
       </div>
+    </>
+  );
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={cls} style={style}>
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <Link to={to} params={params} search={search} className={cls} style={style}>
+      {inner}
     </Link>
   );
 }
