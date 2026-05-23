@@ -26,12 +26,19 @@ export type SpeakingSampleModalProps = {
   categoryId: string;
 };
 
-// Editorial / Oxford prestige palette — matches Writing modals.
+// Ocean ladder — teal → ocean blue → deep indigo (cohesive, modern)
 const BAND_COLORS = [
-  "#1e3a5f", // navy
-  "#9b2c2c", // burgundy
-  "#b8860b", // gold
+  "#0f766e", // teal
+  "#1d4ed8", // ocean blue
+  "#312e81", // deep indigo
 ];
+// Deeper companion shades for the band-tinted modal halo
+const BAND_SHADOW_COLORS = [
+  "rgba(6, 60, 56, 0.7)",   // deep teal
+  "rgba(15, 36, 110, 0.7)", // deep ocean
+  "rgba(20, 18, 70, 0.75)", // deep indigo
+];
+
 
 export function SpeakingSampleModal({
   open,
