@@ -375,21 +375,8 @@ export function FollowUpReader({
             }}
             key={`q-${currentIndex}`}
           >
-            <span
-              aria-hidden
-              style={{
-                display: "inline-block",
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: "0.18em",
-                opacity: 0.75,
-                marginRight: 10,
-                verticalAlign: "middle",
-              }}
-            >
-              {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
-            </span>
             {question.title}
+
           </h2>
 
           {/* Dots indicator — tap to jump between follow-up questions */}
