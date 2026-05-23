@@ -6,6 +6,7 @@ import {
   Lock,
   Mic,
 } from "lucide-react";
+import { useState } from "react";
 import { Footer } from "@/components/site/Footer";
 import { BackButton } from "@/components/site/BackButton";
 import {
@@ -16,6 +17,8 @@ import {
 } from "@/data/speaking-questions";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
 import { QuotaGate } from "@/components/site/QuotaGate";
+import { SpeakingSampleModal } from "@/components/site/SpeakingSampleModal";
+
 
 export const Route = createFileRoute("/speaking-samples/$category/$topic")({
   loader: ({ params }) => {
