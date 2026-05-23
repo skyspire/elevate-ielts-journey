@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X } from "lucide-react";
+
 import { PopupNavMenu } from "@/components/site/PopupNavMenu";
 import {
   getSpeakingModelAnswer,
