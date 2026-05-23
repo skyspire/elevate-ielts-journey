@@ -58,7 +58,6 @@ import { Route as AdminBannerRouteImport } from './routes/admin.banner'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminContentIndexRouteImport } from './routes/admin.content.index'
-import { Route as SpeakingSamplesCategoryTopicRouteImport } from './routes/speaking-samples.$category.$topic'
 import { Route as AdminContentResourcesIndexRouteImport } from './routes/admin.content.resources.index'
 import { Route as AdminContentModuleIndexRouteImport } from './routes/admin.content.$module.index'
 import { Route as AdminContentResourcesResourceRouteImport } from './routes/admin.content.resources.$resource'
@@ -312,12 +311,6 @@ const AdminContentIndexRoute = AdminContentIndexRouteImport.update({
   path: '/content/',
   getParentRoute: () => AdminRoute,
 } as any)
-const SpeakingSamplesCategoryTopicRoute =
-  SpeakingSamplesCategoryTopicRouteImport.update({
-    id: '/speaking-samples/$category/$topic',
-    path: '/speaking-samples/$category/$topic',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AdminContentResourcesIndexRoute =
   AdminContentResourcesIndexRouteImport.update({
     id: '/content/resources/',
@@ -403,7 +396,6 @@ export interface FileRoutesByFullPath {
   '/sample-answers/': typeof SampleAnswersIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module/': typeof AdminContentModuleIndexRoute
@@ -460,7 +452,6 @@ export interface FileRoutesByTo {
   '/sample-answers': typeof SampleAnswersIndexRoute
   '/speaking-samples': typeof SpeakingSamplesIndexRoute
   '/writing-samples': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content': typeof AdminContentIndexRoute
   '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module': typeof AdminContentModuleIndexRoute
@@ -519,7 +510,6 @@ export interface FileRoutesById {
   '/sample-answers/': typeof SampleAnswersIndexRoute
   '/speaking-samples/': typeof SpeakingSamplesIndexRoute
   '/writing-samples/': typeof WritingSamplesIndexRoute
-  '/speaking-samples/$category/$topic': typeof SpeakingSamplesCategoryTopicRoute
   '/admin/content/': typeof AdminContentIndexRoute
   '/admin/content/resources/$resource': typeof AdminContentResourcesResourceRoute
   '/admin/content/$module/': typeof AdminContentModuleIndexRoute
@@ -579,7 +569,6 @@ export interface FileRouteTypes {
     | '/sample-answers/'
     | '/speaking-samples/'
     | '/writing-samples/'
-    | '/speaking-samples/$category/$topic'
     | '/admin/content/'
     | '/admin/content/resources/$resource'
     | '/admin/content/$module/'
@@ -636,7 +625,6 @@ export interface FileRouteTypes {
     | '/sample-answers'
     | '/speaking-samples'
     | '/writing-samples'
-    | '/speaking-samples/$category/$topic'
     | '/admin/content'
     | '/admin/content/resources/$resource'
     | '/admin/content/$module'
@@ -694,7 +682,6 @@ export interface FileRouteTypes {
     | '/sample-answers/'
     | '/speaking-samples/'
     | '/writing-samples/'
-    | '/speaking-samples/$category/$topic'
     | '/admin/content/'
     | '/admin/content/resources/$resource'
     | '/admin/content/$module/'
@@ -724,7 +711,6 @@ export interface RootRouteChildren {
   SampleAnswersIndexRoute: typeof SampleAnswersIndexRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
   WritingSamplesIndexRoute: typeof WritingSamplesIndexRoute
-  SpeakingSamplesCategoryTopicRoute: typeof SpeakingSamplesCategoryTopicRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1072,13 +1058,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminContentIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/speaking-samples/$category/$topic': {
-      id: '/speaking-samples/$category/$topic'
-      path: '/speaking-samples/$category/$topic'
-      fullPath: '/speaking-samples/$category/$topic'
-      preLoaderRoute: typeof SpeakingSamplesCategoryTopicRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/content/resources/': {
       id: '/admin/content/resources/'
       path: '/content/resources'
@@ -1245,8 +1224,16 @@ const rootRouteChildren: RootRouteChildren = {
   SampleAnswersIndexRoute: SampleAnswersIndexRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
   WritingSamplesIndexRoute: WritingSamplesIndexRoute,
-  SpeakingSamplesCategoryTopicRoute: SpeakingSamplesCategoryTopicRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
