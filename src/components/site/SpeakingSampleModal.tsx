@@ -193,8 +193,7 @@ export function SpeakingSampleModal({
         }}
       />
 
-        }}
-      />
+
 
 
       {/* Floating dust particles */}
