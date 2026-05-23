@@ -225,7 +225,18 @@ export function FollowUpReader({
         if (e.key === "ArrowRight") goToVariant(variantIndex + 1);
         if (e.key === "ArrowLeft") goToVariant(variantIndex - 1);
       }
+      if (total > 1) {
+        if (e.key === "PageDown" || e.key === "ArrowDown") {
+          e.preventDefault();
+          goToQuestion(currentIndex + 1);
+        }
+        if (e.key === "PageUp" || e.key === "ArrowUp") {
+          e.preventDefault();
+          goToQuestion(currentIndex - 1);
+        }
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
