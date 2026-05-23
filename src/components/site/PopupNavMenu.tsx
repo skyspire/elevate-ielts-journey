@@ -11,6 +11,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { DustParticles } from "@/components/site/DustParticles";
 
 /**
  * PopupNavMenu — shared chrome for fullscreen sample-answer popups.
