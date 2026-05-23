@@ -51,6 +51,8 @@ export function PopupNavMenu({ onClose }: PopupNavMenuProps) {
 
   return (
     <>
+      {/* Ambient dust particles rising from bottom (behind popup card) */}
+      <DustParticles />
       {/* Dim + blur backdrop behind the menu (above sheet, below buttons) */}
       <button
         type="button"
