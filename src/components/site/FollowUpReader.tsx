@@ -356,7 +356,20 @@ export function FollowUpReader({
               }}
             />
             <div className="absolute right-6 top-6 z-[120] flex flex-col items-end gap-3 sm:right-8 sm:top-8">
-              {/* Trigger */}
+              {/* Close popup (red) — sits above the hamburger */}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-xl transition-all hover:scale-105 active:scale-95"
+                style={{
+                  backgroundColor: "rgba(220, 38, 38, 0.92)",
+                }}
+              >
+                <X className="h-5 w-5" strokeWidth={2.4} />
+              </button>
+              {/* Hamburger trigger */}
+
               <button
                 type="button"
                 onClick={() => setNavOpen((v) => !v)}
@@ -549,14 +562,6 @@ export function FollowUpReader({
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-white/90 transition hover:bg-white/15 hover:text-white sm:right-4 sm:top-4"
-          >
-            <X className="h-4 w-4" strokeWidth={2.4} />
-          </button>
         </div>
 
 
