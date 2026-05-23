@@ -780,8 +780,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
                     index={i + 1}
                     label={t.label}
                     accent={accent}
-                    to="/speaking-samples/$category/$topic"
-                    params={{ category: catId, topic: t.id }}
+                    onClick={() => setModalTopic({ id: t.id, label: t.label })}
                   />
                 ))}
               </div>
@@ -789,6 +788,15 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
           </div>
         </DottedTintPanel>
       </div>
+
+      {modalTopic && (
+        <SpeakingSampleModal
+          open={!!modalTopic}
+          onClose={() => setModalTopic(null)}
+          categoryId={catId}
+          topic={modalTopic}
+        />
+      )}
     </div>
   );
 }
