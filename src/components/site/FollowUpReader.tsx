@@ -132,69 +132,20 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     };
   }, [fullBody]);
 
-  // ── PARCHMENT + INK palette with bold per-variant gradient washes ──────
-  // Background base is a warm cream parchment for premium long-read comfort.
-  // Each variant overlays its own gradient wash (Sunrise · Forest · Twilight)
-  // as a translucent atmospheric tint — rich but readable. Text stays a deep
-  // espresso ink for full contrast on parchment.
-  const PARCHMENT      = "oklch(0.965 0.022 82)";   // warm cream paper
-  const PARCHMENT_DEEP = "oklch(0.93 0.030 78)";    // edge / vignette
-  const INK            = "oklch(0.24 0.030 60)";    // deep espresso
-  const INK_SOFT       = "oklch(0.32 0.028 60 / 0.92)";
-
-  const palette = [
-    {
-      // SUNRISE — warm peach → amber → rose
-      label:        "Sunrise",
-      gradTop:      "oklch(0.88 0.085 55)",
-      gradMid:      "oklch(0.83 0.105 35)",
-      gradBottom:   "oklch(0.78 0.110 22)",
-      accent:       "oklch(0.58 0.150 32)",   // burnt sienna
-      accentDeep:   "oklch(0.42 0.130 32)",
-      tabBg:        "oklch(0.78 0.105 38)",
-      tabBorder:    "oklch(0.44 0.140 32)",
-      tabInk:       "oklch(0.20 0.040 35)",
-      // Legacy aliases used by JSX below — body stays ink-on-parchment;
-      // chrome/badges/borders take the variant's accent hue.
-      ink:          INK,
-      inkSoft:      INK_SOFT,
-      fill:         "oklch(0.58 0.150 32)",
-      fillDeep:     "oklch(0.42 0.130 32)",
-    },
-    {
-      // FOREST — sage → moss → deep pine
-      label:        "Forest",
-      gradTop:      "oklch(0.86 0.060 155)",
-      gradMid:      "oklch(0.74 0.080 150)",
-      gradBottom:   "oklch(0.58 0.090 148)",
-      accent:       "oklch(0.42 0.090 150)",
-      accentDeep:   "oklch(0.30 0.070 150)",
-      tabBg:        "oklch(0.70 0.085 150)",
-      tabBorder:    "oklch(0.34 0.080 150)",
-      tabInk:       "oklch(0.18 0.030 150)",
-      ink:          INK,
-      inkSoft:      INK_SOFT,
-      fill:         "oklch(0.42 0.090 150)",
-      fillDeep:     "oklch(0.30 0.070 150)",
-    },
-    {
-      // TWILIGHT — lilac → indigo → deep plum
-      label:        "Twilight",
-      gradTop:      "oklch(0.84 0.075 295)",
-      gradMid:      "oklch(0.66 0.105 285)",
-      gradBottom:   "oklch(0.46 0.110 290)",
-      accent:       "oklch(0.40 0.130 295)",
-      accentDeep:   "oklch(0.28 0.110 295)",
-      tabBg:        "oklch(0.62 0.100 290)",
-      tabBorder:    "oklch(0.32 0.115 295)",
-      tabInk:       "oklch(0.99 0.012 290)",
-      ink:          INK,
-      inkSoft:      INK_SOFT,
-      fill:         "oklch(0.40 0.130 295)",
-      fillDeep:     "oklch(0.28 0.110 295)",
-    },
+  // ── Ocean ladder palette — cohesive with SpeakingSampleModal ─────────
+  const BAND_COLORS = ["#0f766e", "#1d4ed8", "#312e81"];
+  const BAND_BAR_COLORS = ["#0a534d", "#1e3a8a", "#1e1b5e"];
+  const BAND_SHADOW_COLORS = [
+    "rgba(6, 60, 56, 0.7)",
+    "rgba(15, 36, 110, 0.7)",
+    "rgba(20, 18, 70, 0.75)",
   ];
-  const activePalette = palette[variantIndex % palette.length];
+  const INK = "#0f172a";
+  const INK_SOFT = "rgba(15, 23, 42, 0.86)";
+
+  const activeBand = BAND_COLORS[variantIndex % BAND_COLORS.length];
+  const activeBar = BAND_BAR_COLORS[variantIndex % BAND_BAR_COLORS.length];
+  const activeShadow = BAND_SHADOW_COLORS[variantIndex % BAND_SHADOW_COLORS.length];
 
   // Open / close phase machine.
   useEffect(() => {
@@ -206,16 +157,11 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
       }
       return;
     }
-    // Burst → settled. The burst animation runs in CSS for ~520ms; once it
-    // peaks we transition to "settled" so the reader content fades in.
     setPhase("burst");
-    const t = window.setTimeout(() => setPhase("settled"), 520);
+    const t = window.setTimeout(() => setPhase("settled"), 420);
     return () => clearTimeout(t);
   }, [open]);
 
-  // Billboard: the whole answer appears as one block — no per-section reveal.
-  // We keep `revealedSections` for compatibility with the lane-slide effect:
-  // it just toggles 0 → 1 once the reader settles.
   useEffect(() => {
     if (phase !== "settled") {
       setRevealedSections(0);
@@ -224,7 +170,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     setRevealedSections(1);
   }, [phase, variantIndex]);
 
-  // Body scroll lock.
   useEffect(() => {
     if (phase === "closed") return;
     const original = document.body.style.overflow;
@@ -236,7 +181,6 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     };
   }, [phase]);
 
-  // Esc + arrow keys.
   useEffect(() => {
     if (phase === "closed") return;
     const onKey = (e: KeyboardEvent) => {
@@ -263,289 +207,167 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
       setVariantIndex(clamped);
       if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
       setLaneAnim("in");
-    }, 260);
-    window.setTimeout(() => setLaneAnim("idle"), 660);
+    }, 220);
+    window.setTimeout(() => setLaneAnim("idle"), 600);
   }
 
   if (phase === "closed") return null;
 
-  // Burst origin — defaults to viewport center if no click point given.
-  const burstX = origin?.x ?? (typeof window !== "undefined" ? window.innerWidth / 2 : 0);
-  const burstY = origin?.y ?? (typeof window !== "undefined" ? window.innerHeight / 2 : 0);
-
-  const isBursting = phase === "burst";
-  const isSettled = phase === "settled";
+  const visible = phase === "settled";
+  const laneOut = laneAnim === "out";
+  const laneStyle: React.CSSProperties = laneOut
+    ? {
+        transform: `translate3d(${-switchDir * 24}px, 0, 0)`,
+        opacity: 0,
+        transition:
+          "transform 220ms cubic-bezier(0.4, 0, 1, 1), opacity 220ms cubic-bezier(0.4, 0, 1, 1)",
+      }
+    : {
+        animation:
+          laneAnim === "in"
+            ? "fu-lane-in 380ms cubic-bezier(0, 0, 0.2, 1) both"
+            : undefined,
+        ["--fu-lane-from" as string]: `${switchDir * 24}px`,
+      };
 
   return (
     <div
-      className="fixed inset-0 z-[110]"
+      className="fixed inset-0 z-[110] flex items-center justify-center px-4 py-10 sm:px-10 sm:py-16"
       role="dialog"
       aria-modal="true"
       aria-label={`${question.title} — Sample answers`}
     >
-      {/* Backdrop fade */}
+      {/* Backdrop — band-tinted frosted glass */}
       <button
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="absolute inset-0 bg-foreground/60 backdrop-blur-[20px] transition-opacity duration-500"
-        style={{ opacity: isSettled ? 1 : 0.0 }}
+        className="absolute inset-0 cursor-default"
+        style={{
+          background: visible
+            ? `radial-gradient(130% 100% at 50% 30%, ${activeBand}d9 0%, ${activeBand}b8 55%, ${activeBand}cc 100%)`
+            : "rgba(8, 10, 20, 0)",
+          backdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
+          WebkitBackdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
+          transition:
+            "background 360ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity: visible ? 1 : 0,
+          background:
+            "radial-gradient(70% 40% at 50% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 70%)",
+          transition: "opacity 360ms ease",
+        }}
       />
 
-      {/* ── Burst & split streams overlay ─────────────────────────────────
-          A central glowing wisp bursts from the click origin, then three
-          palette-tinted streams arc outward in three directions. Pure CSS
-          via inline keyframe animations — no JS animation loop. */}
-      {isBursting && (
-        <div
-          className="pointer-events-none absolute inset-0 z-[112] overflow-hidden"
-          aria-hidden
-        >
-          {/* Central wisp */}
-          <span
-            className="absolute rounded-full"
-            style={{
-              left: burstX,
-              top: burstY,
-              width: 16,
-              height: 16,
-              marginLeft: -8,
-              marginTop: -8,
-              background:
-                "radial-gradient(circle, oklch(0.98 0.02 80) 0%, oklch(0.85 0.10 80 / 0.7) 50%, transparent 70%)",
-              boxShadow: "0 0 60px 20px oklch(0.95 0.05 80 / 0.55)",
-              animation: "fu-burst-core 520ms cubic-bezier(0.16, 1, 0.3, 1) forwards",
-            }}
-          />
-          {/* Three palette-tinted streams arcing outward */}
-          {palette.map((p, i) => {
-            // Three directions: up-left, up, up-right (slight upward spread).
-            const angle = -90 + (i - 1) * 28; // -118°, -90°, -62°
-            const rad = (angle * Math.PI) / 180;
-            const dist = 380;
-            const dx = Math.cos(rad) * dist;
-            const dy = Math.sin(rad) * dist;
-            return (
-              <span
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  left: burstX,
-                  top: burstY,
-                  width: 12,
-                  height: 12,
-                  marginLeft: -6,
-                  marginTop: -6,
-                  background: p.fill,
-                  boxShadow: `0 0 30px 8px ${p.fill}`,
-                  ["--fu-dx" as string]: `${dx}px`,
-                  ["--fu-dy" as string]: `${dy}px`,
-                  animation: `fu-stream 520ms cubic-bezier(0.22, 1, 0.36, 1) ${i * 50}ms forwards`,
-                  opacity: 0,
-                }}
-              />
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Reader stage ─────────────────────────────────────────────────
-          Fades + scales in from the burst origin once the streams settle. */}
+      {/* Glass sheet */}
       <div
-        className="pointer-events-auto absolute inset-0 origin-center"
+        className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
         style={{
-          opacity: isSettled ? 1 : 0,
-          transform: isSettled ? "scale(1)" : "scale(0.94)",
-          transformOrigin: `${burstX}px ${burstY}px`,
+          height: "min(92vh, 980px)",
+          backgroundColor: "rgba(255,255,255,0.93)",
+          backdropFilter: "blur(14px) saturate(1.05)",
+          WebkitBackdropFilter: "blur(14px) saturate(1.05)",
+          boxShadow: `0 30px 90px -20px ${activeShadow}, 0 12px 36px -12px ${activeShadow}`,
+          transformOrigin: "50% 55%",
+          opacity: visible ? 1 : 0,
+          transform: visible ? "scale(1)" : "scale(0.96)",
           transition:
-            "opacity 380ms cubic-bezier(0.16, 1, 0.3, 1), transform 480ms cubic-bezier(0.16, 1, 0.3, 1)",
+            "opacity 320ms cubic-bezier(0.16, 1, 0.3, 1), transform 380ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 360ms ease",
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* ── STUDY PAPER background ────────────────────────────────────
-            Confident & tactile dotted bullet-journal paper, layered with
-            a per-variant atmospheric wash so the reader still carries the
-            Sunrise / Forest / Twilight color identity. */}
-        <StudyPaperBackground tone="cream" />
+        {/* Header bar — dark band-coloured, stacked logo + question */}
         <div
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-          aria-hidden
+          className="relative flex flex-col items-center gap-2 px-12 sm:px-16"
+          style={{
+            paddingTop: 14,
+            paddingBottom: 16,
+            backgroundColor: activeBar,
+            boxShadow: "0 6px 18px -12px rgba(15,23,42,0.35)",
+            transition: "background-color 360ms ease",
+          }}
         >
-          {/* Per-variant atmospheric tint — soft multiply so the dot grid
-              still reads through it. */}
           <div
-            className="absolute inset-0"
+            aria-label="BigIELTS.com"
             style={{
-              backgroundImage: `linear-gradient(160deg, ${activePalette.gradTop} 0%, ${activePalette.gradMid} 55%, ${activePalette.gradBottom} 100%)`,
-              mixBlendMode: "multiply",
-              opacity: 0.18,
-              transition:
-                "background-image 640ms cubic-bezier(0.4, 0, 0.2, 1), opacity 640ms cubic-bezier(0.4, 0, 0.2, 1)",
+              fontFamily:
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+              fontWeight: 800,
+              fontSize: 13,
+              letterSpacing: "0.02em",
+              color: "#ffffff",
+              opacity: 0.9,
             }}
-          />
-          {/* Top vignette anchoring the header pill */}
-          <div
-            className="absolute inset-x-0 top-0 h-48"
+          >
+            BigIELTS
+          </div>
+          <h2
+            className="text-center"
             style={{
-              background: `linear-gradient(180deg, ${activePalette.accentDeep}33 0%, transparent 100%)`,
+              fontFamily: '"Poppins", "Inter", ui-sans-serif, system-ui, sans-serif',
+              fontWeight: 700,
+              fontSize: "clamp(15px, 2.2vw, 18px)",
+              lineHeight: 1.35,
+              letterSpacing: "-0.01em",
+              color: "#ffffff",
+              maxWidth: "44ch",
             }}
-          />
-          {/* Bottom vignette toward the footer band */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-56"
-            style={{
-              background: `linear-gradient(0deg, ${PARCHMENT_DEEP}aa 0%, transparent 100%)`,
-            }}
-          />
-        </div>
-
-        {/* Header — circular icon-only close button, top-right. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-end items-center px-4 pt-4 sm:px-6 sm:pt-6">
+          >
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: "0.18em",
+                opacity: 0.75,
+                marginRight: 10,
+                verticalAlign: "middle",
+              }}
+            >
+              {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
+            </span>
+            {question.title}
+          </h2>
           <button
             type="button"
             onClick={onClose}
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-md transition-all hover:scale-105 sm:h-11 sm:w-11"
-            style={{
-              color: INK,
-              borderColor: `${activePalette.accentDeep}55`,
-              backgroundColor: `${PARCHMENT}cc`,
-            }}
             aria-label="Close"
+            className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-white/90 transition hover:bg-white/15 hover:text-white sm:right-4 sm:top-4"
           >
-            <ArrowLeft className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2.4} />
+            <X className="h-4 w-4" strokeWidth={2.4} />
           </button>
         </div>
 
-        {/* ── Two-column billboard ───────────────────────────────────────
-            Desktop (lg+): LEFT column (question stack) is FIXED — it does
-            not scroll. Only the RIGHT column (answer body) scrolls.
-            Mobile: single column, whole stage scrolls (question first,
-            answer below). */}
-        {(() => {
-          const isOut = laneAnim === "out";
-          const outStyle: React.CSSProperties = {
-            transform: `translate3d(${-switchDir * 36}px, 0, 0)`,
-            opacity: 0,
-            transition:
-              "transform 260ms cubic-bezier(0.4, 0, 1, 1), opacity 260ms cubic-bezier(0.4, 0, 1, 1)",
-            willChange: "transform, opacity",
-          };
-          const inOrIdleStyle: React.CSSProperties = {
-            animation:
-              laneAnim === "in"
-                ? "lane-slide-in 380ms cubic-bezier(0, 0, 0.2, 1) both"
-                : undefined,
-            ["--lane-from-x" as string]: `${switchDir * 36}px`,
-          };
-          const visible = revealedSections > 0;
-          const laneStyle: React.CSSProperties = {
-            visibility: visible ? "visible" : "hidden",
-            ...(isOut ? outStyle : inOrIdleStyle),
-          };
-
-          // ── LEFT: fixed question stack (centered vertically) ──────────
-          // Editorial treatment:
-          //   • Massive display numeral (e.g. "01") set tight & heavy, with a
-          //     hairline rule beneath and a tiny "/ 03 FOLLOW-UPS" counter.
-          //   • "Follow-up" label uses the site's display font, bold, with a
-          //     short accent underline in the variant color.
-          //   • Headline gets an ink-bleed underline sweep on entrance: a
-          //     thin rule expands left→right under the question, then settles
-          //     as a permanent accent.
-          const QuestionStack = (
-            <aside className="flex w-full flex-col items-center text-center">
-              {/* Editorial numeral block — muted grey, restrained scale */}
-              <div className="relative flex items-baseline justify-center" aria-hidden>
-                <span
-                  className="font-display font-black leading-[0.85] tabular-nums"
-                  style={{
-                    color: "oklch(0.62 0.008 60)",
-                    fontSize: "clamp(2.75rem, 4.4vw, 4rem)",
-                    letterSpacing: "-0.045em",
-                    fontFeatureSettings: '"ss01", "cv11", "lnum"',
-                  }}
-                >
-                  {String(index).padStart(2, "0")}
-                </span>
-              </div>
-              {/* Hairline rule + counter */}
-              <div className="mt-3 flex w-full max-w-[260px] items-center gap-3">
-                <span
-                  className="block h-px flex-1"
-                  style={{ backgroundColor: `${activePalette.ink}66` }}
-                  aria-hidden
-                />
-                <span
-                  className="font-display font-extrabold uppercase tabular-nums"
-                  style={{
-                    color: activePalette.ink,
-                    fontSize: "10.5px",
-                    letterSpacing: "0.28em",
-                    opacity: 0.78,
-                  }}
-                >
-                  / {String(total).padStart(2, "0")} Follow-ups
-                </span>
-                <span
-                  className="block h-px flex-1"
-                  style={{ backgroundColor: `${activePalette.ink}66` }}
-                  aria-hidden
-                />
-              </div>
-
-              {/* "Follow-up" label — bold display + accent underline */}
-              <div className="mt-9 inline-flex flex-col items-center">
-                <span
-                  className="font-display font-black leading-none"
-                  style={{
-                    color: activePalette.ink,
-                    fontSize: "clamp(1rem, 1.35vw, 1.15rem)",
-                    letterSpacing: "-0.005em",
-                  }}
-                >
-                  Follow-up
-                </span>
-                <span
-                  className="mt-2 block h-[3px] rounded-full"
-                  style={{
-                    width: "clamp(36px, 4.5vw, 56px)",
-                    backgroundColor: activePalette.accent,
-                  }}
-                  aria-hidden
-                />
-              </div>
-
-              {/* Headline + ink-bleed underline sweep — dark grey ink */}
-              <h1
-                className="fu-headline relative mt-4 inline-block font-display font-black leading-[1.05] tracking-tight"
-                style={{
-                  color: "oklch(0.28 0.012 60)",
-                  fontSize: "clamp(1.7rem, 3.4vw, 2.65rem)",
-                  letterSpacing: "-0.012em",
-                }}
-              >
-                {question.title}
-              </h1>
-            </aside>
-          );
-
-          // ── RIGHT: scrollable answer body ─────────────────────────────
-          const AnswerBody = (
+        {/* Scrollable answer body */}
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto px-5 py-6 sm:px-10 sm:py-9"
+        >
+          <article style={laneStyle}>
             <div
-              className="font-display"
+              className="mx-auto max-w-[680px]"
               style={{
-                color: activePalette.inkSoft,
-                fontSize: "clamp(1.0625rem, 1.55vw, 1.2rem)",
+                color: INK_SOFT,
+                fontFamily:
+                  '"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                fontSize: "clamp(16px, 1.5vw, 18px)",
                 lineHeight: 1.72,
-                fontWeight: 500,
+                fontWeight: 450,
               }}
             >
               <p>
                 <Highlight tone="amber">
                   <span
-                    className="font-display font-extrabold"
                     style={{
-                      color: activePalette.ink,
-                      fontSize: "1.12em",
+                      color: INK,
+                      fontWeight: 700,
+                      fontSize: "1.06em",
                       letterSpacing: "-0.005em",
                     }}
                   >
@@ -557,41 +379,35 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
 
               {pullQuote && (
                 <figure
-                  className="my-8 flex flex-col items-center text-center"
+                  className="my-7 flex flex-col items-center text-center"
                   aria-label="Pull quote"
                 >
-                  <blockquote
-                    className="mt-4 font-display font-extrabold leading-[1.25] tracking-tight"
+                  <span
+                    aria-hidden
                     style={{
-                      color: activePalette.ink,
-                      fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
-                      maxWidth: "560px",
-                      textShadow: `0 2px 18px ${activePalette.fillDeep}`,
+                      width: 44,
+                      height: 3,
+                      borderRadius: 999,
+                      backgroundColor: activeBand,
+                      marginBottom: 14,
+                    }}
+                  />
+                  <blockquote
+                    style={{
+                      color: INK,
+                      fontFamily: '"Poppins", "Inter", sans-serif',
+                      fontWeight: 700,
+                      fontSize: "clamp(18px, 2vw, 22px)",
+                      lineHeight: 1.35,
+                      letterSpacing: "-0.012em",
+                      maxWidth: 560,
                     }}
                   >
-                    <span
-                      aria-hidden
-                      style={{
-                        opacity: 0.55,
-                        marginRight: "0.12em",
-                        fontSize: "1.4em",
-                        lineHeight: 0,
-                        verticalAlign: "-0.18em",
-                      }}
-                    >
+                    <span aria-hidden style={{ opacity: 0.4, marginRight: "0.1em" }}>
                       “
                     </span>
                     {pullQuote.replace(/^["“”]|["“”]$/g, "")}
-                    <span
-                      aria-hidden
-                      style={{
-                        opacity: 0.55,
-                        marginLeft: "0.08em",
-                        fontSize: "1.4em",
-                        lineHeight: 0,
-                        verticalAlign: "-0.18em",
-                      }}
-                    >
+                    <span aria-hidden style={{ opacity: 0.4, marginLeft: "0.05em" }}>
                       ”
                     </span>
                   </blockquote>
@@ -600,186 +416,68 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
 
               {bodyAfterPullQuote && <p>{annotateText(bodyAfterPullQuote)}</p>}
             </div>
-          );
-
-          return (
-            <>
-              {/* ── DESKTOP (lg+): split layout, only right column scrolls ── */}
-              <div
-                key={`fu-desktop-${variantIndex}`}
-                className="absolute inset-0 hidden pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px] lg:block"
-                style={laneStyle}
-              >
-                <div className="mx-auto grid h-full w-full max-w-[1280px] grid-cols-[2fr_3fr] gap-14 px-10">
-                  {/* Fixed (non-scrolling) question column — left-aligned editorial */}
-                  <div className="flex h-full items-center justify-center pr-8">
-                    {QuestionStack}
-                  </div>
-                  {/* Scrollable answer column */}
-                  <div
-                    ref={scrollRef}
-                    className="h-full overflow-y-auto border-l py-10 pl-12 pr-2"
-                    style={{ borderColor: `${activePalette.ink}26` }}
-                  >
-                    {AnswerBody}
-                  </div>
-                </div>
-              </div>
-
-              {/* ── MOBILE / TABLET: stacked, whole stage scrolls ────────── */}
-              <div
-                key={`fu-mobile-${variantIndex}`}
-                className="absolute inset-0 overflow-y-auto pt-[72px] pb-[140px] sm:pt-[88px] sm:pb-[160px] lg:hidden"
-              >
-                <div className="mx-auto flex min-h-full max-w-[1280px] flex-col gap-10 px-5 py-6 sm:px-10">
-                  <article style={laneStyle} className="flex flex-col gap-10">
-                    {QuestionStack}
-                    <div>{AnswerBody}</div>
-                  </article>
-                </div>
-              </div>
-            </>
-          );
-        })()}
-
-        {/* Brand mark — bottom-right above the footer pager, with a soft glow.
-            Uses the same charcoal-tile GraduationCap mark as the site Header. */}
-        <div
-          className="pointer-events-none absolute right-4 z-20 flex items-center gap-2 sm:right-8"
-          style={{
-            bottom: variants.length > 1 ? "calc(72px + 16px)" : "20px",
-          }}
-          aria-hidden
-        >
-          <span
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl text-white sm:h-10 sm:w-10"
-            style={{
-              backgroundColor: INK,
-              boxShadow: `0 0 0 1px ${activePalette.accent}55, 0 0 28px 6px ${activePalette.accent}66, 0 8px 24px ${activePalette.accentDeep}40`,
-            }}
-          >
-            <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.75} />
-          </span>
-          <span
-            className="hidden font-display text-[14px] font-extrabold tracking-tight sm:inline"
-            style={{ color: INK }}
-          >
-            BigIELTS
-          </span>
+          </article>
         </div>
 
-        {/* Footer pager — FULL-WIDTH BAND with palette-toned top divider rule. */}
+        {/* Footer tabs — band-coloured strip */}
         {variants.length > 1 && (
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20"
+            className="grid w-full"
             style={{
-              borderTop: `1px solid ${activePalette.accentDeep}55`,
-              background: `linear-gradient(180deg, ${PARCHMENT_DEEP} 0%, ${PARCHMENT} 100%)`,
-              backdropFilter: "blur(6px)",
-              boxShadow: `0 -8px 24px ${activePalette.accentDeep}1a`,
+              gridTemplateColumns: `repeat(${variants.length}, minmax(0, 1fr))`,
             }}
+            role="tablist"
+            aria-label="Sample answers"
           >
-            <div className="pointer-events-auto mx-auto flex w-full max-w-[1280px] items-stretch gap-1.5 px-4 py-3 sm:px-10 sm:py-4">
-              <button
-                type="button"
-                onClick={() => goToVariant(variantIndex - 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-                style={{ color: `${INK}b3` }}
-                aria-label="Previous answer"
-              >
-                <ChevronLeft className="h-4 w-4" strokeWidth={2.6} />
-              </button>
-
-              <div
-                className="flex flex-1 items-stretch gap-1.5"
-                role="tablist"
-                aria-label="Sample answers"
-              >
-                {variants.map((_, i) => {
-                  const active = i === variantIndex;
-                  const tone = palette[i % palette.length];
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={() => goToVariant(i)}
-                      className="relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-300 ease-out sm:py-3"
-                      style={{
-                        backgroundColor: active ? tone.accent : `${tone.accent}1f`,
-                        boxShadow: active
-                          ? `inset 0 0 0 2px ${tone.accentDeep}, 0 6px 18px ${tone.accentDeep}55`
-                          : `inset 0 0 0 1px ${tone.accent}55`,
-                      }}
-                    >
-                      <span
-                        className="font-display tracking-tight transition-all duration-300"
-                        style={{
-                          color: active ? "oklch(1 0 0 / 0.98)" : tone.accentDeep,
-                          fontWeight: active ? 800 : 700,
-                          fontSize: "13px",
-                          letterSpacing: active ? "-0.01em" : "0",
-                        }}
-                      >
-                        {tone.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => goToVariant(variantIndex + 1)}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors sm:h-12 sm:w-12"
-                style={{ color: `${INK}b3` }}
-                aria-label="Next answer"
-              >
-                <ChevronRight className="h-4 w-4" strokeWidth={2.6} />
-              </button>
-            </div>
+            {variants.map((v, i) => {
+              const active = i === variantIndex;
+              const color = BAND_COLORS[i % BAND_COLORS.length];
+              const tint = `${color}26`;
+              return (
+                <button
+                  key={i}
+                  id={`fu-band-tab-${i}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  tabIndex={active ? 0 : -1}
+                  onClick={() => goToVariant(i)}
+                  className="group relative flex items-center justify-center px-3 py-5 transition-all focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-foreground sm:py-6"
+                  style={{
+                    backgroundColor: active ? color : tint,
+                    color: active ? "#ffffff" : INK,
+                    boxShadow: active
+                      ? "inset 0 1px 0 rgba(0,0,0,0.18), inset 0 0 0 1px rgba(0,0,0,0.10)"
+                      : "inset 0 1px 0 rgba(0,0,0,0.08)",
+                    fontFamily:
+                      '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                  }}
+                >
+                  <span
+                    className="font-bold tracking-tight"
+                    style={{
+                      fontSize: active ? 22 : 20,
+                      letterSpacing: "-0.01em",
+                      textShadow: active ? "0 1px 0 rgba(0,0,0,0.18)" : "none",
+                      transition: "font-size 180ms ease",
+                    }}
+                  >
+                    Band {v.bandScore}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Local keyframes for the burst & split entrance + headline rule sweep. */}
       <style>{`
-        @keyframes fu-burst-core {
-          0%   { transform: scale(0.4); opacity: 0; }
-          25%  { transform: scale(1.5); opacity: 1; }
-          70%  { transform: scale(2.4); opacity: 0.8; }
-          100% { transform: scale(3.2); opacity: 0; }
-        }
-        @keyframes fu-stream {
-          0%   { transform: translate3d(0, 0, 0) scale(0.4); opacity: 0; }
-          15%  { opacity: 1; }
-          70%  { opacity: 0.85; }
-          100% {
-            transform: translate3d(var(--fu-dx, 0), var(--fu-dy, 0), 0) scale(0.6);
-            opacity: 0;
-          }
-        }
-        /* Ink-bleed underline sweep — a thin rule grows left→right beneath
-           the headline on entrance, then stays as a permanent accent. Re-runs
-           per variant switch because the rule element is re-keyed by mount. */
-        @keyframes fu-rule-sweep {
-          0%   { transform: scaleX(0); opacity: 0; }
-          18%  { opacity: 1; }
-          100% { transform: scaleX(1); opacity: 1; }
-        }
-        .fu-headline-rule {
-          transform: scaleX(0);
-          animation: fu-rule-sweep 780ms cubic-bezier(0.22, 1, 0.36, 1) 220ms forwards;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .fu-headline-rule {
-            animation: none;
-            transform: scaleX(1);
-            opacity: 1;
-          }
+        @keyframes fu-lane-in {
+          from { transform: translate3d(var(--fu-lane-from, 24px), 0, 0); opacity: 0; }
+          to   { transform: translate3d(0, 0, 0); opacity: 1; }
         }
       `}</style>
     </div>
   );
 }
+
