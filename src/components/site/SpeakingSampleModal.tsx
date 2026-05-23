@@ -132,6 +132,14 @@ export function SpeakingSampleModal({
   const currentVariant = variants[Math.min(variant, variants.length - 1)];
   const sections = currentVariant.sections;
   const title = headerQuestion?.title ?? topic.label;
+  // Strip cue-card sub-questions ("You should say: • ...") so the title card
+  // only shows the main prompt sentence.
+  const mainQuestion = (() => {
+    const cut = title.split(/\s*you should say\s*:?/i)[0].trim();
+    const cleaned = cut.replace(/[\s•\-–—]+$/g, "").trim();
+    return /[.!?]$/.test(cleaned) ? cleaned : `${cleaned}.`;
+  })();
+
 
   const BAND_LABELS = variants.map((v) => `Band ${v.bandScore}`);
 
