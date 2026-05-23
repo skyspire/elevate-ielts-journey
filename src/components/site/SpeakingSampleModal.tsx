@@ -152,7 +152,7 @@ export function SpeakingSampleModal({
       role="dialog"
       aria-label={`${topic.label} — sample answer`}
     >
-      {/* Backdrop — band-tinted glossy radial with heavy blur */}
+      {/* Backdrop — frosted band glass (no grey, edge-to-edge band tint) */}
       <button
         type="button"
         aria-label="Close"
@@ -160,26 +160,40 @@ export function SpeakingSampleModal({
         className="absolute inset-0 cursor-default"
         style={{
           background: visible
-            ? `radial-gradient(120% 90% at 50% 35%, ${BAND_COLORS[variant]}cc 0%, ${BAND_COLORS[variant]}99 35%, rgba(8,10,20,0.75) 75%, rgba(8,10,20,0.92) 100%)`
+            ? `radial-gradient(130% 100% at 50% 30%, ${BAND_COLORS[variant]}d9 0%, ${BAND_COLORS[variant]}b8 55%, ${BAND_COLORS[variant]}cc 100%)`
             : "rgba(8, 10, 20, 0)",
-          backdropFilter: visible ? "blur(24px) saturate(1.4)" : "blur(0px)",
-          WebkitBackdropFilter: visible ? "blur(24px) saturate(1.4)" : "blur(0px)",
+          backdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
+          WebkitBackdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
           transition:
             "background 360ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
         }}
       />
 
-      {/* Glossy highlight sheen — soft top-light to give a smooth glassy feel */}
+      {/* Glossy top sheen */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           opacity: visible ? 1 : 0,
           background:
-            "radial-gradient(60% 35% at 50% 0%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%)",
+            "radial-gradient(70% 40% at 50% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 70%)",
           transition: "opacity 360ms ease",
         }}
       />
+
+      {/* Subtle frosted noise for that premium glass texture */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 mix-blend-overlay"
+        style={{
+          opacity: visible ? 0.18 : 0,
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+          transition: "opacity 360ms ease",
+        }}
+      />
+
+
 
 
       {/* Floating dust particles */}
