@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { X, Menu, ArrowLeft, LayoutDashboard, Home, Grid3x3 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
 } from "@/data/speaking-model-answers";
 import { Highlight, annotateText } from "./StudyPaper";
+
 
 
 /**
