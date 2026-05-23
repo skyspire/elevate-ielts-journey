@@ -237,6 +237,107 @@ export function SpeakingSampleModal({
           }
         }
       `}</style>
+      {phase === "title" && (
+        <div
+          role="button"
+          tabIndex={0}
+          aria-label="Reveal sample answer"
+          onClick={(e) => {
+            e.stopPropagation();
+            setPhase("answer");
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setPhase("answer");
+            }
+          }}
+          className="relative flex w-full max-w-[880px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl px-8 py-16 text-center sm:rounded-3xl sm:px-16 sm:py-24"
+          style={{
+            height: "min(92vh, 980px)",
+            backgroundColor: "oklch(0.93 0.03 70)",
+            color: "oklch(0.20 0.04 70)",
+            boxShadow:
+              "0 0 0 1px rgba(255,255,255,0.4), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
+          }}
+        >
+          <div
+            aria-hidden="true"
+            style={{
+              fontFamily:
+                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
+              fontSize: "clamp(72px, 14vw, 160px)",
+              lineHeight: 0.8,
+              color: "oklch(0.45 0.17 30)",
+              opacity: 0.55,
+              marginBottom: 8,
+            }}
+          >
+            “
+          </div>
+          <h2
+            style={{
+              fontFamily:
+                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
+              fontWeight: 400,
+              fontSize: "clamp(28px, 5.2vw, 52px)",
+              lineHeight: 1.18,
+              letterSpacing: "-0.01em",
+              maxWidth: "22ch",
+              color: "oklch(0.20 0.04 70)",
+            }}
+          >
+            {title}
+          </h2>
+          <div
+            aria-hidden="true"
+            style={{
+              fontFamily:
+                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
+              fontSize: "clamp(72px, 14vw, 160px)",
+              lineHeight: 0.4,
+              color: "oklch(0.45 0.17 30)",
+              opacity: 0.55,
+              marginTop: 16,
+            }}
+          >
+            ”
+          </div>
+          <div
+            style={{
+              marginTop: 40,
+              fontFamily:
+                '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+              fontWeight: 700,
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "oklch(0.40 0.03 70)",
+            }}
+          >
+            Tap anywhere to reveal the sample answer
+          </div>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            aria-label="Close"
+            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-6"
+            style={{
+              backgroundColor: "rgba(255,255,255,0.6)",
+              color: "oklch(0.30 0.03 70)",
+              boxShadow:
+                "0 1px 2px rgba(15,23,42,0.06), inset 0 0 0 1px rgba(15,23,42,0.08)",
+            }}
+          >
+            <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
+          </button>
+        </div>
+      )}
+
       <div
         className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
         style={{
@@ -247,10 +348,11 @@ export function SpeakingSampleModal({
           boxShadow:
             "0 0 0 1px rgba(255,255,255,0.4), 0 0 48px 6px rgba(255,255,255,0.18), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
           transformOrigin: "50% 55%",
-          animation: visible
+          animation: visible && phase === "answer"
             ? "spPaperUncrumple 640ms cubic-bezier(0.22, 1, 0.36, 1) both"
             : "none",
-          opacity: visible ? 1 : 0,
+          opacity: visible && phase === "answer" ? 1 : 0,
+          display: phase === "answer" ? "flex" : "none",
           transition: visible ? undefined : "opacity 200ms ease",
         }}
         onClick={(e) => e.stopPropagation()}
