@@ -412,7 +412,7 @@ export function SpeakingSampleModal({
           style={{
             paddingTop: 14,
             paddingBottom: 16,
-            backgroundColor: "#1e40af",
+            backgroundColor: BAND_BAR_COLORS[variant],
             boxShadow: "0 6px 18px -12px rgba(15,23,42,0.35)",
           }}
         >
