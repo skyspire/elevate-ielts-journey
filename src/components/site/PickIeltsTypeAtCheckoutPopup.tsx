@@ -7,33 +7,11 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 type SingleType = "academic" | "general";
-type PreviewStyle = "flat" | "3d" | "photo";
 
-const PREVIEW_STYLES: {
-  key: PreviewStyle;
-  label: string;
-  academic: string;
-  general: string;
-}[] = [
-  {
-    key: "flat",
-    label: "A",
-    academic: "/picker-options/picker_academic_flat.jpg",
-    general: "/picker-options/picker_general_flat.jpg",
-  },
-  {
-    key: "3d",
-    label: "B",
-    academic: "/picker-options/picker_academic_3d.jpg",
-    general: "/picker-options/picker_general_3d.jpg",
-  },
-  {
-    key: "photo",
-    label: "C",
-    academic: "/picker-options/picker_academic_photo.jpg",
-    general: "/picker-options/picker_general_photo.jpg",
-  },
-];
+const PREVIEW_IMAGES: Record<SingleType, string> = {
+  academic: "/picker-options/picker_academic_3d.jpg",
+  general: "/picker-options/picker_general_3d.jpg",
+};
 
 type Props = {
   open: boolean;
@@ -72,13 +50,10 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
   usePopupActive(open);
   const { user } = useLearnerSession();
   const [selected, setSelected] = useState<SingleType | null>(null);
-  const [selectedPreview, setSelectedPreview] = useState<PreviewStyle>("flat");
-  const currentPreview = PREVIEW_STYLES.find((style) => style.key === selectedPreview) ?? PREVIEW_STYLES[0];
 
   useEffect(() => {
     if (!open) {
       setSelected(null);
-      setSelectedPreview("flat");
       return;
     }
     const original = document.body.style.overflow;
