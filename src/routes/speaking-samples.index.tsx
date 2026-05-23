@@ -135,8 +135,8 @@ function SpeakingSamplesPage() {
 
   return (
     <div className="relative flex min-h-screen flex-col" style={{ backgroundColor: "#7FB8B0" }}>
-      {/* Full-page jade silk gradient */}
-      <TopTypeGradient variant="general" />
+      {/* Bold solid page background */}
+
       <div className="relative flex-1">
         {/* Top bar */}
         <header
