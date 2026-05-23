@@ -507,7 +507,7 @@ export function SpeakingSampleModal({
 
                       </button>
                     </li>
-                  ))}
+                  );})}
                 </ul>
               </div>
             )}
