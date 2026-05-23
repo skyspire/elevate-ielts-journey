@@ -164,7 +164,7 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
                   loading="eager"
                 />
 
-                <div className="mt-4 font-display text-xl font-black tracking-tight text-white">
+                <div className="mt-4 font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
                   {card.name}
                 </div>
               </button>
@@ -173,14 +173,14 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
         </div>
 
         <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-center text-[11px] font-semibold text-muted-foreground sm:text-left">
+          <p className="text-center text-xs font-semibold text-muted-foreground sm:text-left sm:text-sm">
             One IELTS type per subscription. Subscribe again to add the other.
           </p>
           <button
             type="button"
             onClick={confirm}
             disabled={!selected || !user}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
             style={{
               background: selected
                 ? `linear-gradient(140deg, ${
