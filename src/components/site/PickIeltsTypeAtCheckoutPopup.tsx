@@ -1,12 +1,39 @@
 import { useEffect, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { GraduationCap, Briefcase, X, Check, ArrowRight } from "lucide-react";
+import { X, Check, ArrowRight } from "lucide-react";
 import { addPurchasedType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 type SingleType = "academic" | "general";
+type PreviewStyle = "flat" | "3d" | "photo";
+
+const PREVIEW_STYLES: {
+  key: PreviewStyle;
+  label: string;
+  academic: string;
+  general: string;
+}[] = [
+  {
+    key: "flat",
+    label: "A",
+    academic: "/picker-options/picker_academic_flat.jpg",
+    general: "/picker-options/picker_general_flat.jpg",
+  },
+  {
+    key: "3d",
+    label: "B",
+    academic: "/picker-options/picker_academic_3d.jpg",
+    general: "/picker-options/picker_general_3d.jpg",
+  },
+  {
+    key: "photo",
+    label: "C",
+    academic: "/picker-options/picker_academic_photo.jpg",
+    general: "/picker-options/picker_general_photo.jpg",
+  },
+];
 
 type Props = {
   open: boolean;
@@ -19,29 +46,20 @@ type Props = {
 const CARDS: {
   key: SingleType;
   name: string;
-  tag: string;
-  icon: typeof GraduationCap;
   accent: string;
   accentDark: string;
-  bullets: string[];
 }[] = [
   {
     key: "academic",
     name: "Academic",
-    tag: "University & professional registration",
-    icon: GraduationCap,
     accent: "oklch(0.58 0.2 255)",
     accentDark: "oklch(0.42 0.21 265)",
-    bullets: ["Writing T1 charts & graphs", "Academic reading", "Academic ebooks & samples"],
   },
   {
     key: "general",
     name: "General Training",
-    tag: "Migration, work & secondary ed",
-    icon: Briefcase,
     accent: "oklch(0.6 0.22 25)",
     accentDark: "oklch(0.45 0.22 25)",
-    bullets: ["Writing T1 letters", "Workplace / everyday reading", "General ebooks & samples"],
   },
 ];
 
