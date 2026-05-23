@@ -1042,3 +1042,18 @@
     filter: brightness(1);
   }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   Popup-active mode — when any modal is open, the site header
+   is completely hidden and the background is heavily blurred so
+   focus is entirely on the popup.
+   ──────────────────────────────────────────────────────────────── */
+
+/* Custom modals toggle this class on <body> via useEffect. */
+body.popup-open header,
+/* Radix-based popups (Dialog / AlertDialog / Sheet / Drawer)
+   render an overlay element with data-state="open" in the portal. */
+body:has([data-state="open"][role="dialog"]) header,
+body:has([data-state="open"].fixed.inset-0) header {
+  display: none !important;
+}
