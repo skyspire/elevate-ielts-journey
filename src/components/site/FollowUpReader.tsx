@@ -75,12 +75,8 @@ export function FollowUpReader({
     window.setTimeout(() => setQAnim("idle"), 560);
   };
 
-  const [phase, setPhase] = useState<EntrancePhase>("closed");
-  const [variantIndex, setVariantIndex] = useState(0);
-  const [switchDir, setSwitchDir] = useState<1 | -1>(1);
-  const [laneAnim, setLaneAnim] = useState<"idle" | "out" | "in">("idle");
-  const [revealedSections, setRevealedSections] = useState(0);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+
 
   // Build three answer variants from the follow-up question's text.
   const followUpAnswer = useMemo(
