@@ -260,67 +260,155 @@ export function SpeakingSampleModal({
               setPhase("answer");
             }
           }}
-          className="relative flex w-full max-w-[880px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl px-8 py-16 text-center sm:rounded-3xl sm:px-16 sm:py-24"
+          className="group relative flex w-full max-w-[480px] cursor-pointer flex-col items-center justify-center overflow-hidden px-10 py-16 text-center transition-shadow duration-700"
           style={{
-            height: "min(92vh, 980px)",
-            backgroundColor: "oklch(0.93 0.03 70)",
-            color: "oklch(0.20 0.04 70)",
+            aspectRatio: "3 / 4.2",
+            maxHeight: "92vh",
+            backgroundColor: "#faf8f5",
+            borderRadius: 48,
+            border: "1px solid rgba(255,255,255,0.6)",
             boxShadow:
-              "0 0 0 1px rgba(255,255,255,0.4), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
+              "0 30px 80px -20px rgba(139,115,85,0.45), 0 12px 40px -12px rgba(8,10,20,0.35)",
           }}
         >
-          <h2
-            style={{
-              fontFamily:
-                'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-              fontWeight: 700,
-              fontSize: "clamp(28px, 5.2vw, 52px)",
-              lineHeight: 1.2,
-              letterSpacing: "-0.02em",
-              maxWidth: "20ch",
-              color: "oklch(0.20 0.01 250)",
-            }}
-          >
-            {mainQuestion}
-          </h2>
-
-
-          {/* BigIELTS.com wordmark — half size, all grey, symmetrical */}
+          {/* Subtle paper grain */}
           <div
-            aria-label="BigIELTS.com"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
             style={{
-              marginTop: "clamp(28px, 5vw, 48px)",
-              fontFamily:
-                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-              fontWeight: 700,
-              fontSize: "clamp(20px, 3.6vw, 36px)",
-              lineHeight: 1,
-              letterSpacing: "-0.02em",
-              color: "oklch(0.55 0.01 250)",
-              textAlign: "center",
+              opacity: 0.04,
+              backgroundImage:
+                "radial-gradient(rgba(61,51,41,0.6) 1px, transparent 1px), radial-gradient(rgba(61,51,41,0.4) 1px, transparent 1px)",
+              backgroundSize: "3px 3px, 7px 7px",
+              backgroundPosition: "0 0, 1px 2px",
             }}
-          >
-            <span>Big</span>
-            <span>IELTS</span>
-            <span style={{ fontWeight: 400, opacity: 0.75 }}>.com</span>
-          </div>
+          />
 
+          {/* Inner hairline frame */}
           <div
+            aria-hidden="true"
+            className="pointer-events-none absolute"
             style={{
-              marginTop: 24,
-              fontFamily:
-                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-              fontWeight: 700,
-              fontSize: 11,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "oklch(0.55 0.01 250)",
+              inset: 16,
+              borderRadius: 36,
+              border: "1px solid rgba(139,115,85,0.08)",
             }}
-          >
-            Tap anywhere to reveal the sample answer
+          />
+
+          {/* Main content */}
+          <div className="relative flex w-full flex-col items-center">
+            {/* Decorative seal */}
+            <div
+              aria-hidden="true"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 9999,
+                border: "1px solid rgba(201,185,154,0.5)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: 0.7,
+                marginBottom: 40,
+              }}
+            >
+              <span
+                style={{
+                  width: 4,
+                  height: 4,
+                  borderRadius: 9999,
+                  backgroundColor: "#c9b99a",
+                }}
+              />
+            </div>
+
+            {/* Question */}
+            <h2
+              style={{
+                fontFamily:
+                  'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+                fontWeight: 600,
+                fontSize: "clamp(26px, 5vw, 34px)",
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                color: "#3d3329",
+                marginBottom: 48,
+                padding: "0 4px",
+                maxWidth: "18ch",
+              }}
+            >
+              {mainQuestion}
+            </h2>
+
+            {/* Divider stack */}
+            <div
+              aria-hidden="true"
+              className="mb-12 flex flex-col items-center"
+              style={{ gap: 16 }}
+            >
+              <span
+                style={{
+                  width: 24,
+                  height: 1,
+                  backgroundColor: "rgba(201,185,154,0.5)",
+                }}
+              />
+              <span style={{ display: "flex", gap: 6 }}>
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    style={{
+                      width: 4,
+                      height: 4,
+                      borderRadius: 9999,
+                      backgroundColor: "rgba(201,185,154,0.5)",
+                    }}
+                  />
+                ))}
+              </span>
+              <span
+                style={{
+                  width: 24,
+                  height: 1,
+                  backgroundColor: "rgba(201,185,154,0.5)",
+                }}
+              />
+            </div>
+
+            {/* Wordmark */}
+            <div
+              aria-label="BigIELTS.com"
+              style={{
+                fontFamily:
+                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+                fontWeight: 500,
+                fontSize: 16,
+                letterSpacing: "-0.01em",
+                color: "rgba(139,115,85,0.7)",
+                marginBottom: 12,
+              }}
+            >
+              <span>BigIELTS</span>
+              <span style={{ color: "rgba(201,185,154,0.85)" }}>.com</span>
+            </div>
+
+            {/* Subtitle */}
+            <p
+              className="transition-all duration-700 group-hover:tracking-[0.35em]"
+              style={{
+                fontFamily:
+                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+                fontWeight: 700,
+                fontSize: 10,
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                color: "#c9b99a",
+                margin: 0,
+              }}
+            >
+              Tap anywhere to reveal
+            </p>
           </div>
-
-
 
           <button
             type="button"
@@ -329,15 +417,13 @@ export function SpeakingSampleModal({
               onClose();
             }}
             aria-label="Close"
-            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-6"
+            className="absolute right-8 top-8 inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors group-hover:bg-[#c9b99a]/20"
             style={{
-              backgroundColor: "rgba(255,255,255,0.6)",
-              color: "oklch(0.30 0.03 70)",
-              boxShadow:
-                "0 1px 2px rgba(15,23,42,0.06), inset 0 0 0 1px rgba(15,23,42,0.08)",
+              backgroundColor: "#f0ebe3",
+              color: "#8b7355",
             }}
           >
-            <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
+            <X className="h-4 w-4" strokeWidth={2} />
           </button>
         </div>
       )}
