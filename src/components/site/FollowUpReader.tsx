@@ -7,6 +7,7 @@ import {
 } from "@/data/speaking-model-answers";
 import { Highlight, annotateText } from "./StudyPaper";
 import { DustParticles } from "@/components/site/DustParticles";
+import { SparkleShimmer } from "@/components/site/SparkleShimmer";
 
 
 
