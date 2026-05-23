@@ -34,10 +34,13 @@ export function DustParticles({
         const seed = (n: number) => (Math.sin(i * 12.9898 + n) + 1) / 2;
         // Mixed sizes: 2px tiny → 14px large foreground motes
         const size = 2 + seed(1) * 12;
-        const left = seed(2) * 100;
+        // Constrain to left/right gutters only — none behind the popup card
+        const isLeft = i % 2 === 0;
+        const left = isLeft ? seed(2) * 11 : 89 + seed(2) * 11; // 0–11% or 89–100%
         const dur = 26 + seed(3) * 30; // 26–56s slow drift
         const delay = -seed(4) * dur;
-        const dx = (seed(5) - 0.5) * 140;
+        // Horizontal drift biased toward the edge (don't drift into card area)
+        const dx = (seed(5) * 60 + 20) * (isLeft ? -1 : 1);
         const opacity = 0.5 + seed(6) * 0.45;
         // Depth-of-field: larger particles get more blur (closer/out-of-focus)
         const blur = size > 9 ? 2.2 : size > 6 ? 1.1 : 0.3;
