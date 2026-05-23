@@ -318,6 +318,10 @@ export function FollowUpReader({
         }}
       />
 
+      {/* Ambient dust particles rising from bottom (behind popup card) */}
+      <DustParticles visible={visible} />
+
+
       {/* Floating radial nav — top-right, outside the popup card */}
       {visible && (() => {
         const bookmarkKey = `bigielts:bookmark:${question.id}`;
