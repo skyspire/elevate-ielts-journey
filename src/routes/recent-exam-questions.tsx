@@ -260,7 +260,7 @@ function RecentExamQuestionsPage() {
   const isAcademic = module === "academic";
 
   // Module-tinted page background — cool ivory for Academic, warm cream for General
-  const pageBg = "#88B5AC";
+  const pageBg = "oklch(0.93 0.025 195)";
   // Hero gradient wash — swaps softly with the Academic ⇄ General toggle.
   // Two corner halos blend into the page color for a clean, texture-free top.
   const heroGradient = isAcademic
@@ -272,7 +272,7 @@ function RecentExamQuestionsPage() {
        linear-gradient(180deg, oklch(0.96 0.03 50 / 0.55) 0%, transparent 100%)`;
 
   return (
-    <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg, color: "oklch(0.25 0.06 195)", ["--foreground" as any]: "oklch(0.22 0.07 195)", ["--muted-foreground" as any]: "oklch(0.36 0.06 195)" }}>
+    <div className="min-h-screen transition-colors duration-700" style={{ backgroundColor: pageBg, color: "oklch(0.20 0.04 195)", ["--foreground" as any]: "oklch(0.20 0.04 195)", ["--muted-foreground" as any]: "oklch(0.40 0.03 195)" }}>
       <main className="relative py-10 sm:py-14">
         {/* Soft tinted gradient wash behind the hero — swaps with the toggle */}
         <div
