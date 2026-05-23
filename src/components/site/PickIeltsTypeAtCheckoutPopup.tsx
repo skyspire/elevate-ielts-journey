@@ -1,28 +1,27 @@
 import { useEffect, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { GraduationCap, Briefcase, Crown, X, Check, Sparkles } from "lucide-react";
-import { addPurchasedType, setUserPlanType, type IeltsPlanType } from "@/lib/ielts-type";
+import { GraduationCap, Briefcase, X, Check, Sparkles, ArrowRight } from "lucide-react";
+import { addPurchasedType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 
+type SingleType = "academic" | "general";
+
 type Props = {
   open: boolean;
   onClose: () => void;
-  /** Description of the cycle the user clicked on, e.g. "Monthly · $14 CAD". Shown as context. */
+  /** Description of the cycle the user clicked on, e.g. "Monthly · $14 CAD". */
   cycleLabel?: string;
-  /** Optional: confirm callback after selection (e.g. proceed to a real checkout). */
   onConfirmed?: (plan: IeltsPlanType) => void;
 };
 
 const CARDS: {
-  key: IeltsPlanType;
+  key: SingleType;
   name: string;
   tag: string;
   icon: typeof GraduationCap;
   accent: string;
-  multiplier: number;
-  popular?: boolean;
   bullets: string[];
 }[] = [
   {
@@ -31,7 +30,6 @@ const CARDS: {
     tag: "University & professional registration",
     icon: GraduationCap,
     accent: "oklch(0.55 0.2 255)",
-    multiplier: 1,
     bullets: ["Writing T1 charts & graphs", "Academic reading", "Academic ebooks & samples"],
   },
   {
@@ -40,32 +38,25 @@ const CARDS: {
     tag: "Migration, work & secondary ed",
     icon: Briefcase,
     accent: "oklch(0.6 0.18 30)",
-    multiplier: 1,
     bullets: ["Writing T1 letters", "Workplace / everyday reading", "General ebooks & samples"],
-  },
-  {
-    key: "both",
-    name: "All Access",
-    tag: "Academic + General together",
-    icon: Crown,
-    accent: "oklch(0.65 0.18 60)",
-    multiplier: 1.5,
-    popular: true,
-    bullets: ["Both IELTS types unlocked", "Switch anytime", "Best value vs. two plans"],
   },
 ];
 
 /**
- * Asks "which IELTS?" right at the moment the user clicks Subscribe.
- * Used by the pricing page and any other Subscribe/Upgrade entry-point.
+ * Bottom-sheet picker shown when a user clicks Subscribe on a plan.
+ * User must explicitly pick Academic or General — no pre-selection, no "both".
+ * To access both types they must subscribe a second time.
  */
 export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConfirmed }: Props) {
   usePopupActive(open);
   const { user } = useLearnerSession();
-  const [hover, setHover] = useState<IeltsPlanType | null>(null);
+  const [selected, setSelected] = useState<SingleType | null>(null);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setSelected(null);
+      return;
+    }
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -75,29 +66,24 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
 
   if (!open) return null;
 
-  const pick = (plan: IeltsPlanType) => {
+  const confirm = () => {
+    if (!selected) return;
     if (!user) {
       toast.error("Please sign up or log in to subscribe.");
       onClose();
       return;
     }
-    if (plan === "both") {
-      setUserPlanType(user.id, "both");
-    } else {
-      addPurchasedType(user.id, plan);
-    }
+    addPurchasedType(user.id, selected);
     toast.success(
-      plan === "both"
-        ? "All Access activated — both IELTS types unlocked."
-        : `${plan === "academic" ? "Academic" : "General Training"} plan activated.`,
+      `${selected === "academic" ? "Academic" : "General Training"} plan activated.`,
     );
-    onConfirmed?.(plan);
+    onConfirmed?.(selected);
     onClose();
   };
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center px-4 sm:items-center"
+      className="fixed inset-0 z-[200] flex items-end justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="pick-type-title"
@@ -106,10 +92,13 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="absolute inset-0 cursor-pointer bg-black/65 backdrop-blur-md"
+        className="absolute inset-0 cursor-pointer bg-black/65 backdrop-blur-md animate-in fade-in duration-200"
       />
 
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-card p-6 shadow-2xl animate-in zoom-in-95 fade-in duration-200 sm:p-8">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-t-3xl bg-card p-5 shadow-2xl animate-in slide-in-from-bottom duration-300 sm:p-7">
+        {/* Grab handle */}
+        <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-muted-foreground/25" />
+
         <button
           type="button"
           onClick={onClose}
@@ -131,12 +120,12 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
 
         <h2
           id="pick-type-title"
-          className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-[28px]"
+          className="mt-2 font-display text-xl font-extrabold leading-tight tracking-tight text-foreground sm:text-2xl"
         >
           Which IELTS are you preparing for?
         </h2>
-        <p className="mt-2 text-sm font-medium text-muted-foreground sm:text-[15px]">
-          Pick the type you'll be tested on. Other-type content will stay locked unless you go All Access.
+        <p className="mt-1.5 text-[13px] font-medium text-muted-foreground sm:text-sm">
+          Pick one. To access both later, you'll need to subscribe a second time for the other type.
         </p>
 
         {!user && (
@@ -147,43 +136,34 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
           </div>
         )}
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {CARDS.map((card) => {
             const Icon = card.icon;
-            const isHover = hover === card.key;
+            const isActive = selected === card.key;
             return (
               <button
                 key={card.key}
                 type="button"
-                onClick={() => pick(card.key)}
-                onMouseEnter={() => setHover(card.key)}
-                onMouseLeave={() => setHover(null)}
+                onClick={() => setSelected(card.key)}
+                aria-pressed={isActive}
                 className="group relative overflow-hidden rounded-2xl border-2 p-4 text-left transition-all"
                 style={{
-                  borderColor: card.popular
-                    ? "transparent"
-                    : isHover
-                      ? card.accent
-                      : "oklch(0.9 0.01 250)",
-                  background: isHover
-                    ? `linear-gradient(140deg, color-mix(in oklab, ${card.accent} 8%, white), color-mix(in oklab, ${card.accent} 14%, white))`
+                  borderColor: isActive ? card.accent : "oklch(0.9 0.01 250)",
+                  background: isActive
+                    ? `linear-gradient(140deg, color-mix(in oklab, ${card.accent} 10%, white), color-mix(in oklab, ${card.accent} 18%, white))`
                     : "white",
-                  boxShadow: card.popular
-                    ? `0 0 0 2px ${card.accent}, 0 14px 30px -10px ${card.accent}66`
-                    : isHover
-                      ? `0 12px 26px -10px ${card.accent}55`
-                      : "0 1px 0 oklch(0.9 0.01 250)",
-                  transform: isHover ? "translateY(-2px)" : "none",
+                  boxShadow: isActive
+                    ? `0 14px 30px -10px ${card.accent}66`
+                    : "0 1px 0 oklch(0.9 0.01 250)",
+                  transform: isActive ? "translateY(-2px)" : "none",
                 }}
               >
-                {card.popular && (
+                {isActive && (
                   <span
-                    className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white"
-                    style={{
-                      background: `linear-gradient(140deg, ${card.accent}, color-mix(in oklab, ${card.accent} 60%, black))`,
-                    }}
+                    className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-white"
+                    style={{ background: card.accent }}
                   >
-                    Best value
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
                   </span>
                 )}
 
@@ -210,20 +190,34 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
                     </li>
                   ))}
                 </ul>
-
-                {card.multiplier > 1 && (
-                  <div className="mt-3 text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground">
-                    +50% vs. single type
-                  </div>
-                )}
               </button>
             );
           })}
         </div>
 
-        <p className="mt-5 text-center text-[11px] font-semibold text-muted-foreground">
-          No mid-plan switching. To access both types later, you'll need to upgrade to All Access.
-        </p>
+        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-center text-[11px] font-semibold text-muted-foreground sm:text-left">
+            One IELTS type per subscription. Subscribe again to add the other.
+          </p>
+          <button
+            type="button"
+            onClick={confirm}
+            disabled={!selected || !user}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+            style={{
+              background: selected
+                ? `linear-gradient(140deg, ${
+                    CARDS.find((c) => c.key === selected)!.accent
+                  }, color-mix(in oklab, ${CARDS.find((c) => c.key === selected)!.accent} 65%, black))`
+                : "oklch(0.45 0.02 250)",
+              boxShadow: selected
+                ? `0 10px 22px -8px ${CARDS.find((c) => c.key === selected)!.accent}80`
+                : undefined,
+            }}
+          >
+            Continue <ArrowRight className="h-4 w-4" strokeWidth={2.6} />
+          </button>
+        </div>
       </div>
     </div>
   );

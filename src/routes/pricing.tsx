@@ -71,7 +71,7 @@ function PricingPage() {
             Choose your subscription
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-muted-foreground sm:text-lg">
-            All prices in CAD. You'll pick your IELTS type (Academic, General, or both) right at checkout.
+            All prices in CAD. You'll pick Academic or General Training at checkout. One type per subscription — subscribe again to add the other.
           </p>
 
           {planType && (
@@ -137,7 +137,7 @@ function PricingPage() {
                   <span className="text-sm font-bold text-muted-foreground">CAD</span>
                 </div>
                 <div className="text-[12px] font-semibold text-muted-foreground">
-                  Single type · All Access {Math.round(c.price * 1.5)} CAD
+                  For Academic or General Training (pick at next step)
                 </div>
 
                 <ul className="mt-5 space-y-2 text-[13px] font-semibold text-foreground">
@@ -151,7 +151,7 @@ function PricingPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
-                    Choose Academic, General, or All Access at next step
+                    Choose Academic or General at next step
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: c.accent }} />
