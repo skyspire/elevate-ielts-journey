@@ -228,8 +228,10 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
     if (phase === "closed") return;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("popup-open");
     return () => {
       document.body.style.overflow = original;
+      document.body.classList.remove("popup-open");
     };
   }, [phase]);
 
