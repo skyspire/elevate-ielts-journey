@@ -38,6 +38,13 @@ const BAND_SHADOW_COLORS = [
   "rgba(15, 36, 110, 0.7)", // deep ocean
   "rgba(20, 18, 70, 0.75)", // deep indigo
 ];
+// Darker bar shades (used by the question header bar)
+const BAND_BAR_COLORS = [
+  "#0a534d", // darker teal
+  "#1e3a8a", // darker ocean
+  "#1e1b5e", // darker indigo
+];
+
 
 
 export function SpeakingSampleModal({
