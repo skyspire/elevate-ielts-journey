@@ -387,7 +387,8 @@ export function SpeakingSampleModal({
           backdropFilter: "blur(14px) saturate(1.05)",
           WebkitBackdropFilter: "blur(14px) saturate(1.05)",
           boxShadow:
-            "0 0 0 1px rgba(255,255,255,0.4), 0 0 48px 6px rgba(255,255,255,0.18), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
+            `0 30px 90px -20px ${BAND_SHADOW_COLORS[variant]}, 0 12px 36px -12px ${BAND_SHADOW_COLORS[variant]}`,
+
           transformOrigin: "50% 55%",
           animation: visible && phase === "answer"
             ? "spPaperUncrumple 640ms cubic-bezier(0.22, 1, 0.36, 1) both"
