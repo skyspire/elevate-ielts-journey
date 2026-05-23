@@ -144,7 +144,7 @@ function VocabularyPage() {
     return <Outlet />;
   }
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#D96E8A" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#D96E8A", color: "oklch(0.22 0.10 0)", ["--foreground" as any]: "oklch(0.20 0.11 0)", ["--muted-foreground" as any]: "oklch(0.35 0.10 0)" }}>
       <main className="relative py-12 sm:py-16">
         <BackButton to="/dashboard" ariaLabel="Back to Dashboard" />
 

@@ -232,7 +232,7 @@ function SampleAnswersHubPage() {
   };
 
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: "#9CB8D8" }}>
+    <div className="relative min-h-screen" style={{ backgroundColor: "#9CB8D8", color: "oklch(0.22 0.08 250)", ["--foreground" as any]: "oklch(0.20 0.09 250)", ["--muted-foreground" as any]: "oklch(0.35 0.07 250)" }}>
       
 
       <header
