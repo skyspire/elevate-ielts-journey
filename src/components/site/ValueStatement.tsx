@@ -26,6 +26,27 @@ import { useCmsSection } from "@/lib/admin/cms-store";
 import { PRICING_KEY, PRICING_DEFAULT } from "@/lib/admin/defaults";
 import { PickIeltsTypeAtCheckoutPopup } from "@/components/site/PickIeltsTypeAtCheckoutPopup";
 
+const IELTS_PICKER_PREVIEWS = [
+  {
+    label: "A",
+    name: "Flat illustration",
+    academic: "/picker-options/picker_academic_flat.jpg",
+    general: "/picker-options/picker_general_flat.jpg",
+  },
+  {
+    label: "B",
+    name: "3D clay render",
+    academic: "/picker-options/picker_academic_3d.jpg",
+    general: "/picker-options/picker_general_3d.jpg",
+  },
+  {
+    label: "C",
+    name: "Cinematic photo",
+    academic: "/picker-options/picker_academic_photo.jpg",
+    general: "/picker-options/picker_general_photo.jpg",
+  },
+];
+
 export function ValueStatement() {
   const { plans, features, footnote } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
@@ -160,6 +181,29 @@ export function ValueStatement() {
         </div>
 
         {/* === PRICING === */}
+        <div className="mx-auto mt-8 grid max-w-5xl gap-3 sm:grid-cols-3">
+          {IELTS_PICKER_PREVIEWS.map((option) => (
+            <div key={option.label} className="rounded-3xl border border-border bg-card p-3 shadow-soft">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-sm font-black text-background">
+                  {option.label}
+                </span>
+                <span className="text-sm font-extrabold text-foreground">{option.name}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-2xl bg-brand p-2">
+                  <img src={option.academic} alt={`Option ${option.label} Academic preview`} className="aspect-square w-full rounded-xl bg-card object-cover" loading="eager" />
+                  <div className="mt-1 text-center text-[11px] font-black text-brand-foreground">Academic</div>
+                </div>
+                <div className="rounded-2xl bg-destructive p-2">
+                  <img src={option.general} alt={`Option ${option.label} General Training preview`} className="aspect-square w-full rounded-xl bg-card object-cover" loading="eager" />
+                  <div className="mt-1 text-center text-[11px] font-black text-destructive-foreground">General</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:mt-10 sm:grid-cols-3">
           {plans
             .filter((p) => p.visible !== false)
