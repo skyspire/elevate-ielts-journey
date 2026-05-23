@@ -260,9 +260,8 @@ export function SpeakingSampleModal({
               setPhase("answer");
             }
           }}
-          className="group relative flex w-full max-w-[520px] cursor-pointer flex-col items-center justify-center overflow-hidden px-10 py-20 text-center transition-shadow duration-700"
+          className="group relative flex w-full max-w-[420px] cursor-pointer flex-col items-center justify-center overflow-hidden px-8 py-16 text-center transition-shadow duration-700 sm:max-w-[760px] sm:px-16 sm:py-20 lg:max-w-[920px] lg:px-20 lg:py-24"
           style={{
-            aspectRatio: "3 / 4.2",
             maxHeight: "92vh",
             background:
               "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%)",
@@ -270,6 +269,7 @@ export function SpeakingSampleModal({
             border: "1px solid rgba(255,255,255,0.18)",
             boxShadow:
               "0 30px 80px -20px rgba(30,58,138,0.7), 0 12px 40px -12px rgba(8,10,20,0.45)",
+
           }}
         >
           {/* Main content */}
