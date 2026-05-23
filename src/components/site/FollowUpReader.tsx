@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X, Menu, ArrowLeft, LayoutDashboard, Home, Grid3x3 } from "lucide-react";
+import { X, Menu, ArrowLeft, LayoutDashboard, Home, BookOpen, MessageCircle, UserCircle, HelpCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
