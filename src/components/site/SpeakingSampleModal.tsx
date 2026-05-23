@@ -541,14 +541,13 @@ export function SpeakingSampleModal({
                             e.currentTarget as HTMLElement
                           ).getBoundingClientRect();
                           setFollowUpReader({
-                            question: { id: q.id, title: q.title },
+                            index: i,
                             origin: {
                               x: rect.left + rect.width / 2,
                               y: rect.top + rect.height / 2,
                             },
-                            index: i + 1,
-                            total: followUps.length,
                           });
+
                         }}
                         className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left transition-all hover:brightness-105 hover:shadow-md"
                         style={{
