@@ -145,7 +145,7 @@ export function SpeakingSampleModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 sm:px-10 sm:py-12"
+      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-10 sm:px-10 sm:py-16"
       aria-modal="true"
       role="dialog"
       aria-label={`${topic.label} — sample answer`}
@@ -260,71 +260,67 @@ export function SpeakingSampleModal({
               setPhase("answer");
             }
           }}
-          className="group relative flex min-h-[78vh] w-full max-w-[420px] cursor-pointer flex-col items-center justify-center overflow-hidden px-8 py-16 text-center transition-shadow duration-700 sm:min-h-0 sm:max-w-[760px] sm:px-16 sm:py-20 lg:max-w-[920px] lg:px-20 lg:py-24"
+          className="group relative flex min-h-[72vh] w-full max-w-[420px] cursor-pointer flex-col items-center justify-center overflow-hidden px-8 py-20 text-center transition-shadow duration-700 sm:min-h-[60vh] sm:max-w-[760px] sm:px-16 sm:py-24 lg:max-w-[920px] lg:px-20 lg:py-28"
           style={{
-            maxHeight: "92vh",
+            maxHeight: "88vh",
             background:
               "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%)",
             borderRadius: 40,
             border: "1px solid rgba(255,255,255,0.18)",
             boxShadow:
               "0 30px 80px -20px rgba(30,58,138,0.7), 0 12px 40px -12px rgba(8,10,20,0.45)",
-
           }}
         >
-          {/* Main content */}
-          <div className="relative flex w-full flex-1 flex-col items-center justify-center">
-            {/* Question */}
-            <h2
+          {/* Question — perfectly centered in the card */}
+          <h2
+            className="relative"
+            style={{
+              fontFamily:
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+              fontWeight: 900,
+              fontSize: "clamp(30px, 5.6vw, 42px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.025em",
+              color: "#ffffff",
+              maxWidth: "18ch",
+              textShadow: "0 2px 24px rgba(8,10,40,0.25)",
+            }}
+          >
+            {mainQuestion}
+          </h2>
+
+          {/* Bottom block: logo + hint, pinned so question stays visually centered */}
+          <div className="absolute inset-x-0 bottom-8 flex flex-col items-center sm:bottom-12">
+            <div
+              aria-label="BigIELTS.com"
               style={{
                 fontFamily:
-                  'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-                fontWeight: 900,
-                fontSize: "clamp(30px, 5.6vw, 42px)",
-                lineHeight: 1.15,
-                letterSpacing: "-0.025em",
+                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+                fontWeight: 800,
+                fontSize: 20,
+                letterSpacing: "-0.01em",
                 color: "#ffffff",
-                maxWidth: "18ch",
-                textShadow: "0 2px 24px rgba(8,10,40,0.25)",
               }}
             >
-              {mainQuestion}
-            </h2>
+              <span>BigIELTS</span>
+              <span style={{ color: "#bfdbfe" }}>.com</span>
+            </div>
+            <p
+              className="mt-8 sm:mt-10"
+              style={{
+                fontFamily:
+                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+                fontWeight: 500,
+                fontSize: 12,
+                letterSpacing: "0.04em",
+                color: "rgba(255,255,255,0.4)",
+                margin: 0,
+              }}
+            >
+              Click anywhere to view the answer
+            </p>
           </div>
 
-          {/* Wordmark */}
-          <div
-            aria-label="BigIELTS.com"
-            className="relative mt-10 sm:mt-20 lg:mt-28"
-            style={{
-              fontFamily:
-                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-              fontWeight: 800,
-              fontSize: 20,
-              letterSpacing: "-0.01em",
-              color: "#ffffff",
-            }}
-          >
-            <span>BigIELTS</span>
-            <span style={{ color: "#bfdbfe" }}>.com</span>
-          </div>
-
-          {/* Hint */}
-          <p
-            className="relative mt-4"
-            style={{
-              fontFamily:
-                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-              fontWeight: 500,
-              fontSize: 11,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)",
-              margin: 0,
-            }}
-          >
-            Click anywhere to view the answer
-          </p>
 
           <button
             type="button"
