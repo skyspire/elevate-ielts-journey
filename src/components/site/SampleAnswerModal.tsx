@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { X } from "lucide-react";
+import { PopupNavMenu } from "@/components/site/PopupNavMenu";
 import type { SampleAnswer } from "@/data/sample-answers";
 
 /**
@@ -121,20 +121,23 @@ export function SampleAnswerModal({
       role="dialog"
       aria-label={`${title} — sample answer`}
     >
-      {/* Backdrop */}
+      {/* Backdrop — band-tinted frosted glass (matches FollowUpReader) */}
       <button
         type="button"
         aria-label="Close"
         onClick={onClose}
         className="absolute inset-0 cursor-default"
         style={{
-          backgroundColor: visible ? "rgba(8, 10, 20, 0.42)" : "rgba(8, 10, 20, 0)",
-          backdropFilter: visible ? "blur(8px)" : "blur(0px)",
-          WebkitBackdropFilter: visible ? "blur(8px)" : "blur(0px)",
+          background: visible
+            ? `radial-gradient(130% 100% at 50% 30%, ${BAND_COLORS[variant]}d9 0%, ${BAND_COLORS[variant]}b8 55%, ${BAND_COLORS[variant]}cc 100%)`
+            : "rgba(8, 10, 20, 0)",
+          backdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
+          WebkitBackdropFilter: visible ? "blur(36px) saturate(1.5)" : "blur(0px)",
           transition:
-            "background-color 240ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
+            "background 360ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
         }}
       />
+      {visible && <PopupNavMenu onClose={onClose} />}
 
       {/* Floating dust particles — ambient cozy layer above backdrop, below sheet */}
       <div
@@ -267,20 +270,6 @@ export function SampleAnswerModal({
           </div>
 
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="-mr-1 mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 hover:text-foreground"
-            style={{
-              backgroundColor: "#f1f1f3",
-              color: "#6b7280",
-              boxShadow:
-                "0 1px 2px rgba(15,23,42,0.06), inset 0 0 0 1px rgba(15,23,42,0.06)",
-            }}
-          >
-            <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
-          </button>
         </div>
 
 
@@ -302,24 +291,12 @@ export function SampleAnswerModal({
             }}
           >
             {activeParagraphs.paragraphs.map((p, i) => (
-              <div key={i} className="mb-8 last:mb-2">
-                {p.heading && (
-                  <h3
-                    className="mb-3 text-[17px] font-bold leading-snug sm:text-[18px]"
-                    style={{
-                      fontFamily:
-                        '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                      color: BAND_COLORS[variant],
-                      letterSpacing: "-0.005em",
-                    }}
-                  >
-                    {p.heading}
-                  </h3>
-                )}
-                <p className="text-[15.5px] leading-[1.8] text-foreground/85 sm:text-[16.5px]">
-                  {p.body}
-                </p>
-              </div>
+              <p
+                key={i}
+                className="mb-5 text-[15.5px] leading-[1.8] text-foreground/85 last:mb-0 sm:text-[16.5px]"
+              >
+                {p.body}
+              </p>
             ))}
           </div>
         </div>
