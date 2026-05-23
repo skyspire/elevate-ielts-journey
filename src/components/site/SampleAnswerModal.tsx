@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { X } from "lucide-react";
 import type { SampleAnswer } from "@/data/sample-answers";
 

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { Lock, X, Check, GraduationCap, Briefcase } from "lucide-react";
 import { useEffect } from "react";
 import type { IeltsType } from "@/lib/ielts-type";

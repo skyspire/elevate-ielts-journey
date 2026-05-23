@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { usePopupActive } from "@/hooks/use-popup-active";
 import { Sparkles, X, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
