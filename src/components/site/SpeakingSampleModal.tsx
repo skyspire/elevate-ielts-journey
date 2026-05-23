@@ -553,7 +553,15 @@ export function SpeakingSampleModal({
                           }, 250);
                         }}
                         data-pressed={pressedFollowUpId === q.id || undefined}
-                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:brightness-105 hover:shadow-md"
+                        onPointerEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = `${activeColor}59`;
+                        }}
+                        onPointerLeave={(e) => {
+                          if (pressedFollowUpId !== q.id) {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = p.bg;
+                          }
+                        }}
+                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:shadow-md"
                         style={{
                           backgroundColor:
                             pressedFollowUpId === q.id
