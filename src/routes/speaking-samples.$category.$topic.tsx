@@ -88,7 +88,9 @@ function GatedSpeakingTopicPage() {
 
 function SpeakingTopicPage() {
   const { topic, questions, isCue, categoryId } = Route.useLoaderData();
-  const [modalOpen, setModalOpen] = useState(false);
+  // Auto-open the sample-answer modal on mount so users land straight on the
+  // title popup instead of seeing the intermediate green topic page first.
+  const [modalOpen, setModalOpen] = useState(true);
 
 
 
