@@ -295,7 +295,7 @@ export function SpeakingSampleModal({
           {/* Wordmark */}
           <div
             aria-label="BigIELTS.com"
-            className="relative"
+            className="relative mt-10 sm:mt-20 lg:mt-28"
             style={{
               fontFamily:
                 'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
@@ -308,6 +308,23 @@ export function SpeakingSampleModal({
             <span>BigIELTS</span>
             <span style={{ color: "#bfdbfe" }}>.com</span>
           </div>
+
+          {/* Hint */}
+          <p
+            className="relative mt-4"
+            style={{
+              fontFamily:
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+              fontWeight: 500,
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.35)",
+              margin: 0,
+            }}
+          >
+            Click anywhere to view the answer
+          </p>
 
           <button
             type="button"
