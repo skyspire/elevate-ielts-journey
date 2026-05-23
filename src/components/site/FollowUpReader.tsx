@@ -440,12 +440,50 @@ export function FollowUpReader({
         </div>
 
 
-        {/* Scrollable answer body */}
+        {/* Scrollable answer body — supports horizontal swipe between questions */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-5 py-6 sm:px-10 sm:py-9"
+          onTouchStart={(e) => {
+            const t = e.touches[0];
+            touchRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+          }}
+          onTouchEnd={(e) => {
+            const start = touchRef.current;
+            touchRef.current = null;
+            if (!start || total <= 1) return;
+            const t = e.changedTouches[0];
+            const dx = t.clientX - start.x;
+            const dy = t.clientY - start.y;
+            const dt = Date.now() - start.t;
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 600) {
+              if (dx < 0) goToQuestion(currentIndex + 1);
+              else goToQuestion(currentIndex - 1);
+            }
+          }}
         >
-          <article style={laneStyle}>
+          <article
+            style={{
+              ...laneStyle,
+              transform:
+                qAnim === "out-left"
+                  ? "translateX(-40px)"
+                  : qAnim === "out-right"
+                  ? "translateX(40px)"
+                  : (laneStyle.transform as string) || "translateX(0)",
+              opacity: qAnim === "out-left" || qAnim === "out-right" ? 0 : laneStyle.opacity ?? 1,
+              transition:
+                qAnim === "out-left" || qAnim === "out-right"
+                  ? "transform 200ms cubic-bezier(0.4,0,1,1), opacity 200ms ease"
+                  : laneStyle.transition,
+              animation:
+                qAnim === "in-left" || qAnim === "in-right"
+                  ? `fu-q-in-${qAnim === "in-left" ? "left" : "right"} 360ms cubic-bezier(0,0,0.2,1) both`
+                  : laneStyle.animation,
+            }}
+            key={`a-${currentIndex}`}
+          >
+
             <div
               className="mx-auto max-w-[680px]"
               style={{
