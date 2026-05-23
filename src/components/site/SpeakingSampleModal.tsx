@@ -485,14 +485,32 @@ export function SpeakingSampleModal({
                             total: followUps.length,
                           });
                         }}
-                        className="group relative flex w-full items-center gap-3 overflow-hidden rounded-xl px-5 py-4 text-left transition-all hover:brightness-110 hover:shadow-md"
+                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left transition-all hover:brightness-105 hover:shadow-md"
                         style={{
                           backgroundColor: p.bg,
                           color: p.ink,
                         }}
                       >
+                        <div
+                          className="flex w-14 shrink-0 items-center justify-center px-2 sm:w-16"
+                          style={{
+                            borderRight: `1px solid ${p.ink}26`,
+                            backgroundColor: `${p.ink}0d`,
+                          }}
+                        >
+                          <span
+                            className="font-display font-black tabular-nums tracking-tight"
+                            style={{
+                              color: p.ink,
+                              fontSize: "clamp(1.25rem, 2.4vw, 1.6rem)",
+                              opacity: 0.85,
+                            }}
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                        </div>
                         <span
-                          className="text-[15px] leading-snug"
+                          className="flex min-w-0 flex-1 items-center px-4 py-4 text-[15px] leading-snug sm:px-5"
                           style={{
                             fontFamily:
                               '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
@@ -500,15 +518,10 @@ export function SpeakingSampleModal({
                             color: p.ink,
                           }}
                         >
-                          <span
-                            className="mr-2 inline-block tabular-nums"
-                            style={{ color: p.ink, fontWeight: 900, opacity: 0.85 }}
-                          >
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
                           {q.title}
                         </span>
                       </button>
+
                     </li>
                   );})}
 
