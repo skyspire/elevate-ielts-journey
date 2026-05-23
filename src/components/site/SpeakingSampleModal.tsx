@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X } from "lucide-react";
+
+import { PopupNavMenu } from "@/components/site/PopupNavMenu";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
@@ -184,6 +185,7 @@ export function SpeakingSampleModal({
             "background 360ms ease, backdrop-filter 240ms ease, -webkit-backdrop-filter 240ms ease",
         }}
       />
+      {visible && <PopupNavMenu onClose={onClose} />}
 
       {/* Glossy top sheen */}
       <div
@@ -369,21 +371,6 @@ export function SpeakingSampleModal({
           </div>
 
 
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClose();
-            }}
-            aria-label="Close"
-            className="absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/25"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.15)",
-              color: "#ffffff",
-            }}
-          >
-            <X className="h-4 w-4" strokeWidth={2.5} />
-          </button>
         </div>
       )}
 
@@ -451,19 +438,7 @@ export function SpeakingSampleModal({
             {mainQuestion}
           </h2>
 
-          {/* Close — floats top-right */}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 sm:right-4 sm:top-4"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.18)",
-              color: "#ffffff",
-            }}
-          >
-            <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
-          </button>
+          {/* Close handled by PopupNavMenu (red close + hamburger) */}
         </div>
 
 
@@ -487,24 +462,12 @@ export function SpeakingSampleModal({
             }}
           >
             {sections.map((s, i) => (
-              <div key={i} className="mb-8 last:mb-2">
-                {s.heading && (
-                  <h3
-                    className="mb-3 text-[17px] font-bold leading-snug sm:text-[18px]"
-                    style={{
-                      fontFamily:
-                        '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                      color: BAND_COLORS[variant],
-                      letterSpacing: "-0.005em",
-                    }}
-                  >
-                    {s.heading}
-                  </h3>
-                )}
-                <p className="text-[15.5px] leading-[1.8] text-foreground/85 sm:text-[16.5px]">
-                  {s.body}
-                </p>
-              </div>
+              <p
+                key={i}
+                className="mb-5 text-[15.5px] leading-[1.8] text-foreground/85 last:mb-0 sm:text-[16.5px]"
+              >
+                {s.body}
+              </p>
             ))}
 
             {/* Follow-up questions (cue cards only) */}
