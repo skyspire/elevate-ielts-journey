@@ -160,30 +160,17 @@ function PricingPage() {
                 </ul>
 
                 <div className="mt-6">
-                  {user ? (
-                    <button
-                      type="button"
-                      onClick={() => setOpenCycle(c.key)}
-                      className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-                      style={{
-                        background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
-                        boxShadow: `0 10px 20px -8px ${c.accent}80`,
-                      }}
-                    >
-                      Subscribe
-                    </button>
-                  ) : (
-                    <Link
-                      to="/signup"
-                      className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-                      style={{
-                        background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
-                        boxShadow: `0 10px 20px -8px ${c.accent}80`,
-                      }}
-                    >
-                      Sign up to subscribe
-                    </Link>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => setOpenCycle(c.key)}
+                    className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+                    style={{
+                      background: `linear-gradient(140deg, ${c.accent}, color-mix(in oklab, ${c.accent} 65%, black))`,
+                      boxShadow: `0 10px 20px -8px ${c.accent}80`,
+                    }}
+                  >
+                    {user ? "Subscribe" : "Get started"}
+                  </button>
                 </div>
               </div>
             );
