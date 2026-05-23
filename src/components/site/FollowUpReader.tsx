@@ -23,18 +23,58 @@ import { Highlight, annotateText } from "./StudyPaper";
 export type FollowUpReaderProps = {
   open: boolean;
   onClose: () => void;
-  question: { id: string; title: string };
-  // Click origin in viewport coords — drives the burst-and-split entrance.
+  // All follow-up questions for this topic (enables in-reader navigation).
+  questions: { id: string; title: string }[];
+  // Current 0-based index into `questions`.
+  currentIndex: number;
+  // Move to another follow-up without closing the reader.
+  onIndexChange: (next: number) => void;
+  // Click origin in viewport coords — drives the burst entrance.
   origin: { x: number; y: number } | null;
-  // Which follow-up this is (1-based) and how many there are total.
-  // Drives the prominent "01 / 03" circle badge above the headline.
-  index: number;
-  total: number;
 };
 
 type EntrancePhase = "closed" | "burst" | "settled";
 
-export function FollowUpReader({ open, onClose, question, origin, index, total }: FollowUpReaderProps) {
+export function FollowUpReader({
+  open,
+  onClose,
+  questions,
+  currentIndex,
+  onIndexChange,
+  origin,
+}: FollowUpReaderProps) {
+  const question = questions[currentIndex] ?? { id: "", title: "" };
+  const index = currentIndex + 1;
+  const total = questions.length;
+
+  const [phase, setPhase] = useState<EntrancePhase>("closed");
+  const [variantIndex, setVariantIndex] = useState(0);
+  const [switchDir, setSwitchDir] = useState<1 | -1>(1);
+  const [laneAnim, setLaneAnim] = useState<"idle" | "out" | "in">("idle");
+  const [revealedSections, setRevealedSections] = useState(0);
+  const [qAnim, setQAnim] = useState<"idle" | "out-left" | "out-right" | "in-left" | "in-right">("idle");
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
+
+  // Reset variant index when question changes
+  useEffect(() => {
+    setVariantIndex(0);
+    if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
+  }, [currentIndex]);
+
+  const goToQuestion = (next: number) => {
+    if (total <= 1) return;
+    const clamped = (next + total) % total;
+    if (clamped === currentIndex) return;
+    const forward = clamped === (currentIndex + 1) % total;
+    setQAnim(forward ? "out-left" : "out-right");
+    window.setTimeout(() => {
+      onIndexChange(clamped);
+      setQAnim(forward ? "in-right" : "in-left");
+    }, 200);
+    window.setTimeout(() => setQAnim("idle"), 560);
+  };
+
   const [phase, setPhase] = useState<EntrancePhase>("closed");
   const [variantIndex, setVariantIndex] = useState(0);
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
