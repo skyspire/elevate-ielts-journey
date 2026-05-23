@@ -7,6 +7,7 @@ import {
 } from "@/data/speaking-model-answers";
 import { Highlight, annotateText } from "./StudyPaper";
 import { DustParticles } from "@/components/site/DustParticles";
+import { SparkleShimmer } from "@/components/site/SparkleShimmer";
 
 
 
@@ -320,6 +321,7 @@ export function FollowUpReader({
 
       {/* Ambient dust particles rising from bottom (behind popup card) */}
       <DustParticles visible={visible} />
+      <SparkleShimmer visible={visible} />
 
 
       {/* Floating radial nav — top-right, outside the popup card */}

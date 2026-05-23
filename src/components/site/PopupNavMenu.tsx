@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { DustParticles } from "@/components/site/DustParticles";
+import { SparkleShimmer } from "@/components/site/SparkleShimmer";
 
 /**
  * PopupNavMenu — shared chrome for fullscreen sample-answer popups.
@@ -53,6 +54,7 @@ export function PopupNavMenu({ onClose }: PopupNavMenuProps) {
     <>
       {/* Ambient dust particles rising from bottom (behind popup card) */}
       <DustParticles />
+      <SparkleShimmer />
       {/* Dim + blur backdrop behind the menu (above sheet, below buttons) */}
       <button
         type="button"
