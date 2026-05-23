@@ -338,9 +338,29 @@ export function FollowUpReader({
           { label: "Home", icon: Home, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/" }); } },
         ];
         // Fan items in a wide arc sweeping down-left from the trigger
-        const radius = 118;
+        const radius = 150;
         const startAngle = 110; // degrees
         const endAngle = 250;
+        return (
+          <>
+            {/* Full-screen dim + blur backdrop behind the menu */}
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setNavOpen(false)}
+              className="absolute inset-0 z-[115] cursor-default"
+              style={{
+                backgroundColor: navOpen ? "rgba(5, 8, 18, 0.62)" : "rgba(5, 8, 18, 0)",
+                backdropFilter: navOpen ? "blur(8px) saturate(1.05)" : "blur(0px)",
+                WebkitBackdropFilter: navOpen ? "blur(8px) saturate(1.05)" : "blur(0px)",
+                opacity: navOpen ? 1 : 0,
+                pointerEvents: navOpen ? "auto" : "none",
+                transition:
+                  "background-color 260ms ease, backdrop-filter 260ms ease, -webkit-backdrop-filter 260ms ease, opacity 220ms ease",
+              }}
+            />
+            <div className="absolute right-6 top-6 z-[120] sm:right-8 sm:top-8">
+
 
         return (
           <div className="absolute right-4 top-4 z-[120] sm:right-6 sm:top-6">
