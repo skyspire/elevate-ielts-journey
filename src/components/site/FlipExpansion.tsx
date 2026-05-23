@@ -324,9 +324,10 @@ export function FlipExpansion({
                 followUps={followUps}
                 accentText={accentText}
                 accentChip={accentChip}
-                onOpenFollowUp={(question, origin, index, total) =>
-                  setFollowUpReader({ question, origin, index, total })
+                onOpenFollowUp={(_question, origin, index) =>
+                  setFollowUpReader({ index: index - 1, origin })
                 }
+
               />
             ) : (
               <CompactPanel
