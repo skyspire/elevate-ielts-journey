@@ -109,50 +109,23 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
 
         <h2
           id="pick-type-title"
-          className="mt-2 font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl"
+          className="mt-2 font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl"
         >
           Select Your IELTS
         </h2>
 
         {!user && (
-          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] font-semibold text-amber-800">
+          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">
             You need an account to subscribe.{" "}
             <Link to="/signup" onClick={onClose} className="underline">Sign up</Link> or{" "}
             <Link to="/login" onClick={onClose} className="underline">log in</Link> first.
           </div>
         )}
 
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {PREVIEW_STYLES.map((style) => {
-            const isStyleActive = selectedPreview === style.key;
-            return (
-              <button
-                key={style.key}
-                type="button"
-                onClick={() => setSelectedPreview(style.key)}
-                aria-pressed={isStyleActive}
-                className="relative overflow-hidden rounded-2xl border bg-card p-1.5 transition-all"
-                style={{
-                  borderColor: isStyleActive ? "oklch(0.58 0.2 255)" : "var(--border)",
-                  boxShadow: isStyleActive ? "0 12px 26px -14px oklch(0.42 0.21 265)" : undefined,
-                }}
-              >
-                <span className="absolute left-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-foreground text-xs font-black text-background">
-                  {style.label}
-                </span>
-                <span className="grid grid-cols-2 gap-1">
-                  <img src={style.academic} alt={`Option ${style.label} Academic preview`} className="aspect-square rounded-xl object-cover" loading="eager" />
-                  <img src={style.general} alt={`Option ${style.label} General Training preview`} className="aspect-square rounded-xl object-cover" loading="eager" />
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {CARDS.map((card) => {
             const isActive = selected === card.key;
-            const imageSrc = currentPreview[card.key];
+            const imageSrc = PREVIEW_IMAGES[card.key];
             return (
               <button
                 key={card.key}
