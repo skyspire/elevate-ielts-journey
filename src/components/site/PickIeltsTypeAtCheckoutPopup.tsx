@@ -147,17 +147,44 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
           </div>
         )}
 
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {PREVIEW_STYLES.map((style) => {
+            const isStyleActive = selectedPreview === style.key;
+            return (
+              <button
+                key={style.key}
+                type="button"
+                onClick={() => setSelectedPreview(style.key)}
+                aria-pressed={isStyleActive}
+                className="relative overflow-hidden rounded-2xl border bg-card p-1.5 transition-all"
+                style={{
+                  borderColor: isStyleActive ? "oklch(0.58 0.2 255)" : "var(--border)",
+                  boxShadow: isStyleActive ? "0 12px 26px -14px oklch(0.42 0.21 265)" : undefined,
+                }}
+              >
+                <span className="absolute left-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-foreground text-xs font-black text-background">
+                  {style.label}
+                </span>
+                <span className="grid grid-cols-2 gap-1">
+                  <img src={style.academic} alt={`Option ${style.label} Academic preview`} className="aspect-square rounded-xl object-cover" loading="eager" />
+                  <img src={style.general} alt={`Option ${style.label} General Training preview`} className="aspect-square rounded-xl object-cover" loading="eager" />
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {CARDS.map((card) => {
-            const Icon = card.icon;
             const isActive = selected === card.key;
+            const imageSrc = currentPreview[card.key];
             return (
               <button
                 key={card.key}
                 type="button"
                 onClick={() => setSelected(card.key)}
                 aria-pressed={isActive}
-                className="group relative overflow-hidden rounded-2xl p-5 text-left text-white transition-all"
+                className="group relative overflow-hidden rounded-2xl p-4 text-left text-white transition-all"
                 style={{
                   background: `linear-gradient(150deg, ${card.accent}, ${card.accentDark})`,
                   boxShadow: isActive
@@ -182,25 +209,16 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
                   </span>
                 )}
 
-                <span
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm ring-1 ring-white/40"
-                >
-                  <Icon className="h-6 w-6 text-white" strokeWidth={2.4} />
-                </span>
+                <img
+                  src={imageSrc}
+                  alt={`${card.name} IELTS preview`}
+                  className="relative z-0 aspect-[4/3] w-full rounded-2xl bg-white/95 object-cover p-1.5 shadow-lg ring-1 ring-white/35"
+                  loading="eager"
+                />
 
                 <div className="mt-4 font-display text-xl font-black tracking-tight text-white">
                   {card.name}
                 </div>
-                <div className="text-[12px] font-semibold text-white/85">{card.tag}</div>
-
-                <ul className="mt-3 space-y-1.5 text-[12.5px] font-semibold text-white/95">
-                  {card.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" strokeWidth={3} />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
               </button>
             );
           })}
