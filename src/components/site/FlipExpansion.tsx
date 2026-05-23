@@ -5,13 +5,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Mic,
-  
   ArrowUpRight,
-  Link as LinkIcon,
   MessageCircleQuestion,
   GraduationCap,
 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
