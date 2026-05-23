@@ -71,7 +71,7 @@ function PricingPage() {
             Choose your subscription
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-muted-foreground sm:text-lg">
-            All prices in CAD. You'll pick your IELTS type (Academic, General, or both) right at checkout.
+            All prices in CAD. You'll pick Academic or General Training at checkout. One type per subscription — subscribe again to add the other.
           </p>
 
           {planType && (
