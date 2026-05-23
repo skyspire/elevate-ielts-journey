@@ -285,40 +285,41 @@ export function SpeakingSampleModal({
           </h2>
 
 
-          {/* BigIELTS.com wordmark — bold serif, perfectly symmetrical */}
+          {/* BigIELTS.com wordmark — half size, all grey, symmetrical */}
           <div
             aria-label="BigIELTS.com"
             style={{
-              marginTop: "clamp(40px, 7vw, 72px)",
+              marginTop: "clamp(28px, 5vw, 48px)",
               fontFamily:
-                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
               fontWeight: 700,
-              fontSize: "clamp(40px, 7.5vw, 78px)",
+              fontSize: "clamp(20px, 3.6vw, 36px)",
               lineHeight: 1,
               letterSpacing: "-0.02em",
-              color: "oklch(0.22 0.05 70)",
+              color: "oklch(0.55 0.01 250)",
               textAlign: "center",
             }}
           >
             <span>Big</span>
-            <span style={{ color: "oklch(0.48 0.18 30)" }}>IELTS</span>
-            <span style={{ opacity: 0.55, fontWeight: 400 }}>.com</span>
+            <span>IELTS</span>
+            <span style={{ fontWeight: 400, opacity: 0.75 }}>.com</span>
           </div>
 
           <div
             style={{
-              marginTop: 28,
+              marginTop: 24,
               fontFamily:
-                '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "oklch(0.42 0.03 70)",
+              color: "oklch(0.55 0.01 250)",
             }}
           >
             Tap anywhere to reveal the sample answer
           </div>
+
 
 
           <button
