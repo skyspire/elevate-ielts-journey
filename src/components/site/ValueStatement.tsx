@@ -24,11 +24,13 @@ import {
 } from "@/lib/currency";
 import { useCmsSection } from "@/lib/admin/cms-store";
 import { PRICING_KEY, PRICING_DEFAULT } from "@/lib/admin/defaults";
+import { PickIeltsTypeAtCheckoutPopup } from "@/components/site/PickIeltsTypeAtCheckoutPopup";
 
 export function ValueStatement() {
   const { plans, features, footnote } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
   const [autoDetected, setAutoDetected] = useState(false);
+  const [openCycleLabel, setOpenCycleLabel] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = getStoredCurrency();
@@ -55,6 +57,7 @@ export function ValueStatement() {
   };
 
   return (
+    <>
     <section id="pricing" className="scroll-mt-24 bg-white pt-14 pb-8 sm:pt-20 sm:pb-12">
       <div className="container-page">
         <div className="mx-auto max-w-4xl text-center">
@@ -236,6 +239,8 @@ export function ValueStatement() {
                 </p>
               )}
               <Button
+                type="button"
+                onClick={() => setOpenCycleLabel(`${p.name} · ${formatPrice(price, currency)} ${currency}`)}
                 className={`mt-6 h-11 w-full rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 ${
                   p.popular
                     ? "bg-brand text-brand-foreground shadow-glow hover:bg-brand/90 hover:shadow-[0_0_30px_oklch(0.7_0.18_30/0.6),0_0_60px_oklch(0.7_0.18_30/0.35)]"
@@ -280,5 +285,11 @@ export function ValueStatement() {
         </p>
       </div>
     </section>
+    <PickIeltsTypeAtCheckoutPopup
+      open={!!openCycleLabel}
+      onClose={() => setOpenCycleLabel(null)}
+      cycleLabel={openCycleLabel ?? undefined}
+    />
+    </>
   );
 }
