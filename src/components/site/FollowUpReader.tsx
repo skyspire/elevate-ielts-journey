@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X, Menu, ArrowLeft, LayoutDashboard, Home, Grid3x3 } from "lucide-react";
+import { X, Menu, ArrowLeft, LayoutDashboard, Home, BookOpen, MessageCircle, UserCircle, HelpCircle, Bookmark, BookmarkCheck } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   getSpeakingModelAnswer,
@@ -319,16 +319,29 @@ export function FollowUpReader({
 
       {/* Floating radial nav — top-right, outside the popup card */}
       {visible && (() => {
+        const bookmarkKey = `bigielts:bookmark:${question.id}`;
+        const isBookmarked = typeof window !== "undefined" && !!localStorage.getItem(bookmarkKey);
+        const toggleBookmark = () => {
+          if (typeof window === "undefined") return;
+          if (localStorage.getItem(bookmarkKey)) localStorage.removeItem(bookmarkKey);
+          else localStorage.setItem(bookmarkKey, "1");
+          setNavOpen(false);
+        };
         const navItems = [
           { label: "Back", icon: ArrowLeft, onClick: () => { setNavOpen(false); onClose(); } },
+          { label: isBookmarked ? "Saved" : "Bookmark", icon: isBookmarked ? BookmarkCheck : Bookmark, onClick: toggleBookmark },
+          { label: "Speaking", icon: MessageCircle, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/sample-answers", search: { selected: "speaking" } as never }); } },
+          { label: "Modules", icon: BookOpen, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/sample-answers" }); } },
           { label: "Dashboard", icon: LayoutDashboard, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/dashboard" }); } },
-          { label: "Homepage", icon: Home, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/" }); } },
-          { label: "Modules", icon: Grid3x3, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/sample-answers" }); } },
+          { label: "Account", icon: UserCircle, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/dashboard" }); } },
+          { label: "Help", icon: HelpCircle, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/faq" }); } },
+          { label: "Home", icon: Home, onClick: () => { setNavOpen(false); onClose(); navigate({ to: "/" }); } },
         ];
-        // Fan items in an arc sweeping down-left from the trigger
-        const radius = 92;
-        const startAngle = 135; // degrees
-        const endAngle = 225;
+        // Fan items in a wide arc sweeping down-left from the trigger
+        const radius = 118;
+        const startAngle = 110; // degrees
+        const endAngle = 250;
+
         return (
           <div className="absolute right-4 top-4 z-[120] sm:right-6 sm:top-6">
             <div className="relative">
