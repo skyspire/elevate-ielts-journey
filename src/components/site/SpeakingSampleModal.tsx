@@ -384,7 +384,7 @@ export function SpeakingSampleModal({
                 lineHeight: 1.4,
               }}
             >
-              {title}
+              {mainQuestion}
             </h2>
           </div>
 
