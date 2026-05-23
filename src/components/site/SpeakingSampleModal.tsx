@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { X, MessageCircleQuestion, ArrowUpRight } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
@@ -443,7 +443,7 @@ export function SpeakingSampleModal({
             {followUps.length > 0 && (
               <div className="mt-10 border-t border-foreground/[0.08] pt-8">
                 <div
-                  className="mb-4 flex items-center gap-2"
+                  className="mb-5 text-center"
                   style={{
                     fontFamily:
                       '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
@@ -454,11 +454,13 @@ export function SpeakingSampleModal({
                     textTransform: "uppercase",
                   }}
                 >
-                  <MessageCircleQuestion className="h-4 w-4 opacity-70" />
                   Follow-up questions
                 </div>
                 <ul className="grid gap-2.5">
-                  {followUps.map((q, i) => (
+                  {followUps.map((q, i) => {
+                    const accents = ["#f59e0b", "#3b82f6", "#10b981", "#ef4444", "#8b5cf6", "#ec4899"];
+                    const accent = accents[i % accents.length];
+                    return (
                     <li key={q.id}>
                       <button
                         type="button"
@@ -476,7 +478,10 @@ export function SpeakingSampleModal({
                             total: followUps.length,
                           });
                         }}
-                        className="group flex w-full items-center justify-between gap-3 rounded-xl border border-foreground/10 bg-white/70 px-4 py-3 text-left transition-all hover:border-foreground/20 hover:bg-white hover:shadow-sm"
+                        className="group relative flex w-full items-center justify-between gap-3 overflow-hidden rounded-xl border border-foreground/10 bg-white/70 px-4 py-3 pl-5 text-left transition-all hover:border-foreground/20 hover:bg-white hover:shadow-sm"
+                        style={{
+                          boxShadow: `inset 5px 0 0 0 ${accent}`,
+                        }}
                       >
                         <span
                           className="min-w-0 flex-1 text-[14.5px] leading-snug text-foreground/85"
@@ -488,19 +493,21 @@ export function SpeakingSampleModal({
                         >
                           <span
                             className="mr-2 inline-block tabular-nums"
-                            style={{ color: "#6b7280", fontWeight: 700 }}
+                            style={{ color: accent, fontWeight: 800 }}
                           >
                             {String(i + 1).padStart(2, "0")}
                           </span>
                           {q.title}
                         </span>
                         <ArrowUpRight
-                          className="h-4 w-4 shrink-0 text-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground/70"
+                          className="h-4 w-4 shrink-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                           strokeWidth={2.4}
+                          style={{ color: accent }}
                         />
+
                       </button>
                     </li>
-                  ))}
+                  );})}
                 </ul>
               </div>
             )}
