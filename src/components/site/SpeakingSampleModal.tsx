@@ -260,154 +260,53 @@ export function SpeakingSampleModal({
               setPhase("answer");
             }
           }}
-          className="group relative flex w-full max-w-[480px] cursor-pointer flex-col items-center justify-center overflow-hidden px-10 py-16 text-center transition-shadow duration-700"
+          className="group relative flex w-full max-w-[520px] cursor-pointer flex-col items-center justify-center overflow-hidden px-10 py-20 text-center transition-shadow duration-700"
           style={{
             aspectRatio: "3 / 4.2",
             maxHeight: "92vh",
-            backgroundColor: "#faf8f5",
-            borderRadius: 48,
-            border: "1px solid rgba(255,255,255,0.6)",
+            background:
+              "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%)",
+            borderRadius: 40,
+            border: "1px solid rgba(255,255,255,0.18)",
             boxShadow:
-              "0 30px 80px -20px rgba(139,115,85,0.45), 0 12px 40px -12px rgba(8,10,20,0.35)",
+              "0 30px 80px -20px rgba(30,58,138,0.7), 0 12px 40px -12px rgba(8,10,20,0.45)",
           }}
         >
-          {/* Subtle paper grain */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              opacity: 0.04,
-              backgroundImage:
-                "radial-gradient(rgba(61,51,41,0.6) 1px, transparent 1px), radial-gradient(rgba(61,51,41,0.4) 1px, transparent 1px)",
-              backgroundSize: "3px 3px, 7px 7px",
-              backgroundPosition: "0 0, 1px 2px",
-            }}
-          />
-
-          {/* Inner hairline frame */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute"
-            style={{
-              inset: 16,
-              borderRadius: 36,
-              border: "1px solid rgba(139,115,85,0.08)",
-            }}
-          />
-
           {/* Main content */}
-          <div className="relative flex w-full flex-col items-center">
-            {/* Decorative seal */}
-            <div
-              aria-hidden="true"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 9999,
-                border: "1px solid rgba(201,185,154,0.5)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                opacity: 0.7,
-                marginBottom: 40,
-              }}
-            >
-              <span
-                style={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: 9999,
-                  backgroundColor: "#c9b99a",
-                }}
-              />
-            </div>
-
+          <div className="relative flex w-full flex-1 flex-col items-center justify-center">
             {/* Question */}
             <h2
               style={{
                 fontFamily:
                   'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-                fontWeight: 600,
-                fontSize: "clamp(26px, 5vw, 34px)",
-                lineHeight: 1.2,
-                letterSpacing: "-0.02em",
-                color: "#3d3329",
-                marginBottom: 48,
-                padding: "0 4px",
+                fontWeight: 900,
+                fontSize: "clamp(30px, 5.6vw, 42px)",
+                lineHeight: 1.15,
+                letterSpacing: "-0.025em",
+                color: "#ffffff",
                 maxWidth: "18ch",
+                textShadow: "0 2px 24px rgba(8,10,40,0.25)",
               }}
             >
               {mainQuestion}
             </h2>
+          </div>
 
-            {/* Divider stack */}
-            <div
-              aria-hidden="true"
-              className="mb-12 flex flex-col items-center"
-              style={{ gap: 16 }}
-            >
-              <span
-                style={{
-                  width: 24,
-                  height: 1,
-                  backgroundColor: "rgba(201,185,154,0.5)",
-                }}
-              />
-              <span style={{ display: "flex", gap: 6 }}>
-                {[0, 1, 2].map((i) => (
-                  <span
-                    key={i}
-                    style={{
-                      width: 4,
-                      height: 4,
-                      borderRadius: 9999,
-                      backgroundColor: "rgba(201,185,154,0.5)",
-                    }}
-                  />
-                ))}
-              </span>
-              <span
-                style={{
-                  width: 24,
-                  height: 1,
-                  backgroundColor: "rgba(201,185,154,0.5)",
-                }}
-              />
-            </div>
-
-            {/* Wordmark */}
-            <div
-              aria-label="BigIELTS.com"
-              style={{
-                fontFamily:
-                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-                fontWeight: 500,
-                fontSize: 16,
-                letterSpacing: "-0.01em",
-                color: "rgba(139,115,85,0.7)",
-                marginBottom: 12,
-              }}
-            >
-              <span>BigIELTS</span>
-              <span style={{ color: "rgba(201,185,154,0.85)" }}>.com</span>
-            </div>
-
-            {/* Subtitle */}
-            <p
-              className="transition-all duration-700 group-hover:tracking-[0.35em]"
-              style={{
-                fontFamily:
-                  'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
-                fontWeight: 700,
-                fontSize: 10,
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
-                color: "#c9b99a",
-                margin: 0,
-              }}
-            >
-              Tap anywhere to reveal
-            </p>
+          {/* Wordmark */}
+          <div
+            aria-label="BigIELTS.com"
+            className="relative"
+            style={{
+              fontFamily:
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
+              fontWeight: 800,
+              fontSize: 20,
+              letterSpacing: "-0.01em",
+              color: "#ffffff",
+            }}
+          >
+            <span>BigIELTS</span>
+            <span style={{ color: "#bfdbfe" }}>.com</span>
           </div>
 
           <button
@@ -417,16 +316,17 @@ export function SpeakingSampleModal({
               onClose();
             }}
             aria-label="Close"
-            className="absolute right-8 top-8 inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors group-hover:bg-[#c9b99a]/20"
+            className="absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/25"
             style={{
-              backgroundColor: "#f0ebe3",
-              color: "#8b7355",
+              backgroundColor: "rgba(255,255,255,0.15)",
+              color: "#ffffff",
             }}
           >
-            <X className="h-4 w-4" strokeWidth={2} />
+            <X className="h-4 w-4" strokeWidth={2.5} />
           </button>
         </div>
       )}
+
 
       <div
         className="relative flex w-full max-w-[880px] flex-col overflow-hidden rounded-2xl sm:rounded-3xl"
