@@ -459,12 +459,12 @@ export function SpeakingSampleModal({
                 <ul className="grid gap-2.5">
                   {followUps.map((q, i) => {
                     const palettes = [
-                      { bg: "#f59e0b", ink: "#78350f" }, // amber
-                      { bg: "#3b82f6", ink: "#1e3a8a" }, // blue
-                      { bg: "#10b981", ink: "#064e3b" }, // emerald
-                      { bg: "#ef4444", ink: "#7f1d1d" }, // red
-                      { bg: "#8b5cf6", ink: "#4c1d95" }, // violet
-                      { bg: "#ec4899", ink: "#831843" }, // pink
+                      { bg: "#fde68a", ink: "#78350f" }, // amber
+                      { bg: "#bfdbfe", ink: "#1e3a8a" }, // blue
+                      { bg: "#bbf7d0", ink: "#064e3b" }, // emerald
+                      { bg: "#fecaca", ink: "#7f1d1d" }, // red
+                      { bg: "#ddd6fe", ink: "#4c1d95" }, // violet
+                      { bg: "#fbcfe8", ink: "#831843" }, // pink
                     ];
                     const p = palettes[i % palettes.length];
                     return (
