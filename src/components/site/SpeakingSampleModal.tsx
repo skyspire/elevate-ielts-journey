@@ -362,37 +362,36 @@ export function SpeakingSampleModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — solid royal blue: logo · question (centered) · close */}
+        {/* Header — stacked centered: logo on top, full question below */}
         <div
-          className="grid items-center gap-3 px-4 sm:px-8"
+          className="relative flex flex-col items-center gap-2 px-12 sm:px-16"
           style={{
-            gridTemplateColumns: "auto 1fr auto",
             paddingTop: 14,
-            paddingBottom: 14,
+            paddingBottom: 16,
             backgroundColor: "#1e40af",
             boxShadow: "0 6px 18px -12px rgba(15,23,42,0.35)",
           }}
         >
-          {/* Logo */}
+          {/* Logo (small, centered) */}
           <div
             aria-label="BigIELTS.com"
-            className="shrink-0"
             style={{
               fontFamily:
                 'var(--font-display), "Inter", ui-sans-serif, system-ui, sans-serif',
               fontWeight: 800,
-              fontSize: 15,
-              letterSpacing: "-0.01em",
+              fontSize: 13,
+              letterSpacing: "0.01em",
               color: "#ffffff",
+              opacity: 0.9,
             }}
           >
             <span>BigIELTS</span>
             <span style={{ color: "#bfdbfe" }}>.com</span>
           </div>
 
-          {/* Question — centered */}
+          {/* Question — full text, centered, wraps freely */}
           <h2
-            className="min-w-0 truncate text-center tracking-[-0.01em] sm:whitespace-normal sm:overflow-visible"
+            className="text-center tracking-[-0.01em]"
             style={{
               fontFamily:
                 '"Poppins", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
@@ -400,17 +399,18 @@ export function SpeakingSampleModal({
               color: "#ffffff",
               fontSize: 16,
               lineHeight: 1.4,
+              maxWidth: "44ch",
             }}
           >
             {mainQuestion}
           </h2>
 
-          {/* Close */}
+          {/* Close — floats top-right */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95"
+            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full transition-all hover:scale-105 active:scale-95 sm:right-4 sm:top-4"
             style={{
               backgroundColor: "rgba(255,255,255,0.18)",
               color: "#ffffff",
@@ -419,6 +419,7 @@ export function SpeakingSampleModal({
             <X className="h-[18px] w-[18px]" strokeWidth={2.4} />
           </button>
         </div>
+
 
 
 
