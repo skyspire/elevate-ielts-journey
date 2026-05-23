@@ -93,6 +93,7 @@ export function SignupGatePopup({
   onDevBypass,
   variant = "sunshine",
 }: Props) {
+  usePopupActive(open);
   const isMobile = useIsMobile();
   const [active, setActive] = useState<GateVariant>(variant);
 
