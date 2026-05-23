@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { DustParticles } from "@/components/site/DustParticles";
+import { SparkleShimmer } from "@/components/site/SparkleShimmer";
 
 /**
  * PopupNavMenu — shared chrome for fullscreen sample-answer popups.
