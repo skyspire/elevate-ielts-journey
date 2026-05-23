@@ -23,24 +23,60 @@ import { Highlight, annotateText } from "./StudyPaper";
 export type FollowUpReaderProps = {
   open: boolean;
   onClose: () => void;
-  question: { id: string; title: string };
-  // Click origin in viewport coords — drives the burst-and-split entrance.
+  // All follow-up questions for this topic (enables in-reader navigation).
+  questions: { id: string; title: string }[];
+  // Current 0-based index into `questions`.
+  currentIndex: number;
+  // Move to another follow-up without closing the reader.
+  onIndexChange: (next: number) => void;
+  // Click origin in viewport coords — drives the burst entrance.
   origin: { x: number; y: number } | null;
-  // Which follow-up this is (1-based) and how many there are total.
-  // Drives the prominent "01 / 03" circle badge above the headline.
-  index: number;
-  total: number;
 };
 
 type EntrancePhase = "closed" | "burst" | "settled";
 
-export function FollowUpReader({ open, onClose, question, origin, index, total }: FollowUpReaderProps) {
+export function FollowUpReader({
+  open,
+  onClose,
+  questions,
+  currentIndex,
+  onIndexChange,
+  origin,
+}: FollowUpReaderProps) {
+  const question = questions[currentIndex] ?? { id: "", title: "" };
+  const index = currentIndex + 1;
+  const total = questions.length;
+
   const [phase, setPhase] = useState<EntrancePhase>("closed");
   const [variantIndex, setVariantIndex] = useState(0);
   const [switchDir, setSwitchDir] = useState<1 | -1>(1);
   const [laneAnim, setLaneAnim] = useState<"idle" | "out" | "in">("idle");
   const [revealedSections, setRevealedSections] = useState(0);
+  const [qAnim, setQAnim] = useState<"idle" | "out-left" | "out-right" | "in-left" | "in-right">("idle");
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
+
+  // Reset variant index when question changes
+  useEffect(() => {
+    setVariantIndex(0);
+    if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "auto" });
+  }, [currentIndex]);
+
+  const goToQuestion = (next: number) => {
+    if (total <= 1) return;
+    const clamped = (next + total) % total;
+    if (clamped === currentIndex) return;
+    const forward = clamped === (currentIndex + 1) % total;
+    setQAnim(forward ? "out-left" : "out-right");
+    window.setTimeout(() => {
+      onIndexChange(clamped);
+      setQAnim(forward ? "in-right" : "in-left");
+    }, 200);
+    window.setTimeout(() => setQAnim("idle"), 560);
+  };
+
+
+
 
   // Build three answer variants from the follow-up question's text.
   const followUpAnswer = useMemo(
@@ -189,7 +225,18 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
         if (e.key === "ArrowRight") goToVariant(variantIndex + 1);
         if (e.key === "ArrowLeft") goToVariant(variantIndex - 1);
       }
+      if (total > 1) {
+        if (e.key === "PageDown" || e.key === "ArrowDown") {
+          e.preventDefault();
+          goToQuestion(currentIndex + 1);
+        }
+        if (e.key === "PageUp" || e.key === "ArrowUp") {
+          e.preventDefault();
+          goToQuestion(currentIndex - 1);
+        }
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -316,7 +363,17 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
               letterSpacing: "-0.01em",
               color: "#ffffff",
               maxWidth: "44ch",
+              transform:
+                qAnim === "out-left"
+                  ? "translateX(-24px)"
+                  : qAnim === "out-right"
+                  ? "translateX(24px)"
+                  : "translateX(0)",
+              opacity: qAnim === "out-left" || qAnim === "out-right" ? 0 : 1,
+              transition:
+                "transform 200ms cubic-bezier(0.4,0,1,1), opacity 200ms ease",
             }}
+            key={`q-${currentIndex}`}
           >
             <span
               aria-hidden
@@ -334,6 +391,44 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
             </span>
             {question.title}
           </h2>
+
+          {/* Dots indicator — tap to jump between follow-up questions */}
+          {total > 1 && (
+            <div
+              className="mt-1 flex items-center justify-center gap-1.5"
+              role="tablist"
+              aria-label="Follow-up questions"
+            >
+              {questions.map((q, i) => {
+                const isActive = i === currentIndex;
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`Question ${i + 1}: ${q.title}`}
+                    onClick={() => goToQuestion(i)}
+                    className="group inline-flex items-center justify-center rounded-full p-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
+                    <span
+                      style={{
+                        display: "block",
+                        width: isActive ? 22 : 7,
+                        height: 7,
+                        borderRadius: 999,
+                        backgroundColor: isActive
+                          ? "#ffffff"
+                          : "rgba(255,255,255,0.45)",
+                        transition: "width 220ms ease, background-color 220ms ease",
+                      }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={onClose}
@@ -344,12 +439,51 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           </button>
         </div>
 
-        {/* Scrollable answer body */}
+
+        {/* Scrollable answer body — supports horizontal swipe between questions */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-5 py-6 sm:px-10 sm:py-9"
+          onTouchStart={(e) => {
+            const t = e.touches[0];
+            touchRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
+          }}
+          onTouchEnd={(e) => {
+            const start = touchRef.current;
+            touchRef.current = null;
+            if (!start || total <= 1) return;
+            const t = e.changedTouches[0];
+            const dx = t.clientX - start.x;
+            const dy = t.clientY - start.y;
+            const dt = Date.now() - start.t;
+            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 600) {
+              if (dx < 0) goToQuestion(currentIndex + 1);
+              else goToQuestion(currentIndex - 1);
+            }
+          }}
         >
-          <article style={laneStyle}>
+          <article
+            style={{
+              ...laneStyle,
+              transform:
+                qAnim === "out-left"
+                  ? "translateX(-40px)"
+                  : qAnim === "out-right"
+                  ? "translateX(40px)"
+                  : (laneStyle.transform as string) || "translateX(0)",
+              opacity: qAnim === "out-left" || qAnim === "out-right" ? 0 : laneStyle.opacity ?? 1,
+              transition:
+                qAnim === "out-left" || qAnim === "out-right"
+                  ? "transform 200ms cubic-bezier(0.4,0,1,1), opacity 200ms ease"
+                  : laneStyle.transition,
+              animation:
+                qAnim === "in-left" || qAnim === "in-right"
+                  ? `fu-q-in-${qAnim === "in-left" ? "left" : "right"} 360ms cubic-bezier(0,0,0.2,1) both`
+                  : laneStyle.animation,
+            }}
+            key={`a-${currentIndex}`}
+          >
+
             <div
               className="mx-auto max-w-[680px]"
               style={{
@@ -476,7 +610,16 @@ export function FollowUpReader({ open, onClose, question, origin, index, total }
           from { transform: translate3d(var(--fu-lane-from, 24px), 0, 0); opacity: 0; }
           to   { transform: translate3d(0, 0, 0); opacity: 1; }
         }
+        @keyframes fu-q-in-right {
+          from { transform: translateX(40px); opacity: 0; }
+          to   { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fu-q-in-left {
+          from { transform: translateX(-40px); opacity: 0; }
+          to   { transform: translateX(0); opacity: 1; }
+        }
       `}</style>
+
     </div>
   );
 }

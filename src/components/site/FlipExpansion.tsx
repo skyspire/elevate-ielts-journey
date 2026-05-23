@@ -58,11 +58,10 @@ export function FlipExpansion({
   // Follow-up reader — opened when the user taps a follow-up card. Holds the
   // clicked question + the click coordinates (used as the burst origin).
   const [followUpReader, setFollowUpReader] = useState<{
-    question: { id: string; title: string };
-    origin: { x: number; y: number };
     index: number;
-    total: number;
+    origin: { x: number; y: number };
   } | null>(null);
+
 
   const isCue = isCueCardCategory(categoryId);
   const questions = getSpeakingQuestions(categoryId, topic.id);
@@ -325,9 +324,10 @@ export function FlipExpansion({
                 followUps={followUps}
                 accentText={accentText}
                 accentChip={accentChip}
-                onOpenFollowUp={(question, origin, index, total) =>
-                  setFollowUpReader({ question, origin, index, total })
+                onOpenFollowUp={(_question, origin, index) =>
+                  setFollowUpReader({ index: index - 1, origin })
                 }
+
               />
             ) : (
               <CompactPanel
@@ -357,12 +357,15 @@ export function FlipExpansion({
         <FollowUpReader
           open={Boolean(followUpReader)}
           onClose={() => setFollowUpReader(null)}
-          question={followUpReader.question}
+          questions={followUps.map((q) => ({ id: q.id, title: q.title }))}
+          currentIndex={followUpReader.index}
+          onIndexChange={(i) =>
+            setFollowUpReader((prev) => (prev ? { ...prev, index: i } : prev))
+          }
           origin={followUpReader.origin}
-          index={followUpReader.index}
-          total={followUpReader.total}
         />
       )}
+
     </div>,
     document.body,
   );
