@@ -57,6 +57,9 @@ export function FollowUpReader({
   const [qAnim, setQAnim] = useState<"idle" | "out-left" | "out-right" | "in-left" | "in-right">("idle");
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const navigate = useNavigate();
+  const [navOpen, setNavOpen] = useState(false);
+
 
   // Reset variant index when question changes
   useEffect(() => {
