@@ -170,8 +170,8 @@ function WritingSamplesPage() {
   // Module-tinted page + ambient gradient — swaps with Academic ⇄ General.
   return (
     <div className="relative min-h-screen transition-colors duration-700" style={{ backgroundColor: "#D8B4C8" }}>
-      {/* Full-page silk gradient — academic = blue, general = green */}
-      <TopTypeGradient variant={module} />
+      {/* Bold solid page background */}
+
 
       {/* Top bar */}
       <header
