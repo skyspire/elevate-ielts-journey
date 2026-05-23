@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ChevronLeft, ChevronRight, GraduationCap } from "lucide-react";
+import { X } from "lucide-react";
 import {
   getSpeakingModelAnswer,
   type SpeakingAnswerVariant,
 } from "@/data/speaking-model-answers";
-import { StudyPaperBackground, Highlight, annotateText } from "./StudyPaper";
+import { Highlight, annotateText } from "./StudyPaper";
+
 
 /**
  * FollowUpReader — full-screen reader for examiner follow-up questions.
