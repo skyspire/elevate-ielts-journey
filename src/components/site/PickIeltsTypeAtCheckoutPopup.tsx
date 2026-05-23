@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { GraduationCap, Briefcase, X, Check, Sparkles, ArrowRight } from "lucide-react";
+import { GraduationCap, Briefcase, X, Check, ArrowRight } from "lucide-react";
 import { addPurchasedType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
@@ -22,6 +22,7 @@ const CARDS: {
   tag: string;
   icon: typeof GraduationCap;
   accent: string;
+  accentDark: string;
   bullets: string[];
 }[] = [
   {
@@ -29,7 +30,8 @@ const CARDS: {
     name: "Academic",
     tag: "University & professional registration",
     icon: GraduationCap,
-    accent: "oklch(0.55 0.2 255)",
+    accent: "oklch(0.58 0.2 255)",
+    accentDark: "oklch(0.42 0.21 265)",
     bullets: ["Writing T1 charts & graphs", "Academic reading", "Academic ebooks & samples"],
   },
   {
@@ -37,7 +39,8 @@ const CARDS: {
     name: "General Training",
     tag: "Migration, work & secondary ed",
     icon: Briefcase,
-    accent: "oklch(0.6 0.18 30)",
+    accent: "oklch(0.6 0.22 25)",
+    accentDark: "oklch(0.45 0.22 25)",
     bullets: ["Writing T1 letters", "Workplace / everyday reading", "General ebooks & samples"],
   },
 ];
@@ -108,25 +111,12 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
           <X className="h-4 w-4" />
         </button>
 
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4" style={{ color: "oklch(0.55 0.18 30)" }} strokeWidth={2.5} />
-          <span
-            className="text-[11px] font-extrabold uppercase tracking-wider"
-            style={{ color: "oklch(0.55 0.18 30)" }}
-          >
-            {cycleLabel ? `One last step · ${cycleLabel}` : "One last step"}
-          </span>
-        </div>
-
         <h2
           id="pick-type-title"
-          className="mt-2 font-display text-xl font-extrabold leading-tight tracking-tight text-foreground sm:text-2xl"
+          className="mt-2 font-display text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl"
         >
-          Which IELTS are you preparing for?
+          Select Your IELTS
         </h2>
-        <p className="mt-1.5 text-[13px] font-medium text-muted-foreground sm:text-sm">
-          Pick one. To access both later, you'll need to subscribe a second time for the other type.
-        </p>
 
         {!user && (
           <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] font-semibold text-amber-800">
@@ -136,7 +126,7 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
           </div>
         )}
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {CARDS.map((card) => {
             const Icon = card.icon;
             const isActive = selected === card.key;
@@ -146,46 +136,46 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
                 type="button"
                 onClick={() => setSelected(card.key)}
                 aria-pressed={isActive}
-                className="group relative overflow-hidden rounded-2xl border-2 p-4 text-left transition-all"
+                className="group relative overflow-hidden rounded-2xl p-5 text-left text-white transition-all"
                 style={{
-                  borderColor: isActive ? card.accent : "oklch(0.9 0.01 250)",
-                  background: isActive
-                    ? `linear-gradient(140deg, color-mix(in oklab, ${card.accent} 10%, white), color-mix(in oklab, ${card.accent} 18%, white))`
-                    : "white",
+                  background: `linear-gradient(150deg, ${card.accent}, ${card.accentDark})`,
                   boxShadow: isActive
-                    ? `0 14px 30px -10px ${card.accent}66`
-                    : "0 1px 0 oklch(0.9 0.01 250)",
+                    ? `0 18px 36px -12px ${card.accent}, 0 0 0 3px white, 0 0 0 5px ${card.accent}`
+                    : `0 10px 24px -12px ${card.accent}aa`,
                   transform: isActive ? "translateY(-2px)" : "none",
                 }}
               >
+                {/* Soft glow blob */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-30 blur-2xl"
+                  style={{ background: "white" }}
+                />
+
                 {isActive && (
                   <span
-                    className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full text-white"
-                    style={{ background: card.accent }}
+                    className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white"
+                    style={{ color: card.accentDark }}
                   >
-                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    <Check className="h-4 w-4" strokeWidth={3.2} />
                   </span>
                 )}
 
                 <span
-                  className="flex h-11 w-11 items-center justify-center rounded-xl"
-                  style={{
-                    background: `linear-gradient(140deg, ${card.accent}, color-mix(in oklab, ${card.accent} 65%, black))`,
-                    boxShadow: `0 8px 18px -6px ${card.accent}80, inset 0 1px 0 oklch(1 0 0 / 0.4)`,
-                  }}
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm ring-1 ring-white/40"
                 >
-                  <Icon className="h-5 w-5 text-white" strokeWidth={2.4} />
+                  <Icon className="h-6 w-6 text-white" strokeWidth={2.4} />
                 </span>
 
-                <div className="mt-3 font-display text-lg font-black tracking-tight text-foreground">
+                <div className="mt-4 font-display text-xl font-black tracking-tight text-white">
                   {card.name}
                 </div>
-                <div className="text-[11px] font-semibold text-muted-foreground">{card.tag}</div>
+                <div className="text-[12px] font-semibold text-white/85">{card.tag}</div>
 
-                <ul className="mt-3 space-y-1 text-[12px] font-semibold text-foreground">
+                <ul className="mt-3 space-y-1.5 text-[12.5px] font-semibold text-white/95">
                   {card.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-1.5">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: card.accent }} />
+                    <li key={b} className="flex items-start gap-2">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" strokeWidth={3} />
                       <span>{b}</span>
                     </li>
                   ))}
