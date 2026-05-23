@@ -103,8 +103,10 @@ export function SpeakingSampleModal({
     if (!mounted) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("popup-open");
     return () => {
       document.body.style.overflow = prev;
+      document.body.classList.remove("popup-open");
     };
   }, [mounted]);
 
