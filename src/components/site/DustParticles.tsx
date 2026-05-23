@@ -1,17 +1,14 @@
 /**
- * DustParticles — ambient rising dust layer rendered behind popup content.
+ * DustParticles — ambient micro-dust layer rendered behind popup content.
  *
- * Mixed-size particles with depth-of-field blur on the larger ones for a
- * cinematic parallax feel. Emits sparsely from the bottom edge and drifts
- * upward with gentle horizontal sway.
- *
- * Usage: place inside a fullscreen popup container with `position: absolute`
- * or `fixed`, after the backdrop and BEFORE the content card so particles
- * appear behind the popup card but above the dimmed backdrop.
+ * Spawns in a frame around the popup card: top strip, bottom strip, and
+ * left/right gutters. Never behind the card itself. Tiny sizes (1–3px with
+ * occasional 5px accents) at very low opacity (~15–35%) for a barely-there
+ * shimmer. Particles drift slowly away from the card edges.
  */
 export function DustParticles({
   visible = true,
-  count = 25,
+  count = 40,
 }: {
   visible?: boolean;
   count?: number;
@@ -24,44 +21,69 @@ export function DustParticles({
     >
       <style>{`
         @keyframes dustParticleFloat {
-          0%   { transform: translate3d(0, 0vh, 0); opacity: 0; }
-          14%  { opacity: var(--dust-op, 0.6); }
-          88%  { opacity: var(--dust-op, 0.6); }
-          100% { transform: translate3d(var(--dust-dx, 0px), -120vh, 0); opacity: 0; }
+          0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+          18%  { opacity: var(--dust-op, 0.25); }
+          85%  { opacity: var(--dust-op, 0.25); }
+          100% { transform: translate3d(var(--dust-dx, 0px), var(--dust-dy, -40vh), 0); opacity: 0; }
         }
       `}</style>
       {Array.from({ length: count }).map((_, i) => {
         const seed = (n: number) => (Math.sin(i * 12.9898 + n) + 1) / 2;
-        // Mixed sizes: 2px tiny → 14px large foreground motes
-        const size = 2 + seed(1) * 12;
-        // Constrain to left/right gutters only — none behind the popup card
-        const isLeft = i % 2 === 0;
-        const left = isLeft ? seed(2) * 11 : 89 + seed(2) * 11; // 0–11% or 89–100%
-        const dur = 26 + seed(3) * 30; // 26–56s slow drift
-        const delay = -seed(4) * dur;
-        // Horizontal drift biased toward the edge (don't drift into card area)
-        const dx = (seed(5) * 60 + 20) * (isLeft ? -1 : 1);
-        const opacity = 0.5 + seed(6) * 0.45;
-        // Depth-of-field: larger particles get more blur (closer/out-of-focus)
-        const blur = size > 9 ? 2.2 : size > 6 ? 1.1 : 0.3;
-        // Emit from bottom edge: stagger starting Y between 92–108vh
-        const startY = 92 + seed(7) * 16;
+        // Micro mix: mostly 1–3px, occasional 5px accent
+        const isAccent = seed(0) > 0.85;
+        const size = isAccent ? 4 + seed(1) * 1.5 : 1 + seed(1) * 2;
+        // Zone: 0=top, 1=bottom, 2=left gutter, 3=right gutter
+        const zone = i % 4;
+        let top = 0;
+        let left = 0;
+        let dx = 0;
+        let dy = 0;
+        if (zone === 0) {
+          // Top margin strip
+          top = seed(2) * 11;
+          left = seed(3) * 100;
+          dx = (seed(4) - 0.5) * 60;
+          dy = -25 - seed(5) * 20;
+        } else if (zone === 1) {
+          // Bottom margin strip — drift downward and out
+          top = 89 + seed(2) * 11;
+          left = seed(3) * 100;
+          dx = (seed(4) - 0.5) * 60;
+          dy = 25 + seed(5) * 25;
+        } else if (zone === 2) {
+          // Left gutter
+          top = 12 + seed(2) * 76;
+          left = seed(3) * 11;
+          dx = -(seed(4) * 50 + 15);
+          dy = -(seed(5) * 30 + 10);
+        } else {
+          // Right gutter
+          top = 12 + seed(2) * 76;
+          left = 89 + seed(3) * 11;
+          dx = seed(4) * 50 + 15;
+          dy = -(seed(5) * 30 + 10);
+        }
+        const dur = 22 + seed(6) * 26; // 22–48s slow drift
+        const delay = -seed(7) * dur;
+        // Very faint: 0.15–0.35
+        const opacity = 0.15 + seed(8) * 0.2;
+        const blur = isAccent ? 0.8 : 0.2;
         return (
           <span
             key={i}
             style={{
               position: "absolute",
-              top: `${startY}vh`,
+              top: `${top}vh`,
               left: `${left}%`,
               width: size,
               height: size,
               borderRadius: "9999px",
-              backgroundColor: "rgba(255,255,255,0.95)",
-              boxShadow:
-                "0 0 10px rgba(255,255,255,0.6), 0 0 20px rgba(191,219,254,0.3)",
+              backgroundColor: "rgba(255,255,255,0.9)",
+              boxShadow: "0 0 4px rgba(255,255,255,0.4)",
               filter: `blur(${blur}px)`,
               ["--dust-op" as never]: String(opacity),
               ["--dust-dx" as never]: `${dx}px`,
+              ["--dust-dy" as never]: `${dy}vh`,
               animation: `dustParticleFloat ${dur}s linear ${delay}s infinite`,
               willChange: "transform, opacity",
             }}
