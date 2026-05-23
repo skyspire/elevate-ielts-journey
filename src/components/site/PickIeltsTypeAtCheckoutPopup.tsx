@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { GraduationCap, Briefcase, X, Check, Sparkles, ArrowRight } from "lucide-react";
+import { GraduationCap, Briefcase, X, Check, ArrowRight } from "lucide-react";
 import { addPurchasedType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
