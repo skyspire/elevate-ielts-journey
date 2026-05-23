@@ -44,6 +44,7 @@ export function SpeakingSampleModal({
   const [variant, setVariant] = useState(0);
   const [laneIn, setLaneIn] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
+  const [phase, setPhase] = useState<"title" | "answer">("title");
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const isCue = isCueCardCategory(categoryId);
