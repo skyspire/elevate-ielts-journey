@@ -549,14 +549,6 @@ export function FollowUpReader({
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-white/90 transition hover:bg-white/15 hover:text-white sm:right-4 sm:top-4"
-          >
-            <X className="h-4 w-4" strokeWidth={2.4} />
-          </button>
         </div>
 
 
