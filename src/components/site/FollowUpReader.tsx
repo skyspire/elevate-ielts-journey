@@ -422,8 +422,10 @@ export function FollowUpReader({
               </button>
             </div>
           </div>
+          </>
         );
       })()}
+
 
       {/* Glass sheet */}
       <div
