@@ -409,23 +409,31 @@ export function FollowUpReader({
                     aria-selected={isActive}
                     aria-label={`Question ${i + 1}: ${q.title}`}
                     onClick={() => goToQuestion(i)}
-                    className="group inline-flex items-center justify-center rounded-full p-1.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="inline-flex items-center justify-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-full"
+                    style={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: 999,
+                      backgroundColor: isActive ? "#ffffff" : "transparent",
+                      color: isActive ? activeBar : "rgba(255,255,255,0.75)",
+                      fontFamily:
+                        '"Nunito", "Quicksand", ui-rounded, system-ui, sans-serif',
+                      fontWeight: 800,
+                      fontSize: 12,
+                      lineHeight: 1,
+                      letterSpacing: 0,
+                      boxShadow: isActive
+                        ? "0 2px 8px rgba(0,0,0,0.18)"
+                        : "none",
+                      transition:
+                        "background-color 220ms ease, color 220ms ease, box-shadow 220ms ease",
+                    }}
                   >
-                    <span
-                      style={{
-                        display: "block",
-                        width: isActive ? 22 : 7,
-                        height: 7,
-                        borderRadius: 999,
-                        backgroundColor: isActive
-                          ? "#ffffff"
-                          : "rgba(255,255,255,0.45)",
-                        transition: "width 220ms ease, background-color 220ms ease",
-                      }}
-                    />
+                    {i + 1}
                   </button>
                 );
               })}
+
             </div>
           )}
 
