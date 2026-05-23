@@ -321,6 +321,7 @@ export function FollowUpReader({
 
       {/* Ambient dust particles rising from bottom (behind popup card) */}
       <DustParticles visible={visible} />
+      <SparkleShimmer visible={visible} />
 
 
       {/* Floating radial nav — top-right, outside the popup card */}
