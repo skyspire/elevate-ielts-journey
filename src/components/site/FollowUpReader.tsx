@@ -169,8 +169,9 @@ export function FollowUpReader({
   }, [fullBody]);
 
   // ── Ocean ladder palette — cohesive with SpeakingSampleModal ─────────
-  const BAND_COLORS = ["#0f766e", "#1d4ed8", "#312e81"];
-  const BAND_BAR_COLORS = ["#0a534d", "#1e3a8a", "#1e1b5e"];
+  const BAND_COLORS = ["#155e75", "#5b21b6", "#9f1239"];
+  const BAND_BAR_COLORS = ["#0e4a5e", "#4c1d95", "#7f1130"];
+
   const BAND_SHADOW_COLORS = [
     "rgba(6, 60, 56, 0.7)",
     "rgba(15, 36, 110, 0.7)",
