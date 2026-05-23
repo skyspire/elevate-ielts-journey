@@ -539,21 +539,27 @@ export function SpeakingSampleModal({
                           const rect = (
                             e.currentTarget as HTMLElement
                           ).getBoundingClientRect();
-                          setFollowUpReader({
-                            index: i,
-                            origin: {
-                              x: rect.left + rect.width / 2,
-                              y: rect.top + rect.height / 2,
-                            },
-                          });
-
+                          const origin = {
+                            x: rect.left + rect.width / 2,
+                            y: rect.top + rect.height / 2,
+                          };
+                          setPressedFollowUpId(q.id);
+                          // Hold pressed state ~250ms, then release over 500ms before opening
+                          window.setTimeout(() => {
+                            setPressedFollowUpId(null);
+                            window.setTimeout(() => {
+                              setFollowUpReader({ index: i, origin });
+                            }, 500);
+                          }, 250);
                         }}
-                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:brightness-105 hover:shadow-md active:scale-[0.95] active:brightness-95 active:shadow-sm motion-reduce:active:scale-100"
+                        data-pressed={pressedFollowUpId === q.id || undefined}
+                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:brightness-105 hover:shadow-md data-[pressed]:scale-[0.93] data-[pressed]:brightness-90 data-[pressed]:shadow-sm motion-reduce:data-[pressed]:scale-100"
                         style={{
                           backgroundColor: p.bg,
                           color: p.ink,
                           transformOrigin: "center",
-                          transition: "transform 350ms cubic-bezier(0.22, 1, 0.36, 1), filter 350ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+                          transition:
+                            "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), filter 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)",
                         }}
                       >
                         <div
