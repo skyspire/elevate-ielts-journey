@@ -525,13 +525,13 @@ export function SpeakingSampleModal({
                 </div>
                 <ul className="grid gap-2.5">
                   {followUps.map((q, i) => {
-                    // Cycle through a deep, eye-friendly trio per follow-up
-                    const ANSWER_PALETTE = ["#1e3a8a", "#065f46", "#7c2d12"];
-                    const activeColor = ANSWER_PALETTE[i % ANSWER_PALETTE.length];
+                    // Uniform pastel tint of the active band tab color
+                    const activeColor = BAND_COLORS[variant];
                     const p = {
                       bg: `${activeColor}1f`,   // ~12% tint
-                      ink: activeColor,          // deep shade for text
+                      ink: BAND_BAR_COLORS[variant], // deep band shade for text
                     };
+
 
 
                     return (
