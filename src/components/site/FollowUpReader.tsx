@@ -563,7 +563,7 @@ export function FollowUpReader({
         {/* Scrollable answer body — supports horizontal swipe between questions */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-5 py-6 sm:px-10 sm:py-9"
+          className="flex-1 overflow-y-auto px-6 py-8 sm:px-12 sm:py-12"
           onTouchStart={(e) => {
             const t = e.touches[0];
             touchRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
@@ -603,75 +603,31 @@ export function FollowUpReader({
             }}
             key={`a-${currentIndex}`}
           >
-
-            <div
-              className="mx-auto max-w-[680px]"
-              style={{
-                color: INK_SOFT,
-                fontFamily:
-                  '"Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
-                fontSize: "clamp(16px, 1.5vw, 18px)",
-                lineHeight: 1.72,
-                fontWeight: 450,
-              }}
-            >
-              <p>
-                <Highlight tone="amber">
-                  <span
-                    style={{
-                      color: INK,
-                      fontWeight: 700,
-                      fontSize: "1.06em",
-                      letterSpacing: "-0.005em",
-                    }}
-                  >
-                    {openingPhrase}
-                  </span>
-                </Highlight>
-                {bodyBeforePullQuote && <span> {annotateText(bodyBeforePullQuote)}</span>}
-              </p>
-
-              {pullQuote && (
-                <figure
-                  className="my-7 flex flex-col items-center text-center"
-                  aria-label="Pull quote"
-                >
-                  <span
-                    aria-hidden
-                    style={{
-                      width: 44,
-                      height: 3,
-                      borderRadius: 999,
-                      backgroundColor: activeBand,
-                      marginBottom: 14,
-                    }}
-                  />
-                  <blockquote
-                    style={{
-                      color: INK,
-                      fontFamily: '"Poppins", "Inter", sans-serif',
-                      fontWeight: 700,
-                      fontSize: "clamp(18px, 2vw, 22px)",
-                      lineHeight: 1.35,
-                      letterSpacing: "-0.012em",
-                      maxWidth: 560,
-                    }}
-                  >
-                    <span aria-hidden style={{ opacity: 0.4, marginRight: "0.1em" }}>
-                      “
-                    </span>
-                    {pullQuote.replace(/^["“”]|["“”]$/g, "")}
-                    <span aria-hidden style={{ opacity: 0.4, marginLeft: "0.05em" }}>
-                      ”
-                    </span>
-                  </blockquote>
-                </figure>
-              )}
-
-              {bodyAfterPullQuote && <p>{annotateText(bodyAfterPullQuote)}</p>}
+            <div className="mx-auto max-w-[640px]">
+              {currentVariant.sections.map((s, i) => (
+                <div key={i} className="mb-8 last:mb-2">
+                  {s.heading && (
+                    <h3
+                      className="mb-3 text-[17px] font-bold leading-snug sm:text-[18px]"
+                      style={{
+                        fontFamily:
+                          '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
+                        color: activeBand,
+                        letterSpacing: "-0.005em",
+                      }}
+                    >
+                      {s.heading}
+                    </h3>
+                  )}
+                  <p className="text-[15.5px] leading-[1.8] text-foreground/85 sm:text-[16.5px]">
+                    {s.body}
+                  </p>
+                </div>
+              ))}
             </div>
           </article>
         </div>
+
 
         {/* Footer tabs — band-coloured strip */}
         {variants.length > 1 && (
