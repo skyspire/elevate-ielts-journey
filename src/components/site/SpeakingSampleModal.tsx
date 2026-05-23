@@ -94,9 +94,10 @@ export function SpeakingSampleModal({
     if (open) {
       setVariant(0);
       setLaneIn(true);
+      setPhase(isCue ? "title" : "answer");
       if (scrollRef.current) scrollRef.current.scrollTop = 0;
     }
-  }, [open]);
+  }, [open, isCue]);
 
   useEffect(() => {
     if (!mounted) return;
