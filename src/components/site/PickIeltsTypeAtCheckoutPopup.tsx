@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePopupActive } from "@/hooks/use-popup-active";
-import { X, Check, ArrowRight } from "lucide-react";
+import { X } from "lucide-react";
 import { addPurchasedType, type IeltsPlanType } from "@/lib/ielts-type";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { Link } from "@tanstack/react-router";
@@ -8,45 +8,19 @@ import { toast } from "sonner";
 
 type SingleType = "academic" | "general";
 
-const PREVIEW_IMAGES: Record<SingleType, string> = {
-  academic: "/picker-options/picker_academic_3d.jpg",
-  general: "/picker-options/picker_general_3d.jpg",
-};
+const OPTIONS: { key: SingleType; name: string; image: string }[] = [
+  { key: "academic", name: "Academic", image: "/picker-options/picker_academic_3d.jpg" },
+  { key: "general", name: "General Training", image: "/picker-options/picker_general_3d.jpg" },
+];
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  /** Description of the cycle the user clicked on, e.g. "Monthly · $14 CAD". */
   cycleLabel?: string;
   onConfirmed?: (plan: IeltsPlanType) => void;
 };
 
-const CARDS: {
-  key: SingleType;
-  name: string;
-  accent: string;
-  accentDark: string;
-}[] = [
-  {
-    key: "academic",
-    name: "Academic",
-    accent: "oklch(0.58 0.2 255)",
-    accentDark: "oklch(0.42 0.21 265)",
-  },
-  {
-    key: "general",
-    name: "General Training",
-    accent: "oklch(0.6 0.22 25)",
-    accentDark: "oklch(0.45 0.22 25)",
-  },
-];
-
-/**
- * Bottom-sheet picker shown when a user clicks Subscribe on a plan.
- * User must explicitly pick Academic or General — no pre-selection, no "both".
- * To access both types they must subscribe a second time.
- */
-export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConfirmed }: Props) {
+export function PickIeltsTypeAtCheckoutPopup({ open, onClose, onConfirmed }: Props) {
   usePopupActive(open);
   const { user } = useLearnerSession();
   const [selected, setSelected] = useState<SingleType | null>(null);
@@ -82,117 +56,95 @@ export function PickIeltsTypeAtCheckoutPopup({ open, onClose, cycleLabel, onConf
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-end justify-center"
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-[#1a0b2e] p-6 animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="pick-type-title"
     >
-      <button
-        type="button"
-        aria-label="Close"
-        onClick={onClose}
-        className="absolute inset-0 cursor-pointer bg-black/65 backdrop-blur-md animate-in fade-in duration-200"
+      {/* Ambient glows */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-purple-600/20 blur-[120px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-amber-500/10 blur-[120px]"
       />
 
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-t-3xl bg-card p-5 shadow-2xl animate-in slide-in-from-bottom duration-300 sm:p-7">
-        {/* Grab handle */}
-        <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-muted-foreground/25" />
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute right-5 top-5 z-10 rounded-full bg-white/5 p-2 text-white/70 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
+      >
+        <X className="h-5 w-5" />
+      </button>
 
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-4 top-4 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        <h2
+      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-10 md:gap-14">
+        <h1
           id="pick-type-title"
-          className="mt-2 font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl"
+          className="text-center font-display text-4xl font-extrabold tracking-tight text-white md:text-5xl"
         >
-          Select Your IELTS
-        </h2>
+          Choose your{" "}
+          <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">
+            IELTS
+          </span>
+        </h1>
 
         {!user && (
-          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">
+          <div className="w-full max-w-md rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-center text-sm font-semibold text-amber-100">
             You need an account to subscribe.{" "}
             <Link to="/signup" onClick={onClose} className="underline">Sign up</Link> or{" "}
-            <Link to="/login" onClick={onClose} className="underline">log in</Link> first.
+            <Link to="/login" onClick={onClose} className="underline">log in</Link>.
           </div>
         )}
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          {CARDS.map((card) => {
-            const isActive = selected === card.key;
-            const imageSrc = PREVIEW_IMAGES[card.key];
+        <div className="grid w-full max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+          {OPTIONS.map((opt) => {
+            const isActive = selected === opt.key;
             return (
               <button
-                key={card.key}
+                key={opt.key}
                 type="button"
-                onClick={() => setSelected(card.key)}
+                onClick={() => setSelected(opt.key)}
                 aria-pressed={isActive}
-                className="group relative overflow-hidden rounded-2xl p-4 text-left text-white transition-all"
-                style={{
-                  background: `linear-gradient(150deg, ${card.accent}, ${card.accentDark})`,
-                  boxShadow: isActive
-                    ? `0 18px 36px -12px ${card.accent}, 0 0 0 3px white, 0 0 0 5px ${card.accent}`
-                    : `0 10px 24px -12px ${card.accent}aa`,
-                  transform: isActive ? "translateY(-2px)" : "none",
-                }}
+                className={[
+                  "group relative block h-full cursor-pointer rounded-[2.5rem] border-2 bg-white/5 p-6 backdrop-blur-2xl transition-all duration-300 md:p-8",
+                  isActive
+                    ? "scale-[1.02] border-amber-400 bg-white/10 shadow-[0_0_50px_rgba(251,191,36,0.18)]"
+                    : "border-white/10 hover:border-white/25 hover:bg-white/[0.08]",
+                ].join(" ")}
               >
-                {/* Soft glow blob */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-30 blur-2xl"
-                  style={{ background: "white" }}
-                />
-
-                {isActive && (
-                  <span
-                    className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white"
-                    style={{ color: card.accentDark }}
-                  >
-                    <Check className="h-4 w-4" strokeWidth={3.2} />
-                  </span>
-                )}
-
-                <img
-                  src={imageSrc}
-                  alt={`${card.name} IELTS preview`}
-                  className="relative z-0 aspect-[4/3] w-full rounded-2xl bg-white/95 object-cover p-1.5 shadow-lg ring-1 ring-white/35"
-                  loading="eager"
-                />
-
-                <div className="mt-4 font-display text-2xl font-black tracking-tight text-white sm:text-3xl">
-                  {card.name}
+                <div className="mb-6 aspect-square w-full overflow-hidden rounded-3xl">
+                  <img
+                    src={opt.image}
+                    alt={`${opt.name} IELTS`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="eager"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="mb-2 font-display text-2xl font-bold text-white">{opt.name}</h3>
+                  <div
+                    className={[
+                      "mx-auto h-1.5 w-10 rounded-full bg-amber-400 transition-opacity",
+                      isActive ? "opacity-100" : "opacity-0",
+                    ].join(" ")}
+                  />
                 </div>
               </button>
             );
           })}
         </div>
 
-        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-center text-xs font-semibold text-muted-foreground sm:text-left sm:text-sm">
-            One IELTS type per subscription. Subscribe again to add the other.
-          </p>
+        <div className="w-full max-w-sm">
           <button
             type="button"
             onClick={confirm}
             disabled={!selected || !user}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-base font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-            style={{
-              background: selected
-                ? `linear-gradient(140deg, ${
-                    CARDS.find((c) => c.key === selected)!.accent
-                  }, color-mix(in oklab, ${CARDS.find((c) => c.key === selected)!.accent} 65%, black))`
-                : "oklch(0.45 0.02 250)",
-              boxShadow: selected
-                ? `0 10px 22px -8px ${CARDS.find((c) => c.key === selected)!.accent}80`
-                : undefined,
-            }}
+            className="w-full cursor-pointer rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-5 text-xl font-extrabold text-[#1a0b2e] shadow-[0_10px_40px_-10px_rgba(251,191,36,0.5)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_50px_-5px_rgba(251,191,36,0.6)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-[0_10px_40px_-10px_rgba(251,191,36,0.3)]"
           >
-            Continue <ArrowRight className="h-4 w-4" strokeWidth={2.6} />
+            Continue
           </button>
         </div>
       </div>
