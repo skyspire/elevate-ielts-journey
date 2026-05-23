@@ -260,7 +260,7 @@ export function SpeakingSampleModal({
               setPhase("answer");
             }
           }}
-          className="group relative flex w-full max-w-[420px] cursor-pointer flex-col items-center justify-center overflow-hidden px-8 py-16 text-center transition-shadow duration-700 sm:max-w-[760px] sm:px-16 sm:py-20 lg:max-w-[920px] lg:px-20 lg:py-24"
+          className="group relative flex min-h-[78vh] w-full max-w-[420px] cursor-pointer flex-col items-center justify-center overflow-hidden px-8 py-16 text-center transition-shadow duration-700 sm:min-h-0 sm:max-w-[760px] sm:px-16 sm:py-20 lg:max-w-[920px] lg:px-20 lg:py-24"
           style={{
             maxHeight: "92vh",
             background:
