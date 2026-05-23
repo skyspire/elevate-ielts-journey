@@ -26,6 +26,7 @@ type Props = {
  * Uses the homepage pricing plans (CMS-driven). Bottom sheet on mobile, modal on desktop.
  */
 export function UpsellPopup({ open, onClose, countdown }: Props) {
+  usePopupActive(open);
   const isMobile = useIsMobile();
   const { plans } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
   const [currency, setCurrency] = useState<CurrencyCode>("INR");
