@@ -30,6 +30,7 @@ export function WritingTask1Modal({
   answer,
   chart,
 }: WritingTask1ModalProps) {
+  usePopupActive(open);
   const [mounted, setMounted] = useState(open);
   const [visible, setVisible] = useState(false);
   const [variant, setVariant] = useState(0);
