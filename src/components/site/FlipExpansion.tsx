@@ -357,12 +357,15 @@ export function FlipExpansion({
         <FollowUpReader
           open={Boolean(followUpReader)}
           onClose={() => setFollowUpReader(null)}
-          question={followUpReader.question}
+          questions={followUps.map((q) => ({ id: q.id, title: q.title }))}
+          currentIndex={followUpReader.index}
+          onIndexChange={(i) =>
+            setFollowUpReader((prev) => (prev ? { ...prev, index: i } : prev))
+          }
           origin={followUpReader.origin}
-          index={followUpReader.index}
-          total={followUpReader.total}
         />
       )}
+
     </div>,
     document.body,
   );
