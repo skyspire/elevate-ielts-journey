@@ -553,16 +553,15 @@ export function SpeakingSampleModal({
                           }, 250);
                         }}
                         data-pressed={pressedFollowUpId === q.id || undefined}
-                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:brightness-105 hover:shadow-md data-[pressed]:scale-[0.97] data-[pressed]:shadow-sm motion-reduce:data-[pressed]:scale-100"
+                        className="group relative flex w-full items-stretch overflow-hidden rounded-xl text-left hover:brightness-105 hover:shadow-md"
                         style={{
                           backgroundColor:
                             pressedFollowUpId === q.id
                               ? `${activeColor}59` /* ~35% tint */
                               : p.bg,
                           color: p.ink,
-                          transformOrigin: "center",
                           transition:
-                            "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), background-color 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            "background-color 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)",
                         }}
                       >
                         <div
