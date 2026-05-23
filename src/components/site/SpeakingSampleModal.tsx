@@ -269,48 +269,21 @@ export function SpeakingSampleModal({
               "0 0 0 1px rgba(255,255,255,0.4), 0 30px 80px -20px rgba(8,10,20,0.55), 0 12px 40px -12px rgba(8,10,20,0.4)",
           }}
         >
-          <div
-            aria-hidden="true"
-            style={{
-              fontFamily:
-                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(64px, 12vw, 140px)",
-              lineHeight: 0.7,
-              color: "oklch(0.45 0.17 30)",
-              opacity: 0.5,
-              marginBottom: 4,
-            }}
-          >
-            “
-          </div>
           <h2
             style={{
               fontFamily:
-                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
-              fontWeight: 400,
-              fontSize: "clamp(30px, 5.6vw, 58px)",
-              lineHeight: 1.15,
-              letterSpacing: "-0.015em",
+                'var(--font-display), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif',
+              fontWeight: 700,
+              fontSize: "clamp(28px, 5.2vw, 52px)",
+              lineHeight: 1.2,
+              letterSpacing: "-0.02em",
               maxWidth: "20ch",
-              color: "oklch(0.18 0.04 70)",
+              color: "oklch(0.20 0.01 250)",
             }}
           >
             {mainQuestion}
           </h2>
-          <div
-            aria-hidden="true"
-            style={{
-              fontFamily:
-                '"Instrument Serif", "Cormorant Garamond", Georgia, serif',
-              fontSize: "clamp(64px, 12vw, 140px)",
-              lineHeight: 0.3,
-              color: "oklch(0.45 0.17 30)",
-              opacity: 0.5,
-              marginTop: 12,
-            }}
-          >
-            ”
-          </div>
+
 
           {/* BigIELTS.com wordmark — bold serif, perfectly symmetrical */}
           <div
