@@ -181,13 +181,13 @@ export function Header() {
       className="sticky top-0 z-50 bg-white"
       style={{ borderBottom: `1px solid ${HAIRLINE}` }}
     >
-      <div className="container-page flex h-[68px] items-center justify-between gap-6">
+      <div className="container-page flex h-[160px] items-center justify-between gap-6">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img
             src={logoWheel}
             alt="BigIELTS.com"
-            style={{ height: 56 }}
+            style={{ height: 140 }}
             className="w-auto object-contain"
           />
         </Link>
