@@ -92,21 +92,15 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
         <div className="relative flex items-center justify-between">
           <Link
             to="/"
-            className="group inline-flex items-center gap-2 text-foreground"
+            className="group inline-flex items-center text-foreground"
             aria-label="BigIELTS home"
           >
-            <span
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-md"
-              style={{
-                background:
-                  "linear-gradient(135deg, oklch(0.55 0.16 255), oklch(0.5 0.17 280))",
-              }}
-            >
-              <GraduationCap className="h-5 w-5" />
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">
-              BigIELTS<span className="text-primary">.</span>
-            </span>
+            <img
+              src={brandLogo}
+              alt="BigIELTS.com"
+              style={{ height: 36 }}
+              className="w-auto object-contain"
+            />
           </Link>
           <Link
             to="/"

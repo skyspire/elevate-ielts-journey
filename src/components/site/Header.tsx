@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useBranding, LOGO_SIZE_PX } from "@/lib/admin/site-settings";
 import { FreeQuotaPill } from "@/components/site/FreeQuotaPill";
-import logoWheel from "@/assets/logo-wheel.png";
+import logoWheel from "@/assets/bigielts-logo.png";
 
 const INK = "oklch(0.20 0.01 250)";
 const INK_SOFT = "oklch(0.45 0.01 250)";
@@ -183,19 +183,13 @@ export function Header() {
     >
       <div className="container-page flex h-[68px] items-center justify-between gap-6">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5">
+        <Link to="/" className="flex items-center">
           <img
             src={logoWheel}
-            alt="BigIELTS logo"
-            style={{ height: logoPx, width: logoPx }}
-            className="object-contain"
+            alt="BigIELTS.com"
+            style={{ height: 36 }}
+            className="w-auto object-contain"
           />
-          <span
-            className="font-display text-[20px] font-extrabold tracking-tight"
-            style={{ color: INK }}
-          >
-            BigIELTS<span style={{ color: INK_SOFT, fontWeight: 600 }}>.com</span>
-          </span>
         </Link>
 
         {/* Desktop nav */}

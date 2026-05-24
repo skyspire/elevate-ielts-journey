@@ -18,16 +18,13 @@ export function Footer({ variant = "dark" }: FooterProps) {
       <div className="container-page py-16">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <div className="flex items-center gap-2">
-              <span
-                className="flex h-9 w-9 items-center justify-center rounded-xl"
-                style={{
-                  background: isLight ? "oklch(0.97 0.01 250)" : "oklch(1 0 0 / 0.10)",
-                }}
-              >
-                <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
-              </span>
-              <span className="font-display text-lg font-extrabold tracking-tight">BigIELTS.com</span>
+            <div className="flex items-center">
+              <img
+                src={brandLogo}
+                alt="BigIELTS.com"
+                style={{ height: 36 }}
+                className="w-auto object-contain"
+              />
             </div>
             <p
               className="mt-4 max-w-sm text-sm font-medium"
