@@ -124,22 +124,6 @@ type ModuleCard = {
 
 const MODULE_CARDS: ModuleCard[] = [
   {
-    id: "listening",
-    label: "Listening",
-    blurb: "Section-by-section transcripts with key-word highlights and answer rationales.",
-    meta: "Coming soon",
-    icon: Headphones,
-    comingSoon: true,
-  },
-  {
-    id: "reading",
-    label: "Reading",
-    blurb: "Passage walkthroughs with question-type strategies and worked solutions.",
-    meta: "Coming soon",
-    icon: BookOpen,
-    comingSoon: true,
-  },
-  {
     id: "writing",
     label: "Writing",
     blurb: "Task 1 & Task 2 prompts with full Band 8+ model essays and examiner notes.",
@@ -154,6 +138,22 @@ const MODULE_CARDS: ModuleCard[] = [
     meta: "300+ samples",
     icon: Mic,
     to: "/speaking-samples",
+  },
+  {
+    id: "reading",
+    label: "Reading",
+    blurb: "Passage walkthroughs with question-type strategies and worked solutions.",
+    meta: "Coming soon",
+    icon: BookOpen,
+    comingSoon: true,
+  },
+  {
+    id: "listening",
+    label: "Listening",
+    blurb: "Section-by-section transcripts with key-word highlights and answer rationales.",
+    meta: "Coming soon",
+    icon: Headphones,
+    comingSoon: true,
   },
 ];
 
