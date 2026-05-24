@@ -1,6 +1,6 @@
-import { GraduationCap } from "lucide-react";
 import { useCmsSection } from "@/lib/admin/cms-store";
 import { FOOTER_KEY, FOOTER_DEFAULT } from "@/lib/admin/defaults";
+import brandLogo from "@/assets/bigielts-logo.png";
 
 type FooterProps = {
   variant?: "dark" | "light";

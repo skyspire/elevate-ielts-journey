@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Quote, Sparkles, Globe2, BookOpen } from "lucide-react";
+import { Quote, Sparkles, Globe2, BookOpen } from "lucide-react";
 import authHero from "@/assets/auth-hero.png";
+import brandLogo from "@/assets/bigielts-logo.png";
 
 type Props = {
   title: string;
