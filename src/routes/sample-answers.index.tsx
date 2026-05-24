@@ -430,24 +430,19 @@ function ModuleTabs({
               type="button"
               onClick={() => onChange(id)}
               aria-pressed={active}
-              className="group relative flex shrink-0 items-center gap-2 pb-1 transition-all duration-200 hover:-translate-y-0.5"
-              style={{ opacity: active ? 1 : 0.5 }}
+              className="group relative flex shrink-0 cursor-pointer items-center gap-2 px-2 py-2 transition-all duration-200 hover:-translate-y-0.5 sm:px-3"
+              style={{ opacity: active ? 1 : comingSoon ? 0.35 : 0.5 }}
             >
               <span
-                className="font-display text-lg font-black tracking-tight text-foreground transition-colors duration-200 sm:text-2xl group-hover:[color:var(--tab-accent)]"
+                className="font-display text-lg font-black tracking-tight text-foreground transition-colors duration-200 group-hover:[color:var(--tab-accent)] sm:text-2xl"
                 style={{ ["--tab-accent" as any]: accent.solid, color: active ? accent.solid : undefined }}
               >
                 {label}
               </span>
-              {comingSoon ? (
-                <span className="ml-1 inline-flex items-center rounded-full bg-foreground/8 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.16em] text-foreground/55">
-                  Soon
-                </span>
-              ) : null}
               {active && (
                 <span
                   aria-hidden
-                  className="absolute -bottom-[14px] left-0 right-0 h-[3px] rounded-full"
+                  className="absolute -bottom-[12px] left-2 right-2 h-[3px] rounded-full sm:left-3 sm:right-3"
                   style={{ backgroundColor: accent.solid }}
                 />
               )}
