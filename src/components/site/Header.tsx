@@ -187,7 +187,7 @@ export function Header() {
           <img
             src={logoWheel}
             alt="BigIELTS.com"
-            style={{ height: 36 }}
+            style={{ height: 56 }}
             className="w-auto object-contain"
           />
         </Link>

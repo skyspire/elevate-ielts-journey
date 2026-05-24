@@ -99,7 +99,7 @@ export function AuthSplitLayout({ title, subtitle, children, footer }: Props) {
             <img
               src={brandLogo}
               alt="BigIELTS.com"
-              style={{ height: 36 }}
+              style={{ height: 56 }}
               className="w-auto object-contain"
             />
           </Link>
