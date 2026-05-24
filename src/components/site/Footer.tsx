@@ -22,7 +22,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
               <img
                 src={brandLogo}
                 alt="BigIELTS.com"
-                style={{ height: 56 }}
+                style={{ height: 140 }}
                 className="w-auto object-contain"
               />
             </div>
