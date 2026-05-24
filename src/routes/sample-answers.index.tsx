@@ -124,22 +124,6 @@ type ModuleCard = {
 
 const MODULE_CARDS: ModuleCard[] = [
   {
-    id: "listening",
-    label: "Listening",
-    blurb: "Section-by-section transcripts with key-word highlights and answer rationales.",
-    meta: "Coming soon",
-    icon: Headphones,
-    comingSoon: true,
-  },
-  {
-    id: "reading",
-    label: "Reading",
-    blurb: "Passage walkthroughs with question-type strategies and worked solutions.",
-    meta: "Coming soon",
-    icon: BookOpen,
-    comingSoon: true,
-  },
-  {
     id: "writing",
     label: "Writing",
     blurb: "Task 1 & Task 2 prompts with full Band 8+ model essays and examiner notes.",
@@ -154,6 +138,22 @@ const MODULE_CARDS: ModuleCard[] = [
     meta: "300+ samples",
     icon: Mic,
     to: "/speaking-samples",
+  },
+  {
+    id: "reading",
+    label: "Reading",
+    blurb: "Passage walkthroughs with question-type strategies and worked solutions.",
+    meta: "Coming soon",
+    icon: BookOpen,
+    comingSoon: true,
+  },
+  {
+    id: "listening",
+    label: "Listening",
+    blurb: "Section-by-section transcripts with key-word highlights and answer rationales.",
+    meta: "Coming soon",
+    icon: Headphones,
+    comingSoon: true,
   },
 ];
 
@@ -422,7 +422,7 @@ function ModuleTabs({
   return (
     <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
       <div className="flex min-w-max items-end justify-center gap-x-7 gap-y-3 border-b border-border/70 pb-3 sm:min-w-0 sm:flex-wrap sm:gap-x-12">
-        {MODULE_CARDS.map(({ id, label, icon: Icon, comingSoon }) => {
+        {MODULE_CARDS.map(({ id, label, comingSoon }) => {
           const active = value === id;
           return (
             <button
@@ -430,15 +430,13 @@ function ModuleTabs({
               type="button"
               onClick={() => onChange(id)}
               aria-pressed={active}
-              className="group relative flex shrink-0 items-center gap-2 pb-1 transition-opacity"
+              className="group relative flex shrink-0 items-center gap-2 pb-1 transition-all duration-200 hover:-translate-y-0.5"
               style={{ opacity: active ? 1 : 0.5 }}
             >
-              <Icon
-                className="h-4 w-4 sm:h-5 sm:w-5"
-                strokeWidth={2.4}
-                style={{ color: active ? accent.solid : "currentColor" }}
-              />
-              <span className="font-display text-lg font-black tracking-tight text-foreground sm:text-2xl">
+              <span
+                className="font-display text-lg font-black tracking-tight text-foreground transition-colors duration-200 sm:text-2xl group-hover:[color:var(--tab-accent)]"
+                style={{ ["--tab-accent" as any]: accent.solid, color: active ? accent.solid : undefined }}
+              >
                 {label}
               </span>
               {comingSoon ? (
