@@ -1,4 +1,4 @@
-import { ArrowUpRight, Calendar, Lock } from "lucide-react";
+import { ArrowUpRight, Lock } from "lucide-react";
 
 type Props = {
   tag: string;
