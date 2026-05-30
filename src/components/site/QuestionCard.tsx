@@ -36,21 +36,34 @@ export function QuestionCard({
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-6">
+      {/* Floating lock badge */}
+      {locked && (
+        <div className="absolute right-4 top-20 z-10 flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-background/90 shadow-sm backdrop-blur-sm">
+          <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+        </div>
+      )}
+      {!locked && (
+        <div className="absolute right-4 top-20 z-10 flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-background/90 shadow-sm backdrop-blur-sm transition-all group-hover:bg-brand group-hover:text-brand-foreground">
+          <ArrowUpRight className="h-4 w-4" />
+        </div>
+      )}
+
+      <div className="flex flex-1 flex-col p-6 pb-8">
         <h3 className="font-display text-xl font-extrabold leading-snug tracking-tight text-foreground">
           {title}
         </h3>
+      </div>
 
-        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground">
-            <Calendar className="h-3.5 w-3.5" />
+      {/* Pastel-blue dual-tab footer */}
+      <div className="mt-auto flex w-full">
+        <div className="flex-1 border-r border-sky-200/60 bg-[#e0f2fe] py-4 text-center">
+          <span className="font-display text-[13px] font-extrabold tracking-tight text-[#0c4a6e]">
             {date}
-            <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-secondary-foreground">
-              {band}
-            </span>
-          </div>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground transition-all group-hover:bg-brand group-hover:text-brand-foreground">
-            {locked ? <Lock className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-4 w-4" />}
+          </span>
+        </div>
+        <div className="flex-1 bg-[#e0f2fe] py-4 text-center">
+          <span className="font-display text-[13px] font-extrabold tracking-tight text-[#0c4a6e]">
+            {band}
           </span>
         </div>
       </div>
