@@ -16,6 +16,7 @@ import { Route as RecentExamQuestionsRouteImport } from './routes/recent-exam-qu
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PredictionsRouteImport } from './routes/predictions'
+import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
@@ -98,6 +99,11 @@ const PricingRoute = PricingRouteImport.update({
 const PredictionsRoute = PredictionsRouteImport.update({
   id: '/predictions',
   path: '/predictions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OurStoryRoute = OurStoryRouteImport.update({
+  id: '/our-story',
+  path: '/our-story',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -356,6 +362,7 @@ export interface FileRoutesByFullPath {
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
+  '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -412,6 +419,7 @@ export interface FileRoutesByTo {
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
+  '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -470,6 +478,7 @@ export interface FileRoutesById {
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
   '/login': typeof LoginRoute
+  '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
@@ -529,6 +538,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/login'
+    | '/our-story'
     | '/predictions'
     | '/pricing'
     | '/privacy'
@@ -585,6 +595,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/login'
+    | '/our-story'
     | '/predictions'
     | '/pricing'
     | '/privacy'
@@ -642,6 +653,7 @@ export interface FileRouteTypes {
     | '/ebooks'
     | '/faq'
     | '/login'
+    | '/our-story'
     | '/predictions'
     | '/pricing'
     | '/privacy'
@@ -700,6 +712,7 @@ export interface RootRouteChildren {
   EbooksRoute: typeof EbooksRouteWithChildren
   FaqRoute: typeof FaqRoute
   LoginRoute: typeof LoginRoute
+  OurStoryRoute: typeof OurStoryRoute
   PredictionsRoute: typeof PredictionsRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -762,6 +775,13 @@ declare module '@tanstack/react-router' {
       path: '/predictions'
       fullPath: '/predictions'
       preLoaderRoute: typeof PredictionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/our-story': {
+      id: '/our-story'
+      path: '/our-story'
+      fullPath: '/our-story'
+      preLoaderRoute: typeof OurStoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1213,6 +1233,7 @@ const rootRouteChildren: RootRouteChildren = {
   EbooksRoute: EbooksRouteWithChildren,
   FaqRoute: FaqRoute,
   LoginRoute: LoginRoute,
+  OurStoryRoute: OurStoryRoute,
   PredictionsRoute: PredictionsRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
@@ -1228,12 +1249,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
