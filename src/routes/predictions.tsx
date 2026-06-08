@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
 import { TypeGate } from "@/components/site/TypeGate";
@@ -1192,6 +1193,7 @@ function PredictionsPage() {
           )}
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

@@ -15,6 +15,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { CardMotif } from "@/components/site/CardMotif";
 import { StudyNotesBackground } from "@/components/site/StudyNotesBackground";
 
@@ -423,6 +424,7 @@ function DashboardPage() {
           </p>
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

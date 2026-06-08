@@ -12,6 +12,7 @@ import {
 import { BackButton } from "@/components/site/BackButton";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 
 type Module = "academic" | "general";
 
@@ -213,6 +214,7 @@ function VocabularyPage() {
           </p>
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

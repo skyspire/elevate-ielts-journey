@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { BackButton } from "@/components/site/BackButton";
 import { UpgradeToAllAccessPopup } from "@/components/site/UpgradeToAllAccessPopup";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
@@ -396,6 +397,7 @@ function SampleAnswersHubPage() {
         </div>
       </main>
 
+      <FreeEbookCta />
       <Footer />
 
       <UpgradeToAllAccessPopup
