@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { ThinkingRetriever } from "@/components/site/ThinkingRetriever";
@@ -352,6 +353,7 @@ function WritingSamplesPage() {
         category={activeCategory.label}
         onClose={() => setOpenQ(null)}
       />
+      <FreeEbookCta />
       <Footer />
     </div>
   );

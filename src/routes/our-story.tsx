@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 
 export const Route = createFileRoute("/our-story")({
   head: () => ({
@@ -484,6 +485,7 @@ function OurStoryPage() {
         </section>
       </main>
 
+      <FreeEbookCta />
       <Footer />
     </div>
   );

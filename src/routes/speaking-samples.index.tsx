@@ -25,6 +25,7 @@ import {
 import { z } from "zod";
 import type { ComponentType } from "react";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { BackButton } from "@/components/site/BackButton";
 import { StickyTrackBar } from "@/components/site/StickyTrackBar";
 import { speakingTopicsByCategory } from "@/data/speaking-topics";
@@ -301,6 +302,7 @@ function SpeakingSamplesPage() {
         </div>
       </main>
       </div>
+      <FreeEbookCta />
       <Footer />
 
       {flipTopic && (

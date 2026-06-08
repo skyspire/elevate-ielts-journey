@@ -13,6 +13,7 @@ import { Faq } from "@/components/site/Faq";
 import { FinalCta } from "@/components/site/FinalCta";
 
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { useHomepageLayout } from "@/lib/admin/site-settings";
 
 
@@ -45,6 +46,7 @@ function Index() {
             return <Comp key={s.id} />;
           })}
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

@@ -11,6 +11,7 @@ import {
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { BackButton } from "@/components/site/BackButton";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import {
   getCategory,
   type CategoryKey,
@@ -176,6 +177,7 @@ function CategoryPage() {
           </div>
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

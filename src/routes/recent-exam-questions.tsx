@@ -7,6 +7,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { QuestionCard } from "@/components/site/QuestionCard";
 import { BackButton } from "@/components/site/BackButton";
 import { QuotaGate } from "@/components/site/QuotaGate";
@@ -393,6 +394,7 @@ function RecentExamQuestionsPage() {
 
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );

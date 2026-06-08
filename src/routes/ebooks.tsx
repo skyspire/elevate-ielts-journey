@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { Footer } from "@/components/site/Footer";
+import { FreeEbookCta } from "@/components/site/FreeEbookCta";
 import { BookOpen } from "lucide-react";
 import { type EbookCategory } from "@/data/ebooks";
 import { useEffect, useMemo, useState } from "react";
@@ -404,6 +405,7 @@ function EbooksPage() {
           })}
         </div>
       </main>
+      <FreeEbookCta />
       <Footer />
     </div>
   );
