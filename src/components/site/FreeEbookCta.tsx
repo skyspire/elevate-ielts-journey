@@ -120,79 +120,65 @@ export function FreeEbookCta({ variant = "default" }: { variant?: Variant }) {
       <div className="absolute inset-x-0 top-0 h-px" style={{ background: "oklch(0.86 0.04 195 / 0.6)" }} />
       <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: "oklch(0.86 0.04 195 / 0.6)" }} />
 
-      <div className={`container-page relative ${isCompact ? "py-12" : "py-20 md:py-24"}`}>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
-          {/* LEFT — Real flat-lay photo with a hand-scribbled note */}
-          <div className="relative flex justify-center lg:justify-start">
-            <div className="relative w-full max-w-[460px]">
-              {/* Handwritten note above photo */}
-              <div
-                className="absolute -top-6 -left-2 z-10 -rotate-[7deg] text-[1.55rem] leading-none"
-                style={{ fontFamily: HANDWRITING, color: "oklch(0.45 0.14 30)" }}
-              >
-                psst — it's actually free
-              </div>
-
-              {/* Photo card with slight tilt + soft shadow */}
-              <div
-                className="relative overflow-hidden rounded-[10px] rotate-[-1.2deg]"
-                style={{
-                  boxShadow:
-                    "0 28px 60px -28px oklch(0.35 0.06 200 / 0.45), 0 6px 14px -6px oklch(0.35 0.06 200 / 0.25)",
-                }}
-              >
-                <img
-                  src={flatlayPhoto}
-                  alt="The IELTS Band 8 Blueprint hardcover book on a warm linen flat-lay with coffee and reading glasses"
-                  loading="lazy"
-                  width={1024}
-                  height={1024}
-                  className="block h-auto w-full"
+      <div className={`relative ${isCompact ? "" : ""}`}>
+        <div className="grid items-stretch lg:grid-cols-2">
+          {/* LEFT — Full-bleed photo column, fills full section height */}
+          <div
+            className="relative min-h-[420px] overflow-hidden lg:min-h-[760px]"
+            style={{
+              background:
+                "linear-gradient(135deg, oklch(0.93 0.06 180), oklch(0.9 0.07 210))",
+            }}
+          >
+            <img
+              src={flatlayPhoto}
+              alt="The IELTS Band 8 Blueprint hardcover book on a warm linen flat-lay with coffee and reading glasses"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* Soft edge fade into the form side on large screens */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 right-0 hidden w-24 lg:block"
+              style={{
+                background:
+                  "linear-gradient(to right, transparent, oklch(0.97 0.04 175 / 0.85))",
+              }}
+            />
+            {/* Handwritten note top-left */}
+            <div
+              className="absolute left-5 top-5 -rotate-[7deg] rounded-md bg-white/85 px-3 py-1.5 text-[1.35rem] leading-none shadow-sm backdrop-blur"
+              style={{ fontFamily: HANDWRITING, color: "oklch(0.45 0.14 30)" }}
+            >
+              psst — it's actually free
+            </div>
+            {/* Scribbled arrow + caption bottom-right */}
+            <div
+              className="absolute bottom-6 right-6 flex items-end gap-2 rotate-[4deg] rounded-md bg-white/85 px-3 py-2 shadow-sm backdrop-blur"
+              style={{ fontFamily: HANDWRITING, color: "oklch(0.45 0.14 30)" }}
+            >
+              <svg width="56" height="34" viewBox="0 0 64 40" fill="none" aria-hidden>
+                <path
+                  d="M2 6 C 18 28, 40 36, 58 30 M50 22 L 58 30 L 50 38"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
                 />
-                {/* Hand-drawn circle around the book */}
-                <svg
-                  aria-hidden
-                  viewBox="0 0 460 460"
-                  className="pointer-events-none absolute inset-0 h-full w-full"
-                >
-                  <ellipse
-                    cx="200"
-                    cy="245"
-                    rx="160"
-                    ry="180"
-                    fill="none"
-                    stroke="oklch(0.55 0.16 30)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray="2 6"
-                    opacity="0.85"
-                    transform="rotate(-8 200 245)"
-                  />
-                </svg>
-              </div>
-
-              {/* Scribbled arrow + caption pointing at the book */}
-              <div
-                className="absolute -bottom-8 right-2 flex items-end gap-2 rotate-[4deg]"
-                style={{ fontFamily: HANDWRITING, color: "oklch(0.45 0.14 30)" }}
-              >
-                <svg width="64" height="40" viewBox="0 0 64 40" fill="none" aria-hidden>
-                  <path
-                    d="M2 6 C 18 28, 40 36, 58 30 M50 22 L 58 30 L 50 38"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                </svg>
-                <span className="text-[1.4rem] leading-none">96 pages of band 8+ gold</span>
-              </div>
+              </svg>
+              <span className="text-[1.25rem] leading-none">96 pages of band 8+ gold</span>
             </div>
           </div>
 
           {/* RIGHT — Magazine headline + form */}
-          <div className="relative">
+          <div
+            className={`relative flex items-center px-6 sm:px-10 lg:px-14 ${
+              isCompact ? "py-12" : "py-16 md:py-20"
+            }`}
+          >
+            <div className="w-full max-w-xl">
+
             {/* Eyebrow */}
             <div
               className="mb-3 text-[11px] font-bold uppercase"
@@ -515,9 +501,11 @@ export function FreeEbookCta({ variant = "default" }: { variant?: Variant }) {
                 </p>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
