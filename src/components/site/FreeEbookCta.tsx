@@ -501,9 +501,11 @@ export function FreeEbookCta({ variant = "default" }: { variant?: Variant }) {
                 </p>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
