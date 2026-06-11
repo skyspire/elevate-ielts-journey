@@ -615,11 +615,11 @@ export function FollowUpReader({
             }}
             key={`a-${currentIndex}`}
           >
-            <div className="mx-auto max-w-[640px]">
+            <div className="mx-auto max-w-[640px] rounded-xl bg-[#FDFCF8] px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10">
               {currentVariant.sections.map((s, i) => (
                 <p
                   key={i}
-                  className="mb-5 text-[15.5px] leading-[1.8] text-foreground/85 last:mb-0 sm:text-[16.5px]"
+                  className="mb-5 text-[15.5px] leading-[1.8] text-[#2a2a2a]/90 last:mb-0 sm:text-[16.5px]"
                 >
                   {s.body}
                 </p>

@@ -329,37 +329,37 @@ export function WritingTask1Modal({
             }}
             className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8"
           >
+          <div
+            className="mx-auto max-w-[560px] rounded-xl bg-[#FDFCF8] px-5 py-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-8 sm:py-8"
+            style={{
+              opacity: laneIn ? 1 : 0,
+              transform: laneIn ? "translateY(0)" : "translateY(6px)",
+              transition: "opacity 180ms ease, transform 180ms ease",
+            }}
+          >
             <div
-              className="mx-auto max-w-[560px]"
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#2a2a2a]/10 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#2a2a2a]/65"
               style={{
-                opacity: laneIn ? 1 : 0,
-                transform: laneIn ? "translateY(0)" : "translateY(6px)",
-                transition: "opacity 180ms ease, transform 180ms ease",
+                fontFamily:
+                  '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
               }}
             >
-              <div
-                className="mb-4 inline-flex items-center gap-2 rounded-full border border-foreground/10 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/65"
-                style={{
-                  fontFamily:
-                    '"Nunito", "Quicksand", ui-rounded, system-ui, -apple-system, sans-serif',
-                }}
-              >
-                <span
-                  className="inline-block h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: BAND_COLORS[variant] }}
-                />
-                Band {active.bandScore} · {active.wordCount} words
-              </div>
-
-              {active.paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  className="mb-5 text-[14.5px] leading-[1.78] text-foreground/85 last:mb-0 sm:text-[15.5px]"
-                >
-                  {p.body}
-                </p>
-              ))}
+              <span
+                className="inline-block h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: BAND_COLORS[variant] }}
+              />
+              Band {active.bandScore} · {active.wordCount} words
             </div>
+
+            {active.paragraphs.map((p, i) => (
+              <p
+                key={i}
+                className="mb-5 text-[14.5px] leading-[1.78] text-[#2a2a2a]/90 last:mb-0 sm:text-[15.5px]"
+              >
+                {p.body}
+              </p>
+            ))}
+          </div>
           </div>
         </div>
 
