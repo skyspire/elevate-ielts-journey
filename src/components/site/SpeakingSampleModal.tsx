@@ -454,11 +454,12 @@ export function SpeakingSampleModal({
           className="min-h-0 flex-1 overflow-y-auto px-6 py-8 sm:px-12 sm:py-12"
         >
           <div
-            className="mx-auto max-w-[640px] rounded-xl bg-[#F2D6A4] px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10"
+            className="mx-auto max-w-[640px] rounded-xl px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10"
             style={{
+              backgroundColor: `color-mix(in oklab, ${BAND_COLORS[variant]} 18%, white)`,
               opacity: laneIn ? 1 : 0,
               transform: laneIn ? "translateY(0)" : "translateY(6px)",
-              transition: "opacity 180ms ease, transform 180ms ease",
+              transition: "opacity 180ms ease, transform 180ms ease, background-color 360ms ease",
             }}
           >
             {sections.map((s, i) => (

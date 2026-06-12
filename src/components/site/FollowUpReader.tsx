@@ -615,7 +615,13 @@ export function FollowUpReader({
             }}
             key={`a-${currentIndex}`}
           >
-            <div className="mx-auto max-w-[640px] rounded-xl bg-[#F2D6A4] px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10">
+            <div
+              className="mx-auto max-w-[640px] rounded-xl px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10"
+              style={{
+                backgroundColor: `color-mix(in oklab, ${activeBand} 18%, white)`,
+                transition: "background-color 360ms ease",
+              }}
+            >
               {currentVariant.sections.map((s, i) => (
                 <p
                   key={i}
