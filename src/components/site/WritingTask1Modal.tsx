@@ -330,7 +330,7 @@ export function WritingTask1Modal({
             className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8"
           >
           <div
-            className="mx-auto max-w-[560px] rounded-xl bg-[#FDFCF8] px-5 py-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-8 sm:py-8"
+            className="mx-auto max-w-[560px] rounded-xl bg-[#F2D6A4] px-5 py-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-8 sm:py-8"
             style={{
               opacity: laneIn ? 1 : 0,
               transform: laneIn ? "translateY(0)" : "translateY(6px)",
