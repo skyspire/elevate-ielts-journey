@@ -328,14 +328,17 @@ export function WritingTask1Modal({
               setCollapsed(top > 24);
             }}
             className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8"
-          >
-          <div
-            className="mx-auto max-w-[560px] rounded-xl px-5 py-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-8 sm:py-8"
             style={{
               backgroundColor: `color-mix(in oklab, ${BAND_COLORS[variant]} 18%, white)`,
+              transition: "background-color 360ms ease",
+            }}
+          >
+          <div
+            className="mx-auto max-w-[560px] px-5 py-6 sm:px-8 sm:py-8"
+            style={{
               opacity: laneIn ? 1 : 0,
               transform: laneIn ? "translateY(0)" : "translateY(6px)",
-              transition: "opacity 180ms ease, transform 180ms ease, background-color 360ms ease",
+              transition: "opacity 180ms ease, transform 180ms ease",
             }}
           >
             <div

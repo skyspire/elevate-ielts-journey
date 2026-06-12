@@ -576,6 +576,10 @@ export function FollowUpReader({
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-6 py-8 sm:px-12 sm:py-12"
+          style={{
+            backgroundColor: `color-mix(in oklab, ${activeBand} 18%, white)`,
+            transition: "background-color 360ms ease",
+          }}
           onTouchStart={(e) => {
             const t = e.touches[0];
             touchRef.current = { x: t.clientX, y: t.clientY, t: Date.now() };
@@ -616,11 +620,7 @@ export function FollowUpReader({
             key={`a-${currentIndex}`}
           >
             <div
-              className="mx-auto max-w-[640px] rounded-xl px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] sm:px-10 sm:py-10"
-              style={{
-                backgroundColor: `color-mix(in oklab, ${activeBand} 18%, white)`,
-                transition: "background-color 360ms ease",
-              }}
+              className="mx-auto max-w-[640px] px-6 py-8 sm:px-10 sm:py-10"
             >
               {currentVariant.sections.map((s, i) => (
                 <p
