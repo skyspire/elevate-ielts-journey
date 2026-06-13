@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { IslamicHero } from "@/components/site/IslamicHero";
+import { IslamicHero, IslamicDivider } from "@/components/site/IslamicHero";
 import { EverythingYouNeed } from "@/components/site/EverythingYouNeed";
 import { Stats } from "@/components/site/Stats";
 import { ValueStatement } from "@/components/site/ValueStatement";
@@ -33,25 +33,37 @@ export const Route = createFileRoute("/islamic")({
 });
 
 function IslamicHome() {
+  const sections = [
+    EverythingYouNeed,
+    Stats,
+    ValueStatement,
+    TrustCompare,
+    TryFreeSection,
+    LatestQuestions,
+    LearnersWorld,
+    Faq,
+    FinalCta,
+  ];
+
   return (
     <div
       className="relative min-h-screen text-foreground"
-      style={{ backgroundColor: "#f5f0e0" }}
+      style={{ backgroundColor: "#f5efdc" }}
     >
-      {/* Page-wide emerald tint overlay — multiplies onto every section */}
+      {/* Strong page-wide emerald tint */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,122,95,0.10) 0%, rgba(201,168,76,0.08) 50%, rgba(6,78,59,0.12) 100%)",
+            "linear-gradient(180deg, rgba(13,90,68,0.22) 0%, rgba(201,168,76,0.14) 50%, rgba(7,61,44,0.24) 100%)",
           mixBlendMode: "multiply",
         }}
       />
-      {/* Page-wide Islamic geometric watermark in emerald */}
+      {/* Page-wide eight-point-star watermark in emerald */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-[1] opacity-[0.07]"
+        className="pointer-events-none fixed inset-0 z-[1] opacity-[0.10]"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23064e3b' stroke-width='1'><path d='M40 6 L50 30 L74 40 L50 50 L40 74 L30 50 L6 40 L30 30 Z'/><path d='M40 6 L40 74 M6 40 L74 40'/></g></svg>\")",
@@ -59,17 +71,15 @@ function IslamicHome() {
           mixBlendMode: "multiply",
         }}
       />
+
       <main className="relative z-0">
         <IslamicHero />
-        <EverythingYouNeed />
-        <Stats />
-        <ValueStatement />
-        <TrustCompare />
-        <TryFreeSection />
-        <LatestQuestions />
-        <LearnersWorld />
-        <Faq />
-        <FinalCta />
+        {sections.map((Comp, i) => (
+          <div key={i}>
+            <Comp />
+            {i < sections.length - 1 && <IslamicDivider />}
+          </div>
+        ))}
       </main>
       <FreeEbookCta />
       <Footer />
