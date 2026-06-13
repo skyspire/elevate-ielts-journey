@@ -18,6 +18,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as IslamicRouteImport } from './routes/islamic'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -109,6 +110,11 @@ const OurStoryRoute = OurStoryRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IslamicRoute = IslamicRouteImport.update({
+  id: '/islamic',
+  path: '/islamic',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -361,6 +367,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
@@ -418,6 +425,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
@@ -477,6 +485,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
   '/predictions': typeof PredictionsRoute
@@ -537,6 +546,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/islamic'
     | '/login'
     | '/our-story'
     | '/predictions'
@@ -594,6 +604,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/islamic'
     | '/login'
     | '/our-story'
     | '/predictions'
@@ -652,6 +663,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/islamic'
     | '/login'
     | '/our-story'
     | '/predictions'
@@ -711,6 +723,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRouteWithChildren
   FaqRoute: typeof FaqRoute
+  IslamicRoute: typeof IslamicRoute
   LoginRoute: typeof LoginRoute
   OurStoryRoute: typeof OurStoryRoute
   PredictionsRoute: typeof PredictionsRoute
@@ -789,6 +802,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/islamic': {
+      id: '/islamic'
+      path: '/islamic'
+      fullPath: '/islamic'
+      preLoaderRoute: typeof IslamicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -1232,6 +1252,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRouteWithChildren,
   FaqRoute: FaqRoute,
+  IslamicRoute: IslamicRoute,
   LoginRoute: LoginRoute,
   OurStoryRoute: OurStoryRoute,
   PredictionsRoute: PredictionsRoute,
@@ -1249,12 +1270,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
