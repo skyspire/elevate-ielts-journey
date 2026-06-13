@@ -34,18 +34,32 @@ export const Route = createFileRoute("/islamic")({
 
 function IslamicHome() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      {/* Page-wide subtle Islamic geometric watermark */}
+    <div
+      className="relative min-h-screen text-foreground"
+      style={{ backgroundColor: "#f5f0e0" }}
+    >
+      {/* Page-wide emerald tint overlay — multiplies onto every section */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.04]"
+        className="pointer-events-none fixed inset-0 z-[1]"
         style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%230f5a55' stroke-width='1'><path d='M40 6 L50 30 L74 40 L50 50 L40 74 L30 50 L6 40 L30 30 Z'/><path d='M40 6 L40 74 M6 40 L74 40'/></g></svg>\")",
-          backgroundSize: "80px 80px",
+          background:
+            "linear-gradient(180deg, rgba(13,122,95,0.10) 0%, rgba(201,168,76,0.08) 50%, rgba(6,78,59,0.12) 100%)",
+          mixBlendMode: "multiply",
         }}
       />
-      <main>
+      {/* Page-wide Islamic geometric watermark in emerald */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[1] opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23064e3b' stroke-width='1'><path d='M40 6 L50 30 L74 40 L50 50 L40 74 L30 50 L6 40 L30 30 Z'/><path d='M40 6 L40 74 M6 40 L74 40'/></g></svg>\")",
+          backgroundSize: "80px 80px",
+          mixBlendMode: "multiply",
+        }}
+      />
+      <main className="relative z-0">
         <IslamicHero />
         <EverythingYouNeed />
         <Stats />
