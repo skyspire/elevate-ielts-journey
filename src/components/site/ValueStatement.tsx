@@ -31,6 +31,7 @@ import { PickIeltsTypeAtCheckoutPopup } from "@/components/site/PickIeltsTypeAtC
 
 export function ValueStatement() {
   const { plans, features, footnote } = useCmsSection(PRICING_KEY, PRICING_DEFAULT);
+  const { user } = useLearnerSession();
   const [currency, setCurrency] = useState<CurrencyCode>("CAD");
   const [autoDetected, setAutoDetected] = useState(false);
   const [openCycleLabel, setOpenCycleLabel] = useState<string | null>(null);
