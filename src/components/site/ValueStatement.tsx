@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Gift, Sparkles, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { useLearnerSession } from "@/lib/learner-auth";
 import {
   Select,
   SelectContent,
