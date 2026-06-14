@@ -163,9 +163,72 @@ export function ValueStatement() {
           )}
         </div>
 
+        {/* === FREE LANDSCAPE CARD (Royal Indigo) === */}
+        <div
+          className="relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl p-6 text-white shadow-[0_22px_50px_-18px_rgba(79,70,229,0.55)] sm:p-8"
+          style={{
+            background:
+              "linear-gradient(135deg, #4f46e5 0%, #6366f1 55%, #1e1b4b 100%)",
+          }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full opacity-40 blur-3xl"
+            style={{ background: "#a5b4fc" }}
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -left-10 -bottom-16 h-48 w-48 rounded-full opacity-30 blur-3xl"
+            style={{ background: "#6366f1" }}
+          />
+          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4 lg:max-w-2xl">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur">
+                <Gift className="h-6 w-6 text-white" strokeWidth={2.5} />
+              </span>
+              <div className="min-w-0">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] ring-1 ring-white/25">
+                  <Sparkles className="h-3 w-3" /> Free forever
+                </div>
+                <h3 className="font-display mt-3 text-2xl font-black leading-[1.1] tracking-tight sm:text-3xl">
+                  Start free — fresh content every week
+                </h3>
+                <p className="mt-2 text-[14px] font-medium leading-relaxed text-white/85 sm:text-[15px]">
+                  Sign up and get hand-picked sample answers and ebook
+                  chapters delivered every week. No card, no trial timer —
+                  yours to keep using as long as you like.
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[13px] font-bold text-white/95">
+                  <li className="flex items-center gap-1.5">
+                    <Check className="h-4 w-4" strokeWidth={2.75} /> Weekly fresh sample answers
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <Check className="h-4 w-4" strokeWidth={2.75} /> Weekly ebook chapter
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <Check className="h-4 w-4" strokeWidth={2.75} /> No credit card required
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex shrink-0 flex-col items-stretch gap-2 lg:items-end">
+              <Link
+                to={user ? "/dashboard" : "/signup"}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-extrabold text-indigo-700 shadow-md transition-transform hover:scale-[1.02]"
+              >
+                {user ? "Go to free content" : "Start free"}
+                <ArrowRight className="h-4 w-4" strokeWidth={2.75} />
+              </Link>
+              <p className="text-center text-[11px] font-bold uppercase tracking-wider text-white/70 lg:text-right">
+                Free plan · Updated weekly
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* === PRICING === */}
 
-        <div className="mx-auto mt-8 grid max-w-5xl gap-4 sm:mt-10 sm:grid-cols-3">
+        <div className="mx-auto mt-6 grid max-w-5xl gap-4 sm:mt-8 sm:grid-cols-3">
           {plans
             .filter((p) => p.visible !== false)
             .slice()
