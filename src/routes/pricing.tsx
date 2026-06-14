@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Calendar, Sparkles, Check, Lock, GraduationCap, Briefcase, Crown } from "lucide-react";
+import { Calendar, Sparkles, Check, Lock, GraduationCap, Briefcase, Crown, Gift, ArrowRight } from "lucide-react";
 import { useLearnerSession } from "@/lib/learner-auth";
 import { useIeltsType } from "@/lib/ielts-type";
 import { PickIeltsTypeAtCheckoutPopup } from "@/components/site/PickIeltsTypeAtCheckoutPopup";
