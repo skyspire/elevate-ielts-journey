@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { FreeEbookCta } from "@/components/site/FreeEbookCta";
+import heroImage from "@/assets/our-story-hero.jpg";
 
 export const Route = createFileRoute("/our-story")({
   head: () => ({
