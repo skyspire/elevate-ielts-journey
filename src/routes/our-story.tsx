@@ -175,6 +175,48 @@ function OurStoryPage() {
       <Header />
 
       <main>
+        {/* =================== FULL-BLEED HERO IMAGE =================== */}
+        <section
+          className="relative h-[75vh] min-h-[480px] w-full overflow-hidden rounded-b-[2.5rem] sm:rounded-b-[3rem]"
+          aria-label="Our Story"
+        >
+          <img
+            src={heroImage}
+            alt="Diverse group of students walking together through a sunlit university campus at golden hour"
+            className="absolute inset-0 h-full w-full object-cover"
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+          />
+          {/* Dark gradient overlay for legibility */}
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(10,10,20,0.35) 0%, rgba(10,10,20,0.15) 45%, rgba(10,10,20,0.7) 100%)",
+            }}
+          />
+          {/* Centered Inter Heavy headline */}
+          <div className="relative z-10 flex h-full w-full items-center justify-center px-6">
+            <h1
+              className="text-center text-white"
+              style={{
+                fontFamily:
+                  "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
+                fontWeight: 900,
+                fontSize: "clamp(3.5rem, 12vw, 11rem)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.95,
+                textShadow: "0 6px 40px rgba(0,0,0,0.45)",
+              }}
+            >
+              Our Story
+            </h1>
+          </div>
+        </section>
+
+
         {/* =================== HERO — centered =================== */}
         <section className="container-page relative pt-20 text-center sm:pt-28">
           <Eyebrow accent="amber">our story</Eyebrow>
