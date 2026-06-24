@@ -740,6 +740,15 @@ export function Header() {
               Pricing
             </Link>
             <Link
+              to="/ielts-calculator"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              Band Calculator
+            </Link>
+            <Link
               to="/faq"
               onClick={() => setOpen(false)}
               className="rounded-md px-4 py-3 text-[15px] font-semibold"
