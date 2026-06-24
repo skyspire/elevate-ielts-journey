@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@/components/site/Header";
-import { Footer } from "@/components/site/Footer";
+
+
 
 export const Route = createFileRoute("/ielts-calculator")({
   head: () => ({
@@ -143,7 +143,7 @@ function SectionShell({
   return (
     <section
       id={id}
-      className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+      className="relative flex h-full min-h-0 w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
       style={INTER}
     >
       {/* page-corner meta */}
@@ -675,7 +675,7 @@ function IeltsCalculatorPage() {
 
         {/* ============ 6. OVERALL REVEAL ============ */}
         <section
-          className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+          className="relative flex h-full min-h-0 w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
           style={INTER}
         >
           <div
@@ -819,10 +819,6 @@ function IeltsCalculatorPage() {
           </div>
         </section>
 
-        {/* footer in its own snap pane so it's reachable but doesn't break the deck */}
-        <div className="snap-start">
-          <Footer />
-        </div>
       </main>
     </div>
   );
