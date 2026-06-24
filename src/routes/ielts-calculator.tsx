@@ -497,7 +497,7 @@ function IeltsCalculatorPage() {
 
       <main
         ref={scrollerRef}
-        className="relative z-10 h-[calc(100vh-0px)] snap-y snap-mandatory overflow-y-scroll scroll-smooth"
+        className="relative z-10 flex-1 snap-y snap-mandatory overflow-y-scroll scroll-smooth"
         style={{ scrollSnapType: "y mandatory" }}
       >
         {/* ============ 1. PICK TRACK ============ */}
