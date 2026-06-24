@@ -488,9 +488,6 @@ function IeltsCalculatorPage() {
         }}
       />
 
-      <div className="relative z-20 shrink-0">
-        <Header />
-      </div>
 
 
       <ProgressRail current={active} total={TOTAL} />
