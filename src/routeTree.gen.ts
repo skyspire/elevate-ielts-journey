@@ -19,6 +19,7 @@ import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IslamicRouteImport } from './routes/islamic'
+import { Route as IeltsCalculatorRouteImport } from './routes/ielts-calculator'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -115,6 +116,11 @@ const LoginRoute = LoginRouteImport.update({
 const IslamicRoute = IslamicRouteImport.update({
   id: '/islamic',
   path: '/islamic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IeltsCalculatorRoute = IeltsCalculatorRouteImport.update({
+  id: '/ielts-calculator',
+  path: '/ielts-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -367,6 +373,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
@@ -425,6 +432,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
@@ -485,6 +493,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
   '/faq': typeof FaqRoute
+  '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
   '/login': typeof LoginRoute
   '/our-story': typeof OurStoryRoute
@@ -546,6 +555,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/ielts-calculator'
     | '/islamic'
     | '/login'
     | '/our-story'
@@ -604,6 +614,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/ielts-calculator'
     | '/islamic'
     | '/login'
     | '/our-story'
@@ -663,6 +674,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ebooks'
     | '/faq'
+    | '/ielts-calculator'
     | '/islamic'
     | '/login'
     | '/our-story'
@@ -723,6 +735,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRouteWithChildren
   FaqRoute: typeof FaqRoute
+  IeltsCalculatorRoute: typeof IeltsCalculatorRoute
   IslamicRoute: typeof IslamicRoute
   LoginRoute: typeof LoginRoute
   OurStoryRoute: typeof OurStoryRoute
@@ -809,6 +822,13 @@ declare module '@tanstack/react-router' {
       path: '/islamic'
       fullPath: '/islamic'
       preLoaderRoute: typeof IslamicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ielts-calculator': {
+      id: '/ielts-calculator'
+      path: '/ielts-calculator'
+      fullPath: '/ielts-calculator'
+      preLoaderRoute: typeof IeltsCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -1252,6 +1272,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRouteWithChildren,
   FaqRoute: FaqRoute,
+  IeltsCalculatorRoute: IeltsCalculatorRoute,
   IslamicRoute: IslamicRoute,
   LoginRoute: LoginRoute,
   OurStoryRoute: OurStoryRoute,
