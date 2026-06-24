@@ -143,7 +143,7 @@ function SectionShell({
   return (
     <section
       id={id}
-      className="relative flex h-screen min-h-[640px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+      className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
       style={INTER}
     >
       {/* page-corner meta */}
@@ -467,7 +467,7 @@ function IeltsCalculatorPage() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative flex h-screen w-full flex-col overflow-hidden"
       style={{
         ...INTER,
         background:
@@ -488,13 +488,16 @@ function IeltsCalculatorPage() {
         }}
       />
 
-      <Header />
+      <div className="relative z-20 shrink-0">
+        <Header />
+      </div>
+
 
       <ProgressRail current={active} total={TOTAL} />
 
       <main
         ref={scrollerRef}
-        className="relative z-10 h-[calc(100vh-0px)] snap-y snap-mandatory overflow-y-scroll scroll-smooth"
+        className="relative z-10 flex-1 snap-y snap-mandatory overflow-y-scroll scroll-smooth"
         style={{ scrollSnapType: "y mandatory" }}
       >
         {/* ============ 1. PICK TRACK ============ */}
@@ -675,7 +678,7 @@ function IeltsCalculatorPage() {
 
         {/* ============ 6. OVERALL REVEAL ============ */}
         <section
-          className="relative flex h-screen min-h-[640px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+          className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
           style={INTER}
         >
           <div
