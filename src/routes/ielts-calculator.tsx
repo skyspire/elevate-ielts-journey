@@ -555,12 +555,8 @@ function IeltsCalculatorPage() {
 
             <button
               type="button"
-              onClick={() =>
-                scrollerRef.current?.scrollTo({
-                  top: scrollerRef.current.clientHeight,
-                  behavior: "smooth",
-                })
-              }
+              onClick={() => scrollToSection(1)}
+
               className="mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
               style={{
                 background: PAL.ink,
