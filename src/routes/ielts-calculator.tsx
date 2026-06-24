@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Header } from "@/components/site/Header";
-import { Footer } from "@/components/site/Footer";
+
+
 
 export const Route = createFileRoute("/ielts-calculator")({
   head: () => ({
@@ -143,7 +143,7 @@ function SectionShell({
   return (
     <section
       id={id}
-      className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+      className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
       style={INTER}
     >
       {/* page-corner meta */}
@@ -448,26 +448,26 @@ function IeltsCalculatorPage() {
   const overall = overallBand([lBand, rBand, wBand, sBand]);
   const interp = INTERPRETATION[overall.toFixed(1)] ?? "—";
 
-  // section tracking for the rail
-  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
+  // section tracking for the rail (document scroll)
   const [active, setActive] = React.useState(0);
   const TOTAL = 6;
 
   React.useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
     const onScroll = () => {
-      const h = el.clientHeight;
-      const idx = Math.round(el.scrollTop / h);
+      const h = window.innerHeight;
+      const idx = Math.round(window.scrollY / h);
       setActive(Math.max(0, Math.min(TOTAL - 1, idx)));
     };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const scrollToSection = (i: number) =>
+    window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
 
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden"
+      className="relative w-full"
       style={{
         ...INTER,
         background:
@@ -475,12 +475,16 @@ function IeltsCalculatorPage() {
           `radial-gradient(ellipse 50% 40% at 95% 100%, ${PAL.oliveSoft}55 0%, transparent 65%),` +
           `linear-gradient(180deg, ${PAL.paper} 0%, ${PAL.paperSoft} 100%)`,
         color: PAL.ink,
+        scrollSnapType: "y proximity",
       }}
     >
+      {/* page-scoped: enable snap on the document while this page is mounted */}
+      <style>{`html { scroll-snap-type: y proximity; scroll-behavior: smooth; }`}</style>
+
       {/* soft grain */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.22] mix-blend-multiply"
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.22] mix-blend-multiply"
         style={{
           backgroundImage:
             `radial-gradient(${PAL.olive}22 1px, transparent 1.2px)`,
@@ -488,18 +492,10 @@ function IeltsCalculatorPage() {
         }}
       />
 
-      <div className="relative z-20 shrink-0">
-        <Header />
-      </div>
-
-
       <ProgressRail current={active} total={TOTAL} />
 
-      <main
-        ref={scrollerRef}
-        className="relative z-10 flex-1 snap-y snap-mandatory overflow-y-scroll scroll-smooth"
-        style={{ scrollSnapType: "y mandatory" }}
-      >
+      <main className="relative z-10">
+
         {/* ============ 1. PICK TRACK ============ */}
         <SectionShell index={1} total={TOTAL} eyebrow="Choose your track">
           <div>
@@ -559,12 +555,8 @@ function IeltsCalculatorPage() {
 
             <button
               type="button"
-              onClick={() =>
-                scrollerRef.current?.scrollTo({
-                  top: scrollerRef.current.clientHeight,
-                  behavior: "smooth",
-                })
-              }
+              onClick={() => scrollToSection(1)}
+
               className="mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
               style={{
                 background: PAL.ink,
@@ -678,7 +670,7 @@ function IeltsCalculatorPage() {
 
         {/* ============ 6. OVERALL REVEAL ============ */}
         <section
-          className="relative flex h-full min-h-[560px] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+          className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
           style={INTER}
         >
           <div
@@ -793,7 +785,7 @@ function IeltsCalculatorPage() {
               <button
                 type="button"
                 onClick={() =>
-                  scrollerRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+                  scrollToSection(0)
                 }
                 className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
                 style={{
@@ -807,7 +799,7 @@ function IeltsCalculatorPage() {
                 type="button"
                 onClick={() => {
                   setTrack(track === "academic" ? "general" : "academic");
-                  scrollerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  scrollToSection(0);
                 }}
                 className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
                 style={{
@@ -822,10 +814,6 @@ function IeltsCalculatorPage() {
           </div>
         </section>
 
-        {/* footer in its own snap pane so it's reachable but doesn't break the deck */}
-        <div className="snap-start">
-          <Footer />
-        </div>
       </main>
     </div>
   );
