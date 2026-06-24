@@ -1,22 +1,21 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-
-
+import { ArrowRight, GraduationCap, Sparkles, RotateCcw, Share2, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/ielts-calculator")({
   head: () => ({
     meta: [
-      { title: "IELTS Score Calculator — BigIELTS" },
+      { title: "IELTS Band Calculator — BigIELTS" },
       {
         name: "description",
         content:
-          "Calculate your IELTS Overall Band Score for Academic and General Training. Enter raw Listening and Reading scores plus Writing and Speaking bands.",
+          "Free IELTS band score calculator. Slide your Listening, Reading, Writing and Speaking scores — we apply the official rounding rules.",
       },
-      { property: "og:title", content: "IELTS Score Calculator — BigIELTS" },
+      { property: "og:title", content: "IELTS Band Calculator — BigIELTS" },
       {
         property: "og:description",
         content:
-          "Free IELTS band score calculator. Convert raw scores to bands instantly for Academic and General Training.",
+          "Find your IELTS overall band in seconds. Same rounding rules as the real exam.",
       },
     ],
   }),
@@ -24,16 +23,19 @@ export const Route = createFileRoute("/ielts-calculator")({
 });
 
 /* ------------------------------------------------------------------ */
-/* Palette — olive × cream                                            */
+/* Palette — sage × navy, faithful to the reference                   */
 /* ------------------------------------------------------------------ */
-const PAL = {
-  paper: "#f3efe2",
-  paperSoft: "#e6dec5",
-  oliveSoft: "#bdb98a",
-  olive: "#5e6b3a",
-  oliveDeep: "#3f4a24",
-  ink: "#21260f",
-  cream: "#faf6e9",
+const C = {
+  bg: "#cfd8a8",
+  bgDeep: "#a3b375",
+  cardCream: "#e6e9c6",
+  cardCreamSoft: "#d8dfb4",
+  ink: "#1c2330",
+  inkSoft: "#2a3243",
+  pale: "#cfd8a8",       // pale green that lives on the dark card
+  paleSoft: "#e6e9c6",
+  olive: "#7d8b4a",      // accent inside the cream card (the "band" highlight)
+  muted: "rgba(28,35,48,0.62)",
 };
 
 const INTER: React.CSSProperties = {
@@ -42,63 +44,8 @@ const INTER: React.CSSProperties = {
 };
 
 /* ------------------------------------------------------------------ */
-/* IELTS conversion tables                                            */
+/* Band logic                                                          */
 /* ------------------------------------------------------------------ */
-type Track = "academic" | "general";
-
-function listeningBand(raw: number): number {
-  if (raw >= 39) return 9;
-  if (raw >= 37) return 8.5;
-  if (raw >= 35) return 8;
-  if (raw >= 32) return 7.5;
-  if (raw >= 30) return 7;
-  if (raw >= 26) return 6.5;
-  if (raw >= 23) return 6;
-  if (raw >= 18) return 5.5;
-  if (raw >= 16) return 5;
-  if (raw >= 13) return 4.5;
-  if (raw >= 11) return 4;
-  if (raw >= 8) return 3.5;
-  if (raw >= 6) return 3;
-  if (raw >= 4) return 2.5;
-  return 0;
-}
-function academicReadingBand(raw: number): number {
-  if (raw >= 39) return 9;
-  if (raw >= 37) return 8.5;
-  if (raw >= 35) return 8;
-  if (raw >= 33) return 7.5;
-  if (raw >= 30) return 7;
-  if (raw >= 27) return 6.5;
-  if (raw >= 23) return 6;
-  if (raw >= 19) return 5.5;
-  if (raw >= 15) return 5;
-  if (raw >= 13) return 4.5;
-  if (raw >= 10) return 4;
-  if (raw >= 8) return 3.5;
-  if (raw >= 6) return 3;
-  if (raw >= 4) return 2.5;
-  return 0;
-}
-function generalReadingBand(raw: number): number {
-  if (raw >= 40) return 9;
-  if (raw >= 39) return 8.5;
-  if (raw >= 37) return 8;
-  if (raw >= 36) return 7.5;
-  if (raw >= 34) return 7;
-  if (raw >= 32) return 6.5;
-  if (raw >= 30) return 6;
-  if (raw >= 27) return 5.5;
-  if (raw >= 23) return 5;
-  if (raw >= 19) return 4.5;
-  if (raw >= 15) return 4;
-  if (raw >= 12) return 3.5;
-  if (raw >= 9) return 3;
-  if (raw >= 6) return 2.5;
-  return 0;
-}
-
-/** Average → round to nearest 0.5; .25 rounds UP to .5, .75 rounds UP to next whole. */
 function overallBand(bands: number[]): number {
   const avg = bands.reduce((a, b) => a + b, 0) / bands.length;
   const whole = Math.floor(avg);
@@ -108,713 +55,652 @@ function overallBand(bands: number[]): number {
   return whole + 1;
 }
 
-const INTERPRETATION: Record<string, string> = {
-  "9": "Expert user",
-  "8.5": "Very good user",
-  "8": "Very good user",
-  "7.5": "Good user",
-  "7": "Good user",
-  "6.5": "Competent user",
-  "6": "Competent user",
-  "5.5": "Modest user",
-  "5": "Modest user",
-  "4.5": "Limited user",
-  "4": "Limited user",
-  "3.5": "Extremely limited user",
-  "3": "Extremely limited user",
-};
+const BAND_MEANING: Array<{ n: number; t: string; d: string }> = [
+  { n: 9, t: "Expert user", d: "Fully operational command of the language. Appropriate, accurate, fluent — with complete understanding." },
+  { n: 8, t: "Very good user", d: "Operational command with only occasional unsystematic inaccuracies. Handles complex argumentation well." },
+  { n: 7, t: "Good user", d: "Operational command despite occasional inaccuracies. Generally handles complex language and detailed reasoning." },
+  { n: 6, t: "Competent user", d: "Effective command despite some inaccuracies. Can use and understand fairly complex language in familiar situations." },
+  { n: 5, t: "Modest user", d: "Partial command, coping with overall meaning in most situations though likely to make many mistakes." },
+  { n: 4, t: "Limited user", d: "Basic competence limited to familiar situations. Frequent problems in understanding and expression." },
+  { n: 3, t: "Extremely limited user", d: "Conveys and understands only general meaning in very familiar situations. Frequent breakdowns in communication." },
+  { n: 2, t: "Intermittent user", d: "No real communication is possible except for the most basic information using isolated words or short formulae." },
+  { n: 1, t: "Non-user", d: "Essentially has no ability to use the language beyond possibly a few isolated words." },
+];
 
-/* ------------------------------------------------------------------ */
-/* Building blocks                                                    */
-/* ------------------------------------------------------------------ */
-function SectionShell({
-  index,
-  total,
-  eyebrow,
-  children,
-  id,
-}: {
-  index: number;
-  total: number;
-  eyebrow: string;
-  children: React.ReactNode;
-  id?: string;
-}) {
-  return (
-    <section
-      id={id}
-      className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
-      style={INTER}
-    >
-      {/* page-corner meta */}
-      <div
-        className="absolute left-6 top-6 flex items-center gap-3 sm:left-10 sm:top-10"
-        style={{ color: PAL.olive }}
-      >
-        <span
-          className="grid h-9 w-9 place-items-center rounded-full text-xs font-extrabold"
-          style={{
-            background: PAL.cream,
-            border: `1.5px solid ${PAL.oliveSoft}`,
-            color: PAL.oliveDeep,
-            letterSpacing: "0.04em",
-          }}
-        >
-          {String(index).padStart(2, "0")}
-        </span>
-        <span
-          className="text-[11px] font-bold uppercase tracking-[0.22em]"
-          style={{ color: PAL.olive }}
-        >
-          {eyebrow}
-        </span>
-        <span className="text-[11px] font-medium" style={{ color: PAL.oliveSoft }}>
-          / {String(total).padStart(2, "0")}
-        </span>
-      </div>
-
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-        {children}
-      </div>
-    </section>
-  );
+function bandLabel(b: number): { title: string; desc: string } {
+  const whole = Math.round(b);
+  const found = BAND_MEANING.find((x) => x.n === whole);
+  return { title: found?.t ?? "—", desc: found?.d ?? "" };
 }
 
-function LiveBandCard({
-  label,
-  band,
-  hint,
-}: {
-  label: string;
-  band: number | null;
-  hint?: string;
-}) {
+/* ------------------------------------------------------------------ */
+/* Re-usable pieces                                                    */
+/* ------------------------------------------------------------------ */
+function GhostNumber({ n, position }: { n: string; position: "br" | "bl" }) {
   return (
-    <div
-      className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[28px] p-8"
-      style={{
-        background: `linear-gradient(160deg, ${PAL.olive} 0%, ${PAL.oliveDeep} 100%)`,
-        boxShadow:
-          "0 30px 60px -30px rgba(63,74,36,0.55), inset 0 1px 0 rgba(255,255,255,0.08)",
-        color: PAL.cream,
-      }}
-    >
-      {/* corner stamp */}
-      <div
-        className="absolute right-5 top-5 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em]"
-        style={{
-          background: "rgba(250,246,233,0.12)",
-          border: "1px solid rgba(250,246,233,0.25)",
-        }}
-      >
-        Live Band
-      </div>
-      <div className="flex h-full flex-col justify-between">
-        <div>
-          <p
-            className="text-[11px] font-bold uppercase tracking-[0.24em]"
-            style={{ color: "rgba(250,246,233,0.7)" }}
-          >
-            {label}
-          </p>
-          <div className="mt-2 h-px w-10" style={{ background: PAL.oliveSoft }} />
-        </div>
-
-        <div className="text-center">
-          <div
-            className="font-black leading-none tabular-nums"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(5.5rem, 14vw, 9rem)",
-              letterSpacing: "-0.05em",
-              color: PAL.cream,
-              textShadow: "0 8px 30px rgba(0,0,0,0.25)",
-            }}
-          >
-            {band === null ? "—" : band.toFixed(1)}
-          </div>
-          <p
-            className="mt-3 text-xs font-bold uppercase tracking-[0.2em]"
-            style={{ color: "rgba(250,246,233,0.65)" }}
-          >
-            Band Score
-          </p>
-        </div>
-
-        <p
-          className="text-center text-[12px] leading-snug"
-          style={{ color: "rgba(250,246,233,0.7)" }}
-        >
-          {hint ?? "Scores update as you enter your inputs."}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function BigHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2
-      className="leading-[0.95] tracking-tight"
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute select-none ${
+        position === "br" ? "-bottom-10 right-[-2vw]" : "-bottom-10 left-[-2vw]"
+      }`}
       style={{
         ...INTER,
         fontWeight: 900,
-        fontSize: "clamp(2.5rem, 6vw, 4.75rem)",
-        letterSpacing: "-0.04em",
-        color: PAL.ink,
+        fontSize: "clamp(18rem, 38vw, 44rem)",
+        letterSpacing: "-0.08em",
+        lineHeight: 0.78,
+        color: C.ink,
+        opacity: 0.07,
+      }}
+    >
+      {n}
+    </span>
+  );
+}
+
+function SectionNumber({ n }: { n: string }) {
+  return (
+    <span
+      className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.22em]"
+      style={{
+        background: "rgba(28,35,48,0.08)",
+        color: C.ink,
+      }}
+    >
+      <span
+        className="grid h-5 w-5 place-items-center rounded-full text-[10px]"
+        style={{ background: C.ink, color: C.pale }}
+      >
+        {n}
+      </span>
+      Section {n}
+    </span>
+  );
+}
+
+function ChipBrand() {
+  return (
+    <span
+      className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-extrabold"
+      style={{
+        background: C.ink,
+        color: C.pale,
+      }}
+    >
+      <GraduationCap className="h-3.5 w-3.5" strokeWidth={2.6} />
+      IELTS Calculator
+    </span>
+  );
+}
+
+function ChipFree() {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-extrabold"
+      style={{
+        background: C.ink,
+        color: C.pale,
+      }}
+    >
+      <Sparkles className="h-3 w-3" strokeWidth={2.6} />
+      Free · No sign-up
+    </span>
+  );
+}
+
+/* Styled range slider with band readout */
+function BandSlider({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+}) {
+  const pct = (value / 9) * 100;
+  return (
+    <div>
+      <div className="mb-2 flex items-baseline justify-between">
+        <span
+          className="text-[12px] font-extrabold uppercase tracking-[0.18em]"
+          style={{ color: C.ink }}
+        >
+          {label}
+        </span>
+        <span
+          className="font-black tabular-nums"
+          style={{
+            ...INTER,
+            fontWeight: 900,
+            fontSize: "1.75rem",
+            letterSpacing: "-0.03em",
+            color: C.ink,
+          }}
+        >
+          {value.toFixed(1)}
+        </span>
+      </div>
+      <div className="relative">
+        <div
+          className="h-3 w-full rounded-full"
+          style={{ background: "rgba(28,35,48,0.12)" }}
+        />
+        <div
+          className="absolute left-0 top-0 h-3 rounded-full"
+          style={{ width: `${pct}%`, background: C.ink }}
+        />
+        <input
+          type="range"
+          min={0}
+          max={9}
+          step={0.5}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="absolute inset-0 h-3 w-full cursor-pointer appearance-none bg-transparent
+                     [&::-webkit-slider-thumb]:appearance-none
+                     [&::-webkit-slider-thumb]:h-6
+                     [&::-webkit-slider-thumb]:w-6
+                     [&::-webkit-slider-thumb]:rounded-full
+                     [&::-webkit-slider-thumb]:border-[3px]
+                     [&::-webkit-slider-thumb]:border-[var(--ink)]
+                     [&::-webkit-slider-thumb]:bg-white
+                     [&::-webkit-slider-thumb]:shadow-md
+                     [&::-moz-range-thumb]:h-6
+                     [&::-moz-range-thumb]:w-6
+                     [&::-moz-range-thumb]:rounded-full
+                     [&::-moz-range-thumb]:border-[3px]
+                     [&::-moz-range-thumb]:border-[var(--ink)]
+                     [&::-moz-range-thumb]:bg-white"
+          style={{ ["--ink" as string]: C.ink } as React.CSSProperties}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PillButton({
+  children,
+  variant = "dark",
+  onClick,
+}: {
+  children: React.ReactNode;
+  variant?: "dark" | "ghost";
+  onClick?: () => void;
+}) {
+  const isDark = variant === "dark";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-[13px] font-extrabold transition-transform hover:-translate-y-0.5"
+      style={{
+        background: isDark ? C.ink : "transparent",
+        color: isDark ? C.pale : C.ink,
+        border: isDark ? "none" : `1.5px solid ${C.ink}33`,
+        boxShadow: isDark ? "0 10px 24px -12px rgba(28,35,48,0.55)" : "none",
+        letterSpacing: "0.02em",
       }}
     >
       {children}
-    </h2>
-  );
-}
-
-function SubText({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="mt-5 max-w-md text-[16.5px] leading-[1.7]"
-      style={{ ...INTER, fontWeight: 500, color: "rgba(33,38,15,0.72)" }}
-    >
-      {children}
-    </p>
-  );
-}
-
-/* Raw-score stepper — tactile, no native number input look */
-function RawScoreInput({
-  value,
-  onChange,
-  max = 40,
-}: {
-  value: number;
-  onChange: (n: number) => void;
-  max?: number;
-}) {
-  const clamp = (n: number) => Math.max(0, Math.min(max, n));
-  return (
-    <div className="mt-8 flex flex-col gap-5">
-      <div
-        className="flex items-stretch overflow-hidden rounded-2xl"
-        style={{
-          background: PAL.cream,
-          border: `1.5px solid ${PAL.oliveSoft}`,
-          boxShadow: "0 1px 0 rgba(255,255,255,0.6) inset",
-        }}
-      >
-        <button
-          type="button"
-          aria-label="Decrease"
-          onClick={() => onChange(clamp(value - 1))}
-          className="grid w-14 place-items-center text-2xl font-black transition-colors hover:bg-[color:var(--soft)]"
-          style={
-            {
-              color: PAL.oliveDeep,
-              ["--soft" as string]: PAL.paperSoft,
-            } as React.CSSProperties
-          }
-        >
-          −
-        </button>
-        <div className="flex flex-1 items-baseline justify-center gap-2 py-5">
-          <input
-            type="number"
-            min={0}
-            max={max}
-            value={value}
-            onChange={(e) => onChange(clamp(parseInt(e.target.value || "0", 10)))}
-            className="w-24 bg-transparent text-center font-black tabular-nums outline-none"
-            style={{
-              ...INTER,
-              fontWeight: 900,
-              fontSize: "3rem",
-              color: PAL.ink,
-              letterSpacing: "-0.03em",
-            }}
-          />
-          <span
-            className="text-xl font-bold"
-            style={{ color: "rgba(33,38,15,0.4)" }}
-          >
-            / {max}
-          </span>
-        </div>
-        <button
-          type="button"
-          aria-label="Increase"
-          onClick={() => onChange(clamp(value + 1))}
-          className="grid w-14 place-items-center text-2xl font-black transition-colors hover:bg-[color:var(--soft)]"
-          style={
-            {
-              color: PAL.oliveDeep,
-              ["--soft" as string]: PAL.paperSoft,
-            } as React.CSSProperties
-          }
-        >
-          +
-        </button>
-      </div>
-
-      {/* slider */}
-      <input
-        type="range"
-        min={0}
-        max={max}
-        value={value}
-        onChange={(e) => onChange(parseInt(e.target.value, 10))}
-        className="w-full accent-[color:var(--accent)]"
-        style={{ ["--accent" as string]: PAL.olive } as React.CSSProperties}
-      />
-    </div>
-  );
-}
-
-/* Band picker — 0.0 → 9.0 in 0.5 steps, used for Writing & Speaking */
-function BandPicker({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (n: number) => void;
-}) {
-  const steps: number[] = [];
-  for (let b = 4; b <= 9; b += 0.5) steps.push(b);
-  return (
-    <div className="mt-8">
-      <div className="flex flex-wrap gap-2">
-        {steps.map((b) => {
-          const active = Math.abs(b - value) < 0.001;
-          return (
-            <button
-              key={b}
-              type="button"
-              onClick={() => onChange(b)}
-              className="rounded-full px-4 py-2 text-sm font-extrabold tabular-nums transition-all"
-              style={{
-                ...INTER,
-                background: active ? PAL.olive : PAL.cream,
-                color: active ? PAL.cream : PAL.oliveDeep,
-                border: `1.5px solid ${active ? PAL.olive : PAL.oliveSoft}`,
-                boxShadow: active
-                  ? "0 6px 16px -8px rgba(63,74,36,0.55)"
-                  : "none",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              {b.toFixed(1)}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* Scroll progress rail */
-function ProgressRail({ current, total }: { current: number; total: number }) {
-  return (
-    <div className="pointer-events-none fixed right-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-3 sm:flex">
-      {Array.from({ length: total }).map((_, i) => {
-        const active = i === current;
-        return (
-          <span
-            key={i}
-            className="block rounded-full transition-all"
-            style={{
-              width: active ? 10 : 6,
-              height: active ? 28 : 6,
-              background: active ? PAL.olive : PAL.oliveSoft,
-              opacity: active ? 1 : 0.55,
-            }}
-          />
-        );
-      })}
-    </div>
+    </button>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Page                                                               */
+/* Page                                                                */
 /* ------------------------------------------------------------------ */
 function IeltsCalculatorPage() {
-  const [track, setTrack] = React.useState<Track>("academic");
-  const [lRaw, setLRaw] = React.useState(30);
-  const [rRaw, setRRaw] = React.useState(30);
-  const [wBand, setWBand] = React.useState(6.5);
-  const [sBand, setSBand] = React.useState(6.5);
+  const [l, setL] = React.useState(7);
+  const [r, setR] = React.useState(6.5);
+  const [w, setW] = React.useState(6.5);
+  const [s, setS] = React.useState(7);
 
-  const lBand = listeningBand(lRaw);
-  const rBand =
-    track === "academic" ? academicReadingBand(rRaw) : generalReadingBand(rRaw);
-  const overall = overallBand([lBand, rBand, wBand, sBand]);
-  const interp = INTERPRETATION[overall.toFixed(1)] ?? "—";
+  const overall = overallBand([l, r, w, s]);
+  const avg = (l + r + w + s) / 4;
+  const meaning = bandLabel(overall);
 
-  // section tracking for the rail (document scroll)
-  const [active, setActive] = React.useState(0);
-  const TOTAL = 6;
+  const reset = () => {
+    setL(7);
+    setR(6.5);
+    setW(6.5);
+    setS(7);
+  };
 
-  React.useEffect(() => {
-    const onScroll = () => {
-      const h = window.innerHeight;
-      const idx = Math.round(window.scrollY / h);
-      setActive(Math.max(0, Math.min(TOTAL - 1, idx)));
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const scrollToSection = (i: number) =>
-    window.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
+  const calcRef = React.useRef<HTMLDivElement | null>(null);
 
   return (
     <div
-      className="relative w-full"
+      className="relative w-full overflow-x-clip"
       style={{
         ...INTER,
-        background:
-          `radial-gradient(ellipse 60% 40% at 8% 0%, ${PAL.paperSoft} 0%, transparent 60%),` +
-          `radial-gradient(ellipse 50% 40% at 95% 100%, ${PAL.oliveSoft}55 0%, transparent 65%),` +
-          `linear-gradient(180deg, ${PAL.paper} 0%, ${PAL.paperSoft} 100%)`,
-        color: PAL.ink,
-        scrollSnapType: "y proximity",
+        background: C.bg,
+        color: C.ink,
       }}
     >
-      {/* page-scoped: enable snap on the document while this page is mounted */}
-      <style>{`html { scroll-snap-type: y proximity; scroll-behavior: smooth; }`}</style>
-
-      {/* soft grain */}
+      {/* large soft blurred halos like the reference */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.22] mix-blend-multiply"
+        className="pointer-events-none absolute -left-40 -top-40 h-[55vw] w-[55vw] rounded-full"
         style={{
-          backgroundImage:
-            `radial-gradient(${PAL.olive}22 1px, transparent 1.2px)`,
-          backgroundSize: "3px 3px",
+          background: `radial-gradient(circle, ${C.bgDeep} 0%, transparent 65%)`,
+          filter: "blur(60px)",
+          opacity: 0.55,
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-15vw] top-[40vh] h-[40vw] w-[40vw] rounded-full"
+        style={{
+          background: `radial-gradient(circle, ${C.bgDeep} 0%, transparent 65%)`,
+          filter: "blur(70px)",
+          opacity: 0.4,
         }}
       />
 
-      <ProgressRail current={active} total={TOTAL} />
+      {/* =================================================
+          SECTION 01 — HERO with two-card layout
+         ================================================= */}
+      <section
+        className="relative mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-5 py-24 sm:px-8"
+      >
+        <GhostNumber n="01" position="br" />
 
-      <main className="relative z-10">
+        <div className="relative z-10 w-full">
+          <div className="mb-8 flex justify-center">
+            <ChipBrand />
+          </div>
 
-        {/* ============ 1. PICK TRACK ============ */}
-        <SectionShell index={1} total={TOTAL} eyebrow="Choose your track">
-          <div>
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: PAL.olive }}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
+            {/* LEFT — cream card */}
+            <div
+              className="relative rounded-[28px] p-8 sm:p-10"
+              style={{
+                background: C.cardCream,
+                boxShadow:
+                  "0 30px 60px -40px rgba(28,35,48,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+              }}
             >
-              IELTS Score Calculator
-            </p>
-            <BigHeading>
-              Find your <span style={{ color: PAL.olive }}>Overall Band</span> in
-              five quick steps.
-            </BigHeading>
-            <SubText>
-              Pick Academic or General Training. Reading conversion differs
-              between the two — we apply the correct table automatically.
-            </SubText>
+              <div className="absolute -top-3 right-6">
+                <ChipFree />
+              </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-3 max-w-md">
-              {(["academic", "general"] as Track[]).map((t) => {
-                const active = track === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setTrack(t)}
-                    className="rounded-2xl px-5 py-5 text-left transition-all"
-                    style={{
-                      background: active ? PAL.olive : PAL.cream,
-                      color: active ? PAL.cream : PAL.oliveDeep,
-                      border: `1.5px solid ${active ? PAL.olive : PAL.oliveSoft}`,
-                      boxShadow: active
-                        ? "0 18px 40px -22px rgba(63,74,36,0.6)"
-                        : "0 1px 0 rgba(255,255,255,0.6) inset",
-                    }}
-                  >
-                    <div
-                      className="text-[10px] font-extrabold uppercase tracking-[0.22em]"
-                      style={{ opacity: 0.7 }}
-                    >
-                      IELTS
-                    </div>
-                    <div
-                      className="mt-1 font-black tracking-tight"
-                      style={{
-                        fontWeight: 900,
-                        fontSize: "1.5rem",
-                        letterSpacing: "-0.02em",
-                      }}
-                    >
-                      {t === "academic" ? "Academic" : "General Training"}
-                    </div>
-                  </button>
-                );
-              })}
+              <h1
+                className="leading-[0.95] tracking-tight"
+                style={{
+                  ...INTER,
+                  fontWeight: 900,
+                  fontSize: "clamp(2.5rem, 6.4vw, 5rem)",
+                  letterSpacing: "-0.04em",
+                  color: C.ink,
+                }}
+              >
+                Find your IELTS{" "}
+                <span style={{ color: C.olive }}>band</span> in seconds.
+              </h1>
+
+              <p
+                className="mt-6 max-w-md text-[16px] leading-[1.65]"
+                style={{ color: C.muted, fontWeight: 500 }}
+              >
+                Slide your score. We do the math the official way — same
+                rounding as the real exam.
+              </p>
+
+              <div className="mt-8">
+                <PillButton
+                  onClick={() =>
+                    calcRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                >
+                  Start calculating <ArrowRight className="h-4 w-4" />
+                </PillButton>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => scrollToSection(1)}
-
-              className="mt-10 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
-              style={{
-                background: PAL.ink,
-                color: PAL.cream,
-                boxShadow: "0 14px 30px -14px rgba(33,38,15,0.6)",
-              }}
-            >
-              Start scrolling ↓
-            </button>
-          </div>
-          <LiveBandCard
-            label={track === "academic" ? "IELTS Academic" : "IELTS General"}
-            band={null}
-            hint="Scroll down to enter your Listening score first."
-          />
-        </SectionShell>
-
-        {/* ============ 2. LISTENING ============ */}
-        <SectionShell index={2} total={TOTAL} eyebrow="Listening">
-          <div>
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: PAL.olive }}
-            >
-              Step 02 · Listening
-            </p>
-            <BigHeading>How many did you get right?</BigHeading>
-            <SubText>
-              Listening has 40 questions. Enter the number you answered
-              correctly — we convert to a band using the official IELTS table.
-            </SubText>
-            <RawScoreInput value={lRaw} onChange={setLRaw} />
-          </div>
-          <LiveBandCard
-            label="Listening Band"
-            band={lBand}
-            hint={`Raw ${lRaw} / 40 → Band ${lBand.toFixed(1)}`}
-          />
-        </SectionShell>
-
-        {/* ============ 3. READING ============ */}
-        <SectionShell index={3} total={TOTAL} eyebrow="Reading">
-          <div>
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: PAL.olive }}
-            >
-              Step 03 · {track === "academic" ? "Academic Reading" : "General Reading"}
-            </p>
-            <BigHeading>Now your Reading raw score.</BigHeading>
-            <SubText>
-              Reading also has 40 questions.{" "}
-              {track === "general"
-                ? "General Training Reading is graded on a more demanding scale — you need more correct answers for the same band."
-                : "We apply the Academic Reading conversion table."}
-            </SubText>
-            <RawScoreInput value={rRaw} onChange={setRRaw} />
-          </div>
-          <LiveBandCard
-            label="Reading Band"
-            band={rBand}
-            hint={`Raw ${rRaw} / 40 → Band ${rBand.toFixed(1)}`}
-          />
-        </SectionShell>
-
-        {/* ============ 4. WRITING ============ */}
-        <SectionShell index={4} total={TOTAL} eyebrow="Writing">
-          <div>
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: PAL.olive }}
-            >
-              Step 04 · Writing
-            </p>
-            <BigHeading>Pick your Writing band.</BigHeading>
-            <SubText>
-              Writing is band-scored directly by the examiner across the four
-              criteria. Pick what you expect to score, or your last mock result.
-            </SubText>
-            <BandPicker value={wBand} onChange={setWBand} />
-          </div>
-          <LiveBandCard
-            label="Writing Band"
-            band={wBand}
-            hint="Tap a chip to set your Writing band."
-          />
-        </SectionShell>
-
-        {/* ============ 5. SPEAKING ============ */}
-        <SectionShell index={5} total={TOTAL} eyebrow="Speaking">
-          <div>
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.24em]"
-              style={{ color: PAL.olive }}
-            >
-              Step 05 · Speaking
-            </p>
-            <BigHeading>And your Speaking band.</BigHeading>
-            <SubText>
-              Same idea — pick what you expect across Fluency, Vocabulary,
-              Grammar, and Pronunciation.
-            </SubText>
-            <BandPicker value={sBand} onChange={setSBand} />
-          </div>
-          <LiveBandCard
-            label="Speaking Band"
-            band={sBand}
-            hint="Tap a chip to set your Speaking band."
-          />
-        </SectionShell>
-
-        {/* ============ 6. OVERALL REVEAL ============ */}
-        <section
-          className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
-          style={INTER}
-        >
-          <div
-            className="absolute left-6 top-6 flex items-center gap-3 sm:left-10 sm:top-10"
-            style={{ color: PAL.olive }}
-          >
-            <span
-              className="grid h-9 w-9 place-items-center rounded-full text-xs font-extrabold"
-              style={{
-                background: PAL.cream,
-                border: `1.5px solid ${PAL.oliveSoft}`,
-                color: PAL.oliveDeep,
-              }}
-            >
-              06
-            </span>
-            <span
-              className="text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: PAL.olive }}
-            >
-              Your Overall Band
-            </span>
-          </div>
-
-          <div className="mx-auto w-full max-w-4xl text-center">
-            <p
-              className="text-xs font-extrabold uppercase tracking-[0.28em]"
-              style={{ color: PAL.olive }}
-            >
-              Estimated Overall Band Score
-            </p>
-
+            {/* RIGHT — dark navy card with giant pale band number */}
             <div
-              key={overall}
-              className="mx-auto mt-6 animate-[scale-in_0.5s_ease-out] font-black leading-none tabular-nums"
+              className="relative flex items-center justify-center rounded-[28px] p-10 sm:p-12"
               style={{
-                fontWeight: 900,
-                fontSize: "clamp(9rem, 28vw, 22rem)",
-                letterSpacing: "-0.06em",
-                color: PAL.oliveDeep,
-                textShadow: "0 18px 60px rgba(63,74,36,0.25)",
+                background: C.ink,
+                color: C.pale,
+                boxShadow:
+                  "0 30px 60px -30px rgba(28,35,48,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
+                minHeight: 320,
               }}
             >
-              {overall.toFixed(1)}
-            </div>
-
-            <p
-              className="mt-2 font-extrabold uppercase tracking-[0.22em]"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
-                color: PAL.ink,
-              }}
-            >
-              {interp}
-            </p>
-
-            <div
-              className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4"
-              style={INTER}
-            >
-              {[
-                { k: "Listening", v: lBand, sub: `${lRaw}/40` },
-                { k: "Reading", v: rBand, sub: `${rRaw}/40` },
-                { k: "Writing", v: wBand, sub: "Band" },
-                { k: "Speaking", v: sBand, sub: "Band" },
-              ].map((row) => (
+              <div className="text-center">
                 <div
-                  key={row.k}
-                  className="rounded-2xl px-4 py-5 text-left"
+                  className="font-black leading-none tabular-nums"
                   style={{
-                    background: PAL.cream,
-                    border: `1.5px solid ${PAL.oliveSoft}`,
+                    ...INTER,
+                    fontWeight: 900,
+                    fontSize: "clamp(7rem, 16vw, 12rem)",
+                    letterSpacing: "-0.06em",
+                    color: C.pale,
+                    textShadow: "0 10px 40px rgba(0,0,0,0.25)",
                   }}
                 >
-                  <div
-                    className="text-[10px] font-extrabold uppercase tracking-[0.2em]"
-                    style={{ color: PAL.olive }}
-                  >
-                    {row.k}
-                  </div>
-                  <div
-                    className="mt-1 font-black tabular-nums"
-                    style={{
-                      fontWeight: 900,
-                      fontSize: "2rem",
-                      letterSpacing: "-0.03em",
-                      color: PAL.ink,
-                    }}
-                  >
-                    {row.v.toFixed(1)}
-                  </div>
-                  <div
-                    className="text-[11px] font-bold"
-                    style={{ color: "rgba(33,38,15,0.5)" }}
-                  >
-                    {row.sub}
-                  </div>
+                  {overall.toFixed(1)}
                 </div>
-              ))}
-            </div>
-
-            <p
-              className="mx-auto mt-10 max-w-xl text-[13px] leading-relaxed"
-              style={{ color: "rgba(33,38,15,0.6)" }}
-            >
-              Overall band = average of the four skills, rounded to the nearest
-              0.5. .25 rounds up to .5, .75 rounds up to the next whole band.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() =>
-                  scrollToSection(0)
-                }
-                className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
-                style={{
-                  background: PAL.ink,
-                  color: PAL.cream,
-                }}
-              >
-                Recalculate
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setTrack(track === "academic" ? "general" : "academic");
-                  scrollToSection(0);
-                }}
-                className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
-                style={{
-                  background: PAL.cream,
-                  color: PAL.oliveDeep,
-                  border: `1.5px solid ${PAL.oliveSoft}`,
-                }}
-              >
-                Switch to {track === "academic" ? "General" : "Academic"}
-              </button>
+                <p
+                  className="mt-4 font-extrabold"
+                  style={{
+                    color: C.olive === C.olive ? "#a3b375" : C.pale,
+                    fontWeight: 800,
+                    fontSize: "0.95rem",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  your overall band
+                </p>
+                <p
+                  className="mt-4 text-[13px]"
+                  style={{ color: "rgba(207,216,168,0.65)" }}
+                >
+                  Updates as you drag the sliders below.
+                </p>
+              </div>
             </div>
           </div>
-        </section>
 
-      </main>
+          {/* scroll hint */}
+          <div className="mt-12 flex justify-center">
+            <button
+              type="button"
+              onClick={() =>
+                calcRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
+              className="text-[11px] font-extrabold uppercase tracking-[0.3em]"
+              style={{ color: C.muted }}
+            >
+              scroll ↓
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* =================================================
+          SECTION 02 — Calculator
+         ================================================= */}
+      <section
+        ref={calcRef}
+        className="relative mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-5 py-24 sm:px-8"
+      >
+        <GhostNumber n="02" position="bl" />
+
+        <div className="relative z-10 w-full">
+          <div className="mb-6 flex flex-col items-start gap-3">
+            <SectionNumber n="02" />
+            <h2
+              className="leading-[0.95] tracking-tight"
+              style={{
+                ...INTER,
+                fontWeight: 900,
+                fontSize: "clamp(2rem, 4.6vw, 3.5rem)",
+                letterSpacing: "-0.03em",
+                color: C.ink,
+              }}
+            >
+              Your calculator
+            </h2>
+            <p style={{ color: C.muted, fontWeight: 500 }}>
+              Drag the sliders. Your overall band updates live.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-5 lg:gap-6">
+            {/* LEFT — sliders card (cream) */}
+            <div
+              className="rounded-[28px] p-8 sm:p-10 lg:col-span-3"
+              style={{
+                background: C.cardCream,
+                boxShadow:
+                  "0 30px 60px -40px rgba(28,35,48,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+              }}
+            >
+              <div className="space-y-7">
+                <BandSlider label="Listening" value={l} onChange={setL} />
+                <BandSlider label="Reading" value={r} onChange={setR} />
+                <BandSlider label="Writing" value={w} onChange={setW} />
+                <BandSlider label="Speaking" value={s} onChange={setS} />
+              </div>
+
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <PillButton variant="ghost">
+                  <Share2 className="h-4 w-4" /> Share
+                </PillButton>
+                <PillButton variant="ghost">
+                  <FileText className="h-4 w-4" /> PDF
+                </PillButton>
+                <PillButton variant="ghost" onClick={reset}>
+                  <RotateCcw className="h-4 w-4" /> Reset
+                </PillButton>
+              </div>
+            </div>
+
+            {/* RIGHT — result card (dark) */}
+            <div
+              className="relative flex flex-col justify-between rounded-[28px] p-8 sm:p-10 lg:col-span-2"
+              style={{
+                background: C.ink,
+                color: C.pale,
+                boxShadow:
+                  "0 30px 60px -30px rgba(28,35,48,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
+                minHeight: 420,
+              }}
+            >
+              <div className="text-center">
+                <div
+                  className="font-black leading-none tabular-nums"
+                  style={{
+                    ...INTER,
+                    fontWeight: 900,
+                    fontSize: "clamp(6rem, 14vw, 10rem)",
+                    letterSpacing: "-0.06em",
+                    color: C.pale,
+                  }}
+                >
+                  {overall.toFixed(1)}
+                </div>
+                <p
+                  className="mt-3 font-extrabold uppercase tracking-[0.18em]"
+                  style={{
+                    color: "#a3b375",
+                    fontWeight: 800,
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  {meaning.title}
+                </p>
+              </div>
+
+              <p
+                className="mx-auto mt-6 max-w-xs text-center text-[13.5px] leading-relaxed"
+                style={{ color: "rgba(207,216,168,0.78)" }}
+              >
+                {meaning.desc}
+              </p>
+
+              <div
+                className="mt-8 rounded-full px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.16em]"
+                style={{
+                  background: "rgba(207,216,168,0.08)",
+                  color: "rgba(207,216,168,0.7)",
+                  border: "1px solid rgba(207,216,168,0.18)",
+                }}
+              >
+                avg {avg.toFixed(3)} · rounded to nearest 0.5
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 flex justify-center">
+            <span
+              className="text-[11px] font-extrabold uppercase tracking-[0.3em]"
+              style={{ color: C.muted }}
+            >
+              scroll ↓
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* =================================================
+          SECTION 03 — How scoring works
+         ================================================= */}
+      <section className="relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-8">
+        <GhostNumber n="03" position="br" />
+
+        <div className="relative z-10">
+          <div className="mb-6 flex flex-col items-start gap-3">
+            <SectionNumber n="03" />
+            <h2
+              className="leading-[0.95] tracking-tight"
+              style={{
+                ...INTER,
+                fontWeight: 900,
+                fontSize: "clamp(2rem, 4.6vw, 3.5rem)",
+                letterSpacing: "-0.03em",
+                color: C.ink,
+              }}
+            >
+              How the scoring works
+            </h2>
+            <p style={{ color: C.muted, fontWeight: 500 }}>
+              The official rounding rules — the same ones we use above.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {[
+              {
+                k: "01",
+                t: "Average the four",
+                d: "We take the mean of your Listening, Reading, Writing, and Speaking band scores.",
+              },
+              {
+                k: "02",
+                t: "Round to nearest 0.5",
+                d: ".25 rounds UP to the next .5. .75 rounds UP to the next whole band. Anything in between stays.",
+              },
+              {
+                k: "03",
+                t: "That's your overall",
+                d: "Example: 6.5 + 6.5 + 5.0 + 7.0 = 25 ÷ 4 = 6.25 → Overall Band 6.5.",
+              },
+            ].map((card) => (
+              <div
+                key={card.k}
+                className="rounded-[24px] p-7"
+                style={{
+                  background: C.cardCream,
+                  boxShadow:
+                    "0 30px 60px -40px rgba(28,35,48,0.3), inset 0 1px 0 rgba(255,255,255,0.4)",
+                }}
+              >
+                <span
+                  className="grid h-9 w-9 place-items-center rounded-full text-[12px] font-extrabold"
+                  style={{ background: C.ink, color: C.pale }}
+                >
+                  {card.k}
+                </span>
+                <h3
+                  className="mt-5"
+                  style={{
+                    ...INTER,
+                    fontWeight: 900,
+                    fontSize: "1.4rem",
+                    letterSpacing: "-0.02em",
+                    color: C.ink,
+                  }}
+                >
+                  {card.t}
+                </h3>
+                <p
+                  className="mt-2 text-[14px] leading-[1.65]"
+                  style={{ color: C.muted, fontWeight: 500 }}
+                >
+                  {card.d}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =================================================
+          SECTION 04 — What each band means
+         ================================================= */}
+      <section className="relative mx-auto w-full max-w-7xl px-5 pb-32 pt-12 sm:px-8">
+        <GhostNumber n="04" position="bl" />
+
+        <div className="relative z-10">
+          <div className="mb-6 flex flex-col items-start gap-3">
+            <SectionNumber n="04" />
+            <h2
+              className="leading-[0.95] tracking-tight"
+              style={{
+                ...INTER,
+                fontWeight: 900,
+                fontSize: "clamp(2rem, 4.6vw, 3.5rem)",
+                letterSpacing: "-0.03em",
+                color: C.ink,
+              }}
+            >
+              What each band means
+            </h2>
+            <p style={{ color: C.muted, fontWeight: 500 }}>
+              Plain English for every score, 9 down to 1.
+            </p>
+          </div>
+
+          <div className="mt-10 overflow-hidden rounded-[28px]" style={{ background: C.cardCream }}>
+            {BAND_MEANING.map((b, i) => (
+              <div
+                key={b.n}
+                className="grid grid-cols-[64px_1fr] items-start gap-5 px-6 py-6 sm:grid-cols-[80px_1fr] sm:px-9 sm:py-7"
+                style={{
+                  borderTop: i === 0 ? "none" : "1px solid rgba(28,35,48,0.08)",
+                }}
+              >
+                <div
+                  className="font-black tabular-nums"
+                  style={{
+                    ...INTER,
+                    fontWeight: 900,
+                    fontSize: "clamp(2.5rem, 5vw, 3.5rem)",
+                    letterSpacing: "-0.04em",
+                    color: C.ink,
+                    lineHeight: 1,
+                  }}
+                >
+                  {b.n}
+                </div>
+                <div>
+                  <h3
+                    style={{
+                      ...INTER,
+                      fontWeight: 900,
+                      fontSize: "1.25rem",
+                      letterSpacing: "-0.02em",
+                      color: C.ink,
+                    }}
+                  >
+                    {b.t}
+                  </h3>
+                  <p
+                    className="mt-1.5 max-w-2xl text-[14.5px] leading-[1.65]"
+                    style={{ color: C.muted, fontWeight: 500 }}
+                  >
+                    {b.d}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
