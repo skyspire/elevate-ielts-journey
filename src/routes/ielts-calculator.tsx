@@ -143,7 +143,7 @@ function SectionShell({
   return (
     <section
       id={id}
-      className="relative flex h-full min-h-0 w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+      className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
       style={INTER}
     >
       {/* page-corner meta */}
@@ -670,7 +670,7 @@ function IeltsCalculatorPage() {
 
         {/* ============ 6. OVERALL REVEAL ============ */}
         <section
-          className="relative flex h-full min-h-0 w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
+          className="relative flex min-h-[100svh] w-full snap-start items-center justify-center px-6 py-16 sm:px-10"
           style={INTER}
         >
           <div
