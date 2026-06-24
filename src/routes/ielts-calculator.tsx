@@ -467,7 +467,7 @@ function IeltsCalculatorPage() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative flex h-screen w-full flex-col overflow-hidden"
       style={{
         ...INTER,
         background:
@@ -488,7 +488,10 @@ function IeltsCalculatorPage() {
         }}
       />
 
-      <Header />
+      <div className="relative z-20 shrink-0">
+        <Header />
+      </div>
+
 
       <ProgressRail current={active} total={TOTAL} />
 
