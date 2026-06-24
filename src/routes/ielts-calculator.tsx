@@ -789,7 +789,7 @@ function IeltsCalculatorPage() {
               <button
                 type="button"
                 onClick={() =>
-                  scrollerRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+                  scrollToSection(0)
                 }
                 className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
                 style={{
@@ -803,7 +803,7 @@ function IeltsCalculatorPage() {
                 type="button"
                 onClick={() => {
                   setTrack(track === "academic" ? "general" : "academic");
-                  scrollerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  scrollToSection(0);
                 }}
                 className="rounded-full px-6 py-3 text-sm font-extrabold uppercase tracking-[0.18em] transition-transform hover:-translate-y-0.5"
                 style={{
