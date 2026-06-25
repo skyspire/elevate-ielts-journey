@@ -98,7 +98,7 @@ function BlogPage() {
 
       {/* Big pastel category tiles — hero */}
       <section className="mx-auto max-w-6xl px-5">
-        <div className="mb-6 flex items-baseline justify-between">
+        <div className="mb-8 text-center">
           <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
             Browse by category
           </h2>
@@ -106,7 +106,7 @@ function BlogPage() {
             <button
               type="button"
               onClick={() => setActiveCat("All")}
-              className="text-xs underline"
+              className="mt-3 text-xs underline"
               style={{ color: "#6d28d9", fontWeight: 600 }}
             >
               Clear filter
@@ -123,12 +123,12 @@ function BlogPage() {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCat(cat)}
-                className="group relative overflow-hidden rounded-2xl p-5 text-left transition-all"
+                className="group relative flex aspect-square flex-col items-center justify-center overflow-hidden rounded-2xl p-5 text-center transition-all"
                 style={{
-                  background: p.cardBg,
+                  background: p.imgBg,
                   boxShadow: active
                     ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
-                    : `0 12px 28px -14px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
+                    : `0 14px 32px -16px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.10)`,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-3px)";
@@ -137,23 +137,18 @@ function BlogPage() {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <div
-                  className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-60"
-                  style={{ background: p.imgBg }}
-                />
-                <div className="relative">
-                  <h3 className="text-lg leading-tight sm:text-xl" style={{ color: p.title, fontWeight: 800 }}>
-                    {cat}
-                  </h3>
-                  <p className="mt-1.5 text-xs" style={{ color: p.chipText, fontWeight: 600 }}>
-                    {count} {count === 1 ? "article" : "articles"}
-                  </p>
-                </div>
+                <h3 className="text-xl leading-tight sm:text-2xl" style={{ color: p.title, fontWeight: 800 }}>
+                  {cat}
+                </h3>
+                <p className="mt-2 text-xs" style={{ color: p.title, opacity: 0.7, fontWeight: 600 }}>
+                  {count} {count === 1 ? "article" : "articles"}
+                </p>
               </button>
             );
           })}
         </div>
       </section>
+
 
       {/* Full-width pastel search band */}
       <section className="mt-16">
@@ -215,9 +210,18 @@ function BlogPage() {
 
 
 
-
       {/* Pastel post cards */}
-      <section className="mx-auto max-w-6xl px-5 pb-20 pt-6">
+      <section className="mx-auto max-w-6xl px-5 pb-20 pt-16">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+            Latest articles
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "#64748b" }}>
+            Fresh strategies and study notes from our IELTS team.
+          </p>
+        </div>
+
+
         {filtered.length === 0 ? (
           <p className="py-16 text-center text-sm" style={{ color: "#94a3b8" }}>
             No articles match your search.
@@ -298,9 +302,10 @@ function BlogPage() {
             boxShadow: "0 20px 50px -20px rgba(124,58,237,0.25), 0 8px 20px -10px rgba(15,23,42,0.08)",
           }}
         >
-          <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#7c3aed", fontWeight: 700 }}>
+          <p className="text-sm tracking-tight" style={{ color: "#7c3aed", fontWeight: 600 }}>
             Stay sharp
           </p>
+
           <h3 className="mx-auto mt-3 max-w-xl text-3xl leading-tight tracking-tight sm:text-4xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
             New IELTS strategies in your inbox, weekly.
           </h3>
