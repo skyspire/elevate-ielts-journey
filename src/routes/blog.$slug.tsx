@@ -188,7 +188,7 @@ function PostPage() {
       {/* Body */}
       <article className="mx-auto max-w-[680px] px-5 pt-12 pb-20">
         <div className="flex flex-col gap-6">
-          {post.body.map((para, i) => (
+          {post.body.map((para: string, i: number) => (
             <p
               key={i}
               className="text-[17px] leading-[1.75]"
