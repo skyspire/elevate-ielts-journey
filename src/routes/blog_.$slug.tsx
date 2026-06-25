@@ -96,10 +96,23 @@ function PostPage() {
   const nextPost = idx >= 0 && idx < POSTS.length - 1 ? POSTS[idx + 1] : null;
 
   const REACTIONS = [
-    { key: "clap", Icon: HandHeart, label: "Appreciate", tint: "#FDE68A", ring: "#F59E0B" },
-    { key: "idea", Icon: Sparkles, label: "Insightful", tint: "#DBEAFE", ring: "#3B82F6" },
-    { key: "fire", Icon: Flame, label: "Love it", tint: "#FECACA", ring: "#EF4444" },
+    { key: "love", label: "Love" },
+    { key: "like", label: "Like" },
+    { key: "smile", label: "Smile" },
   ] as const;
+  const reactionPath: Record<string, string> = {
+    love: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z",
+    like: "M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z",
+    smile: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5s.67 1.5 1.5 1.5zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z",
+  };
+  const SHARE_TARGETS: { key: "whatsapp" | "telegram" | "x" | "facebook" | "linkedin" | "email"; label: string; path: string; iconClass?: string }[] = [
+    { key: "whatsapp", label: "WhatsApp", path: "M17.472 14.382c-.301-.15-1.767-.872-2.04-.971-.272-.1-.47-.15-.67.15-.198.3-.77.971-.944 1.17-.173.199-.347.225-.648.075-.301-.15-1.27-.467-2.42-1.496-.893-.795-1.495-1.777-1.67-2.077-.173-.3-.018-.462.13-.61.135-.133.301-.35.452-.524.15-.174.2-.291.3-.485.1-.197.05-.37-.024-.524-.075-.15-.67-1.611-.92-2.215-.242-.584-.487-.506-.67-.516-.174-.008-.37-.01-.568-.01-.197 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.767-.721 2.016-1.415.249-.694.249-1.289.173-1.415-.075-.124-.272-.198-.57-.348h-.002zM12.22 20.252h-.007c-1.48 0-2.93-.399-4.194-1.154l-.301-.18-3.116.817.833-3.04-.197-.314c-.83-1.321-1.27-2.853-1.27-4.425 0-4.551 3.704-8.255 8.259-8.255 2.204 0 4.276.86 5.833 2.418 1.557 1.558 2.415 3.63 2.413 5.834 0 4.552-3.707 8.255-8.255 8.255zM12 2a9.995 9.995 0 00-10 10c0 1.75.45 3.45 1.31 4.96L2 22l5.16-1.35C8.61 21.51 10.29 22 12 22c5.51 0 10-4.49 10-10S17.51 2 12 2z" },
+    { key: "telegram", label: "Telegram", path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.35-.49.96-.75 3.78-1.65 6.31-2.73 7.57-3.24 3.61-1.48 4.36-1.74 4.85-1.75.11 0 .35.03.5.16.13.12.17.29.18.41.01.07.02.24.01.29z" },
+    { key: "x", label: "X / Twitter", path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z", iconClass: "h-6 w-6" },
+    { key: "facebook", label: "Facebook", path: "M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" },
+    { key: "linkedin", label: "LinkedIn", path: "M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a2.7 2.7 0 0 0-2.7-2.7c-1.2 0-2 .7-2.3 1.2v-1h-3.1v10.1h3.1v-5.1c0-.8.4-1.2 1-1.2.7 0 1 .4 1 1.2v5.1h3.1M6.7 8.1c1 0 1.8-.8 1.8-1.8s-.8-1.8-1.8-1.8-1.8.8-1.8 1.8.8 1.8 1.8 1.8m1.5 10.4V8.5H5.2v10.1h3z" },
+    { key: "email", label: "Email", path: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" },
+  ];
   const reactionsKey = `blog:reactions:${post.slug}`;
   const myReactionsKey = `blog:my-reactions:${post.slug}`;
   const commentsKey = `blog:comments:${post.slug}`;
@@ -393,140 +406,80 @@ function PostPage() {
         </div>
       </article>
 
-      {/* Reactions bar — premium pill row */}
-      <section className="mx-auto max-w-[680px] px-5 pb-10">
-        <div
-          className="relative overflow-hidden rounded-3xl border bg-white px-6 py-6 sm:px-8"
-          style={{
-            borderColor: "#E0E7FF",
-            boxShadow:
-              "0 24px 48px -28px rgba(30,27,75,0.22), 0 4px 12px -6px rgba(15,23,42,0.06)",
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-60"
-            style={{ background: "radial-gradient(closest-side, #DBEAFE, transparent 70%)" }}
-          />
-          <div className="relative flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
-            <div className="text-center sm:text-left">
-              <p
-                className="text-[11px] uppercase tracking-[0.22em]"
-                style={{ color: "#3730a3", fontWeight: 800 }}
-              >
-                React to this piece
-              </p>
-              <p className="mt-1 text-[14px]" style={{ color: "#475569", fontWeight: 500 }}>
-                One tap — it shapes what we write next.
-              </p>
-            </div>
-            <div className="flex items-center gap-2.5">
-              {REACTIONS.map((r) => {
-                const active = !!myReactions[r.key];
-                const Icon = r.Icon;
-                return (
-                  <button
-                    key={r.key}
-                    type="button"
-                    onClick={() => toggleReaction(r.key)}
-                    aria-pressed={active}
-                    aria-label={r.label}
-                    className="group flex h-12 items-center gap-2 rounded-full px-4 text-[13px] transition-all active:scale-95"
-                    style={{
-                      background: active ? r.tint : "#ffffff",
-                      border: `1.5px solid ${active ? r.ring : "#E2E8F0"}`,
-                      color: active ? r.ring : "#475569",
-                      fontWeight: 800,
-                      boxShadow: active
-                        ? `0 8px 20px -10px ${r.ring}55`
-                        : "0 2px 6px -3px rgba(15,23,42,0.06)",
-                    }}
-                  >
-                    <Icon
-                      className="h-[18px] w-[18px] transition-transform group-hover:scale-110"
-                      strokeWidth={active ? 2.4 : 2}
-                    />
-                    <span className="tabular-nums">{reactionCounts[r.key] || 0}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Share — premium icon row */}
+      {/* Engagement — reactions + share, centered, bare on page */}
       <section className="mx-auto max-w-[680px] px-5 pb-14">
-        <div
-          className="rounded-3xl border bg-white px-6 py-6"
-          style={{
-            borderColor: "#E0E7FF",
-            boxShadow: "0 20px 40px -24px rgba(30,27,75,0.18)",
-          }}
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <p
-              className="text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: "#3730a3", fontWeight: 800 }}
-            >
-              Share
-            </p>
-            <button
-              type="button"
-              onClick={copyLink}
-              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] transition-colors"
-              style={{
-                borderColor: copied ? "#10B981" : "#CBD5E1",
-                color: copied ? "#047857" : "#1e1b4b",
-                background: copied ? "#ECFDF5" : "#ffffff",
-                fontWeight: 700,
-              }}
-            >
-              {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
-              {copied ? "Copied" : "Copy link"}
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { key: "whatsapp", label: "WhatsApp", Icon: Send, color: "#25D366" },
-              { key: "telegram", label: "Telegram", Icon: Send, color: "#229ED9" },
-              { key: "x", label: "X", Icon: Twitter, color: "#0f172a" },
-              { key: "facebook", label: "Facebook", Icon: Facebook, color: "#1877F2" },
-              { key: "linkedin", label: "LinkedIn", Icon: Linkedin, color: "#0A66C2" },
-              { key: "email", label: "Email", Icon: Mail, color: "#475569" },
-            ].map((s) => {
-              const Icon = s.Icon;
+        <div className="flex flex-col items-center gap-10">
+          {/* Reactions */}
+          <div className="flex items-center justify-center gap-10 sm:gap-12">
+            {REACTIONS.map((r) => {
+              const active = !!myReactions[r.key];
               return (
                 <button
-                  key={s.key}
+                  key={r.key}
                   type="button"
-                  onClick={() => shareTo(s.key as "whatsapp")}
-                  aria-label={`Share on ${s.label}`}
-                  title={s.label}
-                  className="group relative flex h-11 w-11 items-center justify-center rounded-full transition-all hover:-translate-y-0.5"
-                  style={{
-                    background: "#F8FAFC",
-                    border: "1.5px solid #E2E8F0",
-                    color: s.color,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = s.color;
-                    e.currentTarget.style.borderColor = s.color;
-                    e.currentTarget.style.color = "#ffffff";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#F8FAFC";
-                    e.currentTarget.style.borderColor = "#E2E8F0";
-                    e.currentTarget.style.color = s.color;
-                  }}
+                  onClick={() => toggleReaction(r.key)}
+                  aria-pressed={active}
+                  aria-label={r.label}
+                  className="flex flex-col items-center gap-1.5 transition-transform active:scale-90"
                 >
-                  <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-9 w-9 transition-colors"
+                    style={{ fill: active ? "#3B82F6" : "#93C5FD" }}
+                  >
+                    <path d={reactionPath[r.key]} />
+                  </svg>
+                  <span
+                    className="text-[13px] tabular-nums"
+                    style={{ color: "#1f2937", fontFamily: INTER, fontWeight: 700 }}
+                  >
+                    {reactionCounts[r.key] || 0}
+                  </span>
                 </button>
               );
             })}
           </div>
+
+          {/* Divider */}
+          <div className="h-1 w-12 rounded-full" style={{ background: "#93C5FD" }} />
+
+          {/* Share — 3x2 grid of black rounded-square tiles */}
+          <div className="grid grid-cols-3 gap-3">
+            {SHARE_TARGETS.map((s) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => shareTo(s.key)}
+                aria-label={`Share on ${s.label}`}
+                title={s.label}
+                className="flex h-[52px] w-[52px] items-center justify-center rounded-xl text-white transition-transform hover:scale-105 active:scale-95"
+                style={{ background: "#000000" }}
+              >
+                <svg viewBox="0 0 24 24" className={s.iconClass || "h-7 w-7"} fill="currentColor">
+                  <path d={s.path} />
+                </svg>
+              </button>
+            ))}
+          </div>
+
+          {/* Copy link */}
+          <button
+            type="button"
+            onClick={copyLink}
+            className="inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-colors"
+            style={{
+              color: copied ? "#047857" : "#475569",
+              fontFamily: INTER,
+              fontWeight: 700,
+            }}
+          >
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
+            {copied ? "Link copied" : "Copy link"}
+          </button>
         </div>
       </section>
+
+
 
       {/* Previous / Next article */}
       {(prevPost || nextPost) && (
@@ -662,42 +615,34 @@ function PostPage() {
         </ul>
       </section>
 
-      {/* Comments — unique pastel peach band, full-bleed */}
+      {/* Comments — grey band, full-bleed */}
       <section
         aria-label="Discussion"
         className="relative w-full px-5 py-20"
         style={{
-          background:
-            "linear-gradient(180deg, #FFF1E6 0%, #FFE4D1 55%, #FFD8BE 100%)",
+          background: "linear-gradient(180deg, #F3F4F6 0%, #E5E7EB 100%)",
+          fontFamily: INTER,
         }}
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-60"
-          style={{
-            background:
-              "radial-gradient(600px 240px at 15% 10%, #FFD2B0AA, transparent 70%), radial-gradient(500px 220px at 90% 90%, #FFC8E0AA, transparent 70%)",
-          }}
-        />
         <div className="relative mx-auto max-w-[720px]">
           <div className="mb-8 flex flex-col items-center text-center">
             <div
               className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl"
               style={{
                 background: "#ffffff",
-                color: "#C2410C",
-                boxShadow: "0 10px 24px -12px rgba(194,65,12,0.35)",
+                color: "#1f2937",
+                boxShadow: "0 8px 20px -10px rgba(15,23,42,0.18)",
               }}
             >
               <MessagesSquare className="h-6 w-6" strokeWidth={2.2} />
             </div>
             <h2
               className="text-2xl tracking-tight sm:text-3xl"
-              style={{ color: "#7C2D12", fontWeight: 900 }}
+              style={{ color: "#111827", fontWeight: 700 }}
             >
               Join the discussion
             </h2>
-            <p className="mt-2 text-[14px]" style={{ color: "#9A3412", fontWeight: 500 }}>
+            <p className="mt-2 text-[14px]" style={{ color: "#4B5563", fontWeight: 700 }}>
               {comments.length === 0
                 ? "Be the first to share a thought."
                 : `${comments.length} ${comments.length === 1 ? "comment" : "comments"} so far`}
@@ -705,10 +650,10 @@ function PostPage() {
           </div>
 
           <div
-            className="rounded-3xl border bg-white/85 p-5 backdrop-blur sm:p-6"
+            className="rounded-3xl border bg-white p-5 sm:p-6"
             style={{
-              borderColor: "#FED7AA",
-              boxShadow: "0 24px 48px -28px rgba(124,45,18,0.25)",
+              borderColor: "#E5E7EB",
+              boxShadow: "0 20px 40px -28px rgba(15,23,42,0.18)",
             }}
           >
             <div className="flex flex-col gap-3">
@@ -717,16 +662,16 @@ function PostPage() {
                 value={cName}
                 onChange={(e) => setCName(e.target.value)}
                 placeholder="Your name (optional)"
-                className="w-full rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-orange-400"
-                style={{ borderColor: "#FED7AA", color: "#0f172a" }}
+                className="w-full rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-gray-500"
+                style={{ borderColor: "#E5E7EB", color: "#0f172a", fontWeight: 700 }}
               />
               <textarea
                 value={cText}
                 onChange={(e) => setCText(e.target.value)}
                 placeholder="Share a thought, question, or tip…"
                 rows={3}
-                className="w-full resize-y rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-orange-400"
-                style={{ borderColor: "#FED7AA", color: "#0f172a" }}
+                className="w-full resize-y rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-gray-500"
+                style={{ borderColor: "#E5E7EB", color: "#0f172a", fontWeight: 700 }}
               />
               <div className="flex justify-end">
                 <button
@@ -735,10 +680,10 @@ function PostPage() {
                   disabled={!cText.trim()}
                   className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] transition-transform active:scale-95 disabled:opacity-50"
                   style={{
-                    background: "linear-gradient(135deg, #F97316, #EA580C)",
+                    background: "#111827",
                     color: "#fff",
-                    fontWeight: 800,
-                    boxShadow: "0 10px 22px -10px rgba(234,88,12,0.55)",
+                    fontWeight: 700,
+                    boxShadow: "0 10px 22px -10px rgba(17,24,39,0.45)",
                   }}
                 >
                   <MessageCircle className="h-4 w-4" strokeWidth={2.4} />
@@ -748,15 +693,15 @@ function PostPage() {
             </div>
 
             {comments.length > 0 && (
-              <ul className="mt-6 flex flex-col gap-5 border-t pt-6" style={{ borderColor: "#FED7AA" }}>
+              <ul className="mt-6 flex flex-col gap-5 border-t pt-6" style={{ borderColor: "#E5E7EB" }}>
                 {comments.map((c) => (
                   <li key={c.at} className="flex gap-3">
                     <div
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px]"
                       style={{
-                        background: "linear-gradient(135deg, #F97316, #DB2777)",
+                        background: "#374151",
                         color: "#fff",
-                        fontWeight: 800,
+                        fontWeight: 700,
                       }}
                       aria-hidden="true"
                     >
@@ -764,17 +709,17 @@ function PostPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-[13px]" style={{ color: "#7C2D12", fontWeight: 800 }}>
+                        <span className="text-[13px]" style={{ color: "#111827", fontWeight: 700 }}>
                           {c.name}
                         </span>
-                        <span className="text-[11px]" style={{ color: "#C2410C", fontWeight: 500 }}>
+                        <span className="text-[11px]" style={{ color: "#6B7280", fontWeight: 700 }}>
                           {new Date(c.at).toLocaleDateString(undefined, {
                             month: "short",
                             day: "numeric",
                           })}
                         </span>
                       </div>
-                      <p className="mt-1 whitespace-pre-wrap text-[14px] leading-relaxed" style={{ color: "#1f2937" }}>
+                      <p className="mt-1 whitespace-pre-wrap text-[14px] leading-relaxed" style={{ color: "#1f2937", fontWeight: 700 }}>
                         {c.text}
                       </p>
                     </div>
@@ -785,6 +730,7 @@ function PostPage() {
           </div>
         </div>
       </section>
+
     </main>
   );
 }
