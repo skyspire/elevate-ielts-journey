@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { POSTS, paletteFor } from "@/data/posts";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/blog_/$slug")({
   loader: ({ params }) => {
     const post = POSTS.find((p) => p.slug === params.slug);
     if (!post) throw notFound();
@@ -214,7 +214,7 @@ function PostPage() {
             return (
               <li key={r.slug}>
                 <Link
-                  to="/blog/$slug"
+                  to="/blog_/$slug"
                   params={{ slug: r.slug }}
                   className="group flex h-full flex-col gap-3 rounded-2xl p-2 transition-all duration-300"
                   style={{
