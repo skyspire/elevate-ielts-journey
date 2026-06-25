@@ -96,9 +96,9 @@ function PostPage() {
   const nextPost = idx >= 0 && idx < POSTS.length - 1 ? POSTS[idx + 1] : null;
 
   const REACTIONS = [
-    { key: "clap", emoji: "👏", label: "Clap" },
-    { key: "idea", emoji: "💡", label: "Insightful" },
-    { key: "fire", emoji: "🔥", label: "Love it" },
+    { key: "clap", Icon: HandHeart, label: "Appreciate", tint: "#FDE68A", ring: "#F59E0B" },
+    { key: "idea", Icon: Sparkles, label: "Insightful", tint: "#DBEAFE", ring: "#3B82F6" },
+    { key: "fire", Icon: Flame, label: "Love it", tint: "#FECACA", ring: "#EF4444" },
   ] as const;
   const reactionsKey = `blog:reactions:${post.slug}`;
   const myReactionsKey = `blog:my-reactions:${post.slug}`;
