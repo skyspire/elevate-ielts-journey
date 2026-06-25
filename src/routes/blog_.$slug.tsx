@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { POSTS, paletteFor } from "@/data/posts";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/blog_/$slug")({
   loader: ({ params }) => {
     const post = POSTS.find((p) => p.slug === params.slug);
     if (!post) throw notFound();

@@ -35,7 +35,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as WritingSamplesQuestionIdRouteImport } from './routes/writing-samples.$questionId'
 import { Route as VocabularyCategoryRouteImport } from './routes/vocabulary.$category'
 import { Route as EbooksBookIdRouteImport } from './routes/ebooks.$bookId'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as AdminWritingRouteImport } from './routes/admin.writing'
 import { Route as AdminWorkflowRouteImport } from './routes/admin.workflow'
 import { Route as AdminVocabularyRouteImport } from './routes/admin.vocabulary'
@@ -202,9 +202,9 @@ const EbooksBookIdRoute = EbooksBookIdRouteImport.update({
   getParentRoute: () => EbooksRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog_/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWritingRoute = AdminWritingRouteImport.update({
   id: '/writing',
@@ -381,7 +381,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -442,7 +442,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -505,7 +505,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
-  '/blog': typeof BlogRouteWithChildren
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -547,7 +547,7 @@ export interface FileRoutesById {
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/workflow': typeof AdminWorkflowRoute
   '/admin/writing': typeof AdminWritingRoute
-  '/blog/$slug': typeof BlogSlugRoute
+  '/blog_/$slug': typeof BlogSlugRoute
   '/ebooks/$bookId': typeof EbooksBookIdRoute
   '/vocabulary/$category': typeof VocabularyCategoryRoute
   '/writing-samples/$questionId': typeof WritingSamplesQuestionIdRoute
@@ -734,7 +734,7 @@ export interface FileRouteTypes {
     | '/admin/vocabulary'
     | '/admin/workflow'
     | '/admin/writing'
-    | '/blog/$slug'
+    | '/blog_/$slug'
     | '/ebooks/$bookId'
     | '/vocabulary/$category'
     | '/writing-samples/$questionId'
@@ -755,7 +755,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   BgOptionsRoute: typeof BgOptionsRoute
-  BlogRoute: typeof BlogRouteWithChildren
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRouteWithChildren
@@ -771,6 +771,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
   VocabularyRoute: typeof VocabularyRouteWithChildren
+  BlogSlugRoute: typeof BlogSlugRoute
   WritingSamplesQuestionIdRoute: typeof WritingSamplesQuestionIdRoute
   SampleAnswersIndexRoute: typeof SampleAnswersIndexRoute
   SpeakingSamplesIndexRoute: typeof SpeakingSamplesIndexRoute
@@ -961,12 +962,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EbooksBookIdRouteImport
       parentRoute: typeof EbooksRoute
     }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/$slug'
+    '/blog_/$slug': {
+      id: '/blog_/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/writing': {
       id: '/admin/writing'
@@ -1280,16 +1281,6 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 interface EbooksRouteChildren {
   EbooksBookIdRoute: typeof EbooksBookIdRoute
 }
@@ -1317,7 +1308,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   BgOptionsRoute: BgOptionsRoute,
-  BlogRoute: BlogRouteWithChildren,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRouteWithChildren,
@@ -1333,6 +1324,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
   VocabularyRoute: VocabularyRouteWithChildren,
+  BlogSlugRoute: BlogSlugRoute,
   WritingSamplesQuestionIdRoute: WritingSamplesQuestionIdRoute,
   SampleAnswersIndexRoute: SampleAnswersIndexRoute,
   SpeakingSamplesIndexRoute: SpeakingSamplesIndexRoute,
