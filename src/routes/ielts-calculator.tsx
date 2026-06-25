@@ -609,20 +609,46 @@ function IeltsCalculatorPage() {
 
       {/* ===== 02 — CALCULATOR (peach) ===== */}
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
-        <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag n="02" label="Calculator" />
-          <h2
-            className="leading-[0.95] tracking-tight"
-            style={{
-              ...INTER,
-              fontWeight: 900,
-              fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
-              letterSpacing: "-0.03em",
-              color: INK,
-            }}
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="flex flex-col items-start gap-3">
+            <SectionTag n="02" label="Calculator" />
+            <h2
+              className="leading-[0.95] tracking-tight"
+              style={{
+                ...INTER,
+                fontWeight: 900,
+                fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
+                letterSpacing: "-0.03em",
+                color: INK,
+              }}
+            >
+              Your calculator
+            </h2>
+          </div>
+
+          {/* Academic / General toggle */}
+          <div
+            className="inline-flex items-center rounded-full p-1"
+            style={{ background: "rgba(28,35,48,0.08)" }}
           >
-            Your calculator
-          </h2>
+            {(["academic", "general"] as const).map((t) => {
+              const active = testType === t;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTestType(t)}
+                  className="rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] transition"
+                  style={{
+                    background: active ? INK : "transparent",
+                    color: active ? PALE : INK,
+                  }}
+                >
+                  {t === "academic" ? "Academic" : "General"}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
@@ -634,17 +660,36 @@ function IeltsCalculatorPage() {
             }}
           >
             <div className="space-y-5">
-              <BandSlider label="Listening" value={l} onChange={setL} />
-              <BandSlider label="Reading" value={r} onChange={setR} />
+              <RawBandRow
+                label="Listening"
+                raw={rawL}
+                band={l}
+                table={LISTENING_TABLE}
+                onRawChange={onRawL}
+                onBandChange={onBandL}
+              />
+              <RawBandRow
+                label={`Reading (${testType === "academic" ? "Academic" : "General"})`}
+                raw={rawR}
+                band={r}
+                table={readingTable}
+                onRawChange={onRawR}
+                onBandChange={onBandR}
+              />
               <BandSlider label="Writing" value={w} onChange={setW} />
               <BandSlider label="Speaking" value={s} onChange={setS} />
             </div>
-            <div className="mt-7 flex flex-wrap items-center gap-2.5">
+            <p className="mt-4 text-[11.5px] leading-relaxed" style={{ color: MUTED, fontWeight: 500 }}>
+              Type your correct answers out of 40 for Listening &amp; Reading — the band auto-fills.
+              Writing &amp; Speaking are examiner-graded on 4 criteria, so set those by band directly.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-2.5">
               <PillButton variant="ghost"><Share2 className="h-4 w-4" /> Share</PillButton>
               <PillButton variant="ghost"><FileText className="h-4 w-4" /> PDF</PillButton>
               <PillButton variant="ghost" onClick={reset}><RotateCcw className="h-4 w-4" /> Reset</PillButton>
             </div>
           </div>
+
 
           <div
             className="relative flex flex-col justify-between rounded-[28px] p-6 sm:p-8 lg:col-span-2"
