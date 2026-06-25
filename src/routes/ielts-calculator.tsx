@@ -143,16 +143,6 @@ function GhostNumber({ n, position }: { n: string; position: "br" | "bl" }) {
   );
 }
 
-function SectionTag({ label }: { label: string }) {
-  return (
-    <span
-      className="inline-flex items-center rounded-full px-3 py-1 text-[13px] font-semibold"
-      style={{ ...INTER, background: "rgba(28,35,48,0.08)", color: INK }}
-    >
-      {label}
-    </span>
-  );
-}
 
 function ChipBrand() {
   return (
@@ -363,7 +353,7 @@ function BandStepper({
 }
 
 /* Auto-shrinks its content with CSS transform: scale() so it always
-   fits inside the section's viewport height. Never up-scales. */
+   fits inside the section's viewport, perfectly centred. */
 function FitToScreen({ children }: { children: React.ReactNode }) {
   const outerRef = React.useRef<HTMLDivElement | null>(null);
   const innerRef = React.useRef<HTMLDivElement | null>(null);
@@ -374,7 +364,6 @@ function FitToScreen({ children }: { children: React.ReactNode }) {
       const outer = outerRef.current;
       const inner = innerRef.current;
       if (!outer || !inner) return;
-      // Measure inner at its natural size (scale 1) by temporarily clearing transform
       const prev = inner.style.transform;
       inner.style.transform = "none";
       const ch = inner.scrollHeight;
@@ -382,38 +371,46 @@ function FitToScreen({ children }: { children: React.ReactNode }) {
       inner.style.transform = prev;
       const ah = outer.clientHeight;
       const aw = outer.clientWidth;
+      if (ah === 0 || ch === 0) return;
       const sH = ch > ah ? ah / ch : 1;
       const sW = cw > aw ? aw / cw : 1;
       const s = Math.min(1, sH, sW);
-      setScale(s < 0.55 ? 0.55 : s);
+      setScale(s < 0.5 ? 0.5 : s);
     };
     measure();
-    const ro = new ResizeObserver(measure);
+    let raf = 0;
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    };
+    const ro = new ResizeObserver(schedule);
     if (outerRef.current) ro.observe(outerRef.current);
     if (innerRef.current) ro.observe(innerRef.current);
-    window.addEventListener("resize", measure);
-    window.addEventListener("orientationchange", measure);
-    const t = window.setTimeout(measure, 60);
+    window.addEventListener("resize", schedule);
+    window.addEventListener("orientationchange", schedule);
+    const fonts = (document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts;
+    if (fonts?.ready) fonts.ready.then(schedule);
+    const timers = [60, 200, 500, 1200].map((ms) => window.setTimeout(measure, ms));
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("orientationchange", measure);
-      window.clearTimeout(t);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", schedule);
+      window.removeEventListener("orientationchange", schedule);
+      timers.forEach((t) => window.clearTimeout(t));
     };
   }, [children]);
 
   return (
     <div
       ref={outerRef}
-      className="flex w-full items-center justify-center"
-      style={{ minHeight: "100svh" }}
+      className="absolute inset-0 overflow-hidden"
     >
       <div
         ref={innerRef}
+        className="absolute left-1/2 top-1/2 w-full"
         style={{
-          transform: `scale(${scale})`,
+          transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center center",
-          width: "100%",
           willChange: "transform",
         }}
       >
@@ -450,7 +447,7 @@ function Section({
     >
       {ghostN ? <GhostNumber n={ghostN} position={ghostPos} /> : null}
       <FitToScreen>
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 sm:py-12">
           {children}
         </div>
       </FitToScreen>
@@ -625,7 +622,6 @@ function IeltsCalculatorPage() {
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div className="flex flex-col items-start gap-3">
-            <SectionTag label="Calculator" />
             <h2
               className="leading-[0.95] tracking-tight"
               style={{
@@ -793,7 +789,6 @@ function IeltsCalculatorPage() {
       {/* ===== 03 — HOW SCORING WORKS (lilac) ===== */}
       <Section id="sec-3" bg={SECTIONS.lilac} ghostN="03" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="How it works" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
@@ -842,7 +837,6 @@ function IeltsCalculatorPage() {
       {/* ===== 04 — WHAT EACH BAND MEANS (mint) ===== */}
       <Section id="sec-4" bg={SECTIONS.mint} ghostN="04" ghostPos="bl">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Band reference" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
@@ -896,7 +890,6 @@ function IeltsCalculatorPage() {
       {/* ===== 05 — ACADEMIC vs GENERAL (blush) ===== */}
       <Section id="sec-5" bg={SECTIONS.blush} ghostN="05" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Compare" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
@@ -936,7 +929,6 @@ function IeltsCalculatorPage() {
       {/* ===== 06 — PRO TIPS (butter) ===== */}
       <Section id="sec-6" bg={SECTIONS.butter} ghostN="06" ghostPos="bl">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Tips" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
@@ -968,7 +960,6 @@ function IeltsCalculatorPage() {
       {/* ===== 07 — FAQ (sky) ===== */}
       <Section id="sec-7" bg={SECTIONS.sky} ghostN="07" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="FAQ" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
