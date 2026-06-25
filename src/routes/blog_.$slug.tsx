@@ -175,7 +175,7 @@ function PostPage() {
 
         <h1
           className="mt-5 text-center text-[36px] leading-[1.04] tracking-[-0.025em] sm:text-[64px] sm:leading-[1.02] lg:text-[72px]"
-          style={{ color: "#1e1b4b", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
+          style={{ color: "#93C5FD", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
         >
           {post.title}
         </h1>
