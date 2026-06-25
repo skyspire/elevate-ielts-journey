@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { POSTS, PALETTES } from "@/data/posts";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -21,49 +22,10 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-type Post = {
-  slug: string;
-  title: string;
-  category: string;
-  image: string;
-  readMin: number;
-  author: string;
-};
-
-const POSTS: Post[] = [
-  { slug: "writing-task-2-band-8-structure", title: "The Band 8 Writing Task 2 structure that actually works", category: "Writing", readMin: 6, author: "IELTS team", image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=70" },
-  { slug: "speaking-part-2-fluency-fix", title: "How to stop freezing in Speaking Part 2", category: "Speaking", readMin: 5, author: "IELTS team", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=70" },
-  { slug: "reading-true-false-not-given", title: "True / False / Not Given — a decision tree that never fails", category: "Reading", readMin: 7, author: "IELTS team", image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=900&q=70" },
-  { slug: "listening-map-labelling", title: "Map labelling questions: a 4-step reading order", category: "Listening", readMin: 4, author: "IELTS team", image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=900&q=70" },
-  { slug: "vocabulary-c1-academic", title: "30 C1 academic collocations that examiners notice", category: "Vocabulary", readMin: 8, author: "IELTS team", image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=70" },
-  { slug: "study-plan-30-days", title: "A realistic 30-day IELTS study plan for working adults", category: "Study habits", readMin: 9, author: "IELTS team", image: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=70" },
-  { slug: "writing-task-1-overview", title: "Writing Task 1: the overview sentence that boosts your band", category: "Writing", readMin: 5, author: "IELTS team", image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=900&q=70" },
-  { slug: "speaking-pronunciation-stress", title: "Word stress: the smallest fix with the biggest payoff", category: "Speaking", readMin: 4, author: "IELTS team", image: "https://images.unsplash.com/photo-1589903308904-1010c2294adc?auto=format&fit=crop&w=900&q=70" },
-  { slug: "exam-day-checklist", title: "The exam-day checklist that calms your nerves", category: "Exam day", readMin: 3, author: "IELTS team", image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=70" },
-];
-
-type Palette = {
-  cardBg: string;
-  shadow: string;
-  imgBg: string;
-  chipBg: string;
-  chipText: string;
-  title: string;
-  heart: string;
-};
-
-const PALETTES: Palette[] = [
-  { cardBg: "#f5f3ff", shadow: "#e9d5ff", imgBg: "#ddd6fe", chipBg: "#ede9fe", chipText: "#6d28d9", title: "#3b0764", heart: "#7c3aed" },
-  { cardBg: "#fff1f2", shadow: "#fecdd3", imgBg: "#fecdd3", chipBg: "#ffe4e6", chipText: "#be123c", title: "#4c0519", heart: "#e11d48" },
-  { cardBg: "#ecfdf5", shadow: "#a7f3d0", imgBg: "#a7f3d0", chipBg: "#d1fae5", chipText: "#047857", title: "#022c22", heart: "#059669" },
-  { cardBg: "#fefce8", shadow: "#fde68a", imgBg: "#fde68a", chipBg: "#fef3c7", chipText: "#a16207", title: "#422006", heart: "#ca8a04" },
-  { cardBg: "#f0f9ff", shadow: "#bae6fd", imgBg: "#bae6fd", chipBg: "#e0f2fe", chipText: "#0369a1", title: "#0c2340", heart: "#0284c7" },
-  { cardBg: "#fff7ed", shadow: "#fed7aa", imgBg: "#fed7aa", chipBg: "#ffedd5", chipText: "#c2410c", title: "#431407", heart: "#ea580c" },
-];
-
 const INTER = "Inter, ui-sans-serif, system-ui, sans-serif";
 
 const CATEGORIES = ["All", ...Array.from(new Set(POSTS.map((p) => p.category)))];
+
 
 function BlogPage() {
   const [activeCat, setActiveCat] = useState("All");
