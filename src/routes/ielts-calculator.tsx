@@ -243,7 +243,7 @@ function RawStepper({
           className="flex-1 rounded-xl bg-white py-2 text-center tabular-nums outline-none"
           style={{
             ...INTER,
-            fontWeight: 800,
+            fontWeight: 900,
             fontSize: "2rem",
             letterSpacing: "-0.02em",
             color: INK,
@@ -268,7 +268,7 @@ function RawStepper({
         </span>
         <span
           className="tabular-nums"
-          style={{ ...INTER, fontWeight: 800, fontSize: "1.4rem", letterSpacing: "-0.02em", color: INK }}
+          style={{ ...INTER, fontWeight: 900, fontSize: "1.4rem", letterSpacing: "-0.02em", color: INK }}
         >
           {band.toFixed(1)}
         </span>
@@ -315,7 +315,7 @@ function BandStepper({
           className="flex-1 rounded-xl bg-white py-2 text-center tabular-nums"
           style={{
             ...INTER,
-            fontWeight: 800,
+            fontWeight: 900,
             fontSize: "2rem",
             letterSpacing: "-0.02em",
             color: INK,
@@ -567,7 +567,7 @@ function IeltsCalculatorPage() {
               className="leading-[0.95] tracking-tight"
               style={{
                 ...INTER,
-                fontWeight: 800,
+                fontWeight: 900,
                 fontSize: "clamp(2.2rem, 5.6vw, 4.4rem)",
                 letterSpacing: "-0.03em",
                 color: INK,
@@ -620,21 +620,19 @@ function IeltsCalculatorPage() {
 
       {/* ===== 02 — CALCULATOR (peach) ===== */}
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div className="flex flex-col items-start gap-3">
-            <h2
-              className="leading-[0.95] tracking-tight"
-              style={{
-                ...INTER,
-                fontWeight: 800,
-                fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
-                letterSpacing: "-0.03em",
-                color: INK,
-              }}
-            >
-              Your calculator
-            </h2>
-          </div>
+        <div className="mb-5 flex flex-col items-center gap-3 text-center">
+          <h2
+            className="leading-[0.95] tracking-tight"
+            style={{
+              ...INTER,
+              fontWeight: 900,
+              fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
+              letterSpacing: "-0.03em",
+              color: INK,
+            }}
+          >
+            Your calculator
+          </h2>
 
           {/* Academic / General toggle */}
           <div
@@ -776,7 +774,7 @@ function IeltsCalculatorPage() {
                   style={{ background: "rgba(207,216,168,0.10)", border: "1px solid rgba(207,216,168,0.18)" }}
                 >
                   <div style={{ ...INTER, fontSize: "12px", color: "rgba(207,216,168,0.7)" }}>{x.k}</div>
-                  <div className="tabular-nums" style={{ ...INTER, fontWeight: 800, fontSize: "1.1rem", color: PALE }}>
+                  <div className="tabular-nums" style={{ ...INTER, fontWeight: 900, fontSize: "1.1rem", color: PALE }}>
                     {x.v.toFixed(1)}
                   </div>
                 </div>
@@ -788,12 +786,12 @@ function IeltsCalculatorPage() {
 
       {/* ===== 03 — HOW SCORING WORKS (lilac) ===== */}
       <Section id="sec-3" bg={SECTIONS.lilac} ghostN="03" ghostPos="br">
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <div className="mb-4 flex flex-col items-center gap-3 text-center">
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
               ...INTER,
-              fontWeight: 800,
+              fontWeight: 900,
               fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
               letterSpacing: "-0.03em",
               color: INK,
@@ -836,12 +834,12 @@ function IeltsCalculatorPage() {
 
       {/* ===== 04 — WHAT EACH BAND MEANS (mint) ===== */}
       <Section id="sec-4" bg={SECTIONS.mint} ghostN="04" ghostPos="bl">
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <div className="mb-4 flex flex-col items-center gap-3 text-center">
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
               ...INTER,
-              fontWeight: 800,
+              fontWeight: 900,
               fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
               letterSpacing: "-0.03em",
               color: INK,
@@ -861,7 +859,7 @@ function IeltsCalculatorPage() {
               <div className="flex items-baseline gap-2">
                 <span
                   className="tabular-nums"
-                  style={{ ...INTER, fontWeight: 800, fontSize: "2rem", letterSpacing: "-0.03em", color: INK, lineHeight: 1 }}
+                  style={{ ...INTER, fontWeight: 900, fontSize: "2rem", letterSpacing: "-0.03em", color: INK, lineHeight: 1 }}
                 >
                   {b.n}
                 </span>
@@ -889,10 +887,10 @@ function IeltsCalculatorPage() {
 
       {/* ===== 05 — ACADEMIC vs GENERAL (blush) ===== */}
       <Section id="sec-5" bg={SECTIONS.blush} ghostN="05" ghostPos="br">
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <div className="mb-4 flex flex-col items-center gap-3 text-center">
           <h2
             className="leading-[0.95] tracking-tight"
-            style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
+            style={{ ...INTER, fontWeight: 900, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
           >
             Academic vs General Training
           </h2>
@@ -907,7 +905,7 @@ function IeltsCalculatorPage() {
             { t: "General Training", who: "For migration, work, or training programs.", read: "Everyday notices, ads, work documents.", write: "Task 1: a letter. Task 2: essay." },
           ].map((c) => (
             <div key={c.t} className="rounded-[24px] p-6 sm:p-8" style={{ background: "#f9dde0", boxShadow: "0 30px 60px -40px rgba(28,35,48,0.3)" }}>
-              <h3 style={{ ...INTER, fontWeight: 800, fontSize: "1.6rem", letterSpacing: "-0.02em", color: INK }}>
+              <h3 style={{ ...INTER, fontWeight: 900, fontSize: "1.6rem", letterSpacing: "-0.02em", color: INK }}>
                 {c.t}
               </h3>
               <p className="mt-2 text-[15px]" style={{ ...INTER, color: MUTED, fontWeight: 400 }}>{c.who}</p>
@@ -928,10 +926,10 @@ function IeltsCalculatorPage() {
 
       {/* ===== 06 — PRO TIPS (butter) ===== */}
       <Section id="sec-6" bg={SECTIONS.butter} ghostN="06" ghostPos="bl">
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <div className="mb-4 flex flex-col items-center gap-3 text-center">
           <h2
             className="leading-[0.95] tracking-tight"
-            style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
+            style={{ ...INTER, fontWeight: 900, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
           >
             Push your band by +0.5
           </h2>
@@ -959,10 +957,10 @@ function IeltsCalculatorPage() {
 
       {/* ===== 07 — FAQ (sky) ===== */}
       <Section id="sec-7" bg={SECTIONS.sky} ghostN="07" ghostPos="br">
-        <div className="mb-4 flex flex-col items-start gap-3">
+        <div className="mb-4 flex flex-col items-center gap-3 text-center">
           <h2
             className="leading-[0.95] tracking-tight"
-            style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
+            style={{ ...INTER, fontWeight: 900, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
           >
             Quick questions
           </h2>
@@ -1008,7 +1006,7 @@ function IeltsCalculatorPage() {
             className="mt-5 leading-[0.95] tracking-tight"
             style={{
               ...INTER,
-              fontWeight: 800,
+              fontWeight: 900,
               fontSize: "clamp(2.2rem, 6vw, 4.5rem)",
               letterSpacing: "-0.03em",
               color: PALE,
