@@ -323,6 +323,25 @@ export function Header() {
             FAQ
           </Link>
           <Link
+            to="/blog"
+            className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
+            style={{ color: INK_SOFT }}
+            activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = INK;
+              if (e.currentTarget.getAttribute("data-status") !== "active") {
+                e.currentTarget.style.backgroundColor = HOVER_BG;
+              }
+            }}
+            onMouseLeave={(e) => {
+              const isActive = e.currentTarget.getAttribute("data-status") === "active";
+              e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+              if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+            }}
+          >
+            Blog
+          </Link>
+          <Link
             to="/dashboard"
             className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
             style={{ color: INK_SOFT }}
