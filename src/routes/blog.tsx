@@ -302,9 +302,10 @@ function BlogPage() {
             boxShadow: "0 20px 50px -20px rgba(124,58,237,0.25), 0 8px 20px -10px rgba(15,23,42,0.08)",
           }}
         >
-          <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#7c3aed", fontWeight: 700 }}>
+          <p className="text-sm tracking-tight" style={{ color: "#7c3aed", fontWeight: 600 }}>
             Stay sharp
           </p>
+
           <h3 className="mx-auto mt-3 max-w-xl text-3xl leading-tight tracking-tight sm:text-4xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
             New IELTS strategies in your inbox, weekly.
           </h3>
