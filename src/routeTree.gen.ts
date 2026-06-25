@@ -24,6 +24,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as BgOptionsRouteImport } from './routes/bg-options'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -141,6 +142,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BgOptionsRoute = BgOptionsRouteImport.update({
@@ -369,6 +375,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -428,6 +435,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bg-options': typeof BgOptionsRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -489,6 +497,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/bg-options': typeof BgOptionsRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
@@ -551,6 +560,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/bg-options'
+    | '/blog'
     | '/contact'
     | '/dashboard'
     | '/ebooks'
@@ -610,6 +620,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/bg-options'
+    | '/blog'
     | '/contact'
     | '/dashboard'
     | '/ebooks'
@@ -670,6 +681,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/bg-options'
+    | '/blog'
     | '/contact'
     | '/dashboard'
     | '/ebooks'
@@ -731,6 +743,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   BgOptionsRoute: typeof BgOptionsRoute
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRouteWithChildren
@@ -857,6 +870,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bg-options': {
@@ -1268,6 +1288,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   BgOptionsRoute: BgOptionsRoute,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRouteWithChildren,
@@ -1291,12 +1312,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
