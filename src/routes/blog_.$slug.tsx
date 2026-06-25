@@ -138,8 +138,17 @@ function PostPage() {
         )}
       </div>
 
+      {/* Full-bleed cover */}
+      <figure className="relative w-full" style={{ background: p.imgBg }}>
+        <img
+          src={post.image}
+          alt=""
+          className="h-[44vh] max-h-[560px] min-h-[280px] w-full object-cover sm:h-[56vh]"
+        />
+      </figure>
+
       {/* Article header */}
-      <article className="mx-auto max-w-[680px] px-5 pt-16 sm:pt-24">
+      <article className="mx-auto max-w-[680px] px-5 pt-10 sm:pt-14">
         <Link
           to="/blog"
           className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-70"
@@ -152,15 +161,15 @@ function PostPage() {
         </Link>
 
         <span
-          className="mt-8 inline-block rounded-full px-3 py-1 text-xs"
+          className="mt-8 inline-block rounded-full px-3 py-1 text-[11px] tracking-wide"
           style={{ background: p.chipBg, color: p.chipText, fontWeight: 700 }}
         >
           {post.category}
         </span>
 
         <h1
-          className="mt-4 text-4xl leading-[1.1] tracking-tight sm:text-5xl"
-          style={{ color: "#1e1b4b", fontWeight: 800 }}
+          className="mt-4 text-4xl leading-[1.08] tracking-tight sm:text-5xl"
+          style={{ color: "#1e1b4b", fontWeight: 800, letterSpacing: "-0.02em" }}
         >
           {post.title}
         </h1>
@@ -169,21 +178,32 @@ function PostPage() {
           {post.excerpt}
         </p>
 
-        <p className="mt-6 text-sm" style={{ color: "#94a3b8", fontWeight: 500 }}>
-          {post.readMin} min read · by {post.author}
-        </p>
+        {/* Author meta row */}
+        <div className="mt-8 flex items-center gap-3 border-t pt-6" style={{ borderColor: "#f1f5f9" }}>
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-full text-sm"
+            style={{ background: p.imgBg, color: p.title, fontWeight: 800 }}
+            aria-hidden="true"
+          >
+            {post.author
+              .split(" ")
+              .map((s) => s[0])
+              .slice(0, 2)
+              .join("")}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[13px]" style={{ color: "#1e1b4b", fontWeight: 700 }}>
+              {post.author}
+            </span>
+            <span className="flex items-center gap-1.5 text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+              <span>{post.readMin} min read</span>
+              <span aria-hidden="true" className="h-1 w-1 rounded-full" style={{ background: "#cbd5e1" }} />
+              <span>IELTS specialists</span>
+            </span>
+          </div>
+        </div>
       </article>
 
-      {/* Cover image */}
-      <figure className="mx-auto mt-10 max-w-[920px] px-5">
-        <div className="overflow-hidden rounded-3xl" style={{ background: p.imgBg }}>
-          <img
-            src={post.image}
-            alt=""
-            className="aspect-[16/9] w-full object-cover"
-          />
-        </div>
-      </figure>
 
       {/* Body */}
       <article className="mx-auto max-w-[680px] px-5 pt-12 pb-20">
