@@ -210,6 +210,16 @@ function BlogPage() {
 
 
 
+      {/* Pastel post cards */}
+      <section className="mx-auto max-w-6xl px-5 pb-20 pt-16">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+            Latest articles
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "#64748b" }}>
+            Fresh strategies and study notes from our IELTS team.
+          </p>
+        </div>
 
       {/* Pastel post cards */}
       <section className="mx-auto max-w-6xl px-5 pb-20 pt-6">
