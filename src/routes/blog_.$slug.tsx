@@ -1,5 +1,21 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import {
+  Sparkles,
+  Flame,
+  HandHeart,
+  Send,
+  MessageCircle,
+  Link2,
+  Check,
+  Mail,
+  Linkedin,
+  Facebook,
+  Twitter,
+  ArrowLeft,
+  ArrowRight,
+  MessagesSquare,
+} from "lucide-react";
 import { POSTS, paletteFor } from "@/data/posts";
 
 export const Route = createFileRoute("/blog_/$slug")({
