@@ -138,51 +138,68 @@ function PostPage() {
         )}
       </div>
 
-      {/* Full-bleed cover */}
+      {/* Full-bleed cover with floating back button */}
       <figure className="relative w-full" style={{ background: p.imgBg }}>
         <img
           src={post.image}
           alt=""
           className="h-[44vh] max-h-[560px] min-h-[280px] w-full object-cover sm:h-[56vh]"
         />
+        <Link
+          to="/blog"
+          aria-label="Back to blog"
+          className="absolute left-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95 sm:left-6 sm:top-6 sm:h-12 sm:w-12"
+          style={{
+            background: p.heart,
+            color: "#ffffff",
+            boxShadow: `0 10px 24px -10px ${p.shadow}, 0 4px 10px -4px rgba(15,23,42,0.18)`,
+          }}
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </Link>
       </figure>
 
       {/* Article header */}
       <article className="mx-auto max-w-[680px] px-5 pt-10 sm:pt-14">
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-1.5 text-sm transition-opacity hover:opacity-70"
-          style={{ color: "#64748b", fontWeight: 600 }}
-        >
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-          Back to blog
-        </Link>
-
-        <span
-          className="mt-8 inline-block rounded-full px-3 py-1 text-[11px] tracking-wide"
-          style={{ background: p.chipBg, color: p.chipText, fontWeight: 700 }}
-        >
-          {post.category}
-        </span>
+        <div className="flex items-center gap-3">
+          <span aria-hidden="true" className="h-[3px] w-8 rounded-full" style={{ background: p.heart }} />
+          <span
+            className="text-[11px] uppercase tracking-[0.18em]"
+            style={{ color: p.chipText, fontWeight: 800 }}
+          >
+            {post.category}
+          </span>
+        </div>
 
         <h1
-          className="mt-4 text-4xl leading-[1.08] tracking-tight sm:text-5xl"
-          style={{ color: "#1e1b4b", fontWeight: 800, letterSpacing: "-0.02em" }}
+          className="mt-5 text-[34px] leading-[1.05] tracking-[-0.025em] sm:text-[52px] sm:leading-[1.02]"
+          style={{ color: "#0f0a2e", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
         >
           {post.title}
         </h1>
 
-        <p className="mt-5 text-lg leading-relaxed" style={{ color: "#475569" }}>
+        <p className="mt-6 text-lg leading-relaxed" style={{ color: "#475569", fontWeight: 400 }}>
           {post.excerpt}
         </p>
 
-        {/* Author meta row */}
-        <div className="mt-8 flex items-center gap-3 border-t pt-6" style={{ borderColor: "#f1f5f9" }}>
+        {/* Author card with gradient avatar */}
+        <div
+          className="mt-10 flex items-center gap-4 rounded-2xl p-4 sm:p-5"
+          style={{
+            background: p.cardBg,
+            boxShadow: `0 10px 28px -16px ${p.shadow}, 0 2px 6px -3px rgba(15,23,42,0.06)`,
+          }}
+        >
           <div
-            className="flex h-10 w-10 items-center justify-center rounded-full text-sm"
-            style={{ background: p.imgBg, color: p.title, fontWeight: 800 }}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm sm:h-14 sm:w-14 sm:text-base"
+            style={{
+              background: `linear-gradient(135deg, ${p.heart}, ${p.chipText})`,
+              color: "#ffffff",
+              fontWeight: 800,
+              boxShadow: `0 6px 16px -6px ${p.heart}`,
+            }}
             aria-hidden="true"
           >
             {post.author
@@ -191,32 +208,63 @@ function PostPage() {
               .slice(0, 2)
               .join("")}
           </div>
-          <div className="flex flex-col">
-            <span className="text-[13px]" style={{ color: "#1e1b4b", fontWeight: 700 }}>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-[14px] sm:text-[15px]" style={{ color: "#1e1b4b", fontWeight: 800 }}>
               {post.author}
             </span>
-            <span className="flex items-center gap-1.5 text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+            <span className="text-[11px] uppercase tracking-[0.12em]" style={{ color: p.chipText, fontWeight: 700 }}>
+              IELTS specialists
+            </span>
+            <span className="mt-1 flex items-center gap-1.5 text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
               <span>{post.readMin} min read</span>
               <span aria-hidden="true" className="h-1 w-1 rounded-full" style={{ background: "#cbd5e1" }} />
-              <span>IELTS specialists</span>
+              <span>Updated recently</span>
             </span>
           </div>
         </div>
       </article>
 
 
-      {/* Body */}
+      {/* Body with mid-article pull-quote */}
       <article className="mx-auto max-w-[680px] px-5 pt-12 pb-20">
         <div className="flex flex-col gap-6">
-          {post.body.map((para: string, i: number) => (
-            <p
-              key={i}
-              className="text-[17px] leading-[1.75]"
-              style={{ color: "#1f2937" }}
-            >
-              {para}
-            </p>
-          ))}
+          {post.body.map((para: string, i: number) => {
+            const mid = Math.floor(post.body.length / 2);
+            const showQuote = post.body.length >= 4 && i === mid;
+            const quoteText = post.body[0].split(". ").slice(0, 1).join(". ") + ".";
+            return (
+              <div key={i} className="contents">
+                {showQuote && (
+                  <figure className="my-4 sm:my-6">
+                    <blockquote
+                      className="relative rounded-2xl px-6 py-7 text-[20px] leading-[1.45] tracking-[-0.01em] sm:px-8 sm:py-9 sm:text-[24px]"
+                      style={{
+                        background: p.cardBg,
+                        color: p.title,
+                        fontWeight: 700,
+                        borderLeft: `4px solid ${p.heart}`,
+                      }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute -top-3 left-5 text-5xl leading-none sm:left-7 sm:text-6xl"
+                        style={{ color: p.heart, fontWeight: 900 }}
+                      >
+                        “
+                      </span>
+                      {quoteText}
+                    </blockquote>
+                  </figure>
+                )}
+                <p
+                  className="text-[17px] leading-[1.75]"
+                  style={{ color: "#1f2937" }}
+                >
+                  {para}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </article>
 
