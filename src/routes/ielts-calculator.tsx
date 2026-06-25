@@ -143,16 +143,6 @@ function GhostNumber({ n, position }: { n: string; position: "br" | "bl" }) {
   );
 }
 
-function SectionTag({ label }: { label: string }) {
-  return (
-    <span
-      className="inline-flex items-center rounded-full px-3 py-1 text-[13px] font-semibold"
-      style={{ ...INTER, background: "rgba(28,35,48,0.08)", color: INK }}
-    >
-      {label}
-    </span>
-  );
-}
 
 function ChipBrand() {
   return (
