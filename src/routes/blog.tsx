@@ -113,61 +113,107 @@ const POSTS: Post[] = [
   },
 ];
 
+const INTER = "Inter, ui-sans-serif, system-ui, sans-serif";
+
 function BlogPage() {
   return (
     <main
-      className="min-h-screen bg-white"
-      style={{ fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+      className="min-h-screen"
+      style={{ background: "#fafbfc", fontFamily: INTER }}
     >
-      <section className="mx-auto max-w-6xl px-5 pt-16 pb-10 sm:pt-24 sm:pb-14">
-        <p className="text-sm font-semibold tracking-tight text-neutral-500">
-          The journal
+      {/* Centered header */}
+      <section className="mx-auto max-w-6xl px-5 pt-16 pb-12 text-center sm:pt-24 sm:pb-16">
+        <p
+          className="text-xs tracking-[0.18em]"
+          style={{ color: "#94a3b8", fontWeight: 600 }}
+        >
+          THE JOURNAL
         </p>
         <h1
-          className="mt-3 text-4xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl"
-          style={{ fontWeight: 800 }}
+          className="mx-auto mt-4 text-5xl leading-[1.02] tracking-tight sm:text-6xl"
+          style={{ color: "#0f172a", fontWeight: 800 }}
         >
           Blog
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+        <p
+          className="mx-auto mt-5 max-w-xl text-base leading-relaxed sm:text-lg"
+          style={{ color: "#475569", fontWeight: 400 }}
+        >
           Field notes from our IELTS team — strategies, sample answers, and the
           tiny habits that move bands.
         </p>
+        <div
+          aria-hidden
+          className="mx-auto mt-8 h-px w-16"
+          style={{ background: "#e8ecf1" }}
+        />
       </section>
 
+      {/* Unified post cards */}
       <section className="mx-auto max-w-6xl px-5 pb-24">
-        <ul className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {POSTS.map((post) => (
             <li key={post.slug}>
               <Link
                 to="/blog"
-                className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-4 focus-visible:ring-offset-white rounded-3xl"
+                className="group block h-full rounded-3xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-4"
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid #e8ecf1",
+                  boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 18px 40px -18px rgba(59,130,246,0.25), 0 2px 6px rgba(15,23,42,0.05)";
+                  e.currentTarget.style.borderColor = "#dbe3ec";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 1px 2px rgba(15,23,42,0.04)";
+                  e.currentTarget.style.borderColor = "#e8ecf1";
+                }}
               >
-                <div className="overflow-hidden rounded-3xl bg-neutral-100">
-                  <div className="aspect-[4/3] w-full overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                    />
+                {/* Photo lives inside the card, with a hairline frame around it */}
+                <div className="p-3">
+                  <div
+                    className="overflow-hidden rounded-2xl"
+                    style={{ background: "#e8ecf1" }}
+                  >
+                    <div className="aspect-[16/10] w-full overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-5 px-1">
-                  <div className="flex items-center gap-2 text-xs font-medium text-neutral-500">
-                    <span className="text-neutral-900">{post.category}</span>
-                    <span aria-hidden className="h-1 w-1 rounded-full bg-neutral-300" />
-                    <span>{post.date}</span>
-                    <span aria-hidden className="h-1 w-1 rounded-full bg-neutral-300" />
-                    <span>{post.readTime}</span>
+                {/* Body */}
+                <div className="px-6 pb-6 pt-2">
+                  <div
+                    className="flex items-center gap-2 text-[11px] tracking-[0.12em]"
+                    style={{ color: "#3b82f6", fontWeight: 700 }}
+                  >
+                    <span>{post.category.toUpperCase()}</span>
                   </div>
                   <h2
-                    className="mt-3 text-xl leading-snug tracking-tight text-neutral-900 transition-colors group-hover:text-neutral-700"
-                    style={{ fontWeight: 700 }}
+                    className="mt-3 text-[1.2rem] leading-snug tracking-tight transition-colors"
+                    style={{ color: "#0f172a", fontWeight: 800 }}
                   >
                     {post.title}
                   </h2>
+                  <div
+                    className="mt-5 flex items-center gap-2 text-xs"
+                    style={{ color: "#94a3b8", fontWeight: 500 }}
+                  >
+                    <span>{post.date}</span>
+                    <span aria-hidden className="h-1 w-1 rounded-full bg-current opacity-50" />
+                    <span>{post.readTime}</span>
+                  </div>
                 </div>
               </Link>
             </li>
