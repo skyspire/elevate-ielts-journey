@@ -362,6 +362,67 @@ function BandStepper({
   );
 }
 
+/* Auto-shrinks its content with CSS transform: scale() so it always
+   fits inside the section's viewport height. Never up-scales. */
+function FitToScreen({ children }: { children: React.ReactNode }) {
+  const outerRef = React.useRef<HTMLDivElement | null>(null);
+  const innerRef = React.useRef<HTMLDivElement | null>(null);
+  const [scale, setScale] = React.useState(1);
+
+  React.useLayoutEffect(() => {
+    const measure = () => {
+      const outer = outerRef.current;
+      const inner = innerRef.current;
+      if (!outer || !inner) return;
+      // Measure inner at its natural size (scale 1) by temporarily clearing transform
+      const prev = inner.style.transform;
+      inner.style.transform = "none";
+      const ch = inner.scrollHeight;
+      const cw = inner.scrollWidth;
+      inner.style.transform = prev;
+      const ah = outer.clientHeight;
+      const aw = outer.clientWidth;
+      const sH = ch > ah ? ah / ch : 1;
+      const sW = cw > aw ? aw / cw : 1;
+      const s = Math.min(1, sH, sW);
+      setScale(s < 0.55 ? 0.55 : s);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (outerRef.current) ro.observe(outerRef.current);
+    if (innerRef.current) ro.observe(innerRef.current);
+    window.addEventListener("resize", measure);
+    window.addEventListener("orientationchange", measure);
+    const t = window.setTimeout(measure, 60);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("orientationchange", measure);
+      window.clearTimeout(t);
+    };
+  }, [children]);
+
+  return (
+    <div
+      ref={outerRef}
+      className="flex w-full items-center justify-center"
+      style={{ minHeight: "100svh" }}
+    >
+      <div
+        ref={innerRef}
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: "center center",
+          width: "100%",
+          willChange: "transform",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 /* Reusable section shell — full-viewport snap target with its own pastel bg */
 function Section({
   id,
@@ -382,15 +443,17 @@ function Section({
       className="relative w-full overflow-hidden"
       style={{
         background: bg,
-        minHeight: "100svh",
+        height: "100svh",
         scrollSnapAlign: "start",
         scrollSnapStop: "always",
       }}
     >
       {ghostN ? <GhostNumber n={ghostN} position={ghostPos} /> : null}
-      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col justify-center px-5 py-12 sm:px-8 sm:py-16">
-        {children}
-      </div>
+      <FitToScreen>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+          {children}
+        </div>
+      </FitToScreen>
     </section>
   );
 }
@@ -406,7 +469,8 @@ function IeltsCalculatorPage() {
   const [rawR, setRawR] = React.useState<number>(27);
   const [w, setW] = React.useState(6.5);
   const [s, setS] = React.useState(7);
-  const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+  const [openFaq, setOpenFaq] = React.useState<number | null>(null);
+  const [showAllBands, setShowAllBands] = React.useState(false);
 
   const readingTable = testType === "academic" ? READING_ACADEMIC : READING_GENERAL;
 
@@ -491,7 +555,7 @@ function IeltsCalculatorPage() {
           <ChipBrand />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
           <div
             className="relative rounded-[28px] p-7 sm:p-9"
             style={{
@@ -533,7 +597,7 @@ function IeltsCalculatorPage() {
               background: INK,
               color: PALE,
               boxShadow: "0 30px 60px -30px rgba(28,35,48,0.6)",
-              minHeight: 260,
+              minHeight: 180,
             }}
           >
             <div className="text-center">
@@ -794,7 +858,7 @@ function IeltsCalculatorPage() {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-          {BAND_MEANING.map((b) => (
+          {(showAllBands ? BAND_MEANING : BAND_MEANING.filter((b) => b.n >= 4)).map((b) => (
             <div
               key={b.n}
               className="rounded-2xl p-4 sm:p-5"
@@ -816,6 +880,16 @@ function IeltsCalculatorPage() {
               </p>
             </div>
           ))}
+        </div>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setShowAllBands((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2"
+            style={{ ...INTER, fontWeight: 600, fontSize: "14px", background: "rgba(28,35,48,0.08)", color: INK }}
+          >
+            {showAllBands ? "Show fewer bands" : "See all 9 bands"}
+          </button>
         </div>
       </Section>
 
@@ -874,7 +948,7 @@ function IeltsCalculatorPage() {
           </p>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[
             { t: "Boost your weakest skill first", d: "Rounding rewards lifting your lowest score by 0.5 more than your highest by 1." },
             { t: "Time Reading section 3", d: "Most candidates lose 4–6 marks here purely to clock-running, not difficulty." },
