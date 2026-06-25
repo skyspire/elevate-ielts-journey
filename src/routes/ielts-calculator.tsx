@@ -417,21 +417,50 @@ function Section({
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 function IeltsCalculatorPage() {
+  const [testType, setTestType] = React.useState<"academic" | "general">("academic");
   const [l, setL] = React.useState(7);
   const [r, setR] = React.useState(6.5);
   const [w, setW] = React.useState(6.5);
   const [s, setS] = React.useState(7);
+  const [rawL, setRawL] = React.useState<number>(bandToRaw(7, LISTENING_TABLE) || 30);
+  const [rawR, setRawR] = React.useState<number>(bandToRaw(6.5, READING_ACADEMIC) || 27);
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+
+  const readingTable = testType === "academic" ? READING_ACADEMIC : READING_GENERAL;
+
+  /* When user types a raw score, recompute the band */
+  const onRawL = (n: number) => {
+    setRawL(n);
+    setL(rawToBand(n, LISTENING_TABLE));
+  };
+  const onRawR = (n: number) => {
+    setRawR(n);
+    setR(rawToBand(n, readingTable));
+  };
+  /* When user drags the band slider, jump raw to the lowest raw for that band */
+  const onBandL = (b: number) => {
+    setL(b);
+    setRawL(bandToRaw(b, LISTENING_TABLE) || 0);
+  };
+  const onBandR = (b: number) => {
+    setR(b);
+    setRawR(bandToRaw(b, readingTable) || 0);
+  };
+
+  /* When user switches Academic <-> General, re-derive the Reading band from the same raw */
+  React.useEffect(() => {
+    setR(rawToBand(rawR, readingTable));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testType]);
 
   const overall = overallBand([l, r, w, s]);
   const avg = (l + r + w + s) / 4;
   const meaning = bandLabel(overall);
 
   const reset = () => {
-    setL(7);
-    setR(6.5);
-    setW(6.5);
-    setS(7);
+    setL(7); setR(6.5); setW(6.5); setS(7);
+    setRawL(bandToRaw(7, LISTENING_TABLE) || 30);
+    setRawR(bandToRaw(6.5, readingTable) || 27);
   };
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
