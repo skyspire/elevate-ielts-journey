@@ -156,7 +156,7 @@ function BlogPage() {
             <li key={post.slug}>
               <Link
                 to="/blog"
-                className="group block h-full rounded-3xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-4"
+                className="group block h-full overflow-hidden rounded-2xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-4"
                 style={{
                   background: "#ffffff",
                   border: "1px solid #e8ecf1",
@@ -175,43 +175,46 @@ function BlogPage() {
                   e.currentTarget.style.borderColor = "#e8ecf1";
                 }}
               >
-                {/* Photo lives inside the card, with a hairline frame around it */}
-                <div className="p-3">
-                  <div
-                    className="overflow-hidden rounded-2xl"
-                    style={{ background: "#e8ecf1" }}
-                  >
-                    <div className="aspect-[16/10] w-full overflow-hidden">
-                      <img
-                        src={post.image}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      />
-                    </div>
-                  </div>
+                {/* Full-bleed top image */}
+                <div
+                  className="aspect-video w-full overflow-hidden"
+                  style={{ background: "#f1f5f9" }}
+                >
+                  <img
+                    src={post.image}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                  />
                 </div>
 
-                {/* Body */}
-                <div className="px-6 pb-6 pt-2">
-                  <div
-                    className="flex items-center gap-2 text-[11px] tracking-[0.12em]"
-                    style={{ color: "#3b82f6", fontWeight: 700 }}
-                  >
-                    <span>{post.category.toUpperCase()}</span>
+                {/* Content area */}
+                <div className="p-6">
+                  <div className="flex flex-col gap-2">
+                    <span
+                      className="text-[11px] uppercase tracking-wider"
+                      style={{ color: "#3b82f6", fontWeight: 800 }}
+                    >
+                      {post.category}
+                    </span>
+                    <h2
+                      className="text-[22px] leading-[1.2] tracking-tight"
+                      style={{ color: "#0f172a", fontWeight: 800 }}
+                    >
+                      {post.title}
+                    </h2>
                   </div>
-                  <h2
-                    className="mt-3 text-[1.2rem] leading-snug tracking-tight transition-colors"
-                    style={{ color: "#0f172a", fontWeight: 800 }}
-                  >
-                    {post.title}
-                  </h2>
+
                   <div
-                    className="mt-5 flex items-center gap-2 text-xs"
-                    style={{ color: "#94a3b8", fontWeight: 500 }}
+                    className="mt-5 flex items-center gap-2 text-[13px]"
+                    style={{ color: "#94a3b8" }}
                   >
-                    <span>{post.date}</span>
-                    <span aria-hidden className="h-1 w-1 rounded-full bg-current opacity-50" />
+                    <time>{post.date}</time>
+                    <span
+                      aria-hidden
+                      className="h-1 w-1 rounded-full"
+                      style={{ background: "#e8ecf1" }}
+                    />
                     <span>{post.readTime}</span>
                   </div>
                 </div>
