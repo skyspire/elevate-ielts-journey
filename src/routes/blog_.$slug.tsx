@@ -406,140 +406,80 @@ function PostPage() {
         </div>
       </article>
 
-      {/* Reactions bar — premium pill row */}
-      <section className="mx-auto max-w-[680px] px-5 pb-10">
-        <div
-          className="relative overflow-hidden rounded-3xl border bg-white px-6 py-6 sm:px-8"
-          style={{
-            borderColor: "#E0E7FF",
-            boxShadow:
-              "0 24px 48px -28px rgba(30,27,75,0.22), 0 4px 12px -6px rgba(15,23,42,0.06)",
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-60"
-            style={{ background: "radial-gradient(closest-side, #DBEAFE, transparent 70%)" }}
-          />
-          <div className="relative flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
-            <div className="text-center sm:text-left">
-              <p
-                className="text-[11px] uppercase tracking-[0.22em]"
-                style={{ color: "#3730a3", fontWeight: 800 }}
-              >
-                React to this piece
-              </p>
-              <p className="mt-1 text-[14px]" style={{ color: "#475569", fontWeight: 500 }}>
-                One tap — it shapes what we write next.
-              </p>
-            </div>
-            <div className="flex items-center gap-2.5">
-              {REACTIONS.map((r) => {
-                const active = !!myReactions[r.key];
-                const Icon = r.Icon;
-                return (
-                  <button
-                    key={r.key}
-                    type="button"
-                    onClick={() => toggleReaction(r.key)}
-                    aria-pressed={active}
-                    aria-label={r.label}
-                    className="group flex h-12 items-center gap-2 rounded-full px-4 text-[13px] transition-all active:scale-95"
-                    style={{
-                      background: active ? r.tint : "#ffffff",
-                      border: `1.5px solid ${active ? r.ring : "#E2E8F0"}`,
-                      color: active ? r.ring : "#475569",
-                      fontWeight: 800,
-                      boxShadow: active
-                        ? `0 8px 20px -10px ${r.ring}55`
-                        : "0 2px 6px -3px rgba(15,23,42,0.06)",
-                    }}
-                  >
-                    <Icon
-                      className="h-[18px] w-[18px] transition-transform group-hover:scale-110"
-                      strokeWidth={active ? 2.4 : 2}
-                    />
-                    <span className="tabular-nums">{reactionCounts[r.key] || 0}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Share — premium icon row */}
+      {/* Engagement — reactions + share, centered, bare on page */}
       <section className="mx-auto max-w-[680px] px-5 pb-14">
-        <div
-          className="rounded-3xl border bg-white px-6 py-6"
-          style={{
-            borderColor: "#E0E7FF",
-            boxShadow: "0 20px 40px -24px rgba(30,27,75,0.18)",
-          }}
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <p
-              className="text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: "#3730a3", fontWeight: 800 }}
-            >
-              Share
-            </p>
-            <button
-              type="button"
-              onClick={copyLink}
-              className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] transition-colors"
-              style={{
-                borderColor: copied ? "#10B981" : "#CBD5E1",
-                color: copied ? "#047857" : "#1e1b4b",
-                background: copied ? "#ECFDF5" : "#ffffff",
-                fontWeight: 700,
-              }}
-            >
-              {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
-              {copied ? "Copied" : "Copy link"}
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { key: "whatsapp", label: "WhatsApp", Icon: Send, color: "#25D366" },
-              { key: "telegram", label: "Telegram", Icon: Send, color: "#229ED9" },
-              { key: "x", label: "X", Icon: Twitter, color: "#0f172a" },
-              { key: "facebook", label: "Facebook", Icon: Facebook, color: "#1877F2" },
-              { key: "linkedin", label: "LinkedIn", Icon: Linkedin, color: "#0A66C2" },
-              { key: "email", label: "Email", Icon: Mail, color: "#475569" },
-            ].map((s) => {
-              const Icon = s.Icon;
+        <div className="flex flex-col items-center gap-10">
+          {/* Reactions */}
+          <div className="flex items-center justify-center gap-10 sm:gap-12">
+            {REACTIONS.map((r) => {
+              const active = !!myReactions[r.key];
               return (
                 <button
-                  key={s.key}
+                  key={r.key}
                   type="button"
-                  onClick={() => shareTo(s.key as "whatsapp")}
-                  aria-label={`Share on ${s.label}`}
-                  title={s.label}
-                  className="group relative flex h-11 w-11 items-center justify-center rounded-full transition-all hover:-translate-y-0.5"
-                  style={{
-                    background: "#F8FAFC",
-                    border: "1.5px solid #E2E8F0",
-                    color: s.color,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = s.color;
-                    e.currentTarget.style.borderColor = s.color;
-                    e.currentTarget.style.color = "#ffffff";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#F8FAFC";
-                    e.currentTarget.style.borderColor = "#E2E8F0";
-                    e.currentTarget.style.color = s.color;
-                  }}
+                  onClick={() => toggleReaction(r.key)}
+                  aria-pressed={active}
+                  aria-label={r.label}
+                  className="flex flex-col items-center gap-1.5 transition-transform active:scale-90"
                 >
-                  <Icon className="h-[18px] w-[18px]" strokeWidth={2.2} />
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-9 w-9 transition-colors"
+                    style={{ fill: active ? "#3B82F6" : "#93C5FD" }}
+                  >
+                    <path d={reactionPath[r.key]} />
+                  </svg>
+                  <span
+                    className="text-[13px] tabular-nums"
+                    style={{ color: "#1f2937", fontFamily: INTER, fontWeight: 700 }}
+                  >
+                    {reactionCounts[r.key] || 0}
+                  </span>
                 </button>
               );
             })}
           </div>
+
+          {/* Divider */}
+          <div className="h-1 w-12 rounded-full" style={{ background: "#93C5FD" }} />
+
+          {/* Share — 3x2 grid of black rounded-square tiles */}
+          <div className="grid grid-cols-3 gap-3">
+            {SHARE_TARGETS.map((s) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => shareTo(s.key)}
+                aria-label={`Share on ${s.label}`}
+                title={s.label}
+                className="flex h-[52px] w-[52px] items-center justify-center rounded-xl text-white transition-transform hover:scale-105 active:scale-95"
+                style={{ background: "#000000" }}
+              >
+                <svg viewBox="0 0 24 24" className={s.iconClass || "h-7 w-7"} fill="currentColor">
+                  <path d={s.path} />
+                </svg>
+              </button>
+            ))}
+          </div>
+
+          {/* Copy link */}
+          <button
+            type="button"
+            onClick={copyLink}
+            className="inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-colors"
+            style={{
+              color: copied ? "#047857" : "#475569",
+              fontFamily: INTER,
+              fontWeight: 700,
+            }}
+          >
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
+            {copied ? "Link copied" : "Copy link"}
+          </button>
         </div>
       </section>
+
+
 
       {/* Previous / Next article */}
       {(prevPost || nextPost) && (
