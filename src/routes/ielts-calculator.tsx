@@ -245,6 +245,141 @@ function PillButton({
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Raw -> Band conversion tables (standard published)                  */
+/* Each row = [minRaw, maxRaw, band]                                   */
+/* ------------------------------------------------------------------ */
+type Row = [number, number, number];
+
+const LISTENING_TABLE: Row[] = [
+  [39, 40, 9.0], [37, 38, 8.5], [35, 36, 8.0], [32, 34, 7.5],
+  [30, 31, 7.0], [26, 29, 6.5], [23, 25, 6.0], [18, 22, 5.5],
+  [16, 17, 5.0], [13, 15, 4.5], [11, 12, 4.0], [8, 10, 3.5],
+  [6, 7, 3.0],  [4, 5, 2.5],
+];
+
+const READING_ACADEMIC: Row[] = [
+  [39, 40, 9.0], [37, 38, 8.5], [35, 36, 8.0], [33, 34, 7.5],
+  [30, 32, 7.0], [27, 29, 6.5], [23, 26, 6.0], [19, 22, 5.5],
+  [15, 18, 5.0], [13, 14, 4.5], [10, 12, 4.0], [8, 9, 3.5],
+  [6, 7, 3.0],   [4, 5, 2.5],
+];
+
+const READING_GENERAL: Row[] = [
+  [40, 40, 9.0], [39, 39, 8.5], [37, 38, 8.0], [36, 36, 7.5],
+  [34, 35, 7.0], [32, 33, 6.5], [30, 31, 6.0], [27, 29, 5.5],
+  [23, 26, 5.0], [19, 22, 4.5], [15, 18, 4.0], [12, 14, 3.5],
+  [9, 11, 3.0],  [6, 8, 2.5],
+];
+
+function rawToBand(raw: number, table: Row[]): number {
+  const r = Math.max(0, Math.min(40, Math.round(raw)));
+  for (const [lo, hi, b] of table) if (r >= lo && r <= hi) return b;
+  return 0;
+}
+
+/* Pick the lowest raw score that yields a given band (for slider -> raw sync) */
+function bandToRaw(band: number, table: Row[]): number {
+  let best = 0;
+  for (const [lo, , b] of table) {
+    if (b === band && (best === 0 || lo < best)) best = lo;
+  }
+  return best;
+}
+
+/* Row that pairs a Raw /40 number input + band slider (two-way synced) */
+function RawBandRow({
+  label,
+  raw,
+  band,
+  table,
+  onRawChange,
+  onBandChange,
+}: {
+  label: string;
+  raw: number;
+  band: number;
+  table: Row[];
+  onRawChange: (raw: number) => void;
+  onBandChange: (band: number) => void;
+}) {
+  const pct = (band / 9) * 100;
+  return (
+    <div>
+      <div className="mb-1.5 flex items-center justify-between gap-3">
+        <span
+          className="text-[11px] font-extrabold uppercase tracking-[0.18em]"
+          style={{ color: INK }}
+        >
+          {label}
+        </span>
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1.5 rounded-full px-2.5 py-1" style={{ background: "rgba(28,35,48,0.08)" }}>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.14em]" style={{ color: INK }}>
+              Raw
+            </span>
+            <input
+              type="number"
+              min={0}
+              max={40}
+              value={raw}
+              onChange={(e) => {
+                const n = Math.max(0, Math.min(40, parseInt(e.target.value || "0", 10)));
+                onRawChange(n);
+              }}
+              className="w-12 bg-transparent text-center font-extrabold tabular-nums outline-none"
+              style={{ color: INK, fontSize: "0.9rem" }}
+            />
+            <span className="text-[10px] font-bold" style={{ color: MUTED }}>/40</span>
+          </label>
+          <span
+            className="font-black tabular-nums"
+            style={{
+              ...INTER,
+              fontWeight: 900,
+              fontSize: "1.4rem",
+              letterSpacing: "-0.03em",
+              color: INK,
+              minWidth: "2.5rem",
+              textAlign: "right",
+            }}
+          >
+            {band.toFixed(1)}
+          </span>
+        </div>
+      </div>
+      <div className="relative">
+        <div className="h-2.5 w-full rounded-full" style={{ background: "rgba(28,35,48,0.12)" }} />
+        <div className="absolute left-0 top-0 h-2.5 rounded-full" style={{ width: `${pct}%`, background: INK }} />
+        <input
+          type="range"
+          min={0}
+          max={9}
+          step={0.5}
+          value={band}
+          onChange={(e) => onBandChange(parseFloat(e.target.value))}
+          className="absolute inset-0 h-2.5 w-full cursor-pointer appearance-none bg-transparent
+                     [&::-webkit-slider-thumb]:appearance-none
+                     [&::-webkit-slider-thumb]:h-5
+                     [&::-webkit-slider-thumb]:w-5
+                     [&::-webkit-slider-thumb]:rounded-full
+                     [&::-webkit-slider-thumb]:border-[3px]
+                     [&::-webkit-slider-thumb]:border-[var(--ink)]
+                     [&::-webkit-slider-thumb]:bg-white
+                     [&::-webkit-slider-thumb]:shadow-md
+                     [&::-moz-range-thumb]:h-5
+                     [&::-moz-range-thumb]:w-5
+                     [&::-moz-range-thumb]:rounded-full
+                     [&::-moz-range-thumb]:border-[3px]
+                     [&::-moz-range-thumb]:border-[var(--ink)]
+                     [&::-moz-range-thumb]:bg-white"
+          style={{ ["--ink" as string]: INK } as React.CSSProperties}
+        />
+      </div>
+    </div>
+  );
+}
+
 /* Reusable section shell — full-viewport snap target with its own pastel bg */
 function Section({
   id,
@@ -282,21 +417,50 @@ function Section({
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 function IeltsCalculatorPage() {
+  const [testType, setTestType] = React.useState<"academic" | "general">("academic");
   const [l, setL] = React.useState(7);
   const [r, setR] = React.useState(6.5);
   const [w, setW] = React.useState(6.5);
   const [s, setS] = React.useState(7);
+  const [rawL, setRawL] = React.useState<number>(bandToRaw(7, LISTENING_TABLE) || 30);
+  const [rawR, setRawR] = React.useState<number>(bandToRaw(6.5, READING_ACADEMIC) || 27);
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+
+  const readingTable = testType === "academic" ? READING_ACADEMIC : READING_GENERAL;
+
+  /* When user types a raw score, recompute the band */
+  const onRawL = (n: number) => {
+    setRawL(n);
+    setL(rawToBand(n, LISTENING_TABLE));
+  };
+  const onRawR = (n: number) => {
+    setRawR(n);
+    setR(rawToBand(n, readingTable));
+  };
+  /* When user drags the band slider, jump raw to the lowest raw for that band */
+  const onBandL = (b: number) => {
+    setL(b);
+    setRawL(bandToRaw(b, LISTENING_TABLE) || 0);
+  };
+  const onBandR = (b: number) => {
+    setR(b);
+    setRawR(bandToRaw(b, readingTable) || 0);
+  };
+
+  /* When user switches Academic <-> General, re-derive the Reading band from the same raw */
+  React.useEffect(() => {
+    setR(rawToBand(rawR, readingTable));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testType]);
 
   const overall = overallBand([l, r, w, s]);
   const avg = (l + r + w + s) / 4;
   const meaning = bandLabel(overall);
 
   const reset = () => {
-    setL(7);
-    setR(6.5);
-    setW(6.5);
-    setS(7);
+    setL(7); setR(6.5); setW(6.5); setS(7);
+    setRawL(bandToRaw(7, LISTENING_TABLE) || 30);
+    setRawR(bandToRaw(6.5, readingTable) || 27);
   };
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
@@ -445,20 +609,46 @@ function IeltsCalculatorPage() {
 
       {/* ===== 02 — CALCULATOR (peach) ===== */}
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
-        <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag n="02" label="Calculator" />
-          <h2
-            className="leading-[0.95] tracking-tight"
-            style={{
-              ...INTER,
-              fontWeight: 900,
-              fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
-              letterSpacing: "-0.03em",
-              color: INK,
-            }}
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="flex flex-col items-start gap-3">
+            <SectionTag n="02" label="Calculator" />
+            <h2
+              className="leading-[0.95] tracking-tight"
+              style={{
+                ...INTER,
+                fontWeight: 900,
+                fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
+                letterSpacing: "-0.03em",
+                color: INK,
+              }}
+            >
+              Your calculator
+            </h2>
+          </div>
+
+          {/* Academic / General toggle */}
+          <div
+            className="inline-flex items-center rounded-full p-1"
+            style={{ background: "rgba(28,35,48,0.08)" }}
           >
-            Your calculator
-          </h2>
+            {(["academic", "general"] as const).map((t) => {
+              const active = testType === t;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTestType(t)}
+                  className="rounded-full px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] transition"
+                  style={{
+                    background: active ? INK : "transparent",
+                    color: active ? PALE : INK,
+                  }}
+                >
+                  {t === "academic" ? "Academic" : "General"}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
@@ -470,17 +660,36 @@ function IeltsCalculatorPage() {
             }}
           >
             <div className="space-y-5">
-              <BandSlider label="Listening" value={l} onChange={setL} />
-              <BandSlider label="Reading" value={r} onChange={setR} />
+              <RawBandRow
+                label="Listening"
+                raw={rawL}
+                band={l}
+                table={LISTENING_TABLE}
+                onRawChange={onRawL}
+                onBandChange={onBandL}
+              />
+              <RawBandRow
+                label={`Reading (${testType === "academic" ? "Academic" : "General"})`}
+                raw={rawR}
+                band={r}
+                table={readingTable}
+                onRawChange={onRawR}
+                onBandChange={onBandR}
+              />
               <BandSlider label="Writing" value={w} onChange={setW} />
               <BandSlider label="Speaking" value={s} onChange={setS} />
             </div>
-            <div className="mt-7 flex flex-wrap items-center gap-2.5">
+            <p className="mt-4 text-[11.5px] leading-relaxed" style={{ color: MUTED, fontWeight: 500 }}>
+              Type your correct answers out of 40 for Listening &amp; Reading — the band auto-fills.
+              Writing &amp; Speaking are examiner-graded on 4 criteria, so set those by band directly.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-2.5">
               <PillButton variant="ghost"><Share2 className="h-4 w-4" /> Share</PillButton>
               <PillButton variant="ghost"><FileText className="h-4 w-4" /> PDF</PillButton>
               <PillButton variant="ghost" onClick={reset}><RotateCcw className="h-4 w-4" /> Reset</PillButton>
             </div>
           </div>
+
 
           <div
             className="relative flex flex-col justify-between rounded-[28px] p-6 sm:p-8 lg:col-span-2"
