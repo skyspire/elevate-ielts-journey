@@ -135,45 +135,123 @@ function BlogPage() {
         </Link>
       </section>
 
-      {/* Filter pills + search */}
-      <section className="mx-auto mt-12 max-w-6xl px-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((cat) => {
-              const active = activeCat === cat;
-              return (
+      {/* Full-width pastel search band */}
+      <section className="mt-16">
+        <div
+          className="px-5 py-12 sm:py-16"
+          style={{
+            background: "linear-gradient(135deg, #f5f3ff 0%, #f0f9ff 50%, #ecfdf5 100%)",
+          }}
+        >
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#7c3aed", fontWeight: 700 }}>
+              Find your next read
+            </p>
+            <h2 className="mt-3 text-3xl tracking-tight sm:text-4xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+              Search every IELTS article
+            </h2>
+            <form onSubmit={(e) => e.preventDefault()} className="relative mx-auto mt-6 max-w-2xl">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#7c3aed"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Try ‘Task 2 structure’ or ‘Speaking Part 2’…"
+                className="w-full rounded-full py-4 pl-14 pr-6 text-base outline-none transition-all focus:ring-4"
+                style={{
+                  background: "#ffffff",
+                  color: "#1e1b4b",
+                  boxShadow: "0 12px 30px -12px rgba(124,58,237,0.30), 0 4px 10px -6px rgba(15,23,42,0.08)",
+                }}
+              />
+            </form>
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              {["Task 2", "Speaking Part 2", "True/False/Not Given", "Vocabulary"].map((tag) => (
                 <button
-                  key={cat}
+                  key={tag}
                   type="button"
-                  onClick={() => setActiveCat(cat)}
-                  className="rounded-full px-3 py-1.5 text-xs transition-all"
-                  style={{
-                    background: active ? "#1e1b4b" : "#f1f5f9",
-                    color: active ? "#ffffff" : "#475569",
-                    fontWeight: 600,
-                  }}
+                  onClick={() => setQuery(tag)}
+                  className="rounded-full bg-white/80 px-3 py-1 text-xs backdrop-blur-md transition-transform hover:scale-105"
+                  style={{ color: "#6d28d9", fontWeight: 600 }}
                 >
-                  {cat}
+                  {tag}
                 </button>
-              );
-            })}
-          </div>
-          <div className="relative sm:w-64">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles…"
-              className="w-full rounded-full px-4 py-2 text-sm outline-none transition-all focus:ring-2"
-              style={{
-                background: "#f8fafc",
-                color: "#1e1b4b",
-                boxShadow: "inset 0 0 0 1px #e2e8f0",
-              }}
-            />
+              ))}
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Big pastel category tiles */}
+      <section className="mx-auto mt-16 max-w-6xl px-5">
+        <div className="mb-6 flex items-baseline justify-between">
+          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+            Browse by category
+          </h2>
+          {activeCat !== "All" && (
+            <button
+              type="button"
+              onClick={() => setActiveCat("All")}
+              className="text-xs underline"
+              style={{ color: "#6d28d9", fontWeight: 600 }}
+            >
+              Clear filter
+            </button>
+          )}
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          {CATEGORIES.map((cat, i) => {
+            const p = PALETTES[i % PALETTES.length];
+            const active = activeCat === cat;
+            const count = cat === "All" ? POSTS.length : POSTS.filter((x) => x.category === cat).length;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCat(cat)}
+                className="group relative overflow-hidden rounded-2xl p-5 text-left transition-all"
+                style={{
+                  background: p.cardBg,
+                  boxShadow: active
+                    ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
+                    : `0 12px 28px -14px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                <div
+                  className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-60"
+                  style={{ background: p.imgBg }}
+                />
+                <div className="relative">
+                  <p className="text-[10px] uppercase tracking-wider" style={{ color: p.chipText, fontWeight: 700 }}>
+                    {count} {count === 1 ? "article" : "articles"}
+                  </p>
+                  <h3 className="mt-2 text-lg leading-tight sm:text-xl" style={{ color: p.title, fontWeight: 800 }}>
+                    {cat}
+                  </h3>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
 
       {/* Pastel post cards */}
       <section className="mx-auto max-w-6xl px-5 pb-20 pt-6">
