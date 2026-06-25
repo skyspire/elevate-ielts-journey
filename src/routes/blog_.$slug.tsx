@@ -265,9 +265,48 @@ function PostPage() {
         )}
       </div>
 
-      {/* Hero — image (60%) + title (40%), fits within viewport, no scroll needed */}
-      <section className="flex h-[100svh] min-h-[520px] w-full flex-col">
-        <figure className="relative w-full shrink-0 basis-[60%]" style={{ background: p.imgBg }}>
+      {/* Hero — editorial split: text left, full-bleed image right, fits one screen */}
+      <section className="grid h-[100svh] min-h-[520px] w-full grid-rows-[45%_55%] md:grid-cols-[55%_45%] md:grid-rows-1">
+        {/* Left: text */}
+        <div className="order-2 flex min-h-0 flex-col justify-center px-6 py-6 sm:px-10 md:order-1 md:px-14 lg:px-20">
+          <div className="flex items-center gap-3">
+            <span aria-hidden="true" className="h-[3px] w-10 rounded-full" style={{ background: p.heart }} />
+            <span
+              className="text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: p.chipText, fontWeight: 800 }}
+            >
+              {post.category}
+            </span>
+          </div>
+
+          <h1
+            className="mt-4 text-[clamp(32px,6.4vw,76px)] leading-[1.02] tracking-[-0.028em]"
+            style={{ color: "#0f172a", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
+          >
+            {post.title}
+          </h1>
+
+          <p
+            className="mt-5 max-w-[520px] text-[15px] leading-relaxed sm:text-base"
+            style={{ color: "#475569", fontWeight: 400 }}
+          >
+            {post.excerpt}
+          </p>
+
+          <div
+            aria-hidden="true"
+            className="mt-7 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] animate-fade-in"
+            style={{ color: "#94a3b8", fontWeight: 700 }}
+          >
+            Scroll
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M6 13l6 6 6-6" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Right: full-bleed image */}
+        <figure className="relative order-1 h-full w-full md:order-2" style={{ background: p.imgBg }}>
           <img
             src={post.image}
             alt=""
@@ -288,43 +327,12 @@ function PostPage() {
             </svg>
           </Link>
         </figure>
-
-        <div className="flex min-h-0 grow basis-[40%] flex-col items-center justify-center px-5 py-4 text-center">
-          <div className="flex items-center justify-center gap-3">
-            <span aria-hidden="true" className="h-[3px] w-8 rounded-full" style={{ background: p.heart }} />
-            <span
-              className="text-[11px] uppercase tracking-[0.18em]"
-              style={{ color: p.chipText, fontWeight: 800 }}
-            >
-              {post.category}
-            </span>
-          </div>
-
-          <h1
-            className="mt-3 text-[clamp(24px,6vw,64px)] leading-[1.05] tracking-[-0.025em] lg:text-[72px]"
-            style={{ color: "#93C5FD", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
-          >
-            {post.title}
-          </h1>
-
-          <div
-            aria-hidden="true"
-            className="mt-4 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] animate-fade-in"
-            style={{ color: "#94a3b8", fontWeight: 700 }}
-          >
-            Scroll
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14M6 13l6 6 6-6" />
-            </svg>
-          </div>
-        </div>
       </section>
 
-      {/* Article body intro */}
+
+      {/* Article body */}
       <article className="mx-auto max-w-5xl px-5 pt-10 sm:pt-14">
-        <p className="mx-auto max-w-[680px] text-center text-lg leading-relaxed" style={{ color: "#475569", fontWeight: 400 }}>
-          {post.excerpt}
-        </p>
+
 
 
 
