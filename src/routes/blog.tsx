@@ -113,7 +113,7 @@ function BlogPage() {
             </button>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6">
           {CATEGORIES.map((cat, i) => {
             const p = PALETTES[i % PALETTES.length];
             const active = activeCat === cat;
@@ -123,30 +123,31 @@ function BlogPage() {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCat(cat)}
-                className="group relative flex aspect-square flex-col items-center justify-center overflow-hidden rounded-2xl p-5 text-center transition-all"
+                className="group relative flex flex-col items-center justify-center overflow-hidden rounded-xl px-3 py-3 text-center transition-all"
                 style={{
                   background: p.imgBg,
                   boxShadow: active
-                    ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
-                    : `0 14px 32px -16px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.10)`,
+                    ? `0 0 0 2px ${p.heart}, 0 10px 24px -14px ${p.shadow}`
+                    : `0 8px 20px -12px ${p.shadow}, 0 2px 6px -4px rgba(15,23,42,0.10)`,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <h3 className="text-xl leading-tight sm:text-2xl" style={{ color: p.title, fontWeight: 800 }}>
+                <h3 className="text-sm leading-tight" style={{ color: p.title, fontWeight: 700 }}>
                   {cat}
                 </h3>
-                <p className="mt-2 text-xs" style={{ color: p.title, opacity: 0.7, fontWeight: 600 }}>
-                  {count} {count === 1 ? "article" : "articles"}
+                <p className="mt-0.5 text-[10px]" style={{ color: p.title, opacity: 0.65, fontWeight: 600 }}>
+                  {count}
                 </p>
               </button>
             );
           })}
         </div>
+
       </section>
 
 
