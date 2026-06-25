@@ -175,7 +175,7 @@ function PostPage() {
 
         <h1
           className="mt-5 text-[34px] leading-[1.05] tracking-[-0.025em] sm:text-[52px] sm:leading-[1.02]"
-          style={{ color: "#0f0a2e", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
+          style={{ color: "#1e1b4b", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
         >
           {post.title}
         </h1>
@@ -184,21 +184,21 @@ function PostPage() {
           {post.excerpt}
         </p>
 
-        {/* Author card with gradient avatar */}
+        {/* Author card — clean white, blue accents */}
         <div
-          className="mt-10 flex items-center gap-4 rounded-2xl p-4 sm:p-5"
+          className="mt-10 flex items-center gap-4 rounded-2xl border bg-white p-4 sm:p-5"
           style={{
-            background: p.cardBg,
-            boxShadow: `0 10px 28px -16px ${p.shadow}, 0 2px 6px -3px rgba(15,23,42,0.06)`,
+            borderColor: "#eef2ff",
+            boxShadow: "0 12px 32px -18px rgba(30,27,75,0.20), 0 2px 6px -3px rgba(15,23,42,0.05)",
           }}
         >
           <div
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm sm:h-14 sm:w-14 sm:text-base"
+            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm sm:h-14 sm:w-14 sm:text-base"
             style={{
-              background: `linear-gradient(135deg, ${p.heart}, ${p.chipText})`,
+              background: "linear-gradient(135deg, #1e1b4b, #3b82f6)",
               color: "#ffffff",
               fontWeight: 800,
-              boxShadow: `0 6px 16px -6px ${p.heart}`,
+              boxShadow: "0 8px 18px -6px rgba(59,130,246,0.55)",
             }}
             aria-hidden="true"
           >
@@ -207,15 +207,25 @@ function PostPage() {
               .map((s: string) => s[0])
               .slice(0, 2)
               .join("")}
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white"
+              style={{ background: "#3b82f6" }}
+            />
           </div>
-          <div className="flex min-w-0 flex-1 flex-col">
-            <span className="text-[14px] sm:text-[15px]" style={{ color: "#1e1b4b", fontWeight: 800 }}>
-              {post.author}
-            </span>
-            <span className="text-[11px] uppercase tracking-[0.12em]" style={{ color: p.chipText, fontWeight: 700 }}>
-              IELTS specialists
-            </span>
-            <span className="mt-1 flex items-center gap-1.5 text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[14px] sm:text-[15px]" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+                {post.author}
+              </span>
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-[0.1em]"
+                style={{ background: "#eef2ff", color: "#3730a3", fontWeight: 700 }}
+              >
+                IELTS specialists
+              </span>
+            </div>
+            <span className="flex items-center gap-1.5 text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
               <span>{post.readMin} min read</span>
               <span aria-hidden="true" className="h-1 w-1 rounded-full" style={{ background: "#cbd5e1" }} />
               <span>Updated recently</span>
