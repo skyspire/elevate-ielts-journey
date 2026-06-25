@@ -24,8 +24,6 @@ type Post = {
   slug: string;
   title: string;
   category: string;
-  date: string;
-  readTime: string;
   image: string;
 };
 
@@ -34,82 +32,138 @@ const POSTS: Post[] = [
     slug: "writing-task-2-band-8-structure",
     title: "The Band 8 Writing Task 2 structure that actually works",
     category: "Writing",
-    date: "Jun 18, 2026",
-    readTime: "7 min read",
     image:
-      "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "speaking-part-2-fluency-fix",
     title: "How to stop freezing in Speaking Part 2",
     category: "Speaking",
-    date: "Jun 12, 2026",
-    readTime: "5 min read",
     image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "reading-true-false-not-given",
     title: "True / False / Not Given — a decision tree that never fails",
     category: "Reading",
-    date: "Jun 04, 2026",
-    readTime: "6 min read",
     image:
-      "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "listening-map-labelling",
     title: "Map labelling questions: a 4-step reading order",
     category: "Listening",
-    date: "May 28, 2026",
-    readTime: "4 min read",
     image:
-      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "vocabulary-c1-academic",
     title: "30 C1 academic collocations that examiners notice",
     category: "Vocabulary",
-    date: "May 21, 2026",
-    readTime: "8 min read",
     image:
-      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "study-plan-30-days",
     title: "A realistic 30-day IELTS study plan for working adults",
     category: "Study habits",
-    date: "May 14, 2026",
-    readTime: "9 min read",
     image:
-      "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "writing-task-1-overview",
     title: "Writing Task 1: the overview sentence that boosts your band",
     category: "Writing",
-    date: "May 06, 2026",
-    readTime: "6 min read",
     image:
-      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "speaking-pronunciation-stress",
     title: "Word stress: the smallest fix with the biggest payoff",
     category: "Speaking",
-    date: "Apr 29, 2026",
-    readTime: "5 min read",
     image:
-      "https://images.unsplash.com/photo-1589903308904-1010c2294adc?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1589903308904-1010c2294adc?auto=format&fit=crop&w=900&q=70",
   },
   {
     slug: "exam-day-checklist",
     title: "The exam-day checklist that calms your nerves",
     category: "Exam day",
-    date: "Apr 22, 2026",
-    readTime: "4 min read",
     image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=70",
+  },
+];
+
+// Pastel palettes — each card rotates through these so every card feels different.
+type Palette = {
+  cardBg: string;
+  border: string;
+  imgBg: string;
+  chipBg: string;
+  chipText: string;
+  title: string;
+  heart: string;
+};
+
+const PALETTES: Palette[] = [
+  // Lavender
+  {
+    cardBg: "#f5f3ff",
+    border: "#e9d5ff",
+    imgBg: "#ddd6fe",
+    chipBg: "#ede9fe",
+    chipText: "#6d28d9",
+    title: "#3b0764",
+    heart: "#7c3aed",
+  },
+  // Blush
+  {
+    cardBg: "#fff1f2",
+    border: "#fecdd3",
+    imgBg: "#fecdd3",
+    chipBg: "#ffe4e6",
+    chipText: "#be123c",
+    title: "#4c0519",
+    heart: "#e11d48",
+  },
+  // Mint
+  {
+    cardBg: "#ecfdf5",
+    border: "#a7f3d0",
+    imgBg: "#a7f3d0",
+    chipBg: "#d1fae5",
+    chipText: "#047857",
+    title: "#022c22",
+    heart: "#059669",
+  },
+  // Butter
+  {
+    cardBg: "#fefce8",
+    border: "#fde68a",
+    imgBg: "#fde68a",
+    chipBg: "#fef3c7",
+    chipText: "#a16207",
+    title: "#422006",
+    heart: "#ca8a04",
+  },
+  // Sky
+  {
+    cardBg: "#f0f9ff",
+    border: "#bae6fd",
+    imgBg: "#bae6fd",
+    chipBg: "#e0f2fe",
+    chipText: "#0369a1",
+    title: "#0c2340",
+    heart: "#0284c7",
+  },
+  // Peach
+  {
+    cardBg: "#fff7ed",
+    border: "#fed7aa",
+    imgBg: "#fed7aa",
+    chipBg: "#ffedd5",
+    chipText: "#c2410c",
+    title: "#431407",
+    heart: "#ea580c",
   },
 ];
 
@@ -118,109 +172,108 @@ const INTER = "Inter, ui-sans-serif, system-ui, sans-serif";
 function BlogPage() {
   return (
     <main
-      className="min-h-screen"
-      style={{ background: "#fafbfc", fontFamily: INTER }}
+      className="min-h-screen bg-white"
+      style={{ fontFamily: INTER }}
     >
       {/* Centered header */}
       <section className="mx-auto max-w-6xl px-5 pt-16 pb-12 text-center sm:pt-24 sm:pb-16">
         <p
-          className="text-xs tracking-[0.18em]"
-          style={{ color: "#94a3b8", fontWeight: 600 }}
+          className="text-xs uppercase tracking-[0.2em]"
+          style={{ color: "#94a3b8", fontWeight: 700 }}
         >
-          THE JOURNAL
+          The Journal
         </p>
         <h1
-          className="mx-auto mt-4 text-5xl leading-[1.02] tracking-tight sm:text-6xl"
-          style={{ color: "#0f172a", fontWeight: 800 }}
+          className="mt-4 text-5xl leading-[1.02] tracking-tight sm:text-6xl"
+          style={{ color: "#1e1b4b", fontWeight: 800 }}
         >
           Blog
         </h1>
         <p
           className="mx-auto mt-5 max-w-xl text-base leading-relaxed sm:text-lg"
-          style={{ color: "#475569", fontWeight: 400 }}
+          style={{ color: "#64748b" }}
         >
           Field notes from our IELTS team — strategies, sample answers, and the
           tiny habits that move bands.
         </p>
-        <div
-          aria-hidden
-          className="mx-auto mt-8 h-px w-16"
-          style={{ background: "#e8ecf1" }}
-        />
       </section>
 
-      {/* Unified post cards */}
+      {/* Pastel post cards */}
       <section className="mx-auto max-w-6xl px-5 pb-24">
-        <ul className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {POSTS.map((post) => (
-            <li key={post.slug}>
-              <Link
-                to="/blog"
-                className="group block h-full overflow-hidden rounded-2xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-offset-4"
-                style={{
-                  background: "#ffffff",
-                  border: "1px solid #e8ecf1",
-                  boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 18px 40px -18px rgba(59,130,246,0.25), 0 2px 6px rgba(15,23,42,0.05)";
-                  e.currentTarget.style.borderColor = "#dbe3ec";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 1px 2px rgba(15,23,42,0.04)";
-                  e.currentTarget.style.borderColor = "#e8ecf1";
-                }}
-              >
-                {/* Full-bleed top image */}
-                <div
-                  className="aspect-video w-full overflow-hidden"
-                  style={{ background: "#f1f5f9" }}
+        <ul className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+          {POSTS.map((post, i) => {
+            const p = PALETTES[i % PALETTES.length];
+            return (
+              <li key={post.slug}>
+                <Link
+                  to="/blog"
+                  className="group flex h-full flex-col gap-3 rounded-2xl p-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                  style={{
+                    background: p.cardBg,
+                    border: `1px solid ${p.border}`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-3px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
-                  <img
-                    src={post.image}
-                    alt=""
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                  />
-                </div>
+                  {/* Photo */}
+                  <div
+                    className="relative aspect-[4/5] w-full overflow-hidden rounded-xl"
+                    style={{ background: p.imgBg }}
+                  >
+                    <img
+                      src={post.image}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                    />
+                    {/* Heart save button */}
+                    <button
+                      type="button"
+                      aria-label="Save"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-transform active:scale-90"
+                      style={{ background: "rgba(255,255,255,0.85)" }}
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-4 w-4"
+                        fill={p.heart}
+                      >
+                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.5 3c1.557 0 3.046.727 4 2.015 .954-1.288 2.443-2.015 4-2.015 2.786 0 5.25 2.322 5.25 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001z" />
+                      </svg>
+                    </button>
+                  </div>
 
-                {/* Content area */}
-                <div className="p-6">
-                  <div className="flex flex-col gap-2">
+                  {/* Body */}
+                  <div className="px-1 pb-1">
                     <span
-                      className="text-[11px] uppercase tracking-wider"
-                      style={{ color: "#3b82f6", fontWeight: 800 }}
+                      className="mb-2 inline-block rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wider"
+                      style={{
+                        background: p.chipBg,
+                        color: p.chipText,
+                        fontWeight: 700,
+                      }}
                     >
                       {post.category}
                     </span>
                     <h2
-                      className="text-[22px] leading-[1.2] tracking-tight"
-                      style={{ color: "#0f172a", fontWeight: 800 }}
+                      className="text-sm leading-tight sm:text-[15px]"
+                      style={{ color: p.title, fontWeight: 700 }}
                     >
                       {post.title}
                     </h2>
                   </div>
-
-                  <div
-                    className="mt-5 flex items-center gap-2 text-[13px]"
-                    style={{ color: "#94a3b8" }}
-                  >
-                    <time>{post.date}</time>
-                    <span
-                      aria-hidden
-                      className="h-1 w-1 rounded-full"
-                      style={{ background: "#e8ecf1" }}
-                    />
-                    <span>{post.readTime}</span>
-                  </div>
-                </div>
-              </Link>
-            </li>
-          ))}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
     </main>
