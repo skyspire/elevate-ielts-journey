@@ -210,18 +210,21 @@ function BlogPage() {
                   className="group flex h-full flex-col gap-3 rounded-2xl p-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                   style={{
                     background: p.cardBg,
-                    border: `1px solid ${p.border}`,
+                    border: "none",
+                    boxShadow: `0 12px 28px -14px ${p.border}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-3px)";
+                    e.currentTarget.style.boxShadow = `0 20px 40px -16px ${p.border}, 0 8px 18px -8px rgba(15,23,42,0.12)`;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = `0 12px 28px -14px ${p.border}, 0 4px 10px -6px rgba(15,23,42,0.08)`;
                   }}
                 >
                   {/* Photo */}
                   <div
-                    className="relative aspect-[4/5] w-full overflow-hidden rounded-xl"
+                    className="relative aspect-[5/4] w-full overflow-hidden rounded-xl"
                     style={{ background: p.imgBg }}
                   >
                     <img
