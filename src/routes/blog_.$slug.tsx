@@ -75,6 +75,104 @@ function PostPage() {
 
   const related = POSTS.filter((x) => x.slug !== post.slug).slice(0, 3);
 
+  const idx = POSTS.findIndex((x) => x.slug === post.slug);
+  const prevPost = idx > 0 ? POSTS[idx - 1] : null;
+  const nextPost = idx >= 0 && idx < POSTS.length - 1 ? POSTS[idx + 1] : null;
+
+  const REACTIONS = [
+    { key: "clap", emoji: "👏", label: "Clap" },
+    { key: "idea", emoji: "💡", label: "Insightful" },
+    { key: "fire", emoji: "🔥", label: "Love it" },
+  ] as const;
+  const reactionsKey = `blog:reactions:${post.slug}`;
+  const myReactionsKey = `blog:my-reactions:${post.slug}`;
+  const commentsKey = `blog:comments:${post.slug}`;
+
+  const [reactionCounts, setReactionCounts] = useState<Record<string, number>>({
+    clap: 0,
+    idea: 0,
+    fire: 0,
+  });
+  const [myReactions, setMyReactions] = useState<Record<string, boolean>>({});
+  const [comments, setComments] = useState<{ name: string; text: string; at: number }[]>([]);
+  const [cName, setCName] = useState("");
+  const [cText, setCText] = useState("");
+
+  useEffect(() => {
+    try {
+      const r = localStorage.getItem(reactionsKey);
+      if (r) setReactionCounts({ clap: 0, idea: 0, fire: 0, ...JSON.parse(r) });
+      const mr = localStorage.getItem(myReactionsKey);
+      if (mr) setMyReactions(JSON.parse(mr));
+      const c = localStorage.getItem(commentsKey);
+      if (c) setComments(JSON.parse(c));
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post.slug]);
+
+  const toggleReaction = (key: string) => {
+    setMyReactions((prev) => {
+      const mine = !prev[key];
+      const next = { ...prev, [key]: mine };
+      setReactionCounts((counts) => {
+        const updated = { ...counts, [key]: Math.max(0, (counts[key] || 0) + (mine ? 1 : -1)) };
+        try {
+          localStorage.setItem(reactionsKey, JSON.stringify(updated));
+        } catch {
+          /* ignore */
+        }
+        return updated;
+      });
+      try {
+        localStorage.setItem(myReactionsKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
+
+  const addComment = () => {
+    const name = cName.trim() || "Guest";
+    const text = cText.trim();
+    if (!text) return;
+    const next = [{ name, text, at: Date.now() }, ...comments];
+    setComments(next);
+    setCText("");
+    try {
+      localStorage.setItem(commentsKey, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const shareTo = (network: "whatsapp" | "telegram" | "x" | "facebook" | "linkedin" | "email") => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const u = encodeURIComponent(url);
+    const t = encodeURIComponent(post.title);
+    const map: Record<string, string> = {
+      whatsapp: `https://wa.me/?text=${t}%20${u}`,
+      telegram: `https://t.me/share/url?url=${u}&text=${t}`,
+      x: `https://twitter.com/intent/tweet?url=${u}&text=${t}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${u}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
+      email: `mailto:?subject=${t}&body=${u}`,
+    };
+    window.open(map[network], "_blank", "noopener,noreferrer");
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* ignore */
+    }
+  };
+
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
