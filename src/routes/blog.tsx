@@ -69,8 +69,8 @@ function BlogPage() {
   const [activeCat, setActiveCat] = useState("All");
   const [query, setQuery] = useState("");
 
-  const featured = POSTS[0];
-  const rest = POSTS.slice(1);
+  const rest = POSTS;
+
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -81,13 +81,11 @@ function BlogPage() {
     });
   }, [rest, activeCat, query]);
 
-  const fp = PALETTES[0];
-
   return (
     <main className="min-h-screen bg-white" style={{ fontFamily: INTER }}>
       {/* Header */}
       <section className="mx-auto max-w-6xl px-5 pt-16 pb-10 text-center sm:pt-24 sm:pb-12">
-        <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#94a3b8", fontWeight: 700 }}>
+        <p className="text-sm tracking-tight" style={{ color: "#94a3b8", fontWeight: 600 }}>
           The Journal
         </p>
         <h1 className="mt-4 text-5xl leading-[1.02] tracking-tight sm:text-6xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
@@ -98,41 +96,63 @@ function BlogPage() {
         </p>
       </section>
 
-      {/* Featured hero post */}
+      {/* Big pastel category tiles — hero */}
       <section className="mx-auto max-w-6xl px-5">
-        <Link
-          to="/blog"
-          className="group grid overflow-hidden rounded-3xl p-3 transition-all duration-300 sm:grid-cols-2 sm:p-4"
-          style={{
-            background: fp.cardBg,
-            boxShadow: `0 20px 50px -20px ${fp.shadow}, 0 8px 20px -10px rgba(15,23,42,0.10)`,
-          }}
-        >
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:aspect-auto" style={{ background: fp.imgBg }}>
-            <img
-              src={featured.image}
-              alt=""
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-            />
-          </div>
-          <div className="flex flex-col justify-center gap-4 p-4 sm:p-8">
-            <div className="flex items-center gap-2">
-              <span
-                className="inline-block rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wider"
-                style={{ background: fp.chipBg, color: fp.chipText, fontWeight: 700 }}
+        <div className="mb-6 flex items-baseline justify-between">
+          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+            Browse by category
+          </h2>
+          {activeCat !== "All" && (
+            <button
+              type="button"
+              onClick={() => setActiveCat("All")}
+              className="text-xs underline"
+              style={{ color: "#6d28d9", fontWeight: 600 }}
+            >
+              Clear filter
+            </button>
+          )}
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          {CATEGORIES.map((cat, i) => {
+            const p = PALETTES[i % PALETTES.length];
+            const active = activeCat === cat;
+            const count = cat === "All" ? POSTS.length : POSTS.filter((x) => x.category === cat).length;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCat(cat)}
+                className="group relative overflow-hidden rounded-2xl p-5 text-left transition-all"
+                style={{
+                  background: p.cardBg,
+                  boxShadow: active
+                    ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
+                    : `0 12px 28px -14px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
               >
-                Featured · {featured.category}
-              </span>
-            </div>
-            <h2 className="text-2xl leading-tight sm:text-3xl" style={{ color: fp.title, fontWeight: 800 }}>
-              {featured.title}
-            </h2>
-            <p className="text-xs" style={{ color: "#64748b" }}>
-              {featured.readMin} min read · by {featured.author}
-            </p>
-          </div>
-        </Link>
+                <div
+                  className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-60"
+                  style={{ background: p.imgBg }}
+                />
+                <div className="relative">
+                  <h3 className="text-lg leading-tight sm:text-xl" style={{ color: p.title, fontWeight: 800 }}>
+                    {cat}
+                  </h3>
+                  <p className="mt-1.5 text-xs" style={{ color: p.chipText, fontWeight: 600 }}>
+                    {count} {count === 1 ? "article" : "articles"}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </section>
 
       {/* Full-width pastel search band */}
@@ -144,7 +164,7 @@ function BlogPage() {
           }}
         >
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#7c3aed", fontWeight: 700 }}>
+            <p className="text-sm tracking-tight" style={{ color: "#7c3aed", fontWeight: 600 }}>
               Find your next read
             </p>
             <h2 className="mt-3 text-3xl tracking-tight sm:text-4xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
@@ -193,64 +213,7 @@ function BlogPage() {
         </div>
       </section>
 
-      {/* Big pastel category tiles */}
-      <section className="mx-auto mt-16 max-w-6xl px-5">
-        <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
-            Browse by category
-          </h2>
-          {activeCat !== "All" && (
-            <button
-              type="button"
-              onClick={() => setActiveCat("All")}
-              className="text-xs underline"
-              style={{ color: "#6d28d9", fontWeight: 600 }}
-            >
-              Clear filter
-            </button>
-          )}
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {CATEGORIES.map((cat, i) => {
-            const p = PALETTES[i % PALETTES.length];
-            const active = activeCat === cat;
-            const count = cat === "All" ? POSTS.length : POSTS.filter((x) => x.category === cat).length;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setActiveCat(cat)}
-                className="group relative overflow-hidden rounded-2xl p-5 text-left transition-all"
-                style={{
-                  background: p.cardBg,
-                  boxShadow: active
-                    ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
-                    : `0 12px 28px -14px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div
-                  className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-60"
-                  style={{ background: p.imgBg }}
-                />
-                <div className="relative">
-                  <p className="text-[10px] uppercase tracking-wider" style={{ color: p.chipText, fontWeight: 700 }}>
-                    {count} {count === 1 ? "article" : "articles"}
-                  </p>
-                  <h3 className="mt-2 text-lg leading-tight sm:text-xl" style={{ color: p.title, fontWeight: 800 }}>
-                    {cat}
-                  </h3>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+
 
 
       {/* Pastel post cards */}
