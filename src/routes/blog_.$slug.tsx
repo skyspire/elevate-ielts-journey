@@ -406,44 +406,9 @@ function PostPage() {
         </div>
       </article>
 
-      {/* Engagement — reactions + share, centered, bare on page */}
+      {/* Share — centered tiles + copy link */}
       <section className="mx-auto max-w-[680px] px-5 pb-14">
-        <div className="flex flex-col items-center gap-10">
-          {/* Reactions */}
-          <div className="flex items-center justify-center gap-10 sm:gap-12">
-            {REACTIONS.map((r) => {
-              const active = !!myReactions[r.key];
-              return (
-                <button
-                  key={r.key}
-                  type="button"
-                  onClick={() => toggleReaction(r.key)}
-                  aria-pressed={active}
-                  aria-label={r.label}
-                  className="flex flex-col items-center gap-1.5 transition-transform active:scale-90"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-9 w-9 transition-colors"
-                    style={{ fill: active ? "#3B82F6" : "#93C5FD" }}
-                  >
-                    <path d={reactionPath[r.key]} />
-                  </svg>
-                  <span
-                    className="text-[13px] tabular-nums"
-                    style={{ color: "#1f2937", fontFamily: INTER, fontWeight: 700 }}
-                  >
-                    {reactionCounts[r.key] || 0}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Divider */}
-          <div className="h-1 w-12 rounded-full" style={{ background: "#93C5FD" }} />
-
-          {/* Share — 3x2 grid of black rounded-square tiles */}
+        <div className="flex flex-col items-center gap-8">
           <div className="grid grid-cols-3 gap-3">
             {SHARE_TARGETS.map((s) => (
               <button
@@ -462,7 +427,6 @@ function PostPage() {
             ))}
           </div>
 
-          {/* Copy link */}
           <button
             type="button"
             onClick={copyLink}
@@ -478,6 +442,16 @@ function PostPage() {
           </button>
         </div>
       </section>
+
+      {/* Floating reactions FAB — bottom right, opens popover upward */}
+      <FloatingReactions
+        reactions={REACTIONS}
+        reactionPath={reactionPath}
+        counts={reactionCounts}
+        mine={myReactions}
+        onToggle={toggleReaction}
+      />
+
 
 
 
