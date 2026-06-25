@@ -156,7 +156,7 @@ function BlogPage() {
               return (
                 <li key={post.slug}>
                   <Link
-                    to="/blog_/$slug"
+                    to="/blog/$slug"
                     params={{ slug: post.slug }}
                     className="group flex h-full flex-col gap-3 rounded-2xl p-2 transition-all duration-300"
                     style={{
