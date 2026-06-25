@@ -221,8 +221,7 @@ function BlogPage() {
           </p>
         </div>
 
-      {/* Pastel post cards */}
-      <section className="mx-auto max-w-6xl px-5 pb-20 pt-6">
+
         {filtered.length === 0 ? (
           <p className="py-16 text-center text-sm" style={{ color: "#94a3b8" }}>
             No articles match your search.
