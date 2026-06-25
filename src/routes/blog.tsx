@@ -69,12 +69,8 @@ function BlogPage() {
   const [activeCat, setActiveCat] = useState("All");
   const [query, setQuery] = useState("");
 
-  const featured = POSTS[0];
-  const rest = POSTS.slice(1);
+  const rest = POSTS;
 
-  const featured = POSTS[0];
-  const rest = POSTS.slice(1);
-  void featured;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
