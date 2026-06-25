@@ -606,7 +606,7 @@ function PostPage() {
 
 
       {/* Related posts */}
-      <section className="mx-auto max-w-6xl px-5 pb-24">
+      <section className="mx-auto max-w-6xl px-5 pb-16">
         <h2
           className="mb-8 text-center text-2xl tracking-tight sm:text-3xl"
           style={{ color: "#1e1b4b", fontWeight: 800 }}
@@ -660,6 +660,130 @@ function PostPage() {
             );
           })}
         </ul>
+      </section>
+
+      {/* Comments — unique pastel peach band, full-bleed */}
+      <section
+        aria-label="Discussion"
+        className="relative w-full px-5 py-20"
+        style={{
+          background:
+            "linear-gradient(180deg, #FFF1E6 0%, #FFE4D1 55%, #FFD8BE 100%)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(600px 240px at 15% 10%, #FFD2B0AA, transparent 70%), radial-gradient(500px 220px at 90% 90%, #FFC8E0AA, transparent 70%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-[720px]">
+          <div className="mb-8 flex flex-col items-center text-center">
+            <div
+              className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl"
+              style={{
+                background: "#ffffff",
+                color: "#C2410C",
+                boxShadow: "0 10px 24px -12px rgba(194,65,12,0.35)",
+              }}
+            >
+              <MessagesSquare className="h-6 w-6" strokeWidth={2.2} />
+            </div>
+            <h2
+              className="text-2xl tracking-tight sm:text-3xl"
+              style={{ color: "#7C2D12", fontWeight: 900 }}
+            >
+              Join the discussion
+            </h2>
+            <p className="mt-2 text-[14px]" style={{ color: "#9A3412", fontWeight: 500 }}>
+              {comments.length === 0
+                ? "Be the first to share a thought."
+                : `${comments.length} ${comments.length === 1 ? "comment" : "comments"} so far`}
+            </p>
+          </div>
+
+          <div
+            className="rounded-3xl border bg-white/85 p-5 backdrop-blur sm:p-6"
+            style={{
+              borderColor: "#FED7AA",
+              boxShadow: "0 24px 48px -28px rgba(124,45,18,0.25)",
+            }}
+          >
+            <div className="flex flex-col gap-3">
+              <input
+                type="text"
+                value={cName}
+                onChange={(e) => setCName(e.target.value)}
+                placeholder="Your name (optional)"
+                className="w-full rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-orange-400"
+                style={{ borderColor: "#FED7AA", color: "#0f172a" }}
+              />
+              <textarea
+                value={cText}
+                onChange={(e) => setCText(e.target.value)}
+                placeholder="Share a thought, question, or tip…"
+                rows={3}
+                className="w-full resize-y rounded-xl border bg-white px-4 py-3 text-[14px] outline-none transition-colors focus:border-orange-400"
+                style={{ borderColor: "#FED7AA", color: "#0f172a" }}
+              />
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={addComment}
+                  disabled={!cText.trim()}
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] transition-transform active:scale-95 disabled:opacity-50"
+                  style={{
+                    background: "linear-gradient(135deg, #F97316, #EA580C)",
+                    color: "#fff",
+                    fontWeight: 800,
+                    boxShadow: "0 10px 22px -10px rgba(234,88,12,0.55)",
+                  }}
+                >
+                  <MessageCircle className="h-4 w-4" strokeWidth={2.4} />
+                  Post comment
+                </button>
+              </div>
+            </div>
+
+            {comments.length > 0 && (
+              <ul className="mt-6 flex flex-col gap-5 border-t pt-6" style={{ borderColor: "#FED7AA" }}>
+                {comments.map((c) => (
+                  <li key={c.at} className="flex gap-3">
+                    <div
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px]"
+                      style={{
+                        background: "linear-gradient(135deg, #F97316, #DB2777)",
+                        color: "#fff",
+                        fontWeight: 800,
+                      }}
+                      aria-hidden="true"
+                    >
+                      {c.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[13px]" style={{ color: "#7C2D12", fontWeight: 800 }}>
+                          {c.name}
+                        </span>
+                        <span className="text-[11px]" style={{ color: "#C2410C", fontWeight: 500 }}>
+                          {new Date(c.at).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+                      <p className="mt-1 whitespace-pre-wrap text-[14px] leading-relaxed" style={{ color: "#1f2937" }}>
+                        {c.text}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       </section>
     </main>
   );
