@@ -777,6 +777,15 @@ export function Header() {
               FAQ
             </Link>
             <Link
+              to="/blog"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              Blog
+            </Link>
+            <Link
               to="/dashboard"
               onClick={() => setOpen(false)}
               className="rounded-md px-4 py-3 text-[15px] font-semibold"
