@@ -632,7 +632,6 @@ function IeltsCalculatorPage() {
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div className="flex flex-col items-start gap-3">
-            <SectionTag label="Calculator" />
             <h2
               className="leading-[0.95] tracking-tight"
               style={{
@@ -800,7 +799,6 @@ function IeltsCalculatorPage() {
       {/* ===== 03 — HOW SCORING WORKS (lilac) ===== */}
       <Section id="sec-3" bg={SECTIONS.lilac} ghostN="03" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="How it works" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
@@ -849,7 +847,6 @@ function IeltsCalculatorPage() {
       {/* ===== 04 — WHAT EACH BAND MEANS (mint) ===== */}
       <Section id="sec-4" bg={SECTIONS.mint} ghostN="04" ghostPos="bl">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Band reference" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{
@@ -903,7 +900,6 @@ function IeltsCalculatorPage() {
       {/* ===== 05 — ACADEMIC vs GENERAL (blush) ===== */}
       <Section id="sec-5" bg={SECTIONS.blush} ghostN="05" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Compare" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
@@ -943,7 +939,6 @@ function IeltsCalculatorPage() {
       {/* ===== 06 — PRO TIPS (butter) ===== */}
       <Section id="sec-6" bg={SECTIONS.butter} ghostN="06" ghostPos="bl">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="Tips" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
@@ -975,7 +970,6 @@ function IeltsCalculatorPage() {
       {/* ===== 07 — FAQ (sky) ===== */}
       <Section id="sec-7" bg={SECTIONS.sky} ghostN="07" ghostPos="br">
         <div className="mb-4 flex flex-col items-start gap-3">
-          <SectionTag label="FAQ" />
           <h2
             className="leading-[0.95] tracking-tight"
             style={{ ...INTER, fontWeight: 800, fontSize: "clamp(1.8rem, 4.2vw, 3rem)", letterSpacing: "-0.03em", color: INK }}
