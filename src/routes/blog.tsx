@@ -98,7 +98,7 @@ function BlogPage() {
 
       {/* Big pastel category tiles — hero */}
       <section className="mx-auto max-w-6xl px-5">
-        <div className="mb-6 flex items-baseline justify-between">
+        <div className="mb-8 text-center">
           <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
             Browse by category
           </h2>
@@ -106,7 +106,7 @@ function BlogPage() {
             <button
               type="button"
               onClick={() => setActiveCat("All")}
-              className="text-xs underline"
+              className="mt-3 text-xs underline"
               style={{ color: "#6d28d9", fontWeight: 600 }}
             >
               Clear filter
@@ -123,12 +123,12 @@ function BlogPage() {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCat(cat)}
-                className="group relative overflow-hidden rounded-2xl p-5 text-left transition-all"
+                className="group relative flex aspect-square flex-col items-center justify-center overflow-hidden rounded-2xl p-5 text-center transition-all"
                 style={{
-                  background: p.cardBg,
+                  background: p.imgBg,
                   boxShadow: active
                     ? `0 0 0 3px ${p.heart}, 0 20px 40px -16px ${p.shadow}`
-                    : `0 12px 28px -14px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.08)`,
+                    : `0 14px 32px -16px ${p.shadow}, 0 4px 10px -6px rgba(15,23,42,0.10)`,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-3px)";
@@ -137,23 +137,18 @@ function BlogPage() {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <div
-                  className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-60"
-                  style={{ background: p.imgBg }}
-                />
-                <div className="relative">
-                  <h3 className="text-lg leading-tight sm:text-xl" style={{ color: p.title, fontWeight: 800 }}>
-                    {cat}
-                  </h3>
-                  <p className="mt-1.5 text-xs" style={{ color: p.chipText, fontWeight: 600 }}>
-                    {count} {count === 1 ? "article" : "articles"}
-                  </p>
-                </div>
+                <h3 className="text-xl leading-tight sm:text-2xl" style={{ color: p.title, fontWeight: 800 }}>
+                  {cat}
+                </h3>
+                <p className="mt-2 text-xs" style={{ color: p.title, opacity: 0.7, fontWeight: 600 }}>
+                  {count} {count === 1 ? "article" : "articles"}
+                </p>
               </button>
             );
           })}
         </div>
       </section>
+
 
       {/* Full-width pastel search band */}
       <section className="mt-16">
