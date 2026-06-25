@@ -330,11 +330,9 @@ function PostPage() {
       </section>
 
 
-      {/* Article body intro */}
+      {/* Article body */}
       <article className="mx-auto max-w-5xl px-5 pt-10 sm:pt-14">
-        <p className="mx-auto max-w-[680px] text-center text-lg leading-relaxed" style={{ color: "#475569", fontWeight: 400 }}>
-          {post.excerpt}
-        </p>
+
 
 
 
