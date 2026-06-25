@@ -716,7 +716,7 @@ function FloatingReactions({
   mine,
   onToggle,
 }: {
-  reactions: { key: string; label: string }[];
+  reactions: readonly { readonly key: string; readonly label: string }[];
   reactionPath: Record<string, string>;
   counts: Record<string, number>;
   mine: Record<string, boolean>;
