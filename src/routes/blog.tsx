@@ -96,118 +96,78 @@ function BlogPage() {
         </p>
       </section>
 
-      {/* Big pastel category tiles — hero */}
-      <section className="mx-auto max-w-6xl px-5">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl tracking-tight sm:text-3xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
-            Browse by category
-          </h2>
-          {activeCat !== "All" && (
-            <button
-              type="button"
-              onClick={() => setActiveCat("All")}
-              className="mt-3 text-xs underline"
-              style={{ color: "#6d28d9", fontWeight: 600 }}
-            >
-              Clear filter
-            </button>
-          )}
-        </div>
-        <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6">
-          {CATEGORIES.map((cat, i) => {
-            const p = PALETTES[i % PALETTES.length];
-            const active = activeCat === cat;
-            const count = cat === "All" ? POSTS.length : POSTS.filter((x) => x.category === cat).length;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setActiveCat(cat)}
-                className="group relative flex flex-col items-center justify-center overflow-hidden rounded-xl px-3 py-3 text-center transition-all"
-                style={{
-                  background: p.imgBg,
-                  boxShadow: active
-                    ? `0 0 0 2px ${p.heart}, 0 10px 24px -14px ${p.shadow}`
-                    : `0 8px 20px -12px ${p.shadow}, 0 2px 6px -4px rgba(15,23,42,0.10)`,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <h3 className="text-sm leading-tight" style={{ color: p.title, fontWeight: 700 }}>
-                  {cat}
-                </h3>
-                <p className="mt-0.5 text-[10px]" style={{ color: p.title, opacity: 0.65, fontWeight: 600 }}>
-                  {count}
-                </p>
-              </button>
-            );
-          })}
-        </div>
-
-      </section>
-
-
-      {/* Full-width pastel search band */}
-      <section className="mt-16">
-        <div
-          className="px-5 py-12 sm:py-16"
+      {/* Combined search + category dropdown */}
+      <section className="mx-auto max-w-3xl px-5">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="flex items-stretch overflow-hidden rounded-full"
           style={{
-            background: "linear-gradient(135deg, #f5f3ff 0%, #f0f9ff 50%, #ecfdf5 100%)",
+            background: "#ffffff",
+            boxShadow: "0 14px 34px -16px rgba(124,58,237,0.25), 0 4px 12px -6px rgba(15,23,42,0.08)",
           }}
         >
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm tracking-tight" style={{ color: "#7c3aed", fontWeight: 600 }}>
-              Find your next read
-            </p>
-            <h2 className="mt-3 text-3xl tracking-tight sm:text-4xl" style={{ color: "#1e1b4b", fontWeight: 800 }}>
-              Search every IELTS article
-            </h2>
-            <form onSubmit={(e) => e.preventDefault()} className="relative mx-auto mt-6 max-w-2xl">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#7c3aed"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-3.5-3.5" />
-              </svg>
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Try ‘Task 2 structure’ or ‘Speaking Part 2’…"
-                className="w-full rounded-full py-4 pl-14 pr-6 text-base outline-none transition-all focus:ring-4"
-                style={{
-                  background: "#ffffff",
-                  color: "#1e1b4b",
-                  boxShadow: "0 12px 30px -12px rgba(124,58,237,0.30), 0 4px 10px -6px rgba(15,23,42,0.08)",
-                }}
-              />
-            </form>
-            <div className="mt-5 flex flex-wrap justify-center gap-2">
-              {["Task 2", "Speaking Part 2", "True/False/Not Given", "Vocabulary"].map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => setQuery(tag)}
-                  className="rounded-full bg-white/80 px-3 py-1 text-xs backdrop-blur-md transition-transform hover:scale-105"
-                  style={{ color: "#6d28d9", fontWeight: 600 }}
-                >
-                  {tag}
-                </button>
+          {/* Category select */}
+          <div
+            className="relative flex items-center"
+            style={{ background: "#f5f3ff" }}
+          >
+            <select
+              value={activeCat}
+              onChange={(e) => setActiveCat(e.target.value)}
+              className="h-full cursor-pointer appearance-none bg-transparent py-3 pl-5 pr-9 text-sm outline-none"
+              style={{ color: "#6d28d9", fontWeight: 700 }}
+              aria-label="Filter by category"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat} style={{ color: "#1e1b4b" }}>
+                  {cat}
+                  {cat !== "All" ? ` (${POSTS.filter((x) => x.category === cat).length})` : ""}
+                </option>
               ))}
-            </div>
+            </select>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6d28d9"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="pointer-events-none absolute right-3 h-4 w-4"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
           </div>
-        </div>
+
+          {/* Divider */}
+          <div className="w-px" style={{ background: "#ede9fe" }} />
+
+          {/* Search */}
+          <div className="relative flex-1">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#94a3b8"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search articles"
+              className="h-full w-full bg-transparent py-3 pl-11 pr-5 text-sm outline-none"
+              style={{ color: "#1e1b4b" }}
+            />
+          </div>
+        </form>
       </section>
+
+
 
 
 
