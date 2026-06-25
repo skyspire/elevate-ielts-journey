@@ -377,6 +377,228 @@ function PostPage() {
         </div>
       </article>
 
+      {/* Reactions bar */}
+      <section className="mx-auto max-w-[680px] px-5 pb-10">
+        <div
+          className="flex flex-col items-center gap-3 rounded-2xl border bg-white px-5 py-5 sm:flex-row sm:justify-between"
+          style={{
+            borderColor: "#eef2ff",
+            boxShadow: "0 12px 32px -18px rgba(30,27,75,0.18)",
+          }}
+        >
+          <div className="text-center sm:text-left">
+            <p className="text-[13px] uppercase tracking-[0.16em]" style={{ color: "#3730a3", fontWeight: 800 }}>
+              How did this land?
+            </p>
+            <p className="text-[13px]" style={{ color: "#64748b", fontWeight: 500 }}>
+              Tap a reaction — it helps us write more like this.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            {REACTIONS.map((r) => {
+              const active = !!myReactions[r.key];
+              return (
+                <button
+                  key={r.key}
+                  type="button"
+                  onClick={() => toggleReaction(r.key)}
+                  aria-pressed={active}
+                  aria-label={r.label}
+                  className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] transition-transform active:scale-95"
+                  style={{
+                    background: active ? "#eef2ff" : "#f8fafc",
+                    border: `1px solid ${active ? "#93C5FD" : "#e2e8f0"}`,
+                    color: "#1e1b4b",
+                    fontWeight: 700,
+                  }}
+                >
+                  <span className="text-base leading-none">{r.emoji}</span>
+                  <span className="tabular-nums">{reactionCounts[r.key] || 0}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Expanded share buttons */}
+      <section className="mx-auto max-w-[680px] px-5 pb-12">
+        <div className="rounded-2xl border bg-white px-5 py-5" style={{ borderColor: "#eef2ff" }}>
+          <p className="mb-3 text-[13px] uppercase tracking-[0.16em]" style={{ color: "#3730a3", fontWeight: 800 }}>
+            Share this article
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { key: "whatsapp", label: "WhatsApp", bg: "#25D366" },
+              { key: "telegram", label: "Telegram", bg: "#229ED9" },
+              { key: "x", label: "X / Twitter", bg: "#0f172a" },
+              { key: "facebook", label: "Facebook", bg: "#1877F2" },
+              { key: "linkedin", label: "LinkedIn", bg: "#0A66C2" },
+              { key: "email", label: "Email", bg: "#475569" },
+            ].map((s) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => shareTo(s.key as "whatsapp")}
+                className="rounded-full px-4 py-2 text-[13px] text-white transition-transform active:scale-95"
+                style={{ background: s.bg, fontWeight: 700 }}
+              >
+                {s.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={copyLink}
+              className="rounded-full border px-4 py-2 text-[13px] transition-transform active:scale-95"
+              style={{ borderColor: "#cbd5e1", color: "#1e1b4b", fontWeight: 700 }}
+            >
+              {copied ? "Link copied" : "Copy link"}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Comments thread */}
+      <section className="mx-auto max-w-[680px] px-5 pb-12">
+        <div className="rounded-2xl border bg-white px-5 py-6" style={{ borderColor: "#eef2ff" }}>
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="text-lg tracking-tight" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+              Discussion
+            </h2>
+            <span className="text-[12px]" style={{ color: "#64748b", fontWeight: 600 }}>
+              {comments.length} {comments.length === 1 ? "comment" : "comments"}
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              value={cName}
+              onChange={(e) => setCName(e.target.value)}
+              placeholder="Your name (optional)"
+              className="w-full rounded-lg border px-3 py-2 text-[14px] outline-none"
+              style={{ borderColor: "#e2e8f0", color: "#0f172a" }}
+            />
+            <textarea
+              value={cText}
+              onChange={(e) => setCText(e.target.value)}
+              placeholder="Share a thought, question, or tip…"
+              rows={3}
+              className="w-full resize-y rounded-lg border px-3 py-2 text-[14px] outline-none"
+              style={{ borderColor: "#e2e8f0", color: "#0f172a" }}
+            />
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={addComment}
+                disabled={!cText.trim()}
+                className="rounded-full px-5 py-2 text-[13px] transition-transform active:scale-95 disabled:opacity-50"
+                style={{ background: "#1e1b4b", color: "#fff", fontWeight: 700 }}
+              >
+                Post comment
+              </button>
+            </div>
+          </div>
+
+          <ul className="mt-6 flex flex-col gap-4">
+            {comments.length === 0 && (
+              <li className="rounded-lg border border-dashed py-6 text-center text-[13px]"
+                  style={{ borderColor: "#e2e8f0", color: "#94a3b8", fontWeight: 500 }}>
+                Be the first to comment.
+              </li>
+            )}
+            {comments.map((c) => (
+              <li key={c.at} className="flex gap-3">
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px]"
+                  style={{
+                    background: "linear-gradient(135deg, #1e1b4b, #3b82f6)",
+                    color: "#fff",
+                    fontWeight: 800,
+                  }}
+                  aria-hidden="true"
+                >
+                  {c.name.slice(0, 2).toUpperCase()}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[13px]" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+                      {c.name}
+                    </span>
+                    <span className="text-[11px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+                      {new Date(c.at).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <p className="mt-1 whitespace-pre-wrap text-[14px] leading-relaxed" style={{ color: "#1f2937" }}>
+                    {c.text}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Previous / Next article */}
+      {(prevPost || nextPost) && (
+        <nav
+          aria-label="More articles"
+          className="mx-auto max-w-5xl px-5 pb-16"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {prevPost ? (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: prevPost.slug }}
+                className="group flex flex-col gap-2 rounded-2xl border bg-white p-5 transition-all hover:-translate-y-0.5"
+                style={{
+                  borderColor: "#eef2ff",
+                  boxShadow: "0 10px 24px -16px rgba(30,27,75,0.18)",
+                }}
+              >
+                <span className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "#3730a3", fontWeight: 800 }}>
+                  ← Previous
+                </span>
+                <span className="text-[15px] leading-snug" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+                  {prevPost.title}
+                </span>
+                <span className="text-[12px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+                  {prevPost.category} · {prevPost.readMin} min read
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nextPost ? (
+              <Link
+                to="/blog/$slug"
+                params={{ slug: nextPost.slug }}
+                className="group flex flex-col items-end gap-2 rounded-2xl border bg-white p-5 text-right transition-all hover:-translate-y-0.5"
+                style={{
+                  borderColor: "#eef2ff",
+                  boxShadow: "0 10px 24px -16px rgba(30,27,75,0.18)",
+                }}
+              >
+                <span className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "#3730a3", fontWeight: 800 }}>
+                  Next →
+                </span>
+                <span className="text-[15px] leading-snug" style={{ color: "#1e1b4b", fontWeight: 800 }}>
+                  {nextPost.title}
+                </span>
+                <span className="text-[12px]" style={{ color: "#94a3b8", fontWeight: 500 }}>
+                  {nextPost.category} · {nextPost.readMin} min read
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        </nav>
+      )}
+
       {/* Related posts */}
       <section className="mx-auto max-w-6xl px-5 pb-24">
         <h2
