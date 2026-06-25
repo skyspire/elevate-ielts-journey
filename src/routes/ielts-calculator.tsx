@@ -620,21 +620,19 @@ function IeltsCalculatorPage() {
 
       {/* ===== 02 — CALCULATOR (peach) ===== */}
       <Section id="sec-2" bg={SECTIONS.peach} ghostN="02" ghostPos="bl">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <h2
-              className="leading-[0.95] tracking-tight"
-              style={{
-                ...INTER,
-                fontWeight: 900,
-                fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
-                letterSpacing: "-0.03em",
-                color: INK,
-              }}
-            >
-              Your calculator
-            </h2>
-          </div>
+        <div className="mb-5 flex flex-col items-center gap-3 text-center">
+          <h2
+            className="leading-[0.95] tracking-tight"
+            style={{
+              ...INTER,
+              fontWeight: 900,
+              fontSize: "clamp(1.8rem, 4.2vw, 3rem)",
+              letterSpacing: "-0.03em",
+              color: INK,
+            }}
+          >
+            Your calculator
+          </h2>
 
           {/* Academic / General toggle */}
           <div
