@@ -161,9 +161,9 @@ function PostPage() {
         </Link>
       </figure>
 
-      {/* Article header */}
-      <article className="mx-auto max-w-[680px] px-5 pt-10 sm:pt-14">
-        <div className="flex items-center gap-3">
+      {/* Article header — edge-to-edge wide title */}
+      <article className="mx-auto max-w-5xl px-5 pt-10 sm:pt-14">
+        <div className="flex items-center justify-center gap-3">
           <span aria-hidden="true" className="h-[3px] w-8 rounded-full" style={{ background: p.heart }} />
           <span
             className="text-[11px] uppercase tracking-[0.18em]"
@@ -174,15 +174,16 @@ function PostPage() {
         </div>
 
         <h1
-          className="mt-5 text-[34px] leading-[1.05] tracking-[-0.025em] sm:text-[52px] sm:leading-[1.02]"
+          className="mt-5 text-center text-[36px] leading-[1.04] tracking-[-0.025em] sm:text-[64px] sm:leading-[1.02] lg:text-[72px]"
           style={{ color: "#1e1b4b", fontWeight: 900, textWrap: "balance" } as React.CSSProperties}
         >
           {post.title}
         </h1>
 
-        <p className="mt-6 text-lg leading-relaxed" style={{ color: "#475569", fontWeight: 400 }}>
+        <p className="mx-auto mt-6 max-w-[680px] text-center text-lg leading-relaxed" style={{ color: "#475569", fontWeight: 400 }}>
           {post.excerpt}
         </p>
+
 
         {/* Author card — clean white, blue accents */}
         <div
