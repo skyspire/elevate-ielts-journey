@@ -406,44 +406,9 @@ function PostPage() {
         </div>
       </article>
 
-      {/* Engagement — reactions + share, centered, bare on page */}
+      {/* Share — centered tiles + copy link */}
       <section className="mx-auto max-w-[680px] px-5 pb-14">
-        <div className="flex flex-col items-center gap-10">
-          {/* Reactions */}
-          <div className="flex items-center justify-center gap-10 sm:gap-12">
-            {REACTIONS.map((r) => {
-              const active = !!myReactions[r.key];
-              return (
-                <button
-                  key={r.key}
-                  type="button"
-                  onClick={() => toggleReaction(r.key)}
-                  aria-pressed={active}
-                  aria-label={r.label}
-                  className="flex flex-col items-center gap-1.5 transition-transform active:scale-90"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-9 w-9 transition-colors"
-                    style={{ fill: active ? "#3B82F6" : "#93C5FD" }}
-                  >
-                    <path d={reactionPath[r.key]} />
-                  </svg>
-                  <span
-                    className="text-[13px] tabular-nums"
-                    style={{ color: "#1f2937", fontFamily: INTER, fontWeight: 700 }}
-                  >
-                    {reactionCounts[r.key] || 0}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Divider */}
-          <div className="h-1 w-12 rounded-full" style={{ background: "#93C5FD" }} />
-
-          {/* Share — 3x2 grid of black rounded-square tiles */}
+        <div className="flex flex-col items-center gap-8">
           <div className="grid grid-cols-3 gap-3">
             {SHARE_TARGETS.map((s) => (
               <button
@@ -462,7 +427,6 @@ function PostPage() {
             ))}
           </div>
 
-          {/* Copy link */}
           <button
             type="button"
             onClick={copyLink}
@@ -478,6 +442,16 @@ function PostPage() {
           </button>
         </div>
       </section>
+
+      {/* Floating reactions FAB — bottom right, opens popover upward */}
+      <FloatingReactions
+        reactions={REACTIONS}
+        reactionPath={reactionPath}
+        counts={reactionCounts}
+        mine={myReactions}
+        onToggle={toggleReaction}
+      />
+
 
 
 
@@ -734,3 +708,115 @@ function PostPage() {
     </main>
   );
 }
+
+function FloatingReactions({
+  reactions,
+  reactionPath,
+  counts,
+  mine,
+  onToggle,
+}: {
+  reactions: readonly { readonly key: string; readonly label: string }[];
+  reactionPath: Record<string, string>;
+  counts: Record<string, number>;
+  mine: Record<string, boolean>;
+  onToggle: (key: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const total = reactions.reduce((s, r) => s + (counts[r.key] || 0), 0);
+  const anyActive = reactions.some((r) => mine[r.key]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <div className="fixed bottom-5 right-5 z-50" style={{ fontFamily: INTER }}>
+      {open && (
+        <>
+          <button
+            type="button"
+            aria-label="Close reactions"
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-0 bg-transparent"
+          />
+          <div
+            role="dialog"
+            aria-label="React to this article"
+            className="relative z-10 mb-3 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 animate-scale-in"
+            style={{
+              boxShadow: "0 18px 48px -16px rgba(15,23,42,0.28), 0 2px 8px rgba(15,23,42,0.08)",
+              border: "1px solid #E5E7EB",
+              transformOrigin: "bottom right",
+            }}
+          >
+            {reactions.map((r) => {
+              const active = !!mine[r.key];
+              return (
+                <button
+                  key={r.key}
+                  type="button"
+                  onClick={() => onToggle(r.key)}
+                  aria-pressed={active}
+                  aria-label={r.label}
+                  className="flex flex-col items-center gap-1 px-1.5 transition-transform hover:scale-110 active:scale-95"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-7 w-7 transition-colors"
+                    style={{ fill: active ? "#3B82F6" : "#CBD5E1" }}
+                  >
+                    <path d={reactionPath[r.key]} />
+                  </svg>
+                  <span
+                    className="text-[11px] tabular-nums"
+                    style={{ color: "#1f2937", fontWeight: 700 }}
+                  >
+                    {counts[r.key] || 0}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label="Reactions"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95"
+        style={{
+          background: "#111827",
+          boxShadow: "0 14px 32px -10px rgba(17,24,39,0.45), 0 2px 6px rgba(17,24,39,0.2)",
+        }}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="h-6 w-6 transition-colors"
+          style={{ fill: anyActive ? "#F87171" : "#ffffff" }}
+        >
+          <path d="M12 21s-7.5-4.6-9.6-9.1C1 8.6 3 5 6.5 5c2 0 3.4 1 4.4 2.4l1.1 1.5 1.1-1.5C14.1 6 15.5 5 17.5 5 21 5 23 8.6 21.6 11.9 19.5 16.4 12 21 12 21z" />
+        </svg>
+        {total > 0 && (
+          <span
+            className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full px-1 text-[10px] tabular-nums"
+            style={{
+              background: "#3B82F6",
+              color: "#ffffff",
+              fontWeight: 800,
+              border: "2px solid #ffffff",
+            }}
+          >
+            {total}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+}
+
