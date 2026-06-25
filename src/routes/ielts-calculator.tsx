@@ -363,7 +363,7 @@ function BandStepper({
 }
 
 /* Auto-shrinks its content with CSS transform: scale() so it always
-   fits inside the section's viewport height. Never up-scales. */
+   fits inside the section's viewport, perfectly centred. */
 function FitToScreen({ children }: { children: React.ReactNode }) {
   const outerRef = React.useRef<HTMLDivElement | null>(null);
   const innerRef = React.useRef<HTMLDivElement | null>(null);
@@ -374,7 +374,6 @@ function FitToScreen({ children }: { children: React.ReactNode }) {
       const outer = outerRef.current;
       const inner = innerRef.current;
       if (!outer || !inner) return;
-      // Measure inner at its natural size (scale 1) by temporarily clearing transform
       const prev = inner.style.transform;
       inner.style.transform = "none";
       const ch = inner.scrollHeight;
@@ -382,38 +381,46 @@ function FitToScreen({ children }: { children: React.ReactNode }) {
       inner.style.transform = prev;
       const ah = outer.clientHeight;
       const aw = outer.clientWidth;
+      if (ah === 0 || ch === 0) return;
       const sH = ch > ah ? ah / ch : 1;
       const sW = cw > aw ? aw / cw : 1;
       const s = Math.min(1, sH, sW);
-      setScale(s < 0.55 ? 0.55 : s);
+      setScale(s < 0.5 ? 0.5 : s);
     };
     measure();
-    const ro = new ResizeObserver(measure);
+    let raf = 0;
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    };
+    const ro = new ResizeObserver(schedule);
     if (outerRef.current) ro.observe(outerRef.current);
     if (innerRef.current) ro.observe(innerRef.current);
-    window.addEventListener("resize", measure);
-    window.addEventListener("orientationchange", measure);
-    const t = window.setTimeout(measure, 60);
+    window.addEventListener("resize", schedule);
+    window.addEventListener("orientationchange", schedule);
+    const fonts = (document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts;
+    if (fonts?.ready) fonts.ready.then(schedule);
+    const timers = [60, 200, 500, 1200].map((ms) => window.setTimeout(measure, ms));
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("orientationchange", measure);
-      window.clearTimeout(t);
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", schedule);
+      window.removeEventListener("orientationchange", schedule);
+      timers.forEach((t) => window.clearTimeout(t));
     };
   }, [children]);
 
   return (
     <div
       ref={outerRef}
-      className="flex w-full items-center justify-center"
-      style={{ minHeight: "100svh" }}
+      className="absolute inset-0 overflow-hidden"
     >
       <div
         ref={innerRef}
+        className="absolute left-1/2 top-1/2 w-full"
         style={{
-          transform: `scale(${scale})`,
+          transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center center",
-          width: "100%",
           willChange: "transform",
         }}
       >
@@ -450,7 +457,7 @@ function Section({
     >
       {ghostN ? <GhostNumber n={ghostN} position={ghostPos} /> : null}
       <FitToScreen>
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 sm:py-12">
           {children}
         </div>
       </FitToScreen>
