@@ -21,6 +21,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IslamicRouteImport } from './routes/islamic'
 import { Route as IeltsCalculatorRouteImport } from './routes/ielts-calculator'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ExaminerPhrasesRouteImport } from './routes/examiner-phrases'
 import { Route as EbooksRouteImport } from './routes/ebooks'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -128,6 +129,11 @@ const IeltsCalculatorRoute = IeltsCalculatorRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExaminerPhrasesRoute = ExaminerPhrasesRouteImport.update({
+  id: '/examiner-phrases',
+  path: '/examiner-phrases',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EbooksRoute = EbooksRouteImport.update({
@@ -385,6 +391,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
+  '/examiner-phrases': typeof ExaminerPhrasesRoute
   '/faq': typeof FaqRoute
   '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
@@ -446,6 +453,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
+  '/examiner-phrases': typeof ExaminerPhrasesRoute
   '/faq': typeof FaqRoute
   '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
@@ -509,6 +517,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/ebooks': typeof EbooksRouteWithChildren
+  '/examiner-phrases': typeof ExaminerPhrasesRoute
   '/faq': typeof FaqRoute
   '/ielts-calculator': typeof IeltsCalculatorRoute
   '/islamic': typeof IslamicRoute
@@ -573,6 +582,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/ebooks'
+    | '/examiner-phrases'
     | '/faq'
     | '/ielts-calculator'
     | '/islamic'
@@ -634,6 +644,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/ebooks'
+    | '/examiner-phrases'
     | '/faq'
     | '/ielts-calculator'
     | '/islamic'
@@ -696,6 +707,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/ebooks'
+    | '/examiner-phrases'
     | '/faq'
     | '/ielts-calculator'
     | '/islamic'
@@ -759,6 +771,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   EbooksRoute: typeof EbooksRouteWithChildren
+  ExaminerPhrasesRoute: typeof ExaminerPhrasesRoute
   FaqRoute: typeof FaqRoute
   IeltsCalculatorRoute: typeof IeltsCalculatorRoute
   IslamicRoute: typeof IslamicRoute
@@ -862,6 +875,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/examiner-phrases': {
+      id: '/examiner-phrases'
+      path: '/examiner-phrases'
+      fullPath: '/examiner-phrases'
+      preLoaderRoute: typeof ExaminerPhrasesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ebooks': {
@@ -1312,6 +1332,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   EbooksRoute: EbooksRouteWithChildren,
+  ExaminerPhrasesRoute: ExaminerPhrasesRoute,
   FaqRoute: FaqRoute,
   IeltsCalculatorRoute: IeltsCalculatorRoute,
   IslamicRoute: IslamicRoute,
@@ -1333,12 +1354,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

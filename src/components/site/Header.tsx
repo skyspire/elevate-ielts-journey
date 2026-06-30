@@ -342,6 +342,25 @@ export function Header() {
             Blog
           </Link>
           <Link
+            to="/examiner-phrases"
+            className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
+            style={{ color: INK_SOFT }}
+            activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = INK;
+              if (e.currentTarget.getAttribute("data-status") !== "active") {
+                e.currentTarget.style.backgroundColor = HOVER_BG;
+              }
+            }}
+            onMouseLeave={(e) => {
+              const isActive = e.currentTarget.getAttribute("data-status") === "active";
+              e.currentTarget.style.color = isActive ? INK : INK_SOFT;
+              if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+            }}
+          >
+            Examiner Phrases
+          </Link>
+          <Link
             to="/dashboard"
             className="rounded-md px-3.5 py-2 text-[14px] font-semibold transition-colors"
             style={{ color: INK_SOFT }}
@@ -784,6 +803,15 @@ export function Header() {
               activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
             >
               Blog
+            </Link>
+            <Link
+              to="/examiner-phrases"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-4 py-3 text-[15px] font-semibold"
+              style={{ color: INK_SOFT }}
+              activeProps={{ style: { color: INK, backgroundColor: HOVER_BG } }}
+            >
+              Examiner Phrases
             </Link>
             <Link
               to="/dashboard"
