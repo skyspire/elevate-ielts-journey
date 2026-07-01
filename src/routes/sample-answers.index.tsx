@@ -593,22 +593,24 @@ function ModuleContent({
   moduleId,
   ieltsType,
   accent,
+  palette,
 }: {
   moduleId: ModuleId;
   ieltsType: IeltsType;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette: (typeof MODULE_PALETTE)[ModuleId];
 }) {
   if (moduleId === "listening" || moduleId === "reading") {
     return (
       <div
         className="mt-10 rounded-2xl border-2 border-dashed p-8 text-center"
-        style={{ borderColor: accent.ring, backgroundColor: accent.soft }}
+        style={{ borderColor: palette.ring, backgroundColor: palette.soft }}
       >
-        <Clock className="mx-auto h-7 w-7 text-foreground/45" strokeWidth={2.2} />
-        <h3 className="mt-3 font-display text-xl font-extrabold tracking-tight text-foreground">
+        <Clock className="mx-auto h-7 w-7" strokeWidth={2.2} style={{ color: palette.ink }} />
+        <h3 className="mt-3 font-display text-xl font-extrabold tracking-tight" style={{ color: palette.ink }}>
           {moduleId === "listening" ? "Listening" : "Reading"} samples — coming soon
         </h3>
-        <p className="mx-auto mt-2 max-w-md text-[14px] font-medium text-foreground/60">
+        <p className="mx-auto mt-2 max-w-md text-[14px] font-medium" style={{ color: palette.ink, opacity: 0.75 }}>
           Our team is finalising Band 8+ transcripts, key-word highlights and worked solutions. Sit tight — they'll appear here first.
         </p>
       </div>
@@ -616,10 +618,10 @@ function ModuleContent({
   }
 
   if (moduleId === "writing") {
-    return <WritingInline ieltsType={ieltsType} accent={accent} />;
+    return <WritingInline ieltsType={ieltsType} accent={accent} palette={palette} />;
   }
 
-  return <SpeakingInline accent={accent} />;
+  return <SpeakingInline accent={accent} palette={palette} />;
 }
 
 // ───────── Writing inline drilldown ─────────
