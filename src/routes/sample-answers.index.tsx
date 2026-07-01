@@ -708,6 +708,7 @@ function WritingInline({
                       index={i + 1}
                       label={statement}
                       accent={accent}
+                      palette={palette}
                       to="/writing-samples/$questionId"
                       params={{ questionId: qId }}
                       search={{ module: ieltsType }}
