@@ -879,6 +879,7 @@ function NumberedTile({
   index,
   label,
   accent,
+  palette,
   to,
   params,
   search,
@@ -887,6 +888,7 @@ function NumberedTile({
   index: number;
   label: string;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette?: (typeof MODULE_PALETTE)[ModuleId];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   to?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -896,20 +898,35 @@ function NumberedTile({
   onClick?: () => void;
 }) {
   const idx = String(index).padStart(2, "0");
+  const fill = palette?.soft ?? "#ffffff";
+  const accentFill = palette?.active ?? "rgba(0,0,0,0.04)";
+  const ring = palette?.ring ?? "rgba(0,0,0,0.10)";
+  const ink = palette?.ink ?? "oklch(0.28 0.01 250)";
   const cls =
-    "group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
-  const style = { ['--tw-ring-color' as never]: accent.solid };
+    "group relative flex h-full w-full overflow-hidden rounded-2xl border text-left transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  const style = {
+    ['--tw-ring-color' as never]: accent.solid,
+    backgroundColor: fill,
+    borderColor: ring,
+    boxShadow: `0 8px 20px -16px ${ring}`,
+  };
   const inner = (
     <>
-      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-4 sm:w-16 sm:pt-6">
-        <span className="font-display text-xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-2xl">
+      <div
+        className="flex w-14 shrink-0 items-start justify-center px-2 pt-5 pb-4 sm:w-16 sm:pt-6"
+        style={{ backgroundColor: accentFill, borderRight: `1px solid ${ring}` }}
+      >
+        <span
+          className="font-display text-xl font-black tracking-tight sm:text-2xl"
+          style={{ color: ink, opacity: 0.75 }}
+        >
           {idx}
         </span>
       </div>
       <div className="flex min-w-0 flex-1 items-center px-4 py-5 sm:px-5">
         <p
           className="font-display font-black leading-snug tracking-tight"
-          style={{ color: "oklch(0.28 0.01 250)", fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+          style={{ color: ink, fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
         >
           {label}
         </p>
