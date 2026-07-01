@@ -178,6 +178,17 @@ const TYPE_ACCENT: Record<
   },
 };
 
+// Pastel palette per module — matches homepage Latest Questions treatment
+const MODULE_PALETTE: Record<
+  ModuleId,
+  { active: string; soft: string; ink: string; ring: string; icon: string }
+> = {
+  writing:   { active: "#c8ebd4", soft: "#e6f5ec", ink: "#1f3b2a", ring: "#9ed7b3", icon: "✍️" },
+  speaking:  { active: "#fbd7be", soft: "#fdeadd", ink: "#4a2a17", ring: "#f2b98f", icon: "🎙" },
+  reading:   { active: "#dfd0f2", soft: "#ece2f8", ink: "#2f2246", ring: "#c4aee5", icon: "📖" },
+  listening: { active: "#fbe8b0", soft: "#fdf3d3", ink: "#4a3a10", ring: "#efd27a", icon: "🎧" },
+};
+
 function SampleAnswersHubPage() {
   const search = Route.useSearch();
   const { user } = useLearnerSession();
@@ -234,7 +245,7 @@ function SampleAnswersHubPage() {
   };
 
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: "#E6DCC8", color: "oklch(0.22 0.03 85)", ["--foreground" as any]: "oklch(0.22 0.03 85)", ["--muted-foreground" as any]: "oklch(0.40 0.025 85)" }}>
+    <div className="relative min-h-screen" style={{ backgroundColor: "#faf7f0", color: "oklch(0.22 0.03 85)", ["--foreground" as any]: "oklch(0.22 0.03 85)", ["--muted-foreground" as any]: "oklch(0.40 0.025 85)" }}>
       
 
       <header
@@ -385,6 +396,7 @@ function SampleAnswersHubPage() {
                 moduleId={selected}
                 ieltsType={module}
                 accent={accent}
+                palette={MODULE_PALETTE[selected as ModuleId]}
               />
             ) : (
               <p className="mt-10 text-center text-[13px] font-medium text-foreground/45">
@@ -423,30 +435,34 @@ function ModuleTabs({
 }) {
   return (
     <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-      <div className="flex min-w-max items-end justify-center gap-x-7 gap-y-3 border-b border-border/70 pb-3 sm:min-w-0 sm:flex-wrap sm:gap-x-12">
+      <div className="flex min-w-max flex-wrap items-center justify-center gap-3 sm:min-w-0 sm:gap-4">
         {MODULE_CARDS.map(({ id, label, comingSoon }) => {
           const active = value === id;
+          const p = MODULE_PALETTE[id];
           return (
             <button
               key={id}
               type="button"
               onClick={() => onChange(id)}
               aria-pressed={active}
-              className="group relative flex shrink-0 cursor-pointer items-center gap-2 px-2 py-2 transition-all duration-200 hover:-translate-y-0.5 sm:px-3"
-              style={{ opacity: active ? 1 : comingSoon ? 0.35 : 0.5 }}
+              className="group inline-flex shrink-0 items-center gap-3 rounded-full border-2 px-6 py-4 font-display text-base font-extrabold tracking-tight transition-all duration-300 sm:px-8 sm:py-5 sm:text-lg"
+              style={{
+                backgroundColor: active ? p.active : "#ffffff",
+                borderColor: active ? p.ring : "rgba(0,0,0,0.08)",
+                color: active ? p.ink : "#2a2a2a",
+                boxShadow: active
+                  ? `0 10px 24px -14px ${p.ring}`
+                  : "0 2px 0 0 rgba(0,0,0,0.06)",
+                transform: active ? "translateY(-1px)" : "none",
+                opacity: comingSoon && !active ? 0.65 : 1,
+              }}
             >
-              <span
-                className="font-display text-lg font-black tracking-tight text-foreground transition-colors duration-200 group-hover:[color:var(--tab-accent)] sm:text-2xl"
-                style={{ ["--tab-accent" as any]: accent.solid, color: active ? accent.solid : undefined }}
-              >
-                {label}
-              </span>
-              {active && (
-                <span
-                  aria-hidden
-                  className="absolute -bottom-[12px] left-2 right-2 h-[3px] rounded-full sm:left-3 sm:right-3"
-                  style={{ backgroundColor: accent.solid }}
-                />
+              <span className="text-xl sm:text-2xl" aria-hidden>{p.icon}</span>
+              <span>{label}</span>
+              {comingSoon && (
+                <span className="ml-1 rounded-full bg-black/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider">
+                  Soon
+                </span>
               )}
             </button>
           );
@@ -577,22 +593,24 @@ function ModuleContent({
   moduleId,
   ieltsType,
   accent,
+  palette,
 }: {
   moduleId: ModuleId;
   ieltsType: IeltsType;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette: (typeof MODULE_PALETTE)[ModuleId];
 }) {
   if (moduleId === "listening" || moduleId === "reading") {
     return (
       <div
         className="mt-10 rounded-2xl border-2 border-dashed p-8 text-center"
-        style={{ borderColor: accent.ring, backgroundColor: accent.soft }}
+        style={{ borderColor: palette.ring, backgroundColor: palette.soft }}
       >
-        <Clock className="mx-auto h-7 w-7 text-foreground/45" strokeWidth={2.2} />
-        <h3 className="mt-3 font-display text-xl font-extrabold tracking-tight text-foreground">
+        <Clock className="mx-auto h-7 w-7" strokeWidth={2.2} style={{ color: palette.ink }} />
+        <h3 className="mt-3 font-display text-xl font-extrabold tracking-tight" style={{ color: palette.ink }}>
           {moduleId === "listening" ? "Listening" : "Reading"} samples — coming soon
         </h3>
-        <p className="mx-auto mt-2 max-w-md text-[14px] font-medium text-foreground/60">
+        <p className="mx-auto mt-2 max-w-md text-[14px] font-medium" style={{ color: palette.ink, opacity: 0.75 }}>
           Our team is finalising Band 8+ transcripts, key-word highlights and worked solutions. Sit tight — they'll appear here first.
         </p>
       </div>
@@ -600,19 +618,21 @@ function ModuleContent({
   }
 
   if (moduleId === "writing") {
-    return <WritingInline ieltsType={ieltsType} accent={accent} />;
+    return <WritingInline ieltsType={ieltsType} accent={accent} palette={palette} />;
   }
 
-  return <SpeakingInline accent={accent} />;
+  return <SpeakingInline accent={accent} palette={palette} />;
 }
 
 // ───────── Writing inline drilldown ─────────
 function WritingInline({
   ieltsType,
   accent,
+  palette,
 }: {
   ieltsType: IeltsType;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette: (typeof MODULE_PALETTE)[ModuleId];
 }) {
   type Task = "task1" | "task2";
   const [task, setTask] = useState<Task>("task2");
@@ -688,6 +708,7 @@ function WritingInline({
                       index={i + 1}
                       label={statement}
                       accent={accent}
+                      palette={palette}
                       to="/writing-samples/$questionId"
                       params={{ questionId: qId }}
                       search={{ module: ieltsType }}
@@ -704,7 +725,7 @@ function WritingInline({
 }
 
 // ───────── Speaking inline drilldown ─────────
-function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] }) {
+function SpeakingInline({ accent, palette }: { accent: (typeof TYPE_ACCENT)[IeltsType]; palette: (typeof MODULE_PALETTE)[ModuleId] }) {
   type Mode = "general" | "cuecards";
   const [mode, setMode] = useState<Mode>("general");
   const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
@@ -775,6 +796,7 @@ function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] })
                     index={i + 1}
                     label={t.label}
                     accent={accent}
+                    palette={palette}
                     onClick={() => setModalTopic({ id: t.id, label: t.label })}
                   />
                 ))}
@@ -859,6 +881,7 @@ function NumberedTile({
   index,
   label,
   accent,
+  palette,
   to,
   params,
   search,
@@ -867,6 +890,7 @@ function NumberedTile({
   index: number;
   label: string;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette?: (typeof MODULE_PALETTE)[ModuleId];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   to?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -876,20 +900,35 @@ function NumberedTile({
   onClick?: () => void;
 }) {
   const idx = String(index).padStart(2, "0");
+  const fill = palette?.soft ?? "#ffffff";
+  const accentFill = palette?.active ?? "rgba(0,0,0,0.04)";
+  const ring = palette?.ring ?? "rgba(0,0,0,0.10)";
+  const ink = palette?.ink ?? "oklch(0.28 0.01 250)";
   const cls =
-    "group relative flex h-full w-full overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
-  const style = { ['--tw-ring-color' as never]: accent.solid };
+    "group relative flex h-full w-full overflow-hidden rounded-2xl border text-left transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  const style = {
+    ['--tw-ring-color' as never]: accent.solid,
+    backgroundColor: fill,
+    borderColor: ring,
+    boxShadow: `0 8px 20px -16px ${ring}`,
+  };
   const inner = (
     <>
-      <div className="flex w-14 shrink-0 items-start justify-center border-r border-foreground/10 bg-foreground/[0.025] px-2 pt-5 pb-4 sm:w-16 sm:pt-6">
-        <span className="font-display text-xl font-black tracking-tight text-foreground/45 transition-colors group-hover:text-foreground/70 sm:text-2xl">
+      <div
+        className="flex w-14 shrink-0 items-start justify-center px-2 pt-5 pb-4 sm:w-16 sm:pt-6"
+        style={{ backgroundColor: accentFill, borderRight: `1px solid ${ring}` }}
+      >
+        <span
+          className="font-display text-xl font-black tracking-tight sm:text-2xl"
+          style={{ color: ink, opacity: 0.75 }}
+        >
           {idx}
         </span>
       </div>
       <div className="flex min-w-0 flex-1 items-center px-4 py-5 sm:px-5">
         <p
           className="font-display font-black leading-snug tracking-tight"
-          style={{ color: "oklch(0.28 0.01 250)", fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+          style={{ color: ink, fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
         >
           {label}
         </p>
