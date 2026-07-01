@@ -1,68 +1,93 @@
-import { ArrowUpRight, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 
 type Props = {
   tag: string;
-  tagTone?: "blue" | "mint" | "peach" | "lilac";
-  type: "Writing Task 1" | "Writing Task 2" | "Speaking Part 1" | "Speaking Part 2" | "Speaking Part 3";
+  type: string;
   title: string;
   date: string;
   band?: string;
   locked?: boolean;
-};
-
-const toneMap: Record<NonNullable<Props["tagTone"]>, string> = {
-  blue: "bg-brand-soft text-brand",
-  mint: "bg-mint text-foreground",
-  peach: "bg-peach text-foreground",
-  lilac: "bg-lilac text-foreground",
+  // Pastel fill palette from parent
+  fill?: string;
+  accent?: string;
+  ink?: string;
+  ring?: string;
 };
 
 export function QuestionCard({
   tag,
-  tagTone = "blue",
   type,
   title,
   date,
   band = "Band 8.5",
   locked = true,
+  fill = "#f5efe2",
+  accent = "#e8dcbf",
+  ink = "#2a2a2a",
+  ring = "#d9c99a",
 }: Props) {
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
-      {/* Tag banner — full-width, prominent */}
-      <div className={`flex items-center justify-between px-5 py-3.5 ${toneMap[tagTone]}`}>
+    <article
+      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border transition-all duration-300 hover:-translate-y-1"
+      style={{
+        backgroundColor: fill,
+        borderColor: ring,
+        boxShadow: `0 10px 24px -18px ${ring}`,
+      }}
+    >
+      {/* Tag banner */}
+      <div
+        className="flex items-center justify-between px-5 py-3.5"
+        style={{ backgroundColor: accent, color: ink }}
+      >
         <span className="text-sm font-extrabold uppercase tracking-wide">{tag}</span>
-        <span className="rounded-full bg-background/60 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+        <span
+          className="rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider"
+          style={{ backgroundColor: "rgba(255,255,255,0.55)", color: ink }}
+        >
           {type}
         </span>
       </div>
 
-      {/* Floating lock badge */}
       {locked && (
-        <div className="absolute right-4 top-20 z-10 flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-background/90 shadow-sm backdrop-blur-sm">
-          <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-        </div>
-      )}
-      {!locked && (
-        <div className="absolute right-4 top-20 z-10 flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-background/90 shadow-sm backdrop-blur-sm transition-all group-hover:bg-brand group-hover:text-brand-foreground">
-          <ArrowUpRight className="h-4 w-4" />
+        <div
+          className="absolute right-4 top-20 z-10 flex h-9 w-9 items-center justify-center rounded-2xl border"
+          style={{
+            backgroundColor: "rgba(255,255,255,0.85)",
+            borderColor: ring,
+          }}
+        >
+          <Lock className="h-3.5 w-3.5" style={{ color: ink }} />
         </div>
       )}
 
       <div className="flex flex-1 flex-col p-6 pb-8">
-        <h3 className="font-display text-xl font-extrabold leading-snug tracking-tight text-foreground">
+        <h3
+          className="font-display text-xl font-extrabold leading-snug tracking-tight"
+          style={{ color: ink }}
+        >
           {title}
         </h3>
       </div>
 
-      {/* Pastel-blue dual-tab footer */}
-      <div className="mt-auto flex w-full">
-        <div className="flex-1 border-r border-sky-200/60 bg-[#e0f2fe] py-4 text-center">
-          <span className="font-display text-[13px] font-extrabold tracking-tight text-[#0c4a6e]">
+      {/* Footer split */}
+      <div className="mt-auto flex w-full" style={{ backgroundColor: accent }}>
+        <div
+          className="flex-1 border-r py-4 text-center"
+          style={{ borderColor: "rgba(0,0,0,0.08)" }}
+        >
+          <span
+            className="font-display text-[13px] font-extrabold tracking-tight"
+            style={{ color: ink }}
+          >
             {date}
           </span>
         </div>
-        <div className="flex-1 bg-[#e0f2fe] py-4 text-center">
-          <span className="font-display text-[13px] font-extrabold tracking-tight text-[#0c4a6e]">
+        <div className="flex-1 py-4 text-center">
+          <span
+            className="font-display text-[13px] font-extrabold tracking-tight"
+            style={{ color: ink }}
+          >
             {band}
           </span>
         </div>
