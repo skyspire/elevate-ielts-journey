@@ -628,9 +628,11 @@ function ModuleContent({
 function WritingInline({
   ieltsType,
   accent,
+  palette,
 }: {
   ieltsType: IeltsType;
   accent: (typeof TYPE_ACCENT)[IeltsType];
+  palette: (typeof MODULE_PALETTE)[ModuleId];
 }) {
   type Task = "task1" | "task2";
   const [task, setTask] = useState<Task>("task2");
