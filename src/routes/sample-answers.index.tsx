@@ -724,7 +724,7 @@ function WritingInline({
 }
 
 // ───────── Speaking inline drilldown ─────────
-function SpeakingInline({ accent }: { accent: (typeof TYPE_ACCENT)[IeltsType] }) {
+function SpeakingInline({ accent, palette }: { accent: (typeof TYPE_ACCENT)[IeltsType]; palette: (typeof MODULE_PALETTE)[ModuleId] }) {
   type Mode = "general" | "cuecards";
   const [mode, setMode] = useState<Mode>("general");
   const cats = mode === "general" ? SPEAKING_GENERAL_CATS : SPEAKING_CUECARD_CATS;
