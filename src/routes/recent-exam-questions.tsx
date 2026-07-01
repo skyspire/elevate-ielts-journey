@@ -1265,15 +1265,25 @@ function ExamQuestionCard({
   sectionLabel: QuestionType;
 }) {
   const tone: Tone = TAG_TONE[q.tag] ?? "blue";
+  const palettes: Record<Tone, { fill: string; accent: string; ink: string; ring: string }> = {
+    blue: { fill: "#e6f0fb", accent: "#c9deef", ink: "#1e3a52", ring: "#9dc2e0" },
+    mint: { fill: "#e6f5ec", accent: "#c8ebd4", ink: "#1f3b2a", ring: "#9ed7b3" },
+    peach: { fill: "#fdeadd", accent: "#fbd7be", ink: "#4a2a17", ring: "#f2b98f" },
+    lilac: { fill: "#ece2f8", accent: "#dfd0f2", ink: "#2f2246", ring: "#c4aee5" },
+  };
+  const p = palettes[tone];
   return (
     <QuestionCard
       tag={q.tag}
-      tagTone={tone}
       type={sectionLabel}
       title={q.title}
       date={q.date}
       band={q.band}
       locked={q.locked}
+      fill={p.fill}
+      accent={p.accent}
+      ink={p.ink}
+      ring={p.ring}
     />
   );
 }
