@@ -178,6 +178,17 @@ const TYPE_ACCENT: Record<
   },
 };
 
+// Pastel palette per module — matches homepage Latest Questions treatment
+const MODULE_PALETTE: Record<
+  ModuleId,
+  { active: string; soft: string; ink: string; ring: string; icon: string }
+> = {
+  writing:   { active: "#c8ebd4", soft: "#e6f5ec", ink: "#1f3b2a", ring: "#9ed7b3", icon: "✍️" },
+  speaking:  { active: "#fbd7be", soft: "#fdeadd", ink: "#4a2a17", ring: "#f2b98f", icon: "🎙" },
+  reading:   { active: "#dfd0f2", soft: "#ece2f8", ink: "#2f2246", ring: "#c4aee5", icon: "📖" },
+  listening: { active: "#fbe8b0", soft: "#fdf3d3", ink: "#4a3a10", ring: "#efd27a", icon: "🎧" },
+};
+
 function SampleAnswersHubPage() {
   const search = Route.useSearch();
   const { user } = useLearnerSession();
