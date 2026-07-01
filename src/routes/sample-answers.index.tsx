@@ -245,7 +245,7 @@ function SampleAnswersHubPage() {
   };
 
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: "#E6DCC8", color: "oklch(0.22 0.03 85)", ["--foreground" as any]: "oklch(0.22 0.03 85)", ["--muted-foreground" as any]: "oklch(0.40 0.025 85)" }}>
+    <div className="relative min-h-screen" style={{ backgroundColor: "#faf7f0", color: "oklch(0.22 0.03 85)", ["--foreground" as any]: "oklch(0.22 0.03 85)", ["--muted-foreground" as any]: "oklch(0.40 0.025 85)" }}>
       
 
       <header
