@@ -396,7 +396,7 @@ function SampleAnswersHubPage() {
                 moduleId={selected}
                 ieltsType={module}
                 accent={accent}
-                palette={MODULE_PALETTE[selected]}
+                palette={MODULE_PALETTE[selected as ModuleId]}
               />
             ) : (
               <p className="mt-10 text-center text-[13px] font-medium text-foreground/45">
