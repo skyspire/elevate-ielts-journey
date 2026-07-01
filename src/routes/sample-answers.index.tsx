@@ -796,6 +796,7 @@ function SpeakingInline({ accent, palette }: { accent: (typeof TYPE_ACCENT)[Ielt
                     index={i + 1}
                     label={t.label}
                     accent={accent}
+                    palette={palette}
                     onClick={() => setModalTopic({ id: t.id, label: t.label })}
                   />
                 ))}
