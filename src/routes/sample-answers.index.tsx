@@ -224,7 +224,7 @@ function SampleAnswersHubPage() {
 
   const [showUpgrade, setShowUpgrade] = useState(false);
   const navigate = useNavigate({ from: "/sample-answers" });
-  const selected = search.selected ?? null;
+  const selected: ModuleId = (search.selected as ModuleId | undefined) ?? "writing";
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const onSelectModule = (id: ModuleId) => {
@@ -235,7 +235,7 @@ function SampleAnswersHubPage() {
     navigate({
       search: (prev: z.infer<typeof searchSchema>) => ({
         ...prev,
-        selected: prev.selected === id ? undefined : id,
+        selected: id,
       }),
       replace: true,
     });
@@ -332,20 +332,32 @@ function SampleAnswersHubPage() {
             </p>
           </div>
 
-          {/* IELTS type selector — universal */}
-          <div className="mt-14 flex justify-center sm:mt-20">
-            <IeltsTypeSelector
-              value={module}
-              onChange={(t) => select(t)}
-              lockedAcademic={!isGuest && !ownsAcademic}
-              lockedGeneral={!isGuest && !ownsGeneral}
-            />
+          {/* Compact integrated chooser bar — type + modules on one row */}
+          <div className="mt-8 sm:mt-10">
+            <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-3 rounded-2xl border border-foreground/10 bg-white/60 p-3 shadow-soft backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-3">
+              <div className="shrink-0">
+                <IeltsTypeSelector
+                  value={module}
+                  onChange={(t) => select(t)}
+                  lockedAcademic={!isGuest && !ownsAcademic}
+                  lockedGeneral={!isGuest && !ownsGeneral}
+                />
+              </div>
+              <div className="hidden h-10 w-px bg-foreground/10 sm:block" />
+              <div className={`min-w-0 flex-1 transition-[filter,opacity] duration-300 ${typeLocked ? "blur-[2px] opacity-80" : ""}`}>
+                <ModuleTabs
+                  value={selected}
+                  accent={accent}
+                  onChange={onSelectModule}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Locked-type unlock bar */}
           {typeLocked ? (
             <div
-              className="mt-12 flex flex-col items-start gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5"
+              className="mt-6 flex flex-col items-start gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5"
               style={{ borderColor: accent.ring, backgroundColor: accent.soft }}
             >
               <div className="flex items-start gap-3">
@@ -376,33 +388,14 @@ function SampleAnswersHubPage() {
             </div>
           ) : null}
 
-          {/* Module tabs — editorial underline style (pic-1) */}
-          <div
-            className={`mt-12 sm:mt-14 transition-[filter,opacity] duration-300 ${
-              typeLocked ? "blur-[2px] opacity-80" : ""
-            }`}
-          >
-            <ModuleTabs
-              value={selected}
-              accent={accent}
-              onChange={onSelectModule}
-            />
-          </div>
-
-          {/* Inline content reveal */}
+          {/* Inline content — renders immediately for default module */}
           <div ref={contentRef} className="scroll-mt-24">
-            {selected ? (
-              <ModuleContent
-                moduleId={selected}
-                ieltsType={module}
-                accent={accent}
-                palette={MODULE_PALETTE[selected as ModuleId]}
-              />
-            ) : (
-              <p className="mt-10 text-center text-[13px] font-medium text-foreground/45">
-                Pick a module above to see its sample answers.
-              </p>
-            )}
+            <ModuleContent
+              moduleId={selected}
+              ieltsType={module}
+              accent={accent}
+              palette={MODULE_PALETTE[selected]}
+            />
           </div>
 
           <div className="pb-20 sm:pb-28" />
