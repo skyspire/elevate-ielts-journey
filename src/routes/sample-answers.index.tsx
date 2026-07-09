@@ -235,7 +235,7 @@ function SampleAnswersHubPage() {
     navigate({
       search: (prev: z.infer<typeof searchSchema>) => ({
         ...prev,
-        selected: prev.selected === id ? undefined : id,
+        selected: id,
       }),
       replace: true,
     });
